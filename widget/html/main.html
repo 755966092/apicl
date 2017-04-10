@@ -29,7 +29,9 @@
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
+	var contacts;
     apiready = function(){
+    	contacts = api.require('contacts');
 		// var ver = api.version;
 		// var sType = api.systemType;
 		// var sVer = api.systemVersion;
@@ -66,7 +68,13 @@
 
     };
     function cli() {
-    	alert('点击');
+		contacts.select(function(ret, err) {
+		    if (ret) {
+		        alert(JSON.stringify(ret));
+		    } else {
+		        alert(JSON.stringify(err));
+		    }
+		});
     }
 </script>
 </html>
