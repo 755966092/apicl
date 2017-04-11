@@ -25,56 +25,171 @@
 <body>
     <label id="con">Hello APP</label>
 	<div id='sys-info'></div>
-	<button onclick="cli()">点击</button>
+	<button onclick="cli()">打开</button>
+	<button onclick="cli4()">新建</button>
+	<button onclick="cli1()">存储</button>
+	<button onclick="cli2()">查询</button>
+	<button onclick="cli3()">执行</button>
+	<button onclick="cli5()">关闭</button>
+	<button onclick="txl()">查询通讯录</button>
+	<div id="div1"></div>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
-	var contacts;
+	var contacts, db;
     apiready = function(){
     	contacts = api.require('contacts');
-		// var ver = api.version;
-		// var sType = api.systemType;
-		// var sVer = api.systemVersion;
-		// var id = api.deviceId;
-		// var model = api.deviceModel;
-		// var name = api.deviceName;
-		// var cType = api.connectionType;
-		// var winName = api.winName;
-		// var winWidth = api.winWidth;
-		// var winHeight = api.winHeight;
-		// var frameName = api.frameName || '';
-		// var frameWidth = api.frameWidth || '';
-		// var frameHeight = api.frameHeight || '';
-
-		// var str = '<ul>';
-		// str += '<li>引擎版本信息: ' + ver + '</li>';
-		// str += '<li>系统类型: ' + sType + '</li>';
-		// str += '<li>系统版本: ' + sVer + '</li>';
-		// str += '<li>设备标识: ' + id + '</li>';
-		// str += '<li>设备型号: ' + model + '</li>';
-		// str += '<li>设备名称: ' + name + '</li>';
-		// str += '<li>网络状态: ' + cType + '</li>';
-		// str += '<li>主窗口名字: ' + winName + '</li>';
-		// str += '<li>主窗口宽度: ' + winWidth + '</li>';
-		// str += '<li>主窗口高度: ' + winHeight + '</li>';
-		// str += '<li>子窗口名字: ' + frameName + '</li>';
-		// str += '<li>子窗口宽度: ' + frameWidth + '</li>';
-		// str += '<li>子窗口高度: ' + frameHeight + '</li>';
-		// str += '</ul>';
-
-		// $api.byId('sys-info').innerHTML = str;
-		//---------------------------------------------------------------------
-		
-
+    	db = api.require('db');
+    	
     };
+    function txl() {
+    	contacts = api.require('contacts');
+		contacts.queryByPage({
+		    pageIndex: 0
+		}, function(ret, err){
+		    if( ret ){
+		         var info = JSON.stringify(ret);
+		         document.getElementById("div1").innerHTML = info.replace(/,/g , ',<br/>');
+		        
+		         for (var i = 0; i < ret.contacts.length; i++) {
+		         	var phones = JSON.stringify(ret.contacts[i].phones).replace(/"/g, "\'")
+		         	db.executeSql({
+		         	    name: 'test',
+		         	    sql: 'INSERT INTO Txl VALUES (' + ret.contacts[i].id + ', "' + ret.contacts[i].fullName + '", "'+ phones +'")' 
+		         	}, function(ret, err){        
+		         	    if( ret.status ){
+		         	        // alert( JSON.stringify( ret ) );
+		         	    }else{
+		         	        alert( JSON.stringify( err ) );
+		         	    }
+		         	});
+		         	
+		         }
+		    }else{
+		        alert( '错误' );
+		    }
+		});
+    }
+
+  //   var id = [];
+  //   var name = [];
+  //   var phone = [];
+  //   function txl() {
+  //   	var contacts = api.require('contacts');
+		// contacts.queryByPage({
+		//     pageIndex: 0
+		// }, function(ret, err){
+		//     if( ret ){
+		//          for (var i = 0; i < 5; i++) {
+		//          	id.push(i+1)
+		//          	name.push(ret.contacts[i].fullName)
+		//          	phone.push(3);
+		         	
+		//          }
+		//     }else{
+		//         alert( JSON.stringify( err ) );
+		//     }
+		// });
+  //   }
+    // 打开数据库
     function cli() {
-		contacts.select(function(ret, err) {
-		    if (ret) {
+		// contacts.select(function(ret, err) {
+		//     if (ret) {
+		//         // alert(JSON.stringify(ret));
+		//         var info = JSON.stringify(ret);
+		        
+		//         document.getElementById("div1").innerHTML = info.replace(/,/g , ',<br/>');
+		//     } else {
+		//         alert(JSON.stringify(err));
+		//     }
+		// });、
+		db.openDatabase({
+		    name: 'test'
+		}, function(ret, err){        
+		    if( ret.status ){
+		        alert('打开成功');
+		    }else{
+		        alert( JSON.stringify( err ) );
+		    }
+		});
+    }
+   
+    // 新建一个表格
+    function cli4() {
+    	var sql = 'CREATE TABLE Txl(id int, name varchar(255), phone int)'
+    	db.executeSql({
+		    name: 'test',
+		    // sql: 'CREATE TABLE Persons(Id_P int, LastName varchar(255), FirstName varchar(255), Address varchar(255), City varchar(255))'
+		    sql: sql
+		}, function(ret, err) {
+		    if (ret.status) {
 		        alert(JSON.stringify(ret));
 		    } else {
 		        alert(JSON.stringify(err));
 		    }
 		});
+    }
+
+    // 储存数据
+    function cli1() {
+    	for (var i = 0; i < id.length; i++) {
+    		db.executeSql({
+			    name: 'test',
+			    sql: 'INSERT INTO Txl (id, name, phone) VALUES (' + id[i] + ', ' + name[i] + ', '+ phone[i] +')'    
+			}, function(ret, err){        
+			    if( ret.status ){
+			        // alert('储存成功');
+			    }else{
+			        alert( JSON.stringify( err ) );
+			    }
+			});
+    	}
+    	var sql = 'INSERT INTO Txl (id, name, phone) VALUES (25, "Wilson", "Champs-Elysees")'
+		
+    }
+
+    //
+    function cli3() {
+    	db.transaction({
+    	    name: 'test',
+    	    operation: 'begin'
+    	}, function(ret, err){        
+    	    if( ret.status ){
+    	        alert( JSON.stringify( ret ) );
+    	    }else{
+    	        alert( JSON.stringify( err ) );
+    	    }
+    	});
+    }
+
+    // 查询数据看
+    function cli2() {
+    	db.selectSql({
+    	    name: 'test',
+    	    sql: 'SELECT * FROM Txl'
+    	}, function(ret, err){        
+    	    if( ret.status ){
+    	        // alert( JSON.stringify( ret ) );
+    	        // alert(JSON.stringify(ret.data))
+    	        var info = JSON.stringify(ret.data);
+    	        document.getElementById("div1").innerHTML = info.replace(/,/g , ',<br/>');
+    	    }else{
+    	        alert( JSON.stringify( err ) );
+    	    }
+    	});
+    }
+
+    // 关闭数据库
+    function cli5() {
+    	db.closeDatabase({
+    	    name: 'test'
+    	}, function(ret, err){        
+    	    if( ret.status ){
+    	        alert('关闭成功');
+    	    }else{
+    	        alert( JSON.stringify( err ) );
+    	    }
+    	});
     }
 </script>
 </html>
