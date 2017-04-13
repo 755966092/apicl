@@ -32,6 +32,9 @@
 	<button onclick="cli3()">执行</button>
 	<button onclick="cli5()">关闭</button>
 	<button onclick="txl()">查询通讯录</button>
+	<button onclick="city()">城市</button>
+	<button onclick="slide()">slide</button>
+
 	<div id="div1"></div>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
@@ -191,5 +194,151 @@
     	    }
     	});
     }
+
+    // 城市选择器
+    function city() {
+    	var citySelector = api.require('citySelector');
+		citySelector.open({
+		    y: api.frameHeight / 1.6,
+		    fixedOn: api.frameName,
+		    anim: true
+		}, function(ret, err) {
+		    if (ret) {
+		        alert(JSON.stringify(ret));
+		    } else {
+		        alert(JSON.stringify(err));
+		    }
+		});
+    }
+
+    // slide
+    function slide() {
+    	var UIListView = api.require('UIListView');
+UIListView.open({
+    rect: {
+        x: 0,
+        y: 0,
+        w: api.winWidth,
+        h: api.frameHeight
+    },
+    data: [{
+        uid: '1001',
+        imgPath: 'widget://res/img/apicloud.png',
+        title: '标题',
+        subTitle: '子标题，说明文字',
+        remark: '备注',
+        icon: ''
+    }, {
+        uid: '1001',
+        imgPath: 'widget://res/img/apicloud.png',
+        title: '标题',
+        subTitle: '子标题，说明文字',
+        remark: '备注',
+        icon: ''
+    }, {
+        uid: '1001',
+        imgPath: 'widget://res/img/apicloud.png',
+        title: '标题',
+        subTitle: '子标题，说明文字',
+        remark: '备注',
+        icon: ''
+    }, {
+        uid: '1001',
+        imgPath: 'widget://res/img/apicloud.png',
+        title: '标题',
+        subTitle: '子标题，说明文字',
+        remark: '备注',
+        icon: ''
+    }, {
+        uid: '1001',
+        imgPath: 'widget://res/img/apicloud.png',
+        title: '标题',
+        subTitle: '子标题，说明文字',
+        remark: '备注',
+        icon: ''
+    }, {
+        uid: '1001',
+        imgPath: 'widget://res/img/apicloud.png',
+        title: '标题',
+        subTitle: '子标题，说明文字',
+        remark: '备注',
+        icon: ''
+    }, {
+        uid: '1001',
+        imgPath: 'widget://res/img/apicloud.png',
+        title: '标题',
+        subTitle: '子标题，说明文字',
+        remark: '备注',
+        icon: ''
+    }, {
+        uid: '1001',
+        imgPath: 'widget://res/img/apicloud.png',
+        title: '标题',
+        subTitle: '子标题，说明文字',
+        remark: '备注',
+        icon: ''
+    }, {
+        uid: '1001',
+        imgPath: 'widget://res/img/apicloud.png',
+        title: '标题',
+        subTitle: '子标题，说明文字',
+        remark: '备注',
+        icon: ''
+    }, {
+        uid: '1001',
+        imgPath: 'widget://res/img/apicloud.png',
+        title: '标题',
+        subTitle: '子标题，说明文字',
+        remark: '备注',
+        icon: ''
+    }, {
+        imgPath: 'widget://res/img/apicloud.png',
+        title: '标题',
+        subTitle: '子标题，说明文字',
+        remark: '备注',
+        icon: ''
+    }],
+    rightBtns: [{
+        bgColor: '#388e8e',
+        activeBgColor: '',
+        width: 70,
+        title: '按钮',
+        titleSize: 12,
+        titleColor: '#fff',
+        icon: '',
+        iconWidth: 20
+    }],
+    styles: {
+        borderColor: '#696969',
+        item: {
+            bgColor: '#AFEEEE',
+            activeBgColor: '#F5F5F5',
+            height: 55.0,
+            imgWidth: 40,
+            imgHeight: 40,
+            imgCorner: 4,
+            placeholderImg: '',
+            titleSize: 12.0,
+            titleColor: '#000',
+            subTitleSize: 12.0,
+            subTitleColor: '#000',
+            remarkColor: '#000',
+            remarkSize: 16,
+            remarkIconWidth: 30
+        }
+    },
+    fixedOn: api.frameName
+}, function(ret, err) {
+    if (ret) {
+        alert(JSON.stringify(ret));
+    } else {
+        alert(JSON.stringify(err));
+    }
+});
+    }
 </script>
 </html>
+
+
+
+

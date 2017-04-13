@@ -1,15 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<title>Document</title>
-	<style type="text/css">
-		body {
-			background-color: #fff;
-		}
-	</style>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <style type="text/css">
+    body {
+        background-color: #fff;
+    }
+    </style>
 </head>
+
 <body>
-	2222222222
+    <button onclick="lt()">聊天</button>
+    <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript">
+    var UIChatTools;
+    apiready = function() {
+        UIChatTools = api.require('UIChatTools');
+        api.setCustomRefreshHeaderInfo({
+            bgColor: '#C0C0C0',
+            isScale: true,
+            image: {
+                pull: [
+                    'widget://image/refresh/dropdown_anim_00.png',
+                    'widget://image/refresh/dropdown_anim_01.png',
+                    'widget://image/refresh/dropdown_anim_03.png',
+                    'widget://image/refresh/dropdown_anim_04.png',
+                    'widget://image/refresh/dropdown_anim_05.png',
+                    'widget://image/refresh/dropdown_anim_06.png',
+                    'widget://image/refresh/dropdown_anim_07.png',
+                    'widget://image/refresh/dropdown_anim_08.png',
+                    'widget://image/refresh/dropdown_anim_09.png',
+                    'widget://image/refresh/dropdown_anim_10.png'
+                ],
+                load: [
+                    'widget://image/refresh/dropdown_loading_00.png',
+                    'widget://image/refresh/dropdown_loading_01.png',
+                    'widget://image/refresh/dropdown_loading_02.png'
+                ]
+            }
+        }, function() {
+            //下拉刷新被触发，自动进入加载状态，使用 api.refreshHeaderLoadDone() 手动结束加载中状态
+            //下拉刷新被触发，使用 api.refreshHeaderLoadDone() 结束加载中状态  
+            // alert('开始加载刷新数据，摇一摇停止加载状态');
+            // api.addEventListener({
+            //     name: 'shake'
+            // }, function(ret, err) {
+            //     api.refreshHeaderLoadDone()
+            // });
+            setTimeout(function() {
+                api.refreshHeaderLoadDone()
+            }, 2000)
+        });
+    }
+
+    function lt() {
+        
+        UIChatTools.open({
+            chatBox: {
+                placeholder: '聊天内容',
+                autoFocuse: false,
+                maxRows: 6
+            },
+            styles: {
+                bgColor: '#D1D1D1',
+                margin: 10,
+                mask: {
+                    bgColor: 'rgba(0,0,0,0.5)'
+                }
+            },
+            tools: {
+                h: 44,
+                iconSize: 30,
+                recorder: {
+                    normal: 'fs://UIChatTolls/recorder.png',
+                    selected: 'fs://UIChatTolls/recorder1.png'
+                },
+                image: {
+                    normal: 'fs://UIChatTolls/image.png',
+                    selected: 'fs://UIChatTolls/image1.png'
+                },
+                video: {
+                    normal: 'fs://UIChatTolls/video.png',
+                    selected: 'fs://UIChatTolls/video1.png'
+                },
+                packet: {
+                    normal: 'fs://UIChatTolls/packet.png',
+                    selected: 'fs://UIChatTolls/packet1.png'
+                },
+                face: {
+                    normal: 'fs://UIChatTolls/face.png',
+                    selected: 'fs://UIChatTolls/face1.png'
+                },
+                append: {
+                    normal: 'fs://UIChatTolls/append.png',
+                    selected: 'fs://UIChatTolls/append1.png'
+                }
+            },
+            emotions: ['widget://res/emotions/basic', 'widget://res/emotions/append1', 'widget://res/emotions/append2']
+        }, function(ret) {
+            if (ret) {
+                api.alert({
+                    msg: JSON.stringify(ret)
+                });
+            }
+        });
+    }
+    </script>
 </body>
+
 </html>
