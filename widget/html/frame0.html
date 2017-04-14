@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>我在</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <style>
+    .ipt {
+        width: 7.5rem;
+        height: .8rem;
+        box-sizing: border-box;
+        padding: .15rem .2rem;
+        background-color: #EFEFF4;
+        text-align: center;
+        position: relative;
+    }
+    
+    input {
+        height: .48rem;
+        width: 100%;
+        background-color: #fff;
+        border-radius: 2px;
+        font-size: .2rem;
+        text-align: center;
+    }
+    
+    input::placeholder {
+        color: #999;
+        font-size: 0.3rem;
+    }
+    
+    .ipt span {
+        display: inline-block;
+        width: .5rem;
+        height: .26rem;
+        background: url(../image/icon_search.png)no-repeat;
+        -webkit-background-size: .25rem .26rem;
+        background-size: .25rem .26rem;
+        position: absolute;
+        top: .25rem;
+        left: 3.2rem;
+        padding-left: .3rem;
+        color: #8E8E93;
+    }
+    
+    .news {
+        display: flex;
+        flex-flow: column nowrap;
+    }
+    
+    .news ul {
+        width: 100%;
+        padding: 0 .2rem;
+        box-sizing: border-box;
+    }
+    
+    .news ul li {
+        width: 100%;
+        height: 1.2rem;
+        box-sizing: border-box;
+        padding: .15rem 0;
+        border-bottom: 1px solid #D6D6D6;
+        position: relative;
+    }
+    
+    .news ul li img {
+        width: .9rem;
+        height: .9rem;
+        margin-right: .2rem;
+    }
+    
+    .news ul li h3 {
+        margin-top: .1rem;
+        margin-bottom: .05rem;
+    }
+    .news ul li.select:before {
+       content:"";
+       display: inline-block;
+       width: .15rem;
+       height: .15rem;
+        background-color:#f00;
+        border-radius: 50%;
+        position: absolute;
+        top: .1rem;
+        left: .8rem;
+    }
+    .news ul li p {
+        color: #9B9B9B;
+    }
+    
+    .addWin {
+        width: 2.24rem;
+        height: 1.74rem;
+        background: url(../image/bg_news.png)no-repeat;
+        -webkit-background-size: 2.24rem 1.74rem;
+        background-size: 2.24rem 1.74rem;
+        position: absolute;
+        right: 0.1rem;
+        top: .1rem;
+        padding-top: .1rem;
+        display: none;
+        z-index: 1000
+    }
+    
+    .addWin p {
+        color: #fff;
+        padding-left: .5rem;
+        height: .82rem;
+        line-height: .8rem;
+        font-size: .28rem;
+    }
+    
+    .addWin p:nth-child(1) {
+        background: url(../image/icon_add.png)no-repeat;
+        background-position: .15rem .22rem;
+        -webkit-background-size: .41rem .41rem;
+        background-size: .41rem .41rem;
+        border-bottom: .01rem solid #959498;
+    }
+    
+    .addWin p:nth-child(2) {
+        background: url(../image/icon_sao.png)no-repeat;
+        background-position: .15rem .22rem;
+        -webkit-background-size: .41rem .41rem;
+        background-size: .41rem .41rem;
+    }
+    
+    .show {
+        display: block;
+    }
+    </style>
+</head>
+
+<body onclick="closeNews()">
+    <div class="ipt">
+        <input type="text" onclick="openS()">
+        <span id="search" onclick="openS()">搜索</span>
+        <div class="addWin">
+            <p onclick="addFellow(0)">添加朋友</p>
+            <p onclick="addFellow(1)">扫一扫</p>
+        </div>
+    </div>
+    <div class="news">
+        <ul>
+            <li class="select">
+                <img class="fl" src="../image/tou_1.png">
+                <h3>系统消息</h3>
+                <p>您有一条好友请求待处理</p>
+            </li>
+            <li>
+                <img class="fl" src="../image/tou_1.png">
+                <h3>安吉拉</h3>
+                <p>晚安</p>
+            </li>
+        </ul>
+    </div>
+    <script type="text/javascript" src="../script/common.js"></script>
+    <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript" src="../script/doT.min.js"></script>
+    <script type="text/javascript">
+    apiready = function() {
+        // 监听showNews事件，显示添加好友框     
+        api.addEventListener({
+            name: 'showNews'
+        }, function() {
+            $api.addCls($api.dom('.addWin'), 'show')
+        });
+    }
+
+    function openS() {
+        api.openWin({
+            name: 'frameName',
+            url: './news/newsSearch.html',
+        });
+
+    }
+
+    // 点击添加好友和扫面二维码跳转到的页面
+    function addFellow(n) {
+        if (n == 0) {
+            api.openWin({
+                name: 'addAccount',
+                url: './news/addAccount.html',
+            });
+        } else {
+            api.openWin({
+                name: 'scan',
+                url: './news/scan.html',
+            });
+        }
+    }
+
+    // 关闭添加好友弹窗
+    function closeNews() {
+        $api.removeCls($api.dom('.addWin'), 'show')
+    }
+    </script>
+</body>
+
+</html>
