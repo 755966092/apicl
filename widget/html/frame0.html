@@ -168,7 +168,7 @@
     <ul class="resultList"> </ul>
     <script type="text/x-dot-template" id="listT">
         {{ for (var i = 0; i< it.length; i++) { }} 
-            <li class="{{=it[i].select}}">
+            <li class="{{=it[i].select}}" data-name="{{=it[i].name}}"  onclick="openChat(this)">
                 <img class="fl" src="{{=it[i].url}}">
                 <h3>{{=it[i].name}}</h3>
                 <p>{{=it[i].news}}</p>
@@ -251,6 +251,19 @@
         var html = fnListT(data);
         var list = $api.dom('.resultList');
         $api.append(list, html);
+    }
+
+    // 打开聊天窗口
+    function openChat(ele) {
+        // var major_Name = $api.text(ele);
+        var name = $api.attr(ele,'data-name');
+        api.openWin({
+            name: 'winName',
+            url: './news/chatPage.html',
+            pageParam: {
+                name: name
+            }
+        });
     }
     </script>
 </body>
