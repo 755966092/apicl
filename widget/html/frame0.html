@@ -100,47 +100,7 @@
         overflow: hidden;
     }
     
-    .addWin {
-        width: 2.24rem;
-        height: 1.74rem;
-        background: url(../image/bg_news.png)no-repeat;
-        -webkit-background-size: 2.24rem 1.74rem;
-        background-size: 2.24rem 1.74rem;
-        position: absolute;
-        right: 0.1rem;
-        top: .1rem;
-        padding-top: .1rem;
-        display: none;
-        z-index: 1000;
-    }
-    
-    .addWin p {
-        color: #fff;
-        padding-left: .5rem;
-        height: .82rem;
-        line-height: .8rem;
-        font-size: .28rem;
-    }
-    
-    .addWin p:nth-child(1) {
-        background: url(../image/icon_add.png)no-repeat;
-        background-position: .15rem .22rem;
-        -webkit-background-size: .41rem .41rem;
-        background-size: .41rem .41rem;
-        border-bottom: .01rem solid #959498;
-    }
-    
-    .addWin p:nth-child(2) {
-        background: url(../image/icon_sao.png)no-repeat;
-        background-position: .15rem .22rem;
-        -webkit-background-size: .41rem .41rem;
-        background-size: .41rem .41rem;
-    }
-    
-    .show {
-        display: block;
-    }
-
+  
     </style>
 </head>
 
@@ -150,10 +110,7 @@
         <div class="ipt">
             <input type="text" onclick="openS()">
             <span id="search" onclick="openS()">搜索</span>
-            <div class="addWin">
-                <p onclick="addFellow(0)">添加朋友</p>
-                <p onclick="addFellow(1)">扫一扫</p>
-            </div>
+           
           
         </div>
         <ul class="resultList"> </ul>
@@ -204,18 +161,18 @@
         api.addEventListener({
             name: 'showNews'
         }, function() {
-            $api.addCls($api.dom('.addWin'), 'show');
-            // api.openFrame({
-            //     name: 'frameName',
-            //     url: './news/addFellowWin.html',
-            //     rect: {
-            //         x: 0,
-            //         y: 70,
-            //         // w : api.winWidth,
-            //         // h : api.winHeight
-            //     },
-            //     bounces: false
-            // });
+            // $api.addCls($api.dom('.addWin'), 'show');
+            api.openFrame({
+                name: 'frameName',
+                url: './news/addFellowWin.html',
+                rect: {
+                    x: 0,
+                    y: 0,
+                    // w : api.winWidth,
+                    // h : api.winHeight
+                },
+                bounces: false
+            });
         });
        
     }
@@ -227,20 +184,7 @@
             url: './news/newsSearch.html',
         });
     }
-    // 点击添加好友和扫面二维码跳转到的页面
-    function addFellow(n) {
-        if (n == 0) {
-            api.openWin({
-                name: 'addAccount',
-                url: './news/addAccount.html',
-            });
-        } else {
-            api.openWin({
-                name: 'scan',
-                url: './news/scan.html',
-            });
-        }
-    }
+   
 
     // 关闭添加好友弹窗
     function closeNews() {

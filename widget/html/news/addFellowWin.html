@@ -6,10 +6,12 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-        body{
-            background-color: rgba(255,0,0,0.5);
-            position: relative;
-        }
+        body, html {
+                width: 100%;
+                height: 100%;
+                background: transparent;
+                position: relative;
+            }
         .addWin {
         width: 2.24rem;
         height: 1.74rem;
@@ -17,15 +19,15 @@
         background-size: 2.24rem 1.74rem;
         position: absolute;
         right: 0.1rem;
-        top: .1rem;
+        top: 1.1rem;
         padding-top: .1rem;
     }
     
     .addWin p {
         color: #fff;
-        padding-left: .5rem;
+        padding-left: .7rem;
         height: .82rem;
-        line-height: .8rem;
+        line-height: .82rem;
         font-size: .28rem;
     }
     
@@ -45,7 +47,7 @@
     }
     </style>
 </head>
-<body>
+<body onclick="api.closeFrame()">
     <div class="addWin">
         <p onclick="addFellow(0)">添加朋友</p>
         <p onclick="addFellow(1)">扫一扫</p>
@@ -54,8 +56,22 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
-        alert(1)
+
     };
+     // 点击添加好友和扫面二维码跳转到的页面
+    function addFellow(n) {
+        if (n == 0) {
+            api.openWin({
+                name: 'addAccount',
+                url: './addAccount.html',
+            });
+        } else {
+            api.openWin({
+                name: 'scan',
+                url: './scan.html',
+            });
+        }
+    }
 </script>
 </body>
 
