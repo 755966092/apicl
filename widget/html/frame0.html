@@ -8,10 +8,7 @@
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <style>
-    body {
-        width: 100%;
-        height: 100%;
-    }
+
     .ipt {
         width: 7.5rem;
         height: .8rem;
@@ -114,7 +111,7 @@
         top: .1rem;
         padding-top: .1rem;
         display: none;
-        z-index: 1000
+        z-index: 1000;
     }
     
     .addWin p {
@@ -143,42 +140,33 @@
     .show {
         display: block;
     }
+
     </style>
 </head>
 
 <body onclick="closeNews()">
-    <div class="ipt">
-        <input type="text" onclick="openS()">
-        <span id="search" onclick="openS()">搜索</span>
-        <div class="addWin">
-            <p onclick="addFellow(0)">添加朋友</p>
-            <p onclick="addFellow(1)">扫一扫</p>
+  
+    <div id="news_wrap" class=" clearfix" onclick="closeNews()">
+        <div class="ipt">
+            <input type="text" onclick="openS()">
+            <span id="search" onclick="openS()">搜索</span>
+            <div class="addWin">
+                <p onclick="addFellow(0)">添加朋友</p>
+                <p onclick="addFellow(1)">扫一扫</p>
+            </div>
+          
         </div>
+        <ul class="resultList"> </ul>
+        <script type="text/x-dot-template" id="listT">
+            {{ for (var i = 0; i< it.length; i++) { }} 
+                <li class="{{=it[i].select}} chatList" data-name="{{=it[i].name}}"  onclick="openChat(this)">
+                    <img class="fl" src="{{=it[i].url}}">
+                    <h3>{{=it[i].name}}</h3>
+                    <p>{{=it[i].news}}</p>
+                </li>
+            {{ }; }}
+        </script>
     </div>
-    <div class="news">
-        <!-- <ul>
-            <li class="select">
-                <img class="fl" src="../image/tou_1.png">
-                <h3>系统消息</h3>
-                <p>您有一条好友请求待处理</p>
-            </li>
-            <li>
-                <img class="fl" src="../image/tou_1.png">
-                <h3>安吉拉</h3>
-                <p>晚安</p>
-            </li>
-        </ul> -->
-    </div>
-    <ul class="resultList"> </ul>
-    <script type="text/x-dot-template" id="listT">
-        {{ for (var i = 0; i< it.length; i++) { }} 
-            <li class="{{=it[i].select}}" data-name="{{=it[i].name}}"  onclick="openChat(this)">
-                <img class="fl" src="{{=it[i].url}}">
-                <h3>{{=it[i].name}}</h3>
-                <p>{{=it[i].news}}</p>
-            </li>
-        {{ }; }}
-    </script>
     <script type="text/javascript" src="../script/common.js"></script>
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/doT.min.js"></script>
@@ -216,9 +204,9 @@
         api.addEventListener({
             name: 'showNews'
         }, function() {
-            $api.addCls($api.dom('.addWin'), 'show')
+            $api.addCls($api.dom('.addWin'), 'show');
         });
-
+       
     }
     getData(data);
 
