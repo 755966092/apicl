@@ -51,13 +51,13 @@
         flex-flow: column nowrap;
     }
     
-    .news ul {
+    ul {
         width: 100%;
         padding: 0 .2rem;
         box-sizing: border-box;
     }
     
-    .news ul li {
+    ul li {
         width: 100%;
         height: 1.2rem;
         box-sizing: border-box;
@@ -66,29 +66,37 @@
         position: relative;
     }
     
-    .news ul li img {
+    ul li img {
         width: .9rem;
         height: .9rem;
         margin-right: .2rem;
     }
     
-    .news ul li h3 {
+    ul li h3 {
         margin-top: .1rem;
         margin-bottom: .05rem;
     }
-    .news ul li.select:before {
-       content:"";
-       display: inline-block;
-       width: .15rem;
-       height: .15rem;
-        background-color:#f00;
+    
+    ul li.select:before {
+        content: "";
+        display: inline-block;
+        width: .15rem;
+        height: .15rem;
+        background-color: #f00;
         border-radius: 50%;
         position: absolute;
         top: .1rem;
         left: .8rem;
     }
-    .news ul li p {
+    
+    ul li p {
         color: #9B9B9B;
+        word-wrap: break-word;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        height: .32rem;
+        width: 5rem;
+        overflow: hidden;
     }
     
     .addWin {
@@ -144,7 +152,7 @@
         </div>
     </div>
     <div class="news">
-        <ul>
+        <!-- <ul>
             <li class="select">
                 <img class="fl" src="../image/tou_1.png">
                 <h3>系统消息</h3>
@@ -155,12 +163,50 @@
                 <h3>安吉拉</h3>
                 <p>晚安</p>
             </li>
-        </ul>
+        </ul> -->
     </div>
+    <ul class="resultList"> </ul>
+    <script type="text/x-dot-template" id="listT">
+        {{ for (var i = 0; i< it.length; i++) { }} 
+            <li class="{{=it[i].select}}">
+                <img class="fl" src="{{=it[i].url}}">
+                <h3>{{=it[i].name}}</h3>
+                <p>{{=it[i].news}}</p>
+            </li>
+        {{ }; }}
+    </script>
     <script type="text/javascript" src="../script/common.js"></script>
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/doT.min.js"></script>
     <script type="text/javascript">
+    var data = [
+        {
+            name: '系统消息',
+            url: '../image/tx_1.jpg',
+            news: '这个词应用比较广泛',
+            select: 'select'
+        }, {
+            name: 'jack',
+            url: '../image/tx_2.jpg',
+            news: '新鲜事就叫消息',
+            select: ''
+        }, {
+            name: 'rose',
+            url: '../image/tx_3.jpg',
+            news: '还指报道事情的概貌而不讲述详细的经过和细节',
+            select: ''
+        }, {
+            name: 'liMing',
+            url: '../image/tx_4.jpg',
+            news: '它是对新近发生的有社会意义并引起公众兴趣的事实的简短报道',
+            select: ''
+        }, {
+            name: '第一学',
+            url: '../image/tx_5.jpg',
+            news: '参考消息报社编辑出版',
+            select: ''
+        }
+    ]
     apiready = function() {
         // 监听showNews事件，显示添加好友框     
         api.addEventListener({
@@ -168,16 +214,16 @@
         }, function() {
             $api.addCls($api.dom('.addWin'), 'show')
         });
+
     }
+    getData(data);
 
     function openS() {
         api.openWin({
             name: 'frameName',
             url: './news/newsSearch.html',
         });
-
     }
-
     // 点击添加好友和扫面二维码跳转到的页面
     function addFellow(n) {
         if (n == 0) {
@@ -196,6 +242,15 @@
     // 关闭添加好友弹窗
     function closeNews() {
         $api.removeCls($api.dom('.addWin'), 'show')
+    }
+
+    // doT模版获取数据
+    function getData(data) {
+        var listTText = $api.byId('listT').text;
+        var fnListT = doT.template(listTText);
+        var html = fnListT(data);
+        var list = $api.dom('.resultList');
+        $api.append(list, html);
     }
     </script>
 </body>
