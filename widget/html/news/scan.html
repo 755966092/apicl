@@ -27,12 +27,17 @@
             padding-left: .45rem;
             background-position: .1rem .34rem;
         }
+        header span:nth-child(3) {
+            position: absolute;
+            right: .2rem;
+        }
     </style>
 </head>
 <body>
      <header>
         <span onclick="api.closeWin()">返回</span>
-        <span>扫一扫</span>
+        <span>扫一扫加好友</span>
+        <span onclick="openPhoto()">相册</span>
     </header>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -50,8 +55,19 @@
                 w: 'auto',
                 h: 'auto'
             },
+            pageParam: {
+                headerH: headerH
+            },
+
         });
 
     };
+
+    // 发送打开相册事件
+    function openPhoto() {
+        api.sendEvent({
+            name: 'openPhotos',
+        });
+    }
 </script>
 </html>

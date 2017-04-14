@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
         body{
-            
+            background-color: rgba(20,20,20,0.5);
         }
     </style>
 </head>
@@ -18,15 +18,27 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
-        var scanner = api.require('scanner');
-	    scanner.openView({
-		    x: 0,
-		    y: headerH,
-		    
-		    // sound: 'widget://test.wav'
+    	var headerH = api.pageParam.headerH;
+        var FNScanner = api.require('FNScanner');
+        alert(headerH)
+	    FNScanner.openView({
+	    	rect: {
+	    		x: 0,
+	    		y: headerH
+	    	},
+		    autorotation: true
 		}, function(ret, err) {
 		    if (ret) {
 		        alert(JSON.stringify(ret));
+		    } else {
+		        alert(JSON.stringify(err));
+		    }
+		});
+		api.addEventListener({
+		    name: 'openPhotos'
+		}, function(ret, err) {
+		    if (ret) {
+		        alert('监听');
 		    } else {
 		        alert(JSON.stringify(err));
 		    }
