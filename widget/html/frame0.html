@@ -8,7 +8,6 @@
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <style>
-
     .ipt {
         width: 7.5rem;
         height: .8rem;
@@ -99,63 +98,56 @@
         width: 5rem;
         overflow: hidden;
     }
-    
-  
     </style>
 </head>
 
 <body onclick="closeNews()">
-  
     <div id="news_wrap" class=" clearfix" onclick="closeNews()">
         <div class="ipt">
             <input type="text" onclick="openS()">
             <span id="search" onclick="openS()">搜索</span>
-           
-          
         </div>
         <ul class="resultList"> </ul>
         <script type="text/x-dot-template" id="listT">
-            {{ for (var i = 0; i< it.length; i++) { }} 
-                <li class="{{=it[i].select}} chatList" data-name="{{=it[i].name}}"  onclick="openChat(this)">
-                    <img class="fl" src="{{=it[i].url}}">
-                    <h3>{{=it[i].name}}</h3>
-                    <p>{{=it[i].news}}</p>
+            {{ for (var i = 0; i
+            < it.length; i++) { }} <li class="{{=it[i].select}} chatList" data-name="{{=it[i].name}}" onclick="openChat(this)">
+                <img class="fl" src="{{=it[i].url}}">
+                <h3>{{=it[i].name}}</h3>
+                <p>{{=it[i].news}}</p>
                 </li>
-            {{ }; }}
+                {{ }; }}
         </script>
     </div>
     <script type="text/javascript" src="../script/common.js"></script>
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/doT.min.js"></script>
     <script type="text/javascript">
-    var data = [
-        {
-            name: '系统消息',
-            url: '../image/tx_1.jpg',
-            news: '这个词应用比较广泛',
-            select: 'select'
-        }, {
-            name: 'jack',
-            url: '../image/tx_2.jpg',
-            news: '新鲜事就叫消息',
-            select: ''
-        }, {
-            name: 'rose',
-            url: '../image/tx_3.jpg',
-            news: '还指报道事情的概貌而不讲述详细的经过和细节',
-            select: ''
-        }, {
-            name: 'liMing',
-            url: '../image/tx_4.jpg',
-            news: '它是对新近发生的有社会意义并引起公众兴趣的事实的简短报道',
-            select: ''
-        }, {
-            name: '第一学',
-            url: '../image/tx_5.jpg',
-            news: '参考消息报社编辑出版',
-            select: ''
-        }
-    ]
+    var data = [{
+        name: '系统消息',
+        url: '../image/tx_1.jpg',
+        news: '这个词应用比较广泛',
+        select: 'select'
+    }, {
+        name: 'jack',
+        url: '../image/tx_2.jpg',
+        news: '新鲜事就叫消息',
+        select: ''
+    }, {
+        name: 'rose',
+        url: '../image/tx_3.jpg',
+        news: '还指报道事情的概貌而不讲述详细的经过和细节',
+        select: ''
+    }, {
+        name: 'liMing',
+        url: '../image/tx_4.jpg',
+        news: '它是对新近发生的有社会意义并引起公众兴趣的事实的简短报道',
+        select: ''
+    }, {
+        name: '第一学',
+        url: '../image/tx_5.jpg',
+        news: '参考消息报社编辑出版',
+        select: ''
+    }]
     apiready = function() {
         // 监听showNews事件，显示添加好友框     
         api.addEventListener({
@@ -174,8 +166,18 @@
                 bounces: false
             });
         });
-       
+
+        // 滚动到底部触发的事件
+        api.addEventListener({
+            name:'scrolltobottom',
+            extra:{
+                threshold:0            //设置距离底部多少距离时触发，默认值为0，数字类型
+            }
+        }, function(ret, err){        
+            // alert('已滚动到底部');
+        });
     }
+    getData(data);
     getData(data);
 
     function openS() {
@@ -184,7 +186,7 @@
             url: './news/newsSearch.html',
         });
     }
-   
+
 
     // 关闭添加好友弹窗
     function closeNews() {
@@ -203,7 +205,7 @@
     // 打开聊天窗口
     function openChat(ele) {
         // var major_Name = $api.text(ele);
-        var name = $api.attr(ele,'data-name');
+        var name = $api.attr(ele, 'data-name');
         api.openWin({
             name: 'winName',
             url: './news/chatPage.html',

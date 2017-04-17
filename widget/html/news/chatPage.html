@@ -46,6 +46,56 @@
         $api.html(title, name);
         fnInit();
 
+        // 聊天界面模块
+        var UIChatTools = api.require('UIChatTools');
+UIChatTools.open({
+    chatBox: {
+        placeholder: '聊天内容',     
+        autoFocuse: false,  
+        maxRows: 6     
+    },
+    styles: {
+        bgColor: '#D1D1D1',   
+        margin: 10,           
+        mask: {               
+           bgColor:'rgba(0,0,0,0.5)'
+        }             
+    },
+    tools: {
+        h: 44,          
+        iconSize: 30,   
+        recorder: {     
+           normal: 'fs://UIChatTolls/recorder.png',  
+           selected: 'fs://UIChatTolls/recorder1.png' 
+        },
+        image: {        
+           normal: 'fs://UIChatTolls/image.png',  
+           selected: 'fs://UIChatTolls/image1.png' 
+        },
+        video: {        
+           normal: 'fs://UIChatTolls/video.png',  
+           selected: 'fs://UIChatTolls/video1.png' 
+        },
+        packet: {       
+           normal: 'fs://UIChatTolls/packet.png',  
+           selected: 'fs://UIChatTolls/packet1.png' 
+        },
+        face: {         
+           normal: 'fs://UIChatTolls/face.png',  
+           selected: 'fs://UIChatTolls/face1.png' 
+        },
+        append: {       
+           normal: 'fs://UIChatTolls/append.png',  
+           selected: 'fs://UIChatTolls/append1.png'
+        }
+    },
+    emotions:['widget://res/emotions/basic','widget://res/emotions/append1','widget://res/emotions/append2']
+}, function(ret) {
+    if (ret) {
+        api.alert({msg:JSON.stringify(ret)});
+    } 
+});
+
     };
 </script>
 </html>
