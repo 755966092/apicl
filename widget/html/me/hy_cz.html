@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        body, html{
+            background-color: #EDECF3;
+        }
+        header {
+            background-color: #7ABF38;
+            height: 1rem;
+            line-height: 1rem;
+            text-align: center;
+            position: relative;
+            font-size: .36rem;
+            position: relative;
+        }
+        
+        header span:nth-child(1) {
+            line-height: 1rem;
+            position: absolute;
+            left: 0;
+            background: url(../../image/icon_fanh.png)no-repeat;
+            background-size: .2rem .3rem;
+            padding-left: .6rem;
+            background-position: .34rem .36rem;
+            color: #fff;
+            font-size: .28rem;
+        }
+        header span:nth-child(2) {
+            color: #fff;
+            line-height: 1rem;
+         }
+        header span:nth-child(3) {
+            position: absolute;
+            right: .2rem;
+            top: .3rem;
+            line-height: 1rem;
+            display: inline-block;
+            width: .44rem;
+            height: .44rem;
+            background: url(../../image/icon_member/icon_bz.png);
+            -webkit-background-size: .44rem .44rem;
+            background-size: .44rem .44rem;
+            vertical-align:middle;
+        }
+
+        .main {
+            height: 3.8rem;
+            background-color: #7ABF38;
+            padding-right: .2rem;
+            color: #fff;
+            text-align: center;
+        }
+        /* 我的账单 */
+        .main .bill {
+           text-align: right;
+            
+            font-size: .28rem;
+        }
+        /* 钱数 */
+        .main h3 {
+            font-size: .64rem;
+            margin-bottom: .5rem;
+        }
+        /* 余额 有效期*/
+        .main .remainder,
+        .main .time {
+            font-size: .28rem;
+            margin-bottom: .5rem;
+        }
+        ul li {
+            background: #fff url(../../image/icon_member/icon_cz.png)no-repeat;
+            -webkit-background-size: .34rem .34rem;
+            background-size: .34rem .34rem;
+            background-position: .25rem .22rem;
+            height: .8rem;
+            font-size: .32rem;
+            padding-left: .7rem;
+            line-height: .8rem;
+            border-bottom: 1px solid #E4E4E4;
+        }
+        ul li span {
+            display: inline-block;
+            width: .15rem;
+            height: .8rem;
+            background: url(../../image/icon_member/icon_zk.png)no-repeat;
+            -webkit-background-size: .15rem .25rem;
+            background-size: .15rem .25rem;
+            background-position: 0 .3rem;
+            float: right;
+            margin-right: .2rem;
+        }
+        ul li:nth-child(2) {
+            background: #fff url(../../image/icon_member/icon_tx.png)no-repeat;
+             -webkit-background-size: .34rem .34rem;
+            background-size: .34rem .34rem;
+            background-position: .25rem .22rem;
+        }
+        ul li:nth-child(3) {
+            margin-top: .3rem;
+            background: #fff url(../../image/icon_member/icon_jl.png)no-repeat;
+             -webkit-background-size: .34rem .34rem;
+            background-size: .34rem .34rem;
+            background-position: .25rem .22rem;
+        }
+    </style>
+</head>
+<body>
+     <header>
+        <span onclick="api.closeFrame()">返回</span>
+        <span>充值会员</span>
+        <span></span>
+    </header>
+    <div class="main">
+        <p class="bill">我的账单</p>
+        <h3>60.00</h3>
+        <p class="remainder">余额（元）</p>
+        <p class="time">会员有效期至<span>2017</span>年<span>12</span>月<span>1</span>日</p>
+    </div>
+    <ul>
+        <li data-val="hy">
+            充值会员
+            <span></span>
+        </li>
+        <li data-val="tx">
+            提现
+            <span></span>
+        </li>
+        <li data-val="jl">
+            提现记录
+            <span></span>
+        </li>
+        
+    </ul>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+	    fnInit()
+    };
+    function login(ele) {
+       // 根据点击的按钮进入不同的页面
+        var val = $api.attr(ele, 'data-val');
+        api.openWin({
+            name: 'winName',
+            url: './me/hy_' + val + '.html',
+            pageParam: {
+                name: 'value'
+            }
+        });
+    }
+    
+</script>
+</html>
