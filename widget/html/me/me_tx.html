@@ -6,6 +6,24 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
+        header {
+            background-color: #3A393E;
+            height: 1rem;
+            color: #fff;
+            line-height: 1rem;
+            text-align: center;
+            position: relative;
+            font-size: .36rem;
+            position: relative;
+        }
+        header span:nth-child(1) {
+            position: absolute;
+            left: 0;
+            background: url(../image/icon_fanh.png)no-repeat;
+            background-size: .2rem .31rem;
+            padding-left: .4rem;
+            background-position: .14rem .36rem;
+        }
         body, html{
             background-color: #000;
             height: 100%;
@@ -16,7 +34,7 @@
         .main img {
             margin-top: 1.64rem;
             width: 7.5rem;
-            height: auto;
+            height: 7.5rem;
         }
         .main span {
             color: #fff;
@@ -47,6 +65,7 @@
     </header>
     <div class="main">
         <img src="../../image/tx_5.jpg">
+        <!-- <img src="../../image/tx_5.jpg"> -->
         <div>
             <span data-str="camear" onclick="upload(this)">拍照上传</span>
             <span data-str="photo" onclick="upload(this)">相册上传</span>
@@ -57,16 +76,44 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
-	    fnInit()
+	    fnInit();
     };
 
     function upload(str) {
         var val = $api.attr(str, 'data-str')
         if (val === 'camear') {
-            var cameraTool = api.require('cameraTool');
-            cameraTool.openCamera(function(ret, err) { api.prompt({ title: "信息", msg: "图片路径：" + ret.imgPath, buttons: ["取消", "确定"] }); });
+             api.getPicture({
+                    sourceType: 'camera',
+                    mediaValue: 'pic',
+                    encodingType: 'jpg',
+                    destinationType: 'base64',
+                    quality: 50,
+                    targetWidth: 750,
+                    targetHeight: 750,
+                    saveToPhotoAlbum: false // 拍照后是否保存照片到相册
+                }, function(ret, err) {
+                    if (ret) {
+                        $api.attr($api.dom('img'),'src', ret.base64Data)
+                    } else {
+                        alert(JSON.stringify(err));
+                    }
+                });
         } else {
-
+            api.getPicture({
+                sourceType: 'library',
+                mediaValue: 'pic',
+                encodingType: 'jpg',
+                destinationType: 'base64',
+                quality: 50,
+                targetWidth: 750,
+                targetHeight: 750
+            }, function(ret, err) {
+                if (ret) {
+                    $api.attr($api.dom('img'),'src', ret.base64Data)
+                } else {
+                    alert(JSON.stringify(err));
+                }
+            });
         }
     }
   
