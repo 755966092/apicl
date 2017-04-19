@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        body,html{
+            background-color: #F8F8F8;
+        }
+        .main {
+            margin: .3rem .3rem;
+            padding-bottom: 1.3rem;
+        }
+        .main .time {
+            width: 1.1rem;
+            height: .36rem;
+            background-color: #CFCFCF;
+            font-size: .2rem;
+            color: #fff;
+            text-align: center;
+            line-height: .36rem;
+            margin: 0 auto;  
+            border-radius: .05rem;
+            margin-bottom: .3rem;
+        }
+        .main .oneself,
+        .main .other {
+            margin-bottom: .3rem;
+        }
+        .main .oneself img,
+        .main .other img {
+            width: .72rem;
+            height: .72rem;
+            
+        }
+        .main .oneself p,
+        .main .other p {
+            background-color: #A0E75A;
+            font-size: .28rem;
+            min-height: .8rem;
+            min-width: 0.1rem;
+            max-width: 3.76rem;
+            color: #000;
+            line-height: .5rem;
+            margin-right: .3rem;
+            box-sizing: border-box;
+            padding: .15rem .2rem;
+            border-radius: .1rem;
+            position: relative;
+        }
+        
+        .main .oneself p:after {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-top: .2rem solid transparent;
+            border-left: .32rem solid #A0E75A;
+            border-bottom: .2rem solid transparent;
+            position: absolute;
+            top: .175rem;
+            right: -.22rem;
+        }
+        .main .other p:after {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-top: .2rem solid transparent;
+            border-right: .32rem solid #fff;
+            border-bottom: .2rem solid transparent;
+            position: absolute;
+            top: .175rem;
+            left: -.22rem;
+        }
+        .main .other {
+
+        }
+        .main .other p {
+            background-color: #fff;
+            margin-right: 0;
+            margin-left: .3rem;
+            border: 1px solid #E3E3E3;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <!-- <p class="time">04:19</p>
+        <div class="oneself clearfix">
+            <img class="fr" src="../../image/tx_2.jpg">
+            <p class="fr"> d第一 </p>
+        </div>
+        <div class="other clearfix">
+            <img class="fl" src="../../image/tx_2.jpg">
+            <p class="fl">qwwwwwwww</p>
+        </div> -->
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+
+<script type="text/javascript">
+    apiready = function(){
+
+        // 调整页面到输入框的后面
+        api.sendFrameToBack({
+            from: 'chattContent',
+        });
+        api.addEventListener({
+            name: 'sendMsg'
+        }, function(ret, err) {
+            // 发送消息后, 添加消息内容到页面
+             $api.append($api.dom('.main'),'<div class="oneself clearfix"><img class="fr" src="../../image/tx_2.jpg"><p class="fr"> ' + ret.value.msg + ' </p></div>');
+        });
+        api.addEventListener({
+            name: 'receiveMsg'
+        }, function(ret, err) {
+            // 收到消息后, 添加消息内容到页面
+            $api.append($api.dom('.main'),'<div class="other clearfix"><img class="fl" src="../../image/tx_2.jpg"><p class="fl">' + ret.value.msg + '</p></div>');
+        });
+    };
+    
+</script>
+</html>

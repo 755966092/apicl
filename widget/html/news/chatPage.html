@@ -25,8 +25,19 @@
         left: 0;
         background: url(../../image/icon_fanh.png)no-repeat;
         background-size: .22rem .37rem;
-        padding-left: .45rem;
-        background-position: .1rem .34rem;
+        padding-left: .65rem;
+        background-position: .3rem .34rem;
+    }
+    header span.datum {
+      display: inline-block;
+      background: url(../../image/icon_other/icon_datum.png)no-repeat;
+      -webkit-background-size: .42rem .39rem;
+      background-size: .42rem .39rem;
+      width: .42rem;
+      height: .39rem;
+      position: absolute;
+      right: .3rem;
+      top: .35rem;
     }
     </style>
 </head>
@@ -35,17 +46,97 @@
     <header>
         <span onclick="api.closeWin()">返回</span>
         <span id="title"></span>
+        <span class="datum"></span>
     </header>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
+var rong, UIChatTools;
 apiready = function() {
-   
+    // 融云模块
+    rong = api.require('rongCloud2');
 
     //聊天界面模块
-    var UIChatTools = api.require('UIChatTools');
-        UIChatTools.open({
+    UIChatTools = api.require('UIChatTools');
+    
+    // 获取参数
+    var name = api.pageParam.name;
+    var title = document.getElementById('title')
+    $api.html(title, name);
+    
+    // 初始化界面
+    fnInit();
+
+    // 初始化聊天      
+    chatTools();
+    
+    // 聊天内容
+    api.openFrame({
+        name: 'chattContent',
+        url: './chatContent.html',
+        rect: {
+            x: 0,
+            y: headerH,
+            w: 'auto',
+            h: 'auto'
+        },
+        pageParam: {
+            name: 'value'
+        },
+        bounces: true
+    });
+
+};
+
+// 接入融云
+function rongyun () {
+   
+    rong.init(function(ret, err) {
+        if (ret.status == 'error')
+            api.toast({ msg: err.code });
+    });
+   receiveMsg();
+    rong.connect(
+        {   
+            // 用户1
+            // token: 'aAoW4oalHGpvB6Hw89bG0XzZSHvx/Xm6zmi6cWDa3L4VyfNcz/KXDFQxtpoQ+os1nT0799sMXlXPvUAK3FnjIY94cnJzE+aT'
+            // 用户2
+            token: 'hjjQ018gh2aPKpdyjqhX0nzZSHvx/Xm6zmi6cWDa3L4VyfNcz/KXDDNYtoRSbb1+nT0799sMXlXSm1rb7lqSfY94cnJzE+aT'
+        },function(ret, err) { 
+            if (ret.status == 'success') api.toast({ msg: ret.result.userId }); 
+        });
+
+}
+
+// 监听接收消息
+function receiveMsg() {
+   rong.setOnReceiveMessageListener(function(ret, err) {
+      // api.toast({ msg: JSON.stringify(ret.result.message) });
+      // api.toast({ msg: ret.result.message.left });
+      api.alert({
+          title: 'title',
+          msg: ret.result.message,
+      }, function(ret, err) {
+          if (ret) {
+              alert(JSON.stringify(ret));
+          } else {
+              alert(JSON.stringify(err));
+          }
+      });
+      api.sendEvent({
+          name: 'receiveMsg',
+          extra: {
+              msg: ret.result.message.content.text
+          }
+      });
+    })
+}
+
+
+// 聊天界面
+function chatTools() {
+  UIChatTools.open({
             chatBox: {
                 placeholder: '聊天内容',     
                 autoFocuse: true,  
@@ -83,7 +174,14 @@ apiready = function() {
             // emotions:['widget://image/chatPage/emoticons/basic','widget://image/chatPage/emoticons/append1','widget://image/chatPage/emoticons/append2']
         }, function(ret) {
             if (ret) {
-                alert(JSON.stringify(ret));
+                if (ret.eventType === 'send') {
+                  // alert(JSON.stringify(ret.msg));
+                  /**
+                   * sendMsg(msg)
+                   * msg: 发送的消息
+                   */
+                  sendMsg(ret.msg);
+                }
             } 
         });
         // 附加按钮
@@ -114,41 +212,88 @@ apiready = function() {
            api.alert({msg:'点击了第'+ret.index+'个按钮'});
         });
         // 监听功能按钮
-        var UIChatTools = api.require('UIChatTools');
-            UIChatTools.toolsListener(function(ret) {
-               if (ret.eventType == 'video') {
-                  api.alert({
-                      title: 'title',
-                      msg: 'video',
-                  }, function(ret, err) {
-                      if (ret) {
-                          alert(JSON.stringify(ret));
-                      } else {
-                          alert(JSON.stringify(err));
-                      }
-                  });
-               }
-            });
-        // 获取输入框的值
-       
-    var rong = api.require('rongCloud2');
-    rong.init(function(ret, err) {
-        if (ret.status == 'error')
-            api.toast({ msg: err.code });
-    });
-    rong.connect(
-        { 
-            token: 'aAoW4oalHGpvB6Hw89bG0XzZSHvx/Xm6zmi6cWDa3L4VyfNcz/KXDFQxtpoQ+os1nT0799sMXlXPvUAK3FnjIY94cnJzE+aT'
-        },function(ret, err) { 
-            if (ret.status == 'success') api.toast({ msg: ret.result.userId }); 
+        UIChatTools.toolsListener(function(ret) {
+           if (ret.eventType == 'video') {
+              api.alert({
+                  title: 'title',
+                  msg: 'video',
+              }, function(ret, err) {
+                  if (ret) {
+                      alert(JSON.stringify(ret));
+                  } else {
+                      alert(JSON.stringify(err));
+                  }
+              });
+           }
         });
+        rongyun();
+}
 
-     // 获取参数
-    var name = api.pageParam.name;
-    var title = document.getElementById('title')
-    $api.html(title, name);
-    fnInit();
-};
+/**
+* 发送消息 
+* sendMsg(msg)
+* msg: 发送的消息
+*/
+function sendMsg(msg) {
+  var sendMsg;
+  rong.sendTextMessage({
+      conversationType: 'PRIVATE',
+      targetId: 'testUser1',
+      text: msg,
+      extra: ''
+  }, function(ret, err) {
+      
+      if (ret.status == 'prepare') {
+        sendMsg = ret.result.message.content.text;
+
+         // api.toast({ msg: JSON.stringify(ret.result.message) });
+        api.alert({
+            title: 'title',
+            msg: '第一个prepare:' + ret.result.message.content.text,
+        }, function(ret, err) {
+            
+        });
+      }
+         
+      else if (ret.status == 'success') {
+         // api.toast({ msg: ret.result.message.messageId });
+         
+          api.alert({
+              title: 'title',
+              msg: '第二个message' + ret.result.message.messageId,
+          }, function(ret, err) {
+              if (ret) {
+                  alert('第二成功'+JSON.stringify(ret));
+              } else {
+                  alert(JSON.stringify(err));
+              }
+          });
+          api.sendEvent({
+              name: 'sendMsg',
+              extra: {
+                  msg: sendMsg
+              }
+          });
+          
+          
+      }
+         
+      else if (ret.status == 'error') {
+        // api.toast({ msg: err.code });
+          api.alert({
+              title: 'title',
+              msg: '第三个message' + err.code,
+          }, function(ret, err) {
+              if (ret) {
+                  alert(JSON.stringify(ret));
+              } else {
+                  alert(JSON.stringify(err));
+              }
+          });
+      }
+          
+  });
+}
 </script>
 
 </html>
