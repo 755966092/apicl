@@ -33,7 +33,7 @@ function exitApp() {
             name: 'keyback'
         }, function(ret, err) {
             api.closeWidget({
-                id: 'A6911018044825', //这里改成自己的应用ID
+                id: 'A6947696977363', //这里改成自己的应用ID
                 retData: {
                     name: 'closeWidget'
                 },

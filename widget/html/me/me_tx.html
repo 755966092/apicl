@@ -93,7 +93,11 @@
                     saveToPhotoAlbum: false // 拍照后是否保存照片到相册
                 }, function(ret, err) {
                     if (ret) {
+                       if (!ret.base64Data) {
+                        
+                    } else {    
                         $api.attr($api.dom('img'),'src', ret.base64Data)
+                    }
                     } else {
                         alert(JSON.stringify(err));
                     }
@@ -109,7 +113,11 @@
                 targetHeight: 750
             }, function(ret, err) {
                 if (ret) {
-                    $api.attr($api.dom('img'),'src', ret.base64Data)
+                    if (!ret.base64Data) {
+                        
+                    } else {    
+                        $api.attr($api.dom('img'),'src', ret.base64Data)
+                    }
                 } else {
                     alert(JSON.stringify(err));
                 }
