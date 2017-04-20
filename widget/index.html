@@ -11,10 +11,11 @@
 <script type="text/javascript" src="script/api.js"></script>
 <script type="text/javascript">
     apiready = function () {
-        api.openWin({
-            name: 'main',
-            url: 'html/main.html',
-        });
+        // api.openWin({
+        //     name: 'main',
+        //     url: 'html/main.html',
+        //     slidBackEnabled: false,
+        // });
         // api.openWin({
         //     name: 'loginWin',
         //     url: './login.html',
@@ -22,5 +23,30 @@
         //         name: 'value'
         //     }
         // });
+        var userToken = $api.getStorage('userToken');
+        var rongToken = $api.getStorage('rongToken');
+        if(userToken) {
+             api.openWin({
+                name: 'main',
+                url: 'html/main.html',
+                pageParam: {
+                    userToken: userToken,
+                    rongToken: rongToken
+                },
+                slidBackEnabled: false,
+            });
+        } else {
+           // alert()
+            api.openWin({
+                name: 'loginPage',
+                url: './me_login.html',
+                pageParam: {
+                    name: 'value'
+                },
+                slidBackEnabled: false
+            });
+        }
     }
 </script>
+
+

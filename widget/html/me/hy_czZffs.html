@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        body,html{
+            background-color: rgba(0,0,0,0.3);
+            height: 100%;
+        }
+        .main {
+            width: 6.1rem;
+            height: 5.06rem;
+            background-color: #fff;
+            border-radius: .2rem;
+            margin: 0 auto;
+            vertical-align: middle;
+            /* 垂直居中 */
+            position: absolute;
+            top: 0;
+            bottom: 0;  
+            left: 0;
+            right: 0; 
+            margin: auto;
+
+
+        }
+       
+        .zf, .title {
+            font-size: .28rem;
+            height: 1.56rem;
+            vertical-align: middle;
+            border-bottom: 1px solid #EFEFEF;
+        }
+        .zf {
+            line-height: 1.2rem;
+            vertical-align: middle;
+            height: 1.2rem;
+            position: relative;
+        }
+        
+         .title {
+            font-size: .34rem;
+            text-align: center;
+            line-height: 1.56rem;
+        }
+        
+        /* 选择图标 */
+        .icon {
+            display: inline-block;
+            width: .43rem;
+            height: 1.2rem;
+            background: url(../../image/icon_member/icon_cz01.png)no-repeat;
+            -webkit-background-size: .43rem .43rem;
+            background-size: .43rem .43rem;
+            background-position: 0 center;
+            margin-left: .8rem;
+            margin-right: .6rem;
+            }
+        input {
+            opacity: 0.5;
+             width: .43rem;
+            height: 1.2rem;
+            position: absolute;
+            left: .83rem;
+            opacity: 0;
+        }
+        .select1 {
+             background: url(../../image/icon_member/icon_cz02.png)no-repeat;
+            -webkit-background-size: .43rem .43rem;
+            background-size: .43rem .43rem;
+            background-position: 0 center;
+        }
+        /* 支付图标 */
+        .zfb, .wx {
+            margin-right: .2rem;
+            display: inline-block;
+            width: .58rem;
+            height: 1.2rem;
+            background: url(../../image/icon_member/icon_zfb.png)no-repeat;
+            -webkit-background-size: .58rem .58rem;
+            background-size: .58rem .58rem;
+            background-position: 0 center;
+        }
+        .wx {
+             background: url(../../image/icon_member/icon_wx.png)no-repeat;
+            -webkit-background-size: .58rem .58rem;
+            background-size: .58rem .58rem;
+            background-position: 0 center;
+        }
+        
+        /* 底部按钮 */
+        .btn {
+            line-height: 1.05rem;
+            font-size: 0;
+        }
+        .clear,.enter {
+            height: 1.05rem;
+            font-size: .34rem;
+            width: 3.05rem;
+            text-align: center;
+            background-color: #EEEEEE;
+            color: #08BB08;
+        }
+        .clear {
+            border-bottom-left-radius: .2rem;
+        }
+        .enter {
+            background-color: #08BB08;
+            color: #fff;
+            border-bottom-right-radius: .2rem;
+            height: 1.08rem;
+        }
+    </style>
+</head>
+<body>
+     <div class="main">
+         <p class="title">充值￥<span class="money"></span>，请选择支付方式</p>
+         <p class="zf zf1" onclick="selectZfb()">
+            <span   class="icon select1 fl"></span>
+            <!-- <input class="fl" type="radio" name="zf"> -->
+            <span class="zfb fl"></span>
+            <span class="text fl">支付宝支付</span>
+        </p>
+         <p class="zf" onclick="selectWx()" >
+            <span class="icon  fl"></span>
+            <!-- <input class="fl" type="radio" name="zf"> -->
+            <span class="wx fl"></span>
+           <span class="text fl">微信支付</span>
+        </p>
+        <div class="btn">
+            <span class="clear fl" onclick="submit(this)">取消</span>
+            <span class="enter fl" onclick="submit(this)">确定</span>
+        </div>
+     </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+    var money;
+    apiready = function(){
+        money = api.pageParam.money;
+        $api.text($api.dom('.money'), money);
+    }
+        
+   function selectZfb() {
+        $api.addCls(document.getElementsByClassName('icon')[0], 'select1');
+        $api.removeCls(document.getElementsByClassName('icon')[1], 'select1');
+        // 支付宝支付
+   }
+   function selectWx() {
+        $api.addCls(document.getElementsByClassName('icon')[1], 'select1');
+        $api.removeCls(document.getElementsByClassName('icon')[0], 'select1');
+        // 支付宝支付
+   }
+    function submit(ele) {
+        var text = $api.text(ele)
+        if (text === '确定') {
+            if ($api.hasCls(document.getElementsByClassName('icon')[0], 'select1')) {
+                alert('支付宝支付')
+            } else {
+                alert('微信支付')
+            }
+            api.closeFrame({
+                name: 'czZffs'
+            });
+        } else {
+            api.closeFrame({
+                name: 'czZffs'
+            });
+        }
+        
+    }
+</script>
+</html>

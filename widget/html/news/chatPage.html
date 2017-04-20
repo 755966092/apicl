@@ -52,13 +52,11 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
-var rong, UIChatTools;
+var  UIChatTools;
 apiready = function() {
-    // 融云模块
-    rong = api.require('rongCloud2');
-
-    //聊天界面模块
-    UIChatTools = api.require('UIChatTools');
+    // 初始化模块
+    moduleInit()
+    
     
     // 获取参数
     var name = api.pageParam.name;
@@ -68,7 +66,7 @@ apiready = function() {
     // 初始化界面
     fnInit();
 
-    // 初始化聊天      
+    // 初始化聊天界面
     chatTools();
     
     // 聊天内容
@@ -114,16 +112,16 @@ function receiveMsg() {
    rong.setOnReceiveMessageListener(function(ret, err) {
       // api.toast({ msg: JSON.stringify(ret.result.message) });
       // api.toast({ msg: ret.result.message.left });
-      api.alert({
-          title: 'title',
-          msg: ret.result.message,
-      }, function(ret, err) {
-          if (ret) {
-              alert(JSON.stringify(ret));
-          } else {
-              alert(JSON.stringify(err));
-          }
-      });
+      // api.alert({
+      //     title: 'title',
+      //     msg: ret.result.message,
+      // }, function(ret, err) {
+      //     if (ret) {
+      //         alert(JSON.stringify(ret));
+      //     } else {
+      //         alert(JSON.stringify(err));
+      //     }
+      // });
       api.sendEvent({
           name: 'receiveMsg',
           extra: {
@@ -247,27 +245,27 @@ function sendMsg(msg) {
         sendMsg = ret.result.message.content.text;
 
          // api.toast({ msg: JSON.stringify(ret.result.message) });
-        api.alert({
-            title: 'title',
-            msg: '第一个prepare:' + ret.result.message.content.text,
-        }, function(ret, err) {
+        // api.alert({
+        //     title: 'title',
+        //     msg: '第一个prepare:' + ret.result.message.content.text,
+        // }, function(ret, err) {
             
-        });
+        // });
       }
          
       else if (ret.status == 'success') {
          // api.toast({ msg: ret.result.message.messageId });
          
-          api.alert({
-              title: 'title',
-              msg: '第二个message' + ret.result.message.messageId,
-          }, function(ret, err) {
-              if (ret) {
-                  alert('第二成功'+JSON.stringify(ret));
-              } else {
-                  alert(JSON.stringify(err));
-              }
-          });
+          // api.alert({
+          //     title: 'title',
+          //     msg: '第二个message' + ret.result.message.messageId,
+          // }, function(ret, err) {
+          //     if (ret) {
+          //         alert('第二成功'+JSON.stringify(ret));
+          //     } else {
+          //         alert(JSON.stringify(err));
+          //     }
+          // });
           api.sendEvent({
               name: 'sendMsg',
               extra: {

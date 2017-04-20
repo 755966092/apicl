@@ -23,7 +23,7 @@
             background: #fff url(../image/icon_member/icon_cz.png)no-repeat;
             -webkit-background-size: .34rem .34rem;
             background-size: .34rem .34rem;
-            background-position: .25rem .22rem;
+            background-position: .25rem center;
             position: relative;
             
         }
@@ -97,61 +97,61 @@
             background: #fff url(../image/icon_my/icon_hy.png)no-repeat;
             -webkit-background-size: .34rem .34rem;
             background-size: .34rem .34rem;
-            background-position: .6rem .22rem;
+            background-position: .6rem center;
         }
         .main ul li:nth-child(3) {
             background: #fff url(../image/icon_my/icon_tg.png)no-repeat;
             -webkit-background-size: .34rem .34rem;
             background-size: .34rem .34rem;
-            background-position: .6rem .22rem;
+            background-position: .6rem center;
         }
         .main ul li:nth-child(4) {
             background: #fff url(../image/icon_my/icon_gs.png)no-repeat;
             -webkit-background-size: .34rem .34rem;
             background-size: .34rem .34rem;
-            background-position: .6rem .22rem;
+            background-position: .6rem center;
         }
         .main ul li:nth-child(5) {
             background: #fff url(../image/icon_my/icon_gdd.png)no-repeat;
             -webkit-background-size: .34rem .34rem;
             background-size: .34rem .34rem;
-            background-position: .6rem .22rem;
+            background-position: .6rem center;
         }
         .main ul li:nth-child(6) {
             background: #fff url(../image/icon_my/icon_qdd.png)no-repeat;
             -webkit-background-size: .34rem .34rem;
             background-size: .34rem .34rem;
-            background-position: .6rem .22rem;
+            background-position: .6rem center;
         }
         .main ul li:nth-child(7) {
             background: #fff url(../image/icon_my/icon_fb.png)no-repeat;
             -webkit-background-size: .34rem .34rem;
             background-size: .34rem .34rem;
-            background-position: .6rem .22rem;
+            background-position: .6rem center;
         }
         .main ul li:nth-child(8) {
             background: #fff url(../image/icon_my/icon_wdq.png)no-repeat;
             -webkit-background-size: .34rem .34rem;
             background-size: .34rem .34rem;
-            background-position: .6rem .22rem;
+            background-position: .6rem center;
         }
         .main ul li:nth-child(9) {
             background: #fff url(../image/icon_my/icon_sc.png)no-repeat;
             -webkit-background-size: .34rem .34rem;
             background-size: .34rem .34rem;
-            background-position: .6rem .22rem;
+            background-position: .6rem center;
         }
         .main ul li:nth-child(10) {
             background: #fff url(../image/icon_my/icon_gz.png)no-repeat;
             -webkit-background-size: .34rem .34rem;
             background-size: .34rem .34rem;
-            background-position: .6rem .22rem;
+            background-position: .6rem center;
         }
         .main ul li:nth-child(11) {
             background: #fff url(../image/icon_my/icon_sz.png)no-repeat;
             -webkit-background-size: .34rem .34rem;
             background-size: .34rem .34rem;
-            background-position: .6rem .22rem;
+            background-position: .6rem center;
         }
         li.select span:first-child:before {
             content: "";
@@ -170,11 +170,11 @@
     <div class="main">
         <ul>
             <li onclick="login(this)" data-val="login">
-                <img  src="../image/tx_2.jpg">
+                <img class="headImg"  src="../image/tx_2.jpg">
                 <div class="uaseName">
                     <p>
-                        登陆
-                        <img src="../image/icon_my/icon_my.png">
+                        <span class="userName">登陆</span>
+                        <img  class="sexImg" src="../image/icon_my/icon_my01.png">
                     </p>
                     <p>个人说明</p>
                 </div>
@@ -195,8 +195,65 @@
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/common.js"></script>
     <script type="text/javascript">
+    var userToken, rongToken;
+
     	apiready = function(){
+             // 获取传递参数
+             userToken = api.pageParam.userToken;
+             rongToken = api.pageParam.rongToken;
+             
+             userInfo(userToken);
     	}
+
+        // 获取用户信息
+        function userInfo(userToken) {
+            var  userName, headImg, sex, currentCompany, currentPosition;
+            // 如果没有本地缓存，就从网络获取，有就使用本地缓存
+            if ($api.getStorage(''+ userToken +'userName')) {
+                // 本地数据设置页面内容
+                userName =   $api.getStorage(''+ userToken +'userName'); 
+                headImg =   $api.getStorage(''+ userToken +'headImg'); 
+                sex =   $api.getStorage(''+ userToken +'sex'); 
+                currentCompany =   $api.getStorage(''+ userToken +'currentCompany'); 
+                currentPosition =   $api.getStorage(''+ userToken +'currentPosition');
+                reviseContent(userName, headImg, sex, currentCompany, currentPosition);
+            } else {
+                 api.ajax({
+                    url: apiSite + '/api/user_center/index',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                        values: { 
+                            token: userToken
+                        }
+                    }
+                }, function(ret, err) {
+                    if (ret) {
+                        
+                            userName = ret.data.info.nickname,
+                            headImg = ret.data.info.head_img_url,
+                            sex = ret.data.info.sex,
+                            // sex = (ret.data.info.sex === 1)?'男':'女',
+                            // 当前公司
+                            currentCompany = ret.data.info.current_company, 
+                            // 当前职位
+                            currentPosition = ret.data.info.current_position;
+                            // 设置本地缓存
+                            $api.setStorage(''+ userToken +'userName', userName); 
+                            $api.setStorage(''+ userToken +'headImg', headImg); 
+                            $api.setStorage(''+ userToken +'sex', sex); 
+                            $api.setStorage(''+ userToken +'currentCompany', currentCompany); 
+                            $api.setStorage(''+ userToken +'currentPosition', currentPosition); 
+                            // 初始化页面内容   
+                            reviseContent(userName, headImg, sex, currentCompany, currentPosition);
+                    } else {
+                        alert(JSON.stringify(err));
+                    }
+                });
+            }
+           
+        }
+        //
     	function login(ele) {
            // 根据点击的按钮进入不同的页面
             var val = $api.attr(ele, 'data-val');
@@ -207,6 +264,24 @@
                     name: 'value'
                 }
             });
+        }
+
+        // 修改文本内容
+        function reviseContent(userName, headImg, sex, currentCompany, currentPosition) {
+            var name = $api.dom('.userName'),
+                head = $api.dom('.headImg'),
+                sexImg = $api.dom('.sexImg');
+            // 设置用户昵称
+            $api.text(name, userName);
+            // 设置用户头像
+            $api.attr(head, 'src', headImg);
+            // 设置用户性别
+            if (sex == 1 ) {
+                
+            } else {
+                $api.attr(sexImg, 'src', '../image/icon_my/icon_my02.png');
+            }
+            
         }
     </script>
 </body>

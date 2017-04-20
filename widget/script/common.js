@@ -56,11 +56,24 @@ function fnInit() {
 }
 
 //接口地址
-var apiSite = 'http://kyl.api.app.kuakao.com';
+
+var apiSite = 'http://wozai.tonyliangli.cn';
+
 var apiHeader = {
-    'app-id': 2,
-    'version-id': '2',
-    'did': '19900302',
-    'version-mini': '1',
-    'encrypt-did': '0a78e5dc37c7cb02528747b0e919e4b9'
+    "api.version": "1",
+    "cache-control": "no-cache",
+    "postman-token": "8f7e53a3-2c1a-250f-1136-76896a79c3a2"
 };
+
+// 用户token，融云token
+var userToken, rongToken;
+
+var rong,
+    UIChatTools;
+
+function moduleInit() {
+    // 融云模块
+    rong = api.require('rongCloud2');
+    //聊天界面模块
+    UIChatTools = api.require('UIChatTools');
+}

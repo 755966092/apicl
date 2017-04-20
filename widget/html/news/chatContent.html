@@ -8,6 +8,7 @@
     <style>
         body,html{
             background-color: #F8F8F8;
+            height: 20rem;
         }
         .main {
             margin: .3rem .3rem;
@@ -86,7 +87,7 @@
         }
     </style>
 </head>
-<body>
+<body id="body">
     <div class="main">
         <!-- <p class="time">04:19</p>
         <div class="oneself clearfix">
@@ -110,19 +111,32 @@
         api.sendFrameToBack({
             from: 'chattContent',
         });
+
+        var ele = $api.dom('.main'),heightMain;
+
         api.addEventListener({
             name: 'sendMsg'
         }, function(ret, err) {
             // 发送消息后, 添加消息内容到页面
              $api.append($api.dom('.main'),'<div class="oneself clearfix"><img class="fr" src="../../image/tx_2.jpg"><p class="fr"> ' + ret.value.msg + ' </p></div>');
+             // heightMain = $api.offset(ele).h;
+             // alert(heightMain);
         });
         api.addEventListener({
             name: 'receiveMsg'
         }, function(ret, err) {
             // 收到消息后, 添加消息内容到页面
-            $api.append($api.dom('.main'),'<div class="other clearfix"><img class="fl" src="../../image/tx_2.jpg"><p class="fl">' + ret.value.msg + '</p></div>');
+            $api.append($api.dom('.main'),'<div class="other clearfix"><img class="fl" src="../../image/tx_5.jpg"><p class="fl">' + ret.value.msg + '</p></div>');
+            // heightMain = $api.offset(ele).h;
+             // alert(heightMain);
         });
+        document.getElementsByClassName('main')[0].scroll
+        document.get
+
     };
-    
+    console.log(document.getElementById('body'))
+    document.getElementById('body').onscroll = function(e){
+        console.log(e)
+    }
 </script>
 </html>
