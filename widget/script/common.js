@@ -66,7 +66,8 @@ var apiHeader = {
 };
 
 // 用户token，融云token
-var userToken, rongToken;
+var userTokenAll = 5,
+    rongTokenAll;
 
 var rong,
     UIChatTools;

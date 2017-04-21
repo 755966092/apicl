@@ -164,7 +164,6 @@
         // var mobile = $api.val($api.dom('#txzh'));
         // var password = $api.val($api.dom('#psd'));
         
-       
         // 后期删除
         var mobile = '17600103536';
         var password = '123456'
@@ -187,7 +186,10 @@
                         rongToken = ret.data.rongcloud_token;
                     $api.setStorage('userToken', userToken);
                     $api.setStorage('rongToken', rongToken);
-                    alert('缓存信息：' + $api.getStorage('userToken'))
+                    // alert('缓存信息：' + $api.getStorage('user'+ userToken +'Token'))
+                    // 把当前的usertoken和rongtoken广播出去
+                    // sendToken (userToken,rongToken)
+
                     loginSuccess(userToken,rongToken);
 
                 } else {
@@ -204,7 +206,7 @@
         
     }
 
-    function loginSuccess (userToken,rongToken) {
+    function loginSuccess () {
         // 登陆完成
          api.openWin({
             name: 'main',
@@ -216,6 +218,14 @@
             }
         });
     }
-    
+    function sendToken (userToken,rongToken) {
+        api.sendEvent({
+            name: 'sendToken',
+            extra: {
+                userToken: userToken, 
+                rongToken: rongToken
+            }
+        });
+    }
 </script>
 </html>
