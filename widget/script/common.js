@@ -78,3 +78,40 @@ function moduleInit() {
     //聊天界面模块
     UIChatTools = api.require('UIChatTools');
 }
+
+// 接入融云
+function rongyun(rongToken) {
+
+    rong.init(function(ret, err) {
+        if (ret.status == 'error')
+            api.toast({
+                msg: err.code
+            });
+    });
+    receiveMsg();
+    rong.connect({
+        // 用户1
+        // token: 'aAoW4oalHGpvB6Hw89bG0XzZSHvx/Xm6zmi6cWDa3L4VyfNcz/KXDFQxtpoQ+os1nT0799sMXlXPvUAK3FnjIY94cnJzE+aT'
+        // 用户2
+        token: 'hjjQ018gh2aPKpdyjqhX0nzZSHvx/Xm6zmi6cWDa3L4VyfNcz/KXDDNYtoRSbb1+nT0799sMXlXSm1rb7lqSfY94cnJzE+aT'
+            // token: rongToken
+    }, function(ret, err) {
+        // alert(ret.status)
+        if (ret.status == 'success')
+            api.toast({
+                msg: ret.result.userId
+            });
+    });
+
+}
+
+function receiveMsg() {
+    rong.setOnReceiveMessageListener(function(ret, err) {
+        api.sendEvent({
+            name: 'receiveMsg',
+            extra: {
+                msg: ret.result.message.content.text
+            }
+        });
+    })
+}

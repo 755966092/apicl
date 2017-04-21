@@ -106,7 +106,7 @@
 
 <script type="text/javascript">
     apiready = function(){
-
+        moduleInit();
         // 调整页面到输入框的后面
         api.sendFrameToBack({
             from: 'chattContent',
@@ -118,25 +118,45 @@
             name: 'sendMsg'
         }, function(ret, err) {
             // 发送消息后, 添加消息内容到页面
-             $api.append($api.dom('.main'),'<div class="oneself clearfix"><img class="fr" src="../../image/tx_2.jpg"><p class="fr"> ' + ret.value.msg + ' </p></div>');
-             // heightMain = $api.offset(ele).h;
-             // alert(heightMain);
+            addSendMsg(ret.value.msg);
         });
         api.addEventListener({
             name: 'receiveMsg'
         }, function(ret, err) {
             // 收到消息后, 添加消息内容到页面
-            $api.append($api.dom('.main'),'<div class="other clearfix"><img class="fl" src="../../image/tx_5.jpg"><p class="fl">' + ret.value.msg + '</p></div>');
-            // heightMain = $api.offset(ele).h;
-             // alert(heightMain);
+            addReceMsg(ret.value.msg);
         });
-        document.getElementsByClassName('main')[0].scroll
-        document.get
+        
+        // 之前调用 init 和 connect 的代码省略
+        rong.getHistoryMessages({
+            conversationType: 'PRIVATE',
+            targetId: 'testUser1',
+            oldestMessageId: 688,
+            count: 20
+        }, function(ret, err) {
+            for (var i = ret.result.length-1; i >= 0 ; i--) {
+                if (ret.result[i].messageDirection == 'RECEIVE') {
+                    // 消息方向：SEND(发送) 或者 RECEIVE(接受)
+                    addReceMsg(ret.result[i].content.text)
+                } else {
+                    addSendMsg(ret.result[i].content.text);
+                }
+            }
+            alert(JSON.stringify(ret.result));
+        })
 
     };
     console.log(document.getElementById('body'))
     document.getElementById('body').onscroll = function(e){
         console.log(e)
+    }
+    // 接收消息后新建消息
+    function addReceMsg(msg, headImg) {
+        $api.append($api.dom('.main'),'<div class="other clearfix"><img class="fl" src="../../image/tx_5.jpg"><p class="fl">' + msg + '</p></div>');
+    }
+    // 发送消息后新建消息
+    function addSendMsg(msg, headImg) {
+        $api.append($api.dom('.main'),'<div class="oneself clearfix"><img class="fr" src="../../image/tx_2.jpg"><p class="fr"> ' + msg + ' </p></div>');
     }
 </script>
 </html>

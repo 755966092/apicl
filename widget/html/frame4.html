@@ -173,7 +173,7 @@
                 <img class="headImg"  src="../image/tx_2.jpg">
                 <div class="uaseName">
                     <p>
-                        <span class="userName">登陆</span>
+                        <span class="userName"></span>
                         <img  class="sexImg" src="../image/icon_my/icon_my01.png">
                     </p>
                     <p>个人说明</p>
@@ -196,23 +196,26 @@
     <script type="text/javascript" src="../script/common.js"></script>
     <script type="text/javascript">
     var userToken, rongToken;
-
+    var  userName, headImg, sex, currentCompany, currentPosition,imgChche;
     	apiready = function(){
              // 获取传递参数
              userToken = api.pageParam.userToken;
              rongToken = api.pageParam.rongToken;
-             
              userInfo(userToken);
+             // $api.clearStorage();
     	}
 
         // 获取用户信息
         function userInfo(userToken) {
-            var  userName, headImg, sex, currentCompany, currentPosition;
+            
             // 如果没有本地缓存，就从网络获取，有就使用本地缓存
             if ($api.getStorage(''+ userToken +'userName')) {
+            // if (0) {
                 // 本地数据设置页面内容
                 userName =   $api.getStorage(''+ userToken +'userName'); 
                 headImg =   $api.getStorage(''+ userToken +'headImg'); 
+                // headImg =   imgChche; 
+                // alert(headImg)
                 sex =   $api.getStorage(''+ userToken +'sex'); 
                 currentCompany =   $api.getStorage(''+ userToken +'currentCompany'); 
                 currentPosition =   $api.getStorage(''+ userToken +'currentPosition');
@@ -246,6 +249,18 @@
                             $api.setStorage(''+ userToken +'currentPosition', currentPosition); 
                             // 初始化页面内容   
                             reviseContent(userName, headImg, sex, currentCompany, currentPosition);
+                            // 图片缓存
+                            // api.imageCache({
+                            //     url: headImg,
+                            //     policy: 'cache_else_network'
+                            // }, function(ret, err) {
+                            //     if (ret) {
+                            //         alert(ret.url);
+                            //         // imgChche = ret.url;
+                            //     } else {
+                            //         alert(JSON.stringify(err));
+                            //     }
+                            // });
                     } else {
                         alert(JSON.stringify(err));
                     }
