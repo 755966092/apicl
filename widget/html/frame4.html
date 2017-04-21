@@ -209,16 +209,17 @@
         function userInfo(userToken) {
             
             // 如果没有本地缓存，就从网络获取，有就使用本地缓存
-            if ($api.getStorage(''+ userToken +'userName')) {
+            if ($api.getStorage('userName')) {
+            // if ($api.getStorage('userName')) {
             // if (0) {
                 // 本地数据设置页面内容
-                userName =   $api.getStorage(''+ userToken +'userName'); 
-                headImg =   $api.getStorage(''+ userToken +'headImg'); 
+                userName =   $api.getStorage('userName'); 
+                headImg =   $api.getStorage('headImg'); 
                 // headImg =   imgChche; 
                 // alert(headImg)
-                sex =   $api.getStorage(''+ userToken +'sex'); 
-                currentCompany =   $api.getStorage(''+ userToken +'currentCompany'); 
-                currentPosition =   $api.getStorage(''+ userToken +'currentPosition');
+                sex =   $api.getStorage('sex'); 
+                currentCompany =   $api.getStorage('currentCompany'); 
+                currentPosition =   $api.getStorage('currentPosition');
                 reviseContent(userName, headImg, sex, currentCompany, currentPosition);
             } else {
                  api.ajax({
@@ -242,31 +243,37 @@
                             // 当前职位
                             currentPosition = ret.data.info.current_position;
                             // 设置本地缓存
-                            $api.setStorage(''+ userToken +'userName', userName); 
-                            $api.setStorage(''+ userToken +'headImg', headImg); 
-                            $api.setStorage(''+ userToken +'sex', sex); 
-                            $api.setStorage(''+ userToken +'currentCompany', currentCompany); 
-                            $api.setStorage(''+ userToken +'currentPosition', currentPosition); 
+                            $api.setStorage('userName', userName); 
+                            
+                            $api.setStorage('sex', sex); 
+                            $api.setStorage('currentCompany', currentCompany); 
+                            $api.setStorage('currentPosition', currentPosition);
+
+
+                            // $api.setStorage(''+ userToken +'userName', userName); 
+                            // $api.setStorage(''+ userToken +'headImg', headImg); 
+                            // $api.setStorage(''+ userToken +'sex', sex); 
+                            // $api.setStorage(''+ userToken +'currentCompany', currentCompany); 
+                            // $api.setStorage(''+ userToken +'currentPosition', currentPosition);
                             // 初始化页面内容   
                             reviseContent(userName, headImg, sex, currentCompany, currentPosition);
                             // 图片缓存
-                            // api.imageCache({
-                            //     url: headImg,
-                            //     policy: 'cache_else_network'
-                            // }, function(ret, err) {
-                            //     if (ret) {
-                            //         alert(ret.url);
-                            //         // imgChche = ret.url;
-                            //     } else {
-                            //         alert(JSON.stringify(err));
-                            //     }
-                            // });
+                            api.imageCache({
+                                url: headImg,
+                                policy: 'cache_else_network'
+                            }, function(ret, err) {
+                                if (ret) {
+                                    $api.setStorage('headImg', ret.url); 
+                                } else {
+                                    alert(JSON.stringify(err));
+                                }
+                            });
                     } else {
                         alert(JSON.stringify(err));
                     }
                 });
             }
-           
+           // alert(headImg)
         }
         //
     	function login(ele) {

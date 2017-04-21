@@ -3,14 +3,39 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Document</title>
+	<style type="text/css">
+		div {
+			margin-top: 1000px;
+			height: 500px;
+			border: 1px solid #000;
+		}
+		body {
+			height: 2000px;
+		}
+	</style>
 </head>
 <body>
-	
+	<button onclick="dianji()">底部</button>
+	<button onclick="dianji1()">顶部</button>
+	<div>aaaa</div>
+
 </body>
 <!-- <script type="text/javascript" src="script/common.js"></script> -->
 <script type="text/javascript" src="script/api.js"></script>
 <script type="text/javascript" >
 	// moduleInit();
-	alert(rong)
+	console.log(document.getElementsByTagName('div')[0])
+	document.body.onscroll = function() {
+	console.log('距离顶部'+document.getElementsByTagName('div')[0].offsetTop)
+	// console.log('卷曲的高度'+document.getElementsByTagName('div')[0].scrollTop)
+
+	console.log( document.body.scrollTop)
+	}
+	function dianji() {
+		document.getElementsByTagName('div')[0].scrollIntoView(false);
+	}
+	function dianji1() {
+		document.getElementsByTagName('div')[0].scrollIntoView(true);
+	}
 </script>
 </html>

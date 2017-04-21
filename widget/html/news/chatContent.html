@@ -8,11 +8,11 @@
     <style>
         body,html{
             background-color: #F8F8F8;
-            height: 20rem;
+            /*height: 20rem;*/
         }
         .main {
             margin: .3rem .3rem;
-            padding-bottom: 1.3rem;
+            padding-bottom: 1.6rem;
         }
         .main .time {
             width: 1.1rem;
@@ -105,20 +105,29 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 
 <script type="text/javascript">
+var rongToken, userToken;
+var headImg = $api.getStorage('headImg'); 
+var messageId;
     apiready = function(){
+        rongToken = api.pageParam.rongToken;
+        userToken = api.pageParam.userToken;
         moduleInit();
+        // alert(rongToken + '--' +userToken)
         // 调整页面到输入框的后面
         api.sendFrameToBack({
             from: 'chattContent',
         });
 
-        var ele = $api.dom('.main'),heightMain;
+        // 滚动到底部
+        slideBut();
+
+        // var ele = $api.dom('.main'),heightMain;
 
         api.addEventListener({
             name: 'sendMsg'
         }, function(ret, err) {
             // 发送消息后, 添加消息内容到页面
-            addSendMsg(ret.value.msg);
+            addSendMsg(ret.value.msg, headImg);
         });
         api.addEventListener({
             name: 'receiveMsg'
@@ -126,12 +135,10 @@
             // 收到消息后, 添加消息内容到页面
             addReceMsg(ret.value.msg);
         });
-        
-        // 之前调用 init 和 connect 的代码省略
-        rong.getHistoryMessages({
+        // 最新聊天记录
+        rong.getLatestMessages({
             conversationType: 'PRIVATE',
             targetId: 'testUser1',
-            oldestMessageId: 688,
             count: 20
         }, function(ret, err) {
             for (var i = ret.result.length-1; i >= 0 ; i--) {
@@ -139,24 +146,120 @@
                     // 消息方向：SEND(发送) 或者 RECEIVE(接受)
                     addReceMsg(ret.result[i].content.text)
                 } else {
-                    addSendMsg(ret.result[i].content.text);
+                    addSendMsg(ret.result[i].content.text, headImg);
                 }
             }
-            alert(JSON.stringify(ret.result));
+            // 最新的消息的messageId,获取历史记录函数内部-20处理
+            messageId = ret.result[0].messageId;
+
+            // messageId = ret.result[ret.result.length-1].messageId;
+            // alert('messageId:'+ret.result[0].messageId);
+            // alert(JSON.stringify(ret.result));
         })
 
+        xiala(messageId);
+       
     };
-    console.log(document.getElementById('body'))
-    document.getElementById('body').onscroll = function(e){
-        console.log(e)
-    }
+
+
+
+
+
+
+    
     // 接收消息后新建消息
     function addReceMsg(msg, headImg) {
         $api.append($api.dom('.main'),'<div class="other clearfix"><img class="fl" src="../../image/tx_5.jpg"><p class="fl">' + msg + '</p></div>');
+            slideBut();
     }
     // 发送消息后新建消息
     function addSendMsg(msg, headImg) {
-        $api.append($api.dom('.main'),'<div class="oneself clearfix"><img class="fr" src="../../image/tx_2.jpg"><p class="fr"> ' + msg + ' </p></div>');
+        $api.append($api.dom('.main'),'<div class="oneself clearfix"><img class="fr" src="'+ headImg +'"><p class="fr"> ' + msg + ' </p></div>');
+            slideBut();
+    }
+    // 查看历史记录 往上面添加消息
+    function addSendMsgTop(msg, headImg) {
+        $api.prepend($api.dom('.main'),'<div class="oneself clearfix"><img class="fr" src="'+ headImg +'"><p class="fr"> ' + msg + ' </p></div>');
+    }
+    function addReceMsgTop(msg, headImg) {
+        $api.prepend($api.dom('.main'),'<div class="other clearfix"><img class="fl" src="../../image/tx_5.jpg"><p class="fl">' + msg + '</p></div>');
+    }
+
+    // 滚动到页面底部
+    function slideBut() {
+        $api.dom('.main').scrollIntoView(false);
+    }
+
+
+    // 查看历史记录
+    function chatHis() {
+        messageId -= 20;
+        var sta;
+        if (messageId > 0) {
+             rong.getHistoryMessages({
+                conversationType: 'PRIVATE',
+                targetId: 'testUser1',
+                oldestMessageId: messageId,
+                count: 20
+            }, function(ret, err) {
+                for (var i = 0; i < ret.result.length ; i++) {
+                    if (ret.result[i].messageDirection == 'RECEIVE') {
+                        // 消息方向：SEND(发送) 或者 RECEIVE(接受)
+                        addReceMsgTop(ret.result[i].content.text)
+                    } else {
+                        addSendMsgTop(ret.result[i].content.text, headImg);
+                    }
+
+                }
+            })
+            return 1
+         } else {
+            api.toast({
+                msg: '无更多记录'
+            });
+            return 1
+         }
+        
+        
+    }
+
+    // 下拉刷新后 执行函数chatHis(messageId)
+    function xiala() {
+
+        api.setCustomRefreshHeaderInfo({
+            bgColor: '#C0C0C0',
+            isScale: true,
+            image: {
+                pull: [
+                    'widget://image/refresh/dropdown0.png',
+                    'widget://image/refresh/dropdown1.png',
+                    'widget://image/refresh/dropdown2.png',
+                    'widget://image/refresh/dropdown3.png',
+                    'widget://image/refresh/dropdown4.png',
+                    'widget://image/refresh/dropdown5.png',
+                    'widget://image/refresh/dropdown6.png'
+                ],
+                load: [
+                    'widget://image/refresh/loading0.png',
+                    'widget://image/refresh/loading1.png',
+                    'widget://image/refresh/loading2.png',
+                    'widget://image/refresh/loading3.png',
+                    'widget://image/refresh/loading4.png'
+                ]
+            }
+        }, function() {
+            //下拉刷新被触发，自动进入加载状态，使用 api.refreshHeaderLoadDone() 手动结束加载中状态
+            //下拉刷新被触发，使用 api.refreshHeaderLoadDone() 结束加载中状态  
+            // alert('开始加载刷新数据，摇一摇停止加载状态');
+            // api.refreshHeaderLoadDone();
+            if (chatHis()) {
+                api.refreshHeaderLoadDone()
+            }
+            
+            // setTimeout(function(){
+            //     api.refreshHeaderLoadDone()
+            // },2000)
+        });
     }
 </script>
 </html>

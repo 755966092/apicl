@@ -52,12 +52,13 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
-var rongToken;
+var rongToken, userToken;
   apiready = function() {
       // 初始化模块
       moduleInit()
       
-      var rongToken = api.pageParam.rongToken;
+      rongToken = api.pageParam.rongToken;
+      userToken = api.pageParam.userToken;
       // 获取参数
       var name = api.pageParam.name;
       var title = document.getElementById('title')
@@ -80,48 +81,19 @@ var rongToken;
               h: 'auto'
           },
           pageParam: {
-              name: 'value'
+              rongToken: rongToken,
+              userToken: userToken
           },
           bounces: true
       });
 
   };
 
-  // // 接入融云
-  // function rongyun (rongToken) {
-     
-  //     rong.init(function(ret, err) {
-  //         if (ret.status == 'error')
-  //             api.toast({ msg: err.code });
-  //     });
-  //    receiveMsg();
-  //     rong.connect(
-  //         {   
-  //             // 用户1
-  //             // token: 'aAoW4oalHGpvB6Hw89bG0XzZSHvx/Xm6zmi6cWDa3L4VyfNcz/KXDFQxtpoQ+os1nT0799sMXlXPvUAK3FnjIY94cnJzE+aT'
-  //             // 用户2
-  //             token: rongToken
-  //         },function(ret, err) { 
-  //             if (ret.status == 'success') api.toast({ msg: ret.result.userId }); 
-  //         });
-
-  // }
+  
 
   // 监听接收消息
   function receiveMsg() {
      rong.setOnReceiveMessageListener(function(ret, err) {
-        // api.toast({ msg: JSON.stringify(ret.result.message) });
-        // api.toast({ msg: ret.result.message.left });
-        // api.alert({
-        //     title: 'title',
-        //     msg: ret.result.message,
-        // }, function(ret, err) {
-        //     if (ret) {
-        //         alert(JSON.stringify(ret));
-        //     } else {
-        //         alert(JSON.stringify(err));
-        //     }
-        // });
         api.sendEvent({
             name: 'receiveMsg',
             extra: {
@@ -179,6 +151,8 @@ var rongToken;
                      * msg: 发送的消息
                      */
                     sendMsg(ret.msg);
+
+                    // 把聊天内容滑动到最下面
                   }
               } 
           });
@@ -291,6 +265,11 @@ var rongToken;
         }
             
     });
+  }
+
+  // 把聊天内容滑动到最下面
+  function slideBut() {
+
   }
 </script>
 
