@@ -50,8 +50,13 @@
             box-sizing: border-box;
         }
         .main .ipt .tel {
-            background: url(../../image/icon_login/icon_sj.png)no-repeat;
-            background-size: .30rem .42rem;
+            background: url(../../image/icon_login/icon_yhmc.png)no-repeat;
+            background-size: .34rem .32rem;
+            background-position: .26rem center;
+        }
+        .main .ipt .psd {
+             background: url(../../image/icon_login/icon_psd2.png)no-repeat;
+            background-size: .32rem .34rem;
             background-position: .26rem center;
         }
         .main .ipt .yzm {
@@ -64,19 +69,33 @@
             position: relative;
         }
         .main .clearText {
-            display: inline-block;
-            width: .3rem;
+            width: .6rem;
             height: .74rem;
             background: url(../../image/icon_login/icon-clearText.png)no-repeat;
             -webkit-background-size: .3rem .3rem;
             background-size: .3rem .3rem;
-            background-position: 0 center;
+            background-position: center center;
             position: absolute;
             right: .3rem;
             display: none;
             top: 0;
         }
-       
+        .psdClear {
+             position: absolute;
+            right: .3rem;
+            display: none;
+            top: 0;
+              width: .6rem;
+            height: .74rem;
+            background: url(../../image/icon_login/icon_by.png)no-repeat;
+            background-size: .4rem .18rem;
+            background-position: center center;
+        }
+        .lookPsd {
+            background: url(../../image/icon_login/icon_yj.png)no-repeat;
+            background-size: .4rem .27rem;
+            background-position: center center;
+        }
         .main .ipt .lastIpt {
             position: relative;
             font-size: 0;
@@ -122,108 +141,131 @@
         <h3>请输入你的手机号</h3>
         <div class="ipt">
             <div class="firstIpt">
-                <input placeholder="请填写手机号码" maxlength="11" class="tel" id="tel"  type="text" name="txzh" onkeyup="iptChange()">
-                <span class="clearText" onclick="clearText()"></span>
+                <input placeholder="请设置用户名" class="tel" id="tel"  type="text" name="txzh" onkeyup="iptChange()">
+                <span class="clearText" id="iptClear" onclick="clearText()"></span>
+            </div>
+            <div class="firstIpt">
+                <input placeholder="请设置密码" class="tel psd" id="psd"  type="password" name="txzh" onkeyup="psdChange()">
+                <span class=" psdClear"  onclick="lookPsd()"></span>
             </div>
             <div class="lastIpt">
-                <input placeholder="请填写验证码"  class="yzm" id="yzm" type="text" name="yzm" onkeyup="iptChange1()">
-                <button class="hqyzm" onclick="gain()" disabled>获取验证码</button>
+                <input placeholder="邀请码（选填）" class="yzm" id="yzm" type="text" name="yqm">
+                <!-- <button class="hqyzm" onclick="gain()" disabled>获取验证码</button> -->
             </div>
         </div>
-        <button class="nextStep" onclick="nextStep()" disabled>下一步</button>
-        <p>接收短信大约需要<span class="time"></span>秒</p>
+        <button class="nextStep" onclick="nextStep()" disabled>注册</button>
+        <!-- <p>接收短信大约需要<span class="time"></span>秒</p> -->
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
+var tel;
     apiready = function(){
         fnInit();
-
+        tel = api.pageParam.tel;
     };
 
-    // 输入手机号后, 获取验证码按钮变色
-    function iptChange() {
-        $api.removeAttr($api.dom('.hqyzm'), 'disabled');
-        $api.css($api.dom('.hqyzm'), 'border: 1px solid #258AFF;color: #1180FF;');
-        $api.css($api.dom('.clearText'), 'display:inline-block');
-        if ($api.val($api.dom('#tel')) === '') {
-            $api.attr($api.dom('.hqyzm'), 'disabled', 'true');
-            $api.css($api.dom('.hqyzm'), 'border: 1px solid #d0d0d0;color: #9d9d9d;');
-            $api.css($api.dom('.clearText'), 'display:none');
-        }
-
-        var tel = $api.val($api.dom('#tel')),
-            yzm = $api.val($api.dom('#yzm')); 
-        if (tel.length === 11) {
-            judge(tel);
-        }
-    
+    // 显示隐藏查看密码图标
+    function psdChange() {
+        $api.css($api.dom('.psdClear'), 'display:inline-block');
+        if ($api.val($api.dom('#psd')) === '') {
+                $api.css($api.dom('.psdClear'), 'display:none');
+                $api.attr($api.dom('#psd'), 'type', 'password');
+                $api.removeCls($api.dom('.psdClear'), 'lookPsd');
+            }
     }
-
     // 输入验证码后, 取消禁用的下一步按钮
-    function iptChange1() {
-        $api.removeAttr($api.dom('.nextStep'), 'disabled');
+    function iptChange() {
+        // 修改下一步按钮
         $api.css($api.dom('.nextStep'), 'background:#08BB08');
+        $api.removeAttr($api.dom('.nextStep'), 'disabled');
+
+        // 修改清除按钮
+        $api.css($api.dom('#iptClear'), 'display:inline-block');
+        if ($api.val($api.dom('#tel')) === '') {
+                $api.css($api.dom('#iptClear'), 'display:none');
+            }
     }
+
     // 点击下一步后
     function nextStep() {
-        var tel = $api.val($api.dom('#tel')),
+
+
+        var nickName = $api.val($api.dom('#tel')),
+            psd = $api.val($api.dom('#psd')),
             yzm = $api.val($api.dom('#yzm'));
-
-         api.ajax({
-            url: apiSite + 'api/login/registerStepTwo',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-               values: { 
-                   mobile: $api.val($api.dom('#tel')),
-                   code: $api.val($api.dom('#yzm'))
-               }
-            }
-       }, function(ret, err) {
-            if (ret.code === 10004) {
+       
+        if (tel === '') {
+          
+            api.toast({
+                msg: '请输入用户名'
+            });
+        } else if (psd === '') {
+            api.toast({
+                msg: '请输入密码'
+            });
+        } else {
+            // 注册
+             alert(tel + '--' + nickName + '--' + psd + '--' + yzm)
+            api.ajax({
+                url: apiSite + 'api/login/registerStepThree',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: { 
+                        mobile: tel,
+                        password: psd,
+                        nickname: nickName,
+                        invitation_code: yzm
+                    }
+                }
+            }, function(ret, err) {
+                // 注册完成
                 api.toast({
-                    msg: ret.msg
+                    msg: '注册成功'
                 });
-            } else {
+                var userToken =  $api.getStorage('userToken'),
+                    rongToken =  $api.getStorage('rongToken');
                 api.openWin({
-                    name: 'registerWin2',
-                    url: './login_enroll2.html',
+                    name: 'main',
+                    url: '../main.html',
+                    slidBackEnabled: false,
                     pageParam: {
-                        tel : $api.val($api.dom('#tel')),
-                        // yzm : yzm
-                    },
-                    bounces: false
+                        userToken: userToken,
+                        rongToken: rongToken
+                    }
                 });
-            }
-       });
-
-
-
-        
+            });
+        }
+        // api.openWin({
+        //     name: 'registerWin2',
+        //     url: './login_enroll2.html',
+        //     pageParam: {
+        //         tel : tel,
+        //         yzm : yzm
+        //     },
+        //     bounces: false
+        // });
     }
 
     // 清除手机号
     function clearText() {
         $api.val($api.dom('#tel'), '');
+        $api.css($api.dom('#iptClear'), 'display:none');
     }
+    // 查看密码
+    function lookPsd() {
+        $api.toggleCls($api.dom('.psdClear'), 'lookPsd');
+        if ($api.hasCls($api.dom('.psdClear'), 'lookPsd')) {
+            $api.attr($api.dom('#psd'), 'type', 'text');
+        } else {
+            $api.attr($api.dom('#psd'), 'type', 'password');
+        }
+    }
+
     // 获取验证码
     function gain() {
-         // 进行下一步注册, 获取验证码
-         // var tel = $api.val($api.dom('#tel')),
-        api.ajax({
-            url: apiSite + 'api/common/sendMobileCode',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-               values: { 
-                   mobile: $api.val($api.dom('#tel'))
-               }
-            }
-       }, function(ret, err) {
-
-       });
         $api.text($api.dom('h3'), '短信验证码已发送，请填写验证码');
         // 倒计时
         countDown();
@@ -256,55 +298,5 @@
             }
         },1000)
     }
-
-     // 判断手机号是否注册过该平台
-    function judge(tel) {
-        api.ajax({
-            url: apiSite + 'api/login/registerStepOne',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    mobile: tel
-                }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                if (ret.code === 10005) {
-                    api.toast({
-                        msg: ret.msg
-                    });
-                } else {
-                    if (ret.data.is_user) {
-                       api.toast({
-                           msg: '可以注册'
-                       });
-                        
-                    } else {
-                        // 已经注册过,该平台
-                        if (ret.data.is_set_password) {
-                            api.toast({
-                                msg: '该手机号以注册过本平台,请设置密码'
-                            });
-                            // 设置密码
-                        } 
-                        if (ret.data.status === -1) {
-                            api.toast({
-                                msg: '激活手机号'
-                            });
-                            // 激活
-                        }
-                    }
-                }
-        
-               
-
-
-            } else {
-                alert(JSON.stringify(err));
-            }
-        });
-    }
-    
 </script>
 </html>
