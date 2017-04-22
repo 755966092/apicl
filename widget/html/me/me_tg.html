@@ -84,8 +84,8 @@
     </header>
     <div class="main">  
     <ul>
-            <li onclick="login(this)" data-val="gs"><span>我的推广二维码</span><span class="icon_zk"></span></li>
-            <li onclick="login(this)" data-val="gs">
+            <li onclick="login(this)" data-val="ewm"><span>我的推广二维码</span><span class="icon_zk"></span></li>
+            <li onclick="login(this)" data-val="sr">
                 <span>我的收入</span>
                 <span class="fr icon_zk"></span>
                 <span class="fr">$20.50</span>
@@ -102,7 +102,17 @@
     apiready = function(){
         fnInit();
     };
-   
+   function login (ele) {
+        var val = $api.attr(ele, 'data-val');
+        api.openWin({
+            name: val + 'Win',
+            url: './me_tg_' + val + '.html',
+            pageParam: {
+                name: 'value'
+            },
+            bounces: false
+        });
+   }
    
 </script>
 </html>
