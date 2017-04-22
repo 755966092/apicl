@@ -209,7 +209,6 @@ var messageId;
                     } else {
                         addSendMsgTop(ret.result[i].content.text, headImg);
                     }
-
                 }
             })
             return 1
@@ -219,46 +218,35 @@ var messageId;
             });
             return 1
          }
-        
-        
     }
 
     // 下拉刷新后 执行函数chatHis(messageId)
     function xiala() {
-
         api.setCustomRefreshHeaderInfo({
             bgColor: '#C0C0C0',
             isScale: true,
-            image: {
-                pull: [
-                    'widget://image/refresh/dropdown0.png',
-                    'widget://image/refresh/dropdown1.png',
-                    'widget://image/refresh/dropdown2.png',
-                    'widget://image/refresh/dropdown3.png',
-                    'widget://image/refresh/dropdown4.png',
-                    'widget://image/refresh/dropdown5.png',
-                    'widget://image/refresh/dropdown6.png'
-                ],
-                load: [
-                    'widget://image/refresh/loading0.png',
-                    'widget://image/refresh/loading1.png',
-                    'widget://image/refresh/loading2.png',
-                    'widget://image/refresh/loading3.png',
-                    'widget://image/refresh/loading4.png'
-                ]
-            }
+            // image: {
+            //     pull: [
+            //         'widget://image/refresh/dropdown0.png',
+            //         'widget://image/refresh/dropdown1.png',
+            //         'widget://image/refresh/dropdown2.png',
+            //         'widget://image/refresh/dropdown3.png',
+            //         'widget://image/refresh/dropdown4.png',
+            //         'widget://image/refresh/dropdown5.png',
+            //         'widget://image/refresh/dropdown6.png'
+            //     ],
+            //     load: [
+            //         'widget://image/refresh/loading0.png',
+            //         'widget://image/refresh/loading1.png',
+            //         'widget://image/refresh/loading2.png',
+            //         'widget://image/refresh/loading3.png',
+            //         'widget://image/refresh/loading4.png'
+            //     ]
+            // }
         }, function() {
-            //下拉刷新被触发，自动进入加载状态，使用 api.refreshHeaderLoadDone() 手动结束加载中状态
-            //下拉刷新被触发，使用 api.refreshHeaderLoadDone() 结束加载中状态  
-            // alert('开始加载刷新数据，摇一摇停止加载状态');
-            // api.refreshHeaderLoadDone();
             if (chatHis()) {
                 api.refreshHeaderLoadDone()
             }
-            
-            // setTimeout(function(){
-            //     api.refreshHeaderLoadDone()
-            // },2000)
         });
     }
 </script>

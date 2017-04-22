@@ -59,12 +59,12 @@
 </head>
 <body>
      <header>
-        <span onclick="api.closeWin()">返回</span>
+        <span onclick="api.closeWin()">取消</span>
         <span>设置</span>
     </header>
     <div class="main">
         <ul>
-              <li onclick="login()" data-val="sz"><span>清除缓存</span><span></span></li>
+              <li onclick="login(this)" data-val="sz"><span>设置</span><span></span></li>
         </ul>
     </div>
 </body>
@@ -76,8 +76,12 @@
 
     };
 
-   function login() {
-        $api.clearStorage();
-   }
+    // 输入帐号登录按钮变色
+    function login() {
+        $api.css($api.dom('#login'), 'background: #08BB08');
+        if($api.val($api.dom('#txzh')) === '') {
+            $api.css($api.dom('#login'), 'background: #C1E9C1');
+        }
+    }
 </script>
 </html>
