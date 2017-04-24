@@ -76,10 +76,10 @@
         ul li h3 {
             margin-top: .1rem;
             margin-bottom: .05rem;
-            width: 4.5rem;
+            width: 3.5rem;
             float: left;
         }
-        ul li span {
+        ul li .time {
             display: inline-block;
             margin-top: .12rem;
         }
@@ -101,7 +101,7 @@
             white-space: nowrap;
             text-overflow: ellipsis;
             height: .32rem;
-            width:4.5rem;
+            width:3.5rem;
             overflow: hidden;
         }
     </style>
@@ -118,7 +118,8 @@
             {{ for (var i = 0; i < it.length; i++) { }} <li class="{{=it[i].select}} chatList" data-name="{{=it[i].targetId}}" onclick="openChat(this)">
                 <img class="fl" src="{{=it[i].url}}">
                 <h3>{{=it[i].targetId}}</h3>
-                <span class="fr">11：20</span>
+                <!-- <span class="fr time">11：20</span> -->
+                <span class="fr time">{{=it[i].time.hour}}：{{=it[i].time.minute}}</span>
                 <p>{{=it[i].latestMessage.text}}</p>
                 </li>
                 {{ }; }}
@@ -187,7 +188,29 @@
         });
       
         
-               
+        
+        // rong.getConversationList(function(ret, err) {
+        //         for (var i = 0; i < ret.result.length; i++) {
+        //             ret.result[i].url = '../image/tx_3.jpg'
+        //             ret.result[i].time = changeTime(ret.result[i].receivedTime)
+        //         }
+        //         // alert(JSON.stringify(ret))
+        //         getData(ret.result)
+        //     })
+        api.addEventListener({
+            name: 'historicalNews'
+        }, function(ret, err) {
+            if (ret) {
+                // alert(JSON.stringify(ret.value.data));
+                for (var i = 0; i < ret.value.data.length; i++) {
+                    ret.value.data[i].url = '../image/tx_2.jpg'
+                    ret.value.data[i].time = changeTime(ret.value.data[i].receivedTime)
+                }
+                getData(ret.value.data)
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
         // 滚动到底部触发的事件
         api.addEventListener({
             name:'scrolltobottom',
@@ -197,12 +220,7 @@
         }, function(ret, err){        
             // alert('已滚动到底部');
         });
-        rong.getConversationList(function(ret, err) {
-            for (var i = 0; i < ret.result.length; i++) {
-                ret.result[i].url = './image/tx_4.jpg'
-            }
-            getData(ret.result)
-        })
+      
     }
 
     function openS() {

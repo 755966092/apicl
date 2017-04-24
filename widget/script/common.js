@@ -112,7 +112,18 @@ function rongyun(rongToken) {
         if (ret.status == 'success') {
             // alert('登录戎云' + ret.result.userId)
             // alert('登录' + rongToken)
+            rong.getConversationList(function(ret, err) {
 
+                // alert(JSON.stringify(ret.result))
+
+                api.sendEvent({
+                    name: 'historicalNews',
+                    extra: {
+                        data: ret.result
+                    }
+                });
+                // getData(ret.result)
+            })
         }
     });
 }
@@ -148,5 +159,13 @@ function changeTime(time) {
     var day = time.getDay()
         // 星期
     var xingqu = time.getDate()
-    alert('秒:' + sencond + '分：' + minute + ', 小时' + hour + '，时间' + time)
+    return {
+
+        sencond: sencond,
+        minute: minute,
+        hour: hour,
+        year: year,
+        month: month,
+        day: day
+    }
 }
