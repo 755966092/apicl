@@ -7,39 +7,39 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <style>
-    body {}
-    
-    header {
-        background-color: #3A393E;
+      body {}
+      
+      header {
+          background-color: #3A393E;
+          height: 1rem;
+          color: #fff;
+          line-height: 1rem;
+          text-align: center;
+          position: relative;
+          font-size: .36rem;
+          position: relative;
+      }
+      
+      header span:nth-child(1) {
+          position: absolute;
+          left: 0;
+          background: url(../../image/icon_fanh.png)no-repeat;
+          background-size: .22rem .37rem;
+          padding-left: .65rem;
+          background-position: .3rem .34rem;
+      }
+      header span.datum {
+        display: inline-block;
+        background: url(../../image/icon_other/icon_datum.png)no-repeat;
+        -webkit-background-size: .42rem .39rem;
+        background-size: .42rem .39rem;
+        background-position: 0 center;
+        width: .42rem;
         height: 1rem;
-        color: #fff;
-        line-height: 1rem;
-        text-align: center;
-        position: relative;
-        font-size: .36rem;
-        position: relative;
-    }
-    
-    header span:nth-child(1) {
         position: absolute;
-        left: 0;
-        background: url(../../image/icon_fanh.png)no-repeat;
-        background-size: .22rem .37rem;
-        padding-left: .65rem;
-        background-position: .3rem .34rem;
-    }
-    header span.datum {
-      display: inline-block;
-      background: url(../../image/icon_other/icon_datum.png)no-repeat;
-      -webkit-background-size: .42rem .39rem;
-      background-size: .42rem .39rem;
-      background-position: 0 center;
-      width: .42rem;
-      height: 1rem;
-      position: absolute;
-      right: .3rem;
-      /*top: .35rem;*/
-    }
+        right: .3rem;
+        /*top: .35rem;*/
+      }
     </style>
 </head>
 
@@ -53,15 +53,14 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
-var rongToken, userToken;
+var name;
   apiready = function() {
       // 初始化模块
       moduleInit()
       
-      rongToken = api.pageParam.rongToken;
-      userToken = api.pageParam.userToken;
+      
       // 获取参数
-      var name = api.pageParam.name;
+      name = api.pageParam.name;
       var title = document.getElementById('title')
       $api.html(title, name);
       
@@ -69,7 +68,7 @@ var rongToken, userToken;
       fnInit();
 
       // 初始化聊天界面
-      chatTools(rongToken);
+      chatTools(rongTokenAll);
       
       // 聊天内容
       api.openFrame({
@@ -82,8 +81,7 @@ var rongToken, userToken;
               h: 'auto'
           },
           pageParam: {
-              rongToken: rongToken,
-              userToken: userToken
+            name: name
           },
           bounces: true
       });
@@ -199,7 +197,6 @@ var rongToken, userToken;
                 });
              }
           });
-          // rongyun(rongToken);
   }
 
   /**
@@ -211,36 +208,20 @@ var rongToken, userToken;
     var sendMsg;
     rong.sendTextMessage({
         conversationType: 'PRIVATE',
-        targetId: 'testUser1',
+        // 目标rongyun用户名
+        // targetId: 'testUser1',
+        targetId: name,
         text: msg,
         extra: ''
     }, function(ret, err) {
         
         if (ret.status == 'prepare') {
           sendMsg = ret.result.message.content.text;
-
-           // api.toast({ msg: JSON.stringify(ret.result.message) });
-          // api.alert({
-          //     title: 'title',
-          //     msg: '第一个prepare:' + ret.result.message.content.text,
-          // }, function(ret, err) {
-              
-          // });
+          alert(JSON.stringify(ret));
         }
            
         else if (ret.status == 'success') {
-           // api.toast({ msg: ret.result.message.messageId });
-           
-            // api.alert({
-            //     title: 'title',
-            //     msg: '第二个message' + ret.result.message.messageId,
-            // }, function(ret, err) {
-            //     if (ret) {
-            //         alert('第二成功'+JSON.stringify(ret));
-            //     } else {
-            //         alert(JSON.stringify(err));
-            //     }
-            // });
+          
             api.sendEvent({
                 name: 'sendMsg',
                 extra: {
@@ -252,7 +233,6 @@ var rongToken, userToken;
         }
            
         else if (ret.status == 'error') {
-          // api.toast({ msg: err.code });
             api.alert({
                 title: 'title',
                 msg: '第三个message' + err.code,

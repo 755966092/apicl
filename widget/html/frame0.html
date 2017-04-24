@@ -12,7 +12,7 @@
             width: 7.5rem;
             height: .8rem;
             box-sizing: border-box;
-            padding: .15rem .2rem;
+            padding: .15rem .3rem;
             background-color: #EFEFF4;
             text-align: center;
             position: relative;
@@ -53,7 +53,7 @@
         
         ul {
             width: 100%;
-            padding: 0 .2rem;
+            /*padding: 0 .3rem;*/
             box-sizing: border-box;
         }
         
@@ -61,7 +61,8 @@
             width: 100%;
             height: 1.2rem;
             box-sizing: border-box;
-            padding: .15rem 0;
+            padding: .15rem .3rem;
+            /*padding: .15rem 0;*/
             border-bottom: 1px solid #D6D6D6;
             position: relative;
         }
@@ -75,8 +76,13 @@
         ul li h3 {
             margin-top: .1rem;
             margin-bottom: .05rem;
+            width: 4.5rem;
+            float: left;
         }
-        
+        ul li span {
+            display: inline-block;
+            margin-top: .12rem;
+        }
         ul li.select:before {
             content: "";
             display: inline-block;
@@ -95,7 +101,7 @@
             white-space: nowrap;
             text-overflow: ellipsis;
             height: .32rem;
-            width: 5rem;
+            width:4.5rem;
             overflow: hidden;
         }
     </style>
@@ -107,51 +113,61 @@
             <input type="text" onclick="openS()">
             <span id="search" onclick="openS()">搜索</span>
         </div>
-        <ul class="resultList"> </ul>
+        <ul class="resultList"></ul>
         <script type="text/x-dot-template" id="listT">
-            {{ for (var i = 0; i
-            < it.length; i++) { }} <li class="{{=it[i].select}} chatList" data-name="{{=it[i].name}}" onclick="openChat(this)">
+            {{ for (var i = 0; i < it.length; i++) { }} <li class="{{=it[i].select}} chatList" data-name="{{=it[i].targetId}}" onclick="openChat(this)">
                 <img class="fl" src="{{=it[i].url}}">
-                <h3>{{=it[i].name}}</h3>
-                <p>{{=it[i].news}}</p>
+                <h3>{{=it[i].targetId}}</h3>
+                <span class="fr">11：20</span>
+                <p>{{=it[i].latestMessage.text}}</p>
                 </li>
                 {{ }; }}
         </script>
+        <!-- <ul>
+            <li class="{{=it[i].select}} chatList" data-name="{{=it[i].targetId}}" onclick="openChat(this)">
+                <img class="fl" src="../image/tx_5.jpg">
+                <h3>{{=it[i].targetId}}</h3>
+                <span class="fr">11：20</span>
+                <p>{{=it[i].latestMessage.text}}</p>
+                </li>
+        </ul> -->
     </div>
     <script type="text/javascript" src="../script/common.js"></script>
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/doT.min.js"></script>
     <script type="text/javascript">
-    var data = [{
-        name: '系统消息',
-        url: '../image/tx_1.jpg',
-        news: '这个词应用比较广泛',
-        select: 'select'
-    }, {
-        name: 'jack',
-        url: '../image/tx_2.jpg',
-        news: '新鲜事就叫消息',
-        select: ''
-    }, {
-        name: 'rose',
-        url: '../image/tx_3.jpg',
-        news: '还指报道事情的概貌而不讲述详细的经过和细节',
-        select: ''
-    }, {
-        name: 'liMing',
-        url: '../image/tx_4.jpg',
-        news: '它是对新近发生的有社会意义并引起公众兴趣的事实的简短报道',
-        select: ''
-    }, {
-        name: '第一学',
-        url: '../image/tx_5.jpg',
-        news: '参考消息报社编辑出版',
-        select: ''
-    }]
-    var rongToken, userToken;
+    // var data = [{
+    //     name: '系统消息',
+    //     url: '../image/tx_1.jpg',
+    //     news: '这个词应用比较广泛',
+    //     select: 'select'
+    // }, {
+    //     name: 'jack',
+    //     url: '../image/tx_2.jpg',
+    //     news: '新鲜事就叫消息',
+    //     select: ''
+    // }, {
+    //     name: 'rose',
+    //     url: '../image/tx_3.jpg',
+    //     news: '还指报道事情的概貌而不讲述详细的经过和细节',
+    //     select: ''
+    // }, {
+    //     name: 'liMing',
+    //     url: '../image/tx_4.jpg',
+    //     news: '它是对新近发生的有社会意义并引起公众兴趣的事实的简短报道',
+    //     select: ''
+    // }, {
+    //     name: '第一学',
+    //     url: '../image/tx_5.jpg',
+    //     news: '参考消息报社编辑出版',
+    //     select: ''
+    // }]
+    var data = [];
+    // var rongToken, userToken;
     apiready = function() {
-        rongToken = api.pageParam.rongToken;
-        userToken = api.pageParam.userToken;
+        // rongToken = api.pageParam.rongToken;
+        // userToken = api.pageParam.userToken;
+        moduleInit()
         // 监听showNews事件，显示添加好友框     
         api.addEventListener({
             name: 'showNews'
@@ -170,6 +186,14 @@
             });
         });
 
+        rong.getConversationList(function(ret, err) {
+            alert( JSON.stringify(ret.result))
+            for (var i = 0; i < ret.result.length; i++) {
+                ret.result[i].url = '../image/tx_4.jpg';
+            }
+            getData(ret.result);
+        })
+               
         // 滚动到底部触发的事件
         api.addEventListener({
             name:'scrolltobottom',
@@ -179,9 +203,8 @@
         }, function(ret, err){        
             // alert('已滚动到底部');
         });
+        
     }
-    getData(data);
-    getData(data);
 
     function openS() {
         api.openWin({
@@ -203,6 +226,7 @@
         var html = fnListT(data);
         var list = $api.dom('.resultList');
         $api.append(list, html);
+        // alert('getData:' + JSON.stringify(data))
     }
 
     // 打开聊天窗口
@@ -213,8 +237,8 @@
             name: 'winName',
             url: './news/chatPage.html',
             pageParam: {
-                rongToken: rongToken,
-                userToken: userToken,
+                // rongToken: rongToken,
+                // userToken: userToken,
                 name: name
             }
         });

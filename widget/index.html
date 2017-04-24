@@ -13,19 +13,12 @@
 <script type="text/javascript">
     apiready = function () {
         moduleInit();
-        var userToken =  $api.getStorage('userToken');
-        var rongToken =  $api.getStorage('rongToken');
-       
-       // alert('缓存信息：' + $api.getStorage('userToken'))
-        if(userToken) {
-            rongyun(rongToken);
+        if(userTokenAll) {
+             rongyun();
              api.openWin({
                 name: 'main',
                 url: 'html/main.html',
-                pageParam: {    
-                    userToken: userToken,
-                    rongToken: rongToken
-                },
+               
                 slidBackEnabled: false,
             });
         } else {
@@ -33,9 +26,6 @@
             api.openWin({
                 name: 'loginPage',
                 url: './me_login.html',
-                pageParam: {
-                    name: 'value'
-                },
                 slidBackEnabled: false
             });
         }

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+   	<style type="text/css">
+   		span {
+   			font-size: .24rem;
+   			padding: .1rem .2rem;
+   		}
+   		span:nth-child(1) {
+   			border: 1px solid #f00;
+   			float: left;
+   			margin-right: .5rem;
+
+   		}
+   		span:nth-child(2) {
+   			border: 1px solid #ff0;
+   			float: right;
+   			margin-left: .5rem;
+   		}
+   	</style>
+</head>
+<body>
+    <span onclick="enter(0)">取消</span>
+    <span onclick="enter(1)">确认</span>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+var selDate;
+    apiready = function(){
+	   dianji();
+	   
+
+    };
+ function dianji() {
+        alert(1);
+        var UISelector = api.require('UISelector');
+
+        UISelector.open({
+            rect: {
+                x: 0,
+                y: 30,
+                // y: api.winHeight / 2 + 170,
+                // w: api.frameWidth - 60,
+                h: 150
+            },
+            styles: {
+                bg: 'rgba(255,0,0,0.5)',
+                text: {
+                    size: 14,
+                    selected: '#f00',
+                    normal: '#000'
+                },
+                item: {
+                    w: 80,
+                    h: 20,
+                    normal: 'rgba(0,0,0,0.3)',
+                    selected: 'rgba(255,255,255,0)',
+                    zoomIn: 1.5
+                }
+            },
+            rows: 3,
+            indexs: [3, 4, 5],
+            bounce: false,
+            fixedOn: api.frameName,
+            fixed: false,
+            data: [{
+                title: 'A',
+                contents: [{
+                    title: 'a',
+                    contents: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+                },{
+                    title: 'b',
+                    contents: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+                },{
+                    title: 'c',
+                    contents: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+                },{
+                    title: 'd',
+                    contents: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+                },{
+                    title: 'e',
+                    contents: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+                }]
+            }, {
+                title: 'B',
+                contents: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+            }, {
+                title: 'C',
+                contents: ['1a', '2b', '3c', '4d', '5e', '6f', '7g', '8h', '9i', '10j']
+            }, {
+                title: 'D',
+                contents: ['1t', '2t', '3t', '4t', '5t', '6t', '7t', '8t', '9t', '10t']
+            }, {
+                title: 'E',
+                contents: ['1a', '2a', '3a', '4a', '5a', '6a', '7a', '8a', '9a', '10a']
+            }, {
+                title: 'F',
+                contents: ['1f', '2f', '3f', '4f', '5f', '6f', '7f', '8f', '9f', '10f']
+            }, {
+                title: 'G',
+                contents: ['1!', '2!', '3!', '4!', '5!', '6!', '7!', '8!', '9!', '10!']
+            }, {
+                title: 'H',
+                contents: ['1th', '2th', '3th', '4th', '5th', '6th', '7th', '8th', '9th', '10th']
+            }, {
+                title: 'I',
+                contents: ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten']
+            }, {
+                title: 'J',
+                contents: ['壹', '貮', '叁', '肆', '伍', '陆', '柒', '捌', '玖', '拾']
+            }, {
+                title: 'K',
+                contents: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十']
+            }]
+        }, function(ret, err) {
+            if (ret) {
+                // alert(JSON.stringify(ret));
+                selDate = JSON.stringify(ret);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+   }  
+  function enter (n) {
+  	if (n) {
+		alert(selDate);
+  	} else {
+  		api.closeFrame({
+  		    // name: ''
+  		});
+  	}
+  }
+  
+</script>
+</html>

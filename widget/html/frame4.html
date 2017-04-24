@@ -195,19 +195,12 @@
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/common.js"></script>
     <script type="text/javascript">
-    var userToken, rongToken;
     var  userName, headImg, sex, currentCompany, currentPosition,imgChche;
     	apiready = function(){
-             // 获取传递参数
-             userToken = api.pageParam.userToken;
-             rongToken = api.pageParam.rongToken;
-             userInfo(userToken);
-             // $api.clearStorage();
+            userInfo(userTokenAll);
     	}
-
         // 获取用户信息
         function userInfo(userToken) {
-            
             // 如果没有本地缓存，就从网络获取，有就使用本地缓存
             if ($api.getStorage('userName')) {
             // if ($api.getStorage('userName')) {
@@ -233,7 +226,7 @@
                     }
                 }, function(ret, err) {
                     if (ret) {
-                        
+                            
                             userName = ret.data.info.nickname,
                             headImg = ret.data.info.head_img_url,
                             sex = ret.data.info.sex,
@@ -248,13 +241,7 @@
                             $api.setStorage('sex', sex); 
                             $api.setStorage('currentCompany', currentCompany); 
                             $api.setStorage('currentPosition', currentPosition);
-
-
-                            // $api.setStorage(''+ userToken +'userName', userName); 
-                            // $api.setStorage(''+ userToken +'headImg', headImg); 
-                            // $api.setStorage(''+ userToken +'sex', sex); 
-                            // $api.setStorage(''+ userToken +'currentCompany', currentCompany); 
-                            // $api.setStorage(''+ userToken +'currentPosition', currentPosition);
+                            
                             // 初始化页面内容   
                             reviseContent(userName, headImg, sex, currentCompany, currentPosition);
                             // 图片缓存
@@ -273,7 +260,6 @@
                     }
                 });
             }
-           // alert(headImg)
         }
         //
     	function login(ele) {

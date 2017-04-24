@@ -197,12 +197,13 @@
                         rongToken = ret.data.rongcloud_token;
                     $api.setStorage('userToken', userToken);
                     $api.setStorage('rongToken', rongToken);
+                    
                     // alert('缓存信息：' + $api.getStorage('userToken'))
                     // 把当前的usertoken和rongtoken广播出去
                     // sendToken (userToken,rongToken)
 
                     loginSuccess(userToken,rongToken);
-                    rongyun(rongToken);
+                    rongyun();
                 } else {
                     api.toast({
                         msg: ret.msg
@@ -217,16 +218,16 @@
         
     }
 
-    function loginSuccess (userToken,rongToken) {
+    function loginSuccess () {
         // 登陆完成
          api.openWin({
             name: 'main',
             url: 'html/main.html',
             slidBackEnabled: false,
-            pageParam: {
-                userToken: userToken,
-                rongToken: rongToken
-            }
+            // pageParam: {
+            //     userToken: userToken,
+            //     rongToken: rongToken
+            // }
         });
     }
     function sendToken (userToken,rongToken) {
