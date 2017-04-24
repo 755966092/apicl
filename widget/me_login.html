@@ -172,12 +172,12 @@
     }
     function login() {
         // 登陆 测试不输入账号密码
-        // var mobile = $api.val($api.dom('#txzh'));
-        // var password = $api.val($api.dom('#psd'));
+        var mobile = $api.val($api.dom('#txzh'));
+        var password = $api.val($api.dom('#psd'));
         
         // 后期删除
-        var mobile = '17600103536';
-        var password = '123456'
+        // var mobile = '17600103536';
+        // var password = '123456'
         api.ajax({
             url: apiSite + '/api/login/doLogin',
             method: 'post',
@@ -203,7 +203,7 @@
                     // sendToken (userToken,rongToken)
 
                     loginSuccess(userToken,rongToken);
-                    rongyun();
+                    rongyun(rongToken);
                 } else {
                     api.toast({
                         msg: ret.msg
@@ -224,22 +224,23 @@
             name: 'main',
             url: 'html/main.html',
             slidBackEnabled: false,
-            // pageParam: {
-            //     userToken: userToken,
-            //     rongToken: rongToken
-            // }
-        });
-    }
-    function sendToken (userToken,rongToken) {
-        api.sendEvent({
-            name: 'sendToken',
-            extra: {
-                userToken: userToken, 
+            pageParam: {
+                userToken: userToken,
                 rongToken: rongToken
             }
         });
     }
+    // function sendToken (userToken,rongToken) {
+    //     api.sendEvent({
+    //         name: 'sendToken',
+    //         extra: {
+    //             userToken: userToken, 
+    //             rongToken: rongToken
+    //         }
+    //     });
+    // }
 
+    // 注册
     function register() {
         api.openWin({
             name: 'registerWin',
@@ -250,6 +251,7 @@
             bounces: false
         });
     }
+    // 修改密码
     function forgetPsd() {
         api.openWin({
             name: 'ForgetPassword',

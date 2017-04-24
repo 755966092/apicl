@@ -185,14 +185,8 @@
                 bounces: false
             });
         });
-
-        rong.getConversationList(function(ret, err) {
-            alert( JSON.stringify(ret.result))
-            for (var i = 0; i < ret.result.length; i++) {
-                ret.result[i].url = '../image/tx_4.jpg';
-            }
-            getData(ret.result);
-        })
+      
+        
                
         // 滚动到底部触发的事件
         api.addEventListener({
@@ -203,7 +197,12 @@
         }, function(ret, err){        
             // alert('已滚动到底部');
         });
-        
+        rong.getConversationList(function(ret, err) {
+            for (var i = 0; i < ret.result.length; i++) {
+                ret.result[i].url = './image/tx_4.jpg'
+            }
+            getData(ret.result)
+        })
     }
 
     function openS() {
