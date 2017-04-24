@@ -12,7 +12,7 @@
             width: 7.5rem;
             height: .8rem;
             box-sizing: border-box;
-            padding: .15rem .3rem;
+            padding: .15rem .2rem;
             background-color: #EFEFF4;
             text-align: center;
             position: relative;
@@ -163,7 +163,6 @@
     //     news: '参考消息报社编辑出版',
     //     select: ''
     // }]
-    var data = [];
     // var rongToken, userToken;
     apiready = function() {
         // rongToken = api.pageParam.rongToken;
@@ -188,7 +187,6 @@
         });
       
         
-        
         // rong.getConversationList(function(ret, err) {
         //         for (var i = 0; i < ret.result.length; i++) {
         //             ret.result[i].url = '../image/tx_3.jpg'
@@ -197,6 +195,9 @@
         //         // alert(JSON.stringify(ret))
         //         getData(ret.result)
         //     })
+        //     
+        
+        // 历史消息列表
         api.addEventListener({
             name: 'historicalNews'
         }, function(ret, err) {
@@ -206,11 +207,30 @@
                     ret.value.data[i].url = '../image/tx_2.jpg'
                     ret.value.data[i].time = changeTime(ret.value.data[i].receivedTime)
                 }
+                // alert(JSON.stringify(ret.value.data))
                 getData(ret.value.data)
             } else {
                 alert(JSON.stringify(err));
             }
         });
+
+        // 收到最新消息
+        api.addEventListener({
+            name: 'sendMsg'
+        }, function(ret, err) {
+            // 发送消息后, 添加消息内容到页面
+            // addSendMsg(ret.value.msg, headImg);
+            historicalNews()
+        });
+        api.addEventListener({
+            name: 'receiveMsg'
+        }, function(ret, err) {
+            // 收到消息后, 添加消息内容到页面
+            // addReceMsg(ret.value.msg);
+            historicalNews();
+        });
+        
+         
         // 滚动到底部触发的事件
         api.addEventListener({
             name:'scrolltobottom',
@@ -242,7 +262,8 @@
         var fnListT = doT.template(listTText);
         var html = fnListT(data);
         var list = $api.dom('.resultList');
-        $api.append(list, html);
+        // 替换resultList所有内容
+        $api.html(list, html);
         // alert('getData:' + JSON.stringify(data))
     }
 
