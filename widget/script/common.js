@@ -83,6 +83,7 @@ var rongTokenAll = $api.getStorage('rongToken');
 
 
 var rong,
+    UISelector,
     UIChatTools;
 
 function moduleInit() {
@@ -90,6 +91,8 @@ function moduleInit() {
     rong = api.require('rongCloud2');
     //聊天界面模块
     UIChatTools = api.require('UIChatTools');
+    //列表模块
+    UISelector = api.require('UISelector');
 }
 
 // 接入融云
@@ -100,19 +103,21 @@ function rongyun(rongToken) {
             api.toast({
                 msg: err.code
             });
+
     });
     receiveMsg();
     rong.connect({
         // 用户1
         // token: 'aAoW4oalHGpvB6Hw89bG0XzZSHvx/Xm6zmi6cWDa3L4VyfNcz/KXDFQxtpoQ+os1nT0799sMXlXPvUAK3FnjIY94cnJzE+aT'
         // 用户2r
-        token: 'hjjQ018gh2aPKpdyjqhX0nzZSHvx/Xm6zmi6cWDa3L4VyfNcz/KXDDNYtoRSbb1+nT0799sMXlXSm1rb7lqSfY94cnJzE+aT'
-            // token: rongToken
+        // token: 'hjjQ018gh2aPKpdyjqhX0nzZSHvx/Xm6zmi6cWDa3L4VyfNcz/KXDDNYtoRSbb1+nT0799sMXlXSm1rb7lqSfY94cnJzE+aT'
+        token: rongToken
     }, function(ret, err) {
+
         if (ret.status == 'success') {
-            // alert('登录戎云' + ret.result.userId)
-            // alert('登录' + rongToken)
-            // rong.getConversationList(function(ret, err) {
+            alert('登录戎云' + ret.result.userId)
+                // alert('登录' + rongToken)
+                // rong.getConversationList(function(ret, err) {
 
             //     // alert(JSON.stringify(ret.result))
 

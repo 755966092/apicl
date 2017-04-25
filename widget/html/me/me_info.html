@@ -12,7 +12,7 @@
             background-color: #EDECF3;
         }
         
-         header {
+        header {
             background-color: #3A393E;
             height: 1rem;
            color: #fff;
@@ -75,6 +75,7 @@
             vertical-align:middle;
             position: absolute;
             right: 1rem;
+            top: .21rem;
         }
       
         .main ul li:nth-child(1) p img {
@@ -134,21 +135,14 @@
         <ul>
             <li onclick="login(this)" data-val="info">
                 <img class="headImg"  src="../../image/tx_2.jpg">
-                <!-- <div class="uaseName">
-                    <p>
-                        <span class="userName"></span>
-                        <a href=""></a>
-                    </p>
-                    <p>个人说明</p>
-                </div> -->
                 <p>头像</p>
                 <span class="zkicon"></span>
             </li>
             <li onclick="login(this)" data-val="name"><span>真实姓名</span><span></span></li>
             <li onclick="login(this)" data-val="nicheng"><span>昵称</span><span></span></li>
-            <li onclick="login(this)" data-val="sex"><span>性别</span><span></span></li>
-            <li onclick="login(this)" data-val="jx"><span>家乡</span><span></span></li>
-            <li onclick="login(this)" data-val="sr"><span>生日</span><span></span></li>
+            <li onclick="openF(this)" data-val="sex"><span>性别</span><span></span></li>
+            <li onclick="openF(this)" data-val="jx"><span>家乡</span><span></span></li>
+            <li onclick="openF(this)" data-val="sr"><span>生日</span><span></span></li>
             <li onclick="login(this)" data-val="zz"><span>住址</span><span></span></li>
             <li onclick="login(this)" data-val="lxfs"><span>联系方式</span><span></span></li>
             <li onclick="login(this)" data-val="xxjl"><span>学习经历</span><span></span></li>
@@ -233,13 +227,27 @@
             var val = $api.attr(ele, 'data-val');
             api.openWin({
                 name: 'winName',
-                url: './me/me_' + val + '.html',
+                url: './me_info_' + val + '.html',
                 pageParam: {
                     name: 'value'
                 }
             });
         }
-
+        function openF (ele) {
+            var val = $api.attr(ele, 'data-val');
+            api.openFrame({
+                name: 'frameName',
+                url: './me_info_' + val + '.html',
+                rect: {
+                    x: 0,
+                    y: api.winHeight / 2 + 130,
+                    w: 'auto',
+                    h: 'auto'
+                },
+               
+                bounces: false
+            });
+        }
         // 修改文本内容
         function reviseContent(userName, headImg, sex, currentCompany, currentPosition) {
             var name = $api.dom('.userName'),
