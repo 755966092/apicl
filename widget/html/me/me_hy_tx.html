@@ -35,17 +35,16 @@
         
        
         .main .listContent {
-            height: 2.34rem;    
+            height: 1.16rem;    
             border-bottom: 1px solid #E0E0E0;
             background-color: #fff;
-            padding:  0 .82rem; 
-
+            padding:  0 .3rem; 
         }
 
         /* 左边提现 */
         .main .listContent .jl_left {
+            font-size: .28rem;
             line-height: 1.16rem;   
-            font-size: .75rem;  
         }
 
        
@@ -63,42 +62,17 @@
             right: 0;   
             margin: auto;
             margin-top: .8rem;  
-            outline: none  
+            outline: none;
+            border-radius: .1rem;
         }
 
         input {
             width: 5rem;    
-            font-size: .75rem;  
+            font-size: .28rem;  
             height: 1.16rem;    
             outline: none;
-            line-height: 1.16rem;
         }
-        input::-webkit-input-placeholder {
-            font-size: .28rem;
-        }
-        .title {
-            font-size: .28rem;
-            padding-top: .28rem;    
-            margin-bottom: .36rem; 
-        }
-        /* 余额 */
-        .surplus {
-            height: 1.16rem;
-            line-height: 1.16rem;
-            font-size: .32rem;
-            background-color: #fff;
-            border-bottom: 1px solid #E0E0E0;
-            padding-left: .82rem;
-        }
-        .all {
-            color: #4A90E2;
-        }
-        .surplusMoney {
-            margin-right: .2rem;
-        }
-        .surplusMoney span:nth-child(1) {
-            margin-left: .2rem;
-        }
+        
     </style>
 </head>
 <body>
@@ -109,16 +83,11 @@
     </header>
     <div class="main">  
         <div class="listContent">
-            <p class="title">提现金额</p>
-            <span class="jl_left fl">￥</span>  
-            <input class="fr" type="text" name="zfbzh" placeholder="提现金额">
-        </div>
-        <div class="surplus">  
-            <span class="surplusMoney">余额<span>￥</span><span class="money">510</span></span>
-            <span class="all" onclick="allGet()">全部提现</span>
+            <span  class="jl_left fl">支付宝账号</span>  
+            <input autofocus class="fr" type="text" name="zfbzh" placeholder="输入账号">
         </div>
     </div>
-    <button onclick="enter()">确认提现</button>
+    <button onclick="enter()">确认</button>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -126,23 +95,23 @@
     apiready = function(){
         fnInit();
     };
-    // 全部提现，把余额全部写进输入框
-   function allGet() {
-       var money = $api.text($api.dom('.money'));
-       $api.attr($api.dom('input'), 'value', money);
-       // 情况input的placeholder属性
-       $api.attr($api.dom('input'), 'placeholder', '');
-   }
+   
    function enter () {
-        // 获取用户输入的金额
+        // 获取用户输入的账号
         var val = $api.val($api.dom('input'));
-        api.openFrame({
-            name: 'txEnter',
-            url: './hy_txEnter.html',
-            pageParam: {
-                money: val
-            }
-        });
+        if (val === '') {
+            api.toast({
+                msg: '请输入账号！'
+            });
+        } else {
+            api.openWin({
+                name: 'txPage',
+                url: './me_hy_txInfo.html',
+                pageParam: {
+                    name: val
+                }
+            });
+        }
         
    }
 </script>
