@@ -136,11 +136,7 @@
     </style>
 </head>
 <body>
- <header>
-        <span onclick="api.closeWin()">返回</span>
-        <span>个人信息</span>
-    </header>
-    <!-- <div class="main">
+    <div class="main">
         <ul>
             <li onclick="login(this)" data-val="tx">
                 <img class="headImg"  src="../../image/tx_2.jpg">
@@ -162,39 +158,24 @@
             <li onclick="login(this)" data-val="xmyj"><span>项目业绩</span><span></span></li>
             <li onclick="login(this)" data-val="mqdt"><span>主要工作动态</span><span></span></li>
         </ul>
-    </div> -->
+    </div>
     <script type="text/javascript" src="../../script/api.js"></script>
     <script type="text/javascript" src="../../script/common.js"></script>
     <script type="text/javascript">
     var  userName, zName ,headImg, sex, hometown, birthday,imgChche, userToken, rongToken;
         apiready = function(){
-            fnInit();
-            api.openFrame({
-                name: 'infoframe',
-                url: './me_infoFrame.html',
-                rect: {
-                    x: 0,
-                    y: headerH,
-                    w: 'auto',
-                    h: 'auto'
-                },
-                pageParam: {
-                    name: 'value'
-                },
-                bounces: true
-            });
-            // userToken = api.pageParam.userToken || $api.getStorage('userToken');;
-            // rongToken = api.pageParam.rongToken || $api.getStorage('rongToken');;
-            // userInfo(userTokenAll || userToken);
+            userToken = api.pageParam.userToken || $api.getStorage('userToken');;
+            rongToken = api.pageParam.rongToken || $api.getStorage('rongToken');;
+            userInfo(userTokenAll || userToken);
             
-            // // 修改性别
-            // monitor('xiugaisex', $api.dom('.sex'));
-            // // 修改生日
-            // monitor('xiugaisr' , $api.dom('.sr'));
-            // // 修改家乡
-            // monitor('xiugaijx' , $api.dom('.jx'));
-            // // 修改头像
-            // monitor('changeHead' , $api.dom('.headImg'));
+            // 修改性别
+            monitor('xiugaisex', $api.dom('.sex'));
+            // 修改生日
+            monitor('xiugaisr' , $api.dom('.sr'));
+            // 修改家乡
+            monitor('xiugaijx' , $api.dom('.jx'));
+            // 修改头像
+            monitor('changeHead' , $api.dom('.headImg'));
         // 获取用户信息
         }
 
@@ -223,6 +204,10 @@
                 pageParam: {
                     name: 'value'
                 }
+            });
+            api.sendFrameToBack ({
+                // from: 'infoframe'
+                // to: 'toFrameName'
             });
         }
         function openF (ele) {

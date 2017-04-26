@@ -1,24 +1,339 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
-    <title>通讯录</title>
-    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>我在</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <style>
-        .empty{ text-align: center; padding: 120px 0; }
+        html, body {
+            background-color: #F8F8F8;
+        }
+        .ipt {
+            width: 7.5rem;
+            height: .8rem;
+            box-sizing: border-box;
+            padding: .15rem .2rem;
+            background-color: #EFEFF4;
+            text-align: center;
+            position: relative;
+        }
         
+        input {
+            height: .48rem;
+            width: 100%;
+            background-color: #fff;
+            border-radius: 2px;
+            font-size: .2rem;
+            text-align: center;
+        }
+        
+        input::placeholder {
+            color: #999;
+            font-size: 0.3rem;
+        }
+        
+        .ipt span {
+            display: inline-block;
+            width: .5rem;
+            height: .26rem;
+            background: url(../image/icon_search.png)no-repeat;
+            -webkit-background-size: .25rem .26rem;
+            background-size: .25rem .26rem;
+            position: absolute;
+            top: .25rem;
+            left: 3.2rem;
+            padding-left: .3rem;
+            color: #8E8E93;
+        }
+        
+        .news {
+            display: flex;
+            flex-flow: column nowrap;
+        }
+        
+        ul {
+            width: 100%;
+            /*padding: 0 .3rem;*/
+            box-sizing: border-box;
+        }
+        
+        ul li {
+            width: 100%;
+            height: 1.2rem;
+            box-sizing: border-box;
+            padding: .15rem .3rem;
+            /*padding: .15rem 0;*/
+            border-bottom: 1px solid #D6D6D6;
+            position: relative;
+        }
+        
+        ul li img {
+            width: .9rem;
+            height: .9rem;
+            margin-right: .2rem;
+        }
+        
+        ul li h3 {
+            margin-top: .1rem;
+            margin-bottom: .05rem;
+            width: 3.5rem;
+            float: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+       
+        ul li.select:before {
+            content: "";
+            display: inline-block;
+            width: .15rem;
+            height: .15rem;
+            background-color: #f00;
+            border-radius: 50%;
+            position: absolute;
+            top: .1rem;
+            left: .8rem;
+        }
+        
+        ul li p {
+            color: #9B9B9B;
+            word-wrap: break-word;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            height: .32rem;
+            width:3.5rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+
+        .main_no1,
+        .main_no2 {
+            height: 1rem;
+            border-bottom: 1px solid #EBEBEB;
+            font-size: .3rem;
+            line-height: 1rem;
+            padding-left: 1.1rem;
+
+        }
+        .main_no1 {
+            background: #fff url(../image/icon_txl/icon_yi.png)no-repeat;
+            -webkit-background-size: .66rem .66rem;
+            background-size: .66rem .66rem;
+            background-position: .3rem center;
+        }
+        .main_no2 {
+            background: #fff url(../image/icon_txl/icon_cs.png)no-repeat;
+            -webkit-background-size: .66rem .66rem;
+            background-size: .66rem .66rem;
+            background-position: .3rem center;
+            margin-bottom: .6rem;
+        }
     </style>
 </head>
-<body>
-    <div class="empty">通讯录</div>
+
+<body onclick="closeNews()">
+    <div id="news_wrap" class=" clearfix" onclick="closeNews()">
+        <div class="ipt">
+            <input type="text" onclick="openS()">
+            <span id="search" onclick="openS()">搜索</span>
+        </div>
+
+        <!--<ul class="resultList"></ul>
+         <script type="text/x-dot-template" id="listT">
+            {{ for (var i = 0; i < it.length; i++) { }} <li class="{{=it[i].select}} chatList" data-name="{{=it[i].targetId}}" onclick="openChat(this)">
+                <img class="fl" src="{{=it[i].url}}">
+                <h3>{{=it[i].targetId}}</h3>
+                <span class="fr time">{{=it[i].time.hour}}：{{=it[i].time.minute}}</span>
+                <p>{{=it[i].latestMessage.text}}</p>
+                </li>
+                {{ }; }}
+        </script> -->
+        <div class="main_no1">
+            一度人脉
+        </div>
+        <div class="main_no2" onclick="txl()">
+            初识好友（无通讯录）
+        </div>
+        <!-- <ul>
+            <li class="{{=it[i].select}} chatList" data-name="{{=it[i].targetId}}" onclick="openChat(this)">
+                <img class="fl" src="../image/tx_5.jpg">
+                <h3>{{=it[i].targetId}}</h3>
+                <p>{{=it[i].latestMessage.text}}</p>
+            </li>
+        </ul> -->
+    </div>
+    <script type="text/javascript" src="../script/common.js"></script>
     <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript" src="../script/doT.min.js"></script>
     <script type="text/javascript">
-    	apiready = function(){
-    	    
-    	}
-    	    
+    apiready = function() {
+        
+        var hei = $api.offset($api.dom('.main_no1')).h * 2 + $api.offset($api.dom('.ipt')).h + 10; 
+        dakai(hei)
+        moduleInit()
+      
+    }
+    function openS() {
+        api.openWin({
+            name: 'frameName',
+            url: './news/newsSearch.html',
+        });
+    }
+
+
+    
+   function dakai(hei) {
+   
+    var UIListContacts = api.require('UIListContacts');
+          var ah = api.frameHeight - hei;
+            UIListContacts.open({
+                rect : {
+                    x : 0,
+                    y : hei,
+                    w : api.frameWidth,
+                    h : ah 
+                },
+                contacts : [{
+                    "employee_id" : 191,
+                    "remark" : "王科研",
+                    "phonetic" : "WangKeYang", //名字的拼音
+                    "namephonetic" : "WangKeYang88",
+                    "position" : "研发",
+                    "dept_id" : "002000",
+                    "isdeleted" : "N",
+                    "tags" : "",
+                    "dept_name" : "创达集团",
+                    "isremark" : 1,
+                    "phones" : [{
+                        "phone" : "13366148872",
+                        "type" : "1"
+                    }]
+                }, {
+                    "employee_id" : 192,
+                    "remark" : "艾瑞雪",
+                    "phonetic" : "WangKeYang", //名字的拼音
+                    "namephonetic" : "WangKeYang88",
+                    "position" : "研发",
+                    "dept_id" : "002000",
+                    "isdeleted" : "N",
+                    "tags" : "",
+                    "dept_name" : "创达集团",
+                    "isremark" : 1,
+                    "phones" : [{
+                        "phone" : "13366148872",
+                        "type" : "1"
+                    }]
+                }, {
+                    "employee_id" : 193,
+                    "remark" : "秋风疾",
+                    "phonetic" : "BangKeYang88", //名字的拼音
+                    "namephonetic" : "WangKeYang88",
+                    "position" : "研发",
+                    "dept_id" : "002000",
+                    "isdeleted" : "N",
+                    "tags" : "",
+                    "dept_name" : "创达集团",
+                    "isremark" : 1,
+                    "phones" : [{
+                        "phone" : "13366148872",
+                        "type" : "1"
+                    }]
+                },{
+                    "employee_id" : 193,
+                    "remark" : "啊风疾",
+                    "phonetic" : "AangKeYang88", //名字的拼音
+                    "namephonetic" : "WangKeYang88",
+                    "position" : "研发",
+                    "dept_id" : "002000",
+                    "isdeleted" : "N",
+                    "tags" : "",
+                    "dept_name" : "创达集团",
+                    "isremark" : 1,
+                    "phones" : [{
+                        "phone" : "13366148872",
+                        "type" : "1"
+                    }]
+                },{
+                    "employee_id" : 193,
+                    "remark" : "啊风疾",
+                    "phonetic" : "AangKeYang88", //名字的拼音
+                    "namephonetic" : "WangKeYang88",
+                    "position" : "研发",
+                    "dept_id" : "002000",
+                    "isdeleted" : "N",
+                    "tags" : "",
+                    "dept_name" : "创达集团",
+                    "isremark" : 1,
+                    "phones" : [{
+                        "phone" : "13366148872",
+                        "type" : "1"
+                    }]
+                },{
+                    "employee_id" : 193,
+                    "remark" : "啊风疾",
+                    "phonetic" : "AangKeYang88", //名字的拼音
+                    "namephonetic" : "WangKeYang88",
+                    "position" : "研发",
+                    "dept_id" : "002000",
+                    "isdeleted" : "N",
+                    "tags" : "",
+                    "dept_name" : "创达集团",
+                    "isremark" : 1,
+                    "phones" : [{
+                        "phone" : "13366148872",
+                        "type" : "1"
+                    }]
+                },{
+                    "employee_id" : 193,
+                    "remark" : "啊风疾",
+                    "phonetic" : "AangKeYang88", //名字的拼音
+                    "namephonetic" : "WangKeYang88",
+                    "position" : "研发",
+                    "dept_id" : "002000",
+                    "isdeleted" : "N",
+                    "tags" : "",
+                    "dept_name" : "创达集团",
+                    "isremark" : 1,
+                    "phones" : [{
+                        "phone" : "13366148872",
+                        "type" : "1"
+                    }]
+                },{
+                    "employee_id" : 193,
+                    "remark" : "啊风疾",
+                    "phonetic" : "AangKeYang88", //名字的拼音
+                    "namephonetic" : "WangKeYang88",
+                    "position" : "研发",
+                    "dept_id" : "002000",
+                    "isdeleted" : "N",
+                    "tags" : "",
+                    "dept_name" : "创达集团",
+                    "isremark" : 1,
+                    "phones" : [{
+                        "phone" : "13366148872",
+                        "type" : "1"
+                    }]
+                }],
+                fixedOn : api.frameName
+            }, function(ret) {
+                if (ret==='click') {
+                    alert(JSON.stringify(ret));
+                }
+            });
+   }
+   function  txl() {
+       contacts.select(function(ret, err) {
+    if (ret) {
+        alert(JSON.stringify(ret));
+    } else {
+        alert(JSON.stringify(err));
+    }
+});
+   }
     </script>
 </body>
+
 </html>

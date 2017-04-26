@@ -195,9 +195,11 @@
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/common.js"></script>
     <script type="text/javascript">
-    var  userName, headImg, sex, currentCompany, currentPosition,imgChche;
+    var  userName, headImg, sex, currentCompany, currentPosition,imgChche, userToken, rongToken;
     	apiready = function(){
             userInfo(userTokenAll);
+            userToken = api.pageParam.userToken;
+            rongToken = api.pageParam.rongToken;
     	}
         // 获取用户信息
         function userInfo(userToken) {
@@ -269,7 +271,8 @@
                 name: 'winName',
                 url: './me/me_' + val + '.html',
                 pageParam: {
-                    name: 'value'
+                    userToken: userToken,
+                    rongToken: rongToken
                 }
             });
         }

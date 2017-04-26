@@ -6,30 +6,35 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style type="text/css">
-        body {
-            padding: 0 .5rem;
-            border-top: 1px solid #000;
-            background-color: #f0f0f0;
-        }
-        span {
-            font-size: .24rem;
-            padding: .1rem .2rem;
-            margin-top: .2rem;
-        }
-        span:nth-child(1) {
-            float: left;
-            margin-right: .5rem;
+        body,html {
+            text-align: center;
+            background-color: rgba(0,0,0,0.3);
+            height: 100%;
 
         }
-        span:nth-child(2) {
-            float: right;
-            margin-left: .5rem;
+        span {
+            font-size: .36rem;
+            width: 100%;
+            padding: .3rem 0;
+            text-align: center;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background-color: #fff;
+            color: #0089e9;
+        }
+        .main {
+            height: 100%;
+            width: 100%;
         }
     </style>
 </head>
-<body>
-    <span onclick="enter(0)">取消</span>
-    <span onclick="enter(1)">确认</span>
+<body onclick="api.closeFrame()">
+    <!-- <span onclick="enter(0)">取消</span> -->
+    
+    <div class="main" onclick="api.closeFrame()">
+        <span onclick="enter()">确认</span>
+    </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -40,30 +45,32 @@ var selDate;
        
 
     };
+    function close() {
+        api.closeFrame();
+    }
  function dianji() {
         var UISelector = api.require('UISelector');
 
         UISelector.open({
             rect: {
                 x: 0,
-                y: 30,
-                // y: api.winHeight / 2 + 170,
-                // w: api.frameWidth - 60,
+                y: api.frameHeight / 2 + 110,
+               
                 h: 150
             },
             styles: {
-                bg: 'rgba(0,0,0,0)',
+                bg: 'rgba(255,255,255,1)',
                 text: {
-                    size: 14,
-                    selected: '#000',
-                    normal: '#555'
+                    size: 18,
+                    selected: '#333',
+                    normal: '#a8a8a8'
                 },
                 item: {
                     w: 80,
                     h: 20,
                     normal: 'rgba(0,0,0,0)',
                     selected: 'rgba(0,0,0,0)',
-                    zoomIn: 1.5
+                    zoomIn: 1.2
                 }
             },
             rows: 3,
@@ -79,23 +86,21 @@ var selDate;
         }, function(ret, err) {
             if (ret) {
                 // alert(JSON.stringify(ret));
-                selDate = JSON.stringify(ret);
+                // selDate = JSON.stringify(ret);
+                selDate = ret.selects[0].content;
             } else {
                 alert(JSON.stringify(err));
             }
         });
    }  
-  function enter (n) {
-    if (n) {
-        alert(selDate);
-        api.closeFrame({
-            // name: ''
-        });
-    } else {
-        api.closeFrame({
-            // name: ''
-        });
-    }
+  function enter () {
+    api.closeFrame();
+    api.sendEvent({
+        name: 'xiugaisex',
+        extra: {
+            selDate: selDate
+        }
+    });
   }
   
 </script>

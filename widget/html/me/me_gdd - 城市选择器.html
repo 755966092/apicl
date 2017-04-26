@@ -53,19 +53,29 @@
         fnInit();
         
     };
-    function dianji() {
-        api.openFrame({
-            name: 'frameName',
-            url: './uiselect.html',
-            rect: {
-                x: 0,
-                y: api.winHeight / 2 + 100,
-                w: 'auto',
-                h: 200
-            },
-            bounces: false
+   function dianji() {
+   
+        citySelector.open({
+            y: api.frameHeight / 1.6,
+            fixedOn: api.frameName,
+            anim: true,
+            // // 选中颜色
+            // selectedColor: #f00,
+            // // 默认颜色
+            // fontColor: #0f0,
+            // 取消按钮背景图片
+            cancelImg: '../../bg.png',
+            enterImg: 'widget://bg.png',
+            titleImg: 'widget://bg.png',
+            bgImg: 'widget://bg.png'
+
+        }, function(ret, err) {
+            if (ret) {
+                alert(JSON.stringify(ret));
+            } else {
+                alert(JSON.stringify(err));
+            }
         });
-    }
-  
+   }  
 </script>
 </html>

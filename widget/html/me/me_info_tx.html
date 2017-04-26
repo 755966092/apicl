@@ -56,27 +56,43 @@
             background-size: .63rem .52rem;
             background-position: center 0;
         }
+        header span:nth-child(3) {
+            position: absolute;
+            right: .3rem;
+            top: 0rem;
+        }
     </style>
 </head>
 <body>
      <header>
-        <span onclick="api.closeWin()">取消</span>
+        <span onclick="closeW()">取消</span>
         <span>选择头像</span>
+        <span onclick="enter()">完成</span>
     </header>
-    <div class="main">
+    <!-- <div class="main">
         <img src="../../image/tx_5.jpg">
-        <!-- <img src="../../image/tx_5.jpg"> -->
         <div>
             <span data-str="camear" onclick="upload(this)">拍照上传</span>
             <span data-str="photo" onclick="upload(this)">相册上传</span>
         </div>
-    </div>
+    </div> -->
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
 	    fnInit();
+        api.openFrame({
+            name: 'txframe',
+            url: './me_info_tx2.html',
+            rect: {
+                x: 0,
+                y: headerH,
+                w: 'auto',
+                h: 'auto'
+            },
+            bounces: false
+        });
     };
 
     function upload(str) {
@@ -86,44 +102,51 @@
                     sourceType: 'camera',
                     mediaValue: 'pic',
                     encodingType: 'jpg',
-                    destinationType: 'base64',
-                    quality: 50,
+                    destinationType: 'url',
+                    quality: 80,
                     targetWidth: 750,
                     targetHeight: 750,
-                    saveToPhotoAlbum: false // 拍照后是否保存照片到相册
+                    saveToPhotoAlbum: true // 拍照后是否保存照片到相册
                 }, function(ret, err) {
-                    if (ret) {
-                       if (!ret.base64Data) {
-                        
-                    } else {    
-                        $api.attr($api.dom('img'),'src', ret.base64Data)
-                    }
-                    } else {
-                        alert(JSON.stringify(err));
-                    }
+                    if (ret.data) {
+                        $api.attr($api.dom('img'),'src', ret.data);
+                    } 
                 });
         } else {
             api.getPicture({
                 sourceType: 'library',
                 mediaValue: 'pic',
                 encodingType: 'jpg',
-                destinationType: 'base64',
-                quality: 50,
+                destinationType: 'url',
+                quality: 80,
                 targetWidth: 750,
                 targetHeight: 750
             }, function(ret, err) {
                 if (ret) {
-                    if (!ret.base64Data) {
-                        
-                    } else {    
-                        $api.attr($api.dom('img'),'src', ret.base64Data)
-                    }
+                    if (ret.data) {
+                        $api.attr($api.dom('img'),'src', ret.data);
+                    } 
+                    
                 } else {
                     alert(JSON.stringify(err));
                 }
             });
         }
     }
-  
+    function enter () {
+        var url = $api.attr($api.dom('img'),'src');
+        api.sendEvent({
+            name: 'changeHead',
+            extra: {
+                selDate: url
+            }
+        });
+        api.closeWin();
+    }
+    function closeW() {
+        api.closeWin({
+            name: 'me_info_tx'
+        });
+    }
 </script>
 </html>
