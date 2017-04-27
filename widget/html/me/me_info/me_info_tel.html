@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <style type="text/css">
+        body,html {
+            text-align: center;
+            background-color: rgba(0,0,0,0.3);
+            height: 100%;
+
+        }
+        span {
+            font-size: .36rem;
+            width: 100%;
+            padding: .3rem 0;
+            text-align: center;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background-color: #fff;
+            color: #0089e9;
+        }
+        .main {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body onclick="api.closeFrame()">
+    <!-- <span onclick="enter(0)">取消</span> -->
+    
+    <div class="main" onclick="api.closeFrame()">
+        <span onclick="enter()">确认</span>
+    </div>
+</body>
+<script type="text/javascript" src="../../../script/api.js"></script>
+<script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript">
+var selDate;
+    apiready = function(){
+       dianji();
+       
+
+    };
+    function close() {
+        api.closeFrame();
+    }
+ function dianji() {
+        var UISelector = api.require('UISelector');
+
+        UISelector.open({
+            rect: {
+                x: 0,
+                y: api.frameHeight / 2 + 110,
+               
+                h: 150
+            },
+            styles: {
+                bg: 'rgba(255,255,255,1)',
+                text: {
+                    size: 18,
+                    selected: '#333',
+                    normal: '#a8a8a8'
+                },
+                item: {
+                    w: 80,
+                    h: 20,
+                    normal: 'rgba(0,0,0,0)',
+                    selected: 'rgba(0,0,0,0)',
+                    zoomIn: 1.2
+                }
+            },
+            rows: 3,
+            indexs: [3, 4, 5],
+            bounce: false,
+            fixedOn: api.frameName,
+            fixed: false,
+            data: [{
+                title: '工作',
+            }, {
+                title: '生活',
+            }]
+        }, function(ret, err) {
+            if (ret) {
+                // alert(JSON.stringify(ret));
+                // selDate = JSON.stringify(ret);
+                selDate = ret.selects[0].content;
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+   }  
+  function enter () {
+    api.closeFrame();
+    api.sendEvent({
+        name: 'xiugaitel',
+        extra: {
+            selDate: selDate
+        }
+    });
+  }
+  
+</script>
+</html>

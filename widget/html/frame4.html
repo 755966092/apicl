@@ -197,26 +197,31 @@
     <script type="text/javascript">
     var  userName, headImg, sex, currentCompany, currentPosition,imgChche, userToken, rongToken;
     	apiready = function(){
-            userInfo(userTokenAll);
-            userToken = api.pageParam.userToken;
-            rongToken = api.pageParam.rongToken;
+            userToken = api.pageParam.userToken || userTokenAll;
+            rongToken = api.pageParam.rongToken || rongTokenAll;
+            userInfo(userToken);
+            api.addEventListener({
+                name:'viewappear'
+            }, function(ret, err){        
+                userInfo(userToken);
+            });
     	}
         // 获取用户信息
         function userInfo(userToken) {
             // 如果没有本地缓存，就从网络获取，有就使用本地缓存
-            if ($api.getStorage('userName')) {
             // if ($api.getStorage('userName')) {
-            // if (0) {
-                // 本地数据设置页面内容
-                userName =   $api.getStorage('userName'); 
-                headImg =   $api.getStorage('headImg'); 
-                // headImg =   imgChche; 
-                // alert(headImg)
-                sex =   $api.getStorage('sex'); 
-                currentCompany =   $api.getStorage('currentCompany'); 
-                currentPosition =   $api.getStorage('currentPosition');
-                reviseContent(userName, headImg, sex, currentCompany, currentPosition);
-            } else {
+            // // if ($api.getStorage('userName')) {
+            // // if (0) {
+            //     // 本地数据设置页面内容
+            //     userName =   $api.getStorage('userName'); 
+            //     headImg =   $api.getStorage('headImg'); 
+            //     // headImg =   imgChche; 
+            //     // alert(headImg)
+            //     sex =   $api.getStorage('sex'); 
+            //     currentCompany =   $api.getStorage('currentCompany'); 
+            //     currentPosition =   $api.getStorage('currentPosition');
+            //     reviseContent(userName, headImg, sex, currentCompany, currentPosition);
+            // } else {
                  api.ajax({
                     url: apiSite + '/api/user_center/index',
                     method: 'post',
@@ -261,7 +266,7 @@
                         alert(JSON.stringify(err));
                     }
                 });
-            }
+            // }
         }
         //
     	function login(ele) {
@@ -288,7 +293,7 @@
             $api.attr(head, 'src', headImg);
             // 设置用户性别
             if (sex == 1 ) {
-                
+                $api.attr(sexImg, 'src', '../image/icon_my/icon_my01.png');
             } else {
                 $api.attr(sexImg, 'src', '../image/icon_my/icon_my02.png');
             }
