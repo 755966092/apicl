@@ -183,197 +183,184 @@
                 },
                 bounces: true
             });
-            // userToken = api.pageParam.userToken || $api.getStorage('userToken');;
-            // rongToken = api.pageParam.rongToken || $api.getStorage('rongToken');;
-            // userInfo(userTokenAll || userToken);
-            
-            // // 修改性别
-            // monitor('xiugaisex', $api.dom('.sex'));
-            // // 修改生日
-            // monitor('xiugaisr' , $api.dom('.sr'));
-            // // 修改家乡
-            // monitor('xiugaijx' , $api.dom('.jx'));
-            // // 修改头像
-            // monitor('changeHead' , $api.dom('.headImg'));
-        // 获取用户信息
         }
 
-        function userInfo(userToken) {
-            // 如果没有本地缓存，就从网络获取，有就使用本地缓存
-            // if ($api.getStorage('hometown')) {
-            //     // 本地数据设置页面内容
-            //     userName =   $api.getStorage('userName'); 
-            //     zName =   $api.getStorage('zName'); 
-            //     headImg =   $api.getStorage('headImg'); 
-            //     sex =   $api.getStorage('sex'); 
-            //     hometown =   $api.getStorage('hometown'); 
-            //     birthday =   $api.getStorage('birthday');
-            //     reviseContent(userName, zName, headImg, sex, hometown, birthday);
-            // } else {
-                 myAjax();
-            // }
-        }
+        // function userInfo(userToken) {
+        //     // 如果没有本地缓存，就从网络获取，有就使用本地缓存
+        //     // if ($api.getStorage('hometown')) {
+        //     //     // 本地数据设置页面内容
+        //     //     userName =   $api.getStorage('userName'); 
+        //     //     zName =   $api.getStorage('zName'); 
+        //     //     headImg =   $api.getStorage('headImg'); 
+        //     //     sex =   $api.getStorage('sex'); 
+        //     //     hometown =   $api.getStorage('hometown'); 
+        //     //     birthday =   $api.getStorage('birthday');
+        //     //     reviseContent(userName, zName, headImg, sex, hometown, birthday);
+        //     // } else {
+        //          myAjax();
+        //     // }
+        // }
         //
-        function login(ele) {
-           // 根据点击的按钮进入不同的页面
-            var val = $api.attr(ele, 'data-val');
-            api.openWin({
-                name: 'me_info_' + val,
-                url: './me_info_' + val + '.html',
-                pageParam: {
-                    name: 'value'
-                }
-            });
-        }
-        function openF (ele) {
-            var val = $api.attr(ele, 'data-val');
-            api.openFrame({
-                name: 'frameName',
-                url: './me_info_' + val + '.html',
-                rect: {
-                    x: 0,
-                    y: 0,
-                    w: 'auto',
-                    h: api.winHeight
-                },
+        // function login(ele) {
+        //    // 根据点击的按钮进入不同的页面
+        //     var val = $api.attr(ele, 'data-val');
+        //     api.openWin({
+        //         name: 'me_info_' + val,
+        //         url: './me_info_' + val + '.html',
+        //         pageParam: {
+        //             name: 'value'
+        //         }
+        //     });
+        // }
+        // function openF (ele) {
+        //     var val = $api.attr(ele, 'data-val');
+        //     api.openFrame({
+        //         name: 'frameName',
+        //         url: './me_info_' + val + '.html',
+        //         rect: {
+        //             x: 0,
+        //             y: 0,
+        //             w: 'auto',
+        //             h: api.winHeight
+        //         },
                
-                bounces: false
-            });
-        }
+        //         bounces: false
+        //     });
+        // }
         // 修改文本内容
-        function reviseContent(userName1, zName1, headImg1, sex1, hometown1, birthday1) {
-            var name = $api.dom('.name'),
-                nicheng = $api.dom('.nicheng'),
-                head = $api.dom('.headImg'),
-                sexImg = $api.dom('.sex'),
-                birthday = $api.dom('.sr'),
-                hometown = $api.dom('.jx');
-            // 设置真实姓名
-            $api.val(name, zName1);
-            // 设置用户昵称
-            $api.val(nicheng,userName1);
-            // 设置用户头像
-            $api.attr(head, 'src', headImg1);
-            // 设置用户性别
-            if (sex1 == 1 ) {
-                $api.text(sexImg, '男');
-                $api.attr(sexImg, 'data-val', 1);
-            } else {
-                $api.text(sexImg, '女');
-                $api.attr(sexImg, 'data-val', 2);
-            }
-            // 设置用户家乡
-            hometown1 = hometown1.replace(',','-')
-            $api.text(hometown, hometown1);
-            // 设置用户生日
-            $api.text(birthday, birthday1);
-        }
+        // function reviseContent(userName1, zName1, headImg1, sex1, hometown1, birthday1) {
+        //     var name = $api.dom('.name'),
+        //         nicheng = $api.dom('.nicheng'),
+        //         head = $api.dom('.headImg'),
+        //         sexImg = $api.dom('.sex'),
+        //         birthday = $api.dom('.sr'),
+        //         hometown = $api.dom('.jx');
+        //     // 设置真实姓名
+        //     $api.val(name, zName1);
+        //     // 设置用户昵称
+        //     $api.val(nicheng,userName1);
+        //     // 设置用户头像
+        //     $api.attr(head, 'src', headImg1);
+        //     // 设置用户性别
+        //     if (sex1 == 1 ) {
+        //         $api.text(sexImg, '男');
+        //         $api.attr(sexImg, 'data-val', 1);
+        //     } else {
+        //         $api.text(sexImg, '女');
+        //         $api.attr(sexImg, 'data-val', 2);
+        //     }
+        //     // 设置用户家乡
+        //     hometown1 = hometown1.replace(',','-')
+        //     $api.text(hometown, hometown1);
+        //     // 设置用户生日
+        //     $api.text(birthday, birthday1);
+        // }
 
 
         // 监听事件
-        function monitor (eve, ele) {
+        // function monitor (eve, ele) {
 
-            api.addEventListener({
-                name: eve
-            }, function(ret, err) {
-                var val = ret.value.selDate;
-                if (ret) {
-                    if (eve == 'changeHead') {
-                        $api.attr(ele, 'src', val);
-                    } else {
-                        $api.text(ele, val);
-                        reviseData();
-                    }
+        //     api.addEventListener({
+        //         name: eve
+        //     }, function(ret, err) {
+        //         var val = ret.value.selDate;
+        //         if (ret) {
+        //             if (eve == 'changeHead') {
+        //                 $api.attr(ele, 'src', val);
+        //             } else {
+        //                 $api.text(ele, val);
+        //                 reviseData();
+        //             }
                     
                     
-                } else {
-                    alert(JSON.stringify(err));
-                }
-            });
+        //         } else {
+        //             alert(JSON.stringify(err));
+        //         }
+        //     });
             
-        }
+        // }
 
 
 
-        // 修改资料
-        function reviseData () {
+        // // 修改资料
+        // function reviseData () {
 
-            var name = $api.val($api.dom('.name')) || userName;
-            var niCheng = $api.val($api.dom('.nicheng')) || zName;
-            var headImg = $api.attr($api.dom('.headImg'),'src') || headImg;
-            var sex = $api.attr($api.dom('.sex'),'data-val') || sex;
-            var jx = $api.text($api.dom('.jx')) || hometown;
-            var sr = $api.text($api.dom('.sr')) || birthday;
-            // 上传数据
-             api.ajax({
-                    url: apiSite + '/api/user_center/editBasicInfo',
-                    method: 'post',
-                    headers: apiHeader,
-                    data: {
-                        values: { 
-                            token: userToken,
-                            head_img_url: headImg,
-                            real_name: name,
-                            nickname: niCheng,
-                            sex: sex,
-                            hometown:jx,
-                            birthday:sr
-                        }
-                    }
-                }, function(ret, err) {
-                        // alert(JSON.stringify(ret))
-                })
-             // myAjax();
-        }
+        //     var name = $api.val($api.dom('.name')) || userName;
+        //     var niCheng = $api.val($api.dom('.nicheng')) || zName;
+        //     var headImg = $api.attr($api.dom('.headImg'),'src') || headImg;
+        //     var sex = $api.attr($api.dom('.sex'),'data-val') || sex;
+        //     var jx = $api.text($api.dom('.jx')) || hometown;
+        //     var sr = $api.text($api.dom('.sr')) || birthday;
+        //     // 上传数据
+        //      api.ajax({
+        //             url: apiSite + '/api/user_center/editBasicInfo',
+        //             method: 'post',
+        //             headers: apiHeader,
+        //             data: {
+        //                 values: { 
+        //                     token: userToken,
+        //                     head_img_url: headImg,
+        //                     real_name: name,
+        //                     nickname: niCheng,
+        //                     sex: sex,
+        //                     hometown:jx,
+        //                     birthday:sr
+        //                 }
+        //             }
+        //         }, function(ret, err) {
+        //                 // alert(JSON.stringify(ret))
+        //         })
+        //      // myAjax();
+        // }
 
         // 获取个人资料
-        function myAjax() {
-            api.ajax({
-                    url: apiSite + '/api/user_center/editBasicInfoIndex',
-                    method: 'post',
-                    headers: apiHeader,
-                    data: {
-                        values: { 
-                            token: userToken
-                        }
-                    }
-                }, function(ret, err) {
-                    if (ret) {
+        // function myAjax() {
+        //     api.ajax({
+        //             url: apiSite + '/api/user_center/editBasicInfoIndex',
+        //             method: 'post',
+        //             headers: apiHeader,
+        //             data: {
+        //                 values: { 
+        //                     token: userToken
+        //                 }
+        //             }
+        //         }, function(ret, err) {
+        //             if (ret) {
                             
-                            userName = ret.data.info.nickname,
-                            zName = ret.data.info.real_name,
-                            headImg = ret.data.info.head_img_url,
-                            sex = ret.data.info.sex,
-                            // sex = (ret.data.info.sex === 1)?'男':'女',
-                            // 家乡
-                            hometown = ret.data.info.hometown, 
-                            // 生日
-                            birthday = ret.data.info.birthday;
-                            // 设置本地缓存
-                            $api.setStorage('userName', userName); 
-                            $api.setStorage('zName', zName); 
-                            $api.setStorage('sex', sex); 
-                            $api.setStorage('hometown', hometown); 
-                            $api.setStorage('birthday', birthday);
+        //                     userName = ret.data.info.nickname,
+        //                     zName = ret.data.info.real_name,
+        //                     headImg = ret.data.info.head_img_url,
+        //                     sex = ret.data.info.sex,
+        //                     // sex = (ret.data.info.sex === 1)?'男':'女',
+        //                     // 家乡
+        //                     hometown = ret.data.info.hometown, 
+        //                     // 生日
+        //                     birthday = ret.data.info.birthday;
+        //                     // 设置本地缓存
+        //                     $api.setStorage('userName', userName); 
+        //                     $api.setStorage('zName', zName); 
+        //                     $api.setStorage('sex', sex); 
+        //                     $api.setStorage('hometown', hometown); 
+        //                     $api.setStorage('birthday', birthday);
                             
-                            // 初始化页面内容   
-                            reviseContent(userName,zName, headImg, sex, hometown, birthday);
-                            // 图片缓存
-                            api.imageCache({
-                                url: headImg,
-                                policy: 'cache_else_network'
-                            }, function(ret, err) {
-                                if (ret) {
-                                    $api.setStorage('headImg', ret.url); 
-                                } else {
-                                    alert(JSON.stringify(err));
-                                }
-                            });
-                    } else {
-                        alert(JSON.stringify(err));
-                    }
-                });
-        }
+        //                     // 初始化页面内容   
+        //                     reviseContent(userName,zName, headImg, sex, hometown, birthday);
+        //                     // 图片缓存
+        //                     api.imageCache({
+        //                         url: headImg,
+        //                         policy: 'cache_else_network'
+        //                     }, function(ret, err) {
+        //                         if (ret) {
+        //                             $api.setStorage('headImg', ret.url); 
+        //                         } else {
+        //                             alert(JSON.stringify(err));
+        //                         }
+        //                     });
+        //             } else {
+        //                 alert(JSON.stringify(err));
+        //             }
+        //         });
+        // }
     </script>
 </body>
 </html>

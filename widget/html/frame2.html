@@ -7,16 +7,40 @@
     <link rel="stylesheet" type="text/css" href="../css/api.css"/>
     <link rel="stylesheet" type="text/css" href="../css/style.css"/>
     <style>
-        .empty{ text-align: center; padding: 120px 0; }
+        
     </style>
 </head>
 <body>
-    <div class="empty">供求</div>
+    <button onclick="txl()">通讯录</button>
+    <button onclick="qb()">通讯录</button>
     <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript" src="../script/common.js"></script>
     <script type="text/javascript">
     	apiready = function(){
-    	    
+    	    moduleInit()
+            
     	}
+        function txl() {
+            contacts.select(function(ret, err) {
+                if (ret) {
+                    alert(JSON.stringify(ret));
+                } else {
+                    alert(JSON.stringify(err));
+                }
+            });
+        }
+        function qb() {
+            contacts.queryByPage({
+                count: 20,
+                pageIndex: 0
+            }, function(ret, err) {
+                if (ret) {
+                    alert(JSON.stringify(ret));
+                } else {
+                    alert(JSON.stringify(err));
+                }
+            });
+        }
     	    
     </script>
 </body>
