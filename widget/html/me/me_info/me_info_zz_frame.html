@@ -112,17 +112,18 @@
     // 编辑地址
     function openEdit(ele) {
         if ($api.hasCls(ele, 'edit')) {
-            无
+            // 
         } else {
-            alert('')
+            // 编辑按钮状态下 进入编辑页面
+            api.openWin({
+                name: 'editAddressWin',
+                url: './me_info_zz_editAddress.html',
+                pageParam: {
+                    userToken: api.pageParam.userToken || $api.getStorage('userToken')
+                }
+            });
         }
-        api.openWin({
-            name: 'editAddressWin',
-            url: './me_info_zz_editAddress.html',
-            pageParam: {
-                userToken: api.pageParam.userToken || $api.getStorage('userToken')
-            }
-        });
+        
     }
 
     // 添加新地址

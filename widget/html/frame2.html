@@ -31,11 +31,13 @@
                 pageIndex: 0
             }, function(ret, err) {
                  alert(JSON.stringify(ret));
-                 getTxl(ret)
+                 
+                 getTxl(ret);
             });
         }
     	    
         function getTxl (content) {
+            alert("调用提交函数成功")
             api.ajax({
                 url: apiSite + '/api/contact/sync',
                 method: 'post',
@@ -47,7 +49,8 @@
                     }
                 }
             }, function(ret, err) {
-
+                 alert('正确信息：'+JSON.stringify(ret));
+                 alert('错误信息：'+JSON.stringify(err));
                 if (ret) {
                     alert(JSON.stringify(ret))
                 } else {
