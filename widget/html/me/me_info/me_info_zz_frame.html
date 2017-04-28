@@ -57,18 +57,24 @@
             background-position: 0 center;
             padding-left: .5rem;
         }
+        .dzlist .edit {
+            background: url(../../../image/icon_login/icon-clearText.png)no-repeat;
+            background-size: .25rem .25rem;
+            background-position: 0 center;
+        }
     </style>
 </head>
 <body>
     
     <div class="wrap resultList">
-       <!-- <div class="dzlist">
+       <div class="dzlist">
            <div class="left fl">
                 <h3>方小姐</h3>
                 <p>北京市海淀区清华科技园创业大厦110</p>
            </div>
+           <!-- <span onclick="openEdit(this)" class="right fr"></span> -->
            <span onclick="openEdit(this)" class="right fr"></span>
-       </div> -->
+       </div>
        <!-- <div class="dzlist">
            <div class="left fl">
                 <h3>方小姐</h3>
@@ -77,7 +83,7 @@
            <span onclick="openEdit(this)" class="right fr"></span>
        </div> -->
     </div>
-     <script type="text/x-dot-template" id="listT">
+     <!-- <script type="text/x-dot-template" id="listT">
         {{ for (var i = 0; i < it.length; i++) { }} 
             <div class="dzlist" >
                 <div class="left fl">
@@ -87,7 +93,7 @@
                 <span onclick="openEdit(this)" class="right fr"></span>
            </div>
         {{ }; }}
-     </script>
+     </script> -->
     <div class="main_no3 ">
         <p onclick="addAddress()">添加新地址</p>
     </div>
@@ -99,10 +105,17 @@
     apiready = function(){
         // 请求地址列表
 	    getCityList();
+        // 删除地址
+        delDz();
     };
 
     // 编辑地址
     function openEdit(ele) {
+        if ($api.hasCls(ele, 'edit')) {
+            无
+        } else {
+            alert('')
+        }
         api.openWin({
             name: 'editAddressWin',
             url: './me_info_zz_editAddress.html',
@@ -125,7 +138,7 @@
 
     // 请求地址列表
     function getCityList() {
-         api.ajax({
+        api.ajax({
             url: apiSite + '/api/user_center/addressList',
             method: 'post',
             headers: apiHeader,
@@ -142,6 +155,40 @@
             }
         });
     }
+
+    // 删除地址
+
+    function delDz () {
+        api.addEventListener({
+            name: 'editDz'
+        }, function(ret, err) {
+            if (ret) {
+                $api.toggleCls($api.dom('.right'), 'edit');
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // doT模版获取数据
     function getData(data) {

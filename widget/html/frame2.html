@@ -11,35 +11,50 @@
     </style>
 </head>
 <body>
-    <button onclick="txl()">通讯录</button>
     <button onclick="qb()">通讯录</button>
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/common.js"></script>
     <script type="text/javascript">
-    var contacts;
     	apiready = function(){
-    	    // moduleInit()
-            contacts = api.require('contacts');
+    	    moduleInit()
     	}
         function txl() {
             // var contacts = api.require('contacts');
             contacts.select(function(ret, err) {
-                 alert('错误：'+JSON.stringify(err));
-                 alert('正确：'+JSON.stringify(ret));
+                 alert(JSON.stringify(ret));
                
             });
         }
         function qb() {
-            
             contacts.queryByPage({
-                count: 20,
+                // count: 20,
                 pageIndex: 0
             }, function(ret, err) {
-                alert('错误：'+JSON.stringify(err));
-                 alert('正确：'+JSON.stringify(ret));
+                 alert(JSON.stringify(ret));
+                 getTxl(ret)
             });
         }
     	    
+        function getTxl (content) {
+            api.ajax({
+                url: apiSite + '/api/contact/sync',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: { 
+                        token: api.pageParam.userToken || $api.getStorage('userToken'),
+                        contact_json: content
+                    }
+                }
+            }, function(ret, err) {
+
+                if (ret) {
+                    alert(JSON.stringify(ret))
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            });
+        }
     </script>
 </body>
 </html>
