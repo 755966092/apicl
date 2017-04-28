@@ -39,10 +39,11 @@
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
 <script type="text/javascript">
-    var selDate;
+    var provinces,cities,city;
     apiready = function(){
         moduleInit();
         dianji();
+       
     };
     function dianji() {
         var UISelector = api.require('UISelector');
@@ -74,10 +75,12 @@
             bounce: false,
             fixedOn: api.frameName,
             fixed: false,
-            data: 'widget://data/city.json'
+            data: 'widget://data/city_2.json'
         }, function(ret, err) {
             if (ret) {
-                selDate = ret.selects[0].content + '-' + ret.selects[1].content;
+                provinces = ret.selects[0].content;
+                cities = ret.selects[1].content;
+                city = ret.selects[2].content;
             } else {
                 alert(JSON.stringify(err));
             }
@@ -88,9 +91,12 @@
     api.sendEvent({
         name: 'selCity',
         extra: {
-            selDate: selDate
+            provinces: provinces,
+            cities: cities,
+            city: city
         }
     });
+
   }
   
 </script>

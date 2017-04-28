@@ -96,7 +96,7 @@ function moduleInit() {
     //列表模块
     UISelector = api.require('UISelector');
     // 通讯录模块
-    contacts = api.require('contacts');
+    // contacts = api.require('contacts');
     // 城市选择器
     citySelector = api.require('citySelector');
 }

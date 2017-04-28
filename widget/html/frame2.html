@@ -16,31 +16,27 @@
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/common.js"></script>
     <script type="text/javascript">
+    var contacts;
     	apiready = function(){
-    	    moduleInit()
-            
+    	    // moduleInit()
+            contacts = api.require('contacts');
     	}
         function txl() {
-            var contacts = api.require('contacts');
+            // var contacts = api.require('contacts');
             contacts.select(function(ret, err) {
-                if (ret) {
-                    alert(JSON.stringify(ret));
-                } else {
-                    alert(JSON.stringify(err));
-                }
+                 alert('错误：'+JSON.stringify(err));
+                 alert('正确：'+JSON.stringify(ret));
+               
             });
         }
         function qb() {
-            var contacts = api.require('contacts');
+            
             contacts.queryByPage({
                 count: 20,
                 pageIndex: 0
             }, function(ret, err) {
-                if (ret) {
-                    alert(JSON.stringify(ret));
-                } else {
-                    alert(JSON.stringify(err));
-                }
+                alert('错误：'+JSON.stringify(err));
+                 alert('正确：'+JSON.stringify(ret));
             });
         }
     	    
