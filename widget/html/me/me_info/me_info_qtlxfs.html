@@ -33,7 +33,7 @@
             background-color: #F8F8F8;
         }
         
-       
+        
     </style>
 </head>
 <body>
@@ -42,7 +42,7 @@
         <span>电话</span>
         <span onclick="enter()" class="bj">编辑</span>
     </header>
-    <!-- <div class="wrap"> -->
+    <div class="wrap">
        <!--  <div class="main clearfix">
             <p class="mobile ">移动</p>
            <div class="main_no1 yd">
@@ -71,8 +71,8 @@
                </p>
            </div>
         </div> -->
-    <!-- </div>
-     <div class="main_no3 ">
+    </div>
+     <!-- <div class="main_no3 ">
            <p onclick="addTel()">添加新号码</p>
        </div> -->
 </body>
@@ -83,7 +83,7 @@
 	    fnInit();
         api.openFrame({
             name: 'zydhframe',
-            url: './me_info_zydh_frame.html',
+            url: './me_info_qtlxfs_frame.html',
             rect: {
                 x: 0,
                 y: headerH,
@@ -95,14 +95,10 @@
         api.addEventListener({
             name: 'viewappear'
         }, function(ret, err) {
-            if (ret) {
-                alert('1')
                 api.sendEvent({
-                    name: 'xgTel',
+                    name: 'qtlxfsOpenWin'
                 });
-            } else {
-                // alert(JSON.stringify(err));
-            }
+            
         });
        
     };
@@ -111,7 +107,7 @@
             $api.text($api.dom('.bj'), '保存');
             // 移除添加按钮绑定的事件
             api.sendEvent({
-                name: 'bjTel',
+                name: 'bjQtxfs',
                 extra: {
                     valueName1: '保存',
                     
@@ -121,10 +117,9 @@
         } else {
             $api.text($api.dom('.bj'), '编辑');
             api.sendEvent({
-                name: 'bjTel',
+                name: 'bjQtxfs',
                 extra: {
                     valueName1: '编辑',
-                    
                 }
             });
         }

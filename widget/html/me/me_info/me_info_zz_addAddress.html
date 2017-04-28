@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <style>
+        header {
+            background-color: #3A393E;
+            height: 1rem;
+            color: #fff;
+            line-height: 1rem;
+            text-align: center;
+            position: relative;
+            font-size: .36rem;
+            position: relative;
+        }
+        header span:nth-child(1) {
+            position: absolute;
+            left: 0;
+            background: url(../../../image/icon_fanh.png)no-repeat;
+            background-size: .2rem .31rem;
+            padding-left: .4rem;
+            background-position: .14rem .36rem;
+        }
+        header span:nth-child(3) {
+            position: absolute;
+            right: .3rem;
+            /*top: 0rem;*/
+        }
+        body, html {
+            background-color: #F8F8F8;
+        }
+        ul {
+            margin-top: .2rem;
+            font-size: .28rem;
+            background-color: #fff;
+        }
+        ul li {
+            height: .8rem;
+            border-bottom: 1px solid #ECECEC;
+            padding: 0 .3rem;
+            line-height: .8rem;
+        }
+        li .title {
+            width: 1.3rem;
+        }
+        li input {
+            height: .8rem;
+            outline: none;
+        }
+        .text {
+            color: #B1AEA9;
+            width: 5rem;
+        }
+        
+    </style>
+</head>
+<body>
+     <header> <!-- cities -->
+        <span onclick="api.closeWin()">取消</span>
+        <span>新增地址</span>
+    </header>
+    <div class="main">
+        <ul>
+            <li>
+                <span class="title" data-val="provinces">省</span>
+                <span class="text" class="provinces" onclick="selCity(this)">所在省份</span>
+            </li>
+            <li>
+                <span class="title" data-val="cities">市</span>
+                <span class="text" onclick="selCity(this)">所在城市</span>
+            </li>
+            <li>
+                <span class="title" data-val="city">区</span>
+                <span class="text" onclick="selCity(this)">所在城区</span>
+            </li>
+            <li>
+                <span class="title">详细地址</span>
+                <input type="text" name="" placeholder="街道门牌信息">
+            </li>
+            <li>
+                <span class="title">邮政编码</span>
+                <input type="text" name="" placeholder="邮政编码">
+            </li>
+        </ul>
+    </div>
+</body>
+<script type="text/javascript" src="../../../script/api.js"></script>
+<script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+	    fnInit();
+        api.addEventListener({
+            name: 'selCity'
+        }, function(ret, err) {
+            if (ret) {
+                alert(JSON.stringify(ret.value.selDate));
+                $api.text($api.dom('.provinces'), ret.value.selDate);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    };
+
+    // 城市选择器
+    function selCity(ele) {
+        api.openFrame({
+            name: 'selCity',
+            url: './me_info_zz_addAddress_selCity.html',
+            rect: {
+                x: 0,
+                y: 0,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                name: 'value'
+            },
+            bounces: true
+        });
+    }
+    
+</script>
+</html>

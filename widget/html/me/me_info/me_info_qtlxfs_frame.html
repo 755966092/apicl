@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <style>
+        header {
+            background-color: #3A393E;
+            height: 1rem;
+            color: #fff;
+            line-height: 1rem;
+            text-align: center;
+            position: relative;
+            font-size: .36rem;
+            position: relative;
+        }
+        header span:nth-child(1) {
+            position: absolute;
+            left: 0;
+            background: url(../../../image/icon_fanh.png)no-repeat;
+            background-size: .2rem .31rem;
+            padding-left: .4rem;
+            background-position: .14rem .36rem;
+        }
+        header span:nth-child(3) {
+            position: absolute;
+            right: .3rem;
+            /*top: 0rem;*/
+        }
+        body, html {
+            background-color: #F8F8F8;
+        }
+        
+        .main_no1 {
+        }
+        .main_no1 p, .main_no2 p {
+             background-color: #fff;
+            height: .8rem;
+            line-height: .8rem;
+            border-bottom: 1px solid #DBDBDB;
+            font-size: .3rem;
+            padding: 0 .3rem;
+
+        }
+        .main_no1 p span {
+            display: inline-block;
+            width: .45rem;
+            height: .8rem;
+            float: right;
+            background: url(../../../image/icon_my/icon_enter.png)no-repeat;
+            background-size: .45rem .34rem;
+            background-position: center center;
+            display: none;
+        }
+        .main_no1 p span.select {
+            display: inline-block;
+        }
+        button {
+            display: block;
+            width: 7.2rem;
+            height: .95rem;
+            background-color: #08BB08;
+            color: #fff;
+            font-size: .34rem;
+            margin-top: 4rem;
+            margin: 0 auto;
+        }
+        .main_no3 {
+            margin-top: .2rem;
+            background-color: #fff;
+        }
+        .main_no3 p {
+            width: 1.7rem;
+            margin: 0 auto;
+            height: .8rem;
+            line-height: .8rem;
+            font-size: .34rem;
+            color: #27b24a;
+            background:  url(../../../image/icon_my/icon_add.png)no-repeat;
+            -webkit-background-size: .4rem .4rem ;
+            background-size: .4rem .4rem ;
+            background-position: 0 center;
+            padding-left: .5rem;
+        }
+        
+        
+        .mobile {
+            height: .6rem;
+            font-size: .28rem;
+            color: #999;
+            line-height: .6rem;
+            padding-left: .3rem;
+        }
+        .telIpt {
+            height: .8rem;
+            margin-left: .5rem;
+            outline: none;
+        }
+        .clearIpt {
+            display: none;
+            width: .24rem;
+            height: .8rem;
+            background: url(../../../image/icon_login/icon-clearText.png)no-repeat;
+            background-size: .24rem .24rem;
+            background-position: 0 center;
+            float: right;
+        }
+        .gdd input {
+            color: #4990e2;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+       
+    </div>
+     <div class="main_no3 ">
+           <p onclick="addTel()">添加新号码</p>
+       </div>
+</body>
+<script type="text/javascript" src="../../../script/api.js"></script>
+<script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        delTel();
+        lxrList();
+        // 显示在屏幕上的事件
+        api.addEventListener({
+            name: 'qtlxfsOpenWin'
+        }, function(ret, err) {
+            if (ret) {
+                // 初始化
+            } else {
+                alert('未监听到');
+            }
+        });
+        
+    };
+    
+    // 监听删除电话事件
+    function delTel () {
+        api.addEventListener({
+            name: 'bjQtxfs'
+        }, function(ret, err) {
+            if (ret) {
+               enter(ret.value.valueName1);
+            } else {
+                // alert(JSON.stringify(err));
+            }
+        });
+    }
+    // 编辑电话号码
+    function enter (text) {
+        alert(text)
+        var ipt = $api.domAll('input'),
+            clearIpt = $api.domAll('.clearIpt');
+        if (text == '保存') {
+            for (var i = 0; i < ipt.length; i++) {
+                $api.removeAttr(ipt[i], 'disabled');
+            }
+            for (var i = 0; i < clearIpt.length; i++) {
+                $api.css(clearIpt[i], 'display:inline-block');
+            }
+            // 移除添加按钮绑定的事件
+        } else {
+            for (var i = 0; i < ipt.length; i++) {
+                $api.attr(ipt[i], 'disabled', 'true');
+            }
+            for (var i = 0; i < clearIpt.length; i++) {
+                $api.css(clearIpt[i], 'display:none');
+            }
+        }
+    }
+    // 添加联系方式
+    function addTel() {
+        api.openWin({
+            name: 'addTel',
+            url: './me_info_qtlxfs_fs.html',
+            pageParam: {
+                userToken: api.pageParam.userToken || $api.getStorage('userToken')
+            },
+            bounces: false
+        });
+    }
+    // 删除其他联系方式
+    function clearIpt(ele) {
+        $api.remove($api.closest(ele,'.p'));
+        api.ajax({
+            url: apiSite + '/api/user_center/deleteOtherContact',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    contact_id: $api.attr(ele, 'data-val')
+                }
+            }
+        }, function(ret, err) {
+            alert('删除进度'+JSON.stringify(ret))
+        })
+    }
+    // 获取联系人列表
+    function lxrList() {
+        api.ajax({
+            url: apiSite + '/api/user_center/otherContactList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: api.pageParam.userToken || $api.getStorage('userToken')
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                // alert(JSON.stringify(ret));
+                
+                var phoneArr = ret.data.list
+                for (var i = 0; i < phoneArr.length; i++) {
+                    if (phoneArr[i].type == 1) {
+                        // 即时通讯
+                        // 
+                        if (!$api.dom('.ydd')) {
+                            $api.append($api.dom('.wrap'), '<div class="main yd clearfix"><p class="mobile">即时通讯</p><div class="main_no1 ydd"></div></div>');
+                        }
+                        if (phoneArr[i].sub_type == 1) {
+                            // 微信
+                            $api.append($api.dom('.ydd'), '<p class="p">微信<input onchange="bjPhone(this)" data-val="'+ phoneArr[i].contact_id +'"  data-type = "'+ phoneArr[i].type +'"   maxlength="11" data-subType = "'+ phoneArr[i].sub_type +'" type="text" class="telIpt" name="" value="'+phoneArr[i].info+'" disabled><i data-val="'+ phoneArr[i].contact_id +'"  class="clearIpt" onclick="clearIpt(this)"></i></p>');
+                        } else {
+                            // qq
+                            $api.append($api.dom('.ydd'), '<p class="p">QQ<input onchange="bjPhone(this)" data-val="'+ phoneArr[i].contact_id +'"   data-type = "'+ phoneArr[i].type +'"   maxlength="11" data-subType = "'+ phoneArr[i].sub_type +'" type="text" class="telIpt" name="" value="'+phoneArr[i].info+'" disabled><i data-val="'+ phoneArr[i].contact_id +'"  class="clearIpt" onclick="clearIpt(this)"></i></p>');
+                        }
+                    } else {
+                        // 网站
+                        if (!$api.dom('.gdd')) {
+                            $api.append($api.dom('.wrap'), '<div class="main gd clearfix"><p class="mobile">网站</p><div class="main_no1 gdd"></div></div>')
+            
+                        }
+                        if (phoneArr[i].sub_type == 1) {
+                            // 网址
+                            $api.append($api.dom('.gdd'), '<p class="p">网址<input onchange="bjPhone(this)" data-val="'+ phoneArr[i].contact_id +'"   data-type = "'+ phoneArr[i].type +'"   maxlength="11" data-subType = "'+ phoneArr[i].sub_type +'" type="text" class="telIpt" name="" value="'+phoneArr[i].info+'" disabled><i data-val="'+ phoneArr[i].contact_id +'"  class="clearIpt" onclick="clearIpt(this)"></i></p>');
+                        } else {
+                            // 网址
+                            $api.append($api.dom('.gdd'), '<p class="p">网址<input onchange="bjPhone(this)" data-val="'+ phoneArr[i].contact_id +'" data-type = "'+ phoneArr[i].type +'"   maxlength="11" data-subType = "'+ phoneArr[i].sub_type +'" type="text" class="telIpt" name="" value="'+phoneArr[i].info+'" disabled><i data-val="'+ phoneArr[i].contact_id +'" class="clearIpt" onclick="clearIpt(this)"></i></p>');
+                        }
+                    }
+                }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    // 编辑其他联系方式
+    function bjPhone(ele) {
+        api.ajax({
+            url: apiSite + '/api/user_center/editOtherContact',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    contact_id: $api.attr(ele, 'data-val'),
+                    info: $api.val(ele),
+                    type: $api.attr(ele, 'data-type'),
+                    sub_type: $api.attr(ele, 'data-subType')
+                }
+            }
+        }, function(ret, err) {
+            alert(JSON.stringify(ret))
+        })
+    }
+</script>
+</html>

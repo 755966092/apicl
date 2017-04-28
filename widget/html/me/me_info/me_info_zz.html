@@ -33,48 +33,18 @@
             background-color: #F8F8F8;
         }
         
-       
+        
     </style>
 </head>
 <body>
      <header>
         <span onclick="api.closeWin()">取消</span>
-        <span>电话</span>
-        <span onclick="enter()" class="bj">编辑</span>
+        <span>地址</span>
+        <!-- <span onclick="enter()" class="bj">编辑</span> -->
     </header>
-    <!-- <div class="wrap"> -->
-       <!--  <div class="main clearfix">
-            <p class="mobile ">移动</p>
-           <div class="main_no1 yd">
-               <p onclick="selectClass(this)"  data-val="yddh">
-                    工作
-                    <input maxlength="11" type="text" class="telIpt" name="" value="18765303417" disabled>
-               </p>
-               <p onclick="selectClass(this)"  data-val="gddh">
-                    生活
-                    <input maxlength="11" type="text" class="telIpt" name="" value="18765303417" disabled>
-               </p>
-           </div>
-        </div> -->
-        <!-- <div class="main clearfix gd">
-            <p class="mobile ">固定</p>
-           <div class="main_no1 gdd">
-               <p class="p">
-                    工作
-                    <input maxlength="11" type="text" class="telIpt" name="" value="18765303417" disabled>
-                    <i class="clearIpt" onclick="clearIpt(this)"></i>
-               </p>
-               <p class="p">
-                    生活
-                    <input maxlength="11" type="text" class="telIpt" name="" value="18765303417" disabled>
-                    <i class="clearIpt" onclick="clearIpt(this)"></i>
-               </p>
-           </div>
-        </div> -->
-    <!-- </div>
-     <div class="main_no3 ">
-           <p onclick="addTel()">添加新号码</p>
-       </div> -->
+    <div class="wrap">
+       
+    </div>
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
@@ -83,7 +53,7 @@
 	    fnInit();
         api.openFrame({
             name: 'zydhframe',
-            url: './me_info_zydh_frame.html',
+            url: './me_info_zz_frame.html',
             rect: {
                 x: 0,
                 y: headerH,
@@ -95,36 +65,29 @@
         api.addEventListener({
             name: 'viewappear'
         }, function(ret, err) {
-            if (ret) {
-                alert('1')
                 api.sendEvent({
-                    name: 'xgTel',
+                    name: 'qtlxfsOpenWin'
                 });
-            } else {
-                // alert(JSON.stringify(err));
-            }
+            
         });
-       
     };
     function enter () {
         if ($api.text($api.dom('.bj')) == '编辑') {
             $api.text($api.dom('.bj'), '保存');
             // 移除添加按钮绑定的事件
             api.sendEvent({
-                name: 'bjTel',
+                name: 'bjQtxfs',
                 extra: {
                     valueName1: '保存',
-                    
                 }
             });
             
         } else {
             $api.text($api.dom('.bj'), '编辑');
             api.sendEvent({
-                name: 'bjTel',
+                name: 'bjQtxfs',
                 extra: {
                     valueName1: '编辑',
-                    
                 }
             });
         }

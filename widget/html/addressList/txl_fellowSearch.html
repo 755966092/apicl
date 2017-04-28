@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        body,html{
+            background-color: #F8F8F8;
+        }
+         header {
+            background-color: #3A393E;
+            height: 1rem;
+           color: #fff;
+            line-height: 1rem;
+            text-align: center;
+            position: relative;
+            font-size: .36rem;
+            position: relative;
+        }
+        header span:nth-child(1) {
+            position: absolute;
+            left: 0;
+            background: url(../../image/icon_fanh.png)no-repeat;
+             background-size: .22rem .37rem;
+            padding-left: .6rem;
+            background-position: .25rem .34rem;
+        }
+        header span:nth-child(3) {
+            position: absolute;
+            right: .2rem;
+        }
+
+        .main {
+            padding: 0 .3rem;
+            height: .6rem;
+            font-size: 0rem;
+            margin-top: .2rem;
+            position: relative;
+        }
+        input {
+            outline: none;
+            height: .6rem;
+            font-size: .24rem;
+            text-align: center;
+            background-color: #fff;
+            width: 85%;
+            padding-left: .5rem;
+            box-sizing: border-box;
+        }
+
+        .icon_search {
+            display: inline-block;
+            position: absolute;
+            margin-left: .2rem;
+            width: .25rem;
+            height: .6rem;
+            background: url(../../image/icon_search.png)no-repeat;
+            background-size: .25rem .25rem;
+            background-position: 0 center;
+        }
+        .clear_search {
+            font-size: .28rem;
+            margin-left: .3rem;            
+            color: #1AAD19;
+        }
+    </style>
+</head>
+<body>
+     <header>
+        <span onclick="api.closeWin()">返回</span>
+        <span>搜索联系人</span>
+    </header>
+    <div class="main">  
+        <span class="icon_search"></span>
+        <input type="text" name="" onkeyup="searchFellow(this)" placeholder="搜索">
+        <span class="clear_search">取消</span>
+    </div>
+    <div class="fellow">
+        
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        fnInit();
+    };
+   
+    function searchFellow(ele) {
+        var val = $api.val(ele);
+        // 搜索, 显示搜索界面
+        var heig = headerH + $api.offset($api.dom('.main')).h
+        api.openFrame({
+            name: 'fellowSearchFruit',
+            url: 'txl_fellowSearchFruit.html',
+            rect: {
+                x: 0,
+                y: 90,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                val: val
+            },
+            bounces: false
+        });
+    }
+</script>
+</html>

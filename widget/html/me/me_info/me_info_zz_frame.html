@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <style>
+        html,
+        body {
+            background-color: #F8F8F8;
+        }
+        .wrap {
+            margin-top: .2rem;
+        }
+        .dzlist {
+            height: 1.36rem;
+            border-bottom: 1px solid #E3E3E3;
+            background-color: #fff;
+            padding: 0 .3rem;
+        }
+        .dzlist .left {
+            
+            margin-top: .35rem;
+        }
+        .dzlist h3 {
+            font-size: .28rem;
+            color: #222;
+
+        }
+        .dzlist p {
+            font-size: .24rem;
+            color: #555;
+        }
+        .dzlist .right {
+            height: 1.36rem;
+            width: .44rem;
+            background: url(../../../image/icon_my/icon_bj.png)no-repeat;
+            background-size: .44rem .44rem;
+            background-position: 0 center;
+        }
+
+        .main_no3 {
+            margin-top: .2rem;
+            background-color: #fff;
+        }
+        .main_no3 p {
+            width: 1.7rem;
+            margin: 0 auto;
+            height: .8rem;
+            line-height: .8rem;
+            font-size: .34rem;
+            color: #27b24a;
+            background:  url(../../../image/icon_my/icon_add.png)no-repeat;
+            -webkit-background-size: .4rem .4rem ;
+            background-size: .4rem .4rem ;
+            background-position: 0 center;
+            padding-left: .5rem;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="wrap">
+       <div class="dzlist">
+           <div class="left fl">
+                <h3>方小姐</h3>
+                <p>北京市海淀区清华科技园创业大厦110</p>
+           </div>
+           <span onclick="openEdit(this)" class="right fr"></span>
+       </div>
+       <div class="dzlist">
+           <div class="left fl">
+                <h3>方小姐</h3>
+                <p>北京市海淀区清华科技园创业大厦110</p>
+           </div>
+           <span onclick="openEdit(this)" class="right fr"></span>
+       </div>
+    </div>
+    <div class="main_no3 ">
+        <p onclick="addAddress()">添加新地址</p>
+    </div>
+</body>
+<script type="text/javascript" src="../../../script/api.js"></script>
+<script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+	   
+    };
+
+    // 编辑地址
+    function openEdit(ele) {
+        api.openWin({
+            name: 'editAddressWin',
+            url: './me_info_zz_editAddress.html',
+            pageParam: {
+                userToken: api.pageParam.userToken || $api.getStorage('userToken')
+            }
+        });
+    }
+
+    // 添加新地址
+    function addAddress() {
+        api.openWin({
+            name: 'addAddressWin',
+            url: './me_info_zz_addAddress.html',
+            pageParam: {
+                userToken: api.pageParam.userToken || $api.getStorage('userToken')
+            }
+        });
+    }
+</script>
+</html>
