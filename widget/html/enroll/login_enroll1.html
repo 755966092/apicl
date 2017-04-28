@@ -283,8 +283,15 @@
                     } else {
                         // 已经注册过,该平台
                         if (ret.data.is_set_password) {
-                            api.toast({
-                                msg: '该手机号以注册过本平台,请设置密码'
+                            api.alert({
+                                title: '提醒',
+                                msg: '该手机号以',
+                            }, function(ret, err) {
+                                if (ret) {
+                                    alert(JSON.stringify(ret));
+                                } else {
+                                    alert(JSON.stringify(err));
+                                }
                             });
                             // 设置密码
                         } 

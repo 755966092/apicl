@@ -108,11 +108,12 @@
 // var rongToken, userToken;
 var headImg = $api.getStorage('headImg'); 
 var name;
-var messageId;
+var messageId,targetRongId;
     apiready = function(){
         // rongToken = api.pageParam.rongToken;
         // userToken = api.pageParam.userToken;
         moduleInit();
+        targetRongId = api.pageParam.targetRongId
         name = api.pageParam.name;
         // alert(rongToken + '--' +userToken)
         // 调整页面到输入框的后面
@@ -142,7 +143,7 @@ var messageId;
         rong.getLatestMessages({
             conversationType: 'PRIVATE',
             // 目标rongyun用户名
-            targetId: 'testUser1',
+            targetId: targetRongId,
             // targetId: name,
             count: 20
         }, function(ret, err) {
@@ -204,7 +205,7 @@ var messageId;
              rong.getHistoryMessages({
                 conversationType: 'PRIVATE',
                 // 目标rongyun用户名
-                targetId: 'testUser1',
+                targetId: targetRongId,
                 // targenameser1',
                 // targetId: name,
                 oldestMessageId: messageId,

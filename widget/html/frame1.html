@@ -151,10 +151,10 @@
                 </li>
                 {{ }; }}
         </script> -->
-        <div class="main_no1">
+        <div class="main_no1" onclick="onceConnected()">
             一度人脉
         </div>
-        <div class="main_no2" onclick="txl()">
+        <div class="main_no2" >
             初识好友（无通讯录）
         </div>
         <!-- <ul>
@@ -170,25 +170,36 @@
     <script type="text/javascript" src="../script/doT.min.js"></script>
     <script type="text/javascript">
     apiready = function() {
-        
+        moduleInit()
         var hei = $api.offset($api.dom('.main_no1')).h * 2 + $api.offset($api.dom('.ipt')).h + 10; 
         dakai(hei)
-        moduleInit()
       
     }
     function openS() {
         api.openWin({
             name: 'txl_fellowSearch',
             url: './addressList/txl_fellowSearch.html',
+            pageParam: {
+                userToken: api.pageParam.userToken,
+                rongToken: api.pageParam.rongToken
+            }
+        });
+    }
+    // 打开一度人脉
+    function onceConnected() {
+        api.openWin({
+            name: 'listWin',
+            url: './addressList/txl_listWin.html',
+            pageParam: {
+                name: 'value'
+            },
+            bounces: false
         });
     }
 
-
     
    function dakai(hei) {
-   
-    var UIListContacts = api.require('UIListContacts');
-          var ah = api.frameHeight - hei;
+        var ah = api.frameHeight - hei;
             UIListContacts.open({
                 rect : {
                     x : 0,
@@ -196,9 +207,10 @@
                     w : api.frameWidth,
                     h : ah 
                 },
-                contacts : [{
+                contacts : [
+                {
                     "employee_id" : 191,
-                    "remark" : "王科研",
+                    "remark" : "王研",
                     "phonetic" : "WangKeYang", //名字的拼音
                     "namephonetic" : "WangKeYang88",
                     "position" : "研发",
@@ -213,7 +225,7 @@
                     }]
                 }, {
                     "employee_id" : 192,
-                    "remark" : "艾瑞雪",
+                    "remark" : "艾雪",
                     "phonetic" : "WangKeYang", //名字的拼音
                     "namephonetic" : "WangKeYang88",
                     "position" : "研发",

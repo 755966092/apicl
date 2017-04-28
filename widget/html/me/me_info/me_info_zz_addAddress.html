@@ -78,11 +78,11 @@
             </li>
             <li>
                 <span class="title">详细地址</span>
-                <input type="text" name="" placeholder="街道门牌信息">
+                <input type="text " class="address" name="" placeholder="街道门牌信息">
             </li>
             <li>
                 <span class="title">邮政编码</span>
-                <input type="text" name="" placeholder="邮政编码">
+                <input type="text" class="zipcode" name="" placeholder="邮政编码">
             </li>
         </ul>
     </div>
@@ -92,18 +92,16 @@
 <script type="text/javascript">
     apiready = function(){
 	    fnInit();
+       
+        if (api.pageParam.flag) {
+            // 1 编辑
+            getCityList();
+        } else {
+            // 0 新增
+        }
+        // 城市选择器返回的内容
+        install();
 
-        api.addEventListener({
-            name: 'selCity'
-        }, function(ret, err) {
-            if (ret) {
-                $api.text($api.dom('.provinces'), ret.value.provinces);
-                $api.text($api.dom('.cities'), ret.value.cities);
-                $api.text($api.dom('.city'), ret.value.city);
-            } else {
-                alert(JSON.stringify(err));
-            }
-        });
     };
 
     // 城市选择器
@@ -121,6 +119,46 @@
             bounces: false
         });
     }
-    
+    // 设置页面内容
+    function install() {
+        api.addEventListener({
+            name: 'selCity'
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.dom('.provinces'), ret.value.provinces);
+                $api.text($api.dom('.cities'), ret.value.cities);
+                $api.text($api.dom('.city'), ret.value.city);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+
+    // 请求地址列表
+    function getCityList() {
+        api.ajax({
+            url: apiSite + '/api/user_center/addressList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: api.pageParam.userToken || $api.getStorage('userToken')
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                
+                $api.text($api.dom('.provinces'), ret.data.provinces);
+                $api.text($api.dom('.cities'), ret.data.cities);
+                $api.text($api.dom('.city'), ret.data.city);
+                $api.val($api.dom('.address'), ret.data.city);
+                $api.val($api.dom('.zipcode'), ret.data.city);
+
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
 </script>
 </html>

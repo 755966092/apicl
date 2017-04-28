@@ -68,58 +68,15 @@
     </style>
 </head>
 <body>
-     <header>
-        <span onclick="api.closeWin()">返回</span>
-        <span>搜索联系人</span>
-    </header>
-    <div class="main">  
-        <span class="icon_search"></span>
-        <input type="text" name="" onkeyup="searchFellow(this)" placeholder="搜索">
-        <span class="clear_search">取消</span>
-    </div>
-    <div class="fellow">
-        
-    </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
-        fnInit();
+        alert('打开frame')
+
+        dakai();
     };
-    function searchFellow(ele) {
-        var val = $api.val(ele);
-         api.ajax({
-            url: apiSite + '/api/user/search',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-               values: { 
-                  token: api.pageParam.userToken || $api.getStorage('userToken'),
-                  keyword: val
-               }
-            }
-       }, function(ret, err) {
-            var heig = headerH + $api.offset($api.dom('.main')).h + 20;
-            // alert('search:'+JSON.stringify(ret.data.list))
-            api.openFrame({
-                name: 'fellowSearchFruit',
-                url: './txl_fellowSearchFruit.html',
-                rect: {
-                    x: 0,
-                    y: heig,
-                    w: 'auto',
-                    h: 'auto'
-                },
-                pageParam: {
-                    val: ret.data.list
-                },
-                bounces: false
-            });
-           })
-        // 搜索, 显示搜索界面
-        
-        
-    }
+    
 </script>
 </html>

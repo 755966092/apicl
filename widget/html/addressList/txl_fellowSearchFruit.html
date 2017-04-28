@@ -36,31 +36,61 @@
     </style>
 </head>
 <body>
-    <div class="main">
+    <!-- <div class="main">
         <ul>
-            <li>
+            <li onclick="openChat()">
                 <img src="../../image/tx_2.jpg">
                 <div>
                     <h3>陈成成</h3>
                     <p>上海百度网络科技 董事长</p>
                 </div>
             </li>
-            <li>
-                <img src="../../image/tx_2.jpg">
-                <div>
-                    <h3>陈成成</h3>
-                    <p>上海百度网络科技 董事长</p>
-                </div>
-            </li>
+            
         </ul>
-    </div>
+    </div> -->
+    <ul class="resultList"></ul>
+    <script type="text/x-dot-template" id="listT">
+        {{ for (var i = 0; i < it.length; i++) { }} 
+           <li onclick="openChat(this)" data-nickname = '{{=it[i].nickname}}' data-rongId='{{=it[i].rongcloud_user_id}}'>
+                <img src="{{=it[i].head_img_url}}">
+                <div>
+                    <h3>{{=it[i].nickname}}</h3>
+                    <p>{{=it[i].current_position}}</p>
+                </div>
+            </li>
+        {{ }; }}
+    </script>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+
 <script type="text/javascript">
     apiready = function(){
+        // alert('frame:'+JSON.stringify(api.pageParam.val[0]))
+        getData(api.pageParam.val)
     };
    
-   
+   function openChat(ele) {  
+        var targetRongId = $api.attr(ele, 'data-rongId'),nickname = $api.attr(ele, 'data-nickname');  
+        api.openWin({
+            name: 'chatWin',
+            url: '../news/chatPage.html',
+            pageParam: {
+                targetRongId: targetRongId,
+                nickname: nickname
+            }
+        });
+   }
+    // doT模版获取数据
+    function getData(data) {
+        var listTText = $api.byId('listT').text;
+        var fnListT = doT.template(listTText);
+        var html = fnListT(data);
+        var list = $api.dom('.resultList');
+        // 替换resultList所有内容
+        $api.html(list, html);
+        // alert('getData:' + JSON.stringify(data))
+    }
 </script>
 </html>

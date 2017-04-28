@@ -86,6 +86,7 @@ var rong,
     UISelector,
     UIChatTools,
     citySelector,
+    UIListContacts,
     contacts;
 
 function moduleInit() {
@@ -99,6 +100,9 @@ function moduleInit() {
     contacts = api.require('contacts');
     // 城市选择器
     citySelector = api.require('citySelector');
+    // 通讯录列表
+    UIListContacts = api.require('UIListContacts');
+
 }
 
 // 接入融云
@@ -116,8 +120,8 @@ function rongyun(rongToken) {
         // 用户1
         // token: 'aAoW4oalHGpvB6Hw89bG0XzZSHvx/Xm6zmi6cWDa3L4VyfNcz/KXDFQxtpoQ+os1nT0799sMXlXPvUAK3FnjIY94cnJzE+aT'
         // 用户2r
-        token: 'hjjQ018gh2aPKpdyjqhX0nzZSHvx/Xm6zmi6cWDa3L4VyfNcz/KXDDNYtoRSbb1+nT0799sMXlXSm1rb7lqSfY94cnJzE+aT'
-            // token: rongToken
+        // token: 'hjjQ018gh2aPKpdyjqhX0nzZSHvx/Xm6zmi6cWDa3L4VyfNcz/KXDDNYtoRSbb1+nT0799sMXlXSm1rb7lqSfY94cnJzE+aT'
+        token: rongToken
     }, function(ret, err) {
 
         if (ret.status == 'success') {

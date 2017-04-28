@@ -45,7 +45,7 @@
             background-color: #fff;
         }
         .main_no3 p {
-            width: 1.7rem;
+            width: 2rem;
             margin: 0 auto;
             height: .8rem;
             line-height: .8rem;
@@ -72,7 +72,6 @@
                 <h3>方小姐</h3>
                 <p>北京市海淀区清华科技园创业大厦110</p>
            </div>
-           <!-- <span onclick="openEdit(this)" class="right fr"></span> -->
            <span onclick="openEdit(this)" class="right fr"></span>
        </div>
        <!-- <div class="dzlist">
@@ -83,17 +82,22 @@
            <span onclick="openEdit(this)" class="right fr"></span>
        </div> -->
     </div>
-     <!-- <script type="text/x-dot-template" id="listT">
+     <script type="text/x-dot-template" id="listT">
         {{ for (var i = 0; i < it.length; i++) { }} 
-            <div class="dzlist" >
+            <div class="dzlist" data-val="{{=it[i].address_id}}">
                 <div class="left fl">
                     <h3>{{=it[i].note}}</h3>
-                    <p>{{=it[i].province}}{{=it[i].city}}{{=it[i].district}}{{=it[i].address}}</p>
+                    <p>
+                        <span class="province">{{=it[i].province}}</span>
+                        <span class="city">{{=it[i].city}}</span>
+                        <span class="district">{{=it[i].district}}</span>
+                        <span class="address">{{=it[i].address}}</span>
+                    </p>
                 </div>
                 <span onclick="openEdit(this)" class="right fr"></span>
            </div>
         {{ }; }}
-     </script> -->
+     </script>
     <div class="main_no3 ">
         <p onclick="addAddress()">添加新地址</p>
     </div>
@@ -102,6 +106,7 @@
 <script type="text/javascript" src="../../../script/common.js"></script>
 <script type="text/javascript" src="../../../script/doT.min.js"></script>
 <script type="text/javascript">
+    var zipcode;//邮编
     apiready = function(){
         // 请求地址列表
 	    getCityList();
@@ -111,15 +116,28 @@
 
     // 编辑地址
     function openEdit(ele) {
+        var val = $api.attr(ele, 'data-val');
+            // province = $api.text($api.dom('.province'));
+            // city = $api.text($api.dom('.city'));
+            // district = $api.text($api.dom('.city'));
+            // address = $api.text($api.dom('.address'));
+            // zipcode = val;
+            // note = $api.text($api.dom('h3'));
+            // address_id = val;
+            
+
         if ($api.hasCls(ele, 'edit')) {
-            // 
+            // 删除按钮状态下删除地址
+            $api.remove($api.closest(ele, '.dzlist'));
+            delDz2(val);
         } else {
             // 编辑按钮状态下 进入编辑页面
             api.openWin({
                 name: 'editAddressWin',
-                url: './me_info_zz_editAddress.html',
+                url: './me_info_zz_addAddress.html',
                 pageParam: {
-                    userToken: api.pageParam.userToken || $api.getStorage('userToken')
+                    userToken: api.pageParam.userToken || $api.getStorage('userToken'),
+                    flag: 1
                 }
             });
         }
@@ -132,7 +150,8 @@
             name: 'addAddressWin',
             url: './me_info_zz_addAddress.html',
             pageParam: {
-                userToken: api.pageParam.userToken || $api.getStorage('userToken')
+                userToken: api.pageParam.userToken || $api.getStorage('userToken'),
+                flag: 0
             }
         });
     }
@@ -158,7 +177,6 @@
     }
 
     // 删除地址
-
     function delDz () {
         api.addEventListener({
             name: 'editDz'
@@ -170,7 +188,26 @@
             }
         });
     }
-
+    // 删除地址
+    function delDz2 (id) {
+        api.ajax({
+            url: apiSite + '/api/user_center/deleteOtherContact',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    address_id: id
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                getData(ret.data.list)
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
 
 
 
