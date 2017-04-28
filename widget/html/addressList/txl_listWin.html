@@ -99,134 +99,32 @@
         dakai();
     };
     function dakai() {
-        alert('调用开始')
-            UIListContacts.open({
+        var data;
+         api.ajax({
+            url: apiSite + '/api/contact/levelOne',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+               values: { 
+                  token: $api.getStorage('userToken'),
+               }
+            }
+       }, function(ret, err) {
+           
+            data = ret.data.list
+            for (var i = 0; i < data.length; i++) {
+                data[i].employee_id = data[i].user_id;
+                data[i].remark = data[i].nickname;
+                data[i].position = data[i].current_position;
+                data[i].dept_name = data[i].current_company;
+            }
+             UIListContacts.open({
                 rect : {
                     x : 0,
-                    y : headerH 
+                    y : headerH,
+                    h : api.winHeight
                 },
-                contacts : [
-                {
-                    "employee_id" : 191,
-                    "remark" : "王研",
-                    "phonetic" : "WangKeYang", //名字的拼音
-                    "namephonetic" : "WangKeYang88",
-                    "position" : "研发",
-                    "dept_id" : "002000",
-                    "isdeleted" : "N",
-                    "tags" : "",
-                    "dept_name" : "创达集团",
-                    "isremark" : 1,
-                    "phones" : [{
-                        "phone" : "13366148872",
-                        "type" : "1"
-                    }]
-                }, {
-                    "employee_id" : 192,
-                    "remark" : "艾雪",
-                    "phonetic" : "WangKeYang", //名字的拼音
-                    "namephonetic" : "WangKeYang88",
-                    "position" : "研发",
-                    "dept_id" : "002000",
-                    "isdeleted" : "N",
-                    "tags" : "",
-                    "dept_name" : "创达集团",
-                    "isremark" : 1,
-                    "phones" : [{
-                        "phone" : "13366148872",
-                        "type" : "1"
-                    }]
-                }, {
-                    "employee_id" : 193,
-                    "remark" : "秋风疾",
-                    "phonetic" : "BangKeYang88", //名字的拼音
-                    "namephonetic" : "WangKeYang88",
-                    "position" : "研发",
-                    "dept_id" : "002000",
-                    "isdeleted" : "N",
-                    "tags" : "",
-                    "dept_name" : "创达集团",
-                    "isremark" : 1,
-                    "phones" : [{
-                        "phone" : "13366148872",
-                        "type" : "1"
-                    }]
-                },{
-                    "employee_id" : 193,
-                    "remark" : "啊风疾",
-                    "phonetic" : "AangKeYang88", //名字的拼音
-                    "namephonetic" : "WangKeYang88",
-                    "position" : "研发",
-                    "dept_id" : "002000",
-                    "isdeleted" : "N",
-                    "tags" : "",
-                    "dept_name" : "创达集团",
-                    "isremark" : 1,
-                    "phones" : [{
-                        "phone" : "13366148872",
-                        "type" : "1"
-                    }]
-                },{
-                    "employee_id" : 193,
-                    "remark" : "啊风疾",
-                    "phonetic" : "AangKeYang88", //名字的拼音
-                    "namephonetic" : "WangKeYang88",
-                    "position" : "研发",
-                    "dept_id" : "002000",
-                    "isdeleted" : "N",
-                    "tags" : "",
-                    "dept_name" : "创达集团",
-                    "isremark" : 1,
-                    "phones" : [{
-                        "phone" : "13366148872",
-                        "type" : "1"
-                    }]
-                },{
-                    "employee_id" : 193,
-                    "remark" : "啊风疾",
-                    "phonetic" : "AangKeYang88", //名字的拼音
-                    "namephonetic" : "WangKeYang88",
-                    "position" : "研发",
-                    "dept_id" : "002000",
-                    "isdeleted" : "N",
-                    "tags" : "",
-                    "dept_name" : "创达集团",
-                    "isremark" : 1,
-                    "phones" : [{
-                        "phone" : "13366148872",
-                        "type" : "1"
-                    }]
-                },{
-                    "employee_id" : 193,
-                    "remark" : "啊风疾",
-                    "phonetic" : "AangKeYang88", //名字的拼音
-                    "namephonetic" : "WangKeYang88",
-                    "position" : "研发",
-                    "dept_id" : "002000",
-                    "isdeleted" : "N",
-                    "tags" : "",
-                    "dept_name" : "创达集团",
-                    "isremark" : 1,
-                    "phones" : [{
-                        "phone" : "13366148872",
-                        "type" : "1"
-                    }]
-                },{
-                    "employee_id" : 193,
-                    "remark" : "啊风疾",
-                    "phonetic" : "AangKeYang88", //名字的拼音
-                    "namephonetic" : "WangKeYang88",
-                    "position" : "研发",
-                    "dept_id" : "002000",
-                    "isdeleted" : "N",
-                    "tags" : "",
-                    "dept_name" : "创达集团",
-                    "isremark" : 1,
-                    "phones" : [{
-                        "phone" : "13366148872",
-                        "type" : "1"
-                    }]
-                }],
+                contacts : data,
                 fixedOn : api.frameName
             }, function(ret,err) {
                 alert(JSON.stringify(ret)+'----'+JSON.stringify(err))
@@ -234,7 +132,12 @@
                     alert(JSON.stringify(ret));
                 }
             });
-        alert('调用结束')
+            
+
+       })
+       
+           
+        
    }
 </script>
 </html>
