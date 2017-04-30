@@ -145,6 +145,16 @@
         // rongToken = api.pageParam.rongToken;
         // userToken = api.pageParam.userToken;
         moduleInit()
+            
+        // 监听打开加好友窗口  
+        monitorEvent();
+        // 历史消息
+        historyNews();
+        // 滚动到底部触发的事件    
+        scrollBotton();
+    }
+    // 监听打开加好友窗口
+    function monitorEvent() {
         // 监听showNews事件，显示添加好友框     
         api.addEventListener({
             name: 'showNews'
@@ -162,54 +172,25 @@
                 bounces: false
             });
         });
-      
-        
-        // rong.getConversationList(function(ret, err) {
-        //         for (var i = 0; i < ret.result.length; i++) {
-        //             ret.result[i].url = '../image/tx_3.jpg'
-        //             ret.result[i].time = changeTime(ret.result[i].receivedTime)
-        //         }
-        //         // alert(JSON.stringify(ret))
-        //         getData(ret.result)
-        //     })
-        //     
-        
-        // 历史消息列表
+    }
+    // 历史消息
+    function historyNews(){
         api.addEventListener({
-            name: 'historicalNews'
+            name: 'historNews'
         }, function(ret, err) {
             if (ret) {
-                // alert(JSON.stringify(ret.value.data));
                 for (var i = 0; i < ret.value.data.length; i++) {
                     ret.value.data[i].url = '../image/tx_2.jpg'
                     ret.value.data[i].time = changeTime(ret.value.data[i].receivedTime)
                 }
-                // alert(JSON.stringify(ret.value.data))
-                // targetId M目标ID
-                // alert(JSON.stringify(ret.value.data))
                 getData(ret.value.data)
             } else {
                 alert(JSON.stringify(err));
             }
         });
-
-        // 收到最新消息
-        api.addEventListener({
-            name: 'sendMsg'
-        }, function(ret, err) {
-            // 发送消息后, 添加消息内容到页面
-            // addSendMsg(ret.value.msg, headImg);
-            historicalNews()
-        });
-        api.addEventListener({
-            name: 'receiveMsg'
-        }, function(ret, err) {
-            // 收到消息后, 添加消息内容到页面
-            // addReceMsg(ret.value.msg);
-            historicalNews();
-        });
-        
-         
+    }
+    // 滚动到底部触发的事件
+    function scrollBotton() {
         // 滚动到底部触发的事件
         api.addEventListener({
             name:'scrolltobottom',
@@ -219,9 +200,9 @@
         }, function(ret, err){        
             // alert('已滚动到底部');
         });
-      
     }
 
+    // 打开搜索窗口
     function openS() {
         api.openWin({
             name: 'frameName',

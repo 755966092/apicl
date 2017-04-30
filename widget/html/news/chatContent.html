@@ -110,27 +110,28 @@ var headImg = $api.getStorage('headImg');
 var name;
 var messageId,targetRongId;
     apiready = function(){
-        // rongToken = api.pageParam.rongToken;
-        // userToken = api.pageParam.userToken;
         moduleInit();
         targetRongId = api.pageParam.targetRongId
         name = api.pageParam.name;
-        // alert(rongToken + '--' +userToken)
         // 调整页面到输入框的后面
         api.sendFrameToBack({
             from: 'chattContent',
         });
-
         // 滚动到底部
         slideBut();
-
-        // var ele = $api.dom('.main'),heightMain;
-
         api.addEventListener({
             name: 'sendMsg'
         }, function(ret, err) {
             // 发送消息后, 添加消息内容到页面
             addSendMsg(ret.value.msg, headImg);
+            // 聊天列表获取
+            var news = historicalNews();
+            api.execScript({
+                name: 'main',
+                frameName: 'frame0',
+                script: news
+            });
+
         });
         api.addEventListener({
             name: 'receiveMsg'

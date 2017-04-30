@@ -125,20 +125,6 @@ function rongyun(rongToken) {
     }, function(ret, err) {
 
         if (ret.status == 'success') {
-            // alert('登录戎云' + ret.result.userId)
-            // alert('登录' + rongToken)
-            // rong.getConversationList(function(ret, err) {
-
-            //     // alert(JSON.stringify(ret.result))
-
-            //     api.sendEvent({
-            //         name: 'historicalNews',
-            //         extra: {
-            //             data: ret.result
-            //         }
-            //     });
-            //     // getData(ret.result)
-            // })
             historicalNews();
         }
     });
@@ -146,24 +132,21 @@ function rongyun(rongToken) {
 
 // 查看历史消息
 function historicalNews() {
-    // alert('查看历史消息')
     rong.getConversationList(function(ret, err) {
-
-        // alert(JSON.stringify(ret))
-
         api.sendEvent({
-            name: 'historicalNews',
+            name: 'historNews',
             extra: {
                 data: ret.result
             }
         });
-        // getData(ret.result)
     })
 }
 
 // 接收消息
 function receiveMsg() {
     rong.setOnReceiveMessageListener(function(ret, err) {
+        // 接收消息监听器接收到消息后刷新列表
+        historicalNews();
         api.sendEvent({
             name: 'receiveMsg',
             extra: {
