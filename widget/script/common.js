@@ -124,6 +124,7 @@ function rongyun(rongToken) {
         token: rongToken
     }, function(ret, err) {
 
+
         if (ret.status == 'success') {
             historicalNews();
         }
@@ -132,6 +133,7 @@ function rongyun(rongToken) {
 
 // 查看历史消息
 function historicalNews() {
+    // alert('开始发送事件')
     rong.getConversationList(function(ret, err) {
         api.sendEvent({
             name: 'historNews',
@@ -139,6 +141,7 @@ function historicalNews() {
                 data: ret.result
             }
         });
+
     })
 }
 

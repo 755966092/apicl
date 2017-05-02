@@ -148,10 +148,12 @@
             
         // 监听打开加好友窗口  
         monitorEvent();
+       
         // 历史消息
-        historyNews();
+        historyNews()
+        
         // 滚动到底部触发的事件    
-        scrollBotton();
+        // scrollBotton();
     }
     // 监听打开加好友窗口
     function monitorEvent() {
@@ -175,6 +177,7 @@
     }
     // 历史消息
     function historyNews(){
+        // 历史消息列表
         api.addEventListener({
             name: 'historNews'
         }, function(ret, err) {
@@ -183,6 +186,9 @@
                     ret.value.data[i].url = '../image/tx_2.jpg'
                     ret.value.data[i].time = changeTime(ret.value.data[i].receivedTime)
                 }
+                // alert(JSON.stringify(ret.value.data))
+                // targetId M目标ID
+                // alert(JSON.stringify(ret.value.data))
                 getData(ret.value.data)
             } else {
                 alert(JSON.stringify(err));
