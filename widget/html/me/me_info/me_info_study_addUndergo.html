@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <style type="text/css">
+        body,html {
+            text-align: center;
+            background-color: rgba(0,0,0,0.3);
+            height: 100%;
+
+        }
+        span {
+            font-size: .36rem;
+            width: 100%;
+            padding: .3rem 0;
+            text-align: center;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background-color: #fff;
+            color: #0089e9;
+        }
+        .main {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body onclick="api.closeFrame()">
+    <div class="main" onclick="api.closeFrame()">
+        <span onclick="enter()">确认</span>
+    </div>
+</body>
+<script type="text/javascript" src="../../../script/api.js"></script>
+<script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript">
+var selDate;
+    apiready = function(){
+       moduleInit();
+       dianji();
+
+    };
+ function dianji() {
+        UISelector.open({
+            rect: {
+                x: 0,
+                y: api.frameHeight / 2 + 110,
+                // y: api.winHeight / 2 + 170,
+                // w: api.frameWidth - 60,
+                h: 150
+            },
+            styles: {
+                bg: 'rgba(255,255,255,1)',
+                text: {
+                    size: 18,
+                    selected: '#333',
+                    normal: '#a8a8a8'
+                },
+                item: {
+                    w: 80,
+                    h: 20,
+                    normal: 'rgba(0,0,0,0)',
+                    selected: 'rgba(0,0,0,0)',
+                    zoomIn: 1.2
+                }
+            },
+            rows: 3,
+            indexs: [1],
+            bounce: false,
+            fixedOn: api.frameName,
+            fixed: false,
+            data:  [{
+                title: '大学',
+            }, {
+                title: '中学',
+            }, {
+                title: '中学',
+            }]
+        }, function(ret, err) {
+            if (ret) {
+                // alert(JSON.stringify(ret))
+                selDate = ret.selects[0].content;
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+   }  
+  function enter () {
+   
+    if (selDate == '大学') {
+        // 选择大学
+        alert(1);
+        api.openWin({
+            name: 'me_info_study_addUndergo_1',
+            url: './me_info_study_addUndergo_1.html',
+            pageParam: {
+                name: 'value'
+            }
+        });
+    } else if (selDate == '中学') {
+        // 选择中学
+        api.openWin({
+            name: 'me_info_study_addUndergo_2',
+            url: './me_info_study_addUndergo_2.html',
+            pageParam: {
+                name: 'value'
+            }
+        });
+    } else {
+        api.openWin({
+            name: 'me_info_study_addUndergo_3',
+            url: './me_info_study_addUndergo_3.html',
+            pageParam: {
+                name: 'value'
+            }
+        });
+        // 选择小学
+    }
+    api.closeFrame();
+  }
+  
+</script>
+</html>

@@ -134,13 +134,17 @@ var name, targetRongId;
           }, function(ret) {
               if (ret) {
                   if (ret.eventType === 'send') {
-                    // alert(JSON.stringify(ret.msg));
+                    alert(JSON.stringify(ret));
                     /**
                      * sendMsg(msg)
                      * msg: 发送的消息
                      */
                     sendMsg(ret.msg);
-
+                    
+                    // 发送消息后清空输入框
+                    UIChatTools.value({
+                        msg: ''
+                    });
                     // 把聊天内容滑动到最下面
                   }
               } 

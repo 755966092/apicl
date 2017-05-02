@@ -54,7 +54,22 @@
             color: #B1AEA9;
             width: 5rem;
         }
-        
+         .main_no3 {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        .main_no3 button {
+            width: 6.3rem;
+            border-radius: .08rem;
+            text-align: center;
+            margin: 0 auto;
+            height: .8rem;
+            line-height: .8rem;
+            font-size: .34rem;
+            color: #fff;
+            background:  #A3DEA3;
+          
+        }
     </style>
 </head>
 <body>
@@ -78,32 +93,67 @@
             </li>
             <li>
                 <span class="title">详细地址</span>
-                <input type="text " class="address" name="" placeholder="街道门牌信息">
+                <input type="text" class="address" name="" onkeyup ="iptCom()" placeholder="街道门牌信息">
             </li>
             <li>
                 <span class="title">邮政编码</span>
-                <input type="text" class="zipcode" name="" placeholder="邮政编码">
+                <input type="text" class="zipcode" name="" onkeyup ="iptCom()" placeholder="邮政编码">
             </li>
         </ul>
+    </div>
+    <div class="main_no3 ">
+        <!-- <button onclick="address()" class="btn">保存</button> -->
+        <button onclick="addRess()" class="btn" disabled>保存</button>
     </div>
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
 <script type="text/javascript">
+var url;
     apiready = function(){
 	    fnInit();
        
         if (api.pageParam.flag) {
             // 1 编辑
             getCityList();
+            url = '/api/user_center/editAddress'
         } else {
             // 0 新增
+            url = '/api/user_center/addAddress'
         }
         // 城市选择器返回的内容
         install();
 
     };
-
+    function addRess() {
+         api.ajax({
+            url: apiSite + url,
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    province: provinces,
+                    city: cities,
+                    district: city,
+                    address: address,
+                    zipcode: zipcode,
+                    note: '住址',
+                    address_id: api.pageParam.address_id
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                // getData(ret.data.list)
+                api.closeWin();
+                api.sendEvent({
+                    name: 'addCity'
+                });
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
     // 城市选择器
     function selCity(ele) {
         var val = $api.attr(ele, 'data-val');
@@ -132,33 +182,53 @@
                 alert(JSON.stringify(err));
             }
         });
+        // 判断按钮变色
+        iptCom();
     }
 
 
     // 请求地址列表
     function getCityList() {
         api.ajax({
-            url: apiSite + '/api/user_center/addressList',
+            url: apiSite + '/api/user_center/editAddressIndex',
             method: 'post',
             headers: apiHeader,
             data: {
                 values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken')
+                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    address_id: api.pageParam.address_id
                 }
             }
         }, function(ret, err) {
             if (ret) {
-                
-                $api.text($api.dom('.provinces'), ret.data.provinces);
-                $api.text($api.dom('.cities'), ret.data.cities);
-                $api.text($api.dom('.city'), ret.data.city);
-                $api.val($api.dom('.address'), ret.data.city);
-                $api.val($api.dom('.zipcode'), ret.data.city);
-
+                // alert(JSON.stringify(ret))
+                $api.text($api.dom('.provinces'), ret.data.info.province);
+                $api.text($api.dom('.cities'), ret.data.info.city);
+                $api.text($api.dom('.city'), ret.data.info.district);
+                $api.val($api.dom('.address'), ret.data.info.address);
+                // $api.val($api.dom('.zipcode'), ret.data.info.city);
+                $api.val($api.dom('.zipcode'), '邮编');
+                iptCom();
             } else {
                 alert(JSON.stringify(err));
             }
         });
+    }
+    
+    var provinces, cities, city, address, zipcode;
+
+    
+    // 按钮变色
+    function iptCom() {
+            provinces =  $api.text($api.dom('.provinces')),
+            cities =  $api.text($api.dom('.cities')),
+            city =  $api.text($api.dom('.city')),
+            address =  $api.val($api.dom('.address')),
+            zipcode =  $api.val($api.dom('.zipcode'));
+        if (provinces !== '' && cities !== '' && city !== '' && address !== '' && zipcode !== '') {
+            $api.css($api.dom('.btn'), 'background:  #08BB08');
+            $api.removeAttr($api.dom('.btn'),'disabled');
+        }
     }
 </script>
 </html>

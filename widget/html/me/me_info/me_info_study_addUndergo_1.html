@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <style>
+        header {
+            background-color: #3A393E;
+            height: 1rem;
+            color: #fff;
+            line-height: 1rem;
+            text-align: center;
+            position: relative;
+            font-size: .36rem;
+            position: relative;
+        }
+        header span:nth-child(1) {
+            position: absolute;
+            left: 0;
+            background: url(../../../image/icon_fanh.png)no-repeat;
+            background-size: .2rem .31rem;
+            padding-left: .4rem;
+            background-position: .14rem .36rem;
+        }
+        header span:nth-child(3) {
+            position: absolute;
+            right: .3rem;
+            /*top: 0rem;*/
+        }
+        body, html {
+            background-color: #F8F8F8;
+        }
+         .main_no1 {
+        }
+        .main_no1 p, .main_no2 p {
+             background-color: #fff;
+            height: .8rem;
+            line-height: .8rem;
+            border-bottom: 1px solid #DBDBDB;
+            font-size: .3rem;
+            padding: 0 .3rem;
+
+        }
+        .main_no1 p span.select {
+            display: inline-block;
+        }
+        button {
+            display: block;
+            width: 7.2rem;
+            height: .95rem;
+            background-color: #08BB08;
+            color: #fff;
+            font-size: .34rem;
+            margin-top: 4rem;
+            margin: 0 auto;
+        }
+        .main_no3 {
+            margin-top: .2rem;
+            background-color: #fff;
+            margin: 0 auto;  
+            width: 6.32rem; 
+            border-radius: .1rem;
+            height: .82rem;
+            line-height: .82rem;    
+            text-align: center;
+            font-size: .34rem;
+            background-color: #27b24a ;
+            color: #fff; 
+            margin-top: 1rem; 
+        }
+       
+        
+        
+        .mobile {
+            height: .6rem;
+            font-size: .28rem;
+            color: #999;
+            line-height: .6rem;
+            padding-left: .3rem;
+        }
+        .telIpt {
+            height: .8rem;
+            /*margin-left: .5rem;*/
+            outline: none;
+            float: right;
+            width: 2rem;
+            text-align: right;
+            padding-right: .4rem;  
+        }
+        span.telIpt {
+            display: inline-block;  
+            font-size: .27rem;
+            color: #B1A9AB;
+            height: .8rem;  
+            background: url(../../../image/icon_zk.png)no-repeat;
+            background-size: .15rem .25rem;
+            background-position: right  center;
+                
+        }
+        .clearIpt {
+            display: none;
+            width: .24rem;
+            height: .8rem;
+            background: url(../../../image/icon_login/icon-clearText.png)no-repeat;
+            background-size: .24rem .24rem;
+            background-position: 0 center;
+            float: right;
+        }
+       textarea {
+        background-color: #fff;
+        text-align: left;
+        width: 100%;    
+        font-size: .24rem;  
+        color: #000;
+        padding: .2rem .3rem;
+        box-sizing: border-box;
+        outline: none; 
+       }
+       #textLength {
+        background-color: #fff;
+        width: 100%;  
+        padding-right:.3rem ; 
+        margin: 0;  
+        text-align: right; 
+        border-top: 1px solid #EFEFEF;   
+       }
+    </style>
+</head>
+<body>
+     <header>
+        <span onclick="api.closeWin()">取消</span>
+        <span>新增学习经历</span>
+        <!-- <span onclick="enter()" class="bj">编辑</span> -->
+    </header>
+    <div class="wrap">
+        <div class="main clearfix">
+            <p class="mobile ">学习经历（大专及以上）</p>
+            <div class="main_no1 yd">
+               <p onclick="selectClass(this)"  data-val="yddh">
+                    学校
+                    <input maxlength="11" type="text" class="telIpt" name="" placeholder ="必填" >
+               </p>
+               <p onclick="selectClass(this)"  data-val="gddh">
+                    专业
+                    <input maxlength="11" type="text" class="telIpt" name="" placeholder ="必填" >
+               </p>
+               <p onclick="selectClass(this)"  data-val="gddh">
+                    学历
+                    <span class="telIpt">必选</span>
+               </p>
+               <p onclick="selectClass(this)"  data-val="gddh">
+                    时间段
+                    <span class="telIpt">请选择-请选择</span>
+               </p>
+           </div>
+        </div>
+        <div class="main clearfix" style="font-size: 0">
+            <p class="mobile ">在校经历</p>
+            <textarea rows="6" placeholder="主要在校经历" maxlength="300" onkeyup="changeText(this)"></textarea>
+            <p class="mobile fr" id="textLength"> 0/300</p>
+        </div>
+    </div>
+     <div class="main_no3 ">
+           保存
+       </div>
+</body>
+<script type="text/javascript" src="../../../script/api.js"></script>
+<script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+	    fnInit();
+        api.openFrame({
+            name: 'zydhframe',
+            url: './me_info_zydh_frame.html',
+            rect: {
+                x: 0,
+                y: headerH,
+                w: 'auto',
+                h: 'auto'
+            },
+            bounces: false
+        });
+        api.addEventListener({
+            name: 'viewappear'
+        }, function(ret, err) {
+            if (ret) {
+                alert('1')
+                api.sendEvent({
+                    name: 'xgTel',
+                });
+            } else {
+                // alert(JSON.stringify(err));
+            }
+        });
+       
+    };
+    function enter () {
+        if ($api.text($api.dom('.bj')) == '编辑') {
+            $api.text($api.dom('.bj'), '保存');
+            // 移除添加按钮绑定的事件
+            api.sendEvent({
+                name: 'bjTel',
+                extra: {
+                    valueName1: '保存',
+                    
+                }
+            });
+            
+        } else {
+            $api.text($api.dom('.bj'), '编辑');
+            api.sendEvent({
+                name: 'bjTel',
+                extra: {
+                    valueName1: '编辑',
+                    
+                }
+            });
+        }
+    }
+    
+    // 编辑文本和修改文本长度内容
+    function changeText(ele) {
+        // alert();
+        $api.text($api.byId('textLength'), ele.value.length + '/300');
+    } 
+</script>
+</html>
