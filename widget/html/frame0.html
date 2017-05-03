@@ -150,10 +150,16 @@
         monitorEvent();
        
         // 历史消息
-        historyNews()
+        historyNews();
         
         // 滚动到底部触发的事件    
         // scrollBotton();
+        api.addEventListener({
+            name: 'refurbish'
+        }, function(ret, err) {
+            historicalNews();
+            // historyNews();
+        });
     }
     // 监听打开加好友窗口
     function monitorEvent() {
@@ -190,7 +196,6 @@
                 }
                 // 获取聊天对方信息
                 getSideInfo(targetRongIdArr, ret.value.data);
-               
             } else {
                 alert(JSON.stringify(err));
             }
@@ -214,7 +219,6 @@
                     data[i].url = ret.data.list[data[i].targetId].head_img_url
                     data[i].nickname = ret.data.list[data[i].targetId].nickname
                 }
-                
                 getData(data)
            } else {
                alert(JSON.stringify(err))
