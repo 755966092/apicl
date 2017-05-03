@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="./css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
         body{
         }
@@ -22,7 +22,7 @@
         header span:nth-child(1) {
             position: absolute;
             left: 0;
-            background: url(./image/icon_login/icon_qx.png)no-repeat;
+            background: url(../../image/icon_login/icon_qx.png)no-repeat;
             background-size: .3rem .31rem;
             padding-left: .8rem;
             background-position: .34rem .36rem;
@@ -47,13 +47,13 @@
             box-sizing: border-box;
         }
         .main .ipt input:nth-child(1) {
-            background: url(./image/icon_login/icon_sj.png)no-repeat;
+            background: url(../../image/icon_login/icon_sj.png)no-repeat;
             -webkit-background-size: .34rem .49rem;
             background-size: .34rem .49rem;
             background-position: .26rem .16rem;
         }
         .main .ipt input:nth-child(2) {
-            background: url(./image/icon_login/icon_psd.png)no-repeat;
+            background: url(../../image/icon_login/icon_psd.png)no-repeat;
              -webkit-background-size: .34rem .49rem;
             background-size: .34rem .49rem;
             background-position: .26rem .16rem;
@@ -107,7 +107,7 @@
         .qt p {
             width: .88rem;
             height: .88rem;
-            background: url(./image/icon_login/icon_dsf.png);
+            background: url(../../image/icon_login/icon_dsf.png);
             -webkit-background-size: .88rem .88rem;
             background-size: .88rem .88rem;
             margin: .3rem auto 0;
@@ -142,17 +142,17 @@
             </p>
         </div>
     </div>
-    <footer>
+    <!-- <footer>
         <div class="qt">
             <span></span>
             <span>其他方式登录</span>
             <span></span>
             <p></p>
         </div>
-    </footer>
+    </footer> -->
 </body>
-<script type="text/javascript" src="./script/api.js"></script>
-<script type="text/javascript" src="./script/common.js"></script>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     var userToken, rongToken;
     apiready = function(){
@@ -161,6 +161,17 @@
         moduleInit();
         // 退出app
         exitApp();
+        api.openFrame({
+            name: 'frameName',
+            url: './weixin_login.html',
+            rect: {
+                x: 0,
+                y: api.winHeight-200,
+                w: 'auto',
+                h: 'auto'
+            },
+            bounces: false
+        });
     };
 
     // 输入帐号登录按钮变色
@@ -222,7 +233,7 @@
         // 登陆完成
          api.openWin({
             name: 'main',
-            url: 'html/main.html',
+            url: '../main.html',
             slidBackEnabled: false,
             pageParam: {
                 userToken: userToken,
@@ -244,7 +255,7 @@
     function register() {
         api.openWin({
             name: 'login_enroll1',
-            url: './html/enroll/login_enroll1.html',
+            url: './login_enroll1.html',
             bounces: false
         });
     }
@@ -252,7 +263,7 @@
     function forgetPsd() {
         api.openWin({
             name: 'ForgetPassword',
-            url: './html/enroll/login_ForgetPassword1.html',
+            url: './login_ForgetPassword1.html',
             bounces: false
         });
     }
