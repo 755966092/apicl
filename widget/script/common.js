@@ -84,7 +84,7 @@ var rongTokenAll = $api.getStorage('rongToken');
 
 var rong,
     UISelector,
-    UIChatTools,
+    UIChatBox,
     citySelector,
     UIListContacts,
     contacts;
@@ -93,7 +93,7 @@ function moduleInit() {
     // 融云模块
     rong = api.require('rongCloud2');
     //聊天界面模块
-    UIChatTools = api.require('UIChatTools');
+    UIChatBox = api.require('UIChatBox');
     //列表模块
     UISelector = api.require('UISelector');
     // 通讯录模块

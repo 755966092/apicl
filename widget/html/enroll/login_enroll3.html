@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        body{
+            
+        }
+         header {
+            /*background-color: #3A393E;*/
+            height: 1rem;
+                color: #fff;
+            line-height: 1rem;
+            text-align: center;
+            position: relative;
+            font-size: .36rem;
+            position: relative;
+        }
+        header span:nth-child(1) {
+            display: inline-block;
+            width: .6rem;
+            height: .6rem;
+            position: absolute;
+            left: 0;
+            background: url(../../image/icon_login/icon_qx.png)no-repeat;
+             background-size: .3rem .3rem;
+            background-position: .3rem .3rem;
+        }
+       
+        .main h3 {
+            font-size: .34rem;
+            text-align: center;
+        }
+
+       .main .ipt {
+
+            padding: 0.8rem .48rem 0 ;
+            font-size: 0; 
+        }
+        .main .ipt input {
+            border-bottom: 1px solid #F0F0F0;
+            width: 100%;
+            height: .74rem;
+            padding-left: 1.2rem;
+            font-size: .28rem;
+            outline:none;
+            box-sizing: border-box;
+        }
+        .main .ipt .tel {
+            background: url(../../image/icon_login/icon_yhmc.png)no-repeat;
+            background-size: .34rem .32rem;
+            background-position: .26rem center;
+        }
+        .main .ipt .psd {
+             background: url(../../image/icon_login/icon_psd2.png)no-repeat;
+            background-size: .32rem .34rem;
+            background-position: .26rem center;
+        }
+        .main .ipt .yzm {
+            background: url(../../image/icon_login/icon_dx.png)no-repeat;
+             -webkit-background-size: .35rem .27rem;
+            background-size: .35rem .27rem;
+            background-position: .26rem .26rem;
+        }
+        .main .firstIpt {
+            position: relative;
+        }
+        .main .clearText {
+            width: .6rem;
+            height: .74rem;
+            background: url(../../image/icon_login/icon-clearText.png)no-repeat;
+            -webkit-background-size: .3rem .3rem;
+            background-size: .3rem .3rem;
+            background-position: center center;
+            position: absolute;
+            right: .3rem;
+            display: none;
+            top: 0;
+        }
+        .psdClear {
+             position: absolute;
+            right: .3rem;
+            display: none;
+            top: 0;
+              width: .6rem;
+            height: .74rem;
+            background: url(../../image/icon_login/icon_by.png)no-repeat;
+            background-size: .4rem .18rem;
+            background-position: center center;
+        }
+        .lookPsd {
+            background: url(../../image/icon_login/icon_yj.png)no-repeat;
+            background-size: .4rem .27rem;
+            background-position: center center;
+        }
+        .main .ipt .lastIpt {
+            position: relative;
+            font-size: 0;
+        }
+        .main .hqyzm {
+            position: absolute;
+            right: 0;
+            top: .13rem;
+            font-size: .24rem;
+            border: 1px solid #D0D0D0;
+            padding: .1rem .16rem;
+            border-radius: .06rem;
+            color: #9D9D9D;
+            outline: none; 
+        }
+        .main .nextStep {
+            width: 6.3rem;
+            height: .8rem;
+            line-height: .8rem; 
+            background-color: #C1E9C1;
+            text-align: center; 
+            color: #fff;
+            font-size: .28rem;    
+            margin-left: .6rem;
+            margin-top: .8rem;  
+            outline: none; 
+            border-radius: .1rem;
+            margin-bottom: .2rem;
+        }
+        p {
+            text-align: center;
+            color: #578C45;
+            font-size: .24rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+     <header>
+        <span onclick="api.closeWin()"></span>
+    </header>
+    <div class="main">
+        <h3>请输入你的手机号</h3>
+        <div class="ipt">
+            <div class="firstIpt">
+                <input placeholder="请设置用户名" class="tel" id="tel"  type="text" name="txzh" onkeyup="iptChange()">
+                <span class="clearText" id="iptClear" onclick="clearText()"></span>
+            </div>
+            <div class="firstIpt">
+                <input placeholder="请设置密码" class="tel psd" id="psd"  type="password" name="txzh" onkeyup="psdChange()">
+                <span class=" psdClear"  onclick="lookPsd()"></span>
+            </div>
+            <div class="lastIpt">
+                <input placeholder="邀请码（选填）" class="yzm" id="yzm" type="text" name="yqm">
+                <!-- <button class="hqyzm" onclick="gain()" disabled>获取验证码</button> -->
+            </div>
+        </div>
+        <button class="nextStep" onclick="nextStep()" disabled>注册</button>
+        <!-- <p>接收短信大约需要<span class="time"></span>秒</p> -->
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+var tel;
+    apiready = function(){
+        fnInit();
+        tel = api.pageParam.tel;
+    };
+
+    // 显示隐藏查看密码图标
+    function psdChange() {
+        $api.css($api.dom('.psdClear'), 'display:inline-block');
+        if ($api.val($api.dom('#psd')) === '') {
+                $api.css($api.dom('.psdClear'), 'display:none');
+                $api.attr($api.dom('#psd'), 'type', 'password');
+                $api.removeCls($api.dom('.psdClear'), 'lookPsd');
+            }
+    }
+    // 输入验证码后, 取消禁用的下一步按钮
+    function iptChange() {
+        // 修改下一步按钮
+        $api.css($api.dom('.nextStep'), 'background:#08BB08');
+        $api.removeAttr($api.dom('.nextStep'), 'disabled');
+
+        // 修改清除按钮
+        $api.css($api.dom('#iptClear'), 'display:inline-block');
+        if ($api.val($api.dom('#tel')) === '') {
+                $api.css($api.dom('#iptClear'), 'display:none');
+            }
+    }
+
+    // 点击下一步后
+    function nextStep() {
+
+
+        var nickName = $api.val($api.dom('#tel')),
+            psd = $api.val($api.dom('#psd')),
+            yzm = $api.val($api.dom('#yzm'));
+       
+        if (tel === '') {
+          
+            api.toast({
+                msg: '请输入用户名'
+            });
+        } else if (psd === '') {
+            api.toast({
+                msg: '请输入密码'
+            });
+        } else {
+            // 注册
+             alert(tel + '--' + nickName + '--' + psd + '--' + yzm)
+            api.ajax({
+                url: apiSite + 'api/login/registerStepThree',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: { 
+                        mobile: tel,
+                        password: psd,
+                        nickname: nickName,
+                        invitation_code: yzm
+                    }
+                }
+            }, function(ret, err) {
+                // alert('错误信息:'+JSON.stringify(err))
+                // alert('正确信息:'+JSON.stringify(ret))
+                // // 注册完成
+                // api.toast({
+                //     msg: '注册成功'
+                // });
+                // 融云帐号
+                var rongUserId =  ret.data.rongcloud_user_id,
+                // 融云token
+                    rongToken =  ret.data.rongclound_token,
+                // 平台token
+                    userToken = ret.data.token;
+                    $api.setStorage('rongUserId', rongUserId);
+                    $api.setStorage('rongToken', rongToken);
+                    $api.setStorage('userToken', userToken);
+                    // 
+                    api.openWin({
+                        name: 'main',
+                        url: '../main.html',
+                        slidBackEnabled: false,
+                        pageParam: {
+                            userToken: userToken,
+                            rongToken: rongToken
+                        }
+                    });
+                    rongyun(rongToken);
+            });
+            
+             
+        }
+        // api.openWin({
+        //     name: 'registerWin2',
+        //     url: './login_enroll2.html',
+        //     pageParam: {
+        //         tel : tel,
+        //         yzm : yzm
+        //     },
+        //     bounces: false
+        // });
+    }
+
+    // 清除手机号
+    function clearText() {
+        $api.val($api.dom('#tel'), '');
+        $api.css($api.dom('#iptClear'), 'display:none');
+    }
+    // 查看密码
+    function lookPsd() {
+        $api.toggleCls($api.dom('.psdClear'), 'lookPsd');
+        if ($api.hasCls($api.dom('.psdClear'), 'lookPsd')) {
+            $api.attr($api.dom('#psd'), 'type', 'text');
+        } else {
+            $api.attr($api.dom('#psd'), 'type', 'password');
+        }
+    }
+
+    // 获取验证码
+    function gain() {
+        $api.text($api.dom('h3'), '短信验证码已发送，请填写验证码');
+        // 倒计时
+        countDown();
+    }
+    // 倒计时
+    function countDown() {
+        var n = 60;
+        var inta = setInterval(function(){
+            // 设置.time的文本
+            $api.text($api.dom('.time'), n);
+            // 显示倒计时标签
+            $api.css($api.dom('p'), 'display:block');
+            // 禁用发送验证码按钮
+             $api.attr($api.dom('.hqyzm'), 'disabled', 'true');
+             // 修改发送验证码按钮颜色
+            $api.css($api.dom('.hqyzm'), 'border: 1px solid #d0d0d0;color: #9d9d9d;');
+            // 减去倒计时
+            n--;
+            if (n < -1) {
+                // 清除定时器
+                clearInterval(inta);
+                // 倒计时完毕后修改按钮颜色
+                iptChange();
+                // 隐藏倒计时标签
+                $api.css($api.dom('p'), 'display:none');
+                // 把倒计时标签清空
+                $api.text($api.dom('.time'), '');
+                // 初始化时间
+                n = 60;
+            }
+        },1000)
+    }
+</script>
+</html>

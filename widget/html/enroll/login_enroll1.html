@@ -6,10 +6,8 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-        body{
-            
-        }
-         header {
+       
+        header {
             /*background-color: #3A393E;*/
             height: 1rem;
                 color: #fff;
@@ -77,10 +75,7 @@
             top: 0;
         }
        
-        .main .ipt .lastIpt {
-            position: relative;
-            font-size: 0;
-        }
+       
         .main .hqyzm {
             position: absolute;
             right: 0;
@@ -125,13 +120,9 @@
                 <input placeholder="请填写手机号码" maxlength="11" class="tel" id="tel"  type="text" name="txzh" onkeyup="iptChange()">
                 <span class="clearText" onclick="clearText()"></span>
             </div>
-            <div class="lastIpt">
-                <input placeholder="请填写验证码"  class="yzm" id="yzm" type="text" name="yzm" onkeyup="iptChange1()">
-                <button class="hqyzm" onclick="gain()" disabled>获取验证码</button>
-            </div>
+            
         </div>
         <button class="nextStep" onclick="nextStep()" disabled>下一步</button>
-        <p>接收短信大约需要<span class="time"></span>秒</p>
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -144,59 +135,56 @@
 
     // 输入手机号后, 获取验证码按钮变色
     function iptChange() {
-        $api.removeAttr($api.dom('.hqyzm'), 'disabled');
-        $api.css($api.dom('.hqyzm'), 'border: 1px solid #258AFF;color: #1180FF;');
-        $api.css($api.dom('.clearText'), 'display:inline-block');
+       
         if ($api.val($api.dom('#tel')) === '') {
-            $api.attr($api.dom('.hqyzm'), 'disabled', 'true');
-            $api.css($api.dom('.hqyzm'), 'border: 1px solid #d0d0d0;color: #9d9d9d;');
             $api.css($api.dom('.clearText'), 'display:none');
-        }
+            $api.attr($api.dom('.nextStep'), 'disabled','true');
+            $api.css($api.dom('.nextStep'), 'background:#C1E9C1');
+            $api.css($api.dom('.clearText'), 'display:none');
+        } else {
 
-        var tel = $api.val($api.dom('#tel')),
-            yzm = $api.val($api.dom('#yzm')); 
-        if (tel.length === 11) {
-            judge(tel);
+        
+        $api.removeAttr($api.dom('.nextStep'), 'disabled');
+        $api.css($api.dom('.nextStep'), 'background:#08BB08');
+        $api.css($api.dom('.clearText'), 'display:inline-block');
         }
-    
     }
 
     // 输入验证码后, 取消禁用的下一步按钮
-    function iptChange1() {
-        $api.removeAttr($api.dom('.nextStep'), 'disabled');
-        $api.css($api.dom('.nextStep'), 'background:#08BB08');
-    }
+    
     // 点击下一步后
     function nextStep() {
-        var tel = $api.val($api.dom('#tel')),
-            yzm = $api.val($api.dom('#yzm'));
+        var tel = $api.val($api.dom('#tel'));
+        var mobile;
 
          api.ajax({
-            url: apiSite + 'api/login/registerStepTwo',
+            url: apiSite + 'api/login/registerStepOne',
             method: 'post',
             headers: apiHeader,
             data: {
                values: { 
-                   mobile: $api.val($api.dom('#tel')),
-                   code: $api.val($api.dom('#yzm'))
+                   mobile: tel
                }
             }
        }, function(ret, err) {
-            if (ret.code === 10004) {
-                api.toast({
-                    msg: ret.msg
-                });
-            } else {
-                api.openWin({
-                    name: 'registerWin2',
-                    url: './login_enroll2.html',
-                    pageParam: {
-                        tel : $api.val($api.dom('#tel')),
-                        // yzm : yzm
-                    },
-                    bounces: false
-                });
-            }
+            mobile = ret.data.mobile
+            
+                if (ret.code == 10005) {
+                    alert('该手机号以注册');
+                    $api.attr($api.dom('.nextStep'), 'disabled','true');
+                    $api.css($api.dom('.nextStep'), 'background:#C1E9C1');
+                } else {
+                     nextTwo(mobile);
+                    if (ret.data.is_set_password) {
+                        alert('该手机号以注册,请设置密码');
+                        nextTwo(mobile);
+                    }
+                    if (ret.data.status == -1) {
+                        alert('请激活手机号');
+                        nextTwo(mobile);
+                    }
+                }
+                
        });
 
 
@@ -204,9 +192,22 @@
         
     }
 
+    // 进入第二部
+    function nextTwo(mobile) {
+        api.openWin({
+            name: 'registerWin2',
+            url: './login_enroll2.html',
+            pageParam: {
+                tel : mobile,
+                // yzm : yzm
+            },
+            bounces: false
+        });
+    }
     // 清除手机号
     function clearText() {
         $api.val($api.dom('#tel'), '');
+        $api.css($api.dom('.clearText'), 'display:none');
     }
     // 获取验证码
     function gain() {
