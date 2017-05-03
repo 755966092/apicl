@@ -111,7 +111,7 @@
                     <h3>{{=it[i].company_name}}</h3>
                     <p>{{=it[i].start_date}} - {{=it[i].end_date}},&nbsp;&nbsp;{{=it[i].position}}</p>
                 </div>
-                <span onclick="openEdit(this)" data-type='{{=it[i].type}}' data-id='{{=it[i].education_id}}' class="right fr"></span></div>
+                <span onclick="openEdit(this)" data-type='{{=it[i].type}}' data-id='{{=it[i].work_id}}' class="right fr"></span></div>
                 <div class="schoolInfo">{{=it[i].description}}</div>
             </div>
         {{ }; }}
@@ -128,9 +128,9 @@
     apiready = function(){
         // 请求地址列表
 	    getCityList();
-        // 删除雪莉
+        // 删除
         delDz();
-        // 箭头增加地址事件
+        // 监听增加地址事件
         addCity();
 
         api.addEventListener({
@@ -167,40 +167,15 @@
             delDz2(val);
         } else {
             // 编辑按钮状态下 进入编辑页面
-            if (type == 1) {
-                // 小学
-                api.openWin({
-                    name: 'me_info_study_addUndergo_3',
-                    url: './me_info_study_addUndergo_3.html',
-                    pageParam: {
-                        userToken: api.pageParam.userToken || $api.getStorage('userToken'),
-                        flag: 1,
-                        education_id: val
-                    }
-                });
-            } else if (type == 2) {
-                // 中学
-                api.openWin({
-                    name: 'me_info_study_addUndergo_2',
-                    url: './me_info_study_addUndergo_2.html',
-                    pageParam: {
-                        userToken: api.pageParam.userToken || $api.getStorage('userToken'),
-                        flag: 1,
-                        education_id: val
-                    }
-                });
-            } else {
-                // 大学
-                api.openWin({
-                    name: 'me_info_study_addUndergo_1',
-                    url: './me_info_study_addUndergo_1.html',
-                    pageParam: {
-                        userToken: api.pageParam.userToken || $api.getStorage('userToken'),
-                        flag: 1,
-                        education_id: val
-                    }
-                });
-            }
+            api.openWin({
+                name: 'me_info_work_addExper',
+                url: './me_info_work_addExper.html',
+                pageParam: {
+                    userToken: api.pageParam.userToken || $api.getStorage('userToken'),
+                    flag: 1,
+                    work_id: val
+                }
+            });
             
         }
         
@@ -208,9 +183,9 @@
 
     // 添加新地址
     function addAddress() {
-        api.openFrame({
+        api.openWin({
             name: 'addAddressWin',
-            url: './me_info_study_addUndergo.html',
+            url: './me_info_work_addExper.html',
             pageParam: {
                 userToken: api.pageParam.userToken || $api.getStorage('userToken'),
                 flag: 0
@@ -262,13 +237,13 @@
     // 删除服务器地址
     function delDz2 (id) {
         api.ajax({
-            url: apiSite + '/api/user_center/deleteEducation',
+            url: apiSite + '/api/user_center/deleteWork',
             method: 'post',
             headers: apiHeader,
             data: {
                 values: { 
                     token: api.pageParam.userToken || $api.getStorage('userToken'),
-                    education_id: id
+                    work_id: id
                 }
             }
         }, function(ret, err) {

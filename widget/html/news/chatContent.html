@@ -106,13 +106,13 @@
 
 <script type="text/javascript">
 // var rongToken, userToken;
-var headImg = $api.getStorage('headImg'); 
-var name;
+var name,headImg = $api.getStorage('headImg'),youHeadImg;
 var messageId,targetRongId;
     apiready = function(){
         moduleInit();
         targetRongId = api.pageParam.targetRongId
-        name = api.pageParam.name;
+        nickname = api.pageParam.nickname;
+         getSideInfo(targetRongId)
         // 调整页面到输入框的后面
         api.sendFrameToBack({
             from: 'chattContent',
@@ -137,10 +137,43 @@ var messageId,targetRongId;
             name: 'receiveMsg'
         }, function(ret, err) {
             // 收到消息后, 添加消息内容到页面
-            addReceMsg(ret.value.msg);
+            addReceMsg(ret.value.msg, youHeadImg);
         });
         
         // 最新聊天记录
+       
+
+        xiala(messageId);
+       
+    };
+
+    // 获取聊天对方信息
+    function getSideInfo(rongUserId) {
+        rongUserIdArr = rongUserId.split();
+        api.ajax({
+           url: apiSite + '/api/user/chatUserInfo',
+           method: 'post',
+           headers: apiHeader,
+           data: {
+              values: { 
+                  token: $api.getStorage('userToken'),
+                  id_json: rongUserIdArr
+              }
+           }
+       }, function(ret, err) {
+           if(ret) {
+               youHeadImg = ret.data.list[rongUserId].head_img_url
+               // 获取最新消息
+               getNews()
+                
+           } else {
+               alert(JSON.stringify(err))
+           }
+       })
+    }
+
+    // 获取最新消息
+    function getNews() {
         rong.getLatestMessages({
             conversationType: 'PRIVATE',
             // 目标rongyun用户名
@@ -148,37 +181,22 @@ var messageId,targetRongId;
             // targetId: name,
             count: 20
         }, function(ret, err) {
-            // alert("正确"+JSON.stringify(ret) + targetRongId)
-            // alert("错误"+JSON.stringify(err))
             for (var i = ret.result.length-1; i >= 0 ; i--) {
                 if (ret.result[i].messageDirection == 'RECEIVE') {
                     // 消息方向：SEND(发送) 或者 RECEIVE(接受)
-                    addReceMsg(ret.result[i].content.text)
+                    addReceMsg(ret.result[i].content.text, youHeadImg)
                 } else {
                     addSendMsg(ret.result[i].content.text, headImg);
                 }
             }
             // 最新的消息的messageId,获取历史记录函数内部-20处理
             messageId = ret.result[0].messageId;
-
-            // messageId = ret.result[ret.result.length-1].messageId;
-            // alert('messageId:'+ret.result[0].messageId);
-            // alert(JSON.stringify(ret.result));
         })
-
-        xiala(messageId);
-       
-    };
-
-
-
-
-
-
+    }
     
     // 接收消息后新建消息
     function addReceMsg(msg, headImg) {
-        $api.append($api.dom('.main'),'<div class="other clearfix"><img class="fl" src="../../image/tx_5.jpg"><p class="fl">' + msg + '</p></div>');
+        $api.append($api.dom('.main'),'<div class="other clearfix"><img class="fl" src="'+ youHeadImg +'"><p class="fl">' + msg + '</p></div>');
             slideBut();
     }
     // 发送消息后新建消息
@@ -191,7 +209,7 @@ var messageId,targetRongId;
         $api.prepend($api.dom('.main'),'<div class="oneself clearfix"><img class="fr" src="'+ headImg +'"><p class="fr"> ' + msg + ' </p></div>');
     }
     function addReceMsgTop(msg, headImg) {
-        $api.prepend($api.dom('.main'),'<div class="other clearfix"><img class="fl" src="../../image/tx_5.jpg"><p class="fl">' + msg + '</p></div>');
+        $api.prepend($api.dom('.main'),'<div class="other clearfix"><img class="fl" src="'+ youHeadImg +'"><p class="fl">' + msg + '</p></div>');
     }
 
     // 滚动到页面底部
@@ -214,10 +232,11 @@ var messageId,targetRongId;
                 oldestMessageId: messageId,
                 count: 20
             }, function(ret, err) {
+                // alert(JSON.stringify(ret))
                 for (var i = 0; i < ret.result.length ; i++) {
                     if (ret.result[i].messageDirection == 'RECEIVE') {
                         // 消息方向：SEND(发送) 或者 RECEIVE(接受)
-                        addReceMsgTop(ret.result[i].content.text)
+                        addReceMsgTop(ret.result[i].content.text, youHeadImg)
                     } else {
                         addSendMsgTop(ret.result[i].content.text, headImg);
                     }

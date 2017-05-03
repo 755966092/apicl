@@ -119,9 +119,9 @@
         <ul class="resultList"></ul>
         <script type="text/x-dot-template" id="listT">
             {{ for (var i = 0; i < it.length; i++) { }} 
-            <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-name="{{=it[i].targetId}}" onclick="openChat(this)">
+            <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" onclick="openChat(this)">
                 <img class="fl" src="{{=it[i].url}}">
-                <h3>{{=it[i].targetId}}</h3>
+                <h3>{{=it[i].nickname}}</h3>
                 <span class="fr time">{{=it[i].time.hour}}：{{=it[i].time.minute}}</span>
                 <p>{{=it[i].latestMessage.text}}</p>
                 </li>
@@ -182,18 +182,44 @@
             name: 'historNews'
         }, function(ret, err) {
             if (ret) {
+                var targetRongIdArr = [];
                 for (var i = 0; i < ret.value.data.length; i++) {
-                    ret.value.data[i].url = '../image/tx_2.jpg'
-                    ret.value.data[i].time = changeTime(ret.value.data[i].receivedTime)
+                    
+                    ret.value.data[i].time = changeTime(ret.value.data[i].receivedTime);
+                    targetRongIdArr.push(ret.value.data[i].targetId)
                 }
-                // alert(JSON.stringify(ret.value.data))
-                // targetId M目标ID
-                // alert(JSON.stringify(ret.value.data))
-                getData(ret.value.data)
+                // 获取聊天对方信息
+                getSideInfo(targetRongIdArr, ret.value.data);
+               
             } else {
                 alert(JSON.stringify(err));
             }
         });
+    }
+     // 获取聊天对方信息
+    function getSideInfo(rongUserId, data) {
+       api.ajax({
+           url: apiSite + '/api/user/chatUserInfo',
+           method: 'post',
+           headers: apiHeader,
+           data: {
+              values: { 
+                  token: $api.getStorage('userToken'),
+                  id_json: rongUserId
+              }
+           }
+       }, function(ret, err) {
+            if(ret) {
+                for (var i = 0; i < data.length; i++) {
+                    data[i].url = ret.data.list[data[i].targetId].head_img_url
+                    data[i].nickname = ret.data.list[data[i].targetId].nickname
+                }
+                
+                getData(data)
+           } else {
+               alert(JSON.stringify(err))
+           }
+       })
     }
     // 滚动到底部触发的事件
     function scrollBotton() {
@@ -236,7 +262,7 @@
     // 打开聊天窗口
     function openChat(ele) {
         // var major_Name = $api.text(ele);
-        var name = $api.attr(ele, 'data-name');
+        var nickname = $api.attr(ele, 'data-nickname');
         var targetId = $api.attr(ele, 'data-targetId');
         api.openWin({
             name: 'chatWin',
@@ -244,7 +270,7 @@
             pageParam: {
                 // rongToken: rongToken,
                 // userToken: userToken,
-                name: name,
+                nickname: nickname,
                 targetRongId: targetId
             }
         });

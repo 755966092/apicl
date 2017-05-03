@@ -65,9 +65,8 @@ var name, targetRongId;
       targetRongId = api.pageParam.targetRongId;
       nickname = api.pageParam.nickname;
       // 获取参数
-      name = api.pageParam.name;
       var title = document.getElementById('title')
-      $api.html(title, targetRongId);
+      $api.html(title, nickname);
       
       // 初始化界面
       fnInit();
@@ -86,7 +85,7 @@ var name, targetRongId;
               h: 'auto'
           },
           pageParam: {
-            name: name,
+            nickname: nickname,
             targetRongId: targetRongId
           },
           bounces: true
@@ -134,7 +133,7 @@ var name, targetRongId;
           }, function(ret) {
               if (ret) {
                   if (ret.eventType === 'send') {
-                    alert(JSON.stringify(ret));
+                    // alert(JSON.stringify(ret));
                     /**
                      * sendMsg(msg)
                      * msg: 发送的消息
