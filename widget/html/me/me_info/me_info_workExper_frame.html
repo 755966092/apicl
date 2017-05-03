@@ -104,12 +104,12 @@
 
     <script type="text/x-dot-template" id="listT">
         {{ for (var i = 0; i < it.length; i++) { }} 
-            <div class="dzlist" data-id='{{=it[i].education_id}}'>
+            <div class="dzlist" data-id='{{=it[i].work_id}}'>
                 <div class="clearfix kuo">
                 <img src="../../../image/tx_2.jpg">
                 <div class="left fl">
-                    <h3>{{=it[i].school}}</h3>
-                    <p>{{=it[i].start_date}} - {{=it[i].end_date}}, {{=it[i].major}}&nbsp;&nbsp;{{=it[i].degree}}</p>
+                    <h3>{{=it[i].company_name}}</h3>
+                    <p>{{=it[i].start_date}} - {{=it[i].end_date}},&nbsp;&nbsp;{{=it[i].position}}</p>
                 </div>
                 <span onclick="openEdit(this)" data-type='{{=it[i].type}}' data-id='{{=it[i].education_id}}' class="right fr"></span></div>
                 <div class="schoolInfo">{{=it[i].description}}</div>
@@ -117,7 +117,7 @@
         {{ }; }}
     </script>
     <div class="main_no3 ">
-        <p onclick="addAddress()">添加教育经历</p>
+        <p onclick="addAddress()">添加工作经历</p>
     </div>
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
@@ -222,7 +222,7 @@
     // 请求地址列表
     function getCityList() {
         api.ajax({
-            url: apiSite + '/api/user_center/educationList',
+            url: apiSite + '/api/user_center/workList',
             method: 'post',
             headers: apiHeader,
             data: {
@@ -233,26 +233,10 @@
         }, function(ret, err) {
             if (ret) {
                 for (var i = 0; i < ret.data.list.length; i++) {
-                    if (ret.data.list[i].degree == '1') {
-                        ret.data.list[i].degree = '专科'
-                    } else if (ret.data.list[i].degree == '2') {
-                        ret.data.list[i].degree = '本科'
-                    } else if (ret.data.list[i].degree == '3') {
-                        ret.data.list[i].degree = '硕士'
-                    } else if (ret.data.list[i].degree == '4') {
-                        ret.data.list[i].degree = '博士'
-                    } else if (ret.data.list[i].degree == '5'){
-                        ret.data.list[i].degree = '博士后'
-                    } 
-
-                    if (ret.data.list[i].degree == 0) {     
-                        ret.data.list[i].degree = '';
-                    }
                     if (ret.data.list[i].end_date == '0000-00-00' ){
                         ret.data.list[i].end_date = '至今'
-                    }   
+                    }
                 }
-
                 getData(ret.data.list)
             } else {
                 alert(JSON.stringify(err));

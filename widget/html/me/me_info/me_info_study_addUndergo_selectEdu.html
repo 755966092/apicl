@@ -73,11 +73,15 @@ var selDate;
             fixedOn: api.frameName,
             fixed: false,
             data:  [{
-                title: '大学',
+                title: '专科',
             }, {
-                title: '中学',
+                title: '本科',
             }, {
-                title: '小学',
+                title: '硕士',
+            }, {
+                title: '博士',
+            }, {
+                title: '博士后',
             }]
         }, function(ret, err) {
             if (ret) {
@@ -90,37 +94,12 @@ var selDate;
    }  
   function enter () {
    
-    if (selDate == '大学') {
-        // 选择大学
-        api.openWin({
-            name: 'me_info_study_addUndergo_1',
-            url: './me_info_study_addUndergo_1.html',
-            pageParam: {
-                flag: 0,
-                name: 3
-            }
-        });
-    } else if (selDate == '中学') {
-        // 选择中学
-        api.openWin({
-            name: 'me_info_study_addUndergo_2',
-            url: './me_info_study_addUndergo_2.html',
-            pageParam: {
-                flag: 0,
-                name: 2
-            }
-        });
-    } else {
-        api.openWin({
-            name: 'me_info_study_addUndergo_3',
-            url: './me_info_study_addUndergo_3.html',
-            pageParam: {
-                flag: 0,
-                name: 1
-            }
-        });
-        // 选择小学
-    }
+    api.sendEvent({
+        name: 'selectEdu',
+        extra: {
+            selDate: selDate
+        }
+    });
     api.closeFrame();
   }
   
