@@ -153,7 +153,8 @@ function receiveMsg() {
         api.sendEvent({
             name: 'receiveMsg',
             extra: {
-                msg: ret.result.message.content.text
+                msg: ret.result.message.content.text,
+                targetId: ret.result.message.senderUserId
             }
         });
     })

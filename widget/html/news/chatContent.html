@@ -136,8 +136,11 @@ var messageId,targetRongId;
         api.addEventListener({
             name: 'receiveMsg'
         }, function(ret, err) {
+            if (ret.value.targetId == targetRongId) {
+                 addReceMsg(ret.value.msg, youHeadImg);
+            }
             // 收到消息后, 添加消息内容到页面
-            addReceMsg(ret.value.msg, youHeadImg);
+           
         });
         
         // 最新聊天记录
@@ -222,6 +225,7 @@ var messageId,targetRongId;
     function chatHis() {
         messageId -= 20;
         var sta;
+        var count = messageId>20?20:messageId;
         if (messageId > 0) {
              rong.getHistoryMessages({
                 conversationType: 'PRIVATE',
@@ -230,7 +234,7 @@ var messageId,targetRongId;
                 // targenameser1',
                 // targetId: name,
                 oldestMessageId: messageId,
-                count: 20
+                count: count
             }, function(ret, err) {
                 // alert(JSON.stringify(ret))
                 for (var i = 0; i < ret.result.length ; i++) {
