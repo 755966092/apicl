@@ -114,9 +114,7 @@ var messageId,targetRongId;
         nickname = api.pageParam.nickname;
          getSideInfo(targetRongId)
         // 调整页面到输入框的后面
-        api.sendFrameToBack({
-            from: 'chattContent',
-        });
+        
 
         // 滚动到底部
         slideBut();
@@ -149,15 +147,14 @@ var messageId,targetRongId;
            softInputMode: 'resize',  
        });
 
-        xiala(messageId);
+        // xiala(messageId);
         chatTools();
        
     };
 
     // 聊天界面
   function chatTools() {
-  
-        alert('frame弹出的')
+        // alert('frame弹出的')
         UIChatBox.open({
             placeholder: '请输入内容',
             maxRows: 6,
@@ -247,6 +244,31 @@ var messageId,targetRongId;
                    if (ret.eventType === 'clickExtras') {
                       alert('点击了第'+ret.index+'个附加按钮')
                    }
+                   UIChatBox.addEventListener({
+                        target: 'inputBar',
+                        name: 'move'
+                    }, function(ret, err) {
+                        if (ret) {
+                            // alert(JSON.stringify(ret));
+                            // alert('聊天区域高度'+$api.offset($api.dom('.main')).h)
+                            // alert('win高度'+api.winHeight)
+                            var hh = api.winHeight - (ret.panelHeight + ret.inputBarHeight)
+
+                            if ($api.offset($api.dom('.main')).h > api.winHeight) {
+                               slideBut();
+                                api.setFrameAttr({
+                                    name: 'chattContent',
+                                    rect: {
+                                        h: hh
+                                    }
+                                    
+                                });
+
+                            }
+                        } else {
+                            alert(JSON.stringify(err));
+                        }
+                    });
             } else {
                 alert(JSON.stringify(err));
             }

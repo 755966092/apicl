@@ -138,7 +138,7 @@
         <span id="title">新增项目业绩</span>
         <span onclick="addStudy()" id="over">完成</span>
     </header>
-    <div class="wrap">
+    <!-- <div class="wrap">
         <div class="main clearfix">
             <p class="mobile ">项目业绩</p>
             <div class="main_no1 yd">
@@ -175,9 +175,9 @@
             <p class="mobile fr" id="textLength"> 0/300</p>
         </div>
     </div>
-     <div class="main_no3" id="main_no3" onclick="addStudy()">
+    <div class="main_no3" id="main_no3" onclick="addStudy()">
            保存
-       </div>
+    </div> -->
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
@@ -185,28 +185,41 @@
     var url;
     apiready = function(){
 
-        if (api.pageParam.flag == 1) {
-            url = '/api/user_center/editProject';
-            $api.text($api.byId('main_no3'), '删除');
-            $api.text($api.byId('title'), '修改项目业绩');
-            $api.css($api.byId('over'), 'display:inline-block');
-            $api.css($api.byId('main_no3'), 'background-color:#DF214E');
-            $api.removeAttr($api.byId('main_no3'), 'onclick');
-            $api.rmEvt($api.byId('main_no3'), 'click', addStudy);
-            $api.addEvt($api.byId('main_no3'), 'click', function(){
-                delStudy();
-            });
+        // if (api.pageParam.flag == 1) {
+        //     url = '/api/user_center/editProject';
+        //     $api.text($api.byId('main_no3'), '删除');
+        //     $api.text($api.byId('title'), '修改项目业绩');
+        //     $api.css($api.byId('over'), 'display:inline-block');
+        //     $api.css($api.byId('main_no3'), 'background-color:#DF214E');
+        //     $api.removeAttr($api.byId('main_no3'), 'onclick');
+        //     $api.rmEvt($api.byId('main_no3'), 'click', addStudy);
+        //     $api.addEvt($api.byId('main_no3'), 'click', function(){
+        //         delStudy();
+        //     });
             
-        } else {
-            url = '/api/user_center/addProject'
-        }
+        // } else {
+        //     url = '/api/user_center/addProject'
+        // }
         // 大学
         fnInit();
         // 监听返回数据
-        monitor();
-        // 获取数据
-            getCityList();
-        
+        // monitor();
+        // // 获取数据
+        // getCityList();
+        api.openFrame({
+            name: 'me_info_project_addproject_frome',
+            url: './me_info_project_addproject_frome.html',
+            rect: {
+                x: 0,
+                y: headerH,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                name: 'value'
+            },
+            bounces: true
+        });
     };
 
     // 获取数据
