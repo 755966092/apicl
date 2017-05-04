@@ -167,21 +167,20 @@ function changeTime(time) {
     // 获取的是毫秒数
     var time = new Date(time);
     // 秒数
-    var sencond = time.getSeconds()
-        // 分钟数
-    var minute = time.getMinutes()
-        // 小时数
-    var hour = time.getHours()
-        // 年
-    var year = time.getFullYear()
-        // 月
-    var month = time.getMonth()
-        // 日
-    var day = time.getDay()
-        // 星期
-    var xingqu = time.getDate()
+    var sencond = time.getSeconds();
+    // 分钟数
+    var minute = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
+    // 小时数
+    var hour = time.getHours();
+    // 年
+    var year = time.getFullYear();
+    // 月
+    var month = time.getMonth();
+    // 日
+    var day = time.getDay();
+    // 星期
+    var xingqu = time.getDate();
     return {
-
         sencond: sencond,
         minute: minute,
         hour: hour,
