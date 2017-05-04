@@ -162,28 +162,30 @@
 <script type="text/javascript">
     var url;
     apiready = function(){
-        alert(1);
-        // if (api.pageParam.flag == 1) {
-        //     url = '/api/user_center/editProject';
-        //     $api.text($api.byId('main_no3'), '删除');
-        //     $api.text($api.byId('title'), '修改项目业绩');
-        //     $api.css($api.byId('over'), 'display:inline-block');
-        //     $api.css($api.byId('main_no3'), 'background-color:#DF214E');
-        //     $api.removeAttr($api.byId('main_no3'), 'onclick');
-        //     $api.rmEvt($api.byId('main_no3'), 'click', addStudy);
-        //     $api.addEvt($api.byId('main_no3'), 'click', function(){
-        //         delStudy();
-        //     });
+        if (api.pageParam.flag == 1) {
+            url = '/api/user_center/editProject';
+            $api.text($api.byId('main_no3'), '删除');
+            $api.text($api.byId('title'), '修改项目业绩');
+            $api.css($api.byId('main_no3'), 'background-color:#DF214E');
+            $api.removeAttr($api.byId('main_no3'), 'onclick');
+            $api.rmEvt($api.byId('main_no3'), 'click', addStudy);
+            $api.addEvt($api.byId('main_no3'), 'click', function(){
+                delStudy();
+            });
             
-        // } else {
-        //     url = '/api/user_center/addProject'
-        // }
-        // // 大学
-        // // fnInit();
-        // // 监听返回数据
-        // monitor();
-        // // 获取数据
-        //     getCityList();
+        } else {
+            url = '/api/user_center/addProject'
+        }
+        // 监听返回数据
+        monitor();
+        // 获取数据
+        getCityList();
+
+        api.addEventListener({
+            name: 'addStudy'
+        }, function(ret, err) {
+           addStudy();
+        });
         
     };
 
