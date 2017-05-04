@@ -40,13 +40,13 @@ function exitApp() {
                 silent: true
             });
             rong.disconnect({
-                isReceivePush: true
+                isReceivePush: false
             }, function(ret, err) {
-                if ('success' == ret.status) {
-                    api.toast({
-                        msg: '断开连接成功!'
-                    });
-                }
+                // if ('success' == ret.status) {
+                //     api.toast({
+                //         // msg: '断开连接成功!'
+                //     });
+                // }
             });
         });
         setTimeout(function() {
