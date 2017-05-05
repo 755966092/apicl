@@ -108,7 +108,9 @@
 // var rongToken, userToken;
 var name,headImg = $api.getStorage('headImg'),youHeadImg;
 var messageId,targetRongId;
+var  mainH, _main, scrollH;
     apiready = function(){
+
         moduleInit();
         targetRongId = api.pageParam.targetRongId
         nickname = api.pageParam.nickname;
@@ -147,7 +149,7 @@ var messageId,targetRongId;
            softInputMode: 'resize',  
        });
 
-        // xiala(messageId);
+        xiala(messageId);
         chatTools();
        
     };
@@ -248,7 +250,6 @@ var messageId,targetRongId;
                         target: 'inputBar',
                         name: 'move'
                     }, function(ret, err) {
-                        alert('监听到键盘弹起事件');
                         if (ret) {
                             // alert(JSON.stringify(ret));
                             // alert('聊天区域高度'+$api.offset($api.dom('.main')).h)
@@ -257,7 +258,7 @@ var messageId,targetRongId;
                             // alert(hh)
                             if ($api.offset($api.dom('.main')).h > api.winHeight) {
                                  
-                                // setTimeout(function() {
+                                setTimeout(function() {
                                     api.setFrameAttr({
                                         name: 'chattContent',
                                         rect: {
@@ -265,7 +266,7 @@ var messageId,targetRongId;
                                         }
                                     });
                                     slideBut()
-                                // },10)
+                                },10)
 
                                 
                             }
@@ -320,7 +321,11 @@ var messageId,targetRongId;
                 } else {
                     addSendMsg(ret.result[i].content.text, headImg);
                 }
+                
             }
+            // 获取历史聊天记录后 页面不想上滚动
+            mainH=$api.offset($api.dom('.main')).h;
+            _main = mainH
             // 最新的消息的messageId,获取历史记录函数内部-20处理
             messageId = ret.result[0].messageId;
         })
@@ -346,22 +351,21 @@ var messageId,targetRongId;
 
     // 滚动到页面底部
     function slideBut() {
+        // scrollIntoView 滚动到可是界面的底部   true滚动到顶部
         $api.dom('.main').scrollIntoView(false);
+
     }
 
-
+    
     // 查看历史记录
     function chatHis() {
         messageId -= 20;
-        var sta;
         var count = messageId>20?20:messageId;
         if (messageId > 0) {
              rong.getHistoryMessages({
                 conversationType: 'PRIVATE',
                 // 目标rongyun用户名
                 targetId: targetRongId,
-                // targenameser1',
-                // targetId: name,
                 oldestMessageId: messageId,
                 count: count
             }, function(ret, err) {
@@ -374,6 +378,12 @@ var messageId,targetRongId;
                         addSendMsgTop(ret.result[i].content.text, headImg);
                     }
                 }
+
+                // 修改获取聊天记录后的页面高度
+                mainH = $api.offset($api.dom('.main')).h;
+                scrollH = mainH - _main;
+                _main =  mainH;
+                window.scrollTo(0,scrollH-50);
             })
             return 1
          } else {
@@ -385,6 +395,7 @@ var messageId,targetRongId;
     }
 
     // 下拉刷新后 执行函数chatHis(messageId)
+    
     function xiala() {
         api.setCustomRefreshHeaderInfo({
             bgColor: '#C0C0C0',
@@ -409,7 +420,11 @@ var messageId,targetRongId;
             // }
         }, function() {
             if (chatHis()) {
-                api.refreshHeaderLoadDone()
+                // 停止刷新
+                api.refreshHeaderLoadDone();
+                
+                
+
             }
         });
     }
