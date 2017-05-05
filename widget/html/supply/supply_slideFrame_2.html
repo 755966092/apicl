@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        html,body {
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+
+        }
+        body {
+            width: 100%;
+            height: 100%;
+            
+        }
+        .warp {
+            width: 100%;
+            height: 100%;
+            padding-left: 1.5rem;
+            box-sizing: border-box;
+        }
+        .main {
+            background-color: #fff;
+            position: relative;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        .main>div:first-child {
+            padding: .15rem .3rem;
+        }
+
+        .main ul.no1 {
+            font-size: .24rem;
+            width: 100%;
+        }
+        .main ul.no1 li {
+            margin-bottom: .2rem;
+        }
+        .main ul.no1 li p {
+            color: #9b9b9b;
+        }
+        .main ul.no1 li span {
+            display: inline-block;
+            margin-top: .1rem;
+            width: .96rem;
+            height: .6rem;
+            background-color: #F4F4F4;
+            border-radius: .06rem;
+            text-align: center;
+            line-height: .6rem;
+            color: #555;
+            margin-bottom: .2rem;
+        }
+        .main ul.no1 li span:nth-child(2), 
+        .main ul.no1 li span:nth-child(3) {
+            margin-right: .15rem;
+        }
+        .main ul.no1 li span.sel {
+            background: url(../../image/icon_supply/icon_text4.png);
+            background-size: .96rem .6rem;
+            color: #27B24A;
+        }
+       
+        .main ul.no1 li span.li_span4 {
+            background-size: 1.3rem .6rem;
+            width: 1.3rem;
+        }
+        .main ul.no2 {
+            font-size: .24rem;
+        }
+        .main ul.no2 p {
+            line-height: .96rem;
+            /*border-bottom: 1px solid #cbcbcb;*/
+        }
+        .main ul.no2 li {
+            /*height: .84rem;*/
+            line-height: .84rem;
+            border-top: 1px solid #CBCBCB;
+            font-size: 0;
+        }
+        .main ul.no2 li p {
+            font-size: .32rem;
+        }
+        .main ul.no2 li span{
+            width: .96rem;
+            height: .51rem;
+            font-size: .24rem;
+            background-color: #F4F4F4;
+            text-align: center;
+            line-height: .51rem;
+            margin: 0 .1rem;
+            display: none;
+        }
+        .main ul.no2 li.sel span {
+            display: inline-block;
+        }
+        .main ul.no2 li:last-child {
+            border-bottom: 1px solid #cbcbcb;
+        }
+        .main .footer {
+            height: .98rem;
+            width: 6rem;
+            margin-top: 1rem;
+            font-size: 0;
+            position: absolute;
+            bottom: 1rem;  
+           
+        }
+        .main .footer span {
+            height: .98rem;
+            width: 3rem;    
+            font-size: .34rem;
+            text-align: center;
+            line-height: .98rem;
+            float: left;
+            background-color: #F8F8F8;
+        }
+        .main .footer span:last-child {
+            background-color: #27B24A;
+            color: #fff;
+        }
+        .spanSel {
+            background: url(../../image/icon_supply/icon_text2.png)no-repeat;
+            background-position: right center;
+            -webkit-background-size: .96rem .52rem;
+            background-size: .96rem .52rem; 
+        }
+        /*.no2 .sel {
+            background: url(../../image/icon_my/icon_enter.png)no-repeat;
+            background-position: right center;
+            -webkit-background-size: .44rem .33rem;
+            background-size: .44rem .33rem;
+        }*/
+    </style>
+</head>
+<body onclick="api.closeFrame()">
+    <div class="warp" onclick="api.closeFrame()">
+        <div class="main" onclick="event.cancelBubble=true;">
+            <div>
+                <ul class="no1">
+                    <!-- <li>
+                         <p>类型</p>
+                         <span onclick="li_span(this);event.cancelBubble=true;" class="li_span sel">个人</span>
+                         <span onclick="li_span(this);event.cancelBubble=true;" class="li_span">公司</span>
+                    </li>
+                    <li>
+                         <p>类别</p>
+                         <span onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 sel">自产自销</span>
+                         <span onclick="li_span(this);event.cancelBubble=true;" class="li_span">公司</span>
+                    </li> -->
+                    <li>
+                         <p>排序</p>
+                         <span onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 sel">智能排序</span>
+                         <span onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4">距离最近</span>
+                         <span onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4">价格最低</span>
+                         <span onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4">最新发布</span>
+                    </li>
+                 </ul>  
+                <ul class="no2">
+                    <p>分类</p>
+                    <li class="no2List sel" onclick="li_span(this);event.cancelBubble=true;" >
+                        <p>TA卖</p>
+                        <span onclick="selfAdaption(this)" class="no2_li_Span spanSel">全部</span>
+                        <span onclick="selfAdaption(this)" class="no2_li_Span">摄影</span>
+                        <span onclick="selfAdaption(this)" class="no2_li_Span">医疗</span>
+                        <span onclick="selfAdaption(this)" class="no2_li_Span">教育</span>
+                    </li>
+                    <li class="no2List" onclick="li_span(this);event.cancelBubble=true;">
+                        <p>TA带卖</p>
+                        <span onclick="selfAdaption(this)" class="no2_li_Span">全部</span>
+                        <span onclick="selfAdaption(this)" class="no2_li_Span">摄影</span>
+                        <span onclick="selfAdaption(this)" class="no2_li_Span">医疗</span>
+                        <span onclick="selfAdaption(this)" class="no2_li_Span">教育</span>
+                    </li>
+                    <li class="no2List" onclick="li_span(this);event.cancelBubble=true;">
+                        <p>TA公司卖</p>
+                        <span onclick="selfAdaption(this)" class="no2_li_Span">全部</span>
+                        <span onclick="selfAdaption(this)" class="no2_li_Span">摄影</span>
+                        <span onclick="selfAdaption(this)" class="no2_li_Span">医疗</span>
+                        <span onclick="selfAdaption(this)" class="no2_li_Span">教育</span>
+                    </li>
+                    <li class="no2List" onclick="li_span(this);event.cancelBubble=true;">
+                        <p>TA公司买</p>
+                        <span onclick="selfAdaption(this)" class="no2_li_Span">全部</span>
+                        <span onclick="selfAdaption(this)" class="no2_li_Span">摄影</span>
+                        <span onclick="selfAdaption(this)" class="no2_li_Span">医疗</span>
+                        <span onclick="selfAdaption(this)" class="no2_li_Span">教育</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="footer">
+                <span onclick="enter(0)">重置</span>
+                <span onclick="enter(1)">确定</span>
+            </div>
+        </div> 
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+       
+    };
+
+    function selfAdaption(ele) {
+        for (var i = 0; i < $api.domAll('.no2_li_Span').length; i++) {
+            $api.removeCls($api.domAll('.no2_li_Span')[i], 'spanSel');
+        }
+        $api.addCls(ele, 'spanSel');
+    }
+
+
+
+    // 点击确定按钮： 1； 重置按钮 0
+    function enter(n) {
+        if (n) {
+            var sel = $api.domAll('.sel');
+            var str = '';
+            for (var i = 0; i < sel.length; i++) {
+                str += $api.text(sel[i]) + ','
+            }
+            str = str.slice(0,str.length-1)
+            // alert('选择的内容:'+ str)
+           
+            // 发送事件, 刷新筛选结果
+            api.sendEvent({
+                name: 'screeningResults',
+                extra: {
+                    condition: str 
+                }
+            });
+            
+             api.closeFrame();
+
+        }
+        else {
+            var no1 = document.getElementsByClassName('no1')[0]
+            var liArr = no1.getElementsByTagName('li');
+            for (var i = 0; i < liArr.length; i++) {
+                for(var j = 0; j < liArr[i].childNodes.length ; j++) {
+                    $api.removeCls(liArr[i].childNodes[j], 'sel');
+                }
+                $api.addCls(liArr[i].childNodes[3], 'sel');
+                
+            }  
+            for (var i = 0; i < $api.domAll('.no2List').length; i++) {
+                $api.removeCls($api.domAll('.no2List')[i], 'sel');
+            }
+            $api.addCls($api.domAll('.no2List')[0], 'sel');
+            console.log($api.domAll('.no2List'))
+           
+        }
+    }
+
+
+    // 选中图标
+    function li_span(ele) {
+        var allDom = ele.parentNode.childNodes
+        for (var i = 0; i < allDom.length; i++) {
+            $api.removeCls(allDom[i], 'sel');
+        }
+        $api.addCls(ele, 'sel');
+    }
+    
+   
+   
+</script>
+</html>
