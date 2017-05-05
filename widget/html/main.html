@@ -26,7 +26,8 @@
             display: block;
         }
         
-        header ul li:nth-child(1) span {
+        header ul li:nth-child(1) span,
+        header ul li:nth-child(3) span {
             display: inline-block;
             width: .39rem;
             height: .39rem;
@@ -159,7 +160,10 @@
                     <span id="addFellow" onclick="addFellow()"></span>
                 </li>
                 <li class="border-b">通讯录</li>
-                <li class="border-b">供求</li>
+                <li class="border-b">
+                    供求
+                    <span onclick="addPublish()"></span>
+                </li>
                 <li class="border-b">发现</li>
                 <li class="border-b">我</li>
             </ul>
@@ -170,7 +174,7 @@
             <ul class="flex-wrap">
                 <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con active ">我在</li>
                 <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con ">通讯录</li>
-                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con ">供求</li>
+                <li tapmode="hover" onclick="randomSwitchBtn( this );" data-val = '3' class="flex-con ">供求</li>
                 <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con ">发现</li>
                 <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con news">我</li>
             </ul>
@@ -182,8 +186,9 @@
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/common.js"></script>
 <script type="text/javascript">
-var userToken, rongToken;   
+var userToken, rongToken,footerH;   
 apiready = function() {
+    footerH = $api.offset($api.byId('footer')).h;
     api.addEventListener({
         name:'appintent'
     },function(ret,err){
@@ -209,6 +214,7 @@ apiready = function() {
             name: 'refurbish'
         });
     });
+
 }
 
 
@@ -217,14 +223,16 @@ function funIniGroup() {
         frames = [];
     for (var i = 0, len = eHeaderLis.length; i < len; i++) {
         // 个人中心页面不弹动
-        if (i === 4 || i === 1) {
+        if (i === 4 || i === 1 || i ===2) {
             frames.push({
                 name: 'frame' + i,
                 url: './frame' + i + '.html',
                 bgColor: 'rgba(0,0,0,.2)',
                 pageParam: {
                     userToken: userToken,
-                    rongToken: rongToken
+                    rongToken: rongToken,
+                    headerH: headerH,
+                    footerH: footerH
                 },
                 bounces: false
             }) 
@@ -235,7 +243,9 @@ function funIniGroup() {
                 bgColor: 'rgba(0,0,0,.2)',
                 pageParam: {
                     userToken: userToken,
-                    rongToken: rongToken
+                    rongToken: rongToken,
+                    headerH: headerH,
+                    footerH: footerH
                 },
                 bounces: true
             })
@@ -244,6 +254,7 @@ function funIniGroup() {
     api.openFrameGroup({
         name: 'group',
         scrollEnabled: false,
+        preload: 0,
         rect: {
             x: 0,
             y: $api.dom('header').offsetHeight,
@@ -277,6 +288,16 @@ function randomSwitchBtn(tag) {
         name: 'group',
         index: index
     });
+
+    if ($api.attr(tag, 'data-val') !== '3'){
+        api.closeFrameGroup({
+            name: 'supply_publish'
+        });
+    } else {
+        api.sendEvent({
+            name: 'openSupplyPublishr'
+        });
+    }
 }
 
 // 添加好友按钮
@@ -284,6 +305,12 @@ function addFellow() {
     //添加时间，控制frame0页面的添加好友弹框的显示，如果在该页面写会被frame覆盖
     api.sendEvent({
         name: 'showNews',
+    });
+}
+// 点击发布按钮
+function addPublish() {
+    api.sendEvent({
+        name: 'addPublish'
     });
 }
 </script>

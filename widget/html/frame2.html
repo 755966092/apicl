@@ -1,63 +1,300 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
-    <title>供求</title>
+    <title>title</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/style.css"/>
     <style>
+        body,html{
+            background-color: #F8F8F8;
+        }
+         header {
+            background-color: #3A393E;
+            height: 1rem;
+            color: #fff;
+            line-height: 1rem;
+            text-align: center;
+            position: relative;
+            font-size: .36rem;
+            position: relative;
+        }
+        header span:nth-child(1) {
+            position: absolute;
+            left: 0;
+            background: url(../image/icon_fanh.png)no-repeat;
+             background-size: .22rem .37rem;
+            padding-left: .6rem;
+            background-position: .25rem .34rem;
+        }
+        header span:nth-child(3) {
+            position: absolute;
+            right: .2rem;
+        }
+
         
+        .main {
+
+        }
+        .main .listContent {
+            height: 1.3rem;  
+            border-bottom: 1px solid #E0E0E0;
+            background-color: #fff;
+            padding:  0 .3rem; 
+            margin-top: .2rem;
+            position: relative;
+        }
+
+        /* 左边提现 */
+        .main .listContent .jl_left {
+            font-size: .28rem;
+            line-height: 1.3rem;   
+        }
+
+        /* 右边钱数 */
+        .main .listContent .jl_right {
+            font-size: .34rem;
+            text-align: right;  
+            height: 1.16rem;    
+            padding-top: .2rem;    
+            box-sizing: border-box;
+            color: #0abb07;
+            position: absolute;
+            right: .3rem;
+            top: 0;
+        }
+        .main .listContent .jl_right p {
+            margin-bottom: .1rem;
+        }
+        .main .listContent .bearFruit {
+            font-size: .24rem;
+            margin-top: .15rem; 
+        }
+
+        .img {
+             width: .92rem;
+            height: .92rem;
+            /*vertical-align:middle;*/
+            margin-top: .19rem;
+        }
+        .title {
+            padding-top: .25rem;
+            padding-left: .2rem;
+            height: 1rem;
+            overflow: hidden;
+            font-size: 0rem;
+            /*width: 5rem;*/
+        }
+        .title span {
+            border: 1px solid #0076ff;
+            border-radius: .05rem;
+            color: #0076ff;
+            padding: 0 0.05rem;
+            font-size: .18rem;
+        }
+        .title h3 {
+            margin-bottom: .05rem;
+            margin-left: .1rem;
+            line-height: .3rem;
+            width: 3.5rem;
+            height: .4rem;
+            font-size: .32rem;
+            font-weight: 600;
+            white-space:nowrap;
+            text-overflow:ellipsis;
+            overflow: hidden;
+        }
+        .title p {
+            /*margin-top: .1rem;*/
+            font-size: .24rem;
+            float: left;
+            line-height: .4rem;
+            height: .5rem;
+            width: 3.5rem;
+            white-space:nowrap;
+            text-overflow:ellipsis;
+            overflow: hidden;
+        }
+        .money {
+
+        }
+        .nav {
+            border-bottom: .01rem solid #E6E6E4;
+            height: .8rem;
+            text-align: center;
+            line-height: .8rem;
+            font-size: 0;
+            background-color: #fff;
+            position: relative;
+        }
+        .nav span {
+            border-right: 1px solid #E6E6E4;
+            height: .8rem;
+            font-size: .28rem;
+            float: left;
+            box-sizing: border-box;
+        }
+        .nav span:last-child {
+            border: 0;
+        }
+        .nav .head {
+            width: 1.96rem;
+
+        }
+        .nav .search {
+            width: .8rem;
+            background: url(../image/icon_search.png)no-repeat;
+            background-position: center center;
+            -webkit-background-size: .35rem .35rem;
+            background-size: .35rem .35rem;
+        }
+        .nav .search:last-child {
+            background: url(../image/icon_supply/icon_sx.png)no-repeat;
+            background-position: center center;
+            -webkit-background-size: .35rem .35rem;
+            background-size: .35rem .35rem;
+        }
+        .act{
+            color: #4162ff;
+        }
+        .indexbar {
+            background: url('../image/tabLine.png') no-repeat center bottom;
+            background-size: 63px auto;
+            color: #0099ff;
+            width: 25%;
+            left: .85rem;
+            bottom: 0;
+            position: absolute;
+            height: 2px;
+        }
     </style>
 </head>
 <body>
-    <button onclick="qb()">通讯录</button>
-    <script type="text/javascript" src="../script/api.js"></script>
-    <script type="text/javascript" src="../script/common.js"></script>
-    <script type="text/javascript">
-    	apiready = function(){
-    	    moduleInit()
-    	}
-        function txl() {
-            // var contacts = api.require('contacts');
-            contacts.select(function(ret, err) {
-                 alert(JSON.stringify(ret));
-               
-            });
-        }
-        function qb() {
-            contacts.queryByPage({
-                // count: 20,
-                pageIndex: 0
-            }, function(ret, err) {
-                 alert(JSON.stringify(ret));
-                 
-                 getTxl(ret);
-            });
-        }
-    	    
-        function getTxl (content) {
-            alert("调用提交函数成功")
-            api.ajax({
-                url: apiSite + '/api/contact/sync',
-                method: 'post',
-                headers: apiHeader,
-                data: {
-                    values: { 
-                        token: api.pageParam.userToken || $api.getStorage('userToken'),
-                        contact_json: content
-                    }
-                }
-            }, function(ret, err) {
-                 alert('正确信息：'+JSON.stringify(ret));
-                 alert('错误信息：'+JSON.stringify(err));
-                if (ret) {
-                    alert(JSON.stringify(ret))
-                } else {
-                    alert(JSON.stringify(err))
-                }
-            });
-        }
-    </script>
+     
+    <div class="main">  
+    <div class="nav">
+        <span class="search"></span>
+        <span class="head act" onclick="switchApr(0)">供</span>
+        <span class="head" onclick="switchApr(1)">求</span>
+        <span class="head" onclick="switchApr(2)">圈</span>
+        <div class="indexbar" id="indexbar"></div>
+        <span class="search" onclick="openSlid()"></span>
+    </div>
+   
+        
+    </div>
 </body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+
+      
+        // var navH = $api.offset($api.dom('.head')).h;
+        var navH = $api.offset($api.dom('.head')).h;
+        var frameH = navH + api.pageParam.headerH;
+        var footerH = api.pageParam.footerH;
+
+        openAprGroup(frameH,api.winHeight - frameH - footerH);
+
+        // 切换回供求页面打开frame组
+        api.addEventListener({
+            name: 'openSupplyPublishr'
+        }, function(ret, err) {
+            openAprGroup(frameH,api.winHeight - frameH - footerH);
+        });
+    };
+    function zj() {
+        $api.append($api.dom('ul'), '<li class="listContent"><span class="jl_left fl">提现-<span class="way">微信</span></span><div class="jl_right fr"><p><span>￥</span><span class="money">5</span></p><p class="bearFruit ydz"><span class="time">11月23日</span></p></div></li>')
+    }
+
+
+
+
+    // 打开frame组
+    function openAprGroup (frameH, footerH, condition){
+        api.openFrameGroup({
+            name: 'supply_publish',
+            rect: {
+                 x: 0, 
+                 y: frameH, 
+                 w: 'auto',
+                 h: footerH
+            },
+            scrollEnabled: true,
+            index: 0,
+            frames: [{
+                name: 'publishGroup1', 
+                url: './supply/supply_publish_1.html',
+                pageParam: {
+                    headerH: api.pageParam.headerH
+                }
+            },{
+                name: 'publishGroup2', 
+                url: './supply/supply_publish_2.html',
+                pageParam: {
+                    headerH: api.pageParam.headerH
+                }
+            },{
+                name: 'publishGroup3', 
+                url: './supply/supply_publish_3.html',
+                pageParam: {
+                    headerH: api.pageParam.headerH
+                }
+            }]
+        }, function(ret, err) {
+            if (ret) {
+                switchAprIndex(ret.index)
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+
+    // 显示的页面
+     function switchApr(index){
+            api.setFrameGroupIndex ({
+                name: 'supply_publish',
+                index: index,
+                scroll: true
+            });
+            switchAprIndex(index);
+        }
+
+    // 标题下面竖线
+    function sliderbarCallback(id, num) {
+        var width = parseInt((api.frameWidth - $api.offset($api.dom('.search')).w*2) / 3);
+        var move = num * width;
+
+        $api.css($api.byId(id),
+                "-webkit-transform:translate(" + move + "px,0);-webkit-transition: 300ms;"
+        );
+    }
+     // 切换头部的标题颜色
+    function switchAprIndex(index){
+        sliderbarCallback('indexbar',index)
+        var aprItems = $api.domAll('.head');
+        for (var i = 0; i < aprItems.length; i++) {
+            $api.removeCls(aprItems[i], 'act');
+        }
+        $api.addCls(aprItems[index], 'act');
+    }
+
+    // 打开侧滑
+   
+    function openSlid() {
+        api.openFrame({
+            name: 'SlideFrame',
+            url: './supply/supply_slideFrame.html',
+            rect: {
+                x: 0,
+                y: api.pageParam.headerH,
+                w: api.winWidth,
+                h: api.winHeight
+            },
+            bounces: false
+        });
+    }
+</script>
 </html>
