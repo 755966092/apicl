@@ -112,11 +112,6 @@ var  mainH, _main, scrollH;
     apiready = function(){
 
         moduleInit();
-
-
-
-
-
         targetRongId = api.pageParam.targetRongId
         nickname = api.pageParam.nickname;
          getSideInfo(targetRongId)
@@ -148,57 +143,25 @@ var  mainH, _main, scrollH;
             // 收到消息后, 添加消息内容到页面
            
         });
-         xiala(messageId);
-
+        
         // 最新聊天记录
        api.setFrameAttr({
            softInputMode: 'resize',  
        });
 
-
-        changeHeight();
+        xiala(messageId);
         // 初始化聊天窗口
-        window.setTimeout('chatTools()', 500)
-         
-
+        chatTools();
+       
     };
-    // 监听键盘高度改变事件
-    function changeHeight() {
-        UIChatBox.addEventListener({
-            target: 'inputBar',
-            name: 'move'
-        }, function(ret, err) {
-             pushPageMove(ret.panelHeight, ret.inputBarHeight);
-             window.setTimeout('slideBut()', 300)
-        });
-        UIChatBox.addEventListener({
-            target: 'inputBar',
-            name: 'change'
-        }, function(ret, err) {
-            pushPageMove(ret.panelHeight, ret.inputBarHeight);
-            window.setTimeout('slideBut()', 300)
-        });
-    }
-    // 修改聊天内容高度
-    function pushPageMove (panelHeight, inputBarHeight) {
-         var inputHeight = api.winHeight - (panelHeight + inputBarHeight);
-                setTimeout(function() {
-                    api.setFrameAttr({
-                        name: 'chattContent',
-                        rect: {
-                            x: 0,
-                            y: api.pageParam.headerH,
-                            h: inputHeight
-                        }
-                    });
-                   
-                },10)
-    }
+
     // 聊天界面
-    function chatTools() {
+  function chatTools() {
+        // alert('frame弹出的')
         UIChatBox.open({
             placeholder: '请输入内容',
             maxRows: 6,
+            autoFocus: false,
             emotionPath: 'widget://res/img/emotion',
             texts: {
                 recordBtn: {
@@ -266,28 +229,50 @@ var  mainH, _main, scrollH;
                 }]
             }
         }, function(ret, err) {
+            // UIChatBox.addEventListener({
+            //     target: 'inputBar',
+            //     name: 'move'
+            // }, function(ret, err) {
+            //     alert('弹出键盘'+JSON.stringify(ret));
+            //     // alert('聊天区域高度'+$api.offset($api.dom('.main')).h)
+            //     // alert('win高度'+api.winHeight)
+            //     var hh = api.winHeight - (ret.panelHeight + ret.inputBarHeight)
+            //     // alert(hh)
+            //     if ($api.offset($api.dom('.main')).h > api.winHeight) {
+                     
+            //         setTimeout(function() {
+            //             api.setFrameAttr({
+            //                 name: 'chattContent',
+            //                 rect: {
+            //                     h: hh
+            //                 }
+            //             });
+            //             slideBut()
+            //         },10)
+
+                    
+            //     }
+            // });
             if (ret) {
-                changeHeight();
-            
-                if (ret.eventType == 'send') {
+
+                  if (ret.eventType === 'send') {
                      // msg: 发送的消息
-                    if (ret.msg == '') {
-                        // ios下输入框为空的时候不发送消息
-                    } else {
-                        sendMsg(ret.msg);
-                    }
-                   
+                    sendMsg(ret.msg);
+                    // 发送消息后清空输入框
+                    // UIChatTools.value({
+                    //     msg: ''
+                    // });
                     // 把聊天内容滑动到最下面
-                } 
-                if (ret.eventType === 'clickExtras') {
+                  } 
+                   if (ret.eventType === 'clickExtras') {
                       alert('点击了第'+ret.index+'个附加按钮')
-                }
+                   }
+                   
             } else {
-                alert(JSON.stringify(err))
+                alert(JSON.stringify(err));
             }
         });
-     
-    }
+  }
 
     // 获取聊天对方信息
     function getSideInfo(rongUserId) {
@@ -443,48 +428,48 @@ var  mainH, _main, scrollH;
   * sendMsg(msg)
   * msg: 发送的消息
   */
-    function sendMsg(msg) {
-        var sendMsg;
-        rong.sendTextMessage({
-            conversationType: 'PRIVATE',
-            // 目标rongyun用户名
-            targetId: targetRongId,
-            // targetId: name,
-            text: msg,
-            extra: ''
-        }, function(ret, err) {
+  function sendMsg(msg) {
+    var sendMsg;
+    rong.sendTextMessage({
+        conversationType: 'PRIVATE',
+        // 目标rongyun用户名
+        targetId: targetRongId,
+        // targetId: name,
+        text: msg,
+        extra: ''
+    }, function(ret, err) {
+        
+        if (ret.status == 'prepare') {
+          sendMsg = ret.result.message.content.text;
+          // alert(JSON.stringify(ret));
+        }
+           
+        else if (ret.status == 'success') {
+          
+            api.sendEvent({
+                name: 'sendMsg',
+                extra: {
+                    msg: sendMsg
+                }
+            });
             
-            if (ret.status == 'prepare') {
-              sendMsg = ret.result.message.content.text;
-              // alert(JSON.stringify(ret));
-            }
-               
-            else if (ret.status == 'success') {
-              
-                api.sendEvent({
-                    name: 'sendMsg',
-                    extra: {
-                        msg: sendMsg
-                    }
-                });
-                
-                
-            }
-               
-            else if (ret.status == 'error') {
-                api.alert({
-                    title: 'title',
-                    msg: '第三个message' + err.code,
-                }, function(ret, err) {
-                    if (ret) {
-                        alert(JSON.stringify(ret));
-                    } else {
-                        alert(JSON.stringify(err));
-                    }
-                });
-            }
-                
-        });
-    }
+            
+        }
+           
+        else if (ret.status == 'error') {
+            api.alert({
+                title: 'title',
+                msg: '第三个message' + err.code,
+            }, function(ret, err) {
+                if (ret) {
+                    alert(JSON.stringify(ret));
+                } else {
+                    alert(JSON.stringify(err));
+                }
+            });
+        }
+            
+    });
+  }
 </script>
 </html>
