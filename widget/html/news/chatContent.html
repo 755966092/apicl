@@ -251,28 +251,24 @@ var  mainH, _main, scrollH;
                         target: 'inputBar',
                         name: 'move'
                     }, function(ret, err) {
-                        if (ret) {
-                            alert('弹出键盘'+JSON.stringify(ret));
-                            // alert('聊天区域高度'+$api.offset($api.dom('.main')).h)
-                            // alert('win高度'+api.winHeight)
-                            var hh = api.winHeight - (ret.panelHeight + ret.inputBarHeight)
-                            // alert(hh)
-                            if ($api.offset($api.dom('.main')).h > api.winHeight) {
-                                 
-                                setTimeout(function() {
-                                    api.setFrameAttr({
-                                        name: 'chattContent',
-                                        rect: {
-                                            h: hh
-                                        }
-                                    });
-                                    slideBut()
-                                },10)
+                        alert('弹出键盘'+JSON.stringify(ret));
+                        // alert('聊天区域高度'+$api.offset($api.dom('.main')).h)
+                        // alert('win高度'+api.winHeight)
+                        var hh = api.winHeight - (ret.panelHeight + ret.inputBarHeight)
+                        // alert(hh)
+                        if ($api.offset($api.dom('.main')).h > api.winHeight) {
+                             
+                            setTimeout(function() {
+                                api.setFrameAttr({
+                                    name: 'chattContent',
+                                    rect: {
+                                        h: hh
+                                    }
+                                });
+                                slideBut()
+                            },10)
 
-                                
-                            }
-                        } else {
-                            alert(JSON.stringify(err));
+                            
                         }
                     });
             } else {
