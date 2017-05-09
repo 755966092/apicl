@@ -172,7 +172,7 @@
         <ul class="resultList">  </ul>
         <script type="text/x-dot-template" id="listT">
             {{ for (var i = 0; i < it.length; i++) { }} 
-                <li class="listContent clearfix" onclick="info()">
+                <li class="listContent clearfix" onclick="info(this)">
                         <div class="title clearfix fl">
                             <img class="img fl" src="{{=it[i].head_img_url}}">
                             <div class="title_name fl">
@@ -354,7 +354,17 @@
         })
     }
 
-
+    // 进入详情
+    function info(ele) {
+        api.openWin({
+            name: 'supply_info',
+            url: './supply_info.html',
+            pageParam: {
+                name: 'value'
+            }
+        });
+        
+    }
 
 </script>
 </html>
