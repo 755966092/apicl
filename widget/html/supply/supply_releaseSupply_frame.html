@@ -1,3 +1,7 @@
+
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -65,19 +69,9 @@
             line-height: 1rem;
             padding-left: .35rem;
         }
-         .classify ul li {
-            /*background-color: #fff;*/
-            font-size: .24rem;
-            height: .8rem;
-            line-height: .8rem; 
-            width: 100%;
-            padding: 0 .3rem 0 .8rem;
-            background: #fff url(../../image/icon_my/icon_fb.png)no-repeat;
-            -webkit-background-size: .44rem .44rem;
-            background-size: .44rem .44rem;
-            background-position: .3rem center;
-            box-sizing: border-box;
-        }
+
+
+
         .classify {
             background-color: #EDECF3;
             font-size: 0;
@@ -90,9 +84,10 @@
             line-height: .8rem; 
             width: 100%;
             padding: 0 .3rem 0 .8rem;
-           /* background: #fff url(../../image/icon_my/icon_fb.png)no-repeat;
+            background: #fff url(../../image/icon_my/icon_fb.png)no-repeat;
+            -webkit-background-size: .44rem .44rem;
             background-size: .44rem .44rem;
-            background-position: .3rem center;*/
+            background-position: .3rem center;
             box-sizing: border-box;
         }
         
@@ -102,6 +97,7 @@
             display: inline-block;
             height: .8rem;
             background: url(../../image/icon_zk.png)no-repeat;
+            -webkit-background-size: .15rem .25rem;
             background-size: .15rem .25rem;
             background-position: right center;
             float: right;
@@ -136,12 +132,70 @@
             line-height: .83rem;
             margin-top: 1rem;
         }
+
+
+        ul li:nth-child(1) {
+                background: #fff url(../../image/icon_supply/icon_00.png)no-repeat;
+                background-size: .28rem .34rem;
+                background-position: .3rem center;
+            }
+            ul li:nth-child(2) {
+                background: #fff url(../../image/icon_supply/icon_01.png)no-repeat;
+                background-size: .34rem .34rem;
+                background-position: .3rem center;
+            }
+            ul li:nth-child(3) {
+                background: #fff url(../../image/icon_supply/icon_11.png)no-repeat;
+                background-size: .31rem .31rem;
+                background-position: .3rem center;
+                display: none;
+            }
+            ul li:nth-child(4) {
+                background: #fff url(../../image/icon_supply/icon_02.png)no-repeat;
+                background-size: .32rem .34rem;
+                background-position: .3rem center;
+            }
+             ul li:nth-child(5) {
+                background: #fff url(../../image/icon_supply/icon_03.png)no-repeat;
+                background-size: .34rem .29rem;
+                background-position: .3rem center;
+            }
+            ul li:nth-child(6) {
+                background: #fff url(../../image/icon_supply/icon_04.png)no-repeat;
+                background-size: .32rem .34rem;
+                background-position: .3rem center;
+            }
+            ul li:nth-child(7) {
+                background: #fff url(../../image/icon_supply/icon_05.png)no-repeat;
+                background-size: .3rem .34rem;
+                background-position: .3rem center;
+            }
+            ul li:nth-child(8) {
+                background: #fff url(../../image/icon_supply/icon_08.png)no-repeat;
+                background-size: .34rem .34rem;
+                background-position: .3rem center;
+            }
+            ul li:nth-child(9) {
+                background: #fff url(../../image/icon_supply/icon_09.png)no-repeat;
+                background-size: .34rem .34rem;
+                background-position: .3rem center;
+            }
+            ul li:nth-child(10) {
+                background: #fff url(../../image/icon_supply/icon_06.png)no-repeat;
+                background-size: .33rem .34rem;
+                background-position: .3rem center;
+            }
+            ul li:nth-child(11) {
+                background: #fff url(../../image/icon_supply/icon_07.png)no-repeat;
+                background-size: .33rem .34rem;
+                background-position: .3rem center;
+        }
     </style>
 </head>
 <body>
     <div class="contentText clearfix">
         <div class="title">
-            <span class="smallTitle">#我需要#</span>
+            <span class="smallTitle">#我提供#</span>
             <input type="text" placeholder="输入您发布的标题" name="">
         </div>
         <textarea placeholder="描述一下您发布的内容" rows="5"></textarea>
@@ -155,18 +209,58 @@
                 添加图片
             </div>
         </div>
-        <p class="position">北京 北京 海淀区</p>
+        <p class="position" onclick="getPos(this)">北京 北京 海淀区</p>
     </div>
     <div class="classify clearfix">
         <ul>
-            <li class="mt20"><span>截至时间</span><span class="spanno2">选填</span></li>
-            <li ><span>类型</span><span class="spanno2"></span></li>
-            <li ><span>类别</span><span class="spanno2"></span></li>
-            <li class="mb20"><span>分类</span><span class="spanno2"></span></li>
-            <li ><span>赏金</span><input type="text" name=""placeholder="选填"></li>
-            <li class="mb20"><span>形式</span><span class="spanno2">选填</span></li>
-            <li ><span>提醒谁看</span><span class="spanno2"></span></li>
-            <li class="mb20"><span>定向投递</span><span class="spanno2"></span></li>
+            <li class="mt20">
+                <span>截至时间</span>
+                <span class="spanno2">选填</span>
+            </li>
+
+            <li onclick="selectType(this)" data-val="_type">
+                <span>类型</span>
+                <span class="spanno2 type1"></span>
+            </li>
+            <li id="companyName">
+                <span>公司</span>
+                <span class="spanno2"></span>
+            </li>
+            <li >
+                <span>类别</span>
+                <span class="spanno2"></span>
+            </li>
+            <li class="mb20">
+                <span>分类</span>
+                <span class="spanno2"></span>
+            </li>
+
+
+            <li onclick="abc()">
+                <span>赏金</span>
+                <input type="text" name="" placeholder="选填">
+            </li>
+            <li >
+                <span>形式</span>
+                <span class="spanno2">选填</span>
+            </li>
+            <li >
+                <span>单位</span>
+                <input type="text" name="" placeholder="选填">
+            </li>
+            <li class="mb20">
+                <span>适用范围</span>
+                <input type="text" name="" placeholder="选填">
+            </li>
+
+            <li >
+                <span>提醒谁看</span>
+                <span class="spanno2"></span>
+            </li>
+            <li class="mb20">
+                <span>定向投递</span>
+                <span class="spanno2"></span>
+            </li>
         </ul>        
     </div>
     <div class="btn">发布</div>
@@ -174,27 +268,95 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
+
     apiready = function(){
+        moduleInit();
         
+       api.addEventListener({
+           name: 'selectType'
+       }, function(ret, err) {
+           if (ret) {
+            $api.text($api.dom('.type1'), ret.value.selDate);
+            if (ret.value.selDate == '公司') {
+                $api.css($api.byId('companyName'), 'display: block');
+            } else {
+                $api.css($api.byId('companyName'), 'display: none');
+            }
+           } else {
+               alert(JSON.stringify(err));
+           }
+       });
+     
     };
 
-    // 初始化界面
-    (function () {
-       var liArr = $api.domAll('.classify li');
-       for (var i = 0; i < liArr.length; i++) {
-            if (i==0) {
-                $api.css(liArr[i], ' background: #fff url(../../image/icon_supply/icon_0'+ (i) +'.png)no-repeat;background-size: .28rem .34rem;background-position: .3rem center;');
-            } else if (i==2 || i==4) {
-                $api.css(liArr[i], ' background: #fff url(../../image/icon_supply/icon_0'+ (i) +'.png)no-repeat;background-size: .32rem .34rem;background-position: .3rem center;');
-            } else if (i == 3){
-                $api.css(liArr[i], ' background: #fff url(../../image/icon_supply/icon_0'+ (i) +'.png)no-repeat;background-size: .34rem .29rem;background-position: .3rem center;');
-            } else if (i==5) {
-                $api.css(liArr[i], ' background: #fff url(../../image/icon_supply/icon_0'+ (i) +'.png)no-repeat;background-size: .3rem .34rem;background-position: .3rem center;');
+
+    // 选择类型  公司 | 个人
+    function selectType(ele) {
+       
+        var _data = $api.attr(ele, 'data-val');
+        var _dataSource = [];
+        if (_data == '_type') {
+            _dataSource = ['个人','公司'];
+        }
+                
+        var text = $api.text($api.dom('.type1'));
+
+        api.openFrame({
+                name: '_type',
+                url: 'supply_selectType.html',
+                rect: {
+                    x: 0,
+                    y: 0,
+                    w: 'auto',
+                    h: 'auto'
+                },
+                pageParam: {
+                    dataSource: _dataSource,
+                    text: text
+                },
+                bounces: false
+            });
+
+   }
+
+
+   function getPos(ele) {
+        if (api.systemType == 'ios') {
+            bMap.initMapSDK(function(ret) {
+                if (ret.status) {
+                   getLocation();
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            });
+        } else {
+            getLocation();
+        }
+        
+   }
+    function getLocation() {
+        bMap.getLocation({
+            accuracy: '100m',
+            autoStop: true,
+            filter: 1
+        }, function(ret, err) {
+            if (ret.status) {
+                alert(JSON.stringify(ret));
+                getCoords(ret.lon, ret.lat)
             } else {
-                $api.css(liArr[i], ' background: #fff url(../../image/icon_supply/icon_0'+ (i) +'.png)no-repeat;background-size: .34rem .34rem;background-position: .3rem center;');
+                alert(err.code);
             }
-       }
-   })();
-   
+        });
+    }
+    function getCoords(lon,lat) {
+        bMap.getNameFromCoords({
+            lon: lon,
+            lat: lat
+        }, function(ret, err) {
+            if (ret.status) {
+                alert(JSON.stringify(ret));
+            }
+        });
+    }
 </script>
 </html>

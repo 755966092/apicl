@@ -87,6 +87,7 @@ var rong,
     UIChatBox,
     citySelector,
     UIListContacts,
+    bMap,
     contacts;
 
 function moduleInit() {
@@ -102,6 +103,8 @@ function moduleInit() {
     citySelector = api.require('citySelector');
     // 通讯录列表
     UIListContacts = api.require('UIListContacts');
+    // 百度地图
+    bMap = api.require('bMap');
 
 }
 

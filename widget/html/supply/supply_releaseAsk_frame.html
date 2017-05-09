@@ -65,15 +65,7 @@
             line-height: 1rem;
             padding-left: .35rem;
         }
-
-
-
-        .classify {
-            background-color: #EDECF3;
-            font-size: 0;
-            
-        }
-        .classify ul li {
+         .classify ul li {
             /*background-color: #fff;*/
             font-size: .24rem;
             height: .8rem;
@@ -86,6 +78,23 @@
             background-position: .3rem center;
             box-sizing: border-box;
         }
+        .classify {
+            background-color: #EDECF3;
+            font-size: 0;
+            
+        }
+        .classify ul li {
+            /*background-color: #fff;*/
+            font-size: .24rem;
+            height: .8rem;
+            line-height: .8rem; 
+            width: 100%;
+            padding: 0 .3rem 0 .8rem;
+           /* background: #fff url(../../image/icon_my/icon_fb.png)no-repeat;
+            background-size: .44rem .44rem;
+            background-position: .3rem center;*/
+            box-sizing: border-box;
+        }
         
         .spanno2 {
             margin-right: .2rem;
@@ -93,7 +102,6 @@
             display: inline-block;
             height: .8rem;
             background: url(../../image/icon_zk.png)no-repeat;
-            -webkit-background-size: .15rem .25rem;
             background-size: .15rem .25rem;
             background-position: right center;
             float: right;
@@ -133,7 +141,7 @@
 <body>
     <div class="contentText clearfix">
         <div class="title">
-            <span class="smallTitle">#我提供#</span>
+            <span class="smallTitle">#我需要#</span>
             <input type="text" placeholder="输入您发布的标题" name="">
         </div>
         <textarea placeholder="描述一下您发布的内容" rows="5"></textarea>
@@ -156,10 +164,7 @@
             <li ><span>类别</span><span class="spanno2"></span></li>
             <li class="mb20"><span>分类</span><span class="spanno2"></span></li>
             <li ><span>赏金</span><input type="text" name=""placeholder="选填"></li>
-            <li ><span>形式</span><span class="spanno2">选填</span></li>
-            <li ><span>单位</span><input type="text" name=""placeholder="选填"></li>
-            <li class="mb20"><span>适用范围</span><input type="text" name=""placeholder="选填"></li>
-
+            <li class="mb20"><span>形式</span><span class="spanno2">选填</span></li>
             <li ><span>提醒谁看</span><span class="spanno2"></span></li>
             <li class="mb20"><span>定向投递</span><span class="spanno2"></span></li>
         </ul>        
@@ -170,13 +175,11 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
-
-       
-     
+        
     };
-    initLi();
-     // 初始化界面
-    function initLi() {
+
+    // 初始化界面
+    (function () {
        var liArr = $api.domAll('.classify li');
        for (var i = 0; i < liArr.length; i++) {
             if (i==0) {
@@ -187,15 +190,11 @@
                 $api.css(liArr[i], ' background: #fff url(../../image/icon_supply/icon_0'+ (i) +'.png)no-repeat;background-size: .34rem .29rem;background-position: .3rem center;');
             } else if (i==5) {
                 $api.css(liArr[i], ' background: #fff url(../../image/icon_supply/icon_0'+ (i) +'.png)no-repeat;background-size: .3rem .34rem;background-position: .3rem center;');
-            }else if (i==6 || i==7) {
-                $api.css(liArr[i], ' background: #fff url(../../image/icon_supply/icon_0'+ (i+2) +'.png)no-repeat;background-size: .34rem .34rem;background-position: .3rem center;');
-            }else if (i==8 || i==9) {
-                $api.css(liArr[i], ' background: #fff url(../../image/icon_supply/icon_0'+ (i-2) +'.png)no-repeat;background-size: .34rem .34rem;background-position: .3rem center;');
             } else {
                 $api.css(liArr[i], ' background: #fff url(../../image/icon_supply/icon_0'+ (i) +'.png)no-repeat;background-size: .34rem .34rem;background-position: .3rem center;');
             }
        }
-   }
+   })();
    
 </script>
 </html>
