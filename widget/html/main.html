@@ -160,7 +160,7 @@
                     <span id="addFellow" onclick="addFellow()"></span>
                 </li>
                 <li class="border-b">通讯录</li>
-                <li class="border-b">
+                <li class="border-b supply">
                     供求
                     <span onclick="addPublish()"></span>
                 </li>
@@ -213,6 +213,18 @@ apiready = function() {
         api.sendEvent({
             name: 'refurbish'
         });
+    });
+    api.addEventListener({
+        name: 'searchSupply'
+
+    }, function(ret, err) {
+      
+        $api.html($api.dom('.supply'), '找供求<span onclick="addPublish()"></span>');
+    });
+    api.addEventListener({
+        name: 'clearSearchSupply'
+    }, function(ret, err) {
+        $api.html($api.dom('.supply'), '供求<span onclick="addPublish()"></span>');
     });
 
 }

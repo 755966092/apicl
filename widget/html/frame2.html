@@ -167,18 +167,54 @@
             position: absolute;
             height: 2px;
         }
+        .ipt {
+            padding: .15rem .3rem;
+            /*height: .5rem;*/
+            font-size: 0;  
+            display: none; 
+            position: relative;
+        }
+        .ipt input {
+            width: 100%;
+            height: .5rem;
+            font-size: .24rem;
+            box-sizing: border-box;
+            background: #fff url(../image/icon_search.png)no-repeat;
+            -webkit-background-size: .25rem .26rem;
+            background-size: .25rem .26rem;
+            background-position: .1rem center;
+            padding-left: .4rem;
+            outline: none;
+        }
+        .ipt span {
+
+            display: none;
+            height: .5rem;
+            width: .25rem;
+            position: absolute;
+            right: .4rem;
+            top: .16rem;
+            background: url(../image/icon_login/icon-clearText.png)no-repeat;
+            -webkit-background-size: .25rem .25rem;
+            background-size: .25rem .25rem;
+            background-position: 0 center;
+        }
     </style>
 </head>
 <body>
      
     <div class="main">  
     <div class="nav">
-        <span class="search"></span>
+        <span class="search" onclick="searchSupply(this)"></span>
         <span class="head act" onclick="switchApr(0)">供</span>
         <span class="head" onclick="switchApr(1)">求</span>
         <span class="head" onclick="switchApr(2)">圈</span>
         <div class="indexbar" id="indexbar"></div>
         <span class="search" onclick="openSlid()"></span>
+    </div>
+    <div class="ipt">
+         <input type="text" name="" class="inputText" onblur="hideIpt()" onkeyup="showClear(this)">
+         <span class="clearText" onclick="clearText()"></span>
     </div>
    
         
@@ -294,6 +330,41 @@
             },
             bounces: false
         });
+    }
+
+
+    // 打开搜索
+    function searchSupply(ele) {
+        api.sendEvent({
+            name: 'searchSupply'
+        });
+        $api.css($api.closest(ele, '.nav'), 'display: none');
+        $api.css($api.dom('.ipt'), 'display:block');
+
+    }
+
+    // 显示输入框的清除按钮
+    function showClear(ele) {
+        if ($api.val(ele) == '') {
+            $api.css($api.dom('.clearText'), 'display: none');
+        } else {
+            $api.css($api.dom('.clearText'), 'display: inline-block');
+        }
+        
+    }
+    // 清除文字
+    function clearText() {
+        $api.val($api.dom('.inputText'), '');
+        $api.css($api.dom('.clearText'), 'display: none');
+    }
+
+    // 隐藏输入框
+    function hideIpt() {
+        api.sendEvent({
+            name: 'clearSearchSupply'
+        });
+        $api.css($api.dom('.ipt'), 'display:none');
+        $api.css($api.dom('.nav'), 'display: block');
     }
 </script>
 </html>

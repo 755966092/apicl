@@ -36,6 +36,7 @@
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript" src="../../../data/date.js"></script>
 <script type="text/javascript">
 var selDate;
     apiready = function(){
@@ -44,10 +45,11 @@ var selDate;
 
     };
  function dianji() {
+        var spanH = $api.offset($api.dom('span')).h;
         UISelector.open({
             rect: {
                 x: 0,
-                y: api.frameHeight / 2 + 110,
+                y: api.frameHeight  - 150 - spanH,
                 // y: api.winHeight / 2 + 170,
                 // w: api.frameWidth - 60,
                 h: 150
@@ -72,7 +74,7 @@ var selDate;
             bounce: false,
             fixedOn: api.frameName,
             fixed: false,
-            data: 'widget://data/date.json'
+            data: srDate
         }, function(ret, err) {
             if (ret) {
                 selDate = ret.selects[0].content + '-' + ret.selects[1].content + '-' + 
@@ -81,15 +83,18 @@ var selDate;
                 alert(JSON.stringify(err));
             }
         });
+        
    }  
   function enter () {
-    api.closeFrame();
+    alert(selDate)
+    
     api.sendEvent({
         name: 'xiugaisr',
         extra: {
             selDate: selDate
         }
     });
+    api.closeFrame();
   }
   
 </script>

@@ -6,11 +6,14 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
     <style type="text/css">
-        body,html {
+        html {
             text-align: center;
             background-color: rgba(0,0,0,0.3);
             height: 100%;
 
+        }
+        body {
+            background-color: #f00;
         }
         span {
             font-size: .36rem;
@@ -45,13 +48,13 @@
         dianji();
     };
     function dianji() {
+        var spanH = $api.offset($api.dom('span')).h;
         var UISelector = api.require('UISelector');
 
         UISelector.open({
             rect: {
                 x: 0,
-                y: api.frameHeight / 2 + 110,
-               
+                y: api.frameHeight  - 150 - spanH,
                 h: 150
             },
             styles: {
@@ -84,13 +87,14 @@
         });
    }   
   function enter () {
-    api.closeFrame();
+    alert('发送成功' + selDate)
     api.sendEvent({
         name: 'xiugaijx',
         extra: {
             selDate: selDate
         }
     });
+    api.closeFrame();
   }
   
 </script>

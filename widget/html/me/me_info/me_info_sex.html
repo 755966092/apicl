@@ -50,11 +50,11 @@ var selDate;
     }
  function dianji() {
         var UISelector = api.require('UISelector');
-
+        var spanH = $api.offset($api.dom('span')).h;
         UISelector.open({
             rect: {
                 x: 0,
-                y: api.frameHeight / 2 + 110,
+                y: api.frameHeight  - 150 - spanH,y: api.frameHeight / 2 + 110,
                
                 h: 150
             },
@@ -78,11 +78,7 @@ var selDate;
             bounce: false,
             fixedOn: api.frameName,
             fixed: false,
-            data: [{
-                title: '男',
-            }, {
-                title: '女',
-            }]
+            data: ['男','女']
         }, function(ret, err) {
             if (ret) {
                 // alert(JSON.stringify(ret));
@@ -94,13 +90,14 @@ var selDate;
         });
    }  
   function enter () {
-    api.closeFrame();
+    
     api.sendEvent({
         name: 'xiugaisex',
         extra: {
             selDate: selDate
         }
     });
+    api.closeFrame();
   }
   
 </script>
