@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/flex.css"/>
+   <style type="text/css">
+        html,body {
+            background-color: #F0F0F6;
+        }
+       .main {
+
+       }
+        .search {
+            height: .5rem;
+            line-height: .5rem;
+            background-color: #fff;
+            margin: .2rem 0;
+            text-align: center;
+            font-size: 0;
+        }
+        .search .searchIcon {
+            display: inline-block;
+            width: .26rem;
+            height: .5rem;
+            background: url(../../image/icon_search.png)no-repeat;
+            -webkit-background-size: .25rem .26rem;
+            background-size: .25rem .26rem;
+            background-position: 0 center;
+            vertical-align: top;
+        }
+        .search .searchText {
+            font-size: .24rem;
+        }
+
+        
+        .list {
+            background-color: #fff;
+        }
+        .list li {
+            font-size: 0;
+            height: 1rem;
+            box-sizing: border-box;
+            padding: 0 .3rem 0 .3rem;
+            overflow: hidden;
+            border-bottom: 1px solid #f7f7f7;
+
+            display: -webkit-box; /* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
+            display: -moz-box; /* 老版本语法: Firefox (buggy) */
+            display: -ms-flexbox; /* 混合版本语法: IE 10 */
+            display: -webkit-flex; /* 新版本语法: Chrome 21+ */
+            display: flex; /* 新版本语法: Opera 12.1, Firefox 22+ */
+
+            -webkit-box-align: center;
+            -moz-align-items: center;
+            -webkit-align-items: center;
+            align-items: center;
+        }
+        .list li img {
+            margin-right: .1rem;
+            margin-left: .1rem;
+            width: .64rem;
+            height: .64rem;
+        }
+        .list li .title {
+            width: 5rem;
+        }
+        .list li .title .name {
+            font-size: .28rem;
+            white-space:nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .list li .title .position {
+            font-size: .24rem;
+            white-space:nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+        }
+        .sel {
+            display: inline-block;
+            width: .44rem;
+            height: .44rem;
+            background: url(../../image/icon_member/icon_cz01.png)no-repeat;
+            -webkit-background-size: .44rem .44rem;
+            background-size: .44rem .44rem;
+            background-position: 0 center;
+        }
+        .pitchOn {
+            background: url(../../image/icon_member/icon_cz02.png)no-repeat;
+            -webkit-background-size: .44rem .44rem;
+            background-size: .44rem .44rem;
+            background-position: 0 center;
+        }
+        .slidePage {
+            /*width: .3rem;*/
+
+            position: fixed;
+            right: .1rem;
+            top: 2rem;
+            height: 100%;
+            font-size: .24rem;
+        }
+        .slidePage a{
+            display: block;
+        }
+   </style>
+</head>
+<body>
+    <div class="main">
+        <div class="search">
+            <span class="searchIcon"></span>
+            <span class="searchText">搜索</span>
+        </div>
+       <!--  <ul class="list clearfix">
+            <li onclick="selPerson(this)" data-val='no1'>
+                <span class="sel"></span>
+                <img src="../../image/tx_3.jpg">
+                <div class="title">
+                    <h3 class="name">Name1</h3>
+                    <p class="position">第一学科技公司 董事长</p>
+                </div>
+            </li>
+        </ul> -->
+        <ul class=" list resultList"></ul>
+        <script type="text/x-dot-template" id="listT">
+        {{ for (var i = 0; i < it.length; i++) { }} 
+            {{? it[i].initial != it[i-1].initial}}
+                <p>A</p>
+            {{? }}
+            <li onclick="selPerson(this)" data-val='no1'>
+                <span class="sel"></span>
+                <img src="{{=it[i].headUrl}}">
+                <div class="title">
+                    <h3 class="name">{{=it[i].name}}</h3>
+                    <p class="position">{{=it[i].position}}</p>
+                </div>
+            </li>
+        {{ }; }}
+        </script>
+    </div>
+    <div class="slidePage">
+        <a href="#">a</a>
+        <a href="#">b</a>
+        <a href="#">c</a>
+        <a href="#">d</a>
+        <a href="#">e</a>
+        <a href="#">a</a>
+        <a href="#">a</a>
+        <a href="#">f</a>
+        <a href="#">a</a>
+        <a href="#">a</a>
+        <a href="#">a</a>
+        <a href="#">a</a>
+        <a href="#">a</a>
+        <a href="#">a</a>
+        <a href="#">a</a>
+        <a href="#">a</a>
+        <a href="#">a</a>
+        <a href="#">a</a>
+        <a href="#">a</a>
+        <a href="#">a</a>
+        <a href="#">a</a>
+        <a href="#">a</a>
+        <a href="#">a</a>
+        <a href="#">a</a>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript">
+    var data = [
+        {
+            initial: 'a',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            initial: 'e',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            initial: 'f',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            initial: 'b',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+         {
+            initial: 'a',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            initial: 'e',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            initial: 'f',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            initial: 'b',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+         {
+            initial: 'a',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            initial: 'e',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            initial: 'f',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            initial: 'b',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+         {
+            initial: 'a',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            initial: 'e',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            initial: 'f',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            initial: 'b',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+        {
+            initial: 'c',
+            name: 'name3',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_5.jpg'
+        }
+    ]
+    console.log(data)
+    for (var i = 0; i < data.length; i++) {
+        for (var j = 0; j < data.length; j++) {
+            if (data[i].initial > data[j].initial) {
+                var temp = data[i];
+                data[i] = data[j];
+                data[j] = temp;
+            }
+        }
+    }
+    console.log(data)
+    getData(data)
+    apiready = function(){
+        api.addEventListener({
+            name: 'remindWho'
+        }, function(ret, err) {
+            if (ret) {
+                var pitchOn = $api.domAll('.pitchOn'),
+                    pitchOnArr = [];
+                for (var i = 0; i < pitchOn.length; i++) {
+                    pitchOnArr.push($api.attr($api.closest(pitchOn[i], 'li'), 'data-val'))
+                }
+                api.closeWin();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    };
+
+    // 选中好友
+    function selPerson(ele) {
+        var sel = ele.getElementsByClassName('sel')[0];
+        if ($api.hasCls(sel, 'pitchOn')) {
+            $api.removeCls(sel, 'pitchOn');
+        } else {
+            $api.addCls(sel, 'pitchOn');
+        }
+    }
+
+
+     // doT模版获取数据
+    function getData(data) {
+        var listTText = $api.byId('listT').text;
+        var fnListT = doT.template(listTText);
+        var html = fnListT(data);
+        var list = $api.dom('.resultList');
+        // 替换resultList所有内容
+        $api.html(list, html);
+        // alert('getData:' + JSON.stringify(data))
+    }
+</script>
+</html>

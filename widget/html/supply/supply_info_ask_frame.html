@@ -74,7 +74,7 @@
 
         }
         .productInfo {
-
+            text-align: center;
             font-size: 0;
             padding:  .05rem 0;
             border-bottom: 1px solid #EAEAEC;
@@ -86,11 +86,12 @@
          .productInfo span:last-child {
             text-align: right;
         }
-        .productInfo span {
+        .productInfo>span {
             width: 33%;
             font-size: .24rem;
             text-align: center;
         }
+        
         .classify {
             font-size: .34rem;
             text-align: center;
@@ -188,6 +189,10 @@
         }
         .no4 .item {
             padding-top: .23rem;
+            border-bottom: 1px solid #EFEFF1;
+        }
+        .no4 .item p {
+            border: 0;
         }
         .no4 .item .itemTitle img{
             height: .76rem;
@@ -226,6 +231,7 @@
             font-size: 0;  
             background-color: #fff; 
          }
+
          .no5 .content span {
             width: 50%; 
             text-align: center; 
@@ -294,12 +300,24 @@
         .borderBottom {
             border-bottom: 1px solid #f00;
         }
+        .no1 span {
+            width: .58rem;  
+            height: .58rem; 
+            border-radius: 50%;
+            background: rgba(0,0,0,0.2) url(../../image/icon_supply/icon_return.png)no-repeat;
+            -webkit-background-size: .58rem .58rem;
+             background-size: .58rem .58rem; 
+            position: fixed;    
+            top: .5rem; 
+            left: .3rem;    
+        }
     </style>
 </head>
 <body>
     <div class="main clearfix">
         <div class="no1">
             <img src="../../image/tx_3.jpg">
+            <span id="cloaswin" onclick="api.closeWin()"></span>
         </div>
         <div class="no2 clearfix">
             <div class="title clearfix">
@@ -319,9 +337,9 @@
                 <p class="time">2017-04-09</p>
             </div>
             <div class="productInfo">
-                <span>线上</span>
+                <span class="fl">线上</span>
                 <span>已售:10</span>
-                <span>北京</span>
+                <span class="fr">北京</span>
             </div>
             <p class="classify">分类：设计</p>
 
@@ -339,13 +357,13 @@
                     <p>上海百度悠闲公司 董事长</p>
                 </div>
             </div>
-            <p class="issuer">公司主页</p>
+            <!-- <p class="issuer">公司主页</p>
              <div class="choose">
                 <img src="../../image/tx_4.jpg">
                 <div class="fl company">
                     <p>上海百度悠闲公司 董事长</p>
                 </div>
-            </div>
+            </div> -->
         </div>
         <div class="no4">
             <p class="title">
@@ -378,11 +396,11 @@
                 <i></i>
                 <span>详情</span>
             </p>
-            <div class="content">   
-                    <span onclick="datum(0,this)">
+            <div class="content clearfix">   
+                    <span class="fl" onclick="datum(0,this)">
                         <span class=" no5Title borderBottom">详情</span>
                     </span>
-                    <span onclick="datum(1,this)">
+                    <span class="fl" onclick="datum(1,this)">
                         <span class="no5Title">留言</span>
                     </span>
             </div>
@@ -400,7 +418,7 @@
     <footer>    
             <span><i></i>聊天</span>
             <span><i></i>收藏</span>
-            <span>立即下单</span>
+            <span onclick="immediateOrder()">立即下单</span>
     </footer>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -425,6 +443,40 @@
              $api.addCls($api.first(ele, 'span'), 'borderBottom');
         }
     }
-   
+    
+    var a = 1;
+    $api.addEvt($api.dom('.main'), 'touchmove', function(event) {
+        if (window.scrollY > 300) {
+            a -= 0.1;
+            $api.css($api.byId('cloaswin'), 'opacity:'+ a +';');
+            if (a<0) {
+                a = 0;
+            }
+        } else {
+            a += 0.1;
+            $api.css($api.byId('cloaswin'), 'opacity:'+ a +';');
+            if (a>1) {
+                a = 1;
+            }
+        }
+    });
+    $api.addEvt($api.dom('.main'), 'touchend', function(event) {
+        if (window.scrollY > 300) {
+            // $api.css($api.dom('#cloaswin'), 'display:none');
+            $api.css($api.byId('cloaswin'), 'opacity:0;');
+        } else {
+            $api.css($api.byId('cloaswin'), 'opacity:1;');
+        }
+    });
+
+    function immediateOrder() {
+        api.openWin({
+            name: 'supply_info_immediate_order_2',
+            url: './supply_info_immediate_order_2.html',
+            pageParam: {
+                name: 'value'
+            }
+        });
+    }
 </script>
 </html>

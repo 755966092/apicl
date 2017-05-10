@@ -11,7 +11,7 @@
         }
         header {
             /*opacity: 0;*/
-            background-color: rgba(0,0,0,0);
+            background-color: #3A393E;
             height: 1rem;
             color: #fff;
             line-height: 1rem;
@@ -34,6 +34,7 @@
         header span:nth-child(3) {
             position: absolute;
             right: .2rem;
+            color: #08BB08;
         }
         
         
@@ -45,8 +46,8 @@
 <body>
      <header >
         <span onclick="api.closeWin()">返回</span>
-        <!-- <span>我发布的</span> -->
-        <!-- <span onclick="openPhoto()">相册</span> -->
+        <span>提醒谁看</span>
+        <span onclick="enter()">确定</span>
     </header>
     
 </body>
@@ -57,11 +58,11 @@
         fnInit();
 
         api.openFrame({
-            name: 'supply_info_frame',
-            url: './supply_info_ask_frame.html',
+            name: 'supply_info_ask_remindWho_frame',
+            url: './supply_info_ask_remindWho_frame.html',
             rect: {
                 x: 0,
-                y: 0,
+                y: headerH,
                 w: 'auto',
                 h: 'auto'
             },
@@ -71,7 +72,12 @@
             bounces: false
         });
     };
-    
+    function enter() {
+        api.sendEvent({
+            name: 'remindWho'
+        });
+        alert(1)
+    }
 
    
 </script>

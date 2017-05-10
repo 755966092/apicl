@@ -10,8 +10,6 @@
             background-color: #F8F8F8;
         }
        
-
-       
         .main .listContent {
             width: 100%;
             box-sizing: border-box;
@@ -172,7 +170,7 @@
         <ul class="resultList">  </ul>
         <script type="text/x-dot-template" id="listT">
             {{ for (var i = 0; i < it.length; i++) { }} 
-                <li class="listContent clearfix" onclick="info(this)">
+                <li class="listContent clearfix" data-company="{{=it[i].company_name}}" onclick="info(this)">
                         <div class="title clearfix fl">
                             <img class="img fl" src="{{=it[i].head_img_url}}">
                             <div class="title_name fl">
@@ -222,6 +220,7 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 
 <script type="text/javascript">
+    
     apiready = function(){
         // 请求数据
         requireData();
@@ -338,7 +337,8 @@
                 for (var i = 0; i < ret.data.list.length; i++) {
                     // 解析图片json
                     ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
-                    // ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
+
+                    // flag = ret.data.list[i].company_name == null ? 0 : 1;
                     // 处理时间
                     // 1. 如果是今天， 显示时间
                     // 2. 如果是昨天显示昨天，
@@ -353,14 +353,20 @@
             }
         })
     }
-
+    
     // 进入详情
     function info(ele) {
+        var flag = 0;
+        var compaby_name = $api.attr(ele, 'data-company')
+        if (compaby_name != 'null') {
+            flag = 1;
+        } 
         api.openWin({
             name: 'supply_info',
             url: './supply_info.html',
             pageParam: {
-                name: 'value'
+                flag: flag,
+                compaby_name: compaby_name
             }
         });
         

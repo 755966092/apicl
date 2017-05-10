@@ -39,17 +39,18 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
-var selDate;
+var selDate,defaultIndex=[];
     apiready = function(){
-       dianji();
+       moduleInit();
        
-
+       defaultIndex[0] = api.pageParam.dataSource.indexOf(api.pageParam.defaultVal);
+       openSelector();
     };
     function close() {
         api.closeFrame();
     }
- function dianji() {
-        var UISelector = api.require('UISelector');
+ function openSelector() {
+        // var UISelector = api.require('UISelector');
         var spanH = $api.offset($api.dom('span')).h;
         UISelector.open({
             rect: {
@@ -74,15 +75,13 @@ var selDate;
                 }
             },
             rows: 3,
-            indexs: [3, 4, 5],
+            indexs: defaultIndex,
             bounce: false,
             fixedOn: api.frameName,
             fixed: false,
             data: api.pageParam.dataSource
         }, function(ret, err) {
             if (ret) {
-                
-               
                 selDate = ret.selects[0].content;
             } else {
                 alert(JSON.stringify(err));
@@ -91,21 +90,46 @@ var selDate;
         
    }  
   function enter () {
-    if (selDate==undefined) {
-         api.sendEvent({
-            name: 'selectType',
+    var flag = api.pageParam.flag;
+    if (flag == 0) {
+        if (selDate==undefined) {
+            api.sendEvent({
+                name: 'selectType',
+                extra: {
+                    selDate: '公司'
+                }
+            });
+        } else {
+            api.sendEvent({
+                name: 'selectType',
+                extra: {
+                    selDate: selDate
+                }
+            });
+        }
+    } else if(flag == 1) {
+        api.sendEvent({
+            name: '_genre',
             extra: {
-                selDate: '公司'
+               selDate: selDate
             }
         });
-    } else {
-         api.sendEvent({
-        name: 'selectType',
-        extra: {
-            selDate: selDate
-        }
-    });
+    } else if(flag == 2) {
+        api.sendEvent({
+            name: '_format',
+            extra: {
+               selDate: selDate
+            }
+        });
+    } else if(flag == 3) {
+        api.sendEvent({
+            name: '_classify',
+            extra: {
+               selDate: selDate
+            }
+        });
     }
+   
    
     api.closeFrame();
   }
