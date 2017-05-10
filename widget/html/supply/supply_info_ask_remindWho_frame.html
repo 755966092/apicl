@@ -17,7 +17,7 @@
             height: .5rem;
             line-height: .5rem;
             background-color: #fff;
-            margin: .2rem 0;
+            margin: .2rem 0 0 0;
             text-align: center;
             font-size: 0;
         }
@@ -39,7 +39,7 @@
         .list {
             background-color: #fff;
         }
-        .list li {
+        .list .item {
             font-size: 0;
             height: 1rem;
             box-sizing: border-box;
@@ -58,22 +58,22 @@
             -webkit-align-items: center;
             align-items: center;
         }
-        .list li img {
+        .list .item img {
             margin-right: .1rem;
             margin-left: .1rem;
             width: .64rem;
             height: .64rem;
         }
-        .list li .title {
+        .list .item .title {
             width: 5rem;
         }
-        .list li .title .name {
+        .list .item .title .name {
             font-size: .28rem;
             white-space:nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        .list li .title .position {
+        .list .item .title .position {
             font-size: .24rem;
             white-space:nowrap;
             overflow: hidden;
@@ -106,6 +106,12 @@
         }
         .slidePage a{
             display: block;
+            text-align: center;
+        }
+        .groupTitle {
+            font-size: .24rem;
+            padding: .1rem .3rem;
+            background-color: #F0F0F6;
         }
    </style>
 </head>
@@ -125,48 +131,52 @@
                 </div>
             </li>
         </ul> -->
-        <ul class=" list resultList"></ul>
+        <div class=" list resultList"></div>
         <script type="text/x-dot-template" id="listT">
         {{ for (var i = 0; i < it.length; i++) { }} 
-            {{? it[i].initial != it[i-1].initial}}
-                <p>A</p>
+            {{?it[i].flag}}
+                <p id="{{=it[i].flag}}" class="groupTitle">{{=it[i].flag}}</p>
             {{? }}
-            <li onclick="selPerson(this)" data-val='no1'>
+            <div class="item" onclick="selPerson(this)" data-val='no1'>
+               
                 <span class="sel"></span>
                 <img src="{{=it[i].headUrl}}">
                 <div class="title">
                     <h3 class="name">{{=it[i].name}}</h3>
                     <p class="position">{{=it[i].position}}</p>
                 </div>
-            </li>
+            </div>
         {{ }; }}
         </script>
     </div>
     <div class="slidePage">
-        <a href="#">a</a>
-        <a href="#">b</a>
-        <a href="#">c</a>
-        <a href="#">d</a>
-        <a href="#">e</a>
-        <a href="#">a</a>
-        <a href="#">a</a>
-        <a href="#">f</a>
-        <a href="#">a</a>
-        <a href="#">a</a>
-        <a href="#">a</a>
-        <a href="#">a</a>
-        <a href="#">a</a>
-        <a href="#">a</a>
-        <a href="#">a</a>
-        <a href="#">a</a>
-        <a href="#">a</a>
-        <a href="#">a</a>
-        <a href="#">a</a>
-        <a href="#">a</a>
-        <a href="#">a</a>
-        <a href="#">a</a>
-        <a href="#">a</a>
-        <a href="#">a</a>
+        <a href="#A">A</a>
+        <a href="#B">B</a>
+        <a href="#C">C</a>
+        <a href="#D">D</a>
+        <a href="#E">E</a>
+        <a href="#F">F</a>
+        <a href="#G">G</a>
+        <a href="#H">H</a>
+        <a href="#I">I</a>
+        <a href="#J">J</a>
+        <a href="#K">K</a>
+        <a href="#L">L</a>
+        <a href="#M">M</a>
+        <a href="#N">N</a>
+        <a href="#O">O</a>
+        <a href="#P">P</a>
+        <a href="#Q">Q</a>
+        <a href="#R">R</a>
+        <a href="#S">S</a>
+        <a href="#T">T</a>
+        <a href="#U">U</a>
+        <a href="#V">V</a>
+        <a href="#W">W</a>
+        <a href="#X">X</a>
+        <a href="#Y">Y</a>
+        <a href="#Z">Z</a>
+        <a href="#">#</a>
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -175,119 +185,130 @@
 <script type="text/javascript">
     var data = [
         {
-            initial: 'a',
+            initial: 'A',
             name: 'name1',
             position: '第一学科技公司',
             headUrl: '../../image/tx_1.jpg'
         },
         {
-            initial: 'e',
+            initial: 'E',
             name: 'name5',
             position: '第一学科技公司',
             headUrl: '../../image/tx_3.jpg'
         },
         {
-            initial: 'f',
+            initial: 'F',
             name: 'name6',
             position: '第一学科技公司',
             headUrl: '../../image/tx_2.jpg'
         },
         {
-            initial: 'b',
+            initial: 'B',
             name: 'name2',
             position: '第一学科技公司',
             headUrl: '../../image/tx_4.jpg'
         },
          {
-            initial: 'a',
+            initial: 'A',
             name: 'name1',
             position: '第一学科技公司',
             headUrl: '../../image/tx_1.jpg'
         },
         {
-            initial: 'e',
+            initial: 'D',
             name: 'name5',
             position: '第一学科技公司',
             headUrl: '../../image/tx_3.jpg'
         },
         {
-            initial: 'f',
+            initial: 'W',
             name: 'name6',
             position: '第一学科技公司',
             headUrl: '../../image/tx_2.jpg'
         },
         {
-            initial: 'b',
+            initial: 'Q',
             name: 'name2',
             position: '第一学科技公司',
             headUrl: '../../image/tx_4.jpg'
         },
          {
-            initial: 'a',
+            initial: 'R',
             name: 'name1',
             position: '第一学科技公司',
             headUrl: '../../image/tx_1.jpg'
         },
         {
-            initial: 'e',
+            initial: 'X',
             name: 'name5',
             position: '第一学科技公司',
             headUrl: '../../image/tx_3.jpg'
         },
         {
-            initial: 'f',
+            initial: 'T',
             name: 'name6',
             position: '第一学科技公司',
             headUrl: '../../image/tx_2.jpg'
         },
         {
-            initial: 'b',
+            initial: 'Y',
             name: 'name2',
             position: '第一学科技公司',
             headUrl: '../../image/tx_4.jpg'
         },
          {
-            initial: 'a',
+            initial: 'U',
             name: 'name1',
             position: '第一学科技公司',
             headUrl: '../../image/tx_1.jpg'
         },
         {
-            initial: 'e',
+            initial: 'I',
             name: 'name5',
             position: '第一学科技公司',
             headUrl: '../../image/tx_3.jpg'
         },
         {
-            initial: 'f',
+            initial: 'O',
             name: 'name6',
             position: '第一学科技公司',
             headUrl: '../../image/tx_2.jpg'
         },
         {
-            initial: 'b',
+            initial: 'P',
             name: 'name2',
             position: '第一学科技公司',
             headUrl: '../../image/tx_4.jpg'
         },
         {
-            initial: 'c',
+            initial: 'Z',
             name: 'name3',
             position: '第一学科技公司',
             headUrl: '../../image/tx_5.jpg'
         }
     ]
-    console.log(data)
-    for (var i = 0; i < data.length; i++) {
+
+    // 数据排序
+     for (var i = 0; i < data.length; i++) {
         for (var j = 0; j < data.length; j++) {
-            if (data[i].initial > data[j].initial) {
+            if (data[i].initial < data[j].initial) {
                 var temp = data[i];
                 data[i] = data[j];
                 data[j] = temp;
             }
         }
-    }
-    console.log(data)
+     }
+     for (var i = 0; i < data.length; i++) {
+         data[0].flag = data[0].initial
+        if (i>0) {
+            if (data[i].initial !== data[i-1].initial) {
+                data[i].flag = data[i].initial
+            }
+        }
+     
+     }
+
+     
     getData(data)
     apiready = function(){
         api.addEventListener({
