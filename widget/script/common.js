@@ -196,7 +196,7 @@ function changeTime(time) {
 
 
 // 汉字转拼音
-var PinYin = {
+var phoneticTranscriptionObj = {
     "a": "\u554a\u963f\u9515",
     "ai": "\u57c3\u6328\u54ce\u5509\u54c0\u7691\u764c\u853c\u77ee\u827e\u788d\u7231\u9698\u8bf6\u6371\u55f3\u55cc\u5ad2\u7477\u66a7\u7839\u953f\u972d",
     "an": "\u978d\u6c28\u5b89\u4ffa\u6309\u6697\u5cb8\u80fa\u6848\u8c19\u57ef\u63de\u72b4\u5eb5\u6849\u94f5\u9e4c\u9878\u9eef",
@@ -601,33 +601,31 @@ var PinYin = {
 };
 
 // 汉字转拼音
-function ConvertPinyin(l1) {
-    alert(01)
-    var l2 = l1.length;
-    var I1 = "";
+function ConvertPinyin(ChineseCharacter) {
+    var ChineseCharacterLength = ChineseCharacter.length;
+    var phoneticTranscription = "";
     var reg = new RegExp('[a-zA-Z0-9\- ]');
-    for (var i = 0; i < l2; i++) {
-        var val = l1.substr(i, 1);
-        var name = arraySearch(val, PinYin);
+    for (var i = 0; i < ChineseCharacterLength; i++) {
+        var val = ChineseCharacter.substr(i, 1);
+        var name = arraySearch(val, phoneticTranscriptionObj);
         if (reg.test(val)) {
-            I1 += val;
+            phoneticTranscription += val;
         } else if (name !== false) {
-            I1 += name;
+            phoneticTranscription += name;
         }
 
     }
-    I1 = I1.replace(/ /g, '-');
-    while (I1.indexOf('--') > 0) {
-        I1 = I1.replace('--', '-');
+    phoneticTranscription = phoneticTranscription.replace(/ /g, '-');
+    while (phoneticTranscription.indexOf('--') > 0) {
+        phoneticTranscription = phoneticTranscription.replace('--', '-');
     }
-    return I1;
+    return phoneticTranscription;
 }
 
 // 在对象中搜索
-function arraySearch(l1, l2) {
-    alert(02)
-    for (var name in PinYin) {
-        if (PinYin[name].indexOf(l1) != -1) {
+function arraySearch(litter, phoneticTranscriptionObj) {
+    for (var name in phoneticTranscriptionObj) {
+        if (phoneticTranscriptionObj[name].indexOf(litter) != -1) {
             return ucfirst(name);
             break;
         }
@@ -636,11 +634,10 @@ function arraySearch(l1, l2) {
 }
 
 // 首字母大写
-function ucfirst(l1) {
-    alert(03)
-    if (l1.length > 0) {
-        var first = l1.substr(0, 1).toUpperCase();
-        var spare = l1.substr(1, l1.length);
+function ucfirst(initial) {
+    if (initial.length > 0) {
+        var first = initial.substr(0, 1).toUpperCase();
+        var spare = initial.substr(1, initial.length);
         return first + spare;
         // return first;
     }
