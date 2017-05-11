@@ -42,8 +42,15 @@
 var selDate,defaultIndex=[];
     apiready = function(){
        moduleInit();
+       var indexs = api.pageParam.dataSource.indexOf(api.pageParam.defaultVal);
+       if (indexs == -1) {
+            defaultIndex.push(0);
+       } else {
+           defaultIndex.push(indexs)
+       }
        
-       defaultIndex[0] = api.pageParam.dataSource.indexOf(api.pageParam.defaultVal);
+       
+       console.log(defaultIndex)
        openSelector();
     };
     function close() {
@@ -56,7 +63,6 @@ var selDate,defaultIndex=[];
             rect: {
                 x: 0,
                 y: api.frameHeight  - 150 - spanH,
-               
                 h: 150
             },
             styles: {
@@ -82,7 +88,16 @@ var selDate,defaultIndex=[];
             data: api.pageParam.dataSource
         }, function(ret, err) {
             if (ret) {
-                selDate = ret.selects[0].content;
+                // ios系统下 进入选择器页面后, 如果不滑动选择器,会照成无返回值, 
+                // 如果用户打开选择器没有滑动就返回初始的值
+               if (ret.eventType == 'show') {
+                     UISelector.set({
+                        indexs: defaultIndex
+                    });
+                    selDate = api.pageParam.dataSource[defaultIndex[0]]
+               } else {
+                    selDate = ret.selects[0].content;
+               }
             } else {
                 alert(JSON.stringify(err));
             }
