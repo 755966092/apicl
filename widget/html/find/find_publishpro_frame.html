@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        body,html{
+            background-color: #EDECF3;
+        }
+       .search {
+            height: .5rem;
+            line-height: .5rem;
+            background-color: #fff;
+            margin: .2rem .3rem;
+            text-align: center;
+            font-size: 0;
+            color: #96969B;
+
+        }
+        .search .searchIcon {
+            display: inline-block;
+            width: .26rem;
+            height: .5rem;
+            background: url(../../image/icon_search.png)no-repeat;
+            -webkit-background-size: .25rem .26rem;
+            background-size: .25rem .26rem;
+            background-position: 0 center;
+            vertical-align: top;
+        }
+        .search .searchText {
+            font-size: .24rem;
+        }
+
+        .list {
+            box-sizing: border-box;
+            width: 100%;
+            font-size: 0;   
+            background-color: #fff;
+            padding: .2rem .3rem; 
+            border-bottom: 1px solid #e7e7e7;    
+            margin-bottom: .2rem;
+
+            /* 定义flex */
+            display: -webkit-box; 
+            display: flex; 
+                
+             /*侧轴对齐方式 */
+            -webkit-box-align: start ;
+            align-items: flex-start;
+        
+             /*主轴对齐方式 */
+            
+                
+             /*主轴方向 */
+            -webkit-box-direction: normal;
+            flex-direction: row;
+            
+        }
+        .list .img img {
+            width: .78rem;
+            height: .78rem;  
+            
+        }
+        .list .text {
+            /* 子元素是否伸缩 */
+            -webkit-box-flex: 1.0;
+            flex-grow: 1;
+            box-sizing: border-box;
+            margin-left: .2rem;
+            
+        }
+        .list .text .title {
+            
+
+            box-sizing: border-box;
+            position: relative;
+            
+            display: -webkit-box; 
+            display: flex; 
+            box-sizing: border-box;
+            /*主轴方向 */
+            -webkit-box-direction: normal;
+            flex-direction: row;
+
+            -webkit-box-align: center ;
+            -webkit-align-items: center;
+            align-items: center;
+        }
+        .list .text .title h3 {
+            font-size: .34rem;
+            color: #333;
+            margin-bottom: .05rem;
+            line-height: .24rem;
+            margin-right: .1rem;
+        }
+        .list .text .title .state {
+            font-size: .24rem;
+            color: #0ABB07;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+        .list .text .title .titleLable {
+            width: .63rem;
+            height: .28rem;
+            background: url(../../image/icon_find/icon_label.png)no-repeat;
+            background-size: .63rem .28rem;
+        }
+        .list .text .stateContent {
+            font-size: .24rem;
+            color: #333;
+            margin-top: .2rem;
+        }
+        .list .text .stateTime {
+            margin-top: .1rem;
+        }
+        .list .text .stateTime .timeInfo {
+            font-size: .2rem;
+            color: #999;
+        }
+        .list .text .stateTime .discussIcon {
+            width: .34rem;
+            height: .32rem;
+            background:url(../../image/icon_supply/icon_comment.png)no-repeat;
+            background-size: .34rem .26rem;
+            background-position: 0 center;
+            float: right;
+        }
+        .list .text .discussInfo {
+            background-color: #F3F3F5;
+            padding: .1rem;
+            position: relative;
+            margin-top: .15rem;
+        }
+        .list .text .discussInfo::before {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            /*border-top: .5rem solid transparent;*/
+            border-left: .1rem solid transparent;
+            border-bottom: .15rem solid #F3F3F5;
+            border-right: .1rem solid transparent;
+            position: absolute;
+            top: -.13rem;
+            left: .2rem;
+        }
+        .list .text .discussInfo .discussName {
+            font-size: .24rem;
+            color: #5D7098;
+        }
+        .list .text .discussInfo .discussContent {
+            font-size: .24rem;
+           
+        }
+        .list .text .imgContent {
+            margin-top: .1rem;
+            max-height: 6rem;
+            overflow: hidden;
+        }
+        .list .text .imgContent img {
+            margin-right: .06rem;
+            margin-top: .06rem;
+            
+        }
+    </style>
+</head>
+<body>
+    <div class="search" onclick="open1()">
+        <span class="searchIcon"></span>
+        <span class="searchText" >搜索</span>
+    </div>
+    <div class="main clearfix">
+        <!--<div class="list">
+            <div class="img">
+                <img src="../../image/tx_2.jpg" alt="">
+            </div>
+            <div class="text">
+                <div class="title">
+                    <h3>陈胜东</h3>
+                    <span class="titleLable"></span>
+                    <span class="state">即将开始</span>
+                </div>
+                <p class="stateContent">美国平面设计大神安德鲁将在北京举办演讲</p>
+                <div class="imgContent">
+                    <img class="imgCon" src="../../image/tx_3.jpg" alt="">
+                    <img class="imgCon" src="../../image/tx_3.jpg" alt="">
+                    <img class="imgCon" src="../../image/tx_3.jpg" alt="">
+                </div>
+                <div class="stateTime">
+                    <span class="timeInfo">2天前</span>
+                    <span class="discussIcon"></span>
+                </div>
+                <div class="discussInfo claerfix">
+                    <div>
+                        <span class="discussName">李志超:</span>
+                        <span class="discussContent">是招生办的教师吗？</span>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+       
+         <div class="resultList"></div>
+         <script type="text/x-dot-template" id="listT">
+            {{ for (var i = 0; i < it.length; i++) { }} 
+                <div class="list">
+                    <div class="img">
+                        <img src="{{=it[i].headUrl}}" alt="">
+                    </div>
+                    <div class="text">
+                        <div class="title">
+                            <h3>{{=it[i].name}}</h3>
+                            <span class="titleLable"></span>
+                            <span class="state">{{=it[i].state}}</span>
+                        </div>
+                        <p class="stateContent">{{=it[i].textContent}}</p>
+                        <div class="imgContent">
+                            {{ for (var j = 0; j < it[i].imgContent.length; j++) { }} 
+                                <img class="imgCon" src="{{=it[i].imgContent[j]}}" alt="">
+                            {{ }; }}
+                        </div>
+                        <div class="stateTime">
+                            <span class="timeInfo">2天前</span>
+                            <span class="discussIcon"></span>
+                        </div>
+                        <div class="discussInfo claerfix">
+                            <div>
+                                <span class="discussName">李志超:</span>
+                                <span class="discussContent">是招生办的教师吗？</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{ }; }}
+            </script>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript">
+    var data = [
+        {
+            name: '陈胜东',
+            textContent: '美国平面设计大神安德鲁将在北京举办演讲',
+            imgContent: [
+               
+                '../../image/tx_3.jpg'
+            ],
+            headUrl: '../../image/tx_1.jpg',
+            state: '即将开始',
+        },
+        {
+            name: '陈胜东',
+            textContent: '美国平面设计大神安德鲁将在北京举办演讲',
+            imgContent: [
+                '../../image/tx_2.jpg',
+                '../../image/tx_3.jpg',
+                '../../image/tx_1.jpg',
+                '../../image/tx_4.jpg',
+            ],
+            headUrl: '../../image/tx_3.jpg',
+            state: '即将开始',
+        },
+        {
+            name: '陈胜东',
+            textContent: '美国平面设计大神安德鲁将在北京举办演讲',
+            imgContent: [],
+            headUrl: '../../image/tx_3.jpg',
+            state: '即将开始',
+        },
+        {
+            name: '陈胜东',
+            textContent: '美国平面设计大神安德鲁将在北京举办演讲',
+            imgContent: [
+                '../../image/tx_2.jpg',
+                '../../image/tx_3.jpg',
+            ],
+            headUrl: '../../image/tx_4.jpg',
+            state: '即将开始',
+        },
+        {
+            name: '陈胜东',
+            textContent: '美国平面设计大神安德鲁将在北京举办演讲',
+            imgContent: [
+                '../../image/tx_2.jpg',
+                '../../image/tx_3.jpg',
+                '../../image/tx_2.jpg',
+                '../../image/tx_3.jpg',
+                '../../image/tx_2.jpg',
+                '../../image/tx_3.jpg',
+                '../../image/tx_2.jpg',
+                '../../image/tx_3.jpg'
+            ],
+            headUrl: '../../image/tx_1.jpg',
+            state: '即将开始',
+        },
+    ]
+    apiready = function(){
+        
+    };
+   
+    
+    getData(data);
+    selfAdaption()
+      // 根据上传图片的多少自适应图片的大小
+    function selfAdaption() {
+        
+        var listContent = $api.domAll('.list');
+
+        for (var i = 0; i < listContent.length; i++) {
+            var imgArr = listContent[i].getElementsByClassName('imgCon');
+            console.log(imgArr)
+            var imgCount = imgArr.length
+            if (imgCount == 1) {
+                    $api.css(listContent[i].getElementsByClassName('imgCon')[i], 'width:2.86rem;margin:0');
+
+            }  else if (imgCount == 4 || imgCount == 2) {
+                 for (var j = 0; j < imgCount; j++) {
+                    $api.css(listContent[i].getElementsByClassName('imgCon')[j], 'height:2.9rem;height:2.9rem');
+                }
+            } else {
+                for (var j = 0; j < imgCount; j++) {
+                    $api.css(listContent[i].getElementsByClassName('imgCon')[j], 'height:1.91rem');
+                }
+            }
+        }
+    }
+     // doT模版获取数据
+    function getData(data) {
+        
+        var listTText = $api.byId('listT').text;
+        
+        var fnListT = doT.template(listTText);
+        
+        var html = fnListT(data);
+        
+        var list = $api.dom('.resultList');
+        
+        // 替换resultList所有内容
+        $api.html(list, html);
+        // alert('getData:' + JSON.stringify(data))
+    }
+    
+</script>
+</html>
