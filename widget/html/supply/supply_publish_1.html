@@ -85,12 +85,13 @@
             color: #555;
          }
         .content {
-            padding-top: 1.2rem;
+            /*padding-top: 1.2rem;*/
             padding-left: 1rem;
         }
         .content  img {
             height: 2.86rem;
-            margin: .1rem .1rem;
+            margin-top: .1rem;
+            margin-right: .1rem;
         }
         .content  img:nth-child(4),
         .content  img:nth-child(7),
@@ -182,11 +183,7 @@
                                     <span></span>
                                     {{=it[i].nickname}}
                                 </p>
-                                {{? it[i].company_name !== null}}
-                                    <p class="company">{{=it[i].company_name}}</p>
-                                {??}}
-                                    <p></p>
-                                {{?}}
+                                <p class="company">{{=it[i].company_name}}</p>
                             </div>
                             <p class=   "fr price">1000元/单</p>
                         </div>
@@ -239,19 +236,11 @@
             console.log(imgArr)
             var imgCount = imgArr.length
             if (imgCount == 1) {
-                    $api.css(listContent[i].getElementsByClassName('content_img')[i], 'width:2.86rem;margin:0');
+                    $api.css(listContent[i].getElementsByClassName('content_img')[i], 'width:2.86rem;height:3.26rem;margin:0');
 
-            } else if (imgCount == 2) {
+            }  else {
                 for (var j = 0; j < imgCount; j++) {
-                    $api.css(listContent[i].getElementsByClassName('content_img')[j], 'height:2.7rem');
-                }
-            } else if (imgCount == 3) {
-                 for (var j = 0; j < imgCount; j++) {
-                    $api.css(listContent[i].getElementsByClassName('content_img')[j], 'height:1.7rem');
-                }
-            } else {
-                for (var j = 0; j < imgCount; j++) {
-                    $api.css(listContent[i].getElementsByClassName('content_img')[j], 'height:1.7rem');
+                    $api.css(listContent[i].getElementsByClassName('content_img')[j], 'height:1.56rem');
                 }
             }
         }
@@ -338,7 +327,7 @@
                     // 解析图片json
                     ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
 
-                    // flag = ret.data.list[i].company_name == null ? 0 : 1;
+                   ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
                     // 处理时间
                     // 1. 如果是今天， 显示时间
                     // 2. 如果是昨天显示昨天，
