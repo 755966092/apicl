@@ -8,44 +8,33 @@
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <style>
-        .ipt {
-            width: 7.5rem;
-            height: .8rem;
-            box-sizing: border-box;
-            padding: .15rem .2rem;
-            background-color: #EFEFF4;
-            text-align: center;
-            position: relative;
+        html,body {
+                background: #EFEFF4;
         }
-        
-        input {
-            height: .48rem;
-            width: 100%;
+        .search {
+            height: .5rem;
+            line-height: .5rem;
             background-color: #fff;
-            border-radius: 2px;
-            font-size: .2rem;
+            margin: .2rem .3rem;
             text-align: center;
+            font-size: 0;
+            color: #96969B;
+            display: none;
+
         }
-        
-        input::placeholder {
-            color: #999;
-            font-size: 0.3rem;
-        }
-        
-        .ipt span {
+        .search .searchIcon {
             display: inline-block;
-            width: .5rem;
-            height: .26rem;
+            width: .26rem;
+            height: .5rem;
             background: url(../image/icon_search.png)no-repeat;
             -webkit-background-size: .25rem .26rem;
             background-size: .25rem .26rem;
-            position: absolute;
-            top: .25rem;
-            left: 3.2rem;
-            padding-left: .3rem;
-            color: #8E8E93;
+            background-position: 0 center;
+            vertical-align: top;
         }
-        
+        .search .searchText {
+            font-size: .24rem;
+        }
         .news {
             display: flex;
             flex-flow: column nowrap;
@@ -112,9 +101,9 @@
 
 <body onclick="closeNews()">
     <div id="news_wrap" class=" clearfix" onclick="closeNews()">
-        <div class="ipt">
-            <input type="text" onclick="openS()">
-            <span id="search" onclick="openS()">搜索</span>
+         <div class="search" onclick="openS()">
+            <span class="searchIcon"></span>
+            <span class="searchText">搜索</span>
         </div>
         <ul class="resultList"></ul>
         <script type="text/x-dot-template" id="listT">
@@ -165,6 +154,9 @@
             historicalNews();
             // historyNews();
         });
+
+       
+        
     }
     // 监听打开加好友窗口
     function monitorEvent() {
@@ -243,6 +235,28 @@
         });
     }
 
+    (function (){
+       var yStart=0,yEnd=0;
+        window.addEventListener('touchstart', function(event) {
+            a++;
+            event.preventDefault();
+            console.log(a)
+        })
+        window.addEventListener('touchmove', function(event) {
+            event.preventDefault();
+            b++;
+            console.log(b)
+        })
+        window.addEventListener('touchend', function(event) {
+            // event.preventDefault();
+            console.log(3)
+        })
+    })()
+    
+    // 显示搜索页面
+    function showSearch () {
+
+    }
     // 打开搜索窗口
     function openS() {
         api.openWin({
