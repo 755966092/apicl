@@ -9,41 +9,32 @@
         body,html{
             background-color: #EDECF3;
         }
-        header {
-            background-color: #3A393E;
-            height: 1rem;
-           color: #fff;
-            line-height: 1rem;
-            text-align: center;
-            position: relative;
-            font-size: .36rem;
-            position: relative;
-        }
-        header span:nth-child(1) {
-            position: absolute;
-            left: 0;
-            background: url(../../image/icon_fanh.png)no-repeat;
-             background-size: .22rem .37rem;
-            padding-left: .6rem;
-            background-position: .25rem .34rem;
-        }
-
-       
-         
+        header.header span.rightBtn {
+            display: inline-block;
+            width: .44rem;
+            height: .44rem;
+            background: url(../../image/icon_add.png)no-repeat;
+            -webkit-background-size: .44rem .44rem;
+            background-size: .44rem .44rem;
+            background-position: 0 center;
+        }         
     </style>
 </head>
 <body>
-  
+   
     <header  class="header">
         <div class="head">
             <span class="callback" onclick="api.closeWin()">
+                <!--<span class="heaDicon"></span>-->
                 返回
             </span>
             <span class="winTitle">
-                详情
+                UI设计交流
             </span>
+            <span class="rightBtn" onclick="openShadow()"></span> 
         </div>
     </header>
+    
     
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -52,20 +43,33 @@
     apiready = function(){
         fnInit();
         api.openFrame({
-            name: 'find_stateInfo_frame',
-            url: './find_stateInfo_frame.html',
-            bounces: false,
+            name: 'find_dynamicState_frame',
+            url: './find_dynamicState_frame.html',
+            bounces: true,
             rect: {
                 x: 0,
                 y: headerH,
-                w: api.winWidth,
-                h: api.winHeight-headerH
-            },
-            pageParam: {
-                flag: 0
+                w: 'auto',
+                h: 'auto'
             }
         });
-        
     };
+
+    function openShadow() {
+        api.openFrame({
+            name: 'find_publishBombBox',
+            url: './find_publishBombBox.html',
+            bounces: true,
+            rect: {
+                x: 0,
+                y: 0,
+                w: api.winWidth,
+                h: api.winHeight
+            },
+            pageParam: {
+                headerH: headerH
+            }
+        });
+    }
 </script>
 </html>

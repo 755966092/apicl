@@ -4,84 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <link rel="stylesheet" type="text/css" href="./css/api.css">
-    <link rel="stylesheet" type="text/css" href="css/flex.css">
-      <meta http-equiv="refresh" content="0" url="www.baidu.com">
     <!--[if IE]> 
     <![endif]-->
     <title>我在</title>
    <style type="text/css">
-        .no1 {
-         width: 100%;
-           background: #108423;
-        }
-       .aaa {
-        font-size: 20px;
-       }
-       .aaa1 {
-        flex-box: 5;
-       }
+    div {
+        height: 2000px;
+        width: 50px;
+        border: 1px solid #000;
+    }
    </style>
 </head>
 <body>
+<div class="test" onscroll="fn(event)"></div>
 
-   <div class="no1 clearfix" flex="main:justify cross:center " >
-    <div class="aaa" style="background: #fff">看的1</div>
-    <div class="aaa" style="background: #fff">看看2</div>
-    <div class="aaa" style="background: #fff">看看3</div>
-    <div class="aaa aaa1" flex-box="2" style="background: #fff">看看4</div>
-</div>
- <ul class="resultList"> </ul>
-  <script type="text/x-dot-template" id="listT">
-        {{ for (var i = 0; i < it.length; i++) { }} 
-          <li>{{=it[i].title}}</li>
-        {{ }; }}
-  </script>
 </body>
 </html>
-<script type="text/javascript" src="./script/api.js"></script>
-<script type="text/javascript" src="./script/common.js"></script>
+<script src='./script/api.js'></script>
+
 <script type="text/javascript">
-var a = "[\"http://sj.dfcy120.com/upload/ewebeditor/2011/8/1815752735.jpg\",\"http://www.qqjay.com/uploads/allimg/160306/1_0PP4Q19.jpg\"]"
-var b = eval(a);
-console.log(b)
-    apiready = function () {
-      api.ajax({
-        url: apiSite + '/api/supply/index',
-        method: 'post',
-        headers: apiHeader,
-        data: {
-           values: { 
-               token: $api.getStorage('userToken')
-           }
-        }
-    }, function(ret, err) {
-        if(ret) {
-            // for (var i = 0; i < ret.data.list.length; i++) {
-            //     ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
-            // }
-            alert(JSON.stringify(ret.data.list))
-            getData(ret.data.list)
-        } else {
-            alert(JSON.stringify(err))
-        }
-    })
+    function fn(event) {
+        console.log(event);
     }
 
-     // doT模版获取数据
-    function getData(data) {
-        alert(JSON.stringify(data))
-        var listTText = $api.byId('listT').text;
-        alert('2' + JSON.stringify(listTText))
-        var fnListT = doT.template(listTText);
-        alert('3' + JSON.stringify(fnListT))
-        var html = fnListT(data);
-        alert(4)
-        var list = $api.dom('.resultList');
-        alert(JSON.stringify(html))
-        // 替换resultList所有内容
-        $api.html(list, html);
-        // alert('getData:' + JSON.stringify(data))
-    }
+    window.addEventListener("scroll", function(event) {
+        console.log(window.scrollY)
+    });
 </script>
 
 

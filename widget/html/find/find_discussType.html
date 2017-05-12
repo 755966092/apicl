@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        html, body {
+            background-color: rgba(0,0,0,0.3);
+            width: 100%;
+            height: 100%;
+        }
+        .warp {
+            width: 100%;
+            height: 100%;
+           
+           display: -webkit-box; 
+            display: flex; 
+
+            -webkit-box-align: center ;
+            align-items: center;
+
+            -webkit-box-pack: center;
+            justify-content: center;
+        }
+        .main {
+            width: 5.12rem;
+            height: 5.20rem;
+            background-color: #fff;
+            /*padding-top: .4rem;*/
+            box-sizing: border-box;
+            text-align: center;
+
+            position: relative;
+            
+        }
+        .main .discussType {
+            padding:  0 .4rem;
+        }
+        .main .discussType p {
+            
+            font-size: .3rem;
+            line-height: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #F2F2F2;
+
+        }
+        .main .discussType p.sel {  
+            background: url(../../image/icon_my/icon_enter.png)no-repeat;
+            background-size: .44rem .33rem;
+            background-position: right center;
+        }
+        .main p.title {
+            text-align: center;
+            font-size: .34rem;
+            line-height: 1.2rem;
+        }
+        .main p:last-child {
+            border: 0;
+        }
+        .bth {
+            height: .8rem;
+            width: 100%;
+            font-size: 0;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+        }
+       .btn_right {
+            height: .97rem;
+            font-size: .34rem;
+            background-color: #08BB08;
+            color: #fff;
+             width: 100%;
+            line-height: .97rem;
+        }
+        .btn_right {
+            
+        }
+    </style>
+</head>
+<body>
+    <div class="warp" onclick="api.closeFrame()">
+        <div class="main" onclick="event.stopPropagation();">
+            <p class="title">全部评论方式</p>
+           <div class="discussType">
+               <p class="sel" onclick="selType(this,0)">全体可见</p>
+               <p onclick="selType(this,1)">仅好友可见</p>
+               <p onclick="selType(this,2)">匿名评论</p>
+           </div>
+            <div class="bth">
+                <span class="btn_right" onclick="enter()">确定</span>
+            </div>
+        </div>
+        
+    </div>
+    
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+   
+    apiready = function(){
+        
+    };
+    var flag = 0;
+    function selType(ele, n) {
+        flag = n;
+        var eleArr = $api.domAll('.discussType p');
+        for(var i = 0; i< eleArr.length; i++) {
+            $api.removeCls(eleArr[i], 'sel');
+        }
+        $api.addCls(ele, 'sel');
+    }
+    function enter(){
+        alert (flag);
+        api.closeFrame();
+    }
+    
+</script>
+</html>
