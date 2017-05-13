@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
         body,html{
-            background-color: #F8F8F8;
+            background-color: #EFEFF4;
         }
         .main {
             padding: 0 .3rem;
             height: .6rem;
             font-size: 0rem;
             margin-top: .2rem;
+            margin-bottom: .2rem;
             position: relative;
         }
         input {
@@ -50,7 +51,8 @@
             color: #333;
         }
         ul {
-            background-color: #fff;
+            background-color: #F8F8F8;
+            
            
         }
         ul li {
@@ -70,6 +72,16 @@
             color: #8e8e8e;
             margin-top: .2rem;
         }
+        .hisSearIcon {
+            display: inline-block;
+            width: .25rem;
+            height: .8rem;
+            float: right;
+            background: url(../../image/icon_other/icon_delet.png)no-repeat;
+            -webkit-background-size: .25rem .28rem;
+            background-size: .25rem .28rem;
+            background-position: 0 center;
+        }
     </style>
 </head>
 <body>
@@ -85,13 +97,13 @@
     </header>
     <div class="main">  
         <!-- <span class="icon_search"></span> -->
-        <input type="text" name="" id="ipt" onchange="searchFellow(this)" onkeyup="keyUp(this)" placeholder="搜索">
+        <input type="text" onkeypress="searchFellow(this)" name="" id="ipt" onkeyup="keyUp(this)" placeholder="搜索">
         <span class="clearIcon" onclick="clearText()"></span>
     </div>
     <div class="fellow">
         <div class="hisSear">
             <span class="hisSearTitle">历史搜索</span>
-            <span class="hisSearIcon"></span>
+            <span class="hisSearIcon" oncilck="deletHis()"></span>
         </div>
        
         <ul class="resultList"></ul>
@@ -110,12 +122,24 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
+var hisDataArr=[];
     apiready = function(){
         fnInit();
     };
 
+
+    function deletHis() {
+        alert(1);
+         hisDataArr = [];
+         getData(hisDataArr);
+    }
     function clearText() {
         $api.val($api.byId('ipt'), '');
+        $api.css($api.dom('.clearIcon'), 'display:none');
+        api.closeFrame({
+            name: 'fellowSearchFruit'
+        });
+        getData(hisDataArr);
     }
     function keyUp(ele) {
         // alert('keyup')
@@ -130,8 +154,11 @@
             $api.css($api.dom('.clearIcon'), 'display:inline-block');
         }
     }
-    var hisDataArr=[];
+    
+    var a = 1;
     function searchFellow(ele) {
+        a++;
+        console.log(a)
         var val = $api.val(ele);
         hisDataArr.push(val);
         // // 输入框为空的关闭搜索结果页面
