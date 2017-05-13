@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no" />
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style type="text/css">
@@ -67,8 +68,12 @@
 
 <script type="text/javascript">
     apiready = function(){
-        // alert('frame:'+JSON.stringify(api.pageParam.val[0]))
         getData(api.pageParam.val)
+        api.addEventListener({
+            name: 'addf'
+        }, function(ret, err){
+            getData(ret.value.val)
+        });
     };
    
    function openChat(ele) {  
@@ -82,15 +87,15 @@
             }
         });
    }
-    // doT模版获取数据
-    function getData(data) {
-        var listTText = $api.byId('listT').text;
-        var fnListT = doT.template(listTText);
-        var html = fnListT(data);
-        var list = $api.dom('.resultList');
-        // 替换resultList所有内容
-        $api.html(list, html);
-        // alert('getData:' + JSON.stringify(data))
-    }
+    // // doT模版获取数据
+    // function getData(data) {
+    //     var listTText = $api.byId('listT').text;
+    //     var fnListT = doT.template(listTText);
+    //     var html = fnListT(data);
+    //     var list = $api.dom('.resultList');
+    //     // 替换resultList所有内容
+    //     $api.html(list, html);
+    //     // alert('getData:' + JSON.stringify(data))
+    // }
 </script>
 </html>

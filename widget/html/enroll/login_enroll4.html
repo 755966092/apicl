@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no" />
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        header.header {
+            background: transparent;
+        }
+        .main {
+            text-align: center;
+        }
+        .main h3 {
+            font-size: .44rem;
+            line-height: .62rem;
+        }
+        .main .textContent {
+            font-size: .28rem;
+            line-height: .33rem;
+            color: #888;
+            padding: 0 .53rem;
+            text-align: left;
+            margin-top: .68rem;
+        }
+        ul {
+            margin-top: .32rem;
+            list-style: disc;
+            padding: 0 0 0 .8rem;
+        }
+        ul li {
+            list-style: disc;
+            margin-top: .1rem;  
+            font-size: .22rem;
+            line-height: .33rem;
+            color: #b2b2b2;
+            width: 5.94rem;
+            text-align: left;
+        }
+        .btn {
+            width: 6.8rem;
+            height: .86rem;
+            background-color: #1AAD19;
+            font-size: .34rem;
+            line-height: .86rem;
+            color: #fff;
+            text-align: center;
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+        .after {
+            font-size: .28rem;
+            line-height: .4rem;
+            margin-top: .32rem;
+            color: #576B95;
+            text-align: center;
+        }
+        footer {
+            position: fixed;
+            bottom: .4rem;
+            left: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header class="header"></header>
+    <div class="main">
+        <h3>加朋友</h3>
+        <div class="textContent">
+            我在请求上传你的手机通讯录至我在服务器，帮你匹配手机通讯录中已在使用我在的朋友。我们上传通讯录仅用于匹配朋友，不会保存任何资料，亦不会用作它用。
+        </div>
+        <ul>
+            <li>你的通讯录都不会明文发送</li>
+            <li>你的信息仅仅用于查找朋友，所有信息都会被加密并安全存储任何人都无法查看你的通讯录信息</li>
+            <li>你随时可以在“设置-隐私”中修改通讯录相关的隐私设置</li>
+            <li>如果通讯录中联系人的联系方式发生变化，请及时整理通讯录</li>
+        </ul>
+        
+    </div>
+    <footer>
+        <p class="btn" onclick="accessAddressBook()">同意，并进入我在</p>
+        <p class="after" onclick="openMain()">以后再说</p>
+    </footer>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script>
+
+    apiready = function(){
+        moduleInit();
+    }
+
+    // 同步通讯录
+    function accessAddressBook() {
+        contacts.queryByPage({
+            pageIndex: 0
+        }, function(ret, err) {
+            if (ret) {
+                 api.ajax({
+                    url: apiSite + 'api/contact/sync',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                        values: { 
+                            token: $api.getStorage('userToken'),
+                            contact_json:ret
+                        }
+                    }
+                }, function(ret, err) {
+                    openMain();
+                })
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    function openMain() {
+        api.openWin({
+            name: 'main',
+            url: '../main.html',
+            slidBackEnabled: false,
+            pageParam: {
+                userToken: api.pageParam.userToken,
+                rongToken: api.pageParam.rongToken
+            }
+        });
+    }
+</script>
+</html>

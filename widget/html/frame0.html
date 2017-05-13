@@ -131,11 +131,6 @@
     <script type="text/javascript" src="../script/doT.min.js"></script>
     <script type="text/javascript">
     apiready = function() {
-         api.addEventListener({
-            name:'swipedown'
-        }, function(ret, err){        
-        alert('向下轻扫');
-        });
         api.addEventListener({
             name:'appintent'
         },function(ret,err){
@@ -243,18 +238,28 @@
     (function (){
        var yStart=0,yEnd=0;
         window.addEventListener('touchstart', function(event) {
-            a++;
             event.preventDefault();
-            console.log(a)
+            yStart = event.changedTouches[0].clientY
         })
         window.addEventListener('touchmove', function(event) {
             event.preventDefault();
-            b++;
-            console.log(b)
+            yEnd = event.changedTouches[0].clientY;
+            if ((yEnd - yStart) > 100) {
+                $api.css($api.dom('.search'), 'display:block');
+            } 
+            if ((yEnd - yStart) < -100) {
+                $api.css($api.dom('.search'), 'display:none');
+            }
         })
         window.addEventListener('touchend', function(event) {
             // event.preventDefault();
-            console.log(3)
+            yEnd = event.changedTouches[0].clientY;
+            if ((yEnd - yStart) > 100) {
+                $api.css($api.dom('.search'), 'display:block');
+            } 
+            if ((yEnd - yStart) < -100) {
+                $api.css($api.dom('.search'), 'display:none');
+            }
         })
     })()
     

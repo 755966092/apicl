@@ -20,32 +20,60 @@
             outline: none;
             height: .6rem;
             font-size: .24rem;
-            text-align: center;
-            background-color: #fff;
-            width: 85%;
+            width: 100%;
             padding-left: .5rem;
             box-sizing: border-box;
-        }
-
-        .icon_search {
-            display: inline-block;
-            position: absolute;
-            margin-left: .2rem;
-            width: .25rem;
-            height: .6rem;
-            background: url(../../image/icon_search.png)no-repeat;
+            background: #fff url(../../image/icon_search.png)no-repeat;
             background-size: .25rem .25rem;
-            background-position: 0 center;
+            background-position: .2rem center;
         }
-        .clear_search {
+        .clearIcon {
+            width: .13rem;
+            height: .6rem;
+            background: url(../../image/icon_other/icon_clear.png)no-repeat;
+            -webkit-background-size: .13rem .13rem;
+            background-size: .13rem .13rem;
+            background-position: 0 center;
+            position: absolute;
+            right: .5rem;
+            top: 0;
+            display: none;
+        }
+        .hisSear {
+            font-size: 0;
+            height: .74rem;
+            padding: 0 .3rem;
+            background-color: #F8F8F8;
+        }
+        .hisSearTitle {
+            font-size: .28rem;line-height: .74rem;
+            color: #333;
+        }
+        ul {
+            background-color: #fff;
+           
+        }
+        ul li {
+             padding: 0 .3rem;
+            /*border-bottom: 1px solid #C8C8C8;*/
             font-size: .28rem;
-            margin-left: .3rem;            
-            color: #1AAD19;
+            color: #777;
+            line-height: .8rem;
+            box-shadow: 0 1px  #c8c8c8;
+            /*height: .8rem;*/
+        }
+        .textContent {
+            font-size: .24rem;  
+            line-height: .33rem;
+            width: 5.19rem;
+            margin: 0 auto;
+            color: #8e8e8e;
+            margin-top: .2rem;
         }
     </style>
 </head>
 <body>
-     <header  class="header">
+    <header  class="header">
         <div class="head">
             <span class="callback" onclick="api.closeWin()">
                 返回
@@ -56,53 +84,109 @@
         </div>
     </header>
     <div class="main">  
-        <span class="icon_search"></span>
-        <input type="text" name="" onkeyup="searchFellow(this)" placeholder="搜索">
-        <span class="clear_search">取消</span>
+        <!-- <span class="icon_search"></span> -->
+        <input type="text" name="" id="ipt" onchange="searchFellow(this)" onkeyup="keyUp(this)" placeholder="搜索">
+        <span class="clearIcon" onclick="clearText()"></span>
     </div>
     <div class="fellow">
-        
+        <div class="hisSear">
+            <span class="hisSearTitle">历史搜索</span>
+            <span class="hisSearIcon"></span>
+        </div>
+       
+        <ul class="resultList"></ul>
+        <script type="text/x-dot-template" id="listT">
+            {{ for (var i = 0; i < it.length; i++) { }} 
+            <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" onclick="openChat(this)">
+               <li>{{=it[i]}}</li>
+                {{ }; }}
+        </script>
+        <p class="textContent">
+            不管您是想找到曾经的发小或是同桌，还是某个项目的关系人，我们都可以帮助您。在上面的搜索栏输入您想找人的信息，如姓名、公司、行业等，您输入的信息越多，我们找到的信息就会越精准。
+        </p>
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
     apiready = function(){
         fnInit();
     };
+
+    function clearText() {
+        $api.val($api.byId('ipt'), '');
+    }
+    function keyUp(ele) {
+        // alert('keyup')
+        var val = $api.val(ele);
+        if (val == '') {
+            $api.css($api.dom('.clearIcon'), 'display:none');
+            api.closeFrame({
+                name: 'fellowSearchFruit'
+            });
+            getData(hisDataArr);
+        } else {
+            $api.css($api.dom('.clearIcon'), 'display:inline-block');
+        }
+    }
+    var hisDataArr=[];
     function searchFellow(ele) {
         var val = $api.val(ele);
-         api.ajax({
-            url: apiSite + '/api/user/search',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-               values: { 
-                  token: api.pageParam.userToken || $api.getStorage('userToken'),
-                  keyword: val
-               }
-            }
-       }, function(ret, err) {
-            var heig = headerH + $api.offset($api.dom('.main')).h + 20;
-            // alert('search:'+JSON.stringify(ret.data.list))
-            api.openFrame({
-                name: 'fellowSearchFruit',
-                url: './txl_fellowSearchFruit.html',
-                rect: {
-                    x: 0,
-                    y: heig,
-                    w: 'auto',
-                    h: 'auto'
-                },
-                pageParam: {
-                    val: ret.data.list
-                },
-                bounces: false
-            });
-           })
+        hisDataArr.push(val);
+        // // 输入框为空的关闭搜索结果页面
+        // if (val == '') {
+        //     $api.css($api.dom('.clearIcon'), 'display:none');
+        //     api.closeFrame({
+        //         name: 'fellowSearchFruit'
+        //     });
+        //     getData(hisDataArr);
+        // } else {
+            
+             api.ajax({
+                url: apiSite + '/api/user/search',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: { 
+                        token: api.pageParam.userToken || $api.getStorage('userToken'),
+                        keyword: val
+                    }
+                }
+            }, function(ret, err) {
+                var heig = headerH + $api.offset($api.dom('.main')).h + 20;
+                // 打开页面事件只执行一次
+                setTimeout(function(){
+                    api.openFrame({
+                        name: 'fellowSearchFruit',
+                        url: './txl_fellowSearchFruit.html',
+                        rect: {
+                            x: 0,
+                            y: heig,
+                            w: 'auto',
+                            h: 'auto'
+                        },
+                        pageParam: {
+                            val: ret.data.list
+                        },
+                        bounces: false
+                    });
+                },1)
+                // 打开页面后 发送查询事件, 按键每弹起一次发送一次, 把查询结果发送到结果页面
+                api.sendEvent({
+                    name: 'addf',
+                    extra: {val: ret.data.list}
+                });
+            })
+        // }
+        
+           
         // 搜索, 显示搜索界面
         
         
     }
+
+
+    
 </script>
 </html>

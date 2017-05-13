@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no" />
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
@@ -200,6 +201,7 @@
     var tel;
     apiready = function(){
         fnInit();
+        moduleInit();
         tel = api.pageParam.tel
     };
 
@@ -267,21 +269,83 @@
                     $api.setStorage('rongUserId', rongUserId);
                     $api.setStorage('rongToken', rongToken);
                     $api.setStorage('userToken', userToken);
-                    // 
-                    api.openWin({
-                        name: 'main',
-                        url: '../main.html',
-                        slidBackEnabled: false,
-                        pageParam: {
-                            userToken: userToken,
-                            rongToken: rongToken
+                    
+                    api.confirm({
+                        title: '查找你的我在朋友',
+                        msg: '我在将上传手机通讯录至我在服务器以匹配及推荐朋友。（上传通讯录仅用于匹配朋友，不会保存任何资料，亦不会作它用）',
+                        buttons:['不允许', '好']
+                    },function(ret,err){
+                        if(ret.buttonIndex == 1){
+                            api.openWin({
+                                name: 'login_enroll4',
+                                url: './login_enroll4.html',
+                                pageParam: {
+                                    userToken: userToken,
+                                    rongToken: rongToken
+                                }
+                            });
+                        } else {
+                             setTimeout(function(){
+                                 contacts.queryByPage({
+                                    pageIndex: 0
+                                }, function(ret, err) {
+                                    if (ret) {
+                                        api.ajax({
+                                            url: apiSite + 'api/contact/sync',
+                                            method: 'post',
+                                            headers: apiHeader,
+                                            data: {
+                                                values: { 
+                                                    token: userToken,
+                                                    contact_json:ret
+                                                }
+                                            }
+                                        }, function(ret, err) {
+                                            // 同步通讯录成功
+                                        })
+                                    } else {
+                                        alert(JSON.stringify(err));
+                                    }
+                                });
+                             },100)
+                             api.openWin({
+                                name: 'main',
+                                url: '../main.html',
+                                slidBackEnabled: false,
+                                pageParam: {
+                                    userToken: userToken,
+                                    rongToken: rongToken
+                                }
+                             });
                         }
+                        
                     });
-                    rongyun(rongToken);
+                   rongyun(rongToken);
+                    
             });
         }
     }
-
-  
+    function openloginenroll4() {
+         api.openWin({
+            name: 'login_enroll4',
+            url: './login_enroll4.html',
+            slidBackEnabled: false,
+            pageParam: {
+                userToken: userToken,
+                rongToken: rongToken
+            }
+        });
+    }
+    function openMain() {
+        api.openWin({
+            name: 'main',
+            url: '../main.html',
+            slidBackEnabled: false,
+            pageParam: {
+                userToken: userToken,
+                rongToken: rongToken
+            }
+        });
+    }
 </script>
 </html>
