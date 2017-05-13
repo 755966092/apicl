@@ -8,7 +8,7 @@
     <style>
        
         .main h3 {
-            margin: 1.5rem auto .87rem;
+            margin: 1.5rem auto .55rem;
             text-align: center;
             font-size: .44rem;
             color: #000;
@@ -19,7 +19,7 @@
         }
         .area {
             font-size: 0;
-            border-bottom: 1px solid #ddd;
+            border-bottom: .9px solid #ddd;
             padding: .18rem 0;
             height: .78rem;
             width: 100%;
@@ -51,23 +51,31 @@
 
         }
          .tel {
-            height: .8rem;
+            height: .78rem;
             padding: 0;
         }
         .tel .areaTitle {
-            height: .8rem;
+            height: .78rem;
             font-size: .3rem;
-            line-height: .8rem;
+            line-height: .78rem;
             width: 1.5rem;
-            border-right: 1px solid #ddd;
+            border-right: 0.9px solid #ddd;
             margin-right: .2rem;
         }
         .tel input {
-            height: .8rem;
-            line-height: .8rem;
+            height: .42rem;
+            line-height: .42rem;
             width: 4rem;    
             font-size: .3rem;
             outline: none;
+            font-weight: 400;
+            
+        }
+        .tel .wrap {
+            display: -webkit-box; 
+            display: flex; 
+            -webkit-box-align: center ;
+            align-items: center;
         }
         .psd .areaTitle {
             border: 0;
@@ -96,6 +104,7 @@
         }
         .enroll span {
             color: #62759C;
+            font-size: .24rem;
         }
         
     </style>
@@ -114,13 +123,13 @@
             <div class="area tel">
                 <div>
                     <span class="areaTitle">+86</span>
-                    <input type="text" id="txzh" placeholder="请填写手机号码"onkeyup="iptChange()">
+                    <input  onkeyup="iptChange(); this.value=this.value.replace(/\D/g,'');" onafterpaste="this.value=this.value.replace(/\D/g,'')"  type="text" id="txzh" placeholder="请填写手机号码" >
                 </div>
             </div>
             <div class="area tel psd">
-                <div>
+                <div class="wrap">
                     <span class="areaTitle">密码</span>
-                    <input type="text" id="psd"  placeholder="请填写密码">
+                    <input type="password" id="psd"  placeholder="请填写密码">
                 </div>
             </div>
         </div>
@@ -136,6 +145,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     var userToken, rongToken;
+
     apiready = function(){
       
         // 初始化模块
@@ -157,11 +167,15 @@
 
     // 输入帐号登录按钮变色
     function iptChange() {
-        $api.css($api.dom('#login'), 'background: #1AAD19');
-        $api.css($api.dom('#login'), 'border: 1px solid #189C17;');
+        
+       
         if($api.val($api.dom('#txzh')) === '') {
             $api.css($api.dom('#login'), 'background: #A3DEA3;');
             $api.css($api.dom('#login'), 'border: 1px solid #93C893;');
+        } 
+        if ($api.val($api.dom('#txzh')) !== 0) {
+             $api.css($api.dom('#login'), 'background: #1AAD19');
+             $api.css($api.dom('#login'), 'border: 1px solid #189C17;');
         }
     }
     function login() {
