@@ -39,6 +39,7 @@
             padding: .8rem 0 .97rem 0;
             text-align: center;
             font-size: 0;
+            display: none;
         }
         .noContent img {
             width: 5.16rem;
@@ -86,7 +87,7 @@
     <ul class="resultList"></ul>
     <script type="text/x-dot-template" id="listT">
         {{ for (var i = 0; i < it.length; i++) { }} 
-           <li onclick="addFriends(this)" data-nickname = '{{=it[i].nickname}}' data-rongId='{{=it[i].rongcloud_user_id}}'>
+           <li onclick="openChat(this)" data-nickname = '{{=it[i].nickname}}' data-rongId='{{=it[i].rongcloud_user_id}}'>
                 <img src="{{=it[i].head_img_url}}">
                 <div>
                     <h3>{{=it[i].nickname}}</h3>
@@ -112,8 +113,8 @@
    
     function addFriends() {
         api.openWin({
-            name: 'txl_addFriendsInfo',
-            url: './txl_addFriendsInfo.html',
+            name: 'txl_memberInfo_Win',
+            url: './txl_memberInfo_Win.html',
             pageParam: {
                 name: 'value'
             }

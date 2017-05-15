@@ -17,7 +17,7 @@
             background-color: #fff;
             margin: .2rem .3rem;
             text-align: center;
-            font-size: 0.24rem;
+            font-size: 0;
             color: #96969B;
             display: none;
 
@@ -39,57 +39,74 @@
             display: flex;
             flex-flow: column nowrap;
         }
-        ul li {
-            display: -webkit-box; 
-            display: flex; 
-            height: 1.24rem;
-            background-color: #fff;
-            -webkit-box-align:  center;
-            align-items: center;
-            padding: 0 .12rem 0 .18rem;
+        
+        ul {
+            width: 100%;
+            /*padding: 0 .3rem;*/
+            box-sizing: border-box;
         }
-         ul li .headImg {
-            margin-right: .2rem;
+        
+        ul li {
+            background-color: #fff;
+            width: 100%;
+            height: 1.2rem;
+            box-sizing: border-box;
+            padding: .15rem .3rem;
+            /*padding: .15rem 0;*/
+            border-bottom: 1px solid #D6D6D6;
             position: relative;
-         }
-        ul li .headImg .select {
+        }
+        .headImg {
+            position: relative;
+        }
+         ul li:before {
+            content: "";
             display: inline-block;
-            width: .32rem;
-            height: .32rem;
+            width: .1rem;
+            height: .1rem;
+            background-color: #f00;
+            border-radius: .2rem;
+            position: absolute;
+            top: .2rem;
+            right: .4rem;
+         }
+        ul li img {
+            width: .9rem;
+            height: .9rem;
+            margin-right: .2rem;
+        }
+        
+        ul li h3 {
+            margin-top: .1rem;
+            margin-bottom: .05rem;
+            width: 3.5rem;
+            float: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        ul li .time {
+            display: inline-block;
+            margin-top: .12rem;
+        }
+        ul li.select:before {
+            content: "";
+            display: inline-block;
+            width: .15rem;
+            height: .15rem;
             background-color: #f00;
             border-radius: 50%;
             position: absolute;
-            top: -.1rem;
-            right: -.1rem;
-            text-align: center;
-            line-height: .32rem;
-            color: #fff;
+            top: .1rem;
+            left: .8rem;
         }
-        ul li .headImg img {
-            width: .91rem;
-            height: .91rem;
-            border-radius: .06rem;
-        }
-        .contentRight .name{
-             display: -webkit-box; 
-             display: flex; 
-             width: 6.11rem;
-             -webkit-box-pack: justify;
-            justify-content: space-between;
-        }
-        .contentRight .name h3 {
-            font-size: .3rem;
-            line-height: .4rem;
-        }
-        .contentRight .name .time {
-            font-size: .22rem;
-            color: #999;
-        }
-        .contentRight p {
-            font-size: .24rem;
-            color: #999;
-            width: 5.24rem;
+        
+        ul li p {
+            color: #9B9B9B;
+            word-wrap: break-word;
             white-space: nowrap;
+            text-overflow: ellipsis;
+            height: .32rem;
+            width:3.5rem;
             overflow: hidden;
             text-overflow: ellipsis;
         }
@@ -103,43 +120,18 @@
             <span class="searchText">搜索</span>
         </div>
         
-      <!--   <ul class="resultList">
-            <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" ontouchstart=";event.stopPropagation();" onclick="openChat(this)">
-                <div class="headImg ">
-                    <img class="fl" src="../image/tx_4.jpg">
-                </div>
-                <div class="contentRight">
-                    <div class="name">
-                        <h3>{{=it[i].nickname}}</h3>
-                        <span class="time">速度度速度度速度度</span>
-                    </div>
-                    <p>{{=i{{=it[i].latestMessagelatestMessagelatestMessagelatestMessagelatestMessagelatestMessagelatestMessage.text}}</p>
-                </div>
-            </li>
-        </ul> -->
-
-
         <ul class="resultList"></ul>
         <script type="text/x-dot-template" id="listT">
             {{ for (var i = 0; i < it.length; i++) { }} 
                 <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" ontouchstart=";event.stopPropagation();" onclick="openChat(this)">
-                <div class="headImg">
-                     <img class="fl" src="{{=it[i].url}}">
-                     {{?it[i].unreadMessageCount == 0 }}
-                     {{??}}
-                     <span class="select">{{=it[i].unreadMessageCount}}</span>
-                     {{?}}
+                <div class="headImg ">
+                     <img class="fl select" src="{{=it[i].url}}">
                 </div>
-                <div class="contentRight">
-                   <div class="name">
-                        <h3>{{=it[i].nickname}}</h3>
-                        <span class="time">{{=it[i].time.hour}}：{{=it[i].time.minute}}</span>
-                   </div>
-                    <p>{{=it[i].latestMessage.text}}</p>
-                </div>
+                <h3>{{=it[i].nickname}}</h3>
+                <span class="fr time">{{=it[i].time.hour}}：{{=it[i].time.minute}}</span>
+                <p>{{=it[i].latestMessage.text}}</p>
                 </li>
                 {{ }; }}
-                
         </script>
         <!-- <ul>
             <li class="{{=it[i].select}} chatList" data-name="{{=it[i].targetId}}" onclick="openChat(this)">
@@ -207,8 +199,10 @@
             if (ret) {
                 var targetRongIdArr = [];
                 for (var i = 0; i < ret.value.data.length; i++) {
+                    
                     ret.value.data[i].time = changeTime(ret.value.data[i].receivedTime);
                     targetRongIdArr.push(ret.value.data[i].targetId);
+
                 }
                 // 获取聊天对方信息
                 getSideInfo(targetRongIdArr, ret.value.data);
@@ -316,13 +310,6 @@
         // var major_Name = $api.text(ele);
         var nickname = $api.attr(ele, 'data-nickname');
         var targetId = $api.attr(ele, 'data-targetId');
-        setInterval(function() {
-            rong.clearMessagesUnreadStatus({
-                conversationType: 'PRIVATE',
-                targetId: targetId
-            }, function(ret, err) {
-            })
-        },10)
         api.openWin({
             name: 'chatWin',
             url: './news/chatPage.html',
@@ -334,7 +321,6 @@
                 targetRongId: targetId
             }
         });
-        
     }
     </script>
 </body>

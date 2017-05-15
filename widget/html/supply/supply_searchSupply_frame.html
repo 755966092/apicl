@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        body,html {
+            background-color: #F8F8F8;
+        }
+        .main {
+            font-size: 0;
+        }
+        .ipt {
+            width: 100%;
+            text-align: center;
+            background-color: #EFEFF4;
+            font-size: 0;
+            padding: .15rem 0;
+        }
+        .ipt input {
+            font-size: .24rem;
+            text-align: center;
+            width: 7.174rem;
+            height: .503rem;
+            outline: none;
+            background: #fff url(../../image/icon_search.png)no-repeat;
+            -webkit-background-size: .25rem .26rem;
+            background-size: .25rem .26rem;
+            background-position: 3.17rem center;
+            border: 1px solid #DDDEE2;
+        }
+        input::-webkit-input-placeholder{
+            text-align: center;
+        }
+    　　 
+        
+        .hisSearch {
+           
+            font-size: 0;
+        }
+        .hisSearch .title {
+            height: .65rem;
+            padding: 0 .3rem;
+            font-size: .28rem;
+            color: #333;
+            line-height: .65rem;
+            float: left;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .hisSearch .delIcon {
+            display: inline-block;
+            width: .25rem;
+            height: .65rem;
+            background: url(../../image/icon_other/icon_delet.png)no-repeat;
+            -webkit-background-size: .25rem .28rem;
+            background-size: .25rem .28rem;
+            background-position: 0 center;
+            float: right;
+        }
+        .hisSearchContent {
+            padding: 0 .3rem;
+            font-size: 0;
+        }
+        .hisSearchContent .hisSearchItem {
+            font-size: .24rem;
+            line-height: .52rem;
+            padding: 0 .24rem;
+            background-color: #fff;
+            margin-right: .2rem;
+            margin-bottom: .2rem;
+        }
+
+        .allSearch {
+            font-size: 0;
+            margin-top: .4rem;
+        }
+        .allSearch .title2 {
+            font-size: .28rem;
+            line-height: .4rem;
+            text-align: center;
+        }
+        .allSearch ul {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0 .3rem;
+        }
+        .allSearch ul li {
+            font-size: .28rem;
+            color: #0ABB07;
+            letter-spacing: .078rem;
+            width: 33.3%;
+            box-sizing: border-box;
+            border-right: 1px solid #87EAD4;
+            float: left;
+            text-align: center;
+            line-height: .4rem;
+            margin-top: .5rem;
+            padding: 0 .1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .allSearch ul li:nth-child(3n) {
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="ipt">
+            <input type="text" name="" placeholder="&nbsp;&nbsp;&nbsp;&nbsp;搜索" onkeyup="delIcon(this)">
+        </div>
+    </div>
+    <div class="hisSearch clearfix">
+        <div class="title clearfix">
+            <span>历史搜索</span>
+            <span class="delIcon" onclick="clearHis()"></span>
+        </div>
+        <div class="hisSearchContent clearfix resultList">
+           <!--  <span class="hisSearchItem">公司</span>
+            <span class="hisSearchItem">个人</span>
+            <span class="hisSearchItem">互联网</span>
+            <span class="hisSearchItem">互联网</span>
+            <span class="hisSearchItem">互联网</span>
+            <span class="hisSearchItem">互联网互联网</span> -->
+        </div>
+        <script type="text/x-dot-template" id="listT">
+            {{ for (var i = 0; i < it.length; i++) { }} 
+                 <span class="hisSearchItem">{{=it[i]}}</span>
+            {{ }; }}
+        </script>
+        <div class="allSearch">
+            <p class="title2 clearfix">大家都在搜</p>
+            <ul>
+                <li>儿童摄影</li>
+                <li>儿童摄影</li>
+                <li>儿童摄影</li>
+                <li>儿童摄影儿童摄影</li>
+                <li>儿童摄影</li>
+                <li>儿童摄影</li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+
+<script type="text/javascript">
+    var data = ['公司','个人','互联网','摄影','医疗']
+    apiready = function(){
+        getData(data);
+    };
+    getData(data);
+    function delIcon(ele) {
+        var val = $api.val(ele);
+        if (val != '') {
+            $api.css(ele, 'background:#fff');
+        } else {
+            $api.css(ele, 'background: #fff url(../../image/icon_search.png)no-repeat;background-size: .25rem .26rem;background-position: 3.17rem center;');
+        }
+
+    }
+    function clearHis() {
+        data = []
+        getData(data);
+    }
+</script>
+</html>
