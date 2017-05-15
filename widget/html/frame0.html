@@ -47,6 +47,7 @@
         }
         
         ul li {
+            background-color: #fff;
             width: 100%;
             height: 1.2rem;
             box-sizing: border-box;
@@ -99,7 +100,7 @@
     </style>
 </head>
 
-<body onclick="closeNews()">
+<body id="body" onclick="closeNews()">
     <div id="news_wrap" class=" clearfix" onclick="closeNews()">
          <div class="search" onclick="openS()">
             <span class="searchIcon"></span>
@@ -108,7 +109,7 @@
         <ul class="resultList"></ul>
         <script type="text/x-dot-template" id="listT">
             {{ for (var i = 0; i < it.length; i++) { }} 
-            <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" onclick="openChat(this)">
+                <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" ontouchstart=";event.stopPropagation();" onclick="openChat(this)">
                 <img class="fl" src="{{=it[i].url}}">
                 <h3>{{=it[i].nickname}}</h3>
                 <span class="fr time">{{=it[i].time.hour}}：{{=it[i].time.minute}}</span>
@@ -131,11 +132,6 @@
     <script type="text/javascript" src="../script/doT.min.js"></script>
     <script type="text/javascript">
     apiready = function() {
-        api.addEventListener({
-            name:'appintent'
-        },function(ret,err){
-            alert('fram0');
-        });
         // rongToken = api.pageParam.rongToken;
         // userToken = api.pageParam.userToken;
         moduleInit()
@@ -237,11 +233,11 @@
 
     (function (){
        var yStart=0,yEnd=0;
-        window.addEventListener('touchstart', function(event) {
+        $api.byId('body').addEventListener('touchstart', function(event) {
             event.preventDefault();
             yStart = event.changedTouches[0].clientY
         })
-        window.addEventListener('touchmove', function(event) {
+        $api.byId('body').addEventListener('touchmove', function(event) {
             event.preventDefault();
             yEnd = event.changedTouches[0].clientY;
             if ((yEnd - yStart) > 100) {
@@ -251,7 +247,7 @@
                 $api.css($api.dom('.search'), 'display:none');
             }
         })
-        window.addEventListener('touchend', function(event) {
+        $api.byId('body').addEventListener('touchend', function(event) {
             // event.preventDefault();
             yEnd = event.changedTouches[0].clientY;
             if ((yEnd - yStart) > 100) {

@@ -97,13 +97,13 @@
     </header>
     <div class="main">  
         <!-- <span class="icon_search"></span> -->
-        <input type="text" onkeypress="searchFellow(this)" name="" id="ipt" onkeyup="keyUp(this)" placeholder="搜索">
+        <input type="text" onkeypress="searchFellow(this)"  name="" id="ipt" onkeyup="keyUp(this)" placeholder="搜索">
         <span class="clearIcon" onclick="clearText()"></span>
     </div>
     <div class="fellow">
         <div class="hisSear">
             <span class="hisSearTitle">历史搜索</span>
-            <span class="hisSearIcon" oncilck="deletHis()"></span>
+            <span class="hisSearIcon" onclick="deletHis()"></span>
         </div>
        
         <ul class="resultList"></ul>
@@ -125,11 +125,11 @@
 var hisDataArr=[];
     apiready = function(){
         fnInit();
+       
     };
 
 
     function deletHis() {
-        alert(1);
          hisDataArr = [];
          getData(hisDataArr);
     }
@@ -153,12 +153,10 @@ var hisDataArr=[];
         } else {
             $api.css($api.dom('.clearIcon'), 'display:inline-block');
         }
+        
     }
     
-    var a = 1;
     function searchFellow(ele) {
-        a++;
-        console.log(a)
         var val = $api.val(ele);
         hisDataArr.push(val);
         // // 输入框为空的关闭搜索结果页面
@@ -204,6 +202,7 @@ var hisDataArr=[];
                     name: 'addf',
                     extra: {val: ret.data.list}
                 });
+               
             })
         // }
         

@@ -34,6 +34,35 @@
             font-size: .26rem;
             color: #888;
         }
+        .noContent {
+            background-color: #F8F8F8;
+            padding: .8rem 0 .97rem 0;
+            text-align: center;
+            font-size: 0;
+        }
+        .noContent img {
+            width: 5.16rem;
+            height: 2.35rem;
+        }
+        .icon_line {
+            display: inline-block;
+            width: 5.22rem;
+            height: .07rem;
+            background-color: #9B9B9B;
+        }
+        .noContent h3 {
+            font-size: .34rem;
+            color: #D0011B;
+            line-height: .48rem;
+            margin-top: .35rem;
+        }
+        .noContent .textContent {
+            font-size: .28rem;
+            color: #252525;
+            line-height: .48rem;
+            width: 4.76rem;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
@@ -49,10 +78,15 @@
             
         </ul>
     </div> -->
+    <div class="noContent">
+        <img src="../../image/iocn_addressList/icon_noInfo.png" alt="">
+        <h3>对不起，未搜索到您想要的结果</h3>
+        <p class="textContent">建议您减小搜索范围或更换搜索关键字后从新尝试一下，同时系统为您推荐了一些好友，可能会对您有所帮助。</p>
+    </div>
     <ul class="resultList"></ul>
     <script type="text/x-dot-template" id="listT">
         {{ for (var i = 0; i < it.length; i++) { }} 
-           <li onclick="openChat(this)" data-nickname = '{{=it[i].nickname}}' data-rongId='{{=it[i].rongcloud_user_id}}'>
+           <li onclick="addFriends(this)" data-nickname = '{{=it[i].nickname}}' data-rongId='{{=it[i].rongcloud_user_id}}'>
                 <img src="{{=it[i].head_img_url}}">
                 <div>
                     <h3>{{=it[i].nickname}}</h3>
@@ -72,10 +106,20 @@
         api.addEventListener({
             name: 'addf'
         }, function(ret, err){
-            getData(ret.value.val)
+            getData(api.pageParam.val)
         });
     };
    
+    function addFriends() {
+        api.openWin({
+            name: 'txl_addFriendsInfo',
+            url: './txl_addFriendsInfo.html',
+            pageParam: {
+                name: 'value'
+            }
+        });
+    }
+
    function openChat(ele) {  
         var targetRongId = $api.attr(ele, 'data-rongId'),nickname = $api.attr(ele, 'data-nickname');  
         api.openWin({
