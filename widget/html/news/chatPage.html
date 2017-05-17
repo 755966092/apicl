@@ -52,7 +52,7 @@ var name, targetRongId;
       moduleInit()
       targetRongId = api.pageParam.targetRongId;
       nickname = api.pageParam.nickname;
-      
+     clearState(targetRongId)
       // 获取参数
       var title = document.getElementById('title')
       $api.html(title, nickname);
@@ -83,7 +83,23 @@ var name, targetRongId;
       });
        // 初始化聊天界面
       // chatTools();
+      
+      api.execScript({
+          name: 'main',
+          // frameName: 'fram0',
+          script: 'getTotalCount();'
+      });
+
   };
+
+  function clearState(targetRongId) {
+    rong.clearMessagesUnreadStatus({
+        conversationType: 'PRIVATE',
+        targetId: targetRongId
+    }, function(ret, err) {
+      
+    })
+}
   // 聊天界面
   function chatTools() {
   

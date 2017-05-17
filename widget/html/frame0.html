@@ -178,6 +178,7 @@
        
         
     }
+   
     // 监听打开加好友窗口
     function monitorEvent() {
         // 监听showNews事件，显示添加好友框     
@@ -210,6 +211,11 @@
                     ret.value.data[i].time = changeTime(ret.value.data[i].receivedTime);
                     targetRongIdArr.push(ret.value.data[i].targetId);
                 }
+                api.execScript({
+                  name: 'main',
+                  // frameName: 'fram0',
+                  script: 'getTotalCount();'
+              });
                 // 获取聊天对方信息
                 getSideInfo(targetRongIdArr, ret.value.data);
             } else {
@@ -316,13 +322,7 @@
         // var major_Name = $api.text(ele);
         var nickname = $api.attr(ele, 'data-nickname');
         var targetId = $api.attr(ele, 'data-targetId');
-        setInterval(function() {
-            rong.clearMessagesUnreadStatus({
-                conversationType: 'PRIVATE',
-                targetId: targetId
-            }, function(ret, err) {
-            })
-        },10)
+       
         api.openWin({
             name: 'chatWin',
             url: './news/chatPage.html',

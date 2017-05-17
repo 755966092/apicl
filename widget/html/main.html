@@ -155,6 +155,20 @@
         }
         .show {
             display: block;
+        } 
+        #newsCount {
+            display: inline-block;
+            position: absolute;
+            right: .3rem;
+            top: .05rem;
+            font-size: .22rem;
+            width: .32rem;
+            height: .32rem;
+            background-color: #f00;
+            border-radius: 50%;
+            color: #fff;
+            text-align: center;
+            line-height: .32rem;
         }
     </style>
 </head>
@@ -163,7 +177,7 @@
     <div id="wrap" class="flex-wrap flex-vertical">
         <header>
             <ul>
-                <li class="border-b active">
+                <li class="border-b active" id="title">
                     我在
                     <span id="addFellow" onclick="addFellow()"></span>
                 </li>
@@ -180,7 +194,7 @@
         </div>
         <div id="footer" class="border-t">
             <ul class="flex-wrap">
-                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con active ">我在</li>
+                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con active "><span id="newsCount"></span>我在</li>
                 <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con ">通讯录</li>
                 <li tapmode="hover" onclick="randomSwitchBtn( this );" data-val = '3' class="flex-con ">供求</li>
                 <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con news">发现</li>
@@ -209,7 +223,7 @@ apiready = function() {
     moduleInit();
     $api.fixStatusBar($api.dom('header'));
     api.setStatusBarStyle({
-        style: 'dark',
+        style: 'light',
         color: 'rbga(0,0,0,0)'
     });
     funIniGroup();
@@ -235,8 +249,22 @@ apiready = function() {
         $api.html($api.dom('.supply'), '供求<span onclick="addPublish()"></span>');
     });
 
-   
+    getTotalCount();
 
+}
+
+// 获取所有未读消息数
+function getTotalCount() {
+    rong.getTotalUnreadCount(function(ret, err) {
+        if (ret.result == 0) {
+            $api.html($api.byId('title'), '我在<span id="addFellow" onclick="addFellow()"></span>');
+            $api.css($api.byId('newsCount'), 'display: none');
+        } else {
+            $api.html($api.byId('title'), '我在（' +ret.result+ '）<span id="addFellow" onclick="addFellow()"></span>');
+            $api.css($api.byId('newsCount'), 'display: inline-block');
+            $api.html($api.byId('newsCount'), ret.result);
+        }
+    })
 }
 
 
