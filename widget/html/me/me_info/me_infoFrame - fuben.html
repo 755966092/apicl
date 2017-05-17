@@ -18,9 +18,9 @@
         .main ul li {
             height: .82rem;
             line-height: .82rem;
-            padding: 0 .3rem 0 .3rem;
+            padding: 0 .6rem 0 .3rem;
             font-size: .28rem;
-            
+            border-bottom: 1px solid #EDEDED;
             background: #fff;
             
             position: relative;
@@ -33,11 +33,11 @@
             margin-bottom: .2rem;
         }
         .main ul li:nth-child(1) {
-           position: relative;
+           
             height: 1.6rem;
             background: #fff;
             line-height: 1.6rem;
-            display: -webkit-box; 
+             display: -webkit-box; 
             display: flex; 
             -webkit-box-align:  center;
             align-items: center;
@@ -47,22 +47,20 @@
             width: 1.07rem;
             height: 1.07rem;
             vertical-align:middle;
-            border-radius: .08rem;
+            
+
+            
         }
         .imgDiv {
-             display: -webkit-box; 
-            display: flex; 
-            -webkit-box-align:  center;
-            align-items: center;
-            height: 1.6rem;
             position: absolute; 
-            right: .9rem;   
-            top: 0;
-            width: 1.07rem;
-
+            right: .75rem;   
         }
       
-       
+        .main ul li:nth-child(1) p img {
+            vertical-align:baseline;
+            width: .3rem;
+            height: .3rem;
+        }
         .uaseName {
             display: inline-block;
             vertical-align:middle;
@@ -90,7 +88,17 @@
             background-position: center center;
         }
         
-       
+        li.select span:first-child:before {
+            content: "";
+            display: inline-block;
+            width: .1rem;
+            height: .1rem;
+            background-color: #f00;
+            border-radius: .2rem;
+            position: absolute;
+            top: .2rem;
+            right: -.1rem;
+        }
         li .text {
             position: absolute; 
             top: 0;
@@ -106,11 +114,6 @@
         li input::-webkit-input-placeholder {
             text-align: right;
         }
-        .wrap {
-            /*border-bottom: 1px solid #EDEDED;*/
-            border-bottom: 1px solid #f00;
-            width: 100%;
-        }
 
     </style>
 </head>
@@ -118,77 +121,28 @@
     <div class="main">
         <ul>
             <li onclick="login(this)" data-val="tx">
-                <div class="wrap clearfix">
-                    头像
-                    <div class="imgDiv">
-                        <img class="headImg fr"  src="../../../image/tx_2.jpg">
-                    </div>
-                    <span class="zkicon"></span>
+                <p>头像</p>
+                <div class="imgDiv">    
+                        <img class="headImg"  src="../../../image/tx_2.jpg">
                 </div>
+                <span class="zkicon"></span>
             </li>
-            <li onclick="openF(this)"  data-val="name">
-                <span>真实姓名</span>
-                <span class="text name">必填</span>
-                <span></span>
-            </li>
-            <li onclick="openF(this)"  data-val="nicheng">
-                <span>昵称</span>
-                <span class="text nicheng">必填</span>
-                <span></span>
-            </li>
-            <li onclick="openF(this)"  data-val="sex">
-                <span>性别</span>
-                <span class="text sex">请选择</span>
-                <span></span>
-            </li>
-            <li onclick="openF(this)" data-val="jx">
-                <span>家乡</span>
-                <span class="text jx">请选择</span>
-                <span></span>
-            </li>
-            <li onclick="openF(this)" data-val="sr">
-                <span >生日</span>
-                <span class="text sr">请选择</span>
-                <span class="fr"></span>
-            </li>
-            <li onclick="login(this)" data-val="zydh">
-                <span>主要电话</span>
-                <span></span>
-            </li>
- 
-            <li onclick="login(this)" data-val="qtlxfs">
-                <span>联系方式</span>
-                <span></span>
-            </li>
- 
-            <li onclick="login(this)" data-val="zz">
-                <span>住址</span>
-                <span></span>
-            </li>
- 
-            <li onclick="login(this)" data-val="study">
-                <span>学习经历</span>
-                <span></span>
-            </li>
- 
-            <li onclick="login(this)" data-val="workExper">
-                <span>工作经历</span>
-                <span></span>
-            </li>
- 
-            <li onclick="login(this)" data-val="project">
-                <span>项目业绩</span>
-                <span></span>
-            </li>
- 
-            <li onclick="login(this)" data-val="mqdt">
-                <span>主要工作动态</span>
-                <span></span>
-            </li>
- 
+            <li  data-val="name"><span>真实姓名</span>
+                <input onchange="reviseData()" type="text" placeholder="必填" name="" class="fr name"></li>
+            <li  data-val="nicheng"><span>昵称</span>
+                <input onchange="reviseData()" type="text" placeholder="必填" name="" class="fr nicheng"></li>
+            <li onclick="openF(this)"  data-val="sex"><span>性别</span><span class="text sex">请选择</span><span></span></li>
+            <li onclick="openF(this)" data-val="jx"><span>家乡</span><span class="text jx">请选择</span><span></span></li>
+            <li onclick="openF(this)" data-val="sr"><span >生日</span><span class="text sr">请选择</span><span class="fr"></span></li>
+            <li onclick="login(this)" data-val="zydh"><span>主要电话</span><span></span></li>
+            <li onclick="login(this)" data-val="qtlxfs"><span>联系方式</span><span></span></li>
+            <li onclick="login(this)" data-val="zz"><span>住址</span><span></span></li>
+            <li onclick="login(this)" data-val="study"><span>学习经历</span><span></span></li>
+            <li onclick="login(this)" data-val="workExper"><span>工作经历</span><span></span></li>
+            <li onclick="login(this)" data-val="project"><span>项目业绩</span><span></span></li>
+            <li onclick="login(this)" data-val="mqdt"><span>主要工作动态</span><span></span></li>
         </ul>
-    </div
->
+    </div>
     <script type="text/javascript" src="../../../script/api.js"></script>
     <script type="text/javascript" src="../../../script/common.js"></script>
     <script type="text/javascript">
@@ -265,9 +219,9 @@
                 birthday = $api.dom('.sr'),
                 hometown = $api.dom('.jx');
             // 设置真实姓名
-            $api.text(name, zName1);
+            $api.val(name, zName1);
             // 设置用户昵称
-            $api.text(nicheng,userName1);
+            $api.val(nicheng,userName1);
             // 设置用户头像
             $api.attr(head, 'src', headImg1);
             // 设置用户性别
