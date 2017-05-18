@@ -10,12 +10,32 @@
         body, html {
             background-color: #F8F8F8;
         }
-
+        .main {
+            font-size: 0;
+            padding-top: .3rem;
+            position: relative;
+        }
         .main input {
             height: .797rem;
             width: 100%;
+            background-color: #fff;
+            outline: none;
+            font-size: .3rem;
+            color: #555;
             padding-left: .2rem;
             padding-right: .3rem;
+        }
+        .main .clearIcon {
+            width: .24rem;
+            height: .797rem;
+            background: url(../../../image/icon_other/icon_clear.png)no-repeat;
+            -webkit-background-size: .24rem .24rem;
+            background-size: .24rem .24rem;
+            background-position: 0 center;
+            position: absolute;
+            right: .4rem;
+            top: .3rem;
+            display: none;
         }
     </style>
 </head>
@@ -25,14 +45,14 @@
         <div class="head">
             <span class="callback" onclick="api.closeWin()">返回</span>
             <span class="winTitle">
-                真实姓名
+                
             </span>
             <span class="rightBtn bj" onclick="enter()">保存</span> 
         </div>
     </header>
     <div class="main">
-         <input type="text" name="">
-       
+        <input type="text" name="" onkeyup="clearBtn(this)">
+        <span class="clearIcon" onclick="clearText()"></span>
     </div>
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
@@ -40,7 +60,50 @@
 <script type="text/javascript">
     apiready = function(){
 	    fnInit();
+
+        if (api.pageParam.type == 'name') {
+            $api.text($api.dom('.winTitle'), '真实姓名');
+            $api.val($api.dom('input'), api.pageParam.name);
+        } 
+        if (api.pageParam.type == 'nickname') {
+            $api.text($api.dom('.winTitle'), '昵称');
+            $api.val($api.dom('input'), api.pageParam.name);
+        }
     };
-   
+
+    function enter() {
+        if (api.pageParam.type == 'name') {
+            api.sendEvent({
+                name: 'modifyUserName',
+                extra: {
+                    selDate: $api.val($api.dom('input'))
+                }
+            });
+        } else {
+            api.sendEvent({
+                name: 'modifyNickName',
+                extra: {
+                    selDate: $api.val($api.dom('input'))
+                }
+            });
+        }
+        api.closeWin();
+
+    }
+
+
+
+    function clearBtn(ele) {
+        var val = $api.val(ele);
+        if (val) {
+            $api.css($api.dom('.clearIcon'), 'display:inline-block');
+        } else {
+            $api.css($api.dom('.clearIcon'), 'display:none');
+        }
+    }
+    function clearText () {
+        $api.val($api.dom('input'), '');
+        $api.css($api.dom('.clearIcon'), 'display:none');
+    }
 </script>
 </html>

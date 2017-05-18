@@ -88,7 +88,7 @@
                 <div class="fr dynamicState"><img src="../image/tx_5.jpg"></div class="fr">
             </div>
         </div>
-        <div class="list">
+        <div class="list" onclick="zhaoren()">
             <span class="text">找人</span>
             <span class="rightArrowhead"></span>
         </div>
@@ -102,7 +102,7 @@
 <script type="text/javascript" src="../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
-        
+        moduleInit();
     };
     function openFindPage(n) {
         if (n == 0) {
@@ -112,6 +112,50 @@
                 bounces: false,
             });
         }
+    }
+    function zhaoren() {
+        accessAddressBook()
+    }
+
+     // 同步通讯录
+    function accessAddressBook() {
+        // setTimeout(function(){
+                contacts.queryByPage({
+                pageIndex: 0
+            }, function(ret, err) {
+                if (ret) {
+                    //  api.ajax({
+                    //     url: apiSite + 'api/contact/sync',
+                    //     method: 'post',
+                    //     headers: apiHeader,
+                    //     data: {
+                    //         values: { 
+                    //             token: $api.getStorage('userToken'),
+                    //             contact_json:ret
+                    //         }
+                    //     }
+                    // }, function(ret, err) {
+                        console.log(JSON.stringify(ret))
+                    // })
+                } else {
+                    alert(JSON.stringify(err));
+                }
+            });
+             openMain();
+
+        // },10)
+    }
+     function openMain() {
+        console.log('打开页面')
+        api.openWin({
+            name: 'main',
+            url: 'me/me_gs.html',
+            slidBackEnabled: false,
+            pageParam: {
+                userToken: api.pageParam.userToken,
+                rongToken: api.pageParam.rongToken
+            }
+        });
     }
 </script>
 </html>
