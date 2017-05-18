@@ -127,7 +127,7 @@
 
     // 选择电话类别  生活 || 工作
     function selTel() {
-
+            var val = $api.text($api.dom('.telClass_1'));
             api.openFrame({
                 name: 'me_info_tel',
                 url: './me_info_tel.html',
@@ -136,6 +136,9 @@
                     y: 0,
                     w: 'auto',
                     h: api.winHeight
+                },
+                pageParam: {
+                    val:val
                 },
                 bounces: false
             });
@@ -154,7 +157,7 @@
     // 添加电话完成
     function addTel() {
         var tel = $api.val($api.dom('input'));
-
+        alert(tel)
 
           api.ajax({
             url: apiSite + '/api/user_center/addContact',
@@ -176,7 +179,8 @@
 
 
 
-        if (tel.length !== 11 ) {
+        // if (tel.length !== 11 ) {
+        if (0) {
             api.toast({
                 msg: '输入正确的手机号'
             });

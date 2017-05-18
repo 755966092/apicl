@@ -39,9 +39,18 @@
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
 <script type="text/javascript">
-var selDate;
+var selDate,defaultData,defaultArr=[];
+var data = ['工作', '生活'];
     apiready = function(){
-       dianji();
+        defaultData = api.pageParam.val;
+        // alert(api.pageParam.val)
+        var indexs = data.indexOf(defaultData);
+        if (indexs == -1) {
+            defaultArr.push(0)
+        } else {
+            defaultArr.push(indexs);
+        }
+        dianji();
        
 
     };
@@ -74,33 +83,37 @@ var selDate;
                 }
             },
             rows: 3,
-            indexs: [3, 4, 5],
+            indexs: defaultArr,
             bounce: false,
             fixedOn: api.frameName,
             fixed: false,
-            data: [{
-                title: '工作',
-            }, {
-                title: '生活',
-            }]
+            data: data
         }, function(ret, err) {
             if (ret) {
                 // alert(JSON.stringify(ret));
                 // selDate = JSON.stringify(ret);
-                selDate = ret.selects[0].content;
+                 if (ret.eventType == 'show') {
+                     UISelector.set({
+                        indexs: defaultArr
+                    });
+                     selDate = data[defaultArr[0]];
+                 } else {
+                    selDate = ret.selects[0].content;
+                 }
             } else {
                 alert(JSON.stringify(err));
             }
         });
    }  
   function enter () {
-    api.closeFrame();
+    alert(selDate)
     api.sendEvent({
         name: 'xiugaitel',
         extra: {
             selDate: selDate
         }
     });
+    api.closeFrame();
   }
   
 </script>

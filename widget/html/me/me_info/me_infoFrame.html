@@ -281,9 +281,9 @@
             var val = $api.attr(ele, 'data-val');
 
             var sexText = $api.text($api.dom('.sex'));
-            var homeText = $api.text($api.dom('.jx')).split("-");
-            var birthdayText = $api.text($api.dom('.sr')).split("-");
-            alert(sexText+'---'+homeText+'---'+birthdayText)
+            var homeText = $api.text($api.dom('.jx')).split("-") || 1;
+            var birthdayText = $api.text($api.dom('.sr')).split("-") || 1;
+            
             api.openFrame({
                 name: 'frameName',
                 url: './me_info_' + val + '.html',
@@ -293,7 +293,11 @@
                     w: 'auto',
                     h: api.winHeight
                 },
-               
+                pageParam: {
+                    sexText: sexText,
+                    homeText: homeText,
+                    birthdayText: birthdayText
+                },
                 bounces: false
             });
         }

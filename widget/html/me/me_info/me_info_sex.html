@@ -39,9 +39,19 @@
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
 <script type="text/javascript">
-var selDate;
+var selDate,defaultData,defaultArr=[];
+var data = ['男','女'];
     apiready = function(){
-       dianji();
+        defaultData = api.pageParam.sexText;
+        var i = data.indexOf(defaultData)
+        // alert(i);
+        if (i == -1) {
+            defaultArr[0] = 0;
+        } else {
+            defaultArr.push(i)
+        }
+
+        dianji();
        
 
     };
@@ -74,23 +84,31 @@ var selDate;
                 }
             },
             rows: 3,
-            indexs: [3, 4, 5],
+            indexs: defaultArr,
             bounce: false,
             fixedOn: api.frameName,
             fixed: false,
-            data: ['男','女']
+            data: data
         }, function(ret, err) {
             if (ret) {
                 // alert(JSON.stringify(ret));
                 // selDate = JSON.stringify(ret);
-                selDate = ret.selects[0].content;
+                 // ios系统下 进入选择器页面后, 如果不滑动选择器,会照成无返回值, 
+                // 如果用户打开选择器没有滑动就返回初始的值
+               if (ret.eventType == 'show') {
+                     UISelector.set({
+                        indexs: defaultArr
+                    });
+                    selDate = data[defaultArr[0]]
+               } else {
+                    selDate = ret.selects[0].content;
+               }
             } else {
                 alert(JSON.stringify(err));
             }
         });
    }  
   function enter () {
-    
     api.sendEvent({
         name: 'xiugaisex',
         extra: {

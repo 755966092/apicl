@@ -38,13 +38,54 @@
 <script type="text/javascript" src="../../../script/common.js"></script>
 <script type="text/javascript" src="../../../data/date.js"></script>
 <script type="text/javascript">
-var selDate;
+var selDate,defaultData,defaultArr=[];
     apiready = function(){
        moduleInit();
+       // 查询数据位置
        dianji();
+       queryData();
 
     };
- function dianji() {
+    // 查询数据位置
+    function queryData() {
+        var birthdayText = api.pageParam.birthdayText
+        if (birthdayText == null || birthdayText == '0000,00,00' || birthdayText == "请选择") {
+            for (var i = 0; i < 3; i++) {
+                defaultArr.push(i)
+            }
+         // 查询数据位置
+        } else {
+           var year = birthdayText[0] || 0;
+           var month = birthdayText[1] || 0;
+           var day = birthdayText[2] || 0;
+           // alert(year+'---'+month+'---'+day)
+           // 获取年份的位置
+           for (var i = 0; i < srDate.length; i++) {
+               if (srDate[i].title == year) {
+                defaultArr.push(i)
+                    break;
+               }
+           }
+
+           // 获取月份的位置
+           for (var i = 0; i < srDate[defaultArr[0]].contents.length; i++) {
+               if (srDate[defaultArr[0]].contents[i].title == month){
+                    defaultArr.push(i)
+                    break;
+               }
+           }
+           // 获取日期的位置
+            for (var i = 0; i < srDate[defaultArr[0]].contents[defaultArr[1]].contents.length; i++) {
+                if (srDate[defaultArr[0]].contents[defaultArr[1]].contents[i] == day) {
+                    defaultArr.push(i)
+                    break;
+                }
+            }
+        }
+      
+        
+    }
+    function dianji() {
         var spanH = $api.offset($api.dom('span')).h;
         UISelector.open({
             rect: {
@@ -70,23 +111,32 @@ var selDate;
                 }
             },
             rows: 3,
-            indexs: [10, 4, 5],
+            indexs: defaultArr,
             bounce: false,
             fixedOn: api.frameName,
             fixed: false,
             data: srDate
         }, function(ret, err) {
             if (ret) {
-                selDate = ret.selects[0].content + '-' + ret.selects[1].content + '-' + 
+                // selDate = ret.selects[0].content + '-' + ret.selects[1].content + '-' + 
+                // ret.selects[2].content;
+                if (ret.eventType == 'show') {
+                     UISelector.set({
+                        indexs: defaultArr
+                    });
+                    selDate = srDate[defaultArr[0]].title + '-' +  srDate[defaultArr[0]].contents[defaultArr[1]].title  + '-' +srDate[defaultArr[0]].contents[defaultArr[1]].contents[defaultArr[2]]
+               } else {
+                    selDate = ret.selects[0].content+ '-' + ret.selects[1].content + '-' + 
                 ret.selects[2].content;
+               }
             } else {
                 alert(JSON.stringify(err));
             }
         });
         
-   }  
+    }  
   function enter () {
-    alert(selDate)
+    // alert(selDate)
     
     api.sendEvent({
         name: 'xiugaisr',
