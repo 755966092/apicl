@@ -69,15 +69,15 @@
     </style>
 </head>
 <body>
-    <header  class="header">
+   <!--  <header  class="header">
         <div class="head">
             <span class="callback" onclick="api.closeWin()">取消</span>
             <span class="winTitle">
                 电话号码
             </span>
         </div>
-    </header>
-   <!--  <div class="main clearfix">
+    </header> -->
+    <div class="main clearfix">
        <div class="main_no1">
            <p onclick="selectClass(this)"  data-val="1">
                 移动电话
@@ -99,117 +99,108 @@
        <div class="main_no3 ">
            <button onclick="addTel()">保存</button>
        </div>
-    </div> -->
+    </div>
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
 <script type="text/javascript">
-    // var val = 1, dhlb = 1;
+    var val = 1, dhlb = 1;
     apiready = function(){
-	    fnInit();
-
-
-        api.openFrame({
-            name: 'me_info_zydh_addtel_frame',
-            url: './me_info_zydh_addtel_frame.html',
-            rect: {
-                x: 0,
-                y: headerH,
-                w: 'auto',
-                h: 'auto'
-            },
-            bounces: false
-        });
-        // api.addEventListener({
-        //     name: 'xiugaitel'
-        // }, function(ret, err) {
-        //     if (ret) {
-        //         if (ret.value.selDate == '工作') {
-        //             dhlb = 1;
-        //         } else {
-        //             dhlb = 2;
-        //         }
-        //         $api.text($api.dom('.telClass_1'), ret.value.selDate);
-        //     } else {
-        //         alert(JSON.stringify(err));
-        //     }
-        // });
+        modilyType();
     };
     
 
 
-    // // 选择电话类别  生活 || 工作
-    // function selTel() {
-    //         var val = $api.text($api.dom('.telClass_1'));
-    //         api.openFrame({
-    //             name: 'me_info_tel',
-    //             url: './me_info_tel.html',
-    //             rect: {
-    //                 x: 0,
-    //                 y: 0,
-    //                 w: 'auto',
-    //                 h: api.winHeight
-    //             },
-    //             pageParam: {
-    //                 val:val
-    //             },
-    //             bounces: false
-    //         });
-    // }
+    // 电话类型回调
+    function modilyType(){
+        api.addEventListener({
+            name: 'xiugaitel'
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.value.selDate == '工作') {
+                    dhlb = 1;
+                } else {
+                    dhlb = 2;
+                }
+                $api.text($api.dom('.telClass_1'), ret.value.selDate);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    // 选择电话类别  生活 || 工作
+    function selTel() {
+            var val = $api.text($api.dom('.telClass_1'));
+            api.openFrame({
+                name: 'me_info_tel',
+                url: './me_info_tel.html',
+                rect: {
+                    x: 0,
+                    y: 0,
+                    w: 'auto',
+                    h: api.winHeight
+                },
+                pageParam: {
+                    val:val
+                },
+                bounces: false
+            });
+    }
 
 
     // // 选择电话类别 移动 || 固定
-    // function selectClass(ele) {
-    //     val = $api.attr(ele, 'data-val');
-    //     for (var i = 0; i < $api.domAll('.selClass').length; i++) {
-    //         $api.removeCls($api.domAll('.selClass')[i], 'select');
-    //     }
-    //     $api.addCls($api.last(ele), 'select');
-    // }
+    function selectClass(ele) {
+        val = $api.attr(ele, 'data-val');
+        for (var i = 0; i < $api.domAll('.selClass').length; i++) {
+            $api.removeCls($api.domAll('.selClass')[i], 'select');
+        }
+        $api.addCls($api.last(ele), 'select');
+    }
 
     // // 添加电话完成
-    // function addTel() {
-    //     var tel = $api.val($api.dom('input'));
-    //     alert(tel)
+    function addTel() {
+        var tel = $api.val($api.dom('input'));
+        alert(tel)
+          api.ajax({
+            url: apiSite + '/api/user_center/addContact',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    phone: tel,
+                    type: val,
+                    sub_type: dhlb
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                alert(JSON.stringify(ret))
+                 api.closeWin();
+            }
+             alert(JSON.stringify(err))
+        })
 
-    //       api.ajax({
-    //         url: apiSite + '/api/user_center/addContact',
-    //         method: 'post',
-    //         headers: apiHeader,
-    //         data: {
-    //             values: { 
-    //                 token: api.pageParam.userToken || $api.getStorage('userToken'),
-    //                 phone: tel,
-    //                 type: val,
-    //                 sub_type: dhlb
-    //             }
-    //         }
-    //     }, function(ret, err) {
-    //         if (ret) {
-    //             // alert(JSON.stringify(ret))
-    //         }
-    //     })
 
 
-
-    //     // if (tel.length !== 11 ) {
-    //     if (0) {
-    //         api.toast({
-    //             msg: '输入正确的手机号'
-    //         });
-    //     } else {
-    //          api.sendEvent({
-    //             name: 'addTel',
-    //             extra: {
-    //                 val: val, 
-    //                 dhlb: dhlb,
-    //                 tel: tel
-    //             }
-    //         });
-    //         api.closeWin();
-    //     }
+        // if (tel.length !== 11 ) {
+        // if (0) {
+        //     api.toast({
+        //         msg: '输入正确的手机号'
+        //     });
+        // } else {
+        //      api.sendEvent({
+        //         name: 'addTel',
+        //         extra: {
+        //             val: val, 
+        //             dhlb: dhlb,
+        //             tel: tel
+        //         }
+        //     });
+           
+        // }
        
-    // }
+    }
 
 </script>
 </html>

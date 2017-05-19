@@ -94,10 +94,10 @@
         <span>电话</span>
         <span onclick="enter()" class="bj">编辑</span>
     </header> -->
-    <div class="wrap">
+    <div class="wrap resultList">
        <!--  <div class="main clearfix">
             <p class="mobile ">移动</p>
-           <div class="main_no1 yd">
+            <div class="main_no1 yd">
                <p onclick="selectClass(this)"  data-val="yddh">
                     工作
                     <input maxlength="11" type="text" class="telIpt" name="" value="18765303417" disabled>
@@ -107,8 +107,8 @@
                     <input maxlength="11" type="text" class="telIpt" name="" value="18765303417" disabled>
                </p>
            </div>
-        </div> -->
-        <!-- <div class="main clearfix gd">
+        </div>
+        <div class="main clearfix gd">
             <p class="mobile ">固定</p>
            <div class="main_no1 gdd">
                <p class="p">
@@ -123,123 +123,100 @@
                </p>
            </div>
         </div> -->
+
     </div>
+        <script type="text/x-dot-template" id="listT">
+            {{ for (var i = 0; i < it.length; i++) { }} 
+                {{?it[i].type==1}}
+                    <div class="main clearfix">
+                        <!-- <p class="mobile ">移动</p> -->
+                        {{?it[i].flag==1}}
+                            <p id="{{=it[i].flag}}" class="mobile">移动电话</p>
+                        {{? }}
+                        <div class="main_no1 yd">
+                            {{?it[i].sub_type==1}}
+                               <p onclick="selectClass(this)" class="item"  data-val="yddh" data-val="{{=it[i].contact_id}}">
+                                    工作
+                                    <input maxlength="11" type="text" class="telIpt" name="" value="{{=it[i].phone}}" disabled>
+                                    <i class="clearIpt" data-val="{{=it[i].contact_id}}" onclick="clearIpt(this)"></i>
+                               </p>
+                            {{??}}
+                               <p onclick="selectClass(this)" class="item" class="item"  data-val="gddh" data-val="{{=it[i].contact_id}}">
+                                    生活
+                                    <input maxlength="11" type="text" class="telIpt" name="" value="{{=it[i].phone}}" disabled>
+                                    <i class="clearIpt" data-val="{{=it[i].contact_id}}" onclick="clearIpt(this)"></i>
+                               </p>
+                            {{?}}
+                       </div>
+                    </div>
+                {{??it[i].type==2}}
+                    <div class="main clearfix gd">
+                        <!-- <p class="mobile ">固定</p> -->
+                         {{?it[i].flag==2}}
+                            <p id="{{=it[i].flag}}" class="mobile">固定电话</p>
+                        {{? }}
+                       <div class="main_no1 gdd">
+                           {{?it[i].sub_type==1}}
+                               <p onclick="selectClass(this)" class="item"  data-val="yddh" data-contact_id="{{=it[i].contact_id}}">
+                                    工作
+                                    <input maxlength="11" type="text" class="telIpt" name="" value="{{=it[i].phone}}" disabled>
+                                    <i class="clearIpt" data-val="{{=it[i].contact_id}}" onclick="clearIpt(this)"></i>
+                               </p>
+                            {{??}}
+                               <p onclick="selectClass(this)" class="item"  data-val="gddh" data-contact_id="{{=it[i].contact_id}}">
+                                    生活
+                                    <input maxlength="11" type="text" class="telIpt" name="" value="{{=it[i].phone}}" disabled>
+                                    <i class="clearIpt" data-val="{{=it[i].contact_id}}" onclick="clearIpt(this)"></i>
+                               </p>
+                            {{?}}
+                       </div>
+                    </div>
+                {{?}}
+            {{ }; }}
+        </script>
+
     <div class="main_no3 ">
         <p onclick="addTel()">添加新号码</p>
+    </div>
+    <div class="a">
+        <div class="b">
+            <div class="c" onclick="c(this)">asdasd</div>
+            <div class="c" onclick="c(this)"></div>
+            <div class="c" onclick="c(this)"></div>
+        </div>
     </div>
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript" src="../../../script/doT.min.js"></script>
 <script type="text/javascript">
     apiready = function(){
 	    // fnInit();
-        
-        // 初始化
-        // lxrList();
-        addEventXiugaiTel();
-        addEventAddTel();
-        addPhone();
-        delTel();
-        
-    };
-    // 监听增加电话好吗
-    function addPhone() {
-        api.addEventListener({
-            name: 'xgTel'
-        }, function(ret, err) {
-            if (ret) {
-               lxrList();
-            } else {
-                // alert(JSON.stringify(err));
-            }
-        });
-    }
-    // 监听删除电话事件
-    function delTel () {
+       lxrList()
         api.addEventListener({
             name: 'bjTel'
         }, function(ret, err) {
             if (ret) {
-               enter(ret.value.valueName1);
-            } else {
-                // alert(JSON.stringify(err));
-            }
-        });
-    }
-    // 监听修改电话事件
-    function addEventXiugaiTel() {
-        api.addEventListener({
-            name: 'xiugaitel'
-        }, function(ret, err) {
-            if (ret) {
-                $api.text($api.dom('.telClass_1'), ret.value.selDate);
+                if (ret.value.valueName1 == '保存')
+                    for (var i = 0; i < $api.domAll('.clearIpt').length; i++) {
+                        $api.css($api.domAll('.clearIpt')[i], 'display:inline-block');
+                    }
+                else {
+                    for (var i = 0; i < $api.domAll('.clearIpt').length; i++) {
+                        $api.css($api.domAll('.clearIpt')[i], 'display:none');
+                    }
+                }
+               
             } else {
                 alert(JSON.stringify(err));
             }
         });
+    };
+    // 监听增加电话好吗
+    function c(ele) {
+        console.log(ele)
+        console.log($api.closest(ele, '.a').getElementsByClassName('c').length)
     }
-    // 监听增加电话事件
-    function addEventAddTel() {
-        api.addEventListener({
-            name: 'addTel'
-        }, function(ret, err) {
-            if (ret) {
-                addList(ret.value.dhlb, ret.value.val, ret.value.tel )
-            } else {
-                alert(JSON.stringify(err));
-            }
-        });
-        // lxrList();
-    }
-
-    // 添加号码列表
-    function addList(dhlb, valCla, tel) {
-        if (dhlb == 1) {
-            // 工作
-            val = '工作';
-       } else {
-            // 生活
-            val = '生活';
-       }
-       if (valCla == 1) {
-            // 移动电话
-            if (!$api.dom('.ydd')) {
-                
-                $api.append($api.dom('.wrap'), '<div class="main yd clearfix"><p class="mobile">移动</p><div class="main_no1 ydd"></div></div>');
-            }
-            $api.append($api.dom('.ydd'), '<p class="p">' + val + '<input maxlength="11" type="text" class="telIpt" name="" value="'+tel+'" disabled><i class="clearIpt" onclick="clearIpt(this)"></i></p>');
-       } else {
-            // 固定电话
-            if (!$api.dom('.gdd')) {
-                
-                $api.append($api.dom('.wrap'), '<div class="main gd clearfix"><p class="mobile">固定</p><div class="main_no1 gdd"></div></div>')
-            }
-            $api.append($api.dom('.gdd'), '<p class="p">' + val + '<input maxlength="11" type="text" class="telIpt" name="" value="'+tel+'" disabled><i class="clearIpt" onclick="clearIpt(this)"></i></p>');
-       }
-    }
-
-    // 编辑电话号码
-    function enter (text) {
-        var ipt = $api.domAll('input'),
-            clearIpt = $api.domAll('.clearIpt');
-        if (text == '保存') {
-            for (var i = 0; i < ipt.length; i++) {
-                $api.removeAttr(ipt[i], 'disabled');
-            }
-            for (var i = 0; i < clearIpt.length; i++) {
-                $api.css(clearIpt[i], 'display:inline-block');
-            }
-            // 移除添加按钮绑定的事件
-        } else {
-            for (var i = 0; i < ipt.length; i++) {
-                $api.attr(ipt[i], 'disabled', 'true');
-            }
-            for (var i = 0; i < clearIpt.length; i++) {
-                $api.css(clearIpt[i], 'display:none');
-            }
-        }
-    }
-
     // 添加电话号码
     function addTel() {
         api.openWin({
@@ -251,28 +228,30 @@
             bounces: false
         });
     }
+
+
     // 删除电话好吗
     function clearIpt(ele) {
-        $api.remove($api.closest(ele,'.p'));
-        // console.log($api.closest(ele,'.p'))
-        // console.log($api.trim($api.html($api.dom('.gdd'))))
-        // if ($api.trim($api.html($api.dom('.gdd'))) == '') {
-        //    // $api.remove($api.closest(a, '.gd'));
-        //    console.log(1)
-        // }
-        api.ajax({
-            url: apiSite + '/api/user_center/deleteContact',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
-                    contact_id: $api.attr(ele, 'data-val')
-                }
-            }
-        }, function(ret, err) {
+        console.log(ele)
+        console.log(JSON.stringify($api.closest(ele, '.main_no1').childNodes.length))
+        // $api.remove($api.closest(ele,'p'));
+        // alert($api.text($api.closest(ele,'p')))
+        // $api.remove($api.closest(ele, '.main_no1'));
+        
+        console.log(2);
+        // api.ajax({
+        //     url: apiSite + '/api/user_center/deleteContact',
+        //     method: 'post',
+        //     headers: apiHeader,
+        //     data: {
+        //         values: { 
+        //             token: api.pageParam.userToken || $api.getStorage('userToken'),
+        //             contact_id: $api.attr(ele, 'data-val')
+        //         }
+        //     }
+        // }, function(ret, err) {
 
-        })
+        // })
 
     }
     // 获取联系人列表
@@ -288,43 +267,41 @@
             }
         }, function(ret, err) {
             if (ret) {
-                // alert(JSON.stringify(ret));
-                alert(JSON.stringify(ret))
-                var phoneArr = ret.data.list
-                for (var i = 0; i < phoneArr.length; i++) {
-                    if (phoneArr[i].type == 1) {
-                        // 移动电话
-                        // 
-                        if (!$api.dom('.ydd')) {
-                            $api.append($api.dom('.wrap'), '<div class="main yd clearfix"><p class="mobile">移动</p><div class="main_no1 ydd"></div></div>');
-                        }
-                        if (phoneArr[i].sub_type == 1) {
-                            // 工作
-                            $api.append($api.dom('.ydd'), '<p class="p">工作<input onchange="bjPhone(this)" data-val="'+ phoneArr[i].contact_id +'"  data-type = "'+ phoneArr[i].type +'"   maxlength="11" data-subType = "'+ phoneArr[i].sub_type +'" type="text" class="telIpt" name="" value="'+phoneArr[i].phone+'" disabled><i data-val="'+ phoneArr[i].contact_id +'"  class="clearIpt" onclick="clearIpt(this)"></i></p>');
-                        } else {
-                            // 生活
-                            $api.append($api.dom('.ydd'), '<p class="p">生活<input onchange="bjPhone(this)" data-val="'+ phoneArr[i].contact_id +'"   data-type = "'+ phoneArr[i].type +'"   maxlength="11" data-subType = "'+ phoneArr[i].sub_type +'" type="text" class="telIpt" name="" value="'+phoneArr[i].phone+'" disabled><i data-val="'+ phoneArr[i].contact_id +'"  class="clearIpt" onclick="clearIpt(this)"></i></p>');
-                        }
-                    } else {
-                        // 固定电话
-                        if (!$api.dom('.gdd')) {
-                            $api.append($api.dom('.wrap'), '<div class="main gd clearfix"><p class="mobile">固定</p><div class="main_no1 gdd"></div></div>')
-            
-                        }
-                        if (phoneArr[i].sub_type == 1) {
-                            // 工作
-                            $api.append($api.dom('.gdd'), '<p class="p">工作<input onchange="bjPhone(this)" data-val="'+ phoneArr[i].contact_id +'"   data-type = "'+ phoneArr[i].type +'"   maxlength="11" data-subType = "'+ phoneArr[i].sub_type +'" type="text" class="telIpt" name="" value="'+phoneArr[i].phone+'" disabled><i data-val="'+ phoneArr[i].contact_id +'"  class="clearIpt" onclick="clearIpt(this)"></i></p>');
-                        } else {
-                            // 生活
-                            $api.append($api.dom('.gdd'), '<p class="p">生活<input onchange="bjPhone(this)" data-val="'+ phoneArr[i].contact_id +'" data-type = "'+ phoneArr[i].type +'"   maxlength="11" data-subType = "'+ phoneArr[i].sub_type +'" type="text" class="telIpt" name="" value="'+phoneArr[i].phone+'" disabled><i data-val="'+ phoneArr[i].contact_id +'" class="clearIpt" onclick="clearIpt(this)"></i></p>');
-                        }
-                    }
-                }
+                // alert(JSON.stringify(ret.data.list))
+
+
+
+                litterSort(ret.data.list)
+                alert(JSON.stringify(ret.data.list))
+                getData(ret.data.list);
             } else {
                 alert(JSON.stringify(err));
             }
         });
     }
+
+     // 排序
+    function litterSort(data) {
+        for (var i = 0; i < data.length; i++) {
+            for (var j = 0; j < data.length; j++) {
+                if (data[i].type < data[j].type) {
+                    var temp = data[i];
+                    data[i] = data[j];
+                    data[j] = temp;
+                }
+            }
+         }
+         for (var i = 0; i < data.length; i++) {
+             data[0].flag = data[0].type
+            if (i>0) {
+                if (data[i].type !== data[i-1].type) {
+                    data[i].flag = data[i].type
+                }
+            }
+         }
+    }
+
+
     
     function bjPhone(ele) {
          api.ajax({

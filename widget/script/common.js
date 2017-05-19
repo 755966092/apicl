@@ -119,6 +119,7 @@ function rongyun(rongToken) {
 
     });
     receiveMsg();
+
     rong.connect({
         // 用户1
         // token: 'aAoW4oalHGpvB6Hw89bG0XzZSHvx/Xm6zmi6cWDa3L4VyfNcz/KXDFQxtpoQ+os1nT0799sMXlXPvUAK3FnjIY94cnJzE+aT'
@@ -150,6 +151,11 @@ function historicalNews() {
 
 // 接收消息
 function receiveMsg() {
+    // 监听连接器变化
+    rong.setConnectionStatusListener(function(ret, err) {
+        alert(JSON.stringify(ret))
+        alert('你以被顶下线');
+    });
     rong.setOnReceiveMessageListener(function(ret, err) {
         // 接收消息监听器接收到消息后刷新列表
         historicalNews();
@@ -193,16 +199,16 @@ function changeTime(time) {
     }
 }
 
- // doT模版获取数据
-    function getData(data) {
-        var listTText = $api.byId('listT').text;
-        var fnListT = doT.template(listTText);
-        var html = fnListT(data);
-        var list = $api.dom('.resultList');
-        // 替换resultList所有内容
-        $api.html(list, html);
-        // alert('getData:' + JSON.stringify(data))
-    }
+// doT模版获取数据
+function getData(data) {
+    var listTText = $api.byId('listT').text;
+    var fnListT = doT.template(listTText);
+    var html = fnListT(data);
+    var list = $api.dom('.resultList');
+    // 替换resultList所有内容
+    $api.html(list, html);
+    // alert('getData:' + JSON.stringify(data))
+}
 
 
 // 汉字转拼音
