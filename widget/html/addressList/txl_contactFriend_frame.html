@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="../../css/flex.css"/>
    <style type="text/css">
         html,body {
-            background-color: #f8f8f8;
+            background-color: #F0F0F6;
         }
        .main {
 
@@ -172,7 +172,7 @@
     // 请求数据
     function requestData() {
         api.ajax({
-            url: apiSite + '/api/contact/index',
+            url: apiSite + '/api/contact/friend',
             method: 'post',
             headers: apiHeader,
             data: {
@@ -181,21 +181,19 @@
                }
             }
        }, function(ret, err) {
-            for (var i = 0; i < ret.data.unavailable_list.length; i++) {
-                ret.data.unavailable_list[i].litter = ConvertPinyin(ret.data.unavailable_list[i].nickname);
-                ret.data.unavailable_list[i].title = ret.data.unavailable_list[i].nickname;
-                ret.data.unavailable_list[i].img = ret.data.unavailable_list[i].head_img_url;
-                ret.data.unavailable_list[i].titleSize = 15;
-                if (ret.data.unavailable_list[i].current_position == null) {
-                    ret.data.unavailable_list[i].current_position = '';
+            for (var i = 0; i < ret.data.list.length; i++) {
+                ret.data.list[i].litter = ConvertPinyin(ret.data.list[i].nickname);
+                ret.data.list[i].title = ret.data.list[i].nickname;
+                ret.data.list[i].img = ret.data.list[i].head_img_url;
+                if (ret.data.list[i].current_position == null) {
+                    ret.data.list[i].current_position = '';
                 } 
-                if (ret.data.unavailable_list[i].current_company == null) {
-                    ret.data.unavailable_list[i].current_company = '';
+                if (ret.data.list[i].current_company == null) {
+                    ret.data.list[i].current_company = '';
                 }
             }
             // 模块数据格式
-            console.log(JSON.stringify(ret.data.unavailable_list))
-            var data1 = litterSort(ret.data.unavailable_list)
+            var data1 = litterSort(ret.data.list)
             dakai(data1)
            
        })
@@ -233,11 +231,10 @@
         return arr;
     }
     function dakai(data1) {
-        console.log(data1);
         listContact.open({
-                x : 0,
+                x : 15,
                 y : 0,
-                w : api.frameWidth,
+                w : api.frameWidth-15,
                 h : api.frameHeight,
                 bgColor: '#f8f8f8',
                 // 分割线颜色
@@ -249,7 +246,6 @@
                 //     color: '#000',
                 //     title: '删除'
                 // }],
-                imgHeight: 32,
                 groupTitle: {
                     color: '#999',       
                     size: 14,   
@@ -267,10 +263,10 @@
                 fixedOn: api.frameName
             }, function(ret, err) {
                 if (ret) {
-                    // alert(JSON.stringify(ret));  
+                    alert(JSON.stringify(ret));
                     
                 } else {
-                    // alert(JSON.stringify(err));  
+                    alert(JSON.stringify(err));
                 }
             });
     }

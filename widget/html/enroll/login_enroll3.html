@@ -324,6 +324,27 @@
                     
             });
         }
+         // 打开数据库
+        db.openDatabase({
+            name: 'db_'+$api.getStorage('userName')
+        }, function(ret, err) {
+            if (ret.status) {
+                alert('打开成功');
+                db.executeSql({
+                    name: 'db_'+$api.getStorage('userName'),
+                    sql: 'CREATE TABLE Persons(user_id int, nickname varchar(255), head_img_url varchar(255), current_position varchar(255), title varchar(255), img varchar(255), flag varchar(255))'
+                }, function(ret, err) {
+                    if (ret.status) {
+                        console.log(JSON.stringify(ret));
+                        alert('执行成功')
+                    } else {
+                        alert(JSON.stringify(err));
+                    }
+                });
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     }
     function openloginenroll4() {
          api.openWin({

@@ -36,8 +36,8 @@
             -webkit-background-size: .39rem .39rem;
             background-size: .39rem .39rem;
             position: absolute;
-            right: .2rem;
-            bottom: .3rem;
+            right: .4rem;
+            top: .2rem;
         }
         
         .addWin {
@@ -198,8 +198,8 @@
                 <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con active "><span id="newsCount"></span>我在</li>
                 <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con ">通讯录</li>
                 <li tapmode="hover" onclick="randomSwitchBtn( this );" data-val = '3' class="flex-con ">供求</li>
-                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con news">发现</li>
-                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con news">我</li>
+                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">发现</li>
+                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">我</li>
             </ul>
         </div>
     </div>
@@ -251,6 +251,26 @@ apiready = function() {
     });
 
     getTotalCount();
+    // 打开数据库
+    db.openDatabase({
+        name: 'db_'+$api.getStorage('userName')
+    }, function(ret, err) {
+        if (ret.status) {
+            // alert('打开成功');
+            // db.executeSql({
+            //         name: 'db_'+$api.getStorage('userName'),
+            //         sql: 'CREATE TABLE addressList(user_id int, nickname varchar(255), head_img_url varchar(255),current_company varchar(255), current_position varchar(255), type int)'
+            //     }, function(ret, err) {
+            //         if (ret.status) {
+            //             alert('执行成功')
+            //         } else {
+            //             alert(JSON.stringify(err));
+            //         }
+            //     });
+        } else {
+            alert(JSON.stringify(err));
+        }
+    });
 
 }
 

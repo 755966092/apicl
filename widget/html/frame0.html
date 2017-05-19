@@ -10,17 +10,20 @@
     <style>
         html,body {
                 background: #EFEFF4;
+                box-sizing: border-box;
         }
         .search {
+            border-radius: .04rem;
+            display: block;
             height: .5rem;
             line-height: .5rem;
             background-color: #fff;
-            margin: .2rem .3rem;
+            margin: .2rem .15rem;
             text-align: center;
             font-size: 0.24rem;
             color: #96969B;
-            display: none;
-
+            box-sizing: border-box;
+            
         }
         .search .searchIcon {
             display: inline-block;
@@ -31,9 +34,11 @@
             background-size: .25rem .26rem;
             background-position: 0 center;
             vertical-align: top;
+            box-sizing: border-box;
         }
         .search .searchText {
             font-size: .24rem;
+
         }
         .news {
             display: flex;
@@ -44,9 +49,21 @@
             display: flex; 
             height: 1.24rem;
             background-color: #fff;
+            display: -webkit-box; 
+            display: flex; 
+            padding: 0 0 0 .17rem;
+            box-sizing: border-box;
+
+        }
+        ul li .warp {
+            display: -webkit-box; 
+            display: flex; 
             -webkit-box-align:  center;
             align-items: center;
-            padding: 0 .12rem 0 .18rem;
+            padding-right: .17rem;
+            box-sizing: border-box;
+            width: 100%;
+
         }
          ul li .headImg {
             margin-right: .2rem;
@@ -68,12 +85,12 @@
         ul li .headImg img {
             width: .91rem;
             height: .91rem;
-            border-radius: .06rem;
+            border-radius: .12rem;
         }
         .contentRight .name{
              display: -webkit-box; 
              display: flex; 
-             width: 6.11rem;
+             width: 6.05rem;
              -webkit-box-pack: justify;
             justify-content: space-between;
         }
@@ -86,12 +103,15 @@
             color: #999;
         }
         .contentRight p {
-            font-size: .24rem;
+            font-size: .28rem;
             color: #999;
             width: 5.24rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+        .warp {
+            border-bottom: 0.6px solid #D9D9D9;
         }
     </style>
 </head>
@@ -103,40 +123,44 @@
             <span class="searchText">搜索</span>
         </div>
         
-      <!--   <ul class="resultList">
-            <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" ontouchstart=";event.stopPropagation();" onclick="openChat(this)">
-                <div class="headImg ">
-                    <img class="fl" src="../image/tx_4.jpg">
-                </div>
-                <div class="contentRight">
-                    <div class="name">
-                        <h3>{{=it[i].nickname}}</h3>
-                        <span class="time">速度度速度度速度度</span>
+        <ul class="resultList">
+            <!-- <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" ontouchstart=";event.stopPropagation();" onclick="openChat(this)">
+                <div class="warp">
+                    <div class="headImg ">
+                        <img class="fl" src="../image/tx_4.jpg">
                     </div>
-                    <p>{{=i{{=it[i].latestMessagelatestMessagelatestMessagelatestMessagelatestMessagelatestMessagelatestMessage.text}}</p>
+                    <div class="contentRight">
+                        <div class="name">
+                            <h3>{{=it[i].nickname}}</h3>
+                            <span class="time">速度度速度度速度度</span>
+                        </div>
+                        <p>{{=i{{=it[i].latestMessagelatestMessagelatestMessagelatestMessagelatestMessagelatestMessagelatestMessage.text}}</p>
+                    </div>
                 </div>
-            </li>
-        </ul> -->
+            </li> -->
+        </ul>
 
 
         <ul class="resultList"></ul>
         <script type="text/x-dot-template" id="listT">
             {{ for (var i = 0; i < it.length; i++) { }} 
                 <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" ontouchstart=";event.stopPropagation();" onclick="openChat(this)">
-                <div class="headImg">
-                     <img class="fl" src="{{=it[i].url}}">
-                     {{?it[i].unreadMessageCount == 0 }}
-                     {{??}}
-                     <span class="select">{{=it[i].unreadMessageCount}}</span>
-                     {{?}}
-                </div>
-                <div class="contentRight">
-                   <div class="name">
-                        <h3>{{=it[i].nickname}}</h3>
-                        <span class="time">{{=it[i].time.hour}}：{{=it[i].time.minute}}</span>
-                   </div>
-                    <p>{{=it[i].latestMessage.text}}</p>
-                </div>
+                    <div class="warp">
+                        <div class="headImg">
+                             <img class="fl" src="{{=it[i].url}}">
+                             {{?it[i].unreadMessageCount == 0 }}
+                             {{??}}
+                             <span class="select">{{=it[i].unreadMessageCount}}</span>
+                             {{?}}
+                        </div>
+                        <div class="contentRight">
+                           <div class="name">
+                                <h3>{{=it[i].nickname}}</h3>
+                                <span class="time">{{=it[i].time.hour}}:{{=it[i].time.minute}}</span>
+                           </div>
+                            <p>{{=it[i].latestMessage.text}}</p>
+                        </div>
+                    </div>
                 </li>
                 {{ }; }}
                 
@@ -260,33 +284,33 @@
         });
     }
 
-    (function (){
-       var yStart=0,yEnd=0;
-        $api.byId('body').addEventListener('touchstart', function(event) {
-            event.preventDefault();
-            yStart = event.changedTouches[0].clientY
-        })
-        $api.byId('body').addEventListener('touchmove', function(event) {
-            event.preventDefault();
-            yEnd = event.changedTouches[0].clientY;
-            if ((yEnd - yStart) > 100) {
-                $api.css($api.dom('.search'), 'display:block');
-            } 
-            if ((yEnd - yStart) < -100) {
-                $api.css($api.dom('.search'), 'display:none');
-            }
-        })
-        $api.byId('body').addEventListener('touchend', function(event) {
-            // event.preventDefault();
-            yEnd = event.changedTouches[0].clientY;
-            if ((yEnd - yStart) > 100) {
-                $api.css($api.dom('.search'), 'display:block');
-            } 
-            if ((yEnd - yStart) < -100) {
-                $api.css($api.dom('.search'), 'display:none');
-            }
-        })
-    })()
+    // (function (){
+    //    var yStart=0,yEnd=0;
+    //     $api.byId('body').addEventListener('touchstart', function(event) {
+    //         event.preventDefault();
+    //         yStart = event.changedTouches[0].clientY
+    //     })
+    //     $api.byId('body').addEventListener('touchmove', function(event) {
+    //         event.preventDefault();
+    //         yEnd = event.changedTouches[0].clientY;
+    //         if ((yEnd - yStart) > 100) {
+    //             $api.css($api.dom('.search'), 'display:block');
+    //         } 
+    //         if ((yEnd - yStart) < -100) {
+    //             $api.css($api.dom('.search'), 'display:none');
+    //         }
+    //     })
+    //     $api.byId('body').addEventListener('touchend', function(event) {
+    //         // event.preventDefault();
+    //         yEnd = event.changedTouches[0].clientY;
+    //         if ((yEnd - yStart) > 100) {
+    //             $api.css($api.dom('.search'), 'display:block');
+    //         } 
+    //         if ((yEnd - yStart) < -100) {
+    //             $api.css($api.dom('.search'), 'display:none');
+    //         }
+    //     })
+    // })()
     
     // 显示搜索页面
     function showSearch () {

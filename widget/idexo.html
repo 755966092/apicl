@@ -20,29 +20,103 @@
 </body>
 </html>
 <script src='./script/api.js'></script>
+<script type="text/javascript" src="./script/common.js"></script>
 
 <script type="text/javascript">
-    function fn(event) {
-        console.log(event);
-    }
 
-    window.addEventListener("scroll", function(event) {
-        console.log(window.scrollY)
-    });
-    function abc() {
-        alert(1);
+
+var a = 'asdasda;'
+a=a.substring(0,a.length-1)
+console.log(a)
+
+
+var obj =  [
+            {
+                "user_id": 358,
+                "nickname": "刘欣",
+                "head_img_url": "http://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+                "current_company": null,
+                "current_position": null
+            },
+            {
+                "user_id": 359,
+                "nickname": "杨慧",
+                "head_img_url": "http://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+                "current_company": null,
+                "current_position": null
+            },
+            {
+                "user_id": 360,
+                "nickname": "李新新",
+                "head_img_url": "http://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+                "current_company": null,
+                "current_position": null
+            },
+            {
+                "user_id": 361,
+                "nickname": "姗鸿",
+                "head_img_url": "http://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+                "current_company": null,
+                "current_position": null
+            },
+            {
+                "user_id": 362,
+                "nickname": "鲍思学北京新",
+                "head_img_url": "http://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+                "current_company": null,
+                "current_position": null
+            },
+            {
+                "user_id": 363,
+                "nickname": "孙博泓",
+                "head_img_url": "http://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+                "current_company": null,
+                "current_position": null
+            }
+        ]
+
+// 排序
+// 
+// 
+    for (var i = 0; i < obj.length; i++) {
+        obj[i].litter = ConvertPinyin(obj[i].nickname);
+        obj[i].title = obj[i].nickname;
+        obj[i].img = obj[i].head_img_url;
+
     }
-    setTimeout(function(){
-        var a=1
-        for (var i = 0; i < 10000000000; i++) {
-            a++;
+      // 排序
+    function litterSort(data) {
+        for (var i = 0; i < data.length; i++) {
+            for (var j = 0; j < data.length; j++) {
+                if (data[i].litter < data[j].litter) {
+                    var temp = data[i];
+                    data[i] = data[j];
+                    data[j] = temp;
+                }
+            }
+         }
+         for (var i = 0; i < data.length; i++) {
+             data[0].flag = data[0].litter[0]
+            if (i>0) {
+                if (data[i].litter[0] !== data[i-1].litter[0]) {
+                    data[i].flag = data[i].litter[0]
+                }
+            }
+         
+         }
+        var arr = {}
+        for (var i = 0; i < data.length; i++) {
+            var a;
+            if (data[i].flag) {
+                arr[data[i].flag] = [];
+                a = i;
+            }
+            arr[data[a].flag].push (data[i])
         }
-     console.log(a)
+        return arr;
+    }
 
-    },1)
-    console.log(2)
-        alert(1);
-
+console.log(litterSort(obj))
 
 </script>
 

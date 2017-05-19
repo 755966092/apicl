@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        body,html{
+            background-color: #F8F8F8;
+        }
+        
+        .main {
+            padding: 0 .3rem;
+            height: .6rem;
+            font-size: 0rem;
+            margin-top: .2rem;
+            position: relative;
+        }
+        input {
+            outline: none;
+            height: .6rem;
+            font-size: .24rem;
+            text-align: center;
+            background-color: #fff;
+            width: 85%;
+            padding-left: .5rem;
+            box-sizing: border-box;
+        }
+
+        .icon_search {
+            display: inline-block;
+            position: absolute;
+            margin-left: .2rem;
+            width: .25rem;
+            height: .6rem;
+            background: url(../../image/icon_search.png)no-repeat;
+            background-size: .25rem .25rem;
+            background-position: 0 center;
+        }
+        .clear_search {
+            font-size: .28rem;
+            margin-left: .3rem;            
+            color: #1AAD19;
+        }
+    </style>
+</head>
+<body>
+     <header  class="header">
+        <div class="head">
+            <span class="callback" onclick="api.closeWin()">
+                <!--<span class="heaDicon"></span>-->
+                返回
+            </span>
+            <span class="winTitle">
+                初识好友
+            </span>
+        </div>
+    </header>
+   
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        moduleInit();
+        fnInit();
+        api.openFrame({
+            name: 'txl_contactFriend_frame',
+            url: './txl_contactFriend_frame.html',
+            rect: {
+                x: 0,
+                y: headerH,
+                w: 'auto',
+                h: api.winHeight
+            },
+            pageParam: {
+                userToken: api.pageParam.userToken,
+                rongToken: api.pageParam.rongToken,
+                headerH: headerH
+            },
+            bounces: false
+        });
+    };
+   
+</script>
+</html>

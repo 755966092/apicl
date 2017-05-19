@@ -48,6 +48,16 @@ function exitApp() {
             //     //     });
             //     // }
             // });
+            // 
+            db.closeDatabase({
+                name: 'test'
+            }, function(ret, err) {
+                if (ret.status) {
+                    alert(JSON.stringify(ret));
+                } else {
+                    alert(JSON.stringify(err));
+                }
+            });
         });
         setTimeout(function() {
             exitApp();
@@ -88,9 +98,13 @@ var rong,
     citySelector,
     UIListContacts,
     bMap,
+    listContact,
+    db,
     contacts;
 
 function moduleInit() {
+    // 数据库模块
+    db = api.require('db');
     // 融云模块
     rong = api.require('rongCloud2');
     //聊天界面模块
@@ -103,6 +117,8 @@ function moduleInit() {
     citySelector = api.require('citySelector');
     // 通讯录列表
     UIListContacts = api.require('UIListContacts');
+    // 现在使用
+    listContact = api.require('listContact');
     // 百度地图
     bMap = api.require('bMap');
 
@@ -153,8 +169,8 @@ function historicalNews() {
 function receiveMsg() {
     // 监听连接器变化
     rong.setConnectionStatusListener(function(ret, err) {
-        alert(JSON.stringify(ret))
-        alert('你以被顶下线');
+        // alert(JSON.stringify(ret))
+        // alert('你以被顶下线');
     });
     rong.setOnReceiveMessageListener(function(ret, err) {
         // 接收消息监听器接收到消息后刷新列表
