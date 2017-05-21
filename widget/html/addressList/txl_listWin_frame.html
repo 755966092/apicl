@@ -163,6 +163,7 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
     apiready = function(){
         moduleInit();
@@ -182,7 +183,8 @@
             }
        }, function(ret, err) {
             for (var i = 0; i < ret.data.unavailable_list.length; i++) {
-                ret.data.unavailable_list[i].litter = ConvertPinyin(ret.data.unavailable_list[i].nickname);
+                // ret.data.unavailable_list[i].litter = ConvertPinyin(ret.data.unavailable_list[i].nickname);
+                 ret.data.unavailable_list[i].litter = PinyinHelper.getShortPinyin(ret.data.unavailable_list[i].nickname).toUpperCase();
                 ret.data.unavailable_list[i].title = ret.data.unavailable_list[i].nickname;
                 ret.data.unavailable_list[i].img = ret.data.unavailable_list[i].head_img_url;
                 ret.data.unavailable_list[i].titleSize = 15;
@@ -194,10 +196,9 @@
                 }
             }
             // 模块数据格式
-            console.log(JSON.stringify(ret.data.unavailable_list))
+            // console.log(JSON.stringify(ret.data.unavailable_list))
             var data1 = litterSort(ret.data.unavailable_list)
             dakai(data1)
-           
        })
            
     }
