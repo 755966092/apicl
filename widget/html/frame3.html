@@ -168,7 +168,7 @@
                 alert('打开成功');
                 db.executeSql({
                     name: 'db_'+$api.getStorage('userToken'),
-                    sql: 'DROP TABLE addressList;CREATE TABLE addressList(user_id int, nickname varchar(255), head_img_url varchar(255), current_position varchar(255),current_company varchar(255), titleSize int, title varchar(255), img varchar(255), flag varchar(255), litter varchar(255), type int);CREATE UNIQUE INDEX user_id_idx on addressList (user_id);'
+                    sql: 'DROP TABLE IF EXISTS addressList;CREATE TABLE addressList(user_id int, nickname varchar(255), head_img_url varchar(255), current_position varchar(255),current_company varchar(255), titleSize int, title varchar(255), img varchar(255), flag varchar(255), litter varchar(255), type int);CREATE UNIQUE INDEX user_id_idx on addressList (user_id);'
                 }, function(ret, err) {
                     // ;CREATE UNIQUE INDEX user_id_idx on addressList (user_id);
                     if (ret.status) {
