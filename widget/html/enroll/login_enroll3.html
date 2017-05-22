@@ -409,9 +409,6 @@
             // sqlSyntax(initialData);
         }
     }
-
-
-
     // 排序
     function litterSort(data,type) {
         for (var i = 0; i < data.length; i++) {
@@ -464,7 +461,7 @@
 
         // console.log('数据库语法字符串:'+data1);
         var SQLName = 'db_'+$api.getStorage('userToken');
-        var SQL = 'INSERT INTO addressList(user_id,nickname,head_img_url,current_company,current_position,titleSize,title,img,flag,litter,type) VALUES '
+        var SQL = 'INSERT OR REPLACE INTO addressList(user_id,nickname,head_img_url,current_company,current_position,titleSize,title,img,flag,litter,type) VALUES '
         for (var i = 0; i < data1.length; i++) {
             SQL += '("'+ data1[i].user_id +'","'+ data1[i].nickname +'","'+ data1[i].head_img_url +'","'+ data1[i].current_company +'","'+ data1[i].current_position+'","'+ data1[i].titleSize +'","'+ data1[i].title +'","'+ data1[i].img+'","'+ data1[i].flag +'","'+ data1[i].litter +'",'+ type +'),'
         }
@@ -476,9 +473,7 @@
         }, function(ret, err) {
             if (ret.status) {
                 console.log('执行语句正确'+JSON.stringify(ret));
-                api.sendEvent({
-                    name: 'dataOver'
-                });
+             
                 // api.execScript({
                 //     frameName: 'frame1',
                 //     script: 'query()'
