@@ -128,15 +128,15 @@
 <body>
     <div id="news_wrap" class=" clearfix">
        <div class="wrap clearfix">
-            <div class="search" onclick="openS()">
+            <div class="search"   tapmode="hover"   onclick="openS()">
                 <span class="searchIcon"></span>
                 <span class="searchText">搜索</span>
             </div>
        </div>
-        <div class="main_no1" onclick="onceConnected()">
+        <div class="main_no1"   tapmode="hover"   onclick="onceConnected()">
             一度人脉
         </div>
-        <div class="main_no2" onclick="contactFriend()">
+        <div class="main_no2"   tapmode="hover"   onclick="contactFriend()">
             初识好友（无通讯录）
         </div>
     </div>
@@ -168,6 +168,7 @@
             url: './addressList/txl_listWin.html',
             pageParam: {
                 userToken: api.pageParam.userToken
+                headerH: headerH
             },
             bounces: false
         });
@@ -175,9 +176,12 @@
     // 打开初始好友
     function contactFriend () {
         api.openWin({
-               name: 'txl_contactFriend_win',
-               url: './addressList/txl_contactFriend_win.html',
-               bounces: false
+                name: 'txl_contactFriend_win',
+                url: './addressList/txl_contactFriend_win.html',
+                bounces: false,
+                pageParam: {
+                    headerH: headerH
+                }
            });   
     }
      // 请求数据

@@ -104,7 +104,7 @@
 <body>
    
        <!--  <ul class="list clearfix">
-            <li onclick="selPerson(this)" data-val='no1'>
+            <li   tapmode="hover"   onclick="selPerson(this)" data-val='no1'>
                 <span class="sel"></span>
                 <img src="../../image/tx_3.jpg">
                 <div class="title">
@@ -119,7 +119,7 @@
             {{?it[i].flag}}
                 <p id="{{=it[i].flag}}" class="groupTitle">{{=it[i].flag}}</p>
             {{? }}
-            <div data-userId='{{=it[i].user_id}}' data-name={{=it[i].nickname}} class="item" onclick="selPerson(this)" data-val='no1'>
+            <div data-userId='{{=it[i].user_id}}' data-name={{=it[i].nickname}} class="item"   tapmode="hover"   onclick="selPerson(this)" data-val='no1'>
                
                 <img src="{{=it[i].head_img_url}}">
                 <div class="title">
@@ -188,7 +188,13 @@
         });
     }
 
-
+function f_check_uppercase(obj)   {          
+   if (/^[A-Z]+$/.test( obj ))    {   
+      return true;   
+   }    
+   // f_alert(obj,"请输入大写英文字母");   
+   return false;   
+}   
 function paixv (data) {
     for (var i = 0; i < data.length; i++) {
             // console.log("letter+++:"+data[i].litter)
@@ -198,7 +204,12 @@ function paixv (data) {
             if (i>0) {
                 if (data[i].flag !== data[i-1].flag) {
                     // console.log("letter+++:"+data[i].litter)
-                    data[i].initial = data[i].flag;
+                    if (f_check_uppercase(data[i].flag)) {
+                        data[i].initial = data[i].flag;
+                    } else {
+                        data[i].initial = '#';
+                    }
+
                     // console.log("flag+++:"+data[i].flag)
                 }
             }
@@ -291,7 +302,7 @@ function paixv (data) {
                 x : 0,
                 y : 0,
                 w : api.frameWidth,
-                h : api.frameHeight,
+                h : api.frameHeight - api.pageParam.headerH,
                 bgColor: '#f8f8f8',
                 // 分割线颜色
                 borderColor: '#EDEDED',

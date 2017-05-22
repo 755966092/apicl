@@ -180,12 +180,12 @@
             <ul>
                 <li class="border-b active" id="title">
                     我在
-                    <span id="addFellow" onclick="addFellow()"></span>
+                    <span id="addFellow"   tapmode="hover"   onclick="addFellow()"></span>
                 </li>
                 <li class="border-b">通讯录</li>
                 <li class="border-b supply">
                     供求
-                    <span onclick="addPublish()"></span>
+                    <span tapmode="hover"  onclick="addPublish()"></span>
                 </li>
                 <li class="border-b">发现</li>
                 <li class="border-b">我</li>
@@ -243,12 +243,12 @@ apiready = function() {
 
     }, function(ret, err) {
       
-        $api.html($api.dom('.supply'), '找供求<span onclick="addPublish()"></span>');
+        $api.html($api.dom('.supply'), '找供求<span   tapmode="hover"   onclick="addPublish()"></span>');
     });
     api.addEventListener({
         name: 'clearSearchSupply'
     }, function(ret, err) {
-        $api.html($api.dom('.supply'), '供求<span onclick="addPublish()"></span>');
+        $api.html($api.dom('.supply'), '供求<span   tapmode="hover"   onclick="addPublish()"></span>');
     });
 
     getTotalCount();
@@ -272,10 +272,10 @@ apiready = function() {
 function getTotalCount() {
     rong.getTotalUnreadCount(function(ret, err) {
         if (ret.result == 0) {
-            $api.html($api.byId('title'), '我在<span id="addFellow" onclick="addFellow()"></span>');
+            $api.html($api.byId('title'), '我在<span id="addFellow"   tapmode="hover"   onclick="addFellow()"></span>');
             $api.css($api.byId('newsCount'), 'display: none');
         } else {
-            $api.html($api.byId('title'), '我在（' +ret.result+ '）<span id="addFellow" onclick="addFellow()"></span>');
+            $api.html($api.byId('title'), '我在（' +ret.result+ '）<span id="addFellow"   tapmode="hover"   onclick="addFellow()"></span>');
             $api.css($api.byId('newsCount'), 'display: inline-block');
             $api.html($api.byId('newsCount'), ret.result);
         }
