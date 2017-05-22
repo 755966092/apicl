@@ -173,7 +173,7 @@
 
       // 查询数据库
     function query() {
-         var SQLName = 'db_'+$api.getStorage('userToken');
+        var SQLName = 'db_'+$api.getStorage('userToken');
         // 查询数据库
         db.selectSql({
             name: SQLName,
@@ -188,116 +188,45 @@
         });
     }
 
-function f_check_uppercase(obj)   {          
-   if (/^[A-Z]+$/.test( obj ))    {   
-      return true;   
-   }    
-   // f_alert(obj,"请输入大写英文字母");   
-   return false;   
-}   
+    function f_check_uppercase(obj)   {          
+       if (/[A-Z]/.test(obj))    {   
+          return true;   
+       }    
+       return false;   
+    }   
 function paixv (data) {
     for (var i = 0; i < data.length; i++) {
             // console.log("letter+++:"+data[i].litter)
-             data[0].initial = data[0].flag
+             // data[0].initial = data[0].flag
              // data[i].flag = data[i].litter[0]
-             
+            if (f_check_uppercase(data[0].flag)) {
+                data[0].initial = data[0].flag;
+            } else {
+                data[0].initial = '#';
+            }
             if (i>0) {
                 if (data[i].flag !== data[i-1].flag) {
-                    // console.log("letter+++:"+data[i].litter)
                     if (f_check_uppercase(data[i].flag)) {
                         data[i].initial = data[i].flag;
                     } else {
                         data[i].initial = '#';
                     }
-
-                    // console.log("flag+++:"+data[i].flag)
                 }
             }
          }
-        // console.log('数据：'+JSON.stringify(data))
+         console.log(JSON.stringify(data))
         var arr = {}
         var a;
         for (var i = 0; i < data.length; i++) {
-            
             if (data[i].initial) {
                 arr[data[i].initial] = [];
                 a = i;
             } 
-            // if (data[a].initial ) {
-                
-            // }
             arr[data[a].initial].push (data[i])
         }
         return arr;
     }
-   
-
-
-    // 请求数据
-    function requestData() {
-        api.ajax({
-            url: apiSite + '/api/contact/index',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-               values: { 
-                  token: $api.getStorage('userToken'),
-               }
-            }
-       }, function(ret, err) {
-            for (var i = 0; i < ret.data.unavailable_list.length; i++) {
-                // ret.data.unavailable_list[i].litter = ConvertPinyin(ret.data.unavailable_list[i].nickname);
-                 ret.data.unavailable_list[i].litter = PinyinHelper.getShortPinyin(ret.data.unavailable_list[i].nickname).toUpperCase();
-                ret.data.unavailable_list[i].title = ret.data.unavailable_list[i].nickname;
-                ret.data.unavailable_list[i].img = ret.data.unavailable_list[i].head_img_url;
-                ret.data.unavailable_list[i].titleSize = 15;
-                if (ret.data.unavailable_list[i].current_position == null) {
-                    ret.data.unavailable_list[i].current_position = '';
-                } 
-                if (ret.data.unavailable_list[i].current_company == null) {
-                    ret.data.unavailable_list[i].current_company = '';
-                }
-            }
-            // 模块数据格式
-            // console.log(JSON.stringify(ret.data.unavailable_list))
-            var data1 = litterSort(ret.data.unavailable_list)
-            dakai(data1)
-       })
-           
-    }
-    // 排序
-    function litterSort(data) {
-        for (var i = 0; i < data.length; i++) {
-            for (var j = 0; j < data.length; j++) {
-                if (data[i].litter < data[j].litter) {
-                    var temp = data[i];
-                    data[i] = data[j];
-                    data[j] = temp;
-                }
-            }
-         }
-         for (var i = 0; i < data.length; i++) {
-             data[0].flag = data[0].litter[0]
-            if (i>0) {
-                if (data[i].litter[0] !== data[i-1].litter[0]) {
-                    data[i].flag = data[i].litter[0]
-                }
-            }
-         
-         }
-        var arr = {}
-        for (var i = 0; i < data.length; i++) {
-            var a;
-            if (data[i].flag) {
-                arr[data[i].flag] = [];
-                a = i;
-            }
-            arr[data[a].flag].push (data[i])
-        }
-        return arr;
-    }
     function dakai(data1) {
-        console.log(JSON.stringify(data1));
         listContact.open({
                 x : 0,
                 y : 0,
@@ -326,7 +255,10 @@ function paixv (data) {
                 },
                 cellBgColor: '#fff',
                 // 搜索框
-                // searchBar: {},
+                searchBar: {
+                    bgColor: '#fff',         //（可选项）搜索条背景色，字符串，默认透明，支持 rgb，rgba，#
+                    placeholder: '搜索'      //（可选项）搜索条提示文字，字符串类型，默认空，不传则不显示提示文字
+                },
                 data: data1,
                 fixedOn: api.frameName
             }, function(ret, err) {

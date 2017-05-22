@@ -167,7 +167,7 @@
             name: 'listWin',
             url: './addressList/txl_listWin.html',
             pageParam: {
-                userToken: api.pageParam.userToken
+                userToken: api.pageParam.userToken,
                 headerH: headerH
             },
             bounces: false
@@ -184,89 +184,6 @@
                 }
            });   
     }
-     // 请求数据
-    function requestData() {
-        alert('我没执行')
-        api.ajax({
-            url: apiSite + '/api/contact/index',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-               values: { 
-                  token: $api.getStorage('userToken'),
-               }
-            }
-       }, function(ret, err) {
-            // console.log(JSON.stringify(ret))
-            // var initialData = ret.data.unavailable_list;
-            for (var i = 0; i < ret.data.unavailable_list.length; i++) {
-                // 去除空格
-                ret.data.unavailable_list[i].nickname = $api.trimAll(ret.data.unavailable_list[i].nickname)
-                ret.data.unavailable_list[i].litter = PinyinHelper.getShortPinyin(ret.data.unavailable_list[i].nickname).toUpperCase();
-                ret.data.unavailable_list[i].title = ret.data.unavailable_list[i].nickname;
-                ret.data.unavailable_list[i].img = ret.data.unavailable_list[i].head_img_url;
-                ret.data.unavailable_list[i].titleSize = 15;
-                if (ret.data.unavailable_list[i].current_position == null) {
-                    ret.data.unavailable_list[i].current_position = '';
-                } 
-                if (ret.data.unavailable_list[i].current_company == null) {
-                    ret.data.unavailable_list[i].current_company = '';
-                }
-            }
-            // 模块数据格式
-            var data1 = litterSort(ret.data.unavailable_list)
-            console.log(data1)
-            dakai(data1)
-            // sqlSyntax(initialData);
-       })
-           
-    }
-    // 排序
-    function litterSort(data) {
-        for (var i = 0; i < data.length; i++) {
-            for (var j = 0; j < data.length; j++) {
-                if (data[i].litter < data[j].litter) {
-                    var temp = data[i];
-                    data[i] = data[j];
-                    data[j] = temp;
-                }
-            }
-         }
-         for (var i = 0; i < data.length; i++) {
-            // console.log("letter+++:"+data[i].litter)
-             data[0].flag = data[0].litter[0]
-             // data[i].flag = data[i].litter[0]
-             
-            if (i>0) {
-                if (data[i].litter[0] !== data[i-1].litter[0]) {
-                    // console.log("letter+++:"+data[i].litter)
-                    data[i].flag = data[i].litter[0];
-                    // console.log("flag+++:"+data[i].flag)
-                }
-            }
-         }
-        // console.log('数据：'+JSON.stringify(data))
-        var arr = {}
-        var a;
-        for (var i = 0; i < data.length; i++) {
-            
-            if (data[i].flag) {
-                arr[data[i].flag] = [];
-                a = i;
-            } 
-            // if (data[a].flag ) {
-                
-            // }
-            arr[data[a].flag].push (data[i])
-        }
-        console.log(JSON.stringify(arr))
-        return arr;
-    }
-
-   
-    
-
-
 
     function dakai(data1) {
         var hei = $api.offset($api.dom('.main_no1')).h * 2 + $api.offset($api.dom('.wrap')).h; 
@@ -311,44 +228,12 @@
             });
     }
   
-   function  txl() {
-        contacts.select(function(ret, err) {
-            if (ret) {
-                // alert(JSON.stringify(ret));
-            } else {
-                // alert(JSON.stringify(err));  
-            }
-        });
-    }
-
-    function sqlSyntax(data1) {
-        var SQLName = 'db_'+$api.getStorage('userName');
-        var SQL = 'INSERT INTO addressList (user_id,nickname,head_img_url,current_company,current_position,type) VALUES '
-        for (var i = 0; i < data1.length; i++) {
-            data1[i]
-            SQL += '("'+ data1[i].user_id +'","'+ data1[i].nickname +'","'+ data1[i].head_img_url +'","'+ data1[i].current_company +'","'+ data1[i].current_position+ '",3),'
-        }
-        SQL = SQL.substring(0,SQL.length-1) + ';'
-        console.log(SQL)
-        db.executeSql({
-            name: SQLName,
-            sql: SQL
-        }, function(ret, err) {
-            if (ret.status) {
-                alert('正确'+JSON.stringify(ret));
-            } else {
-                console.log('错误:' + JSON.stringify(err))
-            }
-        });
-    }
-
     // 查询数据库
     function query() {
          var SQLName = 'db_'+$api.getStorage('userToken');
         // 查询数据库
         db.selectSql({
             name: SQLName,
-            // sql: 'SELECT * FROM addressList'  // 查询所有数据
             sql: 'SELECT * FROM addressList'
         }, function(ret, err) {
             console.log('查询到的数据:'+JSON.stringify(ret))
@@ -364,38 +249,36 @@
             }
         });
     }
-
-
-function paixv (data) {
-    for (var i = 0; i < data.length; i++) {
-            // console.log("letter+++:"+data[i].litter)
-             data[0].initial = data[0].flag
-             // data[i].flag = data[i].litter[0]
-             
-            if (i>0) {
-                if (data[i].flag !== data[i-1].flag) {
-                    // console.log("letter+++:"+data[i].litter)
-                    data[i].initial = data[i].flag;
-                    // console.log("flag+++:"+data[i].flag)
-                }
-            }
-         }
-        // console.log('数据：'+JSON.stringify(data))
-        var arr = {}
-        var a;
+    function paixv (data) {
         for (var i = 0; i < data.length; i++) {
-            
-            if (data[i].initial) {
-                arr[data[i].initial] = [];
-                a = i;
-            } 
-            // if (data[a].initial ) {
+                // console.log("letter+++:"+data[i].litter)
+                 data[0].initial = data[0].flag
+                 // data[i].flag = data[i].litter[0]
+                 
+                if (i>0) {
+                    if (data[i].flag !== data[i-1].flag) {
+                        // console.log("letter+++:"+data[i].litter)
+                        data[i].initial = data[i].flag;
+                        // console.log("flag+++:"+data[i].flag)
+                    }
+                }
+             }
+            // console.log('数据：'+JSON.stringify(data))
+            var arr = {}
+            var a;
+            for (var i = 0; i < data.length; i++) {
                 
-            // }
-            arr[data[a].initial].push (data[i])
-        }
-        console.log('处理完的数据:'+JSON.stringify(arr))
-        return arr;
+                if (data[i].initial) {
+                    arr[data[i].initial] = [];
+                    a = i;
+                } 
+                // if (data[a].initial ) {
+                    
+                // }
+                arr[data[a].initial].push (data[i])
+            }
+            console.log('处理完的数据:'+JSON.stringify(arr))
+            return arr;
     }
     </script>
 </body>
