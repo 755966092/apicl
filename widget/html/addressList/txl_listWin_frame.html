@@ -167,8 +167,60 @@
 <script type="text/javascript">
     apiready = function(){
         moduleInit();
-        requestData()
+        // requestData()
+        query();
     };
+
+      // 查询数据库
+    function query() {
+         var SQLName = 'db_'+$api.getStorage('userToken');
+        // 查询数据库
+        db.selectSql({
+            name: SQLName,
+            sql: 'SELECT * FROM addressList'
+        }, function(ret, err) {
+           
+            if (ret.status) {
+                dakai(paixv(ret.data))
+            } else {
+                console.log(JSON.stringify(err));
+            }
+        });
+    }
+
+
+function paixv (data) {
+    for (var i = 0; i < data.length; i++) {
+            // console.log("letter+++:"+data[i].litter)
+             data[0].initial = data[0].flag
+             // data[i].flag = data[i].litter[0]
+             
+            if (i>0) {
+                if (data[i].flag !== data[i-1].flag) {
+                    // console.log("letter+++:"+data[i].litter)
+                    data[i].initial = data[i].flag;
+                    // console.log("flag+++:"+data[i].flag)
+                }
+            }
+         }
+        // console.log('数据：'+JSON.stringify(data))
+        var arr = {}
+        var a;
+        for (var i = 0; i < data.length; i++) {
+            
+            if (data[i].initial) {
+                arr[data[i].initial] = [];
+                a = i;
+            } 
+            // if (data[a].initial ) {
+                
+            // }
+            arr[data[a].initial].push (data[i])
+        }
+        return arr;
+    }
+   
+
 
     // 请求数据
     function requestData() {

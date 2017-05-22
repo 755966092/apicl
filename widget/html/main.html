@@ -212,6 +212,7 @@
 var userToken, rongToken,footerH;  
 apiready = function() {
     footerH = $api.offset($api.byId('footer')).h;
+    // 打开数据库
     api.addEventListener({
         name:'appintent'
     },function(ret,err){
@@ -253,26 +254,19 @@ apiready = function() {
     getTotalCount();
     // 打开数据库
     db.openDatabase({
-        name: 'db_'+$api.getStorage('userName')
+        name: 'db_'+$api.getStorage('userToken')
     }, function(ret, err) {
         if (ret.status) {
             // alert('打开成功');
-            // db.executeSql({
-            //         name: 'db_'+$api.getStorage('userName'),
-            //         sql: 'CREATE TABLE addressList(user_id int, nickname varchar(255), head_img_url varchar(255),current_company varchar(255), current_position varchar(255), type int)'
-            //     }, function(ret, err) {
-            //         if (ret.status) {
-            //             alert('执行成功')
-            //         } else {
-            //             alert(JSON.stringify(err));
-            //         }
-            //     });
         } else {
             alert(JSON.stringify(err));
         }
     });
 
 }
+
+
+
 
 // 获取所有未读消息数
 function getTotalCount() {
