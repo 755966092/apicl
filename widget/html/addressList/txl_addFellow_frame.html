@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/flex.css"/>
+   <style type="text/css">
+        html,body {
+            background-color: #f8f8f8;
+        }
+        .search {
+            height: .791rem;
+            width: 100%;
+            background-color: #EFEFF4;
+            box-sizing: border-box;
+            padding: .14rem .16rem;
+            font-size: 0;   
+            position: relative;
+        }
+        .search input {
+            background-color: #fff;
+            height: .503rem;    
+            width: 100%;
+            float: left;
+            font-size: .24rem;
+            outline: none;
+            text-align: center;
+        }
+        
+        .searchIcon {
+            display: inline-block;
+            width: .25rem;
+            height: .791rem;
+            background: url(../../image/icon_search.png)no-repeat;
+            -webkit-background-size: .25rem .26rem;
+            background-size: .25rem .26rem;
+            background-position: 0 center;
+            position: absolute;
+            top: 0;
+            left: 3.3rem;
+        }
+        .hisSear {
+            font-size: 0;
+            height: .74rem;
+            padding: 0 .3rem;
+            background-color: #F8F8F8;
+        }
+        .hisSearTitle {
+            font-size: .28rem;line-height: .74rem;
+            color: #333;
+        }
+        .hisSearIcon {
+            display: inline-block;
+            width: .25rem;
+            height: .8rem;
+            float: right;
+            background: url(../../image/icon_other/icon_delet.png)no-repeat;
+            -webkit-background-size: .25rem .28rem;
+            background-size: .25rem .28rem;
+            background-position: 0 center;
+        }
+        ul {
+            font-size: 0;
+        }
+        ul li {
+            padding-left: .35rem;
+            background-color: #fff;
+        }
+        ul li div {
+            height: .81rem;
+            border-bottom: 1px solid #F4F4F4;
+            line-height: .81rem;
+            font-size: .3rem;
+            color: #333;
+            padding-left: .68rem;
+            background: url(../../image/icon_txl/icon_ewm.png)no-repeat;
+            -webkit-background-size: .439rem;
+            background-size: .439rem;
+            background-position: 0 center;
+        }
+        ul li:nth-child(2) div {
+            background: url(../../image/icon_txl/icon-sys.png)no-repeat;
+            -webkit-background-size: .439rem;
+            background-size: .439rem;
+            background-position: 0 center;
+        }
+        ul li:nth-child(3) div {
+            background: url(../../image/icon_txl/icon-txl.png)no-repeat;
+            -webkit-background-size: .439rem;
+            background-size: .439rem;
+            background-position: 0 center;
+        }
+        ul li:nth-child(4) div {
+            background: url(../../image/icon_txl/icon-hyqq.png)no-repeat;
+            -webkit-background-size: .439rem;
+            background-size: .439rem;
+            background-position: 0 center;
+            border-bottom: 0;
+        }
+        ul li:nth-child(4) {
+            border-bottom: 1px solid #f4f4f4;
+        }
+   </style>
+</head>
+<body>
+    <div class="search">
+        <input type="text" onkeyup="hideSearIcon(this)" name="" placeholder="&nbsp;&nbsp;&nbsp;&nbsp;搜索">
+        <span class="searchIcon"></span>
+    </div>
+    <div class="main">
+        <div class="hisSear">
+            <span class="hisSearTitle">历史搜索</span>
+            <span class="hisSearIcon"   tapmode="hover"   onclick="deletHis()"></span>
+        </div>
+        <ul>
+            <li>
+                <div>我的推广二维码</div>
+            </li>
+            <li tapmode="hover" onclick="openPage(this)" data-val="PersonInfoSet">
+                <div>扫一扫加好友</div>
+            </li>
+            <li tapmode="hover" onclick="openPage(this)" data-val="phoneAddressList">
+                <div>手机通讯录好友</div>
+            </li>
+            <li tapmode="hover" onclick="openPage(this)" data-val="friendRequest">
+                <div>好友请求</div>
+            </li>
+        </ul>
+
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript" src="../../script/pinyin4js.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+    };
+    function openPage(ele) {
+        var val = $api.attr(ele, 'data-val');
+        api.openWin({
+            name: val,
+            url: './txl_addFellow_'+ val +'_win.html',
+            bounces: false
+        });
+    }
+  
+   
+</script>
+</html>
+
+
+
+

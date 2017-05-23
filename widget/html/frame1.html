@@ -227,16 +227,22 @@
                 }
             });
     }
+    function f_check_uppercase(obj)   {          
+       if (/[A-Z]/.test(obj))    {   
+          return true;   
+       }    
+       return false;   
+    }
   
     // 查询数据库
     function query() {
-         var SQLName = 'db_'+$api.getStorage('userToken');
+        var SQLName = 'db_'+$api.getStorage('userToken');
         // 查询数据库
         db.selectSql({
             name: SQLName,
             sql: 'SELECT * FROM addressList'
         }, function(ret, err) {
-            console.log('查询到的数据:'+JSON.stringify(ret))
+            // console.log('查询到的数据:'+JSON.stringify(ret))
             if (ret.status) {
                 // setTimeout(function(){
                 //     if (ret.data=='') {
@@ -251,33 +257,45 @@
     }
     function paixv (data) {
         for (var i = 0; i < data.length; i++) {
-                // console.log("letter+++:"+data[i].litter)
-                 data[0].initial = data[0].flag
-                 // data[i].flag = data[i].litter[0]
-                 
+                if (f_check_uppercase(data[0].flag)) {
+                    data[0].initial = data[0].flag;
+                } else {
+                    data[0].initial = '#';
+                }
                 if (i>0) {
                     if (data[i].flag !== data[i-1].flag) {
-                        // console.log("letter+++:"+data[i].litter)
-                        data[i].initial = data[i].flag;
-                        // console.log("flag+++:"+data[i].flag)
+                        if (f_check_uppercase(data[i].flag)) {
+                            data[i].initial = data[i].flag;
+                        } else {
+                            data[i].initial = '#';
+                        }
                     }
                 }
              }
-            // console.log('数据：'+JSON.stringify(data))
             var arr = {}
             var a;
             for (var i = 0; i < data.length; i++) {
                 
                 if (data[i].initial) {
-                    arr[data[i].initial] = [];
-                    a = i;
+                    if (data[i].initial == '#') {
+                        if (arr[data[i].initial]) {
+                            arr[data[i].initial].push (data[i])
+                        } else {
+                            arr[data[i].initial] = [];
+                            arr[data[i].initial].push (data[i])
+                        }
+                    } else {
+                        arr[data[i].initial] = [];
+                        a = i;
+                    }
                 } 
                 // if (data[a].initial ) {
                     
                 // }
+       
                 arr[data[a].initial].push (data[i])
             }
-            console.log('处理完的数据:'+JSON.stringify(arr))
+            // console.log('处理完的数据:'+JSON.stringify(arr))
             return arr;
     }
     </script>

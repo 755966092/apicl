@@ -171,6 +171,17 @@
             text-align: center;
             line-height: .32rem;
         }
+        .addF {
+            display: inline-block;
+            width: .39rem;
+            height: .8rem;
+            background: url(../image/icon_addF.png)no-repeat;
+            -webkit-background-size: .39rem .3rem;
+            background-size: .39rem .3rem;
+            background-position: 0 center;
+            float: right;
+            margin-right: .28rem;
+        }
     </style>
 </head>
 
@@ -182,7 +193,9 @@
                     我在
                     <span id="addFellow"   tapmode="hover"   onclick="addFellow()"></span>
                 </li>
-                <li class="border-b">通讯录</li>
+                <li class="border-b">通讯录
+                    <span class="addF" tapmode="hover" onclick="addF()"></span>
+                </li>
                 <li class="border-b supply">
                     供求
                     <span tapmode="hover"  onclick="addPublish()"></span>
@@ -265,7 +278,14 @@ apiready = function() {
 
 }
 
-
+// 通讯录添加好友
+function addF() {
+    api.openWin({
+        name: 'txl_addFellow_win',
+        url: './addressList/txl_addFellow_win.html',
+        bounces: false
+    });
+}
 
 
 // 获取所有未读消息数
