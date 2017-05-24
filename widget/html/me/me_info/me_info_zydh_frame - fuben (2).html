@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <style>
+     
+        body, html {
+            background-color: #F8F8F8;
+        }
+        
+        .main_no1 {
+        }
+        .main_no1 p, .main_no2 p {
+             background-color: #fff;
+            height: .8rem;
+            line-height: .8rem;
+            border-bottom: 1px solid #DBDBDB;
+            font-size: .3rem;
+            padding: 0 .3rem;
+
+        }
+        .main_no1 p span {
+            display: inline-block;
+            width: .45rem;
+            height: .8rem;
+            float: right;
+            background: url(../../../image/icon_my/icon_enter.png)no-repeat;
+            background-size: .45rem .34rem;
+            background-position: center center;
+            display: none;
+        }
+        .main_no1 p span.select {
+            display: inline-block;
+        }
+        button {
+            display: block;
+            width: 7.2rem;
+            height: .95rem;
+            background-color: #08BB08;
+            color: #fff;
+            font-size: .34rem;
+            margin-top: 4rem;
+            margin: 0 auto;
+        }
+        .main_no3 {
+            margin-top: .2rem;
+            background-color: #fff;
+        }
+        .main_no3 p {
+            width: 2.5rem;
+            text-align: center;
+            margin: 0 auto;
+            height: .8rem;
+            line-height: .8rem;
+            font-size: .34rem;
+            color: #27b24a;
+            background:  url(../../../image/icon_my/icon_add.png)no-repeat;
+            -webkit-background-size: .4rem .4rem ;
+            background-size: .4rem .4rem ;
+            background-position: 0 center;
+            padding-left: .3rem;
+        }
+        
+        
+        .mobile {
+            height: .6rem;
+            font-size: .28rem;
+            color: #999;
+            line-height: .6rem;
+            padding-left: .3rem;
+        }
+        .telIpt {
+            height: .8rem;
+            margin-left: .5rem;
+            outline: none;
+        }
+        .clearIpt {
+            display: none;
+            width: .24rem;
+            height: .8rem;
+            background: url(../../../image/icon_login/icon-clearText.png)no-repeat;
+            background-size: .24rem .24rem;
+            background-position: 0 center;
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <!--  <header>
+        <span   tapmode="hover"   onclick="api.closeWin()">取消</span>
+        <span>电话</span>
+        <span   tapmode="hover"   onclick="enter()" class="bj">编辑</span>
+    </header> -->
+    <div class="wrap resultList">
+       <!--  <div class="main clearfix">
+            <p class="mobile ">移动</p>
+            <div class="main_no1 yd">
+               <p   tapmode="hover"   onclick="selectClass(this)"  data-val="yddh">
+                    工作
+                    <input maxlength="11" type="text" class="telIpt" name="" value="18765303417" disabled>
+               </p>
+               <p   tapmode="hover"   onclick="selectClass(this)"  data-val="gddh">
+                    生活
+                    <input maxlength="11" type="text" class="telIpt" name="" value="18765303417" disabled>
+               </p>
+           </div>
+        </div>
+        <div class="main clearfix gd">
+            <p class="mobile ">固定</p>
+           <div class="main_no1 gdd">
+               <p class="p">
+                    工作
+                    <input maxlength="11" type="text" class="telIpt" name="" value="18765303417" disabled>
+                    <i class="clearIpt"   tapmode="hover"   onclick="clearIpt(this)"></i>
+               </p>
+               <p class="p">
+                    生活
+                    <input maxlength="11" type="text" class="telIpt" name="" value="18765303417" disabled>
+                    <i class="clearIpt"   tapmode="hover"   onclick="clearIpt(this)"></i>
+               </p>
+           </div>
+        </div> -->
+
+    </div>
+        <script type="text/x-dot-template" id="listT">
+            {{ for (var i = 0; i < it.length; i++) { }} 
+                {{?it[i].type==1}}
+                    <div class="main clearfix">
+                        <!-- <p class="mobile ">移动</p> -->
+                        {{?it[i].flag==1}}
+                            <p id="{{=it[i].flag}}" class="mobile">移动电话</p>
+                        {{? }}
+                        <div class="main_no1 yd">
+                            {{?it[i].sub_type==1}}
+                               <p   tapmode="hover"   onclick="selectClass(this)" class="item"  data-val="yddh" data-val="{{=it[i].contact_id}}">
+                                    工作
+                                    <input maxlength="11" type="text" class="telIpt" name="" value="{{=it[i].phone}}" disabled>
+                                    <i class="clearIpt" data-val="{{=it[i].contact_id}}"   tapmode="hover"   onclick="clearIpt(this)"></i>
+                               </p>
+                            {{??}}
+                               <p   tapmode="hover"   onclick="selectClass(this)" class="item" class="item"  data-val="gddh" data-val="{{=it[i].contact_id}}">
+                                    生活
+                                    <input maxlength="11" type="text" class="telIpt" name="" value="{{=it[i].phone}}" disabled>
+                                    <i class="clearIpt" data-val="{{=it[i].contact_id}}"   tapmode="hover"   onclick="clearIpt(this)"></i>
+                               </p>
+                            {{?}}
+                       </div>
+                    </div>
+                {{??it[i].type==2}}
+                    <div class="main clearfix gd">
+                        <!-- <p class="mobile ">固定</p> -->
+                         {{?it[i].flag==2}}
+                            <p id="{{=it[i].flag}}" class="mobile">固定电话</p>
+                        {{? }}
+                       <div class="main_no1 gdd">
+                           {{?it[i].sub_type==1}}
+                               <p   tapmode="hover"   onclick="selectClass(this)" class="item"  data-val="yddh" data-contact_id="{{=it[i].contact_id}}">
+                                    工作
+                                    <input maxlength="11" type="text" class="telIpt" name="" value="{{=it[i].phone}}" disabled>
+                                    <i class="clearIpt" data-val="{{=it[i].contact_id}}"   tapmode="hover"   onclick="clearIpt(this)"></i>
+                               </p>
+                            {{??}}
+                               <p   tapmode="hover"   onclick="selectClass(this)" class="item"  data-val="gddh" data-contact_id="{{=it[i].contact_id}}">
+                                    生活
+                                    <input maxlength="11" type="text" class="telIpt" name="" value="{{=it[i].phone}}" disabled>
+                                    <i class="clearIpt" data-val="{{=it[i].contact_id}}"   tapmode="hover"   onclick="clearIpt(this)"></i>
+                               </p>
+                            {{?}}
+                       </div>
+                    </div>
+                {{?}}
+            {{ }; }}
+        </script>
+
+    <div class="main_no3 ">
+        <p   tapmode="hover"   onclick="addTel()">添加新号码</p>
+    </div>
+    <div class="a">
+        <div class="b">
+            <div class="c"   tapmode="hover"   onclick="c(this)">asdasd</div>
+            <div class="c"   tapmode="hover"   onclick="c(this)"></div>
+            <div class="c"   tapmode="hover"   onclick="c(this)"></div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../../script/api.js"></script>
+<script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript" src="../../../script/doT.min.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+	    // fnInit();
+       lxrList()
+        api.addEventListener({
+            name: 'bjTel'
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.value.valueName1 == '保存')
+                    for (var i = 0; i < $api.domAll('.clearIpt').length; i++) {
+                        $api.css($api.domAll('.clearIpt')[i], 'display:inline-block');
+                    }
+                else {
+                    for (var i = 0; i < $api.domAll('.clearIpt').length; i++) {
+                        $api.css($api.domAll('.clearIpt')[i], 'display:none');
+                    }
+                }
+               
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    };
+    // 监听增加电话好吗
+    function c(ele) {
+        console.log(ele)
+        console.log($api.closest(ele, '.a').getElementsByClassName('c').length)
+    }
+    // 添加电话号码
+    function addTel() {
+        api.openWin({
+            name: 'addTel',
+            url: './me_info_zydh_addtel.html',
+            pageParam: {
+                userToken: api.pageParam.userToken || $api.getStorage('userToken')
+            },
+            bounces: false
+        });
+    }
+
+
+    // 删除电话好吗
+    function clearIpt(ele) {
+        console.log(ele)
+        console.log(JSON.stringify($api.closest(ele, '.main_no1').childNodes.length))
+        // $api.remove($api.closest(ele,'p'));
+        // alert($api.text($api.closest(ele,'p')))
+        // $api.remove($api.closest(ele, '.main_no1'));
+        
+        console.log(2);
+        // api.ajax({
+        //     url: apiSite + '/api/user_center/deleteContact',
+        //     method: 'post',
+        //     headers: apiHeader,
+        //     data: {
+        //         values: { 
+        //             token: api.pageParam.userToken || $api.getStorage('userToken'),
+        //             contact_id: $api.attr(ele, 'data-val')
+        //         }
+        //     }
+        // }, function(ret, err) {
+
+        // })
+
+    }
+    // 获取联系人列表
+    function lxrList() {
+        api.ajax({
+            url: apiSite + '/api/user_center/contactList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: api.pageParam.userToken || $api.getStorage('userToken')
+                } 
+            }
+        }, function(ret, err) {
+            if (ret) {
+                // alert(JSON.stringify(ret.data.list))
+
+
+
+                litterSort(ret.data.list)
+                alert(JSON.stringify(ret.data.list))
+                getData(ret.data.list);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+     // 排序
+    function litterSort(data) {
+        for (var i = 0; i < data.length; i++) {
+            for (var j = 0; j < data.length; j++) {
+                if (data[i].type < data[j].type) {
+                    var temp = data[i];
+                    data[i] = data[j];
+                    data[j] = temp;
+                }
+            }
+         }
+         for (var i = 0; i < data.length; i++) {
+             data[0].flag = data[0].type
+            if (i>0) {
+                if (data[i].type !== data[i-1].type) {
+                    data[i].flag = data[i].type
+                }
+            }
+         }
+    }
+
+
+    
+    function bjPhone(ele) {
+         api.ajax({
+            url: apiSite + '/api/user_center/editContact',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    contact_id: $api.attr(ele, 'data-val'),
+                    phone: $api.val(ele),
+                    type: $api.attr(ele, 'data-type'),
+                    sub_type: $api.attr(ele, 'data-subType')
+                }
+            }
+        }, function(ret, err) {
+            alert(JSON.stringify(ret))
+        })
+    }
+</script>
+</html>

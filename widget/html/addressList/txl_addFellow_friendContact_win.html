@@ -10,12 +10,7 @@
             background-color: #F8F8F8;
         }
         
-        header.header .rightBtn {
-            color: #fff;
-            height: .44rem;
-            line-height: .44rem;
-            bottom: auto;
-        }
+        
     </style>
 </head>
 <body>
@@ -26,9 +21,8 @@
                 返回
             </span>
             <span class="winTitle">
-                电话
+                交集信息
             </span>
-            <span class="rightBtn" tapmode="hover" onclick="enter()">编辑</span>
         </div>
     </header>
    
@@ -39,8 +33,8 @@
     apiready = function(){
         fnInit();
         api.openFrame({
-            name: 'me_info_qtlxfs_frame',
-            url: './me_info_qtlxfs_frame.html',
+            name: 'txl_addFellow_friendContact_frame',
+            url: './txl_addFellow_friendContact_frame.html',
             rect: {
                 x: 0,
                 y: headerH,
@@ -50,27 +44,6 @@
             bounces: false
         });
     };
-    function enter () {
-        if ($api.text($api.dom('.rightBtn')) == '编辑') {
-            $api.text($api.dom('.rightBtn'), '保存');
-            // 移除添加按钮绑定的事件
-            api.sendEvent({
-                name: 'editPhone',
-                extra: {
-                    valueName1: '保存',
-                    
-                }
-            });
-            
-        } else {
-            $api.text($api.dom('.rightBtn'), '编辑');
-            api.sendEvent({
-                name: 'keepPhone',
-                extra: {
-                    valueName1: '编辑',
-                }
-            });
-        }
-    }
+   
 </script>
 </html>

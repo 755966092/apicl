@@ -4,7 +4,7 @@
     <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
       
         body, html {
@@ -28,7 +28,7 @@
             width: .45rem;
             height: .8rem;
             float: right;
-            background: url(../../../image/icon_my/icon_enter.png)no-repeat;
+            background: url(../../image/icon_my/icon_enter.png)no-repeat;
             background-size: .45rem .34rem;
             background-position: center center;
             display: none;
@@ -53,7 +53,7 @@
             margin-top: 4rem;
         }
         .main_no2 .telClass{
-            background: #fff url(../../../image/icon_zk.png)no-repeat;
+            background: #fff url(../../image/icon_zk.png)no-repeat;
             background-size: .15rem .25rem;
             background-position: 7.05rem center;
         }
@@ -101,8 +101,8 @@
        </div>
     </div>
 </body>
-<script type="text/javascript" src="../../../script/api.js"></script>
-<script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     var type = 1, sub_type = 1;
     apiready = function(){
@@ -129,8 +129,8 @@
     function selTel() {
             var val = $api.text($api.dom('.telClass_1'));
             api.openFrame({
-                name: 'me_info_tel',
-                url: './me_info_tel.html',
+                name: 'txl_addFellow_addPhone_tel',
+                url: './txl_addFellow_addPhone_tel.html',
                 rect: {
                     x: 0,
                     y: 0,
@@ -157,8 +157,8 @@
     // // 添加电话完成
     function addTel() {
         var tel = $api.val($api.dom('input'));
-        // alert(tel + '---'+ sub_type + '---'+ type)
-        // checkPhone(tel);
+        alert(tel + '---'+ sub_type + '---'+ type)
+        checkPhone(tel);
         api.ajax({
             url: apiSite + '/api/user_center/addContact',
             method: 'post',
@@ -167,13 +167,13 @@
                 values: { 
                     token: api.pageParam.userToken || $api.getStorage('userToken'),
                     phone: tel,
-                    type: type,
+                    type: val,
                     sub_type: sub_type
                 }
             }
         }, function(ret, err) {
             if (ret) {
-                // alert(JSON.stringify(ret))
+                alert(JSON.stringify(ret))
                 api.closeWin();
             }
              alert(JSON.stringify(err))

@@ -25,39 +25,6 @@
             <span class="rightBtn bj" id="voer"   tapmode="hover"   onclick="enter()">编辑</span> 
         </div>
     </header>
-    <!-- <div class="wrap"> -->
-       <!--  <div class="main clearfix">
-            <p class="mobile ">移动</p>
-           <div class="main_no1 yd">
-               <p   tapmode="hover"   onclick="selectClass(this)"  data-val="yddh">
-                    工作
-                    <input maxlength="11" type="text" class="telIpt" name="" value="18765303417" disabled>
-               </p>
-               <p   tapmode="hover"   onclick="selectClass(this)"  data-val="gddh">
-                    生活
-                    <input maxlength="11" type="text" class="telIpt" name="" value="18765303417" disabled>
-               </p>
-           </div>
-        </div> -->
-        <!-- <div class="main clearfix gd">
-            <p class="mobile ">固定</p>
-           <div class="main_no1 gdd">
-               <p class="p">
-                    工作
-                    <input maxlength="11" type="text" class="telIpt" name="" value="18765303417" disabled>
-                    <i class="clearIpt"   tapmode="hover"   onclick="clearIpt(this)"></i>
-               </p>
-               <p class="p">
-                    生活
-                    <input maxlength="11" type="text" class="telIpt" name="" value="18765303417" disabled>
-                    <i class="clearIpt"   tapmode="hover"   onclick="clearIpt(this)"></i>
-               </p>
-           </div>
-        </div> -->
-    <!-- </div>
-     <div class="main_no3 ">
-           <p   tapmode="hover"   onclick="addTel()">添加新号码</p>
-       </div> -->
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
@@ -79,34 +46,33 @@
             name: 'viewappear'
         }, function(ret, err) {
             if (ret) {
-                // alert('1')
                 api.sendEvent({
                     name: 'xgTel',
                 });
             } else {
-                // alert(JSON.stringify(err));
+                alert(JSON.stringify(err));
             }
         });
        
     };
-    function enter () {
-        if ($api.text($api.dom('.bj')) == '编辑') {
-            $api.text($api.dom('.bj'), '保存');
+   function enter () {
+        if ($api.text($api.dom('.rightBtn')) == '编辑') {
+            $api.text($api.dom('.rightBtn'), '保存');
             // 移除添加按钮绑定的事件
             api.sendEvent({
-                name: 'bjTel',
+                name: 'editPhone',
                 extra: {
                     valueName1: '保存',
+                    
                 }
             });
             
         } else {
-            $api.text($api.dom('.bj'), '编辑');
+            $api.text($api.dom('.rightBtn'), '编辑');
             api.sendEvent({
-                name: 'bjTel',
+                name: 'keepPhone',
                 extra: {
                     valueName1: '编辑',
-                    
                 }
             });
         }

@@ -127,8 +127,8 @@
             sql: SQLsentence
         }, function(ret, err) {
             if (ret.status) {
-                listContact.close();
-                dakai(paixv(ret.data))
+                // listContact.close();
+                reloadData(paixv(ret.data))
             } else {
                 console.log(JSON.stringify(err));
             }
@@ -157,7 +157,18 @@
             }
         });
     }
-
+    function reloadData(data) {
+        listContact.reloadData({
+            data: data
+        }, function(ret, err) {
+            if (ret) {
+                alert(JSON.stringify(ret));
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    // 是否是字母
     function f_check_uppercase(obj)   {          
        if (/[A-Z]/.test(obj))    {   
           return true;   
@@ -249,12 +260,29 @@
                 fixedOn: api.frameName
             }, function(ret, err) {
                 if (ret) {
-                    // alert(JSON.stringify(ret));  
+                    // if (ret){
+                    //     alert(JSON.stringify(ret))
+                    // }
+                    if (ret.clickType == 0) {
+                        // 获取点击联系人信息
+                        alert(JSON.stringify(data1[ret.key][ret.index]));  
+                        addFriends();
+                    }
                     
                 } else {
                     // alert(JSON.stringify(err));  
                 }
             });
+    }
+    // 打开人脉详情
+    function addFriends() {
+        api.openWin({
+            name: 'txl_memberInfo_Win',
+            url: './txl_memberInfo_Win.html',
+            pageParam: {
+                name: 'value'
+            }
+        });
     }
 </script>
 </html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        body,html{
+            background-color: #EDECF3;
+        }
+       .search {
+            height: .5rem;
+            line-height: .5rem;
+            background-color: #fff;
+            margin: .2rem .3rem;
+            text-align: center;
+            font-size: 0;
+            color: #96969B;
+
+        }
+        .search .searchIcon {
+            display: inline-block;
+            width: .26rem;
+            height: .5rem;
+            background: url(../../image/icon_search.png)no-repeat;
+            -webkit-background-size: .25rem .26rem;
+            background-size: .25rem .26rem;
+            background-position: 0 center;
+            vertical-align: top;
+        }
+        .search .searchText {
+            font-size: .24rem;
+        }
+
+        .list {
+            font-size: 0;   
+            background-color: #fff;
+            /*padding: 0 .3rem; */
+            padding-left: .3rem;
+            /*height: 1.57rem;*/
+                
+            display: -webkit-box; 
+            display: -webkit-flex; 
+            display: flex; 
+                
+             /*侧轴对齐方式 */
+            -webkit-box-align: center ;
+            align-items: center;
+                
+            
+        }
+        .list .circlTitle {
+            -webkit-box-align: center;
+            -moz-align-items: center;
+            -webkit-align-items: center;
+            align-items: center;
+
+            
+
+        }
+        .list .circlTitle img {
+            width: .9rem;   
+            height: .9rem;  
+            margin-right: .1rem;    
+        }   
+        .list .circlTitle h3 {
+            font-size: .3rem;  
+            width: 5.5rem;    
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: .1rem;   
+        }
+        .list .circlTitle .circleIntroduce {
+            font-size: .28rem;  
+            color: #9b9b9b;
+            width: 5.5rem;    
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .list .circleData {
+            font-size: 0;
+            padding-left: 1rem; 
+
+        }
+        .list .circleData .circleTitle {
+            font-size: .24rem;
+            color: #999;
+            width: 2rem;
+             
+        }
+        .list .circleData .quantity {
+            color: #20C11D;
+            font-size: .24rem;
+        }
+        .category {
+            font-size: .34rem;
+            color: #222;
+            background-color: #fff;
+            margin-top: .2rem;
+            padding: .1rem 0 .1rem .3rem;
+            border-bottom: 1px solid #e7e7e7;    
+        }
+        .wrap {
+            border-bottom: 1px solid #e7e7e7;
+            height: 1.57rem;
+            width: 100%;
+            box-sizing: border-box;
+            padding-top: .17rem;
+        }
+        .main {
+            margin-top: .3rem;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="main clearfix">
+       <!--<div class=" list resultList">
+           <div class="circlTitle clearfix">
+               <img class="fl" src="../../image/tx_4.jpg">
+               <div class="circleInfo fl">
+                   <h3>UI设计交流</h3>
+                   <p class="circleIntroduce">app及网站设计，圈子里有大牛app及网站设计，圈子里有大牛app及网站设计，圈子里有大牛</p>
+               </div>
+           </div>
+           <p class="circleData">
+               <span class="circleTitle">成员: <span class="quantity">1000</span></span>
+               <span class="circleTitle">发布: <span class="quantity">10000</span></span>
+           </p>
+       </div>
+        <p class="category">设计交流</p>
+        <div class=" list resultList">
+           <div class="circlTitle clearfix">
+               <img class="fl" src="../../image/tx_4.jpg">
+               <div class="circleInfo fl">
+                   <h3>UI设计交流</h3>
+                   <p class="circleIntroduce">app及网站设计，圈子里有大牛app及网站设计，圈子里有大牛app及网站设计，圈子里有大牛</p>
+               </div>
+           </div>
+           <p class="circleData">
+               <span class="circleTitle">成员: <span class="quantity">1000</span></span>
+               <span class="circleTitle">发布: <span class="quantity">10000</span></span>
+           </p>
+       </div>
+        <div class=" list resultList">
+           <div class="circlTitle clearfix">
+               <img class="fl" src="../../image/tx_4.jpg">
+               <div class="circleInfo fl">
+                   <h3>UI设计交流</h3>
+                   <p class="circleIntroduce">app及网站设计，圈子里有大牛app及网站设计，圈子里有大牛app及网站设计，圈子里有大牛</p>
+               </div>
+           </div>
+           <p class="circleData">
+               <span class="circleTitle">成员: <span class="quantity">1000</span></span>
+               <span class="circleTitle">发布: <span class="quantity">10000</span></span>
+           </p>
+       </div>-->
+       <div class="resultList"></div>
+       <script type="text/x-dot-template" id="listT">
+            {{ for (var i = 0; i < it.length; i++) { }} 
+                <!-- {{?it[i].flag}}
+                    <p class="category">{{=it[i].flag}}</p>
+                {{? }} -->
+                <div class=" list"   tapmode="hover"   onclick="openCircleInfo(this)">
+                    <div class="wrap">
+                         <div class="circlTitle clearfix">
+                            <img class="fl" src="{{=it[i].headUrl}}">
+                            <div class="circleInfo fl">
+                                <h3>{{=it[i].title}}</h3>
+                                <p class="circleIntroduce">{{=it[i].info}}</p>
+                            </div>
+                        </div>
+                        <p class="circleData">
+                            <span class="circleTitle">成员: <span class="quantity">{{=it[i].cyCount}}</span></span>
+                            <span class="circleTitle">发布: <span class="quantity">{{=it[i].fbCount}}</span></span>
+                        </p>
+                    </div>
+                </div>
+            {{ }; }}
+       </script>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript">
+    var data = [
+        {
+            class: '设计交流',
+            title: 'UI设计交流',
+            info:'app及网站设计，圈子里有大牛app及网站设计',
+            headUrl: '../../image/tx_1.jpg',
+            cyCount: 8927,
+            fbCount: 12574
+
+        },
+        {
+            class: '设计交流',
+            title: '楼盘销售',
+            info:'全国各地区楼盘信息',
+            headUrl: '../../image/tx_2.jpg',
+            cyCount: 1231,
+            fbCount: 12541274
+
+        },
+        {
+            class: '设计交流',
+            title: '移动软件开发交流',
+            info:'移动软件开发，圈子里有大牛',
+            headUrl: '../../image/tx_3.jpg',
+            cyCount: 12311231,
+            fbCount: 1231231
+
+        },
+        {
+            class: '其他',
+            title: '移动软件开发交流',
+            info:'移动软件开发，圈子里有大牛',
+            headUrl: '../../image/tx_4.jpg',
+            cyCount: 12311231,
+            fbCount: 1231231
+
+        },
+        {
+            class: '软件',
+            title: '移动软件开发交流',
+            info:'移动软件开发，圈子里有大牛',
+            headUrl: '../../image/tx_5.jpg',
+            cyCount: 12311231,
+            fbCount: 1231231
+
+        },
+        {
+            class: '其他',
+            title: '移动软件开发交流',
+            info:'移动软件开发，圈子里有大牛',
+            headUrl: '../../image/tx_4.jpg',
+            cyCount: 12311231,
+            fbCount: 1231231
+
+        }
+    ]
+    apiready = function(){
+        
+    };
+  
+    sortData(data);
+    getData(data);
+    // 数据排序分组
+    function sortData(data) {
+        for (var i = 0; i < data.length; i++) {
+            for (var j = 0; j < data.length; j++) {
+                if (data[i].class < data[j].class) {
+                    var temp = data[i];
+                    data[i] = data[j];
+                    data[j] = temp;
+                }
+            }
+        }
+        for (var i = 0; i < data.length; i++) {
+            data[0].flag = data[0].class
+            if (i>0) {
+                if (data[i].class !== data[i-1].class) {
+                    data[i].flag = data[i].class
+                }
+            }
+        }
+    }
+    function getData(data) {
+        var listTText = $api.byId('listT').text;
+        var fnListT = doT.template(listTText);
+        var html = fnListT(data);
+        var list = $api.dom('.resultList');
+        // 替换resultList所有内容
+        $api.html(list, html);
+        // alert('getData:' + JSON.stringify(data))
+    }
+
+    // 打开动态详情
+    function openCircleInfo(ele) {
+        api.openWin({
+            name: 'find_dynamicState_win',
+            url: './find_dynamicState_win.html',
+            bounces: false
+        });
+    }
+
+    function open1() {
+        api.openFrame({
+            name: 'find_joinCircle',
+            url: './find_joinCircle.html',
+            bounces: false,
+            rect: {
+                x: 0,
+                y: 0,
+                w: api.winWidth,
+                h: api.winHeight
+            }
+        });
+    }
+</script>
+</html>

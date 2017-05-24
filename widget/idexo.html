@@ -13,23 +13,33 @@
         width: 50px;
         border: 1px solid #000;
     }
+    input {
+        border: 1px solid #000;
+    }
    </style>
 </head>
 <body>
 <button   tapmode="hover"   onclick="abc()">点击</button>
+    <input type="text" id="phone" onchange="checkPhone(this)">
+    <input type="text" id="tel" onchange="checkTel()">
 </body>
 </html>
 <script src='./script/api.js'></script>
 <script type="text/javascript" src="./script/common.js"></script>
 
 <script type="text/javascript">
-function f_check_uppercase(obj)   {          
-       if (/[A-Z]/.test(obj))    {   
-          return true;   
-       }    
-       return false;   
+function checkPhone(ele){ 
+    var data = $api.val(ele);
+    var phone = /^1[34578]\d{9}$/,
+        tel = /^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/;
+    if(!(phone.test(data))&& !(phone.test(data))){ 
+        alert("电话号码有误，请重填");  
+        return false; 
     } 
-console.log(f_check_uppercase('A'))
+}
+function checkTel(data){
+    
+}
 // var a = 'asdasda;'
 // a=a.substring(0,a.length-1)
 // console.log(a)

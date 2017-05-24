@@ -4,8 +4,8 @@
     <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
-    <link rel="stylesheet" type="text/css" href="../../../css/flex.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/flex.css"/>
    <style type="text/css">
         html,body {
             background-color: #f8f8f8;
@@ -56,14 +56,14 @@
         .addIcon {
             width: .4rem;
             height: .4rem;
-            background: url(../../../image/icon_my/icon_add.png)no-repeat;
+            background: url(../../image/icon_my/icon_add.png)no-repeat;
             background-size: .4rem .4rem;
             margin-right: .1rem;
         }
         .clearIcon {
             width: .25rem;
             height: .8rem;
-            background: url(../../../image/icon_other/icon_clear.png)no-repeat;
+            background: url(../../image/icon_other/icon_clear.png)no-repeat;
             -webkit-background-size: .25rem .25rem;
             background-size: .25rem .25rem;
             background-position: 0 center;
@@ -77,6 +77,35 @@
    </style>
 </head>
 <body>
+   <!--  <div class="main ">
+       <div class="move">
+           <p>移动</p>
+           <div class="item">
+               <span>工作</span>
+               <span>13260227521</span>
+               <span class="clearIcon"></span>
+           </div>
+           <div class="item">
+               <span>工作</span>
+               <span>13260227521</span>
+           </div>
+       </div>
+       <div class="move">
+           <p>移动</p>
+           <div class="item">
+               <span>工作</span>
+               <span>13260227521</span>
+           </div>
+           <div class="item">
+               <span>工作</span>
+               <span>13260227521</span>
+           </div>
+       </div>
+       <div class="addPhone">
+            <div class="addIcon"></div>
+            <div>添加电话好号码</div>
+       </div>
+    </div> -->
     <div class="main resultList"></div>
     <script type="text/x-dot-template" id="listT">
             {{ for (var i = 0; i < it.length; i++) { }} 
@@ -92,6 +121,8 @@
                         </div>
                     </div>
                 {{?}}
+           
+          
                 {{?it[i].flag == 2}}
                     <p class="type fixedTitle">固定</p>
                 {{?}}
@@ -111,24 +142,34 @@
         <div>添加电话好号码</div>
    </div>
 </body>
-<script type="text/javascript" src="../../../script/api.js"></script>
-<script type="text/javascript" src="../../../script/common.js"></script>
-<script type="text/javascript" src="../../../script/doT.min.js"></script>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
 
 <script type="text/javascript">
-    
+    var data = [{
+        "contact_id": 1,
+        "phone": "11111",
+        "type": 1,
+        "sub_type": 2,
+    },{
+        "contact_id": 2,
+        "phone": "22222",
+        "type": 1,
+        "sub_type": 1,
+    },{
+        "contact_id": 3,
+        "phone": "33333",
+        "type": 2,
+        "sub_type": 2,
+    },{
+        "contact_id": 4,
+        "phone": "4444",
+        "type": 2,
+        "sub_type": 1,
+    }]
     apiready = function(){
-        // lxrList();
-        
-        api.addEventListener({
-            name: 'xgTel'
-        }, function(ret, err) {
-            if (ret) {
-                lxrList();
-            } else {
-                alert(JSON.stringify(err));
-            }
-        });
+        monitorEvent()
     };
     // 监听点击保存和编辑按钮
     function monitorEvent () {
@@ -137,7 +178,6 @@
         api.addEventListener({
             name: 'keepPhone'
         }, function(ret, err) {
-            console.log(JSON.stringify(clearIcon.length))
             if (ret) {
                 for (var i = 0; i < clearIcon.length; i++) {
                    $api.css(clearIcon[i], 'display:none');
@@ -153,7 +193,6 @@
         api.addEventListener({
             name: 'editPhone'
         }, function(ret, err) {
-            console.log(JSON.stringify(ipt.length))
             if (ret) {
                for (var i = 0; i < clearIcon.length; i++) {
                    $api.css(clearIcon[i], 'display:inline-block');
@@ -161,29 +200,7 @@
                 for (var i = 0; i < ipt.length; i++) {
                     $api.removeAttr(ipt[i], 'disabled');
                 }
-            } else {
-                alert(JSON.stringify(err));
-            }
-        });
-    }
 
-     // 获取联系人列表
-    function lxrList() {
-        api.ajax({
-            url: apiSite + '/api/user_center/contactList',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken')
-                } 
-            }
-        }, function(ret, err) {
-            if (ret) {
-                alert(JSON.stringify(ret.data.list))
-                handleData(litterSort(ret.data.list))
-                // getData(ret.data.list);
-                monitorEvent();
             } else {
                 alert(JSON.stringify(err));
             }
@@ -199,6 +216,7 @@
                 data[i].sub_type = '生活'
             }
         }
+        console.log(data)
         getData(data);
     }
     function litterSort(data) {
@@ -221,6 +239,7 @@
         }
         return data
     }
+    handleData(litterSort(data))
 
     function clearItem(ele) {
         var father = $api.closest(ele, '.move');
@@ -235,7 +254,7 @@
     function addPhone() {
         api.openWin({
             name: 'winName',
-            url: './me_info_zydh_addtel.html',
+            url: './txl_addFellow_addPhone_win.html',
             pageParam: {
                 name: 'value'
             }

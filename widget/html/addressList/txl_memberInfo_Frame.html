@@ -11,7 +11,7 @@
             padding-bottom: 1.17rem;
         }
         .title {
-            margin-top: .15rem;
+            /*margin-top: .15rem;*/
             border-top: 1px solid #E4E4E4;
             border-bottom: 1px solid #E4E4E4;
             background-color: #fff;
@@ -29,8 +29,9 @@
             margin-right: .2rem;
         }
         .title img {
-            width: 1.178rem;
-            height: 1.178rem;
+            width: .91rem;
+            height: .91rem;
+            border-radius: .1rem;
         }
         .titleRight {
            /* display: -webkit-box; 
@@ -39,16 +40,18 @@
             align-items: flex-start;
              -webkit-box-direction: normal;
              flex-direction: column;*/
-            width: 5.5rem; 
+            width: 6rem; 
         }
         .titleRight .name {
             height: .3rem;
             font-size: 0;
-            width: auto;
+            width: 100%;
             display: -webkit-box; 
             display: flex;
             -webkit-box-align: center ;
             align-items: center;
+            -webkit-box-pack: justify;
+            justify-content: space-between;
             margin-bottom: .1rem;
         }
         .titleRight .name h3 {
@@ -80,9 +83,9 @@
         }
         .company .companyName {
             font-size: .24rem;
-            color: #555;
+            color: #999;
             line-height: .33rem;
-            letter-spacing: -.026rem;
+            /*letter-spacing: -.026rem;*/
             
         }
         .company .companyArrow {
@@ -97,8 +100,9 @@
             background-position: 0 bottom;
         }
         .wran {
+            text-align: center;
             font-size: .24rem;
-            line-height: .33rem;
+            line-height: .5rem;
             color: #9b9b9b;
             margin-top: .05rem;
         }
@@ -130,6 +134,17 @@
             vertical-align: bottom;
             margin-right: .1rem;
 
+        }
+        .ask {
+            
+        }
+        .ask>div {
+            position: absolute;
+            width: 33.33%;
+            margin-top: .18rem;
+            height: .44rem;
+            border-right: 1px solid #D8D8D8;
+            border-left: 1px solid #D8D8D8;
         }
         .business .askIcon {
             display: inline-block;
@@ -208,9 +223,30 @@
             color: #fff;
             margin-top: 1rem;
         }
+        .activeTime {
+            font-size: .22rem;
+            position: relative;
+        }
+        .shadow {
+            width: .56rem;
+            height: .3rem;
+            background-color: rgba(129,129,129,0.95);
+            border-radius: .15rem;
+            position: absolute;
+            top: 0;
+            left: 0;
+
+        }
+        .nameNo1 {
+            display: -webkit-box;
+            display: flex;
+            -webkit-box-align: center;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
+<p class="wran">加入会员后可查看对方最近一次活跃时间</p>
     <div class="main">
         <div class="title">
             <div class="headImg">
@@ -218,14 +254,20 @@
             </div>
             <div class="titleRight">
                 <div class="name">
-                    <h3>陈胜东</h3>
-                    <span class="sexIcon"></span>
+                    <div class="nameNo1">
+                        <h3>陈胜东</h3>
+                        <span class="sexIcon"></span>
+                    </div>
+                    <div class="activeTime">
+                        <span class="shadow"></span>
+                        1天前活跃
+                    </div>
                 </div>
                 <div class="company">
                     <span class="companyName">上海策赢网络科技 董事长</span>
                     <span class="companyArrow"></span>
                 </div>
-                <p class="wran">加入会员后可查看对方最近一次活跃时间</p>
+                
             </div>
         </div>
         <div class="business">
@@ -234,8 +276,10 @@
                <span class="text">供</span>
            </div>
            <div class="ask">
-               <span class="askIcon"></span>
-               <span class="text">求</span>
+               <div></div>
+                    <span class="askIcon"></span>
+                    <span class="text">求</span>
+               
            </div>
            <div class="circle">
                <span class="circleIcon"></span>
@@ -243,11 +287,11 @@
            </div>
         </div>
         <ul class="mt20">
-            <li>
-                <span>关系网</span>
+            <li tapmode="hover" onclick="openInfo(this)" data-val="friendContact">
+                <span>熟识好友，点击查看您与他的交集</span>
                 <span class="icon"></span>
             </li>
-            <li class="mt20">
+            <li class="mt20" tapmode="hover" onclick="openInfo(this)" data-val="mainPhone">
                 <span>电话：</span>
                 <span>18601125241</span>
                 <span class="icon"></span>
@@ -291,6 +335,10 @@
                 <span>工作经历</span>
                 <span class="icon"></span>
             </li>
+             <li>
+                <span>项目业绩</span>
+                <span class="icon"></span>
+            </li>
         </ul>
         <div class="btn"   tapmode="hover"   onclick="addFriends()">
             加为好友
@@ -309,6 +357,17 @@
         api.openWin({
             name: 'txl_addFriendsInfo',
             url: './txl_addFriendsInfo.html',
+            bounces: false
+        });
+    }
+    function openInfo(ele) {
+        var val = $api.attr(ele, 'data-val');
+        api.openWin({
+            name: 'txl_addFellow_' + val + '_win.html',
+            url: './txl_addFellow_' + val + '_win.html',
+            pageParam: {
+                name: 'value'
+            },
             bounces: false
         });
     }

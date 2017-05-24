@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        body,html{
+            background-color: #F8F8F8;
+            
+        }
+        
+        .nav {
+            border-bottom: .01rem solid #E6E6E4;
+            height: .8rem;
+            text-align: center;
+            /*line-height: .8rem;*/
+            font-size: 0;
+            background-color: #fff;
+            box-sizing: border-box;
+        /*    display: -webkit-box; 
+            display: flex; 
+
+            -webkit-box-align:  center;
+            align-items: center;*/
+            width: 7.5rem;
+            position: relative;
+        }
+        .nav span.head {
+            float: left;
+            display: inline-block;
+            /*height: .8rem;*/
+            height: 100%;
+            width: 1.87rem;
+            font-size: .28rem;
+            box-sizing: border-box;
+            display: -webkit-box; 
+            display: flex; 
+
+            -webkit-box-align:  center;
+            align-items: center;
+        }
+        .nav span.head>span {
+             line-height: .4rem;
+            display: inline-block;
+            border-right: 1px solid #E6E6E4;
+            width: 1.87rem;
+        }
+        .nav span:last-child {
+            border-right: 0;
+        }
+        
+        .act{
+            color: #27B24A;
+        }
+
+        .indexbar {
+
+            background: url('../../image/tabLine.png') no-repeat center bottom;
+            background-size: 63px auto;
+            color: #27B24A;
+            width: 1.87rem;
+            left: .05rem;
+            bottom: 0;
+            position: absolute;
+            height: 2px;
+        }
+    </style>
+</head>
+<body>
+    <header  class="header">
+        <div class="head">
+            <span class="callback"   tapmode="hover"   onclick="api.closeWin()">
+                <!--<span class="heaDicon"></span>-->
+                返回
+            </span>
+            <span class="winTitle">
+                交易详情
+            </span>
+        </div>
+    </header>
+    <div class="nav">
+        <span class="head act"   tapmode="hover"   onclick="switchApr(0)"><span>他供的</span></span>
+        <span class="head"   tapmode="hover"   onclick="switchApr(1)"><span>他求的</span></span>
+        <span class="head"   tapmode="hover"   onclick="switchApr(2)"><span>我供的</span></span>
+        <span class="head"   tapmode="hover"   onclick="switchApr(3)"><span>我求的</span></span>
+        <div class="indexbar" id="indexbar"></div>
+    </div>
+   
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        moduleInit();
+        fnInit();
+        openAprGroup()
+    };
+    // 打开frame组
+    function openAprGroup (){
+        var frameH = headerH + $api.offset($api.dom('.nav')).h,
+            footerH = api.winHeight - frameH;
+        api.openFrameGroup({
+            name: 'txl_friendInfo_tradingParticulars',
+            rect: {
+                 x: 0, 
+                 y: frameH+2, 
+                 w: 'auto',
+                 h: footerH
+            },
+            scrollEnabled: true,
+            index: 0,
+            frames: [{
+                name: 'txl_friendInfo_tradingParticulars_frame_1', 
+                url: './txl_friendInfo_tradingParticulars_frame_1.html',
+                pageParam: {
+                    headerH: api.pageParam.headerH
+                }
+            },{
+                name: 'txl_friendInfo_tradingParticulars_frame_2', 
+                url: './txl_friendInfo_tradingParticulars_frame_2.html',
+                pageParam: {
+                    headerH: api.pageParam.headerH
+                }
+            },{
+                name: 'txl_friendInfo_tradingParticulars_frame_3', 
+                url: './txl_friendInfo_tradingParticulars_frame_3.html',
+                pageParam: {
+                    headerH: api.pageParam.headerH
+                }
+            },{
+                name: 'txl_friendInfo_tradingParticulars_frame_4', 
+                url: './txl_friendInfo_tradingParticulars_frame_4.html',
+                pageParam: {
+                    headerH: api.pageParam.headerH
+                }
+            }]
+        }, function(ret, err) {
+            if (ret) {
+                switchAprIndex(ret.index)
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+     // 显示的页面
+    function switchApr(index){
+        api.setFrameGroupIndex ({
+            name: 'txl_friendInfo_tradingParticulars',
+            index: index,
+            scroll: true
+        });
+        switchAprIndex(index);
+    }
+
+    // 标题下面竖线
+    function sliderbarCallback(id, num) {
+        var width = parseInt(api.frameWidth / 4);
+        var move = num * width;
+
+        $api.css($api.byId(id),
+                "-webkit-transform:translate(" + move + "px,0);-webkit-transition: 300ms;"
+        );
+    }
+     // 切换头部的标题颜色
+    function switchAprIndex(index){
+        sliderbarCallback('indexbar',index)
+        var aprItems = $api.domAll('.head');
+        for (var i = 0; i < aprItems.length; i++) {
+            $api.removeCls(aprItems[i], 'act');
+        }
+        $api.addCls(aprItems[index+1], 'act');
+    }
+</script>
+</html>
