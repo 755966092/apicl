@@ -7,224 +7,362 @@
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
         body,html{
-            background-color: #EFEFF4;  
+            background-color: #EFEFF4;
         }
-         header {
-            background-color: #3A393E;
-            height: 1rem;
-            color: #fff;
-            line-height: 1rem;
-            text-align: center;
-            position: relative;
-            font-size: .36rem;
-            position: relative;
-        }
-        header span:nth-child(1) {
-            position: absolute;
-            left: 0;
-            background: url(../../image/icon_fanh.png)no-repeat;
-             background-size: .22rem .37rem;
-            padding-left: .6rem;
-            background-position: .25rem .34rem;
-        }
-        header span:nth-child(3) {
-            position: absolute;
-            right: .2rem;
-        }
-
-        
-     
-        .main .listContent {
-            height: 1.3rem;  
-            border-bottom: 1px solid #E0E0E0;
+       
+         .item {
             background-color: #fff;
-            padding:  0 .3rem; 
-            /*margin-top: .2rem;*/
+            padding: .2rem .3rem;
+            box-sizing: border-box;
+            border-bottom: 1px solid #ECECEA;
+        }
+        .main {
+            /*padding: 0 .3rem;*/
+            background-color: #fff;
+        }
+        .commentIcon {
+            display: inline-block;
+            width: .34rem;
+            float: right;
+            height: .26rem;
+            background: url(../../image/icon_supply/icon_comment.png)no-repeat;
+            -webkit-background-size: .34rem .26rem;
+            background-size: .34rem .26rem;
+        }
+        .commentText {
+            font-size: 0;
+            margin-top: .2rem;
+        }
+        .commentText ul {
             position: relative;
         }
-
-        /* 左边提现 */
-        .main .listContent .jl_left {
-            font-size: .28rem;
-            line-height: 1.3rem;   
-        }
-
-        /* 右边钱数 */
-        .main .listContent .jl_right {
-            font-size: .34rem;
-            text-align: right;  
-            height: 1.16rem;    
-            padding-top: .2rem;    
-            box-sizing: border-box;
-           
+        .commentText ul:before {
             position: absolute;
-            right: .3rem;
-            top: 0;
+            left: .2rem;
+            top: -.1rem;
+            content: "";
+            display: inline-block;
+            width: 0rem;
+            height: 0rem;
+            border-right: .1rem solid transparent;
+            border-left: .1rem solid transparent;
+            border-bottom: .1rem solid #F3F3F5;
         }
-        .main .listContent .jl_right p {
+        .commentText li {
+            font-size: .24rem;
+            background: #F3F3F5;
+            padding: .05rem .2rem;
+        }
+        .headImg {
+            font-size: 0;
+        }
+        .headImg img {
+            width: .785rem;
+            height: .785rem;
+        }
+        .content {
+            font-size: 0;
+            margin-left: .2rem;
+        }
+        
+        .titleLeft {
+            width: 3.5rem;
             margin-bottom: .1rem;
         }
-        .main .listContent .bearFruit {
-            font-size: .24rem;
-            margin-top: .15rem; 
-        }
-
-      
-
-        .img {
-             width: .92rem;
-            height: .92rem;
-            /*vertical-align:middle;*/
-            margin-top: .19rem;
-        }
-        .title {
-            padding-top: .25rem;
-            padding-left: .2rem;
-            height: 1rem;
-            overflow: hidden;
-            font-size: 0rem;
-            /*width: 5rem;*/
-        }
-        .title span {
-            border: 1px solid #0076ff;
-            border-radius: .05rem;
-            color: #0076ff;
-             padding:  0.05rem .02rem 0 ;
-            font-size: .18rem;
-            line-height: .18rem;
-            margin-top: .05rem;
-        }
-        .title h3 {
-            margin-bottom: .05rem;
-            margin-left: .1rem;
-            width: 3.5rem;
-            font-size: .32rem;
+        .titleLeft .name {
+            font-size: .26rem;
+            color: #333;
             font-weight: 600;
-            white-space:nowrap;
-            text-overflow:ellipsis;
-            overflow: hidden;
         }
-        .title p {
-            /*margin-top: .1rem;*/
-            font-size: .24rem;
-            float: left;
-            line-height: .4rem;
-            height: .5rem;
-            width: 3.5rem;
-            white-space:nowrap;
-            text-overflow:ellipsis;
-            overflow: hidden;
-        }
-        .money {
-             color: #0abb07;
-
-        }
-        .nav {
-            border-bottom: .01rem solid #E6E6E4;
-            height: .8rem;
-            text-align: center;
-            line-height: .8rem;
-            font-size: 0;
-            background-color: #fff;
-        }
-        .nav span {
-            border-right: 1px solid #E6E6E4;
-            height: .8rem;
+        
+        .titleRight {
+            color: #0ABB07;
             font-size: .28rem;
-            float: left;
-            box-sizing: border-box;
         }
-        .nav span:last-child {
-            border: 0;
+
+        .info {
+            font-size: 0;
         }
-        .nav .head {
-            width: 2.15rem;
+        .info {
+            font-size: .24rem;
+            color: #555;
+        }
+        .content_text {
+            margin-top: .1rem;
+            margin-bottom: .17rem;
+        }
+        .content_text .text {
+            font-size: .28rem;
+            color: #000;
+            margin-top: .1rem;
+            line-height: .28rem;
 
         }
-        .nav .search {
-            width: 1rem;
-            background: url(../../image/icon_search.png)no-repeat;
-            background-position: center center;
+        .info .comIcon {
+            width: .41rem;
+            height: .24rem;
+            background: url(../../image/icon_supply/icon_gs2.png)no-repeat;
+            -webkit-background-size: .41rem .24rem;
+            background-size: .41rem .24rem;
+            margin-right: .1rem;
+        }
+
+        .comment .time {
+            font-size: .2rem;
+            color: #999;
+        }
+       
+        .results {
+            font-size: .24rem;
+            color: #2BD242;
+            text-align: center;
+            height: .8rem;
+            line-height: .8rem;
+            
+        }
+        .results span {
+            display: inline-block;
+            background:url(../../image/icon_supply/icon_person.png)no-repeat ;
+            -webkit-background-size: .3rem .3rem;
+            background-size: .3rem .3rem;
+            width: .3rem;
+            height: .3rem;
+            vertical-align: text-top;
+            margin-right: .2rem;
+            
+        }
+        .title1 {
+            margin-top: .2rem;
+            padding: 0 .3rem;
+            background-color: #fff;
+            display: none;
+        }
+        .content_img {
+            margin: .1rem .1rem 0 0;
+        }
+        .sexIcon {
+            width: .24rem;
+            height: .24rem;
+            background: url(../../image/icon_supply/icon_person.png)no-repeat;
+            -webkit-background-size: .24rem .24rem;
+            background-size: .24rem .24rem;
+            margin-left: .06rem;
+        }
+        .comment_name {
+            color: #576B95;
         }
     </style>
 </head>
 <body>
-   
-    <div class="main">  
-    
-    <ul>
-        <li class="listContent"   tapmode="hover"   onclick="info()">
-            <img class="img fl" src="../../image/tx_2.jpg">
-            <div class="fl title">
-                <div>
-                    <span class="fl">个人</span>
-                    <h3 class="fl">提供风景类蔬菜</h3>
-                </div>
-                <p>全部为本人原创作品</p>
-            </div>
-            <div class="jl_right fr">
-                    <p>
-                       <span class="money">30元/套</span>
-                    </p> 
-                    <p class="bearFruit ydz">
-                        <span class="time">开启中</span>
-                    </p>
-            </div>
-        </li>
-        <li class="listContent"   tapmode="hover"   onclick="info()">
-            <img class="img fl" src="../../image/tx_2.jpg">
-            <div class="fl title">
-                <div>
-                    <span class="fl">个人</span>
-                    <h3 class="fl">提供风景类蔬菜提供风景类蔬菜</h3>
-                </div>
-                <p>全部为本人原创作品全部为本人原创作品</p>
-            </div>
-            <div class="jl_right fr">
-                    <p>
-                       <span class="money">30元/套</span>
-                    </p> 
-                    <p class="bearFruit ydz">
-                        <span class="time">开启中</span>
-                    </p>
-            </div>
-        </li>
-        <li class="listContent"   tapmode="hover"   onclick="info()">
-            <img class="img fl" src="../../image/tx_2.jpg">
-            <div class="fl title">
-                <div>
-                    <span class="fl">个人</span>
-                    <h3 class="fl">提供风景类蔬菜提供风景类蔬菜</h3>
-                </div>
-                <p>全部为本人原创作品全部为本人原创作品</p>
-            </div>
-            <div class="jl_right fr">
-                    <p>
-                       <span class="money">30元/套</span>
-                    </p> 
-                    <p class="bearFruit ydz">
-                        <span class="time">开启中</span>
-                    </p>
-            </div>
-        </li>
-    </ul>
-        
+    <div class="title1">
+        <p class="results"   tapmode="hover"   onclick="viewResults(this)">
+            <span></span>
+           当筛选结果有变动时通知我
+        </p>
     </div>
+    
+    <div class="main resultList"></div>
+    <script type="text/x-dot-template" id="listT">
+            {{ for (var i = 0; i < it.length; i++) { }} 
+                <div class="item flex-def">
+                    <div class="headImg">
+                    <img src="../../image/tx_5.jpg">
+                </div>
+                <div class="content flex-def flex-zTopBottom flex-item">
+                    <div class="title flex-def flex-zBetween">
+                        <div class="titleLeft flex-def flex-zLeftRight flex-cCenter">
+                            <h3 class="name">{{=it[i].nickname}}</h3>
+                            <span class="sexIcon"></span>
+                            <span class="zmfIcon"></span>
+                            <!-- <span class="zmfText">700分</span> -->
+                        </div>
+                        <div class="titleRight">
+                            1000元/单
+                        </div>
+                    </div>
+                    {{?it[i].company_name}}
+                        <div class="info">
+                            <p class="commanyName flex-def flex-cCenter">
+                                <span class="comIcon"></span>
+                                <span>{{=it[i].company_name}}</span>
+                            </p>
+                        </div>
+                    {{?}}
+                    <div class="content_text">
+                        <p class="text">{{=it[i].description}}</p>
+                        {{ for (var j = 0; j < it[i].image_json.length; j++) { }} 
+                            <img class="content_img" src="{{=it[i].image_json[j]}}">
+                        {{ } }}
+                       
+                    </div>
+                    <div class="comment">
+                        <div class="time">
+                            <span>{{=it[i].create_time}}</span>
+                            <div class="commentIcon"></div>
+                        </div>
+                        <div class="commentText">
+                            <ul>
+                                <li>
+                                    <span class="comment_name">李志超:</span>
+                                    <span class="comment_content">我是一条评论</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{ }; }}
+    </script>
+   
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+
 <script type="text/javascript">
+    
     apiready = function(){
-        fnInit();
+        // 请求数据
+        requireData();
+        // 筛选后的结果
+        bySelect()
     };
 
-     function info() {
-        api.openWin({
-            name: 'me_yfb_info',
-            url: './me_yfb_info.html',
-            bounces: true
-        });
-       
+
+    selfAdaption();
+    // 根据上传图片的多少自适应图片的大小
+    function selfAdaption() {
+        var listContent = $api.domAll('.item');
+
+        for (var i = 0; i < listContent.length; i++) {
+            var imgArr = listContent[i].getElementsByClassName('content_img');
+            console.log(imgArr)
+            var imgCount = imgArr.length
+            if (imgCount == 1) {
+                    $api.css(listContent[i].getElementsByClassName('content_img')[i], 'width:3.26rem;height:2.86rem;margin-top:.1rem');
+
+            }  else {
+                for (var j = 0; j < imgCount; j++) {
+                    $api.css(listContent[i].getElementsByClassName('content_img')[j], 'height:1.56rem');
+                }
+            }
+        }
     }
+    
+
+     // doT模版获取数据
+    function getData(data) {
+        
+        var listTText = $api.byId('listT').text;
+        
+        var fnListT = doT.template(listTText);
+        
+        var html = fnListT(data);
+        
+        var list = $api.dom('.resultList');
+        
+        // 替换resultList所有内容
+        $api.html(list, html);
+        // alert('getData:' + JSON.stringify(data))
+    }
+
+    // 筛选后结果
+    function bySelect() {
+        api.addEventListener({
+           name: 'screeningResults'
+        }, function(ret, err) {
+           $api.css($api.dom('.title1'), 'display:block');
+           getData(data);
+           selfAdaption();
+        })
+
+        api.addEventListener({
+           name: 'addPublish'
+        }, function(ret, err) {
+          api.openFrame({
+              name: 'supply_addSupply',
+              url: 'supply_addSupply.html',
+              rect: {
+                  x: 0,
+                  y: api.pageParam.headerH,
+                  w: api.winWidth,
+                  h: api.winHeight
+              },
+              bounces: false
+          });
+       });
+    }
+    // 筛选后页面变化
+    function viewResults(ele) {
+       
+        $api.css($api.dom('.results'), 'background: #fff url(../../image/icon_zk.png)no-repeat;background-position: right center;-webkit-background-size: .15rem .25rem;background-size: .15rem .25rem;');
+        // $api.css(ele, 'b');
+        // getData(data2);
+        // selfAdaption();
+        if ($api.text(ele) == '查看订阅的筛选结果') {
+            // getData(data3);
+            // selfAdaption();
+            api.openWin({
+                name: 'supply_subscribeWin',
+                url: './supply_subscribeWin.html',
+                pageParam: {
+                    name: 'value'
+                }
+            });
+        }
+         $api.html(ele, '查看订阅的筛选结果');
+    }
+
+    // 请求数据
+    function requireData () {
+        api.ajax({
+            url: apiSite + '/api/supply/index',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+               values: { 
+                   token: $api.getStorage('userToken')
+               }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                for (var i = 0; i < ret.data.list.length; i++) {
+                    // 解析图片json
+                    ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
+
+                   ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
+                    // 处理时间
+                    // 1. 如果是今天， 显示时间
+                    // 2. 如果是昨天显示昨天，
+                    // 3. 大于昨天显示天数
+                   
+                    
+                }
+                getData(ret.data.list);
+                selfAdaption();
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+    
+    // 进入详情
+    function info(ele) {
+        var flag = 0;
+        var compaby_name = $api.attr(ele, 'data-company')
+        if (compaby_name != 'null') {
+            flag = 1;
+        } 
+        api.openWin({
+            name: 'supply_info',
+            url: './supply_info.html',
+            pageParam: {
+                flag: flag,
+                compaby_name: compaby_name
+            }
+        });
+        
+    }
+
 </script>
 </html>

@@ -88,7 +88,7 @@
                         <div class="item">
                             <span class="label">{{=it[i].sub_type}}：</span>
                             <input type="text" value="{{=it[i].phone}}" disabled="true">
-                            <span class="clearIcon" tapmode="hover" onclick="clearItem(this)"></span>
+                            <span class="clearIcon" data-id="{{}}" tapmode="hover" onclick="clearItem(this)"></span>
                         </div>
                     </div>
                 {{?}}
@@ -116,10 +116,8 @@
 <script type="text/javascript" src="../../../script/doT.min.js"></script>
 
 <script type="text/javascript">
-    
     apiready = function(){
-        // lxrList();
-        
+        lxrList();
         api.addEventListener({
             name: 'xgTel'
         }, function(ret, err) {
@@ -147,7 +145,7 @@
                 }
                 
             } else {
-                alert(JSON.stringify(err));
+                alert('1'+JSON.stringify(err));
             }
         });
         api.addEventListener({
@@ -162,7 +160,7 @@
                     $api.removeAttr(ipt[i], 'disabled');
                 }
             } else {
-                alert(JSON.stringify(err));
+                alert('2'+JSON.stringify(err));
             }
         });
     }
@@ -185,7 +183,7 @@
                 // getData(ret.data.list);
                 monitorEvent();
             } else {
-                alert(JSON.stringify(err));
+                alert('3'+JSON.stringify(err));
             }
         });
     }
