@@ -43,21 +43,26 @@ var selDate,defaultData,defaultArr=[];
        moduleInit();
        // 查询数据位置
        dianji();
+       console.log(api.pageParam.birthdayText)
        queryData();
-
     };
     // 查询数据位置
     function queryData() {
+        console.log(1)
         var birthdayText = api.pageParam.birthdayText
+        console.log(2)
         if (birthdayText == null || birthdayText == '0000,00,00' || birthdayText == "请选择") {
             for (var i = 0; i < 3; i++) {
                 defaultArr.push(i)
             }
+            console.log(3)
          // 查询数据位置
         } else {
-           var year = birthdayText[0] || 0;
-           var month = birthdayText[1] || 0;
-           var day = birthdayText[2] || 0;
+           var year = parseInt(birthdayText[0] || 0);
+           var month = parseInt(birthdayText[1] || 0);
+           var day = parseInt(birthdayText[2] || 0);
+           console.log(4)
+           console.log(year+'---'+month+'---'+day)
            // alert(year+'---'+month+'---'+day)
            // 获取年份的位置
            for (var i = 0; i < srDate.length; i++) {
@@ -66,6 +71,8 @@ var selDate,defaultData,defaultArr=[];
                     break;
                }
            }
+           console.log(5)
+           console.log(defaultArr)
 
            // 获取月份的位置
            for (var i = 0; i < srDate[defaultArr[0]].contents.length; i++) {
@@ -74,6 +81,9 @@ var selDate,defaultData,defaultArr=[];
                     break;
                }
            }
+           console.log(6)
+           console.log(defaultArr)
+           // console.log(JSON.stringify(srDate[defaultArr[0]].contents[defaultArr[1]].contents))
            // 获取日期的位置
             for (var i = 0; i < srDate[defaultArr[0]].contents[defaultArr[1]].contents.length; i++) {
                 if (srDate[defaultArr[0]].contents[defaultArr[1]].contents[i] == day) {
@@ -81,6 +91,7 @@ var selDate,defaultData,defaultArr=[];
                     break;
                 }
             }
+            console.log(7)
         }
       
         

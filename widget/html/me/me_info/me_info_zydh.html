@@ -18,7 +18,7 @@
    
     <header  class="header">
         <div class="head">
-            <span class="callback"   tapmode="hover"   onclick="api.closeWin()">取消</span>
+            <span class="callback"   tapmode="hover"   onclick="closewin()">取消</span>
             <span class="winTitle">
                 电话
             </span>
@@ -29,6 +29,7 @@
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
 <script type="text/javascript">
+    
     apiready = function(){
 	    fnInit();
         api.openFrame({
@@ -55,6 +56,11 @@
         });
        
     };
+    function closewin() {
+        api.closeWin({
+            name: 'me_info_zydh'
+        });
+    }
    function enter () {
         if ($api.text($api.dom('.rightBtn')) == '编辑') {
             $api.text($api.dom('.rightBtn'), '保存');
