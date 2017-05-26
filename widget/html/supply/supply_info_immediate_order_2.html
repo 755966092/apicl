@@ -10,31 +10,32 @@
             background-color: #F8F8F8;
         }
 
-     
-
-
         .main {
-            margin-top: .2rem;
+            /*margin-top: .2rem;*/
             font-size: 0;
             
         }
         
         .choose {
+            height: 1rem;
             background-color: #fff;
-            padding: .1rem .3rem;
+            padding: 0 .3rem;
+        }
+        .choose p.name{
+            font-size: .34rem;
+            color: #000;
         }
          
          .choose img {
-            width: .64rem;
-            float: left;
+            width: .71rem;
+            height: .71rem;
         }
          .issuerInfo {
             font-size: .28rem;
             line-height: .3rem;
-            margin-top: .1rem;
             margin-left: .1rem;
         }
-        .issuerInfo p:last-child {
+        .issuerInfo p {
             font-size: .24rem;
             color: #9b9b9b;
         }
@@ -140,12 +141,13 @@
         .price .count {
             margin-top: .17rem;
             border: 1px solid #B5B5B5;
-            border-radius: .1rem;
+            border-radius: .2rem;
             width: 1.45rem;
             height: .45rem;
             font-size: 0;
             text-align: center;
             line-height: .45rem;
+            background-color: #F8F8F8;
         }
         .price .count i {
             display: inline-block;
@@ -157,6 +159,9 @@
             color: #333;
         }
         .price .count input {
+            background-color: #fff;
+            border-right: 1px solid #979797;
+            border-left: 1px solid #979797;
             width: .4rem;
             text-align: center;
             display: inline-block;
@@ -201,29 +206,46 @@
     </header>
 
     <div class="main clearfix">
-            <div class="choose clearfix">
-                <img src="../../image/tx_3.jpg">
-                <div class="fl issuerInfo">
-                    <p>陈升的</p>
-                    <p>上海百度悠闲公司 董事长</p>
+            <div class="resultList"></div>
+            <script type="text/x-dot-template" id="listT">
+                <div class="choose clearfix flex-def flex-cCenter">
+                    <img src="../../image/tx_3.jpg">
+                    <div class="fl issuerInfo">
+                        <p class="name">{{=it.nickname}}</p>
+
+                        {{?it.current_company==null&&it.current_position!=null}}
+                            <p> {{=it.current_position}}</p>
+                        {{??it.current_position==null&&it.current_company!=null}}
+                            <p>{{=it.current_company}}</p>
+                        {{??it.current_position==null&&it.current_company==null}}
+                        {{??}}
+                            <p>{{=it.current_company}} {{=it.current_position}}</p>
+                        {{?}}
+                    </div>
                 </div>
-            </div>
-            <div class="content clearfix">
-                <img class="fl" src="../../image/tx_5.jpg">
-                <div class="fl">
-                    <span class="_type"></span>
-                    <span class="title">提供风景类素材</span>
-                    <p >北京 - 线上</p>
+                <div class="content clearfix">
+                    <img class="fl" src="../../image/tx_5.jpg">
+                    <div class="fl">
+                        <span class="_type"></span>
+                        <span class="title">{{=it.title}}</span>
+                        <p >{{=it.city}} - 
+                        {{?it.form == 1}}
+                            <span>线上</span>
+                        {{??}}
+                            <span>线下</span>
+                        {{?}}
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <div class="price">
-                <span><span id="unitPrice">30</span>元 / 套</span>
-                <div class="fr count">
-                    <i class="fl"   tapmode="hover"   onclick="subtractCount()">-</i>
-                    <input id="buyCount" type="text" name="" value="1" onkeyup="computeTatol()">
-                    <i class="fr"   tapmode="hover"   onclick="addCount()">+</i>
+                <div class="price">
+                    <span><span id="unitPrice">{{=it.price}}</span>元 / 套</span>
+                    <div class="fr count">
+                        <i class="fl"   tapmode="hover"   onclick="subtractCount()">-</i>
+                        <input id="buyCount" type="text" name="" value="1" onkeyup="computeTatol()">
+                        <i class="fr"   tapmode="hover"   onclick="addCount()">+</i>
+                    </div>
                 </div>
-            </div>
+            </script>
             <div class="serveTime">
                 服务时间：
                 <i></i>
@@ -252,18 +274,22 @@
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
     apiready = function(){
         fnInit();
-    // $api.css($api.dom('.main'), 'margin-top:'+ api.pageParam.headerH +';');
+        // $api.css($api.dom('.main'), 'margin-top:'+ api.pageParam.headerH +';');
+        alert(JSON.stringify(api.pageParam.transmitData))
+        getData(api.pageParam.transmitData)
+        computeTatol();
     };
 
 
 
     // 计算总价
     function computeTatol () {
-        var unitPrice = $api.text($api.byId('unitPrice'));
-        var buyCount = $api.val($api.byId('buyCount'));
+        var unitPrice = $api.text($api.byId('unitPrice')) || api.pageParam.transmitData.price;
+        var buyCount = $api.val($api.byId('buyCount')) || 1;
         $api.text($api.byId('total'), '￥'+unitPrice * buyCount);
         console.log(unitPrice + '*' + buyCount +'='+ buyCount*unitPrice)
     }
