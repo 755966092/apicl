@@ -55,11 +55,11 @@
     </style>
 </head>
 <body tapmode="hover" onclick="api.closeFrame()">
-  <header class="header"></header>
+  <!--<header class="header"></header>-->
    <div tapmode="hover" onclick="api.closeFrame()">
        <ul>
-           <li tapmode="hover" onclick="publish(1)">发布供</li>
-           <li tapmode="hover" onclick="publish(0)">发布求</li>
+           <li tapmode="hover" onclick="publish(1);event.stopPropagation();">发布供</li>
+           <li tapmode="hover" onclick="publish(0);event.stopPropagation();">发布求</li>
        </ul>
    </div>   
 </body>
@@ -67,22 +67,24 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
-        fnInit()
+        // fnInit()
     };
     
     function publish(n) {
         if (n) {
             api.openWin({
               name: 'releaseSupply',
-              url: './supply_releaseSupply_win.html',
+              url: './supply_releaseSupply_win.html'
             });
         } else {
-            
             api.openWin({
-              name: 'releaseSupply',
-              url: './supply_releaseAsk_win.html',
+              name: 'releaseAsk',
+              url: './supply_releaseAsk_win.html'
             });
         }
+        // api.closeFrame({
+        //     name: 'supply_addSupply'
+        // });
     }
 
 

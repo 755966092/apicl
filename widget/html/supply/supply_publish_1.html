@@ -162,141 +162,61 @@
            当筛选结果有变动时通知我
         </p>
     </div>
-    <!-- <div class="main">
-        <div class="item flex-def">
-            <div class="headImg">
-                <img src="../../image/tx_5.jpg">
-            </div>
-            <div class="content flex-def flex-zTopBottom flex-item">
-                <div class="title flex-def flex-zBetween">
-                    <div class="titleLeft flex-def flex-zLeftRight flex-cCenter">
-                        <h3 class="name">陈胜东</h3>
-                        <span class="sexIcon"></span>
-                        <span class="zmfIcon"></span>
-                        <span class="zmfText">700分</span>
-                    </div>
-                    <div class="titleRight">
-                        1000元/单
-                    </div>
-                </div>
-                <div class="info">
-                    <p class="commanyName flex-def flex-cCenter">
-                        <span class="comIcon"></span>
-                        <span>上海策赢网络科技</span>
-                    </p>
-                </div>
-                <div class="content_text">
-                    <p class="text">网站开发，编写代码</p>
-                    <img class="content_img" src="../../image/tx_4.jpg">
-                   
-                </div>
-                <div class="comment">
-                    <div class="time">
-                        <span>2天前</span>
-                        <div class="commentIcon"></div>
-                    </div>
-                    <div class="commentText">
-                        <ul>
-                            <li>
-                                <span .comment_name>李志超:</span>
-                                <span class="comment_content">我是一条评论</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
     <div class="main resultList"></div>
     <script type="text/x-dot-template" id="listT">
             {{ for (var i = 0; i < it.length; i++) { }} 
-                <div class="item flex-def">
+                <div class="item flex-def" data-id="{{=it[i].supply_id}}" data-company="{{=it[i].company_name}}"   tapmode="hover"   onclick="info(this)">
                     <div class="headImg">
-                    <img src="../../image/tx_5.jpg">
-                </div>
-                <div class="content flex-def flex-zTopBottom flex-item">
-                    <div class="title flex-def flex-zBetween">
-                        <div class="titleLeft flex-def flex-zLeftRight flex-cCenter">
-                            <h3 class="name">{{=it[i].nickname}}</h3>
-                            <span class="sexIcon"></span>
-                            <span class="zmfIcon"></span>
-                            <!-- <span class="zmfText">700分</span> -->
-                        </div>
-                        <div class="titleRight">
-                            1000元/单
-                        </div>
+                        <img src="{{=it[i].head_img_url}}">
                     </div>
-                    {{?it[i].company_name}}
-                        <div class="info">
-                            <p class="commanyName flex-def flex-cCenter">
-                                <span class="comIcon"></span>
-                                <span>{{=it[i].company_name}}</span>
-                            </p>
-                        </div>
-                    {{?}}
-                    <div class="content_text">
-                        <p class="text">{{=it[i].description}}</p>
-                        {{ for (var j = 0; j < it[i].image_json.length; j++) { }} 
-                            <img class="content_img" src="{{=it[i].image_json[j]}}">
-                        {{ } }}
-                       
-                    </div>
-                    <div class="comment">
-                        <div class="time">
-                            <span>{{=it[i].create_time}}</span>
-                            <div class="commentIcon"></div>
-                        </div>
-                        <div class="commentText">
-                            <ul>
-                                <li>
-                                    <span class="comment_name">李志超:</span>
-                                    <span class="comment_content">我是一条评论</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {{ }; }}
-    </script>
-   <!--  <div class="main">  
-        <ul class="resultList">  </ul>
-        <script type="text/x-dot-template" id="listT">
-            {{ for (var i = 0; i < it.length; i++) { }} 
-                <li class="listContent clearfix" data-company="{{=it[i].company_name}}"   tapmode="hover"   onclick="info(this)">
-                        <div class="title clearfix fl">
-                            <img class="img fl" src="{{=it[i].head_img_url}}">
-                            <div class="title_name fl">
-                                <span class="name">{{=it[i].title}}</span>
-                                <span class="person"></span>
-                                <span class="bitmap"></span>
-                                <span class="score">700分</span>
-                                <p class="position">
-                                    <span></span>
-                                    {{=it[i].nickname}}
-                                </p>
-                                <p class="company">{{=it[i].company_name}}</p>
+                    <div class="content flex-def flex-zTopBottom flex-item">
+                        <div class="title flex-def flex-zBetween">
+                            <div class="titleLeft flex-def flex-zLeftRight flex-cCenter">
+                                <h3 class="name">{{=it[i].title}}</h3>
+                                <!-- <h3 class="name">{{=it[i].nickname}}</h3> -->
+                                <span class="sexIcon"></span>
+                                <span class="zmfIcon"></span>
+                                <!-- <span class="zmfText">700分</span> -->
                             </div>
-                            <p class=   "fr price">1000元/单</p>
+                            <div class="titleRight">
+                                1000元/单
+                            </div>
                         </div>
-                        <div class="content clearfix">
-
-                           <div class="content_text">
-                                <p>{{=it[i].description}}</p>
+                        {{?it[i].company_name}}
+                            <div class="info">
+                                <p class="commanyName flex-def flex-cCenter">
+                                    <span class="comIcon"></span>
+                                    <span>{{=it[i].company_name}}</span>
+                                </p>
+                            </div>
+                        {{?}}
+                        <div class="content_text">
+                            <p class="text">{{=it[i].description}}</p>
+                            {{?it[i].image_json!=null}}
                                 {{ for (var j = 0; j < it[i].image_json.length; j++) { }} 
                                     <img class="content_img" src="{{=it[i].image_json[j]}}">
                                 {{ } }}
-                           </div>
-                           <p class="time">
-                               
-                               <span class="icon_comment"></span>
-                           </p>
+                           {{?}}
                         </div>
-                        
-                </li>   
+                        <div class="comment">
+                            <div class="time">
+                                <span>{{=it[i].create_time}}</span>
+                                <div class="commentIcon"></div>
+                            </div>
+                            <div class="commentText">
+                                <ul>
+                                    <li>
+                                        <span class="comment_name">李志超:</span>
+                                        <span class="comment_content">我是一条评论</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+            </div>
             {{ }; }}
-        </script>
-    </div> -->
+    </script>
+  
    
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -309,7 +229,15 @@
         // 请求数据
         requireData();
         // 筛选后的结果
-        bySelect()
+        bySelect();
+        // 下拉刷新
+        api.setCustomRefreshHeaderInfo({
+            bgColor: '#EFEFF4',
+        }, function(ret, err) {
+            //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
+            requireData();
+        });
+        
     };
 
 
@@ -410,17 +338,17 @@
             }
         }, function(ret, err) {
             if(ret) {
+                // 停止下拉刷新
+                api.refreshHeaderLoadDone()
                 for (var i = 0; i < ret.data.list.length; i++) {
                     // 解析图片json
                     ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
 
-                   ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
+                    ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
                     // 处理时间
                     // 1. 如果是今天， 显示时间
                     // 2. 如果是昨天显示昨天，
                     // 3. 大于昨天显示天数
-                   
-                    
                 }
                 getData(ret.data.list);
                 selfAdaption();
@@ -433,16 +361,21 @@
     // 进入详情
     function info(ele) {
         var flag = 0;
-        var compaby_name = $api.attr(ele, 'data-company')
-        if (compaby_name != 'null') {
+
+        
+        var compaby_name = $api.attr(ele, 'data-company'),
+            supply_id = $api.attr(ele, 'data-id');
+        if (compaby_name != '') {
             flag = 1;
         } 
+        // alert(flag +'---'+ compaby_name)
         api.openWin({
             name: 'supply_info',
             url: './supply_info.html',
             pageParam: {
                 flag: flag,
-                compaby_name: compaby_name
+                compaby_name: compaby_name,
+                supply_id: supply_id
             }
         });
         

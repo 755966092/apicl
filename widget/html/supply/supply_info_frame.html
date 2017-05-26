@@ -326,7 +326,7 @@
     </style>
 </head>
 <body>
-    <div class="main clearfix">
+   <!--  <div class="main clearfix">
         <div class="no1">
             <span id="cloaswin"   tapmode="hover"   onclick="api.closeWin()"></span>
             <img src="../../image/tx_3.jpg">
@@ -427,8 +427,126 @@
                 </div>
             </div>
         </div>
-    </div>
-    
+    </div> -->
+        <!-- {{ for (var i = 0; i < it.length; i++) { }}  -->
+    <div class="resultList"></div>
+    <script type="text/x-dot-template" id="listT">
+            <div class="main clearfix">
+                <div class="no1">
+                    <span id="cloaswin"   tapmode="hover"   onclick="api.closeWin()"></span>
+                    <img src="../../image/tx_3.jpg">
+                </div>
+                <div class="no2 clearfix">
+                    <div class="title clearfix">
+                        <span></span>
+                        <h3>{{=it.info.title}}</h3>
+                        <span></span>
+                    </div>
+                    <div class="prime">
+                        <span class="primeInfo">${{=it.info.price}}元/套</span>
+                        <ul class="fr">
+                            <li class="grade"></li>
+                            <li class="grade"></li>
+                            <li class="grade"></li>
+                            <li class="grade"></li>
+                            <li class="grade"></li>
+                        </ul>
+                        <p class="time">2017-04-09</p>
+                    </div>
+                    <div class="productInfo">
+                        {{?it.info.form==1}}
+                            <span class="fl">线上</span>
+                        {{??}}
+                            <span class="fl">线下</span>
+                        {{?}}
+                        <span>状态：
+                            {{?it.info.status==1}}
+                                <span class="productState">开启中</span>
+                            {{??it.info.status==2}}
+                                <span class="productState">暂停</span>
+                            {{??}}
+                                <span class="productState">已删除</span>
+                            {{?}}
+                        </span>
+                        <span class="fr">{{=it.info.city}}</span>
+                    </div>
+                    <p class="classify">分类：设计</p>
+
+                </div>
+                <div class="no3 clearfix">
+                    <div class="choose">选择
+                        <span>App图标</span>
+                        <i></i>
+                    </div>
+                    <p class="issuer">发布人</p>
+                     <div class="choose">
+                        <img src="../../image/tx_3.jpg">
+                        <div class="fl issuerInfo">
+                            <p>陈升的</p>
+                            <p>上海百度悠闲公司 董事长</p>
+                        </div>
+                    </div>
+                    <div class="companyTtile" id="companyTtile">
+                         <p class="issuer">公司主页</p>
+                         <div class="choose">
+                            <img src="../../image/tx_4.jpg">
+                            <div class="fl company" >
+                                <p id="compaby_name">上海百度悠闲公司 董事长</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="no4">
+                    <p class="title">
+                        <i></i>
+                        <span>评价</span>
+                    </p>
+                    <div class="content">
+                        <p>评价(10)</p>
+                        <div class="item" >
+                            <div class="itemTitle clearfix">
+                                <img class="fl" src="../../image/tx_4.jpg">
+                                <span class="fl">王*柏</span>
+                                <span class="fr">2017-04-25</span>
+                                <ul class="fl">
+                                    <li class="grade"></li>
+                                    <li class="grade"></li>
+                                    <li class="grade"></li>
+                                    <li class="grade"></li>
+                                    <li class="grade"></li>
+                                </ul>
+                                
+                            </div>
+                            <p>设计的非常不错，大师级水平设计的非常不错，大师级水平设计的非常不错，大师级水平设计的非常不错，大师级水平设计的非常不错，大师级水平</p>
+                            <div class="btn">查看更多</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="no5">   
+                    <p class="title">
+                        <i></i>
+                        <span>详情</span>
+                    </p>
+                    <div class="content clearfix">   
+                            <span class="fl"   tapmode="hover"   onclick="datum(0,this)">
+                                <span class=" no5Title borderBottom">详情</span>
+                            </span>
+                            <span class="fl"   tapmode="hover"   onclick="datum(1,this)">
+                                <span class="no5Title">留言</span>
+                            </span>
+                    </div>
+                    <div class="datum">
+                        <div class="detail">
+                            详情详情详情详情详情详
+                        </div>
+                        <div class="leaveWord ">
+                            留言留言留言留言留言留言留言留
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </script>
+        <!-- {{ }; }} -->
     <footer>    
             <span><i></i>聊天</span>
             <span><i></i>收藏</span>
@@ -437,20 +555,44 @@
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/jquery.min.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
     apiready = function(){
         // 初始化页面
-        initialise(api.pageParam.flag, api.pageParam.compaby_name)
+        initialise(api.pageParam.flag, api.pageParam.compaby_name, api.pageParam.supply_id)
     };
 
+
+
+
+
     // 初始化页面
-    function  initialise(flag, compaby_name) {
+    function  initialise(flag, compaby_name, supply_id) {
         if (flag) {
             $api.css($api.byId('companyTtile'), 'display:block');
             $api.text($api.byId('compaby_name'), compaby_name);
         } else {
             $api.css($api.byId('companyTtile'), 'display:none');
         }
+        // 请求数据
+        api.ajax({
+            url: apiSite + '/api/supply/detail',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+               values: { 
+                   token: $api.getStorage('userToken'),
+                   supply_id: supply_id
+               }
+            }
+        }, function(ret, err) {
+            alert(JSON.stringify(ret))
+            var info = ret.info;
+            // 评论
+            var last_comment = ret.last_comment;
+
+        })
     }
     // 切换留言和详情
     function datum(n,ele) {

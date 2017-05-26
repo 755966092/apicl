@@ -31,12 +31,12 @@
         header ul li:nth-child(3) span {
             display: inline-block;
             width: .39rem;
-            height: .39rem;
+            height: .8rem;
             background: url(../image/icon_add.png) no-repeat;
             -webkit-background-size: .39rem .39rem;
             background-size: .39rem .39rem;
             position: absolute;
-            right: .4rem;
+            right: .23rem;
             top: .2rem;
         }
         
@@ -397,8 +397,22 @@ function addFellow() {
 }
 // 点击发布按钮
 function addPublish() {
-    api.sendEvent({
-        name: 'addPublish'
+    // api.sendEvent({
+    //     name: 'addPublish'
+    // });
+    api.openFrame({
+        name: 'supply_addSupply',
+        url: './supply/supply_addSupply.html',
+        rect: {
+            x: 0,
+            y: headerH,
+            w: 'auto',
+            h: 'auto'
+        },
+        pageParam: {
+            name: 'value'
+        },
+        bounces: false
     });
 }
 
