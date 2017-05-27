@@ -30,6 +30,7 @@
             width: 100%;
             padding: .2rem 0;
             outline: none;
+            resize: none;
         }
 
         .addMedia {
@@ -38,7 +39,7 @@
             background: #F8F8F8;
             text-align: center;
             color: #999;
-            margin-right: .2rem;
+            margin-right: .1rem;
         }   
         .addMedia span{
             display: inline-block;
@@ -171,13 +172,13 @@
                 background: #fff url(../../image/icon_supply/icon_08.png)no-repeat;
                 background-size: .34rem .34rem;
                 background-position: .3rem center;
-                display: none;
+                /*display: none;*/
             }
             ul li:nth-child(9) {
                 background: #fff url(../../image/icon_supply/icon_09.png)no-repeat;
                 background-size: .34rem .34rem;
                 background-position: .3rem center;
-                display: none;
+                /*display: none;*/
             }
             ul li:nth-child(10) {
                 background: #fff url(../../image/icon_supply/icon_06.png)no-repeat;
@@ -189,6 +190,28 @@
                 background-size: .33rem .34rem;
                 background-position: .3rem center;
         }
+        .supplyImg {
+            float: left;
+            font-size: 0;
+
+        }
+        .clearfix img{
+            margin-right: .1rem;
+            width: 1.6rem;
+            height: 1.6rem;
+            margin-bottom: .1rem;
+        }
+        .mult {
+            -moz-box-lines: multiple; /*Firefox*/
+            -webkit-box-lines: multiple; /*Safari,Opera,Chrome*/
+            box-lines: multiple;
+            flex-wrap:wrap;
+
+            -webkit-box-flex: 1.0;
+            -moz-flex-shrink: 1;
+            -webkit-flex-shrink: 1;
+            flex-shrink: 1;
+        }
     </style>
 </head>
 <body>
@@ -198,12 +221,17 @@
             <input type="text" placeholder="输入您发布的标题" id="title">
         </div>
         <textarea placeholder="描述一下您发布的内容" rows="5" id="description"></textarea>
-        <div class="clearfix">
-            <div class="fl addMedia">
+        <div class="clearfix flex-def mult">
+                <img  src="../../image/tx_4.jpg">
+                <img  src="../../image/tx_4.jpg">
+                <img  src="../../image/tx_4.jpg">
+                <img  src="../../image/tx_4.jpg">
+                <img  src="../../image/tx_4.jpg">
+            <div class="addMedia">
                 <span></span>
                 添加图片
             </div>
-            <div class="fl addMedia">
+            <div class="addMedia">
                 <span></span>
                 添加视频
             </div>
@@ -245,11 +273,11 @@
             </li>
 
 
-            <li class="companyName">
+            <li  onclick="selectType(this)" data-val="_unit">
                 <span>单位</span>
-                <input type="text" name="" placeholder="选填">
+                <span class="spanno2 _unit" id="unit">选填</span>
             </li>
-            <li class="companyName">
+            <li >
                 <span>适用范围</span>
                 <input type="text" name="" placeholder="选填">
             </li>
@@ -275,6 +303,7 @@
                   ddress,         //string  地址
                   atitude,            //string  纬度
                   ongitude,           //string  经度; 
+                  _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
     apiready = function(){
         moduleInit();
         // 获取位置
@@ -285,6 +314,7 @@
         monitorEvent('_genre','_genre');
         monitorEvent('_format','_format');
         monitorEvent('_classify','_classify');
+        monitorEvent('_unit','_unit');
     };
 
 
@@ -296,7 +326,7 @@
             sub_type = $api.text($api.byId('sub_type')) == '自产自销' ? 1 : 2,            //int 类别ID（1-自产自销，2-代理）
             category_id = 1,         //int 分类ID
             price = $api.val($api.byId('price')),           //float   价格
-            // unit,            //string  单位
+            unit = _dataSource.indexOf($api.text($api.byId('unit')))+1,            //string  单位
             form = $api.text($api.byId('form')) == '线上' ? 1 : 2,            //int 形式（1-线上，2-线下）
             description = $api.val($api.byId('description'));        //string  详细内容
             // image_json = [],          //string  图片（格式：["abc.jpg","ddd.jpg"]）
@@ -319,7 +349,7 @@
                             latitude: latitude,
                             longitude: longitude,
                             price: price,
-                            unit: '个',
+                            unit: unit,
                             form: form,
                             description: description,
                             image_json: null,
@@ -402,6 +432,24 @@
         }else if (_data == '_classify') {
             _dataSource = ['全部','教育','摄影','医疗'];
             flag = 3;
+        } else if (_data == '_unit') {
+            _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
+            flag = 4;
+            // "1": "次",
+            // "2": "幅",
+            // "3": "单",
+            // "4": "小时",
+            // "5": "分钟",
+            // "6": "天",
+            // "7": "周",
+            // "8": "月",
+            // "9": "份",
+            // "10": "个",
+            // "11": "扇",
+            // "12": "课时",
+            // "13": "面议",
+            // "14": "其他",
+            // "15": "未定义"
         }
         
 

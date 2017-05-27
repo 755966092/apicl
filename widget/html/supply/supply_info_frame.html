@@ -321,7 +321,12 @@
     <script type="text/x-dot-template" id="listT">
         <div class="main flex-def flex-zTopBottom">
             <div class="img">
-                <img src="../../image/tx_4.jpg">
+                {{?it.info.image_json[0]!='0'}}
+                    <img src="{{=it.info.image_json[0]}}">
+                {{??it.info.image_json[0]=='0'}}
+                    <img src="../../image/tx_4.jpg">
+                {{?}}
+                
             </div>
             <div class="title flex-def flex-zLeftRight flex-cCenter">
                 <img src="{{=it.info.head_img_url}}" alt="">
@@ -385,11 +390,13 @@
                 </div>
                 <div class="infoData">
                     <p>{{=it.info.description}}</p>
-                    <!-- {{for(var i=0;i< it.info.image_json.length; i++){ }}
-                        <img src="{{=it.info.image_json[i]}}">
-                    {{ }; }} -->
+                    {{?it.info.image_json[0]!='0'}}
+                        {{for(var i=0;i< it.info.image_json.length; i++){ }}
+                            <img src="{{=it.info.image_json[i]}}">
+                        {{ }; }}
+                    {{??it.info.image_json[0]=='0'}}
+                    {{?}}
                     
-
                 </div>
             </div>
             <div class="comment">
@@ -428,7 +435,7 @@
                 {{?}}
                 
             </div>
-            <div class="comment">
+           <!--  <div class="comment">
                 <div class="commentTitle flex-def flex-cCenter flex-zBetween">
                     <span class="commentCount">留言（10）</span>
                     <span class="commentIcon"></span>
@@ -466,7 +473,7 @@
                 <div class="btn flex-def flex-cCenter">
                     <div>查看全部</div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </script>
   
@@ -481,30 +488,31 @@
 <script type="text/javascript" src="../../script/jquery.min.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    var transmitData;
+    var transmitData,_dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
     apiready = function(){
         // 初始化页面
         initialise(api.pageParam.flag, api.pageParam.compaby_name, api.pageParam.supply_id)
     };
 
-    var form = new FormData();
-    form.append("token", "b678d8a0-f0d8-c67e-50b0-4d839ea864d7");
-    form.append("supply_id", "1");
+    // var form = new FormData();
+    // form.append("token", "b678d8a0-f0d8-c67e-50b0-4d839ea864d7");
+    // form.append("supply_id", "1");
 
-    var settings = {
-      "async": true,
-      "crossDomain": true,
-      "url": "http://wozai.tonyliangli.cn/api/supply/detail",
-      "method": "POST",
-      "processData": false,
-      "contentType": false,
-      "mimeType": "multipart/form-data",
-      "data": form
-    }
-    $.ajax(settings).done(function (response) {
-        $api.css($api.dom('.loading'), 'display:none');
-        getData(JSON.parse(response).data)
-    });
+    // var settings = {
+    //   "async": true,
+    //   "crossDomain": true,
+    //   "url": "http://wozai.tonyliangli.cn/api/supply/detail",
+    //   "method": "POST",
+    //   "processData": false,
+    //   "contentType": false,
+    //   "mimeType": "multipart/form-data",
+    //   "data": form
+    // }
+    // $.ajax(settings).done(function (response) {
+    //     // $api.css($api.dom('.loading'), 'display:none');
+    //     // console.log(typeof JSON.parse(response).data.info.image_json)
+    //     // getData(JSON.parse(response).data)
+    // });
 
 
 
@@ -528,6 +536,13 @@
                }
             }
         }, function(ret, err) {
+            if (ret.data.info.image_json != 'null') {
+                // 解析图片json
+                ret.data.info.image_json = eval(ret.data.info.image_json);    
+            } else {
+                ret.data.info.image_json = '0'
+            }   
+            ret.data.info.unit = _dataSource[ret.data.info.unit-1]
             $api.css($api.dom('.loading'), 'display:none');     
             getData(ret.data);
             // ret.data

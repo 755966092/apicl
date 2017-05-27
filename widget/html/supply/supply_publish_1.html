@@ -179,7 +179,7 @@
                                 <!-- <span class="zmfText">700分</span> -->
                             </div>
                             <div class="titleRight">
-                                1000元/单
+                                1000元/{{=it[i].unit}}
                             </div>
                         </div>
                         {{?it[i].company_name}}
@@ -224,7 +224,7 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 
 <script type="text/javascript">
-    
+    var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
     apiready = function(){
         // 请求数据
         requireData();
@@ -324,7 +324,7 @@
         }
          $api.html(ele, '查看订阅的筛选结果');
     }
-
+    
     // 请求数据
     function requireData () {
         api.ajax({
@@ -344,6 +344,11 @@
                     // 解析图片json
                     ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
 
+                    if(ret.data.list[i].unit == 0) {
+                        ret.data.list[i].unit = _dataSource[_dataSource.length-1]
+                    } else {
+                        ret.data.list[i].unit = _dataSource[ret.data.list[i].unit-1]
+                    }
                     ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
                     // 处理时间
                     // 1. 如果是今天， 显示时间
