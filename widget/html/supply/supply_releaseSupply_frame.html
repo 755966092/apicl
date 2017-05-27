@@ -34,6 +34,8 @@
         }
 
         .addMedia {
+            font-size: 0;
+            display: inline-block;
             width: 1.6rem;
             height: 1.6rem;
             background: #F8F8F8;
@@ -41,7 +43,10 @@
             color: #999;
             margin-right: .1rem;
         }   
-        .addMedia span{
+        .addMedia span {
+            font-size: .24rem;
+        }
+        .addMedia span.icon{
             display: inline-block;
             height: .9rem;
             width: 100%;
@@ -49,10 +54,10 @@
             -webkit-background-size: .62rem .62rem;
             background-size: .62rem .62rem;
             background-position: bottom center;
-            
+            font-size: .24rem;
             margin-bottom: .1rem;
         }
-        .addMedia:last-child span {
+        .addMedia:last-child span.icon {
             background: url(../../image/icon_supply/icon_addMedia_02.png)no-repeat;
             background-size: .6rem .45rem;
             background-position: bottom center;
@@ -193,7 +198,6 @@
         .supplyImg {
             float: left;
             font-size: 0;
-
         }
         .clearfix img{
             margin-right: .1rem;
@@ -202,15 +206,22 @@
             margin-bottom: .1rem;
         }
         .mult {
-            -moz-box-lines: multiple; /*Firefox*/
-            -webkit-box-lines: multiple; /*Safari,Opera,Chrome*/
+            -webkit-box-lines: multiple; 
             box-lines: multiple;
             flex-wrap:wrap;
-
+            width: 100%;
+            font-size: 0;
             -webkit-box-flex: 1.0;
             -moz-flex-shrink: 1;
             -webkit-flex-shrink: 1;
             flex-shrink: 1;
+        }
+        .asd {
+            width: 1.6rem;
+            height: 1.6rem;
+            font-size: 0;
+            
+            background-color: #f00;
         }
     </style>
 </head>
@@ -221,21 +232,31 @@
             <input type="text" placeholder="输入您发布的标题" id="title">
         </div>
         <textarea placeholder="描述一下您发布的内容" rows="5" id="description"></textarea>
-        <div class="clearfix flex-def mult">
-                <img  src="../../image/tx_4.jpg">
-                <img  src="../../image/tx_4.jpg">
-                <img  src="../../image/tx_4.jpg">
-                <img  src="../../image/tx_4.jpg">
-                <img  src="../../image/tx_4.jpg">
-            <div class="addMedia">
-                <span></span>
-                添加图片
+        <div class="mult clearfix flex-def resultList">
+           <!--  <img class="fl imgpage" tapmode="hover"  src="">
+            <img  src="../../image/icon_supply/icon_addMedia_1.png" class="addImg" onclick="openImg()" tapmode="hover">
+            <img  src="../../image/icon_supply/icon_addMedia_2.png"> -->
+           
+
+            <!-- <div class="addMedia" onclick="openImg()" tapmode="hover">
+                <span class="icon"></span>
+                <span>添加图片</span>
             </div>
             <div class="addMedia">
-                <span></span>
-                添加视频
-            </div>
+                <span class="icon"></span>
+                <span>添加视频</span>
+            </div> -->
         </div>
+
+        <script type="text/x-dot-template" id="listT">
+            {{ for (var i = 0; i < it.length; i++) { }} 
+                <img class="fl imgpage" tapmode="hover" onclick="openImgPage(this)" data-id = '{{=i}}' src="{{=it[i]}}">
+            {{ }; }}
+                <img  src="../../image/icon_supply/icon_addMedia_1.png" class="addImg" onclick="openImg()" tapmode="hover">
+                <img  src="../../image/icon_supply/icon_addMedia_2.png">
+        </script>
+
+
         <p class="position" id="position"  tapmode="hover"   onclick="getPos()">北京 北京 海淀区</p>
     </div>
     <div class="classify clearfix">
@@ -297,15 +318,19 @@
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
     var type = 1, province,            //string  省份
                   ity,            //string  城市
                   ddress,         //string  地址
                   atitude,            //string  纬度
                   ongitude,           //string  经度; 
-                  _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
+                  _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"]
+                  base64Data=[];
     apiready = function(){
+        
         moduleInit();
+        getData(base64Data);
         // 获取位置
         getPos();
         // 公司|个人 显示不同的页面
@@ -315,8 +340,67 @@
         monitorEvent('_format','_format');
         monitorEvent('_classify','_classify');
         monitorEvent('_unit','_unit');
-    };
 
+        // 删除图片
+        delImg();
+    };
+    // 删除图片
+    function delImg() {
+        api.addEventListener({
+            name: 'delImg'
+        }, function(ret, err) {
+            if (ret) {
+                for (var i = 0; i < $api.domAll('.imgpage').length; i++) {
+                    if (i == (ret.value.imgId-1)) {
+                        $api.remove($api.domAll('.imgpage')[i]);
+                    }
+                }
+                base64Data = base64Data.filter(function(item, index) {
+                    if (index != ret.value.imgId-1) {
+                        return item
+                    }
+                })
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    // 打开相册
+    function openImg() {
+
+        api.getPicture({
+            sourceType: 'album',
+            encodingType: 'png',
+            mediaValue: 'pic',
+            destinationType: 'base64',
+            allowEdit: false,
+            quality: 70,
+            // targetWidth: 100,
+            // targetHeight: 100,
+            saveToPhotoAlbum: false
+        }, function(ret, err) {
+            if (ret) {
+                base64Data.push(ret.base64Data);
+                getData(base64Data);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    function openImgPage(ele) {
+       var data = $api.attr(ele, 'src'),
+            n = parseInt($api.attr(ele, 'data-id'));
+        api.openWin({
+            name: 'supply_releaseSupply_imgPage_win',
+            url: './supply_releaseSupply_imgPage_win.html',
+            bounces: false,
+            pageParam: {
+                data: data,
+                count:  base64Data.length,
+                n: n+1
+            }
+        });
+    }
 
     // 添加供应
     function addSupply() {

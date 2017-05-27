@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        body,html{
+            background-color: #000;
+            height: 100%;
+        }
+        .main {
+            height: 100%;
+        }
+        img {
+            width: 100%;
+        }
+        footer {
+          height: 3.12rem;
+          width: 100%;
+          text-align: center;
+          background-color: #fff;
+          position: fixed;
+          bottom: 0;
+          right: 0;
+          display: none;
+        }
+        .warring {
+          font-size: .22rem;
+          color: #838384;
+          line-height: 1.18rem; 
+          border-bottom: 1px solid #DADADA;
+        }
+        .del {
+          font-size: .32rem;
+          color: #E64340;
+          line-height: 1.04rem;
+          border-bottom: .12rem solid #CCCCBA;
+        }
+        .cancel {
+          line-height: 1rem;
+          background-color: #F5F5F5;
+          color: #000;
+          font-size: .32rem;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="main flex-def flex-cCenter">
+      <img  id="img">
+    </div>
+    <footer>
+      <p class="warring">要删除此图片吗？</p>
+      <p class="del" onclick="ensureDelImg()" tapmode>删除</p>
+      <p class="cancel " onclick="hideDelIcon()">取消</p>
+    </footer>
+    
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        $api.attr($api.byId('img'), 'src', api.pageParam.data);
+        api.addEventListener({
+            name: 'selImgIcon'
+        }, function(ret, err) {
+            if (ret) {
+                $api.css($api.dom('footer'), 'display:block');
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    };
+    function ensureDelImg() {
+      api.sendEvent({
+          name: 'delImg',
+          extra: {
+              imgId:api.pageParam.n
+          }
+      });
+      api.closeWin();
+    }
+    function hideDelIcon(){
+        $api.css($api.dom('footer'), 'display:none');
+    }
+   
+</script>
+</html>

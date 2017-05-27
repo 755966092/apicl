@@ -83,24 +83,26 @@
                 {{?it[i].flag == 1}}
                     <p class="type moveTitle">移动</p>
                 {{?}}
+
                 {{?it[i].type == 1}}
-                    <div class="move moveFlag">
+                    <div class="move moveFlag" data-id="{{=it[i].contact_id}}" data-sub_type="{{=it[i].sub_type}}" data-type="{{=it[i].type}}" >
                         <div class="item">
                             <span class="label">{{=it[i].sub_type}}：</span>
-                            <input type="text" value="{{=it[i].phone}}" disabled="true">
-                            <span class="clearIcon" data-id="{{}}" tapmode="hover" onclick="clearItem(this)"></span>
+                            <input type="text" onchange="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].phone}}" disabled="true">
+                            <span class="clearIcon" data-id="{{=it[i].contact_id}}"  tapmode="hover" onclick="clearItem(this)"></span>
                         </div>
                     </div>
                 {{?}}
+
                 {{?it[i].flag == 2}}
                     <p class="type fixedTitle">固定</p>
                 {{?}}
                 {{?it[i].type == 2}}
-                    <div class="move fixedFlag">
+                    <div class="move fixedFlag"  data-id="{{=it[i].contact_id}}" data-sub_type="{{=it[i].sub_type}}" data-type="{{=it[i].type}}">
                         <div class="item" >
                             <span class="label">{{=it[i].sub_type}}：</span>
-                            <input type="text" value="{{=it[i].phone}}" disabled="true">
-                            <span class="clearIcon" tapmode="hover" onclick="clearItem(this)"></span>
+                            <input type="text" onchange="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].phone}}" disabled="true">
+                            <span class="clearIcon" data-id="{{=it[i].contact_id}}" tapmode="hover" onclick="clearItem(this)"></span>
                         </div>
                     </div>
                 {{?}}
@@ -116,6 +118,7 @@
 <script type="text/javascript" src="../../../script/doT.min.js"></script>
 
 <script type="text/javascript">
+    var editArr=[];
     apiready = function(){
         lxrList();
         api.addEventListener({
@@ -128,14 +131,34 @@
             }
         });
     };
+    function revisePhone(ele) {
+        var obj = {}
+            obj.id = parseInt($api.attr($api.closest(ele, '.move'), 'data-id')),
+            obj.sub_type = parseInt($api.attr($api.closest(ele, '.move'), 'data-sub_type') == '工作' ? 1 : 2),
+            obj.type = parseInt($api.attr($api.closest(ele, '.move'), 'data-type')),
+            obj.phone = $api.val(ele);
+          
+            var i=0;
+            do{
+                if (editArr[i].id == obj.id && obj.phone == editArr[i].phone) {
+                    break;
+                } else {
+                    editArr.push(obj)
+                }
+                i++;
+            }while(i < editArr.length)
+            alert(JSON.stringify(obj))
+            
+    }
     // 监听点击保存和编辑按钮
     function monitorEvent () {
         var clearIcon = $api.domAll('.clearIcon'),
             ipt = $api.domAll('input');
+
         api.addEventListener({
             name: 'keepPhone'
         }, function(ret, err) {
-            console.log(JSON.stringify(clearIcon.length))
+            
             if (ret) {
                 for (var i = 0; i < clearIcon.length; i++) {
                    $api.css(clearIcon[i], 'display:none');
@@ -143,7 +166,29 @@
                 for (var i = 0; i < ipt.length; i++) {
                     $api.attr(ipt[i], 'disabled', 'true');
                 }
-                
+                // 编辑电话号码
+                for (var i = 0; i < editArr.length; i++) {
+                    api.ajax({
+                        url: apiSite + '/api/user_center/editContact',
+                        method: 'post',
+                        headers: apiHeader,
+                        data: {
+                           values: { 
+                                token: $api.getStorage('userToken'),
+                                contact_id: editArr[i].id,
+                                sub_type: editArr[i].sub_type,
+                                type: editArr[i].type,
+                                phone: editArr[i].phone
+                           }
+                        }
+                    }, function(ret, err) {
+                        if(ret) {
+                            alert(JSON.stringify(ret))
+                        } else {
+                            alert(JSON.stringify(err))
+                        }
+                    })
+                }
             } else {
                 alert('1'+JSON.stringify(err));
             }
@@ -151,7 +196,7 @@
         api.addEventListener({
             name: 'editPhone'
         }, function(ret, err) {
-            console.log(JSON.stringify(ipt.length))
+            
             if (ret) {
                for (var i = 0; i < clearIcon.length; i++) {
                    $api.css(clearIcon[i], 'display:inline-block');
@@ -178,9 +223,9 @@
             }
         }, function(ret, err) {
             if (ret) {
-                // alert(JSON.stringify(ret.data.list))
                 handleData(litterSort(ret.data.list))
                 // getData(ret.data.list);
+                // alert(JSON.stringify(ret.data))
                 monitorEvent();
             } else {
                 alert('3'+JSON.stringify(err));
@@ -197,9 +242,11 @@
                 data[i].sub_type = '生活'
             }
         }
+        
         getData(data);
     }
     function litterSort(data) {
+        
         for (var i = 0; i < data.length; i++) {
             for (var j = 0; j < data.length; j++) {
                 if (data[i].type < data[j].type) {
@@ -209,6 +256,7 @@
                 }
             }
          }
+         
          for (var i = 0; i < data.length; i++) {
              data[0].flag = data[0].type
             if (i>0) {
@@ -222,6 +270,7 @@
 
     function clearItem(ele) {
         var father = $api.closest(ele, '.move');
+        var id = $api.attr(ele, 'data-id');
         $api.remove(father);
         if ($api.domAll('.moveFlag').length == 0) {
             $api.remove($api.dom('.moveTitle'));
@@ -229,6 +278,24 @@
         if ($api.domAll('.fixedFlag').length == 0) {
              $api.remove($api.dom('.fixedTitle'));
         }
+        // 删除电话
+        api.ajax({
+            url: apiSite + '/api/user_center/deleteContact',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+               values: { 
+                   token: $api.getStorage('userToken'),
+                   contact_id: id
+               }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                // alert(JSON.stringify(ret))
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
     }
     function addPhone() {
         api.openWin({
