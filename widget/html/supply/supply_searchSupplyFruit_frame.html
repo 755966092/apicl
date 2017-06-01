@@ -225,10 +225,12 @@
 
 <script type="text/javascript">
     var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
+     var keyword;
     apiready = function(){
         moduleInit();
         // 请求数据
-        requireData();
+        requireData(api.pageParam);
+        keyword = api.pageParam.keyword;
         // 筛选后的结果
         bySelect();
         // 下拉刷新
@@ -238,7 +240,6 @@
             //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
             requireData();
         });
-        
     };
 
 
@@ -281,17 +282,36 @@
 
     // 筛选后结果
     function bySelect() {
+        var obj = {
+            keyword: keyword,
+            type: '', 
+            sub_type: '',
+            category_ids: '',
+            order: '',
+        };
+       
         api.addEventListener({
-           name: 'screeningResults'
+           name: 'searchSupply3'
         }, function(ret, err) {
-           
-           if (ret.value.flag) {
-            $api.css($api.dom('.title1'), 'display:block');
-           }
-           requireData(ret.value.condition)
-           selfAdaption();
+           // alert(JSON.stringify(ret))
+                obj.type = ret.value.parameter.type;
+                obj.sub_type = ret.value.parameter.sub_type;
+                obj.category_ids = ret.value.parameter.category_ids;
+                obj.order = ret.value.parameter.order;
+                console.log(keyword)
+                console.log('筛选'+JSON.stringify(obj))
+                alert('33333:::'+JSON.stringify(obj));
+                requireData(obj)
         })
-
+        api.addEventListener({
+           name: 'searchSupply2'
+        }, function(ret, err) {
+            keyword = ret.value.keyword
+            obj.keyword = ret.value.keyword;
+            console.log('搜索'+JSON.stringify(obj))
+            requireData({keyword : ret.value.keyword});
+            // alert('22222:::'+JSON.stringify(obj));
+        });
         api.addEventListener({
            name: 'addPublish'
         }, function(ret, err) {
@@ -308,29 +328,26 @@
           });
        });
     }
-    // 筛选后页面变化
-    function viewResults(ele) {
+    // // 筛选后页面变化
+    // function viewResults(ele) {
        
-        $api.css($api.dom('.results'), 'background: #fff url(../../image/icon_zk.png)no-repeat;background-position: right center;-webkit-background-size: .15rem .25rem;background-size: .15rem .25rem;');
-        // $api.css(ele, 'b');
-        // getData(data2);
-        // selfAdaption();
-        if ($api.text(ele) == '查看订阅的筛选结果') {
-            // getData(data3);
-            // selfAdaption();
-            api.openWin({
-                name: 'supply_subscribeWin',
-                url: './supply_subscribeWin.html',
-                pageParam: {
-                    name: 'value'
-                }
-            });
-        }
-         $api.html(ele, '查看订阅的筛选结果');
-    }
+    //     $api.css($api.dom('.results'), 'background: #fff url(../../image/icon_zk.png)no-repeat;background-position: right center;-webkit-background-size: .15rem .25rem;background-size: .15rem .25rem;');
+       
+    //     if ($api.text(ele) == '查看订阅的筛选结果') {
+    //         api.openWin({
+    //             name: 'supply_subscribeWin',
+    //             url: './supply_subscribeWin.html',
+    //             pageParam: {
+    //                 name: 'value'
+    //             }
+    //         });
+    //     }
+    //      $api.html(ele, '查看订阅的筛选结果');
+    // }
     
     // 请求数据
     function requireData (data) {
+        console.log('函数内:'+JSON.stringify(data))
         var data = data || 1;
         var latitude,longitude;
         if (data !== 1) {
@@ -343,6 +360,7 @@
                     if (ret.status) {
                         latitude = ret.lat;
                         longitude = ret.lon;
+                        console.log(latitude+'--------'+longitude)
                     } else {
                         alert(err.code);
                     }
@@ -357,7 +375,7 @@
             data: {
                values: { 
                     token: $api.getStorage('userToken'),
-                    // keyword: '',
+                    keyword: data.keyword,
                     type: data.type || '', 
                     sub_type: data.sub_type || '',
                     // category_ids: '',     

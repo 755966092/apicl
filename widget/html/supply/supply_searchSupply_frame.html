@@ -17,27 +17,29 @@
             text-align: center;
             background-color: #EFEFF4;
             font-size: 0;
-            padding: .15rem 0;
+            padding: .15rem .15rem;
+            box-sizing: border-box;
         }
         .ipt input {
             font-size: .24rem;
-            text-align: center;
+            /*text-align: left;*/
             width: 7.174rem;
             height: .503rem;
             outline: none;
             background: #fff url(../../image/icon_search.png)no-repeat;
             -webkit-background-size: .25rem .26rem;
             background-size: .25rem .26rem;
-            background-position: 3.17rem center;
+            background-position: .15rem center;
             border: 1px solid #DDDEE2;
+            padding-left: .5rem;
+            box-sizing: border-box;
         }
-        input::-webkit-input-placeholder{
+        /*input::-webkit-input-placeholder{
             text-align: center;
-        }
+        }*/
     　　 
         
         .hisSearch {
-           
             font-size: 0;
         }
         .hisSearch .title {
@@ -106,18 +108,28 @@
         .allSearch ul li:nth-child(3n) {
             border: 0;
         }
+        .filter {
+            width: .64rem;
+            height: .43rem;
+            background: url(../../image/icon_txl/icon_sx.png)no-repeat;
+            -webkit-background-size: .64rem .43rem;
+            background-size: .64rem .43rem;
+            margin-left: .1rem;
+        }
     </style>
 </head>
 <body>
     <div class="main">
-        <div class="ipt">
-            <input type="text" name="" placeholder="&nbsp;&nbsp;&nbsp;&nbsp;搜索" onkeyup="delIcon(this)">
+        <div class="ipt flex-def flex-zCenter flex-cCenter">
+            <input type="text" placeholder="搜索">
+             <span class="filter" tapmode="hover" onclick="openFilter()"></span>
         </div>
     </div>
     <div class="hisSearch clearfix">
         <div class="title clearfix">
             <span>历史搜索</span>
             <span class="delIcon"   tapmode="hover"   onclick="clearHis()"></span>
+           
         </div>
         <div class="hisSearchContent clearfix resultList">
            <!--  <span class="hisSearchItem">公司</span>
@@ -150,19 +162,75 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 
 <script type="text/javascript">
-    var data = ['公司','个人','互联网','摄影','医疗']
+    var data = []
     apiready = function(){
         getData(data);
+        
+        $api.addEvt($api.dom('input'), 'keyup', function(e) {
+            var iputText = $api.val($api.dom('input'));
+            // if (!iputText) {
+            //     api.closeFrame({
+            //         name: 'supply_searchSupplyFruit_frame'
+            //     });
+            // } else {
+                if (e.keyCode == 13) {
+
+                    data.push(iputText);
+                    
+                    if (!iputText) {
+                        getData(data);
+                        api.closeFrame({
+                            name: 'supply_searchSupplyFruit_frame'
+                        });
+
+                    } else {
+                        api.openFrame({
+                            name: 'supply_searchSupplyFruit_frame',
+                            url: './supply_searchSupplyFruit_frame.html',
+                            rect: {
+                                x: 0,
+                                y: api.pageParam.headerH + $api.offset($api.dom('.ipt')).h,
+                                w: 'auto',
+                                h: 'auto'
+                            },
+                            pageParam: {
+                                keyword: iputText
+                            },
+                            bounces: true
+                        });
+                        api.sendEvent({
+                            name: 'searchSupply2',
+                            extra: {
+                                keyword: iputText
+                            }
+                        });
+                    }
+                    
+                }
+                
+            // }
+        });
     };
     getData(data);
     function delIcon(ele) {
-        var val = $api.val(ele);
-        if (val != '') {
-            $api.css(ele, 'background:#fff');
-        } else {
-            $api.css(ele, 'background: #fff url(../../image/icon_search.png)no-repeat;background-size: .25rem .26rem;background-position: 3.17rem center;');
-        }
-
+        
+    }
+    function openFilter() {
+        $api.dom('input').blur();
+        api.openFrame({
+            name: 'supply_slideFrame_3',
+            url: './supply_slideFrame_3.html',
+            rect: {
+                x: 0,
+                y: 0,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                name: 'value'
+            },
+            bounces: false
+        });
     }
     function clearHis() {
         data = []
