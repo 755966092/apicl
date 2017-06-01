@@ -249,17 +249,18 @@
 
         }
         footer {
-            font-size: 0;   
-            height: 1rem;   
+            font-size: 0;       
+            height: .88rem;   
             position: fixed;
             bottom: 0;  
             left: 0;    
-            width: 100%;    
+            width: 100%;     
             background-color: #fff;
-            border-top: .06rem solid #F8F8F8;
+            border-top: .01rem solid #F8F8F8;
          }
          footer span {
-            font-size: .24rem;  
+            font-size: .18rem;  
+            color: #999;
             text-align: center; 
             float: left;
          }
@@ -269,9 +270,9 @@
          }
  
          footer span:nth-child(3) {
-             font-size: .34rem;  
+             font-size: .3rem;  
              width: 50%; 
-             line-height: 1rem;  
+             line-height: .88rem;  
              background-color: #0ABB07;
              color: #fff;
          }
@@ -280,27 +281,25 @@
              width: 100%;    
              height: .55rem; 
              background: url(../../image/icon_supply/icon_chat.png)no-repeat;
-             -webkit-background-size: .44rem .44rem;
-            background-size: .44rem .44rem;
+            background-size: .4rem .38rem;
             background-position: center bottom;
          }
          footer span:nth-child(2) i {
             background: url(../../image/icon_supply/icon_collect.png)no-repeat;
-            -webkit-background-size: .44rem .44rem;
-            background-size: .44rem .44rem;
+                background-size: .4rem .35rem;
             background-position: center bottom;
          }
          .loading {
             width: 1.28rem;
             height: 1.28rem;
             background: url(../../image/loading_more.gif)no-repeat;
+            background-size: 1.28rem 1.28rem;
             position: absolute;
             top: 0;
             bottom: 0;
             right: 0;
             left: 0;
             margin: auto;
-
          }
          #cloaswin {
             width: .44rem;  
@@ -352,7 +351,7 @@
                 </div>
                 <div class="price flex-def flex-zBetween flex-zLeftRight">
                     <div class="priceText">
-                        ￥{{=it.info.price}}/套
+                        ￥{{=it.info.price}}/{{=it.info.unit}}
                     </div>
                     <div class="time">
                         {{=it.info.create_time}}
@@ -480,7 +479,7 @@
     <footer>    
             <span><i></i>聊天</span>
             <span><i></i>收藏</span>
-            <span   tapmode="hover"   onclick="immediateOrder()">立即接单</span>
+            <span tapmode="hover" onclick="immediateOrder()">立即接单</span>
     </footer>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -549,6 +548,8 @@
             transmitData = ret.data.info;
         })
     }
+    // 换算单位
+  
     // 切换留言和详情
     function datum(n,ele) {
         for (var i = 0; i < $api.domAll('.no5Title').length; i++) {

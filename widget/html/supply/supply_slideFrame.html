@@ -196,25 +196,19 @@
                 <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span spanSel">全部</span>
                 <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">摄影</span>
                 <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">医疗</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">医疗</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">医疗</span>
                 <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">教育</span>
             </li>
             <li class="no2List clearfix"   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;">
                 <p>TA代理代办的<span class="no2Icon"></span></p>
                 <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span spanSel">全部</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">摄影摄</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">摄影摄</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">摄影摄</span>
+                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">摄影</span>
                 <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">医疗</span>
                 <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">教育</span>
             </li>
             <li class="no2List clearfix"   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;">
                 <p>TA公司<span class="no2Icon"></span></p>
                 <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span spanSel">全部</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">摄影摄影摄影</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">摄影摄影摄影</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">摄影摄影摄影</span>
+                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">摄影</span>
                 <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">医疗</span>
                 <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">教育</span>
             </li>
@@ -240,6 +234,7 @@
     function li_span(ele) {
         var allDom = ele.parentNode.childNodes
         var no2Icon = ele.parentNode.getElementsByClassName('no2Icon');
+       
         for (var i = 0; i< no2Icon.length; i++) {
             $api.removeCls(no2Icon[i], 'no2Icon2');
         }
@@ -250,7 +245,7 @@
         $api.addCls(ele, 'sel');
     }
 
-      function selfAdaption(ele) {
+    function selfAdaption(ele) {
         var allDom = ele.parentNode.getElementsByClassName("no2_li_Span")
         
 
@@ -266,19 +261,36 @@
             var sel = $api.domAll('.no1 .sel');
             var spanSel = $api.domAll('.spanSel');
             var str = '';
+            var str1 = {
+                supply: 'supply',
+                type: 1,
+                order: ''
+            }
+            var order = $api.text(sel[1])
+            switch (order) {
+                case '智能排序': str1.order = '';
+                break;
+                case '距离最近': str1.order = 'distance';
+                break;
+                case '价格最低': str1.order = 'price';
+                break;
+                case '最新发布': str1.order = 'create_time';
+                break;
+
+            }
             for (var i = 0; i < sel.length; i++) {
                 str += $api.text(sel[i]) + ','
             }
+
             for (var i = 0; i < spanSel.length; i++) {
                 str += $api.text(spanSel[i]) + ','
             }
             str = str.slice(0,str.length-1)
-            alert('选择的内容:'+ str)
             // 发送事件, 刷新筛选结果
             api.sendEvent({
                 name: 'screeningResults',
                 extra: {
-                    condition: str 
+                    condition: str1 
                 }
             });
              api.closeFrame();

@@ -226,6 +226,7 @@
 <script type="text/javascript">
     var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
     apiready = function(){
+        moduleInit();
         // 请求数据
         requireData();
         // 筛选后的结果
@@ -241,7 +242,7 @@
     };
 
 
-    selfAdaption();
+    
     // 根据上传图片的多少自适应图片的大小
     function selfAdaption() {
         var listContent = $api.domAll('.item');
@@ -261,7 +262,25 @@
         }
     }
     
-
+    // 获取经纬度
+    function getLocation() {
+        bMap.getLocation({
+            accuracy: '100m',
+            autoStop: true,
+            filter: 1
+        }, function(ret, err) {
+            if (ret.status) {
+                // alert(   '经度：' + ret.lon + '----' +'纬度:'+ret.lat)
+                return {
+                    latitude: ret.lat,
+                    longitude: ret.lon
+                }
+            } else {
+                alert(err.code);
+            }
+        });
+        
+    }
      // doT模版获取数据
     function getData(data) {
         
@@ -284,7 +303,9 @@
            name: 'screeningResults'
         }, function(ret, err) {
            $api.css($api.dom('.title1'), 'display:block');
-           getData(data);
+           // alert(JSON.stringify(ret.value));
+           // getData(data);
+           requireData(ret.value)
            selfAdaption();
         })
 
@@ -326,14 +347,30 @@
     }
     
     // 请求数据
-    function requireData () {
+    function requireData (data) {
+        var data = data || {};
+        alert('二次请求'+JSON.stringify(data))
+        // alert('初始化页面': +data)
+        var latitude,longitude;
+        // if (data.condition.order == 'distance') {
+        //     var jwd =  getLocation();
+        //     latitude = jwd.latitude;
+        //     longitude = jwd.longitude;
+        // }
         api.ajax({
             url: apiSite + '/api/supply/index',
             method: 'post',
             headers: apiHeader,
             data: {
                values: { 
-                   token: $api.getStorage('userToken')
+                    token: $api.getStorage('userToken'),
+                    // keyword: '',
+                    // type: '', 
+                    // sub_type: '',
+                    // category_ids: '',     
+                    // order: data.order || '',
+                    // latitude: latitude || '',      
+                    // longitude: longitude || ''     
                }
             }
         }, function(ret, err) {
