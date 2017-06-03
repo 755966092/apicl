@@ -20,29 +20,43 @@
         height: 100%;
       }
       ul {
-        width: 2.24rem;
-        height: 1.77rem;
-        margin-right: .2rem;
+        margin-top: .12rem;
+        width: 2.48rem;
+        height: 1.55rem;
+        margin-right: .1rem;
         float: right;
-        padding: .12rem  0;
-        background: url(../../image/icon_supply/icon_tk.png)no-repeat;
+        /*padding: .12rem  0;*/
+        background: #3A393F;
         box-sizing: border-box;
         -webkit-background-size: 2.24rem 1.77rem;
         background-size: 2.24rem 1.77rem;
         font-size: .28rem;
-
+        position: relative;
+      }
+      ul:after {
+        content: '';
+        display: inline-block;
+        width: 0;
+        height: 0;
+        border-right: .2rem solid transparent;
+        border-left: .2rem solid transparent;
+        border-bottom: .12rem solid #3A393F;
+        position: absolute;
+        right: .28rem;
+        top: -.1rem;
       }
       ul li {
-        padding-left: .8rem;
-        height: .81rem;
-        line-height: .81rem;
-        border-bottom: 1px solid #4E4C51;
+        padding-left: .95rem;
+        height: .775rem;
+        line-height: .775rem;
+        
       }
       
       ul li:first-child {
         background: url(../../image/icon_find/icon_publishPro.png)no-repeat;
         background-size: .34rem .20rem;
         background-position: .25rem center;
+        border-bottom: 1px solid #4E4C51;
       }
       ul li.notJoin {
         background: url(../../image/icon_find/icon_addCircle.png)no-repeat;
@@ -60,8 +74,8 @@
    <div   tapmode="hover"   onclick="api.closeFrame()">
     <header class="header"></header>
        <ul>
-           <li class="firstchild"   tapmode="hover"   onclick="publish(0)">发布项目</li>
-           <li class="lastchild"   tapmode="hover"   onclick="publish(1)">圈信息</li>
+           <li class="firstchild"   tapmode="hover"   onclick="publish(0);event.stopPropagation();">发布项目</li>
+           <li class="lastchild"   tapmode="hover"   onclick="publish(1);event.stopPropagation();">圈信息</li>
        </ul>
    </div>   
 </body>
@@ -69,6 +83,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
+      fnInit();
         // $api.css($api.dom('ul'), 'margin-top:' + api.pageParam.headerH + 'px;');
         // if (api.pageParam.flag) {
         if (0) {
@@ -78,7 +93,7 @@
     };
     function publish(n) {
       // if(api.pageParam.flag) {
-      if(0) {
+      if(n) {
         // flag参数是1,未加入圈子,
           // 点击  我要加入, n == 0, 
           // 打开圈信息的时候 看不到所有, 传给find_cricleInfo_win, 0参数

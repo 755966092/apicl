@@ -110,13 +110,13 @@
                 </div>
            </div>
         </div>
-        <div class="list">
+        <div class="list" tapmode="hover"   onclick="openPage(1)">
            <div class="wrap1">
-                <span class="text"   tapmode="hover"   onclick="zhaoren()">找人</span>
+                <span class="text"   >找人</span>
                 <span class="rightArrowhead"></span>
            </div>
         </div>
-        <div class="list">
+        <div class="list" tapmode="hover"   onclick="openPage(0)">
            <div class="wrap1">
                 <span class="text">找供求</span>
                 <span class="rightArrowhead"></span>
@@ -140,9 +140,23 @@
             });
         }
     }
-    function zhaoren() {
-        openDb($api.getStorage('userToken'));
-        requestData();
+    function openPage(n) {
+        // openDb($api.getStorage('userToken'));
+        // requestData();
+        if (n) {
+            api.openWin({
+                name: 'txl_fellowSearch2',
+                url: './addressList/txl_fellowSearch.html',
+               
+            });
+        } else {
+            api.openWin({
+                name: 'supply_searchSupply_win2',
+                url: './supply/supply_searchSupply_win.html',
+               
+            });
+        }
+        
     }
 
     

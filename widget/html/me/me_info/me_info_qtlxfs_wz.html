@@ -65,6 +65,7 @@
             height: .8rem;
             outline: none;
             width: 4rem;
+            text-align: right;
         }
     </style>
 </head>
@@ -81,7 +82,7 @@
     <div class="main clearfix">
        <div class="main_no2">
            <p>网址
-                <input type="text" name="" placeholder="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输入网址" class="fr">
+                <input type="text" name="" placeholder="输入网址" class="fr">
            </p>
        </div>
        <div class="main_no3 ">
@@ -98,9 +99,8 @@
     };
     // 添加电话完成
     function addTel() {
-        api.closeWin();
         var tel = $api.val($api.dom('input'));
-          api.ajax({
+        api.ajax({
             url: apiSite + '/api/user_center/addOtherContact',
             method: 'post',
             headers: apiHeader,
@@ -114,18 +114,9 @@
             }
         }, function(ret, err) {
             if (ret) {
-                // alert(JSON.stringify(ret))
+                api.closeWin();
             }
         })
-        api.sendEvent({
-            name: 'addWz',
-            extra: {
-                val: val, 
-                dhlb: 2,
-                tel: info
-            }
-        });
-        
     }
 
 </script>

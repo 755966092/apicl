@@ -79,7 +79,7 @@
         }
         .classify ul li {
             /*background-color: #fff;*/
-            font-size: .24rem;
+            font-size: .3rem;
             height: .8rem;
             line-height: .8rem; 
             width: 100%;
@@ -108,11 +108,11 @@
             line-height: .8rem;
             text-align: right;
             padding-right: .5rem;
-            font-size: .24rem;
+            font-size: .3rem;
             outline: none;
         }
         .mt20 {
-            margin: .2rem 0;
+            margin-top: .2rem;
         }
         .mb20 {
             margin-bottom: .2rem;
@@ -150,9 +150,9 @@
         }
         .status {
             height: .8rem;
-            margin: .2rem 0;
+            margin: .2rem 0 0 0;
             background-color: #fff;
-            font-size: .28rem;
+            font-size: .3rem;
             color: #333;
             line-height: .8rem;
             padding: 0 .3rem 0 .8rem;
@@ -161,16 +161,31 @@
             background-position: .3rem center;
         }
         .time {
-            font-size: .24rem;
+            font-size: .3rem;
             color: #9b9b9b;
         }  
+
+        .mult {
+            -webkit-box-lines: multiple; 
+            box-lines: multiple;
+            flex-wrap:wrap;
+            width: 100%;
+            font-size: 0;
+            -webkit-box-flex: 1.0;
+            -moz-flex-shrink: 1;
+            -webkit-flex-shrink: 1;
+            flex-shrink: 1;
+        }
+        .clearfix img{
+            margin-right: .1rem;
+            width: 1.6rem;
+            height: 1.6rem;
+            margin-bottom: .1rem;
+        }
     </style>
 </head>
 <body>
-    <div class="status">
-            <span>您的身份</span>
-            <span class="spanno2">知情者</span>
-        </div>
+    
     <div class="contentText clearfix">
         
         <div class="title">
@@ -178,7 +193,7 @@
             <input type="text" placeholder="输入您发布的标题" name="">
         </div>
         <textarea placeholder="描述一下您发布的内容" rows="5"></textarea>
-        <div class="clearfix">
+        <!-- <div class="clearfix">
             <div class="fl addMedia">
                 <span></span>
                 添加图片
@@ -187,26 +202,53 @@
                 <span></span>
                 添加视频
             </div>
+        </div> -->
+         <div class="mult clearfix flex-def resultList">
+           <!--  <img class="fl imgpage" tapmode="hover"  src="">
+            <img  src="../../image/icon_supply/icon_addMedia_1.png" class="addImg" onclick="openImg()" tapmode="hover">
+            <img  src="../../image/icon_supply/icon_addMedia_2.png"> -->
+           
+
+            <!-- <div class="addMedia" onclick="openImg()" tapmode="hover">
+                <span class="icon"></span>
+                <span>添加图片</span>
+            </div>
+            <div class="addMedia">
+                <span class="icon"></span>
+                <span>添加视频</span>
+            </div> -->
         </div>
+
+        <script type="text/x-dot-template" id="listT">
+            {{ for (var i = 0; i < it.length; i++) { }} 
+                <img class="fl imgpage" tapmode="hover" onclick="openImgPage(this)" data-id = '{{=i}}' src="{{=it[i]}}">
+            {{ }; }}
+                <img  src="../../image/icon_supply/icon_addMedia_1.png" class="addImg" onclick="openImg()" tapmode="hover">
+                <img  src="../../image/icon_supply/icon_addMedia_2.png">
+        </script>
         <p class="position"   tapmode="hover"   onclick="getPos(this)">北京 北京 海淀区</p>
     </div>
     <div class="classify clearfix">
+        <div class="status" tapmode='hover' onclick="selectType(this)" data-val='_status' >
+            <span>您的身份</span>
+            <span class="_status spanno2">知情者</span>
+        </div>
         <ul>
-            <li class="mt20">
+            <li>
                 <span>截至时间</span>
                 <span class="spanno2"></span>
                 <span class="fr">
-                     <span class="time">请选择</span>
+                     <span class="time" tapmode="hover" onclick="openTime(this)" data-val='start'>请选择</span>
                      --
-                    <span class="time">请选择</span>
+                    <span class="time" tapmode="hover" onclick="openTime(this)" data-val='end'>请选择</span>
                 </span>
                 
             </li>
-            <li   tapmode="hover"   onclick="remindWho()">
+            <li class="mt20"   tapmode="hover"   onclick="remindWho()">
                 <span>提醒谁看</span>
                 <span class="spanno2"></span>
             </li>
-            <li class="mb20">
+            <li >
                 <span>定向投递</span>
                 <span class="spanno2"></span>
             </li>
@@ -216,30 +258,17 @@
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-
+var base64Data = [];
     apiready = function(){
         moduleInit();
-        
-       
-        api.addEventListener({
-           name: 'selectType'
-        }, function(ret, err) {
-           if (ret) {
-            $api.text($api.dom('._type'), ret.value.selDate);
-            if (ret.value.selDate == '公司') {
-                $api.css($api.byId('companyName'), 'display: block');
-            } else {
-                $api.css($api.byId('companyName'), 'display: none');
-            }
-           } else {
-               alert(JSON.stringify(err));
-           }
-        });
+        getPos();
+        getData(base64Data);
         // 选择类别
-        monitorEvent('_genre','_genre');
-        monitorEvent('_format','_format');
-        monitorEvent('_classify','_classify');
+        monitorEvent('_status','_status');
+        // 删除图片
+        delImg()
     };
 
     // 提现谁看
@@ -268,24 +297,12 @@
         var _data = $api.attr(ele, 'data-val');
         var flag;
         var _dataSource = [];
-        if (_data == '_type') {
-            _dataSource = ['个人','公司'];
+        if (_data == '_status') {
+            _dataSource = ['知情者1','知情者2','知情者3'];
             flag = 0;
-            // var text = $api.text($api.dom('.type1'));
-        } else if (_data == '_genre') {
-            _dataSource = ['自产自销','代理'];
-            flag = 1;
-        } else if (_data == '_format') {
-            _dataSource = ['线上','线下'];
-            flag = 2;
-        }else if (_data == '_classify') {
-            _dataSource = ['全部','教育','摄影','医疗'];
-            flag = 3;
-        }
-        
-
+        } 
         api.openFrame({
-                name: '_type',
+                name: 'supply_selectType2',
                 url: 'supply_selectType.html',
                 rect: {
                     x: 0,
@@ -303,30 +320,60 @@
 
    }
 
+   // 打开时间选择器
+   function openTime(ele) {
+        var data = $api.attr(ele, 'data-val');
+        var text;
+        if (data == 'start') {
+            text = '选择开始时间'
+        } else {
+            text = '选择结束时间'
+        }
+        var date = new Date().getFullYear();
+        var date1 = new Date().getMonth();
+        var date2 = new Date().getDate();
+        api.openPicker({
+            type: 'date',
+            date: date+'-'+date1+'-'+date2,
+            title: text
+        }, function(ret, err) {
+            if (ret) {
+                $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+   }
 
    // 获取位置
-   function getPos(ele) {
+   function getPos() {
         if (api.systemType == 'ios') {
-            bMap.initMapSDK(function(ret) {
+            bMap.initMapSDK(function(ret,err) {
+                console.log(JSON.stringify(err))
+                console.log(JSON.stringify(ret))
                 if (ret.status) {
                    getLocation();
+                   console.log(2)
                 } else {
                     alert(JSON.stringify(err))
                 }
             });
         } else {
+            console.log(22)
             getLocation();
         }
         
    }
    // 获取经纬度
     function getLocation() {
+        console.log(3)
         bMap.getLocation({
             accuracy: '100m',
             autoStop: true,
             filter: 1
         }, function(ret, err) {
             if (ret.status) {
+                console.log(4)
                 alert(JSON.stringify(ret));
                 getCoords(ret.lon, ret.lat)
             } else {
@@ -342,6 +389,64 @@
         }, function(ret, err) {
             if (ret.status) {
                 alert(JSON.stringify(ret));
+            }
+        });
+    }
+
+    // 监听删除图片
+    function delImg() {
+        api.addEventListener({
+            name: 'delImg'
+        }, function(ret, err) {
+            if (ret) {
+                for (var i = 0; i < $api.domAll('.imgpage').length; i++) {
+                    if (i == (ret.value.imgId-1)) {
+                        $api.remove($api.domAll('.imgpage')[i]);
+                    }
+                }
+                base64Data = base64Data.filter(function(item, index) {
+                    if (index != ret.value.imgId-1) {
+                        return item
+                    }
+                })
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    // 打开相册
+    function openImg() {
+
+        api.getPicture({
+            sourceType: 'album',
+            encodingType: 'png',
+            mediaValue: 'pic',
+            destinationType: 'base64',
+            allowEdit: false,
+            quality: 70,
+            // targetWidth: 100,
+            // targetHeight: 100,
+            saveToPhotoAlbum: false
+        }, function(ret, err) {
+            if (ret) {
+                base64Data.push(ret.base64Data);
+                getData(base64Data);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    function openImgPage(ele) {
+       var data = $api.attr(ele, 'src'),
+            n = parseInt($api.attr(ele, 'data-id'));
+        api.openWin({
+            name: 'supply_releaseSupply_imgPage_win1',
+            url: './supply_releaseSupply_imgPage_win.html',
+            bounces: false,
+            pageParam: {
+                data: data,
+                count:  base64Data.length,
+                n: n+1
             }
         });
     }

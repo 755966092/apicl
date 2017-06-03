@@ -77,7 +77,7 @@ function fnInit() {
 
 //接口地址
 
-var apiSite = 'http://wozai.tonyliangli.cn/';
+var apiSite = 'http://wozai.tonyliangli.cn';
 
 var apiHeader = {
     "api.version": "1",

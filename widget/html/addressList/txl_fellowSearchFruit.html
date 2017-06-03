@@ -7,6 +7,9 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style type="text/css">
+        html,body {
+            background-color: #F8F8F8;
+        }
         ul {
             background-color: #fff;
             font-size: 0;
@@ -103,12 +106,20 @@
 
 <script type="text/javascript">
     apiready = function(){
-        getData(api.pageParam.val)
+        if (api.pageParam.val=='') {
+            $api.css($api.dom('.noContent'), 'display:block');
+        } else {
+            getData(api.pageParam.val)
+        }
         api.addEventListener({
             name: 'addf'
         }, function(ret, err){
-            getData(api.pageParam.val)
-            alert(JSON.stringify(api.pageParam.val))
+            if (ret.value.val == '') {
+                $api.css($api.dom('.noContent'), 'display:block');
+            } else {
+                getData(ret.value.val)
+            }
+            // alert(JSON.stringify(api.pageParam.val))
         });
         
     };

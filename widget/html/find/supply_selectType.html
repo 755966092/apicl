@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style type="text/css">
+        body,html {
+            text-align: center;
+            background-color: rgba(0,0,0,0.3);
+            height: 100%;
+
+        }
+        span {
+            font-size: .36rem;
+            width: 100%;
+            padding: .3rem 0;
+            text-align: center;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background-color: #fff;
+            color: #0089e9;
+        }
+        .main {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body   tapmode="hover"   onclick="api.closeFrame()">
+    <!-- <span   tapmode="hover"   onclick="enter(0)">取消</span> -->
+    
+    <div class="main"   tapmode="hover"   onclick="api.closeFrame()">
+        <span   tapmode="hover"   onclick="enter()">确认</span>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+var selDate,defaultIndex=[];
+    apiready = function(){
+       moduleInit();
+       var indexs = api.pageParam.dataSource.indexOf(api.pageParam.defaultVal);
+       if (indexs == -1) {
+            defaultIndex.push(0);
+       } else {
+           defaultIndex.push(indexs)
+       }
+       
+       
+       console.log(defaultIndex)
+       openSelector();
+    };
+    function close() {
+        api.closeFrame();
+    }
+ function openSelector() {
+        // var UISelector = api.require('UISelector');
+        var spanH = $api.offset($api.dom('span')).h;
+        UISelector.open({
+            rect: {
+                x: 0,
+                y: api.frameHeight  - 150 - spanH,
+                h: 150
+            },
+            styles: {
+                bg: 'rgba(255,255,255,1)',
+                text: {
+                    size: 18,
+                    selected: '#333',
+                    normal: '#a8a8a8'
+                },
+                item: {
+                    w: 80,
+                    h: 20,
+                    normal: 'rgba(0,0,0,0)',
+                    selected: 'rgba(0,0,0,0)',
+                    zoomIn: 1.2
+                }
+            },
+            rows: 3,
+            indexs: defaultIndex,
+            bounce: false,
+            fixedOn: api.frameName,
+            fixed: false,
+            data: api.pageParam.dataSource
+        }, function(ret, err) {
+            if (ret) {
+                // ios系统下 进入选择器页面后, 如果不滑动选择器,会照成无返回值, 
+                // 如果用户打开选择器没有滑动就返回初始的值
+               if (ret.eventType == 'show') {
+                     UISelector.set({
+                        indexs: defaultIndex
+                    });
+                    selDate = api.pageParam.dataSource[defaultIndex[0]]
+               } else {
+                    selDate = ret.selects[0].content;
+               }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+        
+   }  
+  function enter () {
+    var flag = api.pageParam.flag;
+    if (flag == 0) {
+        api.sendEvent({
+            name: '_status',
+            extra: {
+               selDate: selDate
+            }
+        });
+    } else if(flag == 1) {
+        api.sendEvent({
+            name: '_genre',
+            extra: {
+               selDate: selDate
+            }
+        });
+    } else if(flag == 2) {
+        api.sendEvent({
+            name: '_format',
+            extra: {
+               selDate: selDate
+            }
+        });
+    } else if(flag == 3) {
+        api.sendEvent({
+            name: '_classify',
+            extra: {
+               selDate: selDate
+            }
+        });
+    } else if(flag == 4) {
+        api.sendEvent({
+            name: '_unit',
+            extra: {
+               selDate: selDate
+            }
+        });
+    }
+   
+   
+    api.closeFrame();
+  }
+  
+</script>
+</html>

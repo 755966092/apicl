@@ -1,12 +1,12 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-      
+        
         body, html {
             background-color: #F8F8F8;
         }
@@ -28,7 +28,7 @@
             width: .45rem;
             height: .8rem;
             float: right;
-            background: url(../../../image/icon_my/icon_enter.png)no-repeat;
+            background: url(../../image/icon_my/icon_enter.png)no-repeat;
             background-size: .45rem .34rem;
             background-position: center center;
             display: none;
@@ -52,9 +52,8 @@
         .main_no3 {
             margin-top: 4rem;
         }
-
         .main_no2 .telClass{
-            background: #fff url(../../../image/icon_zk.png)no-repeat;
+            background: #fff url(../../image/icon_zk.png)no-repeat;
             background-size: .15rem .25rem;
             background-position: 7.05rem center;
         }
@@ -71,29 +70,19 @@
     </style>
 </head>
 <body>
-    <header  class="header">
+     <header  class="header">
         <div class="head">
             <span class="callback"   tapmode="hover"   onclick="api.closeWin()">返回</span>
             <span class="winTitle">
-                即时通讯
+                网址
             </span>
-       
+            
         </div>
     </header>
     <div class="main clearfix">
-       <div class="main_no1">
-           <p   tapmode="hover"   onclick="selectClass(this)"  data-val="1">
-                QQ
-                <span class="selClass select" data-val='QQ'></span>
-           </p>
-           <p   tapmode="hover"   onclick="selectClass(this)"  data-val="2">
-                微信
-                <span class="selClass" data-val='微信'></span>
-           </p>
-       </div>
        <div class="main_no2">
-           <p>帐号
-                <input type="text" name="" placeholder="输入帐号" class="fr">
+           <p>网址
+                <input type="text" name="" placeholder="输入网址" class="fr">
            </p>
        </div>
        <div class="main_no3 ">
@@ -101,30 +90,16 @@
        </div>
     </div>
 </body>
-<script type="text/javascript" src="../../../script/api.js"></script>
-<script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
-    var val = 2;
+    var val = 1;
     apiready = function(){
 	    fnInit();
     };
-    
-
-
-
-    // 选择通讯方式 QQ || 微信
-    function selectClass(ele) {
-        val = $api.attr(ele, 'data-val');
-        for (var i = 0; i < $api.domAll('.selClass').length; i++) {
-            $api.removeCls($api.domAll('.selClass')[i], 'select');
-        }
-        $api.addCls($api.last(ele), 'select');
-    }
-
     // 添加电话完成
     function addTel() {
         var tel = $api.val($api.dom('input'));
-        val = $api.attr($api.dom('.select'),'data-val') == 'QQ' ? 2 : 1
         api.ajax({
             url: apiSite + '/api/user_center/addOtherContact',
             method: 'post',
@@ -133,18 +108,15 @@
                 values: { 
                     token: api.pageParam.userToken || $api.getStorage('userToken'),
                     info: tel,
-                    type: 1,
+                    type: 2,
                     sub_type: val
                 }
             }
         }, function(ret, err) {
             if (ret) {
-                alert(JSON.stringify(ret))
+                api.closeWin();
             }
-            api.closeWin();
         })
-        
-       
     }
 
 </script>

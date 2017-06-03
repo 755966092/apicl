@@ -336,9 +336,9 @@
     apiready = function(){
         moduleInit();
         var flag = api.pageParam.flag
-        console.log(flag)
         if (flag) {
             chatTools();
+            $api.css($api.dom('footer'), ' display:none;');
         } else {
             $api.css($api.dom('footer'), ' display: -webkit-box; display: flex;');
         }
@@ -395,6 +395,12 @@
         }, function(ret, err) {
             if (ret) {
                 if (ret.eventType === 'send') {
+                    UIChatBox.closeKeyboard();
+                    
+                    //  //设置输入框的值
+                    UIChatBox.value({
+                        msg: ret.msg
+                    });
                     api.openFrame({
                         name: 'find_discussType',
                         url: './find_discussType.html',
@@ -404,11 +410,11 @@
                             y: 0,
                             w: api.winWidth,
                             h: api.winHeight
+                        },
+                        pageParam: {
+                            content: ret.msg
                         }
                     });
-                }
-                if (ret.eventType === 'clickExtras') {
-                      alert('点击了第'+ret.index+'个附加按钮')
                 }
             } else {
                 alert(JSON.stringify(err))

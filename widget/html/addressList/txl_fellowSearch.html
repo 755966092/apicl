@@ -97,7 +97,7 @@
     </header>
     <div class="main">  
         <!-- <span class="icon_search"></span> -->
-        <input type="text" onblur="searchFellow(this)"  name="" id="ipt" onkeyup="keyUp(this)" placeholder="搜索">
+        <input type="text"   name="" id="ipt" onkeyup="keyUp(this)" placeholder="搜索">
         <span class="clearIcon"   tapmode="hover"   onclick="clearText()"></span>
     </div>
     <div class="fellow">
@@ -122,12 +122,19 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-var hisDataArr=[];
+var hisDataArr=[],n=1;
     apiready = function(){
         fnInit();
        
     };
 
+    $api.addEvt($api.dom('input'), 'keyup', function(e) {
+
+        if (e.keyCode == 13) {
+            searchFellow();
+        }
+        keyUp($api.dom('input'))
+    });
 
     function deletHis() {
          hisDataArr = [];
@@ -156,8 +163,8 @@ var hisDataArr=[];
         
     }
     
-    function searchFellow(ele) {
-        var val = $api.val(ele);
+    function searchFellow() {
+        var val = $api.val($api.dom('input'));
         hisDataArr.push(val);
         // // 输入框为空的关闭搜索结果页面
         // if (val == '') {
@@ -179,29 +186,17 @@ var hisDataArr=[];
                     }
                 }
             }, function(ret, err) {
-                var heig = headerH + $api.offset($api.dom('.main')).h + 20;
+                
+
                 // 打开页面事件只执行一次
-                setTimeout(function(){
-                    api.openFrame({
-                        name: 'fellowSearchFruit',
-                        url: './txl_fellowSearchFruit.html',
-                        rect: {
-                            x: 0,
-                            y: heig,
-                            w: 'auto',
-                            h: 'auto'
-                        },
-                        pageParam: {
-                            val: ret.data.list
-                        },
-                        bounces: false
-                    });
-                },1)
+                openPage(ret.data.list);
+                
+                    api.sendEvent({
+                        name: 'addf',
+                        extra: {val: ret.data.list}
+                    });    
                 // 打开页面后 发送查询事件, 按键每弹起一次发送一次, 把查询结果发送到结果页面
-                api.sendEvent({
-                    name: 'addf',
-                    extra: {val: ret.data.list}
-                });
+                
                
             })
         // }
@@ -212,7 +207,24 @@ var hisDataArr=[];
         
     }
 
-
+    function openPage(list) {
+        var heig = headerH + $api.offset($api.dom('.main')).h + 20;
+         n = 0;
+         api.openFrame({
+            name: 'fellowSearchFruit',
+            url: './txl_fellowSearchFruit.html',
+            rect: {
+                x: 0,
+                y: heig,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                val: list
+            },
+            bounces: false
+        });
+    }
     
 </script>
 </html>
