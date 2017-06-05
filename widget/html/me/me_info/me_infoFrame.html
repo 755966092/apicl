@@ -203,12 +203,9 @@
     <script type="text/javascript" src="../../../script/api.js"></script>
     <script type="text/javascript" src="../../../script/common.js"></script>
     <script type="text/javascript">
-    var  userName, zName ,headImg, sex, hometown, birthday,imgChche, userToken, rongToken;
+    var  userName, zName ,headImg, sex, hometown, birthday,imgChche ;
         apiready = function(){
-            userToken = api.pageParam.userToken || $api.getStorage('userToken');
-            rongToken = api.pageParam.rongToken || $api.getStorage('rongToken');
-            userInfo(userTokenAll || userToken);
-            
+            myAjax();
             // 修改性别
             monitor('xiugaisex', $api.dom('.sex'));
             // 修改生日
@@ -223,23 +220,6 @@
             monitor('modifyNickName' , $api.dom('.nickname'));
         // 获取用户信息
         }
-
-        function userInfo(userToken) {
-            // 如果没有本地缓存，就从网络获取，有就使用本地缓存
-            // if ($api.getStorage('hometown')) {
-            //     // 本地数据设置页面内容
-            //     userName =   $api.getStorage('userName'); 
-            //     zName =   $api.getStorage('zName'); 
-            //     headImg =   $api.getStorage('headImg'); 
-            //     sex =   $api.getStorage('sex'); 
-            //     hometown =   $api.getStorage('hometown'); 
-            //     birthday =   $api.getStorage('birthday');
-            //     reviseContent(userName, zName, headImg, sex, hometown, birthday);
-            // } else {
-                 myAjax();
-            // }
-        }
-        //
         function login(ele) {
            // 根据点击的按钮进入不同的页面
             var val = $api.attr(ele, 'data-val');
@@ -331,8 +311,6 @@
             // 设置用户生日
             $api.text(birthday, birthday1);
         }
-
-
         // 监听事件
         function monitor (eve, ele) {
             api.addEventListener({
@@ -366,12 +344,8 @@
             });
             
         }
-
-
-
         // 修改资料
         function reviseData () {
-
             var name = $api.text($api.dom('.name')) || userName;
             var niCheng = $api.text($api.dom('.nickname')) || zName;
             var headImg = $api.attr($api.dom('.headImg'),'src') || headImg;
@@ -387,7 +361,7 @@
                     headers: apiHeader,
                     data: {
                         values: { 
-                            token: userToken,
+                            token: $api.getStorage('userToken'),
                             head_img_url: headImg,
                             real_name: name,
                             nickname: niCheng,
@@ -410,7 +384,7 @@
                     headers: apiHeader,
                     data: {
                         values: { 
-                            token: userToken
+                            token: $api.getStorage('userToken')
                         }
                     }
                 }, function(ret, err) {

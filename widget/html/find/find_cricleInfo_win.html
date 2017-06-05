@@ -228,14 +228,14 @@
         <div class="shadow"></div>
         <div class="header">
             <div class="wrap">
-                <span class="fl">成员: 1000</span>
+                <span class="fl" class="">成员: <span id="member_count"></span></span>
                 <img class="imgHead" src="../../image/tx_4.jpg" alt="">
-                <span class="fr">发布: 10000</span>
+                <span class="fr">发布: <span id="topic_count"></span></span>
             </div>
         </div>
         <div class="title">
-            <h3>UI设计交流圈</h3>
-            <p class="circleInfo">圈介绍：大家都到碗里来</p>
+            <h3 id="circle_name">UI设计交流圈</h3>
+            <p class="circleInfo">圈介绍：<span id="description">大家都到碗里来</span></p>
         </div>
         <div class="haveJoin">
             <div class="orCode">文
@@ -270,8 +270,6 @@
                     </div>
 
                 </div>
-
-
                 <p class="viewMore">查看更多圈联系人</p>
             </div>
             <div class="btn">
@@ -298,6 +296,7 @@
 <script type="text/javascript">
     apiready = function () {
         fnInit();
+        requestData();
         if (api.pageParam.flag) {
             $api.css($api.dom('.haveJoin'), 'display:block');
         } else {
@@ -311,7 +310,29 @@
             
         });
     }
-
+    function requestData() {
+        api.ajax({
+            url: apiSite + '/api/circle/detail',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+               values: { 
+                   token: $api.getStorage('userToken'),
+                   circle_id: api.pageParam.circle_id
+               }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                alert(JSON.stringify(ret))
+                $api.text($api.byId('circle_name'), ret.data.info.title);
+                $api.text($api.byId('description'), ret.data.info.description);
+                $api.text($api.byId('member_count'), ret.data.info.member_count);
+                $api.text($api.byId('topic_count'), ret.data.info.topic_count);
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
 </script>
 
 </html>

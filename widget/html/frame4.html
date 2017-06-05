@@ -236,7 +236,7 @@
                     <span></span>
                 </div>
             </li>
-            <li  data-val="yfb" onclick="openP()">
+            <li  data-val="yfb" >
                 <div class="border_b">
                     <span>已发布</span>
                     <span></span>
@@ -277,387 +277,31 @@
     <script type="text/javascript">
     var  userName, headImg, sex, currentCompany, currentPosition,imgChche, userToken, rongToken;
     	apiready = function(){
-            userToken = api.pageParam.userToken || userTokenAll;
-            rongToken = api.pageParam.rongToken || rongTokenAll;
-            userInfo(userToken);
+            userInfo();
             api.addEventListener({
                 name:'viewappear'
             }, function(ret, err){        
-                userInfo(userToken);
+                userInfo();
             });
             api.setFrameAttr({
                 vScrollBarEnabled: false
             });
     	}
 
-        function openP() {
-            var UIActionSelector = api.require('UIActionSelector');
-            UIActionSelector.open({
-                datas: [ 
-                {
-                    "name": "北京市", 
-                    "sub": [ 
-                        {
-                            "name": "东城区" 
-                        }, {
-                            "name": "西城区" 
-                        }
-                    ]
-                }, {
-                    "name": "河南省", 
-                    "sub": [ 
-                        {
-                            "name": "郑州市", 
-                            "sub": [ 
-                                {
-                                    "name": "中原区" 
-                                }, {
-                                    "name": "金水区" 
-                                }
-                            ]
-                        }, {
-                            "name": "驻马店市", 
-                            "sub": [ 
-                                {
-                                    "name": "西平县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "北京市", 
-                    "sub": [ 
-                        {
-                            "name": "东城区" 
-                        }, {
-                            "name": "西城区" 
-                        }
-                    ]
-                }, {
-                    "name": "河南省", 
-                    "sub": [ 
-                        {
-                            "name": "郑州市", 
-                            "sub": [ 
-                                {
-                                    "name": "中原区" 
-                                }, {
-                                    "name": "金水区" 
-                                }
-                            ]
-                        }, {
-                            "name": "驻马店市", 
-                            "sub": [ 
-                                {
-                                    "name": "西平县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }
-                            ]
-                        }
-                    ]
-                },{
-                    "name": "北京市", 
-                    "sub": [ 
-                        {
-                            "name": "东城区" 
-                        }, {
-                            "name": "西城区" 
-                        }
-                    ]
-                }, {
-                    "name": "河南省", 
-                    "sub": [ 
-                        {
-                            "name": "郑州市", 
-                            "sub": [ 
-                                {
-                                    "name": "中原区" 
-                                }, {
-                                    "name": "金水区" 
-                                }
-                            ]
-                        }, {
-                            "name": "驻马店市", 
-                            "sub": [ 
-                                {
-                                    "name": "西平县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }
-                            ]
-                        }
-                    ]
-                },{
-                    "name": "北京市", 
-                    "sub": [ 
-                        {
-                            "name": "东城区" 
-                        }, {
-                            "name": "西城区" 
-                        }
-                    ]
-                }, {
-                    "name": "河南省", 
-                    "sub": [ 
-                        {
-                            "name": "郑州市", 
-                            "sub": [ 
-                                {
-                                    "name": "中原区" 
-                                }, {
-                                    "name": "金水区" 
-                                }
-                            ]
-                        }, {
-                            "name": "驻马店市", 
-                            "sub": [ 
-                                {
-                                    "name": "西平县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }
-                            ]
-                        }
-                    ]
-                },{
-                    "name": "北京市", 
-                    "sub": [ 
-                        {
-                            "name": "东城区" 
-                        }, {
-                            "name": "西城区" 
-                        }
-                    ]
-                }, {
-                    "name": "河南省", 
-                    "sub": [ 
-                        {
-                            "name": "郑州市", 
-                            "sub": [ 
-                                {
-                                    "name": "中原区" 
-                                }, {
-                                    "name": "金水区" 
-                                }
-                            ]
-                        }, {
-                            "name": "驻马店市", 
-                            "sub": [ 
-                                {
-                                    "name": "西平县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }
-                            ]
-                        }
-                    ]
-                },{
-                    "name": "北京市", 
-                    "sub": [ 
-                        {
-                            "name": "东城区" 
-                        }, {
-                            "name": "西城区" 
-                        }
-                    ]
-                }, {
-                    "name": "河南省", 
-                    "sub": [ 
-                        {
-                            "name": "郑州市", 
-                            "sub": [ 
-                                {
-                                    "name": "中原区" 
-                                }, {
-                                    "name": "金水区" 
-                                }
-                            ]
-                        }, {
-                            "name": "驻马店市", 
-                            "sub": [ 
-                                {
-                                    "name": "西平县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }
-                            ]
-                        }, {
-                            "name": "驻马店市", 
-                            "sub": [ 
-                                {
-                                    "name": "西平县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }
-                            ]
-                        }, {
-                            "name": "驻马店市", 
-                            "sub": [ 
-                                {
-                                    "name": "西平县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }
-                            ]
-                        }, {
-                            "name": "驻马店市", 
-                            "sub": [ 
-                                {
-                                    "name": "西平县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }
-                            ]
-                        }, {
-                            "name": "驻马店市", 
-                            "sub": [ 
-                                {
-                                    "name": "西平县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }
-                            ]
-                        }, {
-                            "name": "驻马店市", 
-                            "sub": [ 
-                                {
-                                    "name": "西平县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }
-                            ]
-                        }, {
-                            "name": "驻马店市", 
-                            "sub": [ 
-                                {
-                                    "name": "西平县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }
-                            ]
-                        }, {
-                            "name": "驻马店市", 
-                            "sub": [ 
-                                {
-                                    "name": "西平县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }
-                            ]
-                        }, {
-                            "name": "驻马店市", 
-                            "sub": [ 
-                                {
-                                    "name": "西平县" 
-                                }, {
-                                    "name": "泌阳县" 
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ],
-                layout: {
-                    row: 5,
-                    col: 3,
-                    height: 30,
-                    size: 12,
-                    sizeActive: 14,
-                    rowSpacing: 5,
-                    colSpacing: 10,
-                    maskBg: 'rgba(0,0,0,0.2)',
-                    bg: '#fff',
-                    color: '#888',
-                    colorActive: '#f00',
-                    colorSelected: '#f00'
-                },
-                animation: true,
-                cancel: {
-                    text: '取消',
-                    size: 12,
-                    w: 90,
-                    h: 35,
-                    bg: '#fff',
-                    bgActive: '#ccc',
-                    color: '#888',
-                    colorActive: '#fff'
-                },
-                ok: {
-                    text: '确定',
-                    size: 12,
-                    w: 90,
-                    h: 35,
-                    bg: '#fff',
-                    bgActive: '#ccc',
-                    color: '#888',
-                    colorActive: '#fff'
-                },
-                title: {
-                    text: '请选择',
-                    size: 12,
-                    h: 44,
-                    bg: '#eee',
-                    color: '#888'
-                },
-                fixedOn: api.frameName
-            }, function(ret, err) {
-                if (ret) {
-                    alert(JSON.stringify(ret));
-                } else {
-                    alert(JSON.stringify(err));
-                }
-            });
-        }
+        
         // 获取用户信息
-        function userInfo(userToken) {
-            // 如果没有本地缓存，就从网络获取，有就使用本地缓存
-            // if ($api.getStorage('userName')) {
-            // // if ($api.getStorage('userName')) {
-            // // if (0) {
-            //     // 本地数据设置页面内容
-            //     userName =   $api.getStorage('userName'); 
-            //     headImg =   $api.getStorage('headImg'); 
-            //     // headImg =   imgChche; 
-            //     // alert(headImg)
-            //     sex =   $api.getStorage('sex'); 
-            //     currentCompany =   $api.getStorage('currentCompany'); 
-            //     currentPosition =   $api.getStorage('currentPosition');
-            //     reviseContent(userName, headImg, sex, currentCompany, currentPosition);
-            // } else {
+        function userInfo() {
                  api.ajax({
                     url: apiSite + '/api/user_center/index',
                     method: 'post',
                     headers: apiHeader,
                     data: {
                         values: { 
-                            token: userToken
+                            token: $api.getStorage('userToken')
                         }
                     }
                 }, function(ret, err) {
                     if (ret) {
-                            
                             userName = ret.data.info.nickname,
                             headImg = ret.data.info.head_img_url,
                             sex = ret.data.info.sex,
@@ -699,10 +343,10 @@
             api.openWin({
                 name: 'winName',
                 url: './me/me_' + val + '.html',
-                pageParam: {
-                    userToken: userToken,
-                    rongToken: rongToken
-                },
+                // pageParam: {
+                //     userToken: userToken,
+                //     rongToken: rongToken
+                // },
                 vScrollBarEnabled: false
             });
         }
