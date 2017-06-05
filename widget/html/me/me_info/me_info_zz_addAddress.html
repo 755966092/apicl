@@ -139,6 +139,13 @@ var url;
     // 城市选择器
     function selCity(ele) {
         var val = $api.attr(ele, 'data-val');
+        var provinces = $api.text($api.dom('.provinces')),
+            cities = $api.text($api.dom('.cities')),
+            city = $api.text($api.dom('.city'));
+        var homeText=[];
+        homeText.push(provinces)
+        homeText.push(cities)
+        homeText.push(city)
         api.openFrame({
             name: 'selCity',
             url: './me_info_zz_addAddress_selCity.html',
@@ -148,6 +155,9 @@ var url;
                 w: 'auto',
                 h: 'auto'
             },
+            pageParam: {
+                homeText:homeText
+            },
             bounces: false
         });
     }
@@ -156,6 +166,7 @@ var url;
         api.addEventListener({
             name: 'selCity'
         }, function(ret, err) {
+            alert('监听到的数据'+JSON.stringify(ret))
             if (ret) {
                 $api.text($api.dom('.provinces'), ret.value.provinces);
                 $api.text($api.dom('.cities'), ret.value.cities);

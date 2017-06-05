@@ -38,21 +38,77 @@
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript" src="../../../data/city_2.js"></script>
 <script type="text/javascript">
     var provinces,cities,city;
+    var selDate=[],defaultData,defaultArr=[];
     apiready = function(){
         moduleInit();
+        // openSelect();
+        queryData();
         dianji();
-       
     };
-    function dianji() {
-        var UISelector = api.require('UISelector');
+     // 查询数据位置
+    function queryData() {
+        var homeText = api.pageParam.homeText;
+        console.log(homeText)
+        if (homeText[0] == "所在省份"|| homeText[1] == "所在城市"|| homeText[2] == "所在城区") {
+            for (var i = 0; i < 3; i++) {
+                defaultArr.push(i)
+            }
+            console.log('初始化')
+         // 查询数据位置
+        } else {
+            console.log('no初始化')
+           var year = homeText[0] || 0;
+           var month = homeText[1] || 0;
+           var day = homeText[2] || 0;
+           console.log('no初始化2')
+           console.log('初始数据位置'+year+'---'+month+'---'+day)
+           console.log('数据长度'+city.length)
+           
+           
+           // 获取年份的位置
+           for (let i = 0; i < city.length; i++) {
+               if (city[i].title == year) {
+                console.log('查找到省份')
+                defaultArr.push(i)
+                    break;
+               }
+           }
+           console.log('数据长度2'+city[defaultArr[0]].contents.length)
+           console.log('数据'+JSON.stringify(city[defaultArr[0]].contents))
+           // 获取月份的位置
+           for (let i = 0; i < city[defaultArr[0]].contents.length; i++) {
+               if (city[defaultArr[0]].contents[i].title == month){
+                console.log('查找到市区')
+                    defaultArr.push(i)
+                    break;
+               }
+           }
+           console.log('no初始化3'+JSON.stringify(defaultArr))
 
+           // 获取日期的位置
+            for (let i = 0; i < city[defaultArr[0]].contents[defaultArr[1]].contents.length; i++) {
+                if (city[defaultArr[0]].contents[defaultArr[1]].contents[i] == day) {
+                    console.log('查找到县区')
+                    defaultArr.push(i)
+                    break;
+                }
+            }
+            console.log('no初始化4')
+            console.log('数据长度2'+city[defaultArr[0]].contents[defaultArr[1]].contents.length)
+        }
+       
+    }
+    function openSelect() {
+        var UISelector = api.require('UISelector');
+        var spanH = $api.offset($api.dom('span')).h;
+        console.log(2)
         UISelector.open({
             rect: {
-                x: 0,
-                y: api.frameHeight / 2 + 110,
-               
+                 x: 0,
+                y: api.frameHeight  - 150 - spanH,
                 h: 150
             },
             styles: {
@@ -85,9 +141,71 @@
                 alert(JSON.stringify(err));
             }
         });
+        console.log(3)
    }   
+    function dianji() {
+        var spanH = $api.offset($api.dom('span')).h;
+        var UISelector = api.require('UISelector');
+
+        UISelector.open({
+            rect: {
+                x: 0,
+                y: api.frameHeight  - 150 - spanH,
+                h: 150
+            },
+            styles: {
+                bg: 'rgba(255,255,255,1)',
+                text: {
+                    size: 18,
+                    selected: '#333',
+                    normal: '#a8a8a8'
+                },
+                item: {
+                    w: 80,
+                    h: 20,
+                    normal: 'rgba(0,0,0,0)',
+                    selected: 'rgba(0,0,0,0)',
+                    zoomIn: 1.2
+                }
+            },
+            rows: 3,
+            indexs: defaultArr,
+            bounce: false,
+            fixedOn: api.frameName,
+            fixed: false,
+            // data: 'widget://data/city.json'
+            data: 'widget://data/city_2.json'
+        }, function(ret, err) {
+            if (ret) {
+                // selDate = ret.selects[0].content + '-' + ret.selects[1].content;
+
+                if (ret.eventType == 'show') {
+                     UISelector.set({
+                        indexs: defaultArr
+                    });
+                    // selDate = city[defaultArr[0]].title + '-' +  city[defaultArr[0]].contents[defaultArr[1]].title+ '-' +city[defaultArr[0]].contents[defaultArr[1]].contents[defaultArr[2]]
+                    selDate = [];
+                    selDate.push(city[defaultArr[0]].title)
+                    selDate.push(city[defaultArr[0]].contents[defaultArr[1]].title)
+                    selDate.push(city[defaultArr[0]].contents[defaultArr[1]].contents[defaultArr[2]])
+                    // alert(JSON.stringify(defaultArr))
+               } else {
+                    // selDate = ret.selects[0].content+ '-' + ret.selects[1].content+ '-' + ret.selects[2].content
+                    selDate = [];
+                    selDate.push(ret.selects[0].content)
+                    selDate.push(ret.selects[1].content)
+                    selDate.push(ret.selects[2].content)
+                }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+   } 
   function enter () {
-    api.closeFrame();
+    
+    provinces = selDate[0];
+    cities = selDate[1];
+    city = selDate[2];
     api.sendEvent({
         name: 'selCity',
         extra: {
@@ -96,6 +214,7 @@
             city: city
         }
     });
+        api.closeFrame();
 
   }
   

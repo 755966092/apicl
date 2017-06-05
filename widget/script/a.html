@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<div id="temp"></div>
+ 	<script type="text/x-dot-template" id="listT">
+        {{ for (var i = 0; i < it.length; i++) { }} 
+        	<p>{{=it[i].name}}</p>
+        {{}}}
+	        {{~it:value:index}}
+	        	<p>{{=index+1}}--{{=value.name}}</p>
+	        {{~}}
+    </script>
+    <div id="part"></div>
+    <script id="parttmpl" type="text/x-dot-template">
+	{{##def.snippet:
+	<div>{{=it.name}}</div>{{#def.joke}}
+	#}}
+	{{#def.snippet}}
+	{{=it.html}}
+	</script>
+	<script type="text/javascript" src="./doT.min.js"></script>
+	
+	<script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript">
+	var dataPart = {
+		"name":"Jake",
+		"age":31,
+		"html":"<div style='background: #f00; height: 30px; line-height: 30px;'>html元素</div>"
+	};
+	var defPart = {"joke":"<div>{{=it.name}} who?</div>"};
+	var partText = doT.template($("#parttmpl").text(), undefined, defPart);
+	$("#part").html(partText(dataPart));
+
+	// doT模版获取数据
+	function getData(data) {
+	    var listTText = document.getElementById('listT').text;
+	    var fnListT = doT.template(listTText);
+	    var html = fnListT(data);
+	    var list = document.getElementById('temp');
+	    list.innerHTML = html
+	}
+	function getData1(data) {
+	    var listTText = document.getElementById('listT').text;
+	    var fnListT = doT.template(listTText);
+	    var html = fnListT(data);
+	    var list = document.getElementById('temp');
+	    list.innerHTML = html
+	}
+		var aa = [
+			{
+				name:'jack'
+			},
+			{
+				name:'jack2'
+			},
+			{
+				name:'jack3'
+			},
+			{
+				name:'jack4'
+			},
+		]
+		getData(aa);
+	</script>
+</body>
+</html>

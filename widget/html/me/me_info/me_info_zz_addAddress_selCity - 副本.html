@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <style type="text/css">
+        body,html {
+            text-align: center;
+            background-color: rgba(0,0,0,0.3);
+            height: 100%;
+
+        }
+        span {
+            font-size: .36rem;
+            width: 100%;
+            padding: .3rem 0;
+            text-align: center;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background-color: #fff;
+            color: #0089e9;
+        }
+        .main {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body   tapmode="hover"   onclick="api.closeFrame()">
+    <!-- <span   tapmode="hover"   onclick="enter(0)">取消</span> -->
+    
+    <div class="main"   tapmode="hover"   onclick="api.closeFrame()">
+        <span   tapmode="hover"   onclick="enter()">确认</span>
+    </div>
+</body>
+<script type="text/javascript" src="../../../script/api.js"></script>
+<script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript">
+    var provinces,cities,city;
+    apiready = function(){
+        moduleInit();
+        openSelect();
+    };
+    function openSelect() {
+        var UISelector = api.require('UISelector');
+        var spanH = $api.offset($api.dom('span')).h;
+        
+        UISelector.open({
+            rect: {
+                 x: 0,
+                y: api.frameHeight  - 150 - spanH,
+                h: 150
+            },
+            styles: {
+                bg: 'rgba(255,255,255,1)',
+                text: {
+                    size: 18,
+                    selected: '#333',
+                    normal: '#a8a8a8'
+                },
+                item: {
+                    w: 80,
+                    h: 20,
+                    normal: 'rgba(0,0,0,0)',
+                    selected: 'rgba(0,0,0,0)',
+                    zoomIn: 1.2
+                }
+            },
+            rows: 3,
+            indexs: [3, 4, 5],
+            bounce: false,
+            fixedOn: api.frameName,
+            fixed: false,
+            data: 'widget://data/city_2.json'
+        }, function(ret, err) {
+            if (ret) {
+                provinces = ret.selects[0].content;
+                cities = ret.selects[1].content;
+                city = ret.selects[2].content;
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+   }   
+  function enter () {
+    api.closeFrame();
+    api.sendEvent({
+        name: 'selCity',
+        extra: {
+            provinces: provinces,
+            cities: cities,
+            city: city
+        }
+    });
+
+  }
+  
+</script>
+</html>

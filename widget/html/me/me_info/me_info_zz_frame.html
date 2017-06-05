@@ -194,7 +194,6 @@
             if (ret) {
                 for (var i = 0; i < $api.domAll('.right').length; i++) {
                     $api.toggleCls($api.domAll('.right')[i], 'edit');
-
                 }
                 
             } else {
@@ -204,9 +203,8 @@
     }
     // 删除服务器地址
     function delDz2 (id) {
-        alert(id);
         api.ajax({
-            url: apiSite + '/api/user_center/deleteOtherContact',
+            url: apiSite + '/api/user_center/deleteAddress',
             method: 'post',
             headers: apiHeader,
             data: {
@@ -218,6 +216,7 @@
         }, function(ret, err) {
             if (ret) {
                 // getData(ret.data.list)
+                // alert(JSON.stringify(ret))
             } else {
                 alert(JSON.stringify(err));
             }
