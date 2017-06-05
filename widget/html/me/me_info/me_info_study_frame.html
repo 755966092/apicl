@@ -117,7 +117,7 @@
         {{ }; }}
     </script>
     <div class="main_no3 ">
-        <p   tapmode="hover"   onclick="addAddress()">添加教育经历</p>
+        <p   tapmode="hover"   onclick="openSelect2()">添加教育经历</p>
     </div>
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
@@ -173,7 +173,6 @@
                     name: 'me_info_study_addUndergo_3',
                     url: './me_info_study_addUndergo_3.html',
                     pageParam: {
-                        userToken: api.pageParam.userToken || $api.getStorage('userToken'),
                         flag: 1,
                         education_id: val
                     }
@@ -184,7 +183,6 @@
                     name: 'me_info_study_addUndergo_2',
                     url: './me_info_study_addUndergo_2.html',
                     pageParam: {
-                        userToken: api.pageParam.userToken || $api.getStorage('userToken'),
                         flag: 1,
                         education_id: val
                     }
@@ -195,7 +193,6 @@
                     name: 'me_info_study_addUndergo_1',
                     url: './me_info_study_addUndergo_1.html',
                     pageParam: {
-                        userToken: api.pageParam.userToken || $api.getStorage('userToken'),
                         flag: 1,
                         education_id: val
                     }
@@ -205,14 +202,115 @@
         }
         
     }
+    function openSelect2() {
+        var UIActionSelector = api.require('UIActionSelector');
+            UIActionSelector.open({
+                datas: [
+                    {
+                        name:'大学'
+                    },{
+                        name:'中学'
+                    },{
+                        name:'小学'
+                    }
+                ],
+                actives: [1],
+                layout: {
+                    row: 7,
+                    col: 1,
+                    height: 26,
+                    size: 20,
+                    sizeActive: 24,
+                    rowSpacing: 5,
+                    colSpacing: 5,
+                    maskBg: 'rgba(0,0,0,0.5)',
+                    bg: '#fff',
+                    color: '#888',
+                    colorSelected: '#000'
+                },
+                animation: true,
+                cancel: {
+                    text: '取消',
+                    size: 16,
+                    w: 90,
+                    h: 35,
+                    bg: '#eee',
+                    // bgActive: '#ccc',
+                    color: '#000',
+                    // colorActive: '#fff'
+                },
+                ok: {
+                    text: '确定',
+                    size: 16,
+                    w: 90,
+                    h: 35,
+                    bg: '#eee',
+                    // bgActive: '#ccc',
+                    color: '#000',
+                    // colorActive: '#fff'
+                },
+                title: {
+                    text: '请选择',
+                    size: 20,
+                    h: 44,
+                    bg: '#eee',
+                    color: '#000'
+                },
+                fixedOn: api.frameName
+            }, function(ret, err) {
+                if (ret) {
+                    if (ret.eventType == 'ok') {
+                        enter(ret.level1)
+                    }
+                } else {
+                    alert(JSON.stringify(err));
+                }
+            });
+    }
+    function enter (selDate) {
 
+        if (selDate == '大学') {
+            // 选择大学
+            api.openWin({
+                name: 'me_info_study_addUndergo_1',
+                url: './me_info_study_addUndergo_1.html',
+                pageParam: {
+                    flag: 0,
+                    name: 3
+                }
+            });
+        } else if (selDate == '中学') {
+            // 选择中学
+            api.openWin({
+                name: 'me_info_study_addUndergo_2',
+                url: './me_info_study_addUndergo_2.html',
+                pageParam: {
+                    flag: 0,
+                    name: 2
+                }
+            });
+        }else if (selDate == '小学') {
+            // 选择中学
+            api.openWin({
+                name: 'me_info_study_addUndergo_3',
+                url: './me_info_study_addUndergo_3.html',
+                pageParam: {
+                    flag: 0,
+                    name: 1
+                }
+            });
+        } else {
+           
+            // 选择小学
+        }
+   
+    }
     // 添加新地址
     function addAddress() {
         api.openFrame({
-            name: 'addAddressWin',
+            name: 'me_info_study_addUndergo',
             url: './me_info_study_addUndergo.html',
             pageParam: {
-                userToken: api.pageParam.userToken || $api.getStorage('userToken'),
                 flag: 0
             },
             bounces: false

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        html,
+        body {
+            background-color: #F8F8F8;
+        }
+        .wrap {
+            margin-top: .2rem;
+        }
+        .dzlist {
+            height: 1.36rem;
+            border-bottom: 1px solid #E3E3E3;
+            background-color: #fff;
+            padding: 0 .3rem;
+        }
+        .dzlist .left {
+            
+            margin-top: .35rem;
+        }
+        .dzlist h3 {
+            font-size: .28rem;
+            color: #222;
+
+        }
+        .dzlist p {
+            font-size: .24rem;
+            color: #555;
+        }
+        .dzlist .right {
+            height: 1.36rem;
+            width: .44rem;
+            background: url(../../image/icon_my/icon_bj.png)no-repeat;
+            background-size: .44rem .44rem;
+            background-position: 0 center;
+        }
+
+        .main_no3 {
+            margin-top: .2rem;
+            background-color: #fff;
+        }
+        .main_no3 p {
+            width: 2.5rem;
+            text-align: center;
+            margin: 0 auto;
+            height: .8rem;
+            line-height: .8rem;
+            font-size: .34rem;
+            color: #27b24a;
+            background:  url(../../image/icon_my/icon_add.png)no-repeat;
+            -webkit-background-size: .4rem .4rem ;
+            background-size: .4rem .4rem ;
+            background-position: 0 center;
+            padding-left: .3rem;
+        }
+        .dzlist .edit {
+            background: url(../../image/icon_login/icon-clearText.png)no-repeat;
+            background-size: .25rem .25rem;
+            background-position: 0 center;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="wrap resultList">
+       <!-- <div class="dzlist">
+           <div class="left fl">
+                <h3>方小姐</h3>
+                <p>北京市海淀区清华科技园创业大厦110</p>
+           </div>
+           <span   tapmode="hover"   onclick="openEdit(this)" class="right fr"></span>
+       </div> -->
+       <!-- <div class="dzlist">
+           <div class="left fl">
+                <h3>方小姐</h3>
+                <p>北京市海淀区清华科技园创业大厦110</p>
+           </div>
+           <span   tapmode="hover"   onclick="openEdit(this)" class="right fr"></span>
+       </div> -->
+    </div>
+     <script type="text/x-dot-template" id="listT">
+        {{ for (var i = 0; i < it.length; i++) { }} 
+            <div class="dzlist" data-val="{{=it[i].address_id}}" >
+                <div class="left fl">
+                    <h3>{{=it[i].note}}</h3>
+                    <p>
+                        <span class="province">{{=it[i].province}}</span>
+                        <span class="city">{{=it[i].city}}</span>
+                        <span class="district">{{=it[i].district}}</span>
+                        <span class="address">{{=it[i].address}}</span>
+                    </p>
+                </div>
+                <span   tapmode="hover"   onclick="openEdit(this)" data-val="{{=it[i].address_id}}" class="right fr"></span>
+                <!-- <span   tapmode="hover"   onclick="delDz2(this)"  class="edit right fr"></span> -->
+                <!-- <span   tapmode="hover"   onclick="openEdit(this)" class=" fr"></span> -->
+           </div>
+        {{ }; }}
+     </script>
+    <div class="main_no3 ">
+        <p   tapmode="hover"   onclick="addAddress()">添加新地址</p>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript">
+    var zipcode;//邮编
+    apiready = function(){
+        // 请求地址列表
+	    getCityList();
+        // 删除地址
+        delDz();
+        // 箭头增加地址事件
+        addCity();
+    };
+    // 箭头增加地址事件
+    function addCity()　{
+        // 箭头增加地址事件
+        api.addEventListener({
+            name: 'addCity'
+        }, function(ret, err) {
+            getCityList();
+            if (ret) {
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    // 编辑地址
+    function openEdit(ele) {
+        var val = $api.attr(ele, 'data-val');
+
+        if ($api.hasCls(ele, 'edit')) {
+            // 删除按钮状态下删除地址
+            $api.remove($api.closest(ele, '.dzlist'));
+            delDz2(val);
+        } else {
+            // 编辑按钮状态下 进入编辑页面
+            api.openWin({
+                name: 'txl_addFellow_address_addAddress',
+                url: './txl_addFellow_address_addAddress.html',
+                pageParam: {
+                    userToken: api.pageParam.userToken || $api.getStorage('userToken'),
+                    flag: 1,
+                    address_id: val
+                },
+                softInputMode:'pan'
+            });
+        }
+        
+    }
+
+    // 添加新地址
+    function addAddress() {
+        api.openWin({
+            name: 'txl_addFellow_address_addAddress',
+            url: './txl_addFellow_address_addAddress.html',
+            pageParam: {
+                userToken: api.pageParam.userToken || $api.getStorage('userToken'),
+                flag: 0
+            },
+            softInputMode:'pan'
+        });
+    }
+
+    // 请求地址列表
+    function getCityList() {
+        api.ajax({
+            url: apiSite + '/api/user_center/addressList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: api.pageParam.userToken || $api.getStorage('userToken')
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                getData(ret.data.list)
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+    // 删除地址
+    function delDz () {
+        api.addEventListener({
+            name: 'editDz'
+        }, function(ret, err) {
+            if (ret) {
+                for (var i = 0; i < $api.domAll('.right').length; i++) {
+                    $api.toggleCls($api.domAll('.right')[i], 'edit');
+                }
+                
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    // 删除服务器地址
+    function delDz2 (id) {
+        api.ajax({
+            url: apiSite + '/api/user_center/deleteAddress',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    address_id: id
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                // getData(ret.data.list)
+                // alert(JSON.stringify(ret))
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // doT模版获取数据
+    function getData(data) {
+        var listTText = $api.byId('listT').text;
+        var fnListT = doT.template(listTText);
+        var html = fnListT(data);
+        var list = $api.dom('.resultList');
+        // 替换resultList所有内容
+        $api.html(list, html);
+        // alert('getData:' + JSON.stringify(data))
+    }
+</script>
+</html>

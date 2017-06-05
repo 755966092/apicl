@@ -329,9 +329,18 @@ var base64Data = [];
         } else {
             text = '选择结束时间'
         }
-        var date = new Date().getFullYear();
-        var date1 = new Date().getMonth();
-        var date2 = new Date().getDate();
+        var date, date1, date2;
+        var current = $api.text(ele);
+        if (current!='请选择') {
+            current = current.split('-')
+            date = current[0];
+            date1 = current[1];
+            date2 = current[2];
+        } else　{
+            date = new Date().getFullYear();
+            date1 = new Date().getMonth();
+            date2 = new Date().getDate();
+        }
         api.openPicker({
             type: 'date',
             date: date+'-'+date1+'-'+date2,
@@ -349,31 +358,25 @@ var base64Data = [];
    function getPos() {
         if (api.systemType == 'ios') {
             bMap.initMapSDK(function(ret,err) {
-                console.log(JSON.stringify(err))
-                console.log(JSON.stringify(ret))
                 if (ret.status) {
                    getLocation();
-                   console.log(2)
                 } else {
                     alert(JSON.stringify(err))
                 }
             });
         } else {
-            console.log(22)
             getLocation();
         }
         
    }
    // 获取经纬度
     function getLocation() {
-        console.log(3)
         bMap.getLocation({
             accuracy: '100m',
             autoStop: true,
             filter: 1
         }, function(ret, err) {
             if (ret.status) {
-                console.log(4)
                 alert(JSON.stringify(ret));
                 getCoords(ret.lon, ret.lat)
             } else {

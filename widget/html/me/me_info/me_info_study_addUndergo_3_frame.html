@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <style>
+        body, html {
+            background-color: #F8F8F8;
+        }
+         .main_no1 {
+        }
+        .main_no1 p, .main_no2 p {
+             background-color: #fff;
+            height: .8rem;
+            line-height: .8rem;
+            border-bottom: 1px solid #DBDBDB;
+            font-size: .3rem;
+            padding: 0 .3rem;
+
+        }
+        .main_no1 p span.select {
+            display: inline-block;
+        }
+        button {
+            display: block;
+            width: 7.2rem;
+            height: .95rem;
+            background-color: #08BB08;
+            color: #fff;
+            font-size: .34rem;
+            margin-top: 4rem;
+            margin: 0 auto;
+        }
+        .main_no3 {
+            margin-top: .2rem;
+            background-color: #fff;
+            margin: 0 auto;  
+            width: 6.32rem; 
+            border-radius: .1rem;
+            height: .82rem;
+            line-height: .82rem;    
+            text-align: center;
+            font-size: .34rem;
+            background-color: #27b24a ;
+            color: #fff; 
+            margin-top: 1rem; 
+        }
+       
+        
+        
+        .mobile {
+            height: .6rem;
+            font-size: .28rem;
+            color: #999;
+            line-height: .6rem;
+            padding-left: .3rem;
+        }
+        .telIpt {
+            height: .8rem;
+            /*margin-left: .5rem;*/
+            outline: none;
+            float: right;
+            width: 4rem;
+            text-align: right;
+            padding-right: .4rem;  
+        }
+        span.telIpt {
+            display: inline-block;  
+            font-size: .27rem;
+            color: #B1A9AB;
+            height: .8rem;  
+            background: url(../../../image/icon_zk.png)no-repeat;
+            background-size: .15rem .25rem;
+            background-position: right  center;
+                
+        }
+        .clearIpt {
+            display: none;
+            width: .24rem;
+            height: .8rem;
+            background: url(../../../image/icon_login/icon-clearText.png)no-repeat;
+            background-size: .24rem .24rem;
+            background-position: 0 center;
+            float: right;
+        }
+       textarea {
+        background-color: #fff;
+        text-align: left;
+        width: 100%;    
+        font-size: .24rem;  
+        color: #000;
+        padding: .2rem .3rem;
+        box-sizing: border-box;
+        outline: none; 
+       }
+       #textLength {
+        background-color: #fff;
+        width: 100%;  
+        padding-right:.3rem ; 
+        margin: 0;  
+        text-align: right; 
+        border-top: 1px solid #EFEFEF;   
+       }
+       #over {
+        display: none;
+        color: #129F13;
+       }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="main clearfix">
+            <p class="mobile ">学习经历（小学）</p>
+            <div class="main_no1 yd">
+               <p>
+                    学校
+                    <input maxlength="11" type="text" id="school" class="telIpt" name="" placeholder ="必填" >
+               </p>
+               <p>
+                    时间段
+                    <span class="telIpt" >
+                        <span   tapmode="hover"   onclick="openTime(this)" id="time_1">请选择</span >
+                        --
+                        <span   tapmode="hover"   onclick="openTime(this)" id="time_2">请选择</span>
+                    </span>
+               </p>
+           </div>
+        </div>
+        <div class="main clearfix" style="font-size: 0">
+            <p class="mobile ">在校经历</p>
+            <textarea rows="6" id="textarea" placeholder="主要在校经历" maxlength="300" onkeyup="changeText(this)"></textarea>
+            <p class="mobile fr" id="textLength"> 0/300</p>
+        </div>
+    </div>
+     <div class="main_no3" id="main_no3"   tapmode="hover"   onclick="addStudy()">
+           保存
+       </div>
+</body>
+<script type="text/javascript" src="../../../script/api.js"></script>
+<script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript">
+    var url;
+    apiready = function(){
+
+        if (api.pageParam.flag == 1) {
+            url = '/api/user_center/editEducation';
+            $api.text($api.byId('main_no3'), '删除');
+            $api.text($api.byId('title'), '修改学习经历');
+            $api.css($api.byId('over'), 'display:inline-block');
+            $api.css($api.byId('main_no3'), 'background-color:#DF214E');
+            $api.removeAttr($api.byId('main_no3'), '  tapmode="hover"   onclick');
+            $api.rmEvt($api.byId('main_no3'), 'click', addStudy);
+            $api.addEvt($api.byId('main_no3'), 'click', function(){
+                delStudy();
+            });
+        } else {
+            url = '/api/user_center/addEducation'
+        }
+        // fnInit();
+        // monitor();
+        getCityList();
+        api.addEventListener({
+            name: 'editStudy'
+        }, function(ret, err) {
+            if (ret) {
+                addStudy();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    };
+    
+    // 打开时间选择器
+    function openTime(ele) {
+        var data = $api.attr(ele, 'data-val');
+        var text;
+        if (data == 'start') {
+            text = '选择开始时间'
+        } else {
+            text = '选择结束时间'
+        }
+        var date, date1, date2;
+        var current = $api.text(ele);
+        if (current!='请选择') {
+            current = current.split('-')
+            date = current[0];
+            date1 = current[1];
+            date2 = current[2];
+        } else　{
+            date = new Date().getFullYear();
+            date1 = new Date().getMonth();
+            date2 = new Date().getDate();
+        }
+        api.openPicker({
+            type: 'date',
+            date: date+'-'+date1+'-'+date2,
+            title: text
+        }, function(ret, err) {
+            if (ret) {
+                $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    // 编辑文本和修改文本长度内容
+    function changeText(ele) {
+        // alert();
+        $api.text($api.byId('textLength'), ele.value.length + '/300');
+    } 
+
+    // 获取数据
+    function getCityList() {
+
+        api.ajax({
+            url: apiSite + '/api/user_center/editEducationIndex',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: $api.getStorage('userToken'),
+                    education_id: api.pageParam.education_id
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                alert(JSON.stringify(ret))
+                if (ret.data.info.end_date == '0000-00-00' ){
+                     $api.text($api.byId('time_2'), '至今'); 
+                } else {
+                    $api.text($api.byId('time_2'), ret.data.info.end_date);    
+                }
+                $api.val($api.byId('school'), ret.data.info.school);    
+                $api.text($api.byId('time_1'), ret.data.info.start_date);    
+               
+                $api.val($api.byId('textarea'), ret.data.info.description); 
+                $api.text($api.byId('textLength'), ret.data.info.description.length + '/300');
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    // 提交数据
+    function addStudy() {
+        // 获取数据
+        var school = $api.val($api.byId('school'));    
+        var time_1 = $api.text($api.byId('time_1'));    
+        var time_2 = $api.text($api.byId('time_2')); 
+        var textarea = $api.val($api.byId('textarea')); 
+        api.ajax({
+            url: apiSite + url,
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    education_id: api.pageParam.education_id,
+                    type: 1,
+                    school: school,
+                    major: '',
+                    degree: '',
+                    description: textarea,
+                    start_date: time_1,
+                    end_date: time_2
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+            alert(JSON.stringify(ret))
+             api.sendEvent({
+                 name: 'addStudy'
+             });
+             api.closeWin();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        }); 
+           
+    }
+     // 删除数据
+    function delStudy () {
+        api.ajax({
+            url: apiSite + '/api/user_center/deleteEducation',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    education_id: api.pageParam.education_id
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                // getData(ret.data.list)
+                api.sendEvent({
+                    name: 'addStudy'
+                });
+                api.closeWin();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    
+ // 选择时间
+    function selectTime(n) {
+        
+        if (n == 2) {
+            api.openFrame({
+                name: 'me_info_study_addUndergo_time_2',
+                url: 'me_info_study_addUndergo_time_2.html',
+                rect: {
+                    x: 0,
+                    y: 0,
+                    w: 'auto',
+                    h: 'auto'
+                },
+                pageParam: {
+                    name: 'value'
+                },
+                bounces: false
+            });
+        } else {
+            api.openFrame({
+            name: 'me_info_study_addUndergo_time',
+            url: 'me_info_study_addUndergo_time.html',
+            rect: {
+                x: 0,
+                y: 0,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                name: 'value'
+            },
+            bounces: false
+        });
+        }
+    }
+</script>
+</html>

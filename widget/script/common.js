@@ -77,7 +77,7 @@ function fnInit() {
 
 //接口地址
 
-var apiSite = 'http://wozai.tonyliangli.cn';
+var apiSite = 'https://wozai.tonyliangli.cn';
 
 var apiHeader = {
     "api.version": "1",
@@ -88,9 +88,6 @@ var apiHeader = {
 // 用户token，融云token
 
 
-var userTokenAll = $api.getStorage('userToken');
-var rongTokenAll = $api.getStorage('rongToken');
-
 
 var rong,
     UISelector,
@@ -100,6 +97,7 @@ var rong,
     bMap,
     listContact,
     db,
+    UIActionSelector,
     contacts;
 
 function moduleInit() {
@@ -121,6 +119,8 @@ function moduleInit() {
     listContact = api.require('listContact');
     // 百度地图
     bMap = api.require('bMap');
+    // 选择器
+    UIActionSelector = api.require('UIActionSelector');
 
 }
 
