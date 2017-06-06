@@ -85,8 +85,9 @@
     apiready = function(){
       fnInit();
         // $api.css($api.dom('ul'), 'margin-top:' + api.pageParam.headerH + 'px;');
-        // if (api.pageParam.flag) {
-        if (0) {
+        if (api.pageParam.flag==1) {
+
+        } else {
           $api.addCls($api.dom('.firstchild'), 'notJoin');
           $api.text($api.dom('.firstchild'), '我要加入');
         }
@@ -100,7 +101,6 @@
         //  0已加入圈子
           // 点击 发布项目, 
           // 点击圈信息, 可查看所有信息 传递 n == 1
-        if (n) {
             api.openWin({
               name: 'find_cricleInfo_win',
               url: './find_cricleInfo_win.html',
@@ -110,30 +110,25 @@
                 circle_id: api.pageParam.circle_id
               }
             });
-        } else {
-            api.openWin({
-              // 我要加入
-              name: 'find_payAddCricle_win',
-              url: './find_payAddCricle_win.html',
-              bounces: false,
-              pageParam: {key : 'value'}
-            });
-            
-        }
+        
       } else {
-        if (n) {
+        if (api.pageParam.flag==0) {
             api.openWin({
               name: 'find_cricleInfo_win',
               url: './find_cricleInfo_win.html',
               bounces: false,
-              pageParam: {flag : 1}
+              pageParam: {
+                circle_id: api.pageParam.circle_id
+              }
             });
         } else {
             api.openWin({
               name: 'find_publishPro_win',
               url: './find_publishPro_win.html',
               bounces: false,
-              pageParam: {key : 'value'}
+              pageParam: {
+                circle_id: api.pageParam.circle_id
+              }
             });
             
         }

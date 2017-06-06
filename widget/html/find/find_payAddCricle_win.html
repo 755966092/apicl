@@ -8,6 +8,7 @@
     <style>
         body,html{
             background-color: #EDECF3;
+            height: 100%;
         }
         
         .main {
@@ -67,6 +68,7 @@ justify-content: space-between;
             margin-top: 1.8rem;
             background: #08BB08;
         }
+       
     </style>
 </head>
 <body>
@@ -76,23 +78,24 @@ justify-content: space-between;
                 返回
             </span>
             <span class="winTitle">
-                付费入圈
+                入圈
             </span>
         </div>
     </header>
+    
     <div class="main">
         <div class="circelInfo">
-            <h3>圈主设置了需支付如下金额才能加入</h3>
-            <p class="title">UI设计交流圈</p>
-            <p class="price">￥20</p>
+            <h3 class="circle_info"></h3>
+            <p class="title"></p>
+            <p class="price"></p>
         </div>
         <div class="circleMaster">
-            <span class="circleMasterName">圈主：莱恩多乐</span>
-            <img src="../../image/tx_4.jpg" alt="">
+            <span class="circleMasterName"></span>
+            <img  class="head_img" src="" alt="">
         </div>
     </div>
-    <div class="btn">
-        确认支付
+    <div class="btn" ontouchstart="addCircle()">
+        
     </div>
     
     
@@ -102,25 +105,68 @@ justify-content: space-between;
 <script type="text/javascript">
     apiready = function(){
         fnInit();
+        requestData();
         
     };
+    function requestData() {
+        api.ajax({
+            url: apiSite + '/api/circle/enterIndex',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+               values: { 
+                   token: $api.getStorage('userToken'),
+                   circle_id: api.pageParam.circle_id
+               }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                $api.css($api.dom('.shadow'), 'display:none');
+                if (ret.data.info.type == 1) {
+                    // 免费入群
+                    $api.text($api.dom('.winTitle'), '免费入群');
+                    $api.text($api.dom('.circle_info'), '圈主设置了免费入群');
+                    $api.text($api.dom('.price'), '￥0');
+                    $api.text($api.dom('.btn'), '立即加入');
+
+                } else {
+                    // 付费入群
+                    $api.text($api.dom('.winTitle'), '付费入群');
+                    $api.text($api.dom('.circle_info'), '圈主设置了需支付如下金额才能加入');
+                    $api.text($api.dom('.price'), '￥'+ret.data.info.price);
+                }
+                alert(JSON.stringify(ret))
+                $api.text($api.dom('.title'), ret.data.info.title);
+                $api.text($api.dom('.circleMasterName'), '圈主：'+ ret.data.info.owner_nickname);
+                $api.attr($api.dom('.head_img'), 'src', ret.data.info.image_url);
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+    // 加圈
+    function addCircle() {
+        api.ajax({
+            url: apiSite + '/api/circle/enter',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+               values: { 
+                   token: $api.getStorage('userToken'),
+                   circle_id: api.pageParam.circle_id
+               }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                api.execScript({
+                    frameName: 'find_frame',
+                    script: 'requestData();'
+                });
+                alert(JSON.stringify(ret))
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
 </script>
 </html>
-<!--
-
- header.header {
-            height: 1rem;
-            /*width: 100%;*/
-            background-color: #3A393E;
-            color: #fff;
-            font-size: 0;
-        }
-        header.header .headerLeft {
-            font-size: .28rem;  
-        }
-        header.header .headerCenter {
-            font-size: .34rem;  
-        }
-        header.header .headerRight {
-            font-size: .28rem;
-        }-->

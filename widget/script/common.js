@@ -217,12 +217,18 @@ function changeTime(time) {
 
 // doT模版获取数据
 function getData(data) {
+    console.log('渲染模版111')
     var listTText = $api.byId('listT').text;
+    console.log('渲染模版222')
     var fnListT = doT.template(listTText);
+    console.log('渲染模版333')
     var html = fnListT(data);
+    console.log('渲染模版444')
     var list = $api.dom('.resultList');
+    console.log('渲染模版555')
     // 替换resultList所有内容
     $api.html(list, html);
+    console.log('渲染完成')
     // alert('getData:' + JSON.stringify(data))
 }
 

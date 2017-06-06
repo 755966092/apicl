@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+   <style type="text/css">
+        html,body {
+            background-color: #f8f8f8;
+        }
+       .main {
+            width: 7.5rem;
+            padding: 0 .3rem;
+            box-sizing: border-box;
+            font-size: 0;
+       }
+        .main input {
+            margin-top: .2rem;
+            box-sizing: border-box;
+            padding: .1rem;
+            outline: none;
+            width: 100%;
+            height: .8rem;
+            font-size: .24rem;
+            background-color: #fff;
+            
+        }
+        .main button {
+            display: block;
+            width: 6.5rem;
+            margin: .5rem auto;
+            height: .8rem;
+            line-height: .8rem;
+            font-size: .34rem;
+            text-align: center;
+            border-radius: .1rem;
+            color: #fff;
+            background-color: #1AAD19;
+        }
+   </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="head">
+            <span class="callback"   tapmode="hover"   onclick="api.closeWin()">
+                返回
+            </span>
+            <span class="winTitle">
+                编辑群名片
+            </span>
+            <!-- <span class="rightBtn"   tapmode="hover"   onclick="openPhoto()"></span> -->
+        </div>
+    </header>
+
+   <div class="main">
+       <input type="text" placeholder="输入群名片" name="">
+       <button ontouchstart="editNode()">保存</button>
+   </div>
+
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        fnInit();
+        $api.val($api.dom('input'), api.pageParam.note);
+        
+    };
+    function editNode() {
+        var note = $api.val($api.dom('input'));
+        api.ajax({
+            url: apiSite + '/api/circle/editNote',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+               values: { 
+                   token: $api.getStorage('userToken'),
+                   circle_id: api.pageParam.circle_id,
+                   note: note
+               }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                alert(JSON.stringify(ret))
+                api.execScript({
+                    name: 'find_cricleInfo_win',
+                    script: 'requestData();'
+                });
+                api.closeWin();
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+</script>
+
+</html>

@@ -120,7 +120,7 @@
                <div class="user">
                     <p class="category">我的</p>
                     {{ for (var i = 0; i < it.user_list.length; i++) { }} 
-                        <div class="wrap" data-name='{{=it.user_list[i].title}}' data-id='{{=it.user_list[i].circle_id}}' tapmode="hover"   onclick="openCircleInfo(this)">
+                        <div class="wrap" data-flag='1' data-name='{{=it.user_list[i].title}}' data-id='{{=it.user_list[i].circle_id}}' tapmode="hover"   onclick="openCircleInfo(this)">
                             <div class=" list flex-def flex-cCenter">
                                 <div class="img flex-def flex-cStart">
                                     <img src="{{=it.user_list[i].image_url}}">
@@ -146,7 +146,7 @@
                 <div class="other">
                     <p class="category">其他</p>
                     {{ for (var i = 0; i < it.other_list.length; i++) { }} 
-                        <div class="wrap" data-id='{{=it.other_list[i].circle_id}}' tapmode="hover"   onclick="openCircleInfo(this)">
+                        <div class="wrap" data-flag='0' data-id='{{=it.other_list[i].circle_id}}' tapmode="hover" data-name='{{=it.other_list[i].title}}'   onclick="openCircleInfo(this)">
                             <div class=" list flex-def flex-cCenter">
                            
                                 <div class="img flex-def flex-cStart">
@@ -178,113 +178,11 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript" src="../../script/jquery.min.js"></script>
 <script type="text/javascript">
-    var data = [
-        {
-            class: '设计交流',
-            title: 'UI设计交流',
-            info:'app及网站设计，圈子里有大牛app及网站设计',
-            headUrl: '../../image/tx_1.jpg',
-            cyCount: 8927,
-            fbCount: 12574
-
-        },
-        {
-            class: '设计交流',
-            title: '楼盘销售',
-            info:'全国各地区楼盘信息',
-            headUrl: '../../image/tx_2.jpg',
-            cyCount: 1231,
-            fbCount: 12541274
-
-        },
-        {
-            class: '设计交流',
-            title: '移动软件开发交流',
-            info:'移动软件开发，圈子里有大牛',
-            headUrl: '../../image/tx_3.jpg',
-            cyCount: 12311231,
-            fbCount: 1231231
-
-        },
-        {
-            class: '其他',
-            title: '移动软件开发交流',
-            info:'移动软件开发，圈子里有大牛',
-            headUrl: '../../image/tx_4.jpg',
-            cyCount: 12311231,
-            fbCount: 1231231
-
-        },
-        {
-            class: '软件',
-            title: '移动软件开发交流',
-            info:'移动软件开发，圈子里有大牛',
-            headUrl: '../../image/tx_5.jpg',
-            cyCount: 12311231,
-            fbCount: 1231231
-
-        },
-        {
-            class: '其他',
-            title: '移动软件开发交流',
-            info:'移动软件开发，圈子里有大牛',
-            headUrl: '../../image/tx_4.jpg',
-            cyCount: 12311231,
-            fbCount: 1231231
-
-        },
-        {
-            class: '软件',
-            title: '移动软件开发交流',
-            info:'移动软件开发，圈子里有大牛',
-            headUrl: '../../image/tx_5.jpg',
-            cyCount: 12311231,
-            fbCount: 1231231
-
-        },
-        {
-            class: '其他',
-            title: '移动软件开发交流',
-            info:'移动软件开发，圈子里有大牛',
-            headUrl: '../../image/tx_4.jpg',
-            cyCount: 12311231,
-            fbCount: 1231231
-
-        },
-        {
-            class: '软件',
-            title: '移动软件开发交流',
-            info:'移动软件开发，圈子里有大牛',
-            headUrl: '../../image/tx_5.jpg',
-            cyCount: 12311231,
-            fbCount: 1231231
-
-        }
-    ]
+  
     apiready = function(){
         requestData();
     };
-    var form = new FormData();
-    form.append("token", "b678d8a0-f0d8-c67e-50b0-4d839ea864d7");
-    form.append("page_num", "1");
-
-    var settings = {
-      "async": true,
-      "crossDomain": true,
-      "url": "https://wozai.tonyliangli.cn/api/circle/index",
-      "method": "POST",
-      "processData": false,
-      "contentType": false,
-      "mimeType": "multipart/form-data",
-      "data": form
-    }
-
-    $.ajax(settings).done(function (response) {
-      console.log(JSON.parse(response));
-        var data1 = JSON.parse(response);
-        getData(data1.data);
-    });
-    
+   
    
     function getData(data) {
         var listTText = $api.byId('listT').text;
@@ -317,13 +215,17 @@
     function openCircleInfo(ele) {
         var id = $api.attr(ele, 'data-id');
         var circle_name = $api.attr(ele, 'data-name');
+        var flag = $api.attr(ele, 'data-flag');
+        console.log('openCircleInfo'+flag)
         api.openWin({
             name: 'find_dynamicState_win',
             url: './find_dynamicState_win.html',
             bounces: false,
             pageParam: {
                 circle_id: id,
-                circle_name: circle_name
+                circle_name: circle_name,
+                flag: flag
+
             }
         });
     }
