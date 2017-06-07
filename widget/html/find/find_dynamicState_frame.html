@@ -8,12 +8,17 @@
     <style>
         body,html{
             background-color: #EDECF3;
+            height: 100%;
+        }
+        body {
+            padding-top: .2rem;
+            box-sizing: border-box;
         }
        .search {
             height: .5rem;
             line-height: .5rem;
             background-color: #fff;
-            margin: .2rem .3rem;
+            margin: 0 .3rem .2rem;
             text-align: center;
             font-size: 0;
             color: #96969B;
@@ -134,6 +139,7 @@
             position: relative;
             margin-top: .15rem;
         }
+        
         .list .text .discussInfo::before {
             content: "";
             display: inline-block;
@@ -151,6 +157,10 @@
             font-size: .24rem;
             color: #5D7098;
         }
+        .list .text .discussInfo .text1 {
+            font-size: .24rem;
+            color: #000;   
+        }
         .list .text .discussInfo .discussContent {
             font-size: .24rem;
            
@@ -167,13 +177,13 @@
         }
     </style>
 </head>
-<body>
-    <div class="search"   tapmode="hover"   onclick="open1()">
+<body >
+    <div class="search clearfix"   tapmode="hover"   onclick="open1();event.stopPropagation();">
         <span class="searchIcon"></span>
         <span class="searchText" >搜索</span>
     </div>
     <div class="main clearfix">
-        <!--<div class="list">
+        <!-- <div class="list">
             <div class="img">
                 <img src="../../image/tx_2.jpg" alt="">
             </div>
@@ -194,43 +204,66 @@
                     <span class="discussIcon"></span>
                 </div>
                 <div class="discussInfo claerfix">
-                    <div>
-                        <span class="discussName">李志超:</span>
-                        <span class="discussContent">是招生办的教师吗？</span>
+                    <div class="wrap">
+                        <div>
+                            <span class="discussName">李志超:</span>
+                            <span class="discussContent">是招生办的教师吗？</span>
+                        </div>
+                        <div>
+                            <span class="discussName">李志超</span>
+                            <span class="text1">回复</span>
+                            <span class="discussName">李志超:</span>
+                            <span class="discussContent">是招生办的教师吗？</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>-->
+        </div>  -->
        
          <div class="resultList"></div>
          <script type="text/x-dot-template" id="listT">
             {{ for (var i = 0; i < it.length; i++) { }} 
-                <div class="list"   tapmode="hover"   onclick="openStateInfo()">
+                <div class="list"   tapmode="hover" data-id='{{=it[i].topic_id}}' onclick="openStateInfo(this)">
                     <div class="img">
-                        <img src="{{=it[i].headUrl}}" alt="">
+                        <img src="{{=it[i].head_img_url}}" alt="">
                     </div>
                     <div class="text">
                         <div class="title">
-                            <h3>{{=it[i].name}}</h3>
+                            <h3>{{=it[i].nickname}}</h3>
                             <span class="titleLable"></span>
-                            <span class="state">{{=it[i].state}}</span>
+                            <span class="state">{{=it[i].start_time}}</span>
                         </div>
-                        <p class="stateContent">{{=it[i].textContent}}</p>
-                        <div class="imgContent">
-                            {{ for (var j = 0; j < it[i].imgContent.length; j++) { }} 
-                                <img class="imgCon" src="{{=it[i].imgContent[j]}}" alt="">
-                            {{ }; }}
-                        </div>
-                        <div class="stateTime">
-                            <span class="timeInfo">2天前</span>
-                            <span class="discussIcon"></span>
-                        </div>
-                        <div class="discussInfo claerfix">
-                            <div>
-                                <span class="discussName">李志超:</span>
-                                <span class="discussContent">是招生办的教师吗？</span>
+                        <p class="stateContent">{{=it[i].content}}</p>
+                        {{?0}}
+                            <div class="imgContent">
+                                {{ for (var j = 0; j < it[i].imgContent.length; j++) { }} 
+                                    <img class="imgCon" src="{{=it[i].imgContent[j]}}" alt="">
+                                {{ }; }}
                             </div>
+                        {{?}}
+                        <div class="stateTime" onclick="event.stopPropagation();">
+                            <span class="timeInfo">{{=it[i].create_time}}</span>
+                            <span class="discussIcon" ontouchstart='commentBtn(this)' data-id='{{=it[i].topic_id}}'></span>
                         </div>
+                        {{?it[i].comment_list.length!=0}}
+                        <div class="discussInfo claerfix" onclick="event.stopPropagation();">
+                                {{ for (var j = 0; j < it[i].comment_list.length; j++) { }} 
+                                    {{?it[i].comment_list[j].root==2}}
+                                        <div data-usrId='{{=it[i].comment_list[j].comment_id}}' data-id='{{=it[i].topic_id}}' ontouchstart='addComment(this);event.stopPropagation();'>
+                                            <span class="discussName">{{=it[i].comment_list[j].nickname}}</span>
+                                            <span class="text1">回{{=it[i].comment_list.length}}复</span>
+                                            <span class="discussName">{{=it[i].comment_list[j].comment_nickname}}：</span>
+                                            <span class="discussContent">{{=it[i].comment_list[j].content}}</span>
+                                        </div>
+                                    {{??}}
+                                        <div data-usrId='{{=it[i].comment_list[j].comment_id}}' data-id='{{=it[i].topic_id}}' ontouchstart='addComment(this);event.stopPropagation();'>
+                                            <span class="discussName">{{=it[i].comment_list[j].nickname}}：</span>
+                                            <span class="discussContent">{{=it[i].comment_list[j].content}}</span>
+                                        </div>
+                                    {{?}}
+                                {{ }; }}
+                        </div>
+                        {{?}}
                     </div>
                 </div>
             {{ }; }}
@@ -241,71 +274,83 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    var data = [
-        {
-            name: '陈胜东',
-            textContent: '美国平面设计大神安德鲁将在北京举办演讲',
-            imgContent: [
-               
-                '../../image/tx_3.jpg'
-            ],
-            headUrl: '../../image/tx_1.jpg',
-            state: '即将开始',
-        },
-        {
-            name: '陈胜东',
-            textContent: '美国平面设计大神安德鲁将在北京举办演讲',
-            imgContent: [
-                '../../image/tx_2.jpg',
-                '../../image/tx_3.jpg',
-                '../../image/tx_1.jpg',
-                '../../image/tx_4.jpg',
-            ],
-            headUrl: '../../image/tx_3.jpg',
-            state: '即将开始',
-        },
-        {
-            name: '陈胜东',
-            textContent: '美国平面设计大神安德鲁将在北京举办演讲',
-            imgContent: [],
-            headUrl: '../../image/tx_3.jpg',
-            state: '即将开始',
-        },
-        {
-            name: '陈胜东',
-            textContent: '美国平面设计大神安德鲁将在北京举办演讲',
-            imgContent: [
-                '../../image/tx_2.jpg',
-                '../../image/tx_3.jpg',
-            ],
-            headUrl: '../../image/tx_4.jpg',
-            state: '即将开始',
-        },
-        {
-            name: '陈胜东',
-            textContent: '美国平面设计大神安德鲁将在北京举办演讲',
-            imgContent: [
-                '../../image/tx_2.jpg',
-                '../../image/tx_3.jpg',
-                '../../image/tx_2.jpg',
-                '../../image/tx_3.jpg',
-                '../../image/tx_2.jpg',
-                '../../image/tx_3.jpg',
-                '../../image/tx_2.jpg',
-                '../../image/tx_3.jpg'
-            ],
-            headUrl: '../../image/tx_1.jpg',
-            state: '即将开始',
-        },
-    ]
+    
     apiready = function(){
-        
+        moduleInit();
+        requestData();
     };
    
+    function requestData() {
+        api.ajax({
+            url: apiSite + '/api/circle_topic/index',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       circle_id: api.pageParam.circle_id
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                console.log(JSON.stringify(ret))
+                getData(ret.data.list);
+                selfAdaption()
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
     
-    getData(data);
-    selfAdaption()
-      // 根据上传图片的多少自适应图片的大小
+    // 评论
+    function commentBtn(ele) {
+        var topic_id = $api.attr(ele, 'data-id');
+        // alert(id)
+        openInputBox(topic_id, 1)
+        // 圈子主题ID api.pageParam.circle_id
+        // 评价内容 
+        // 评论级别（1-主题，2-用户） 1
+        // 评论权限 
+        // 被评论用户ID（评论级别为用户时必传）
+        
+    }
+    // 评论用户
+    function addComment(ele) {
+        var comment_customer_id = $api.attr(ele, 'data-usrId');
+        var topic_id = $api.attr(ele, 'data-id');
+        // alert(comment_customer_id   )
+        openInputBox(topic_id, 2, comment_customer_id)
+    }
+    function openInputBox(topic_id, rootCount, comment_customer_id) {
+        var obj = {};
+        if (rootCount == 1) {
+            obj = {
+                topic_id: topic_id,
+                rootCount: rootCount,
+            }
+        } else {
+            obj = {
+                topic_id: topic_id,
+                rootCount: rootCount,
+                comment_customer_id: comment_customer_id
+            }    
+        }
+        
+        api.openFrame({
+            name: 'find_inputBox',
+            url: './find_inputBox.html',
+            rect: {
+                x: 0,
+                y: 0,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: obj,
+            bounces: false
+        });
+    }
+    
+    // 根据上传图片的多少自适应图片的大小
     function selfAdaption() {
         
         var listContent = $api.domAll('.list');
@@ -323,7 +368,7 @@
             }
         }
     }
-     // doT模版获取数据
+    // doT模版获取数据
     function getData(data) {
         
         var listTText = $api.byId('listT').text;
@@ -340,12 +385,13 @@
     }
     
 
-    function openStateInfo() {
+    function openStateInfo(ele) {
+        var topic_id = $api.attr(ele, 'data-id');
         api.openWin({
             name: 'find_stateInfo_win',
             url: './find_stateInfo_win.html',
             bounces: false,
-            pageParam: {key : 'value'}
+            pageParam: {topic_id : topic_id}
         });
     }
 </script>

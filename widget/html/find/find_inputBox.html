@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style type="text/css">
+       
+        html,body {
+            background-color: rgba(0,0,0,0);
+           /* width: 100%;
+            height: 100%;*/
+        }
+        body {
+            background-color: rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body >
+   
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript" src="../../script/jquery.min.js"></script>
+<script type="text/javascript">
+  
+    apiready = function(){
+        moduleInit()
+        
+         openInputBox();
+        
+        
+        api.addEventListener({
+            name:'tap'
+        }, function(ret, err){        
+           UIChatBox.close();
+           console.log(111)
+           api.closeFrame();
+        });
+    };
+   
+     // 聊天界面
+    function openInputBox() {
+        UIChatBox.open({
+            placeholder: '请输入内容',
+            maxRows: 4,
+            // emotionPath: 'widget://res/img/emotion',
+            // autoFocus: true,
+            texts: {
+                sendBtn: {
+                    title: '发送'
+                }
+            },
+            styles: {
+                inputBar: {
+                    borderColor: '#d9d9d9',
+                    bgColor: '#f2f2f2'
+                },
+                inputBox: {
+                    borderColor: '#B3B3B3',
+                    bgColor: '#FFFFFF'
+                },
+                emotionBtn: {
+                    normalImg: 'widget://image/chatPage/face1.png'
+                },
+               
+                keyboardBtn: {
+                    normalImg: 'widget://image/chatPage/key1.png'
+                },
+                recordBtn: {
+                    normalBg: '#c4c4c4',
+                    activeBg: '#999999',
+                    color: '#000',
+                    size: 14
+                },
+                indicator: {
+                    target: 'both',
+                    color: '#c4c4c4',
+                    activeColor: '#9e9e9e'
+                },
+                sendBtn: {
+                    titleColor: '#fff',
+                    bg: '#4cc518',
+                    activeBg: '#46a91e',
+                    titleSize: 14
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.eventType === 'send') {
+                    UIChatBox.closeKeyboard();
+                    
+                    //设置输入框的值
+                    UIChatBox.value({
+                        msg: ret.msg
+                    });
+                    var obj = {};
+                    if (api.pageParam.rootCount == 1) {
+                        obj = {
+                            topic_id: api.pageParam.topic_id,
+                            rootCount: api.pageParam.rootCount,
+                            content: ret.msg
+                        }
+                    } else {
+                        obj = {
+                            topic_id: api.pageParam.topic_id,
+                            rootCount: api.pageParam.rootCount,
+                            comment_customer_id: api.pageParam.comment_customer_id,
+                            content: ret.msg
+                        }    
+                    }
+                    api.openFrame({
+                        name: 'find_discussType',
+                        url: './find_discussType.html',
+                        bounces: false,
+                        rect: {
+                            x: 0,
+                            y: 0,
+                            w: 'auto',
+                            h: 'auto'
+                        },
+                        pageParam: obj
+                    });
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        });
+    }
+         
+
+    
+</script>
+</html>

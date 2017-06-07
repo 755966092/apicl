@@ -10,6 +10,9 @@
             background-color: #EDECF3;
             position: relative;
         }
+        body {
+            margin-bottom: .8rem;
+        }
         
         
         footer {
@@ -38,7 +41,24 @@
             background: url(../../image/icon_find/icon_arrow.png)no-repeat;
             background-size: .28rem .17rem;
             margin-left: .1rem;
-              
+            
+        }
+        footer .selRole .icon3 {
+            animation: myfirst1 0.5s;
+            animation-fill-mode: forwards;
+        }
+        footer .selRole .icon2 {
+            /*transform: rotate(180deg);*/
+            animation: myfirst 0.5s;
+            animation-fill-mode: forwards;
+        }
+        @keyframes myfirst{
+            from {transform: rotate(0deg);}
+            to {transform: rotate(180deg);}
+        }
+        @keyframes myfirst1{
+            from {transform: rotate(180deg);}
+            to {transform: rotate(0deg);}
         }
         footer .collect {
             background-color: #08B508;
@@ -81,11 +101,19 @@
             height: .7rem;
         }
          .label {
-            width: .63rem;
+            /*width: .74rem;*/
+            padding: 0 .06rem;
+            font-size: .2rem;
+
+            color: #5D7099;
+            text-align: center;
+            line-height: .28rem;
+            border: 1px solid #5D7099;
+            border-radius: .06rem;
             height: .28rem;
-            background: url(../../image/icon_find/icon_label.png)no-repeat;
+            /*background: url(../../image/icon_find/icon_label.png)no-repeat;
             -webkit-background-size: .63rem .28rem;
-            background-size: .63rem .28rem;
+            background-size: .63rem .28rem;*/
 
         }
         .content {
@@ -257,62 +285,106 @@
             color: #fff;
             font-size: .32rem;
         }
+        .selRoleList {
+            position: fixed;
+            bottom: 1rem;
+            left: 0;
+            background-color: #fff;
+            width: 7.5rem;
+            padding-left: .3rem;
+            display: none;
+        }
+        .selRoleList ul {
+            font-size: 0;
+        }
+        .selRoleList ul li {
+            font-size: .28rem;
+            line-height: .8rem;
+            border-bottom: 1px solid #D9D9D9;
+            box-sizing: border-box;
+        }
+        .selRoleList ul li:Last-child {
+            border: 0;
+        }
     </style>
 </head>
 <body>
-    <div class="statePersonInfo flex-def flex-cCenter ">
-        <img class="headImg" src="../../image/tx_1.jpg" alt="">
-        <div class="text flex-item">
-            <div class="name flex-def flex-zBetween">
-                <h3>陈生动</h3>
-                <span class="label"></span>
-            </div>
-            <p class="company">上海策赢网络科技 董事长</p>
-        </div>
-    </div>
-    <div class="content flex-def flex-zBetween flex-zTopBottom flex-cEnd">
-        <div>
-            <p class="next">即将开始</p>
-            <div class="flex-def flex-cCenter flex-zCenter">
-                <span class="line"></span>
-                <span class="imgIcon"></span>
-                <span class="xqText">详情</span>
-                <span class="line"></span>
-            </div>
-            <h3>美国平面设计大神安德鲁将在北京举办演讲</h3>
-            <p class="textContent">安德鲁是美国设计大神，大家都来参加啊，在北京新国展，已经开始售票啦，想去的人联系我</p>
-        </div>
-        <p class="time">2天前</p>
-    </div>
-    <div class="startEndTime ">
-        <span>起止时间</span>
-        <span class="zkIcon"></span>
-    </div>
-    <div class="discuss">
-        <div class="startEndTime ">
-            <span>评论（10）</span>
-            <span class="zkIcon"></span>
-        </div>
-        <div class="discussContent flex-def ">
-            <div class="img flex-def flex-cStart">
-                <img src="../../image/tx_4.jpg">
-            </div>
-            <div class="flex-item">
-                <div class="discussTitle flex-def flex-zBetween flex-cCenter">
-                    <div>
-                        <span class="discussName">谢慧</span>
-                        <span class="label"></span>
+    <div class="resultList"></div>
+    <script type="text/x-dot-template" id="listT">
+            <div class="statePersonInfo flex-def flex-cCenter ">
+                <img class="headImg" src="{{=it.info.user_info.head_img_url}}" alt="">
+                <div class="text flex-item">
+                    <div class="name flex-def flex-zBetween">
+                        <h3>{{=it.info.user_info.nickname}}</h3>
+                        <span class="label">知情人</span>
                     </div>
-                    <span class="discussTime">3小时前</span>
+                    {{?it.info.user_info.current_company && it.info.user_info.current_position==null}}
+                    <p class="company">{{=it.info.user_info.current_company}} }}</p>
+                    {{??it.info.user_info.current_position && it.info.user_info.current_company==null}}
+                    <p class="company">{{=it.info.user_info.current_position}}</p>
+                    {{??it.info.user_info.current_position==null && it.info.user_info.current_company==null}}
+                    <!-- <p class="company">{{=it.info.user_info.current_position}}</p> -->
+                    {{??}}
+                    <p class="company">{{=it.info.user_info.current_company}} {{=it.info.user_info.current_position}}</p>
+                    {{?}}
                 </div>
-                <p class="discussText">广而告之：请报名参加的各位无比去无锡专场扎个场子广而告之：请报名参加的各位无比去无锡专场扎个场子</p>
             </div>
-        </div>
-       
-    </div>
+            <div class="content flex-def flex-zBetween flex-zTopBottom flex-cEnd">
+                <div>
+                    <p class="next">即将开始</p>
+                    <div class="flex-def flex-cCenter flex-zCenter">
+                        <span class="line"></span>
+                        <span class="imgIcon"></span>
+                        <span class="xqText">详情</span>
+                        <span class="line"></span>
+                    </div>
+                    <h3>{{=it.info.topic_info.title}}</h3>
+                    <p class="textContent">安德鲁是美国设计大神，大家都来参加啊，在北京新国展，已经开始售票啦，想去的人联系我</p>
+                </div>
+                <p class="time">{{=it.info.topic_info.create_time}}</p>
+            </div>
+            <div class="startEndTime ">
+                <span>起止时间</span>
+                <span class="zkIcon"></span>
+            </div>
+            <div class="discuss">
+                <div class="startEndTime ">
+                    <span>评论（{{=it.commmentLength}}）</span>
+                    <span class="zkIcon"></span>
+                </div>
+                {{ for(var i = 0; i < it.list.length; i++){ }}
+                    <div class="discussContent flex-def ">
+                        <div class="img flex-def flex-cStart">
+                            <img src="../../image/tx_4.jpg">
+                        </div>
+                        <div class="flex-item">
+                            <div class="discussTitle flex-def flex-zBetween flex-cCenter">
+                                <div>
+                                    <span class="discussName">{{=it.list[i].nickname}}</span>
+                                    <span class="label">{{=it.list[i].role}}</span>
+                                </div>
+                                <span class="discussTime">{{=it.list[i].create_time}}</span>
+                            </div>
+                            <p class="discussText">{{=it.list[i].content}}</p>
+                        </div>
+                    </div>
+                {{ }; }}
+            </div>
+    </script>
+   <div class="selRoleList">
+       <ul>
+           <li ontouchstart="selRoleList(this)">关系人</li>
+           <li ontouchstart="selRoleList(this)">知情人</li>
+           <li ontouchstart="selRoleList(this)">甲方</li>
+           <li ontouchstart="selRoleList(this)">总包单位</li>
+           <li ontouchstart="selRoleList(this)">分包单位</li>
+           <li ontouchstart="selRoleList(this)">设计院</li>
+           <li ontouchstart="selRoleList(this)">销售</li>
+       </ul>
+   </div>
     <footer class="flex-def">
-        <div class="selRole">
-            <span class="text">选择角色</span>
+        <div class="selRole" ontouchstart="selRole()">
+            <span class="text" id='role' >选择角色</span>
             <span class="icon"></span>
         </div>
         <div class="collect">
@@ -332,22 +404,88 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    
+    var role = ['关系人','知情人','甲方','总包单位','分包单位','设计院','销售']
     apiready = function(){
         moduleInit();
-        var flag = api.pageParam.flag
-        if (flag) {
-            chatTools();
-            $api.css($api.dom('footer'), ' display:none;');
-        } else {
-            $api.css($api.dom('footer'), ' display: -webkit-box; display: flex;');
-        }
+       
+        requestData();
     };
-    
-    function openShadow() {
-        $api.removeCls($api.dom('.shadow'), 'dn');
+    // 获取数据
+    function requestData() {
+        
+        api.ajax({
+            url: apiSite + '/api/circle_topic/detail',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       topic_id: api.pageParam.topic_id
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                alert(JSON.stringify(ret))
+                if (!ret.data.is_collect) {
+                     $api.css($api.dom('footer'), ' display: -webkit-box; display: flex;');
+                } else {
+                    chatTools();
+                    $api.css($api.dom('footer'), ' display:none;');
+                   
+                }
+                var count=0;
+                for (var i = 0; i < ret.data.list.length; i++) {
+                    if (ret.data.list[i].root == 1) {
+                        count++;
+                    }
+                    ret.data.list[i].role = role[ret.data.list[i].role]
+
+                }
+
+                ret.data.commmentLength = count;
+                console.log(JSON.stringify(ret.data))
+                getData(ret.data)
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
     }
-     // 聊天界面
+    // 收藏
+    function openShadow() {
+        var val = $api.text($api.byId('role')),valId;
+        if ( val == '选择角色') {
+            $api.removeCls($api.dom('.shadow'), 'dn');
+        } else {
+            for (var i = 0; i < role.length; i++) {
+                if (val == role[i]) {
+                    valId = i+1;
+                    break;
+                }
+            }
+            api.ajax({
+                url: apiSite + '/api/circle_topic/collect',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                       values: { 
+                           token: $api.getStorage('userToken'),
+                           topic_id: api.pageParam.topic_id,
+                           role: val
+                       }
+                }
+            }, function(ret, err) { 
+                if(ret) {
+                    // alert(JSON.stringify(ret))
+                    alert('收藏成功')
+                    requestData();
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
+        }
+
+    }
+    // 评论输入框
     function chatTools() {
         UIChatBox.open({
             placeholder: '请输入内容',
@@ -404,7 +542,7 @@
                     api.openFrame({
                         name: 'find_discussType',
                         url: './find_discussType.html',
-                        bounces: true,
+                        bounces: false,
                         rect: {
                             x: 0,
                             y: 0,
@@ -420,7 +558,20 @@
                 alert(JSON.stringify(err))
             }
         });
-     
+    }
+
+    // 选择角色
+    function selRole() {
+        $api.css($api.dom('.selRoleList'), 'display:block');
+        $api.addCls($api.dom('.selRole .icon'), 'icon2');
+    }
+    // 
+    function selRoleList(ele) {
+        var val = $api.text(ele);
+        $api.text($api.byId('role'), val);
+        $api.css($api.dom('.selRoleList'), 'display:none');
+        $api.removeCls($api.dom('.selRole .icon'), 'icon2');
+        $api.addCls($api.dom('.selRole .icon'), 'icon3');
     }
 </script>
 </html>

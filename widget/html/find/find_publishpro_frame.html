@@ -161,7 +161,7 @@
             background-position: .3rem center;
         }
         .time {
-            font-size: .3rem;
+            font-size: .24rem;
             color: #9b9b9b;
         }  
 
@@ -229,9 +229,9 @@
         <p class="position"   tapmode="hover"   onclick="getPos(this)">北京 北京 海淀区</p>
     </div>
     <div class="classify clearfix">
-        <div class="status" tapmode='hover' onclick="selectType(this)" data-val='_status' >
+        <div class="status" tapmode='hover' ontouchstart="selRole()" data-val='_status' >
             <span>您的身份</span>
-            <span class="_status spanno2">知情者</span>
+            <span class="_status spanno2" >知情者</span>
         </div>
         <ul>
             <li>
@@ -270,7 +270,82 @@ var base64Data = [];
         // 删除图片
         delImg()
     };
-
+    // 悬着角色
+    function selRole() {
+         // var UIActionSelector = api.require('UIActionSelector');
+            UIActionSelector.open({
+                datas: [
+                    {
+                        name:'关系人'
+                    },{
+                        name:'知情人'
+                    },{
+                        name:'甲方'
+                    },{
+                        name:'总包单位'
+                    },{
+                        name:'分包单位'
+                    },{
+                        name:'设计院'
+                    },{
+                        name:'销售'
+                    }
+                ],
+                actives: [1],
+                layout: {
+                    row: 7,
+                    col: 1,
+                    height: 30,
+                    size: 18,
+                    sizeActive: 20,
+                    rowSpacing: 5,
+                    colSpacing: 5,
+                    maskBg: 'rgba(0,0,0,0.5)',
+                    bg: '#fff',
+                    color: '#888',
+                    colorSelected: '#000'
+                },
+                animation: true,
+                cancel: {
+                    text: '取消',
+                    size: 16,
+                    w: 90,
+                    h: 40,
+                    bg: '#eee',
+                    // bgActive: '#ccc',
+                    color: '#000',
+                    // colorActive: '#fff'
+                },
+                ok: {
+                    text: '确定',
+                    size: 16,
+                    w: 90,
+                    h: 40,
+                    bg: '#eee',
+                    // bgActive: '#ccc',
+                    color: '#000',
+                    // colorActive: '#fff'
+                },
+                title: {
+                    text: '请选择',
+                    size: 20,
+                    h: 44,
+                    bg: '#eee',
+                    color: '#000'
+                },
+                fixedOn: api.frameName
+            }, function(ret, err) {
+                if (ret) {
+                    alert(JSON.stringify(ret))
+                    if (ret.eventType == 'ok') {
+                        
+                        $api.text($api.dom('._status'), ret.level1);
+                    }
+                } else {
+                    alert(JSON.stringify(err));
+                }
+            });
+    }
     // 提现谁看
     function remindWho() {
         api.openWin({
@@ -291,34 +366,34 @@ var base64Data = [];
         });
     }
     // 选择类型  公司 | 个人
-    function selectType(ele) {
-        var person =  $api.text(ele.getElementsByClassName('spanno2')[0]);
+   //  function selectType(ele) {
+   //      var person =  $api.text(ele.getElementsByClassName('spanno2')[0]);
 
-        var _data = $api.attr(ele, 'data-val');
-        var flag;
-        var _dataSource = [];
-        if (_data == '_status') {
-            _dataSource = ['知情者1','知情者2','知情者3'];
-            flag = 0;
-        } 
-        api.openFrame({
-                name: 'supply_selectType2',
-                url: 'supply_selectType.html',
-                rect: {
-                    x: 0,
-                    y: 0,
-                    w: 'auto',
-                    h: 'auto'
-                },
-                pageParam: {
-                    dataSource: _dataSource,
-                    flag: flag,
-                    defaultVal: person
-                },
-                bounces: false
-            });
+   //      var _data = $api.attr(ele, 'data-val');
+   //      var flag;
+   //      var _dataSource = [];
+   //      if (_data == '_status') {
+   //          _dataSource = ['知情者1','知情者2','知情者3'];
+   //          flag = 0;
+   //      } 
+   //      api.openFrame({
+   //              name: 'supply_selectType2',
+   //              url: 'supply_selectType.html',
+   //              rect: {
+   //                  x: 0,
+   //                  y: 0,
+   //                  w: 'auto',
+   //                  h: 'auto'
+   //              },
+   //              pageParam: {
+   //                  dataSource: _dataSource,
+   //                  flag: flag,
+   //                  defaultVal: person
+   //              },
+   //              bounces: false
+   //          });
 
-   }
+   // }
 
    // 打开时间选择器
    function openTime(ele) {
@@ -342,12 +417,16 @@ var base64Data = [];
             date2 = new Date().getDate();
         }
         api.openPicker({
-            type: 'date',
+            type: 'date-time',
             date: date+'-'+date1+'-'+date2,
             title: text
         }, function(ret, err) {
             if (ret) {
-                $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day);
+                alert(JSON.stringify(ret))
+                if (ret.minute < 10) {
+                    ret.minute = '0' + ret.minute
+                }
+                $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day+' '+ret.hour+':'+ret.minute);
             } else {
                 alert(JSON.stringify(err));
             }
@@ -361,7 +440,7 @@ var base64Data = [];
                 if (ret.status) {
                    getLocation();
                 } else {
-                    alert(JSON.stringify(err))
+                    alert(''+JSON.stringify(err))
                 }
             });
         } else {
@@ -392,6 +471,8 @@ var base64Data = [];
         }, function(ret, err) {
             if (ret.status) {
                 alert(JSON.stringify(ret));
+                
+                $api.text($api.dom('.position'), ret.address);
             }
         });
     }
