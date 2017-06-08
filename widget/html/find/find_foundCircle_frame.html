@@ -83,14 +83,17 @@
         }
         .addGroupType p {
             font-size: .28rem;
-            width: 50%;float: left;
-            text-align: center;
+            width: 50%;
+            float: left;
+            /*text-align: center;*/
             line-height: .65rem;
             box-sizing: border-box;
-
+        }
+        .addGroupType p:first-child span {
+            float: left;
         }
         .addGroup input {
-            text-align: center;font-size: .24rem;
+            text-align: center;font-size: .42rem;
             outline: none;
             margin-top: .44rem;
         }
@@ -160,7 +163,7 @@
     <div class="main">
         <div class="flex-def flex-cCenter flex-zCenter flex-zTopBottom">
             <div class="img">
-                <img id="image_url" class="circleHead" src="../../image/tx_4.jpg">
+                <img id="image_url" class="circleHead" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1496926338823&di=28180f83aec11ebc9bdc69c88f59201b&imgtype=0&src=http%3A%2F%2Fwww.ld12.com%2Fupimg358%2Fallimg%2Fc140921%2F14112C1C3IP-4R5S.jpg">
                 <span></span>
             </div>
             <input id="title" class="circleName" type="text" name="">
@@ -233,7 +236,38 @@
         var description = $api.val($api.byId('description'));
         var image_url = $api.attr($api.byId('image_url'), 'src');
         var price = $api.attr($api.byId('price'), 'src');
-        var type = $api.text($api.dom('sel')) == '免费' ? 1 : 2;
+        var type = $api.text($api.dom('.sel')) == '免费' ? 1 : 2;
+        var obj = {
+            title: title,
+            description: description,
+            image_url: image_url,
+            price: price,
+            type: type
+        }
+        api.ajax({
+            url: apiSite + '/api/circle/add',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                        token: $api.getStorage('userToken'),
+                        title: title,
+                        description: description,
+                        image_url: image_url,
+                        price: price,
+                        type: type,
+                        apply_reason: '测试'
+                       
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                alert(JSON.stringify(ret))
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+        console.log(JSON.stringify(obj))
     }
     
 </script>
