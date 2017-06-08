@@ -11,10 +11,8 @@
             position: relative;
         }
         body {
-            margin-bottom: .8rem;
+            margin-bottom: 1.2rem;
         }
-        
-        
         footer {
 
             position: fixed;
@@ -119,8 +117,14 @@
         .content {
             font-size: 0;
             text-align: center;
-            height: 3.77rem;
+            /*height: 3.77rem;*/
             background-color: #fff;
+            width: 7.5rem;
+            box-sizing: border-box;
+        }
+        .content .wrap {
+            width: 100%;
+            box-sizing: border-box;
         }
         .content .xqText {
             font-size: .34rem;
@@ -145,6 +149,8 @@
             margin-top: .17rem;
         }
         .content .textContent {
+            box-sizing: border-box;
+            width: 100%;
             max-height: 1.54rem;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -153,6 +159,10 @@
             text-align: left;
             padding: 0 .35rem;
             margin-top: .2rem;
+        }
+        .content .wrap img {
+            width: 6.9rem;
+            margin: .1rem;
         }
         .content .time {
             font-size: .24rem;
@@ -306,6 +316,9 @@
         .selRoleList ul li:Last-child {
             border: 0;
         }
+        .resultList {
+
+        }
     </style>
 </head>
 <body>
@@ -316,7 +329,7 @@
                 <div class="text flex-item">
                     <div class="name flex-def flex-zBetween">
                         <h3>{{=it.info.user_info.nickname}}</h3>
-                        <span class="label">知情人</span>
+                        <span class="label">{{=it.info.topic_info.role}}</span>
                     </div>
                     {{?it.info.user_info.current_company && it.info.user_info.current_position==null}}
                     <p class="company">{{=it.info.user_info.current_company}} }}</p>
@@ -330,7 +343,7 @@
                 </div>
             </div>
             <div class="content flex-def flex-zBetween flex-zTopBottom flex-cEnd">
-                <div>
+                <div class="wrap">
                     <p class="next">即将开始</p>
                     <div class="flex-def flex-cCenter flex-zCenter">
                         <span class="line"></span>
@@ -339,7 +352,12 @@
                         <span class="line"></span>
                     </div>
                     <h3>{{=it.info.topic_info.title}}</h3>
-                    <p class="textContent">安德鲁是美国设计大神，大家都来参加啊，在北京新国展，已经开始售票啦，想去的人联系我</p>
+                    <p class="textContent">{{=it.info.topic_info.content}}</p>
+                    {{?it.info.topic_info.image_json!=null}}
+                        {{ for(var i=0; i< it.info.topic_info.image_json.length; i++){ }}
+                            <img src="{{=it.info.topic_info.image_json[i]}}">
+                        {{ }; }}
+                    {{?}}
                 </div>
                 <p class="time">{{=it.info.topic_info.create_time}}</p>
             </div>
@@ -431,9 +449,9 @@
                 } else {
                     chatTools();
                     $api.css($api.dom('footer'), ' display:none;');
-                   
                 }
                 var count=0;
+                ret.data.info.topic_info.role = role[ret.data.info.topic_info.role]
                 for (var i = 0; i < ret.data.list.length; i++) {
                     if (ret.data.list[i].root == 1) {
                         count++;
@@ -444,6 +462,7 @@
 
                 ret.data.commmentLength = count;
                 console.log(JSON.stringify(ret.data))
+                ret.data.info.topic_info.image_json = eval(ret.data.info.topic_info.image_json)
                 getData(ret.data)
             } else {
                 alert(JSON.stringify(err))
@@ -452,7 +471,7 @@
     }
     // 收藏
     function openShadow() {
-        var val = $api.text($api.byId('role')),valId;
+        var val = $api.text($api.byId('role')), valId=1;
         if ( val == '选择角色') {
             $api.removeCls($api.dom('.shadow'), 'dn');
         } else {
@@ -470,13 +489,12 @@
                        values: { 
                            token: $api.getStorage('userToken'),
                            topic_id: api.pageParam.topic_id,
-                           role: val
+                           role: valId
                        }
                 }
             }, function(ret, err) { 
                 if(ret) {
-                    // alert(JSON.stringify(ret))
-                    alert('收藏成功')
+                    // 收藏成功
                     requestData();
                 } else {
                     alert(JSON.stringify(err))
@@ -550,7 +568,10 @@
                             h: api.winHeight
                         },
                         pageParam: {
-                            content: ret.msg
+                            content: ret.msg,
+                            topic_id: api.pageParam.topic_id,
+                            rootCount: 1
+
                         }
                     });
                 }

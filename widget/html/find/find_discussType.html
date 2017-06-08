@@ -114,8 +114,6 @@
         $api.addCls(ele, 'sel');
     }
     function enter(){
-        alert (flag+'----'+api.pageParam.content);
-        console.log('参数'+JSON.stringify(api.pageParam))
         var obj = {};
         if (api.pageParam.rootCount == 1) {
             obj = {
@@ -135,7 +133,6 @@
                 parent_comment_id: api.pageParam.comment_customer_id    
             }    
         }
-        console.log('对象'+JSON.stringify(obj))
         api.ajax({
             url: apiSite + '/api/circle_topic/comment',
             method: 'post',
@@ -146,6 +143,7 @@
         }, function(ret, err) {
             if(ret) {
                 alert(JSON.stringify(ret))
+                console.log(JSON.stringify(obj))
             } else {
                 alert(JSON.stringify(err))
             }

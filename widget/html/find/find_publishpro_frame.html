@@ -190,9 +190,9 @@
         
         <div class="title">
             <span class="smallTitle">#我提供#</span>
-            <input type="text" placeholder="输入您发布的标题" name="">
+            <input id="title" type="text" placeholder="输入您发布的标题" name="">
         </div>
-        <textarea placeholder="描述一下您发布的内容" rows="5"></textarea>
+        <textarea id="content" placeholder="描述一下您发布的内容" rows="5"></textarea>
         <!-- <div class="clearfix">
             <div class="fl addMedia">
                 <span></span>
@@ -226,21 +226,21 @@
                 <img  src="../../image/icon_supply/icon_addMedia_1.png" class="addImg" onclick="openImg()" tapmode="hover">
                 <img  src="../../image/icon_supply/icon_addMedia_2.png">
         </script>
-        <p class="position"   tapmode="hover"   onclick="getPos(this)">北京 北京 海淀区</p>
+        <p class="position"></p>
     </div>
     <div class="classify clearfix">
         <div class="status" tapmode='hover' ontouchstart="selRole()" data-val='_status' >
             <span>您的身份</span>
-            <span class="_status spanno2" >知情者</span>
+            <span class="_status spanno2" id="role"></span>
         </div>
         <ul>
             <li>
                 <span>截至时间</span>
                 <span class="spanno2"></span>
                 <span class="fr">
-                     <span class="time" tapmode="hover" onclick="openTime(this)" data-val='start'>请选择</span>
+                     <span class="time" id="startTime" tapmode="hover" onclick="openTime(this)" data-val='start'>请选择</span>
                      --
-                    <span class="time" tapmode="hover" onclick="openTime(this)" data-val='end'>请选择</span>
+                    <span class="time" id="endTime" tapmode="hover" onclick="openTime(this)" data-val='end'>请选择</span>
                 </span>
                 
             </li>
@@ -254,23 +254,93 @@
             </li>
         </ul>        
     </div>
-    <div class="btn">发布</div>
+    <div class="btn" ontouchstart="addTopic()">发布</div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-var base64Data = [];
+var base64Data = [], role = ['关系人','知情人','甲方','总包单位','分包单位','设计院','销售'],province='',city='',district='',latitude='',longitude='';
     apiready = function(){
         moduleInit();
         getPos();
         getData(base64Data);
-        // 选择类别
-        monitorEvent('_status','_status');
         // 删除图片
         delImg()
     };
-    // 悬着角色
+    // 添加圈子主题
+    function addTopic() {
+
+        // 获取身份
+        var roleId = 0;
+        for (var i = 0; i < role.length; i++) {
+             if ($api.text($api.byId('role')) == role[i]) {
+                roleId = i
+                break;
+             }
+        } 
+        // 内容
+        var title = $api.val($api.byId('title'));
+        var content = $api.val($api.byId('content'));
+        var start_time = $api.text($api.byId('startTime'));
+        var end_time = $api.text($api.byId('endTime'));
+
+        var obj = {
+            circle_id: api.pageParam.circle_id,           //int 圈子ID
+            role: roleId,            //int 角色（1-关系人，2-知情人，3-甲方，4-总包单位，5-分包单位，6-设计院，7-销售）
+            title: title,           //string  标题
+            content: content,         //string  详细内容
+            province: province,            //string  省份
+            city: city,            //string  城市
+            address: district,         //string  地址
+            start_time: start_time,          //string  开始时间
+            end_time: end_time,            //string  结束时间
+            latitude: latitude,            //string  纬度
+            longitude: longitude,    
+        }
+        console.log(JSON.stringify(obj))
+        api.ajax({
+            url: apiSite + '/api/circle_topic/add',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                        token: $api.getStorage('userToken'),
+                        circle_id: api.pageParam.circle_id,           //int 圈子ID
+                        role: roleId,            //int 角色（1-关系人，2-知情人，3-甲方，4-总包单位，5-分包单位，6-设计院，7-销售）
+                        title: title,           //string  标题
+                        content: content,         //string  详细内容
+                        province: province,            //string  省份
+                        city: city,            //string  城市
+                        address: district,         //string  地址
+                        start_time: start_time,          //string  开始时间
+                        end_time: end_time,            //string  结束时间
+                        latitude: latitude,            //string  纬度
+                        longitude: longitude,           //string  经度
+                        // image_json: ,      //
+                       
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code != 200) {
+                    alert(JSON.stringify(ret.msg))
+                } else {
+                    alert(JSON.stringify(ret))
+                    api.execScript({
+                        name: 'find_dynamicState_win',
+                        frameName: 'find_dynamicState_frame',
+                        script: 'requestData();'
+                    });
+                    api.closeWin();
+                }
+            } else {
+                alert(JSON.stringify(err))
+
+            }
+        })
+    }
+    // 选择角色
     function selRole() {
          // var UIActionSelector = api.require('UIActionSelector');
             UIActionSelector.open({
@@ -351,52 +421,10 @@ var base64Data = [];
         api.openWin({
             name: 'supply_info_ask_remindWho',
             url: '../supply/supply_info_ask_remindWho.html'
-            
         });
     }
-    function monitorEvent(eventName, calssName) {
-        api.addEventListener({
-           name: eventName
-        }, function(ret, err) {
-           if (ret) {
-            $api.text($api.dom('.'+ calssName +''), ret.value.selDate);
-           } else {
-               alert(JSON.stringify(err));
-           }
-        });
-    }
-    // 选择类型  公司 | 个人
-   //  function selectType(ele) {
-   //      var person =  $api.text(ele.getElementsByClassName('spanno2')[0]);
-
-   //      var _data = $api.attr(ele, 'data-val');
-   //      var flag;
-   //      var _dataSource = [];
-   //      if (_data == '_status') {
-   //          _dataSource = ['知情者1','知情者2','知情者3'];
-   //          flag = 0;
-   //      } 
-   //      api.openFrame({
-   //              name: 'supply_selectType2',
-   //              url: 'supply_selectType.html',
-   //              rect: {
-   //                  x: 0,
-   //                  y: 0,
-   //                  w: 'auto',
-   //                  h: 'auto'
-   //              },
-   //              pageParam: {
-   //                  dataSource: _dataSource,
-   //                  flag: flag,
-   //                  defaultVal: person
-   //              },
-   //              bounces: false
-   //          });
-
-   // }
-
-   // 打开时间选择器
-   function openTime(ele) {
+    // 打开时间选择器
+    function openTime(ele) {
         var data = $api.attr(ele, 'data-val');
         var text;
         if (data == 'start') {
@@ -431,24 +459,24 @@ var base64Data = [];
                 alert(JSON.stringify(err));
             }
         });
-   }
+    }
 
-   // 获取位置
-   function getPos() {
+    // 获取位置
+    function getPos() {
         if (api.systemType == 'ios') {
             bMap.initMapSDK(function(ret,err) {
                 if (ret.status) {
                    getLocation();
                 } else {
-                    alert(''+JSON.stringify(err))
+                    alert(JSON.stringify(err))
                 }
             });
         } else {
             getLocation();
         }
-        
-   }
-   // 获取经纬度
+         
+    }
+    // 获取经纬度
     function getLocation() {
         bMap.getLocation({
             accuracy: '100m',
@@ -456,10 +484,9 @@ var base64Data = [];
             filter: 1
         }, function(ret, err) {
             if (ret.status) {
-                alert(JSON.stringify(ret));
                 getCoords(ret.lon, ret.lat)
             } else {
-                alert(err.code);
+                alert(err);
             }
         });
     }
@@ -470,9 +497,12 @@ var base64Data = [];
             lat: lat
         }, function(ret, err) {
             if (ret.status) {
-                alert(JSON.stringify(ret));
-                
                 $api.text($api.dom('.position'), ret.address);
+                province = ret.province//省 ret.province
+                city = ret.city//市 ret.city
+                district = ret.district//区 ret.district
+                latitude = lat;
+                longitude = lon;
             }
         });
     }

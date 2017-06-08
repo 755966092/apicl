@@ -9,11 +9,16 @@
         body,html{
             background-color: #EDECF3;
         }
-       .search {
+        .searchWrap {
+            padding: .2rem .3rem;
+        }
+       .search {    
             height: .5rem;
             line-height: .5rem;
             background-color: #fff;
-            margin: .2rem .3rem;
+            /*margin: .2rem .3rem;*/
+            box-sizing: border-box;
+            /*padding: .2rem .3rem;*/
             text-align: center;
             font-size: 0;
             color: #96969B;
@@ -106,12 +111,74 @@
             padding: .1rem 0 .1rem .3rem;
             border-bottom: 1px solid #e7e7e7;    
         }
+        .shadow {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.3);
+            padding-top: .15rem;
+            box-sizing: border-box;
+            padding-right: .075rem;
+            display: none;
+            position: fixed;
+            /*padding-top: .8rem;*/
+        }
+        .shadow .box {
+            width: 2.48rem;
+            height: 1.55rem;
+            background-color: #49494B;
+            position: relative;
+            float: right;
+            padding: 0 .15rem;
+            box-sizing: border-box;
+            font-size: 0;
+
+
+        }
+        .shadow .box>p {
+            font-size: .28rem;
+            box-sizing: border-box;
+            padding-left: .8rem;
+            color: #fff;
+            line-height: .77rem;
+            background: url(../../image/icon_find/icon_publishPro.png)no-repeat;
+            -webkit-background-size: .34rem .2rem;
+            background-size: .34rem .2rem;
+            background-position: .2rem center;
+
+        }
+        .shadow .box>p:last-child {
+            border-top: 1px solid #545356;
+            background: url(../../image/icon_find/icon_found.png)no-repeat;
+            -webkit-background-size: .28rem .28rem;
+            background-size: .28rem .28rem;
+            background-position: .2rem center;
+        }
+        .shadow .triangle {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-right: .13rem solid transparent;
+            border-left: .13rem solid transparent;
+            border-bottom: .13rem solid #49494B;
+            top: -.12rem;
+            right: .35rem;
+
+        }
     </style>
 </head>
 <body>
-    <div class="search"   tapmode="hover"   onclick="open1()">
-        <span class="searchIcon"></span>
-        <span class="searchText" >搜索</span>
+    <div class="shadow" ontouchstart="closeShow()">
+        <div class="box">
+            <div class="triangle"></div>
+            <p ontouchstart="openPublish(1)">发布项目</p>
+            <p ontouchstart="openPublish(0)">创建圈子</p>
+        </div>
+    </div>
+    <div class="searchWrap">
+        <div class="search"   tapmode="hover"   onclick="open1()">
+            <span class="searchIcon"></span>
+            <span class="searchText" >搜索</span>
+        </div>
     </div>
     <div class="main clearfix">
        <div class="resultList"></div>
@@ -181,9 +248,30 @@
   
     apiready = function(){
         requestData();
+        api.addEventListener({
+            name: 'showShadow'
+        }, function(ret, err) {
+            $api.css($api.dom('.shadow'), 'display: block');
+        });
     };
-   
-   
+    function closeShow() {
+         $api.css($api.dom('.shadow'), 'display: none');
+    }
+   function openPublish(n) {
+        if (n) {
+            // 1  发布项目
+            alert(n)
+        } else {
+            // 0   创建圈子
+            api.openWin({
+                name: 'find_foundCircle_win',
+                url: './find_foundCircle_win.html',
+                pageParam: {
+                    name: 'value'
+                }
+            });
+        }
+   }
     function getData(data) {
         var listTText = $api.byId('listT').text;
         var fnListT = doT.template(listTText);

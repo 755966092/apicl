@@ -108,10 +108,15 @@
             top: 0;
         }
         .list .text .title .titleLable {
-            width: .63rem;
+             padding: 0 .06rem;
+            font-size: .2rem;
+
+            color: #5D7099;
+            text-align: center;
+            line-height: .28rem;
+            border: 1px solid #5D7099;
+            border-radius: .06rem;
             height: .28rem;
-            background: url(../../image/icon_find/icon_label.png)no-repeat;
-            background-size: .63rem .28rem;
         }
         .list .text .stateContent {
             font-size: .24rem;
@@ -173,7 +178,6 @@
         .list .text .imgContent img {
             margin-right: .1rem;
             margin-top: .1rem;
-            
         }
     </style>
 </head>
@@ -230,14 +234,14 @@
                     <div class="text">
                         <div class="title">
                             <h3>{{=it[i].nickname}}</h3>
-                            <span class="titleLable"></span>
+                            <span class="titleLable">{{=it[i].role}}</span>
                             <span class="state">{{=it[i].start_time}}</span>
                         </div>
                         <p class="stateContent">{{=it[i].content}}</p>
-                        {{?0}}
+                        {{?it[i].image_json!=null}}
                             <div class="imgContent">
-                                {{ for (var j = 0; j < it[i].imgContent.length; j++) { }} 
-                                    <img class="imgCon" src="{{=it[i].imgContent[j]}}" alt="">
+                                {{ for (var j = 0; j < it[i].image_json.length; j++) { }} 
+                                    <img class="imgCon" src="{{=it[i].image_json[j]}}" alt="">
                                 {{ }; }}
                             </div>
                         {{?}}
@@ -274,11 +278,45 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    
+    var role = ['关系人','知情人','甲方','总包单位','分包单位','设计院','销售'],isMenber='';
     apiready = function(){
         moduleInit();
         requestData();
+
+        // 下拉刷新
+        // 下拉刷新
+        api.setCustomRefreshHeaderInfo({
+            bgColor: '#EFEFF4',
+        }, function(ret, err) {
+            //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
+             requestData();
+        });
+        // 上啦加载
+        api.addEventListener({
+            name: 'scrolltobottom'
+        }, function(ret, err) {
+            if (isMenber) {
+                alert('下拉加载')
+            } else {
+                // 不是圈子成员
+                api.openFrame({
+                    name: 'find_joinCircle',
+                    url: './find_joinCircle.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        circle_id: api.pageParam.circle_id
+                    },
+                    bounces: false
+                });
+            }
+        });
     };
+    
    
     function requestData() {
         api.ajax({
@@ -293,7 +331,15 @@
             }
         }, function(ret, err) {
             if(ret) {
-                console.log(JSON.stringify(ret))
+                for (var i = 0; i < ret.data.list.length; i++) {
+                    ret.data.list[i].role = role[ret.data.list[i].role];
+                    if (ret.data.list[i].image_json != null) {
+                        ret.data.list[i].image_json = eval(ret.data.list[i].image_json)
+                    }
+                }
+                isMenber = ret.data.is_member;
+                // 停止下拉刷新
+                api.refreshHeaderLoadDone()
                 getData(ret.data.list);
                 selfAdaption()
             } else {
@@ -363,7 +409,7 @@
 
             } else {
                 for (var j = 0; j < imgCount; j++) {
-                    $api.css(listContent[i].getElementsByClassName('imgCon')[j], 'height:1.56rem');
+                    $api.css(listContent[i].getElementsByClassName('imgCon')[j], 'height:1.56rem;width:1.56rem');
                 }
             }
         }

@@ -94,7 +94,7 @@ justify-content: space-between;
             <img  class="head_img" src="" alt="">
         </div>
     </div>
-    <div class="btn" ontouchstart="addCircle()">
+    <div class="btn" ontouchstart="addCircleType()">
         
     </div>
     
@@ -103,11 +103,13 @@ justify-content: space-between;
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
+    var price='';
     apiready = function(){
         fnInit();
         requestData();
         
     };
+
     function requestData() {
         api.ajax({
             url: apiSite + '/api/circle/enterIndex',
@@ -134,39 +136,66 @@ justify-content: space-between;
                     $api.text($api.dom('.winTitle'), '付费入群');
                     $api.text($api.dom('.circle_info'), '圈主设置了需支付如下金额才能加入');
                     $api.text($api.dom('.price'), '￥'+ret.data.info.price);
+                    $api.text($api.dom('.btn'), '付费入群');
+                    price = ret.data.info.price;
                 }
-                alert(JSON.stringify(ret))
                 $api.text($api.dom('.title'), ret.data.info.title);
                 $api.text($api.dom('.circleMasterName'), '圈主：'+ ret.data.info.owner_nickname);
                 $api.attr($api.dom('.head_img'), 'src', ret.data.info.image_url);
             } else {
-                alert(JSON.stringify(err))
+                alert('错误信息'+JSON.stringify(err))
             }
         })
     }
     // 加圈
-    function addCircle() {
+    function addCircleType() {
+        var obj = {
+            token: $api.getStorage('userToken'),
+            circle_id: api.pageParam.circle_id
+        };
+        if ($api.text($api.dom('.btn')) == '付费入群') {
+            alert(2)
+            api.openFrame({
+                name: 'find_modeOfPayment',
+                url: './find_modeOfPayment.html',
+                rect: {
+                    x: 0,
+                    y: 0,
+                    w: 'auto',
+                    h: 'auto'
+                },
+                pageParam: {
+                    circle_id: api.pageParam.circle_id,
+                    price: price
+                },
+                bounces: false
+            });
+           
+        } else {
+            // addCircle(obj);
+            alert(333)
+        }
+        
+    }
+    function addCircle(obj) {
         api.ajax({
-            url: apiSite + '/api/circle/enter',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-               values: { 
-                   token: $api.getStorage('userToken'),
-                   circle_id: api.pageParam.circle_id
-               }
-            }
-        }, function(ret, err) {
-            if(ret) {
-                api.execScript({
-                    frameName: 'find_frame',
-                    script: 'requestData();'
-                });
-                alert(JSON.stringify(ret))
-            } else {
-                alert(JSON.stringify(err))
-            }
-        })
+                url: apiSite + '/api/circle/enter',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                   values: obj
+                }
+            }, function(ret, err) {
+                if(ret) {
+                    api.execScript({
+                        frameName: 'find_frame',
+                        script: 'requestData();'
+                    });
+                    alert(JSON.stringify(ret))
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
     }
 </script>
 </html>
