@@ -27,19 +27,14 @@
             display: block;
         }
         
-        header ul li:nth-child(1) span,
-        header ul li:nth-child(3) span {
-            display: inline-block;
-            width: .39rem;
-            height: .8rem;
-            background: url(../image/icon_add.png) no-repeat;
-            -webkit-background-size: .39rem .39rem;
-            background-size: .39rem .39rem;
-            position: absolute;
-            right: .23rem;
-            top: .2rem;
+       
+        header ul li span.rightBtn {
+            font-size: .8rem;
+             line-height: .8rem;
+             position: absolute;
+             right: .3rem;
+             font-weight: 400;
         }
-        
         .addWin {
             width: 2.24rem;
             height: 1.74rem;
@@ -184,6 +179,7 @@
             float: right;
             margin-right: .28rem;
         }
+
     </style>
 </head>
 
@@ -193,14 +189,15 @@
             <ul>
                 <li class="border-b active" id="title">
                     我在
-                    <span id="addFellow"   tapmode="hover"   onclick="addFellow()"></span>
+                    <!-- <span id="addFellow"   tapmode="hover"   onclick="addFellow()"></span> -->
+                    <span class="rightBtn"   tapmode="hover"   onclick="addFellow()">+</span> 
                 </li>
                 <li class="border-b">通讯录
                     <span class="addF" tapmode="hover" onclick="addF()"></span>
                 </li>
                 <li class="border-b supply">
                     供求
-                    <span tapmode="hover"  onclick="addPublish()"></span>
+                    <span class="rightBtn"   tapmode="hover"   onclick="addPublish()">+</span> 
                 </li>
                 <li class="border-b">发现</li>
                 <li class="border-b">我</li>
@@ -294,10 +291,10 @@ function addF() {
 function getTotalCount() {
     rong.getTotalUnreadCount(function(ret, err) {
         if (ret.result == 0) {
-            $api.html($api.byId('title'), '我在<span id="addFellow"   tapmode="hover"   onclick="addFellow()"></span>');
+            $api.html($api.byId('title'), '我在<span class="rightBtn"   tapmode="hover"   onclick="addFellow()">+</span> ');
             $api.css($api.byId('newsCount'), 'display: none');
         } else {
-            $api.html($api.byId('title'), '我在（' +ret.result+ '）<span id="addFellow"   tapmode="hover"   onclick="addFellow()"></span>');
+            $api.html($api.byId('title'), '我在(' +ret.result+ ')<span class="rightBtn"   tapmode="hover"   onclick="addFellow()">+</span> ');
             $api.css($api.byId('newsCount'), 'display: inline-block');
             $api.html($api.byId('newsCount'), ret.result);
         }

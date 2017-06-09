@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        
+        body, html {
+            background-color: #F8F8F8;
+        }
+       
+       #over {
+        display: none;
+        color: #129F13;
+       }
+    </style>
+</head>
+<body>
+   
+    <header  class="header">
+        <div class="head">
+            <span class="callback"   tapmode="hover"   onclick="api.closeWin()">返回</span>
+            <span class="winTitle">
+                新增项目业绩
+            </span>
+            <span class="rightBtn"   tapmode="hover"   onclick="addStudy()" id="over">完成</span> 
+        </div>
+    </header>
+  
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+
+        
+        fnInit();
+        
+        api.openFrame({
+            name: 'txl_addFellow_project_addproject_frome',
+            url: './txl_addFellow_project_addproject_frome.html',
+            rect: {
+                x: 0,
+                y: headerH,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                userToken: api.pageParam.userToken || $api.getStorage('userToken'),
+                flag: api.pageParam.flag,
+                project_id: api.pageParam.project_id
+            },
+            bounces: true
+        });
+
+        if (api.pageParam.flag == 1) {
+             $api.css($api.byId('over'), 'display:inline-block');
+        }
+    };
+    function addStudy() {
+        api.sendEvent({
+            name: 'addStudy'
+        });
+    }
+   
+</script>
+</html>

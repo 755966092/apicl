@@ -41,55 +41,63 @@
 </head>
 <body>
     
-    <header  class="header">
-        <div class="head">
-            <span class="callback"   tapmode="hover"   onclick="api.closeWin()">返回</span>
-            <span class="winTitle">
-                
-            </span>
-            <span class="rightBtn bj"   tapmode="hover"   onclick="enter()">保存</span> 
-        </div>
-    </header>
-  
+   
+    <div class="main">
+        <input type="text" autofocus="true" name="" onkeyup="clearBtn(this)">
+        <span class="clearIcon"   tapmode="hover"   onclick="clearText()"></span>
+    </div>
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
-	    fnInit();
-
-        api.openFrame({
-            name: 'me_info_name_frame',
-            url: './me_info_name_frame.html',
-            rect: {
-                x: 0,
-                y: headerH,
-                w: 'auto',
-                h: 'auto'
-            },
-            pageParam: {
-                type: api.pageParam.type,
-                name: api.pageParam.name
-            },
-            bounces: false
-        });
-
 
         if (api.pageParam.type == 'name') {
-            $api.text($api.dom('.winTitle'), '真实姓名');
             // $api.val($api.dom('input'), api.pageParam.name);
             $api.attr($api.dom('input'), 'placeholder', api.pageParam.name);
         } 
         if (api.pageParam.type == 'nickname') {
-            $api.text($api.dom('.winTitle'), '昵称');
             $api.attr($api.dom('input'), 'placeholder', api.pageParam.name);
         }
+
+
+
+        api.addEventListener({
+            name: 'editName'
+        }, function(ret, err) {
+            if (ret) {
+                enter();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     };
 
     function enter() {
-        api.sendEvent({
-            name: 'editName'
-        });
+        var name = $api.val($api.dom('input'))
+        if (name) {
+            if (api.pageParam.type == 'name') {
+                api.sendEvent({
+                    name: 'modifyUserName',
+                    extra: {
+                        selDate: name
+                    }
+                });
+                // alert(name)
+            } else {
+                api.sendEvent({
+                    name: 'modifyNickName',
+                    extra: {
+                        selDate: name
+                    }
+                });
+            }
+        } else {
+            
+        }
+        
+        api.closeWin();
+
     }
 
 

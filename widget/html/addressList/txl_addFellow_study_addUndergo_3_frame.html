@@ -4,7 +4,7 @@
     <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
         body, html {
             background-color: #F8F8F8;
@@ -71,7 +71,7 @@
             font-size: .27rem;
             color: #B1A9AB;
             height: .8rem;  
-            background: url(../../../image/icon_zk.png)no-repeat;
+            background: url(../../image/icon_zk.png)no-repeat;
             background-size: .15rem .25rem;
             background-position: right  center;
                 
@@ -80,7 +80,7 @@
             display: none;
             width: .24rem;
             height: .8rem;
-            background: url(../../../image/icon_login/icon-clearText.png)no-repeat;
+            background: url(../../image/icon_login/icon-clearText.png)no-repeat;
             background-size: .24rem .24rem;
             background-position: 0 center;
             float: right;
@@ -138,8 +138,8 @@
            保存
        </div>
 </body>
-<script type="text/javascript" src="../../../script/api.js"></script>
-<script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     var url;
     apiready = function(){
@@ -155,12 +155,13 @@
             $api.addEvt($api.byId('main_no3'), 'click', function(){
                 delStudy();
             });
+            getCityList();
         } else {
             url = '/api/user_center/addEducation'
         }
         // fnInit();
         // monitor();
-        getCityList();
+        
         api.addEventListener({
             name: 'editStudy'
         }, function(ret, err) {
@@ -173,7 +174,10 @@
     };
     
     // 打开时间选择器
-    function openTime(ele) {                                                                                                                                     for (var i = 0; i < $api.domAll('input').length; i++) {             $api.domAll('input')[i].blur()         }
+    function openTime(ele) {                                                                                                                                     
+        for (var i = 0; i < $api.domAll('input').length; i++) {
+            $api.domAll('input')[i].blur()
+        }
         var data = $api.attr(ele, 'data-val');
         var text;
         if (data == 'start') {
@@ -213,7 +217,6 @@
 
     // 获取数据
     function getCityList() {
-
         api.ajax({
             url: apiSite + '/api/user_center/editEducationIndex',
             method: 'post',
@@ -303,41 +306,6 @@
             }
         });
     }
-    
- // 选择时间
-    function selectTime(n) {
-        
-        if (n == 2) {
-            api.openFrame({
-                name: 'me_info_study_addUndergo_time_2',
-                url: 'me_info_study_addUndergo_time_2.html',
-                rect: {
-                    x: 0,
-                    y: 0,
-                    w: 'auto',
-                    h: 'auto'
-                },
-                pageParam: {
-                    name: 'value'
-                },
-                bounces: false
-            });
-        } else {
-            api.openFrame({
-            name: 'me_info_study_addUndergo_time',
-            url: 'me_info_study_addUndergo_time.html',
-            rect: {
-                x: 0,
-                y: 0,
-                w: 'auto',
-                h: 'auto'
-            },
-            pageParam: {
-                name: 'value'
-            },
-            bounces: false
-        });
-        }
-    }
+ 
 </script>
 </html>

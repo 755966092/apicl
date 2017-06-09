@@ -4,7 +4,7 @@
     <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
         html,
         body {
@@ -14,15 +14,16 @@
             margin-top: .2rem;
         }
         .dzlist {
-            height: 1.6rem;
+            /*height: 1.6rem;*/
             border-bottom: 1px solid #E3E3E3;
             background-color: #fff;
-            padding: 0 .3rem;
+            padding: 0 .3rem .1rem;
             font-size: 0;
         }
         .dzlist .left {
             width: 5.7rem;
             margin-top: .35rem;
+            /*margin-right: .5rem;*/
         }
         .dzlist h3 {
             font-size: .28rem;
@@ -34,11 +35,14 @@
             color: #555;
         }
         .dzlist .right {
-            height: 1.6rem;
+            height: 1rem;
             width: .44rem;
-            background: url(../../../image/icon_my/icon_bj.png)no-repeat;
+            background: url(../../image/icon_my/icon_bj.png)no-repeat;
             background-size: .44rem .44rem;
-            background-position: 0 center;
+            background-position: 0 bottom;
+            /*position: absolute;
+            right: 0;
+            top: 0;*/
         }
         
         .dzlist img {
@@ -59,40 +63,46 @@
             line-height: .8rem;
             font-size: .34rem;
             color: #27b24a;
-            background:  url(../../../image/icon_my/icon_add.png)no-repeat;
+            background:  url(../../image/icon_my/icon_add.png)no-repeat;
             -webkit-background-size: .4rem .4rem ;
             background-size: .4rem .4rem ;
             background-position: 0 center;
             padding-left: .3rem;
         }
         .dzlist .edit {
-            background: url(../../../image/icon_login/icon-clearText.png)no-repeat;
+            background: url(../../image/icon_login/icon-clearText.png)no-repeat;
             background-size: .25rem .25rem;
-            background-position: 0 center;
+            background-position: 0 bottom;
         }
         .schoolInfo {
             font-size: .24rem;
             line-height: .4rem;
-            padding-left: .74rem;
+            padding-left: .7rem;
+            white-space:nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-        .kuo {
+        /*.kuo {
             height: .5rem;
-        }
+        }*/
     </style>
 </head>
 <body>
     
     <div class="wrap resultList">
-        <!-- <div class="dzlist">
-            <div class="clearfix kuo">
-            <img src="../../../image/tx_2.jpg">
-            <div class="left fl">
-                <h3>北京大学</h3>
-                <p>2013.1 - 2016.3, 金融，硕士</p>
-            </div>
-            <span   tapmode="hover"   onclick="openEdit(this)" class="right fr"></span></div>
-            <div class="schoolInfo">北京市海淀区清华科技园创业大厦110</div>
-        </div> -->
+         <!-- <div class="dzlist" data-id='{{=it[i].project_id}}'>
+                <div class="clearfix kuo">
+                <img src="../../image/tx_2.jpg">
+                <div class="left fl">
+                    <h3>{{=it[i].name}}</h3>
+                    p>{{=it[i].start_date}} - {{=it[i].end_date}},{{=it[i].url}}&nbsp;&nbsp;{{=it[i].role}}</p> 
+                    <p>{{=it[i].url}}&nbsp;&nbsp;{{=it[i].role}}</p>
+                </div>
+                <span   tapmode="hover"   onclick="openEdit(this)" data-type='{{=it[i].type}}' data-id='{{=it[i].project_id}}' class="right fr"></span></div>
+                <div class="schoolInfo">{{=it[i].description}}</div>
+                <div class="schoolInfo">{{=it[i].achievement}}</div>
+            </div> -->
+            
        <!-- <div class="dzlist">
            <div class="left fl">
                 <h3>方小姐</h3>
@@ -104,25 +114,27 @@
 
     <script type="text/x-dot-template" id="listT">
         {{ for (var i = 0; i < it.length; i++) { }} 
-            <div class="dzlist" data-id='{{=it[i].work_id}}'>
+            <div class="dzlist" data-id='{{=it[i].project_id}}'>
                 <div class="clearfix kuo">
-                <img src="../../../image/tx_2.jpg">
+                <img src="../../image/tx_2.jpg">
                 <div class="left fl">
-                    <h3>{{=it[i].company_name}}</h3>
-                    <p>{{=it[i].start_date}} - {{=it[i].end_date}},&nbsp;&nbsp;{{=it[i].position}}</p>
+                    <h3>{{=it[i].name}}</h3>
+                    <!-- <p>{{=it[i].start_date}} - {{=it[i].end_date}},{{=it[i].url}}&nbsp;&nbsp;{{=it[i].role}}</p> -->
+                    <p>{{=it[i].url}}&nbsp;&nbsp;{{=it[i].role}}</p>
                 </div>
-                <span   tapmode="hover"   onclick="openEdit(this)" data-type='{{=it[i].type}}' data-id='{{=it[i].work_id}}' class="right fr"></span></div>
+                <span   tapmode="hover"   onclick="openEdit(this)" data-type='{{=it[i].type}}' data-id='{{=it[i].project_id}}' class="right fr"></span></div>
                 <div class="schoolInfo">{{=it[i].description}}</div>
+                <div class="schoolInfo">{{=it[i].achievement}}</div>
             </div>
         {{ }; }}
     </script>
     <div class="main_no3 ">
-        <p   tapmode="hover"   onclick="addAddress()">添加工作经历</p>
+        <p   tapmode="hover"   onclick="addAddress()">添加项目业绩</p>
     </div>
 </body>
-<script type="text/javascript" src="../../../script/api.js"></script>
-<script type="text/javascript" src="../../../script/common.js"></script>
-<script type="text/javascript" src="../../../script/doT.min.js"></script>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
     var zipcode;//邮编
     apiready = function(){
@@ -143,11 +155,11 @@
             }
         });
     };
-    // 箭头增加地址事件
+    // 监听增加地址事件
     function addCity()　{
-        // 箭头增加地址事件
+        // 监听增加地址事件
         api.addEventListener({
-            name: 'addCity'
+            name: '_addStudy'
         }, function(ret, err) {
             getCityList();
             if (ret) {
@@ -159,7 +171,7 @@
     // 编辑地址
     function openEdit(ele) {
         var val = $api.attr(ele, 'data-id');
-        var type = $api.attr(ele, 'data-type');
+        // var type = $api.attr(ele, 'data-type');
 
         if ($api.hasCls(ele, 'edit')) {
             // 删除按钮状态下删除地址
@@ -168,14 +180,13 @@
         } else {
             // 编辑按钮状态下 进入编辑页面
             api.openWin({
-                name: 'me_info_work_addExper',
-                url: './me_info_work_addExper.html',
+                name: 'txl_addFellow_project_addproject',
+                url: './txl_addFellow_project_addproject.html',
                 pageParam: {
                     userToken: api.pageParam.userToken || $api.getStorage('userToken'),
                     flag: 1,
-                    work_id: val
-                },
-                softInputMode: 'pan'
+                    project_id: val
+                }
             });
             
         }
@@ -185,13 +196,12 @@
     // 添加新地址
     function addAddress() {
         api.openWin({
-            name: 'addAddressWin',
-            url: './me_info_work_addExper.html',
+            name: 'txl_addFellow_project_addproject',
+            url: './txl_addFellow_project_addproject.html',
             pageParam: {
                 userToken: api.pageParam.userToken || $api.getStorage('userToken'),
                 flag: 0
             },
-            softInputMode: 'pan',
             bounces: false
         });
     }
@@ -199,7 +209,7 @@
     // 请求地址列表
     function getCityList() {
         api.ajax({
-            url: apiSite + '/api/user_center/workList',
+            url: apiSite + '/api/user_center/projectList',
             method: 'post',
             headers: apiHeader,
             data: {
@@ -214,8 +224,7 @@
                         ret.data.list[i].end_date = '至今'
                     }
                 }
-                getData(ret.data.list);
-                $api.setStorage('userWorkExperience', ret.data.list);
+                getData(ret.data.list)
             } else {
                 alert(JSON.stringify(err));
             }
@@ -240,13 +249,13 @@
     // 删除服务器地址
     function delDz2 (id) {
         api.ajax({
-            url: apiSite + '/api/user_center/deleteWork',
+            url: apiSite + '/api/user_center/deleteProject',
             method: 'post',
             headers: apiHeader,
             data: {
                 values: { 
                     token: api.pageParam.userToken || $api.getStorage('userToken'),
-                    work_id: id
+                    project_id: id
                 }
             }
         }, function(ret, err) {

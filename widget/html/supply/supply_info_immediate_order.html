@@ -141,46 +141,6 @@
             
         </div>
     </header>
-
-    <div class="main clearfix">
-            <div class="choose clearfix">
-                <img src="../../image/tx_3.jpg">
-                <div class="fl issuerInfo">
-                    <p>陈升的</p>
-                    <p>上海百度悠闲公司 董事长</p>
-                </div>
-            </div>
-            <div class="content clearfix">
-                <img class="fl" src="../../image/tx_5.jpg">
-                <div class="fl">
-                    <span class="_type"></span>
-                    <span class="title">提供风景类素材</span>
-                    <p >北京 - 线上</p>
-                </div>
-            </div>
-            <div class="price">
-                <p>赏金：￥<span>1000</span></p>
-            </div>
-            <div class="tel">
-                <p>联系电话：
-                    <input type="text" placeholder="13260228596" name="">
-                </p>
-            </div>
-            <div class="tel">
-                <p>备注：
-                    <input type="text" placeholder="填写备注" name="">
-                </p>
-            </div>
-    </div>
-    <footer>    
-    
-            <span class="priceTitle">
-                <span>赏金：</span>
-                <span class="price">￥1000</span>
-            </span>
-            
-            <span class="enter">确认接单</span>
-    </footer>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -188,50 +148,21 @@
     apiready = function(){
         fnInit();
     // $api.css($api.dom('.main'), 'margin-top:'+ api.pageParam.headerH +';');
+        api.openFrame({
+            name: 'frameName',
+            url: './supply_info_immediate_order_frame.html',
+            rect: {
+                x: 0,
+                y: headerH,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                name: 'value'
+            },
+            bounces: false
+        });
     };
-    // 切换留言和详情
-    function datum(n,ele) {
-        for (var i = 0; i < $api.domAll('.no5Title').length; i++) {
-            $api.removeCls($api.domAll('.no5Title')[i], 'borderBottom');
-        }
-        if (n) { // 传入1  点击留言
-            $api.css($api.dom('.detail'), 'display:none');
-            $api.css($api.dom('.leaveWord'), 'display:block');
-            $api.addCls($api.first(ele, 'span'), 'borderBottom');
-        } else { // 点击详情
-            $api.css($api.dom('.detail'), 'display:block');
-            $api.css($api.dom('.leaveWord'), 'display:none');
-            $api.addCls($api.first(ele, 'span'), 'borderBottom');
-        }
-    }
-   
-
-
-
-    var a = 1;
-    $api.addEvt($api.dom('.main'), 'touchmove', function(event) {
-        if (window.scrollY > 300) {
-            a -= 0.1;
-            $api.css($api.byId('cloaswin'), 'opacity:'+ a +';');
-            if (a<0) {
-                a = 0;
-            }
-        } else {
-            a += 0.1;
-            $api.css($api.byId('cloaswin'), 'opacity:'+ a +';');
-            if (a>1) {
-                a = 1;
-            }
-        }
-    });
-    $api.addEvt($api.dom('.main'), 'touchend', function(event) {
-        if (window.scrollY > 300) {
-            // $api.css($api.dom('#cloaswin'), 'display:none');
-            $api.css($api.byId('cloaswin'), 'opacity:0;');
-        } else {
-            $api.css($api.byId('cloaswin'), 'opacity:1;');
-        }
-    });
    
 </script>
 </html>

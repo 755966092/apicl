@@ -4,13 +4,14 @@
     <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
        
         body, html {
             background-color: #F8F8F8;
         }
-        
+         .main_no1 {
+        }
         .main_no1 p, .main_no2 p {
              background-color: #fff;
             height: .8rem;
@@ -47,9 +48,6 @@
             color: #fff; 
             margin-top: 1rem; 
         }
-       
-        
-        
         .mobile {
             height: .6rem;
             font-size: .28rem;
@@ -60,7 +58,7 @@
         .telIpt {
             height: .8rem;
             /*margin-left: .5rem;*/
-            outline: none;
+            outline: none;  
             float: right;
             width: 4rem;
             text-align: right;
@@ -71,7 +69,7 @@
             font-size: .27rem;
             color: #B1A9AB;
             height: .8rem;  
-            background: url(../../../image/icon_zk.png)no-repeat;
+            background: url(../../image/icon_zk.png)no-repeat;
             background-size: .15rem .25rem;
             background-position: right  center;
                 
@@ -80,7 +78,7 @@
             display: none;
             width: .24rem;
             height: .8rem;
-            background: url(../../../image/icon_login/icon-clearText.png)no-repeat;
+            background: url(../../image/icon_login/icon-clearText.png)no-repeat;
             background-size: .24rem .24rem;
             background-position: 0 center;
             float: right;
@@ -110,16 +108,7 @@
     </style>
 </head>
 <body>
-     
-    <!-- <header  class="header">
-        <div class="head">
-            <span class="callback"   tapmode="hover"   onclick="api.closeWin()">取消</span>
-            <span class="winTitle">
-                新增学习经历
-            </span>
-            <span class="rightBtn bj" id="voer"   tapmode="hover"   onclick="addStudy()">完成</span> 
-        </div>
-    </header> -->
+   
     <div class="wrap">
         <div class="main clearfix">
             <p class="mobile ">学习经历（大专及以上）</p>
@@ -128,46 +117,41 @@
                     学校
                     <input maxlength="11" type="text" id="school" class="telIpt" name="" placeholder ="必填" >
                </p>
+              
                <p>
-                    专业
-                    <input maxlength="11" type="text" id="major" class="telIpt" name="" placeholder ="必填" >
-               </p>
-               <p>
-                    学历
-                    <span class="telIpt" id="selectEdu"   tapmode="hover"   onclick="openSelect2(this)">必选</span>
+                    文理科
+                    <span class="telIpt"   tapmode="hover"   onclick="openSelect2(this)" id="selectKe">必选</span>
                </p>
                <p>
                     时间段
                     <span class="telIpt" >
-                        <span   tapmode="hover" data-val='startTime'   onclick="openTime(this)" id="time_1">请选择</span >
+                        <span   tapmode="hover"   onclick="openTime(this)" id="time_1">请选择</span >
                         --
-                        <span   tapmode="hover"  data-val='endTime'  onclick="openTime(this)" id="time_2">请选择</span>
+                        <span   tapmode="hover"   onclick="openTime(this)" id="time_2">请选择</span>
                     </span>
                </p>
            </div>
         </div>
         <div class="main clearfix" style="font-size: 0">
             <p class="mobile ">在校经历</p>
-            <textarea rows="6" placeholder="主要在校经历" id="textarea" maxlength="300" onkeyup="changeText(this)"></textarea>
+            <textarea rows="6" id="textarea" placeholder="主要在校经历" maxlength="300" onkeyup="changeText(this)"></textarea>
             <p class="mobile fr" id="textLength"> 0/300</p>
         </div>
     </div>
-     <div class="main_no3" id="main_no3"   tapmode="hover"   onclick="addStudy()">
+     <div class="main_no3 " id="main_no3"   tapmode="hover"   onclick="addStudy()">
            保存
        </div>
 </body>
-<script type="text/javascript" src="../../../script/api.js"></script>
-<script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     var url;
     apiready = function(){
         moduleInit();
-     
-     
         if (api.pageParam.flag == 1) {
             url = '/api/user_center/editEducation';
             $api.text($api.byId('main_no3'), '删除');
-           
+            $api.text($api.byId('title'), '修改学习经历');
             $api.css($api.byId('over'), 'display:inline-block');
             $api.css($api.byId('main_no3'), 'background-color:#DF214E');
             $api.removeAttr($api.byId('main_no3'), '  tapmode="hover"   onclick');
@@ -178,9 +162,6 @@
         } else {
             url = '/api/user_center/addEducation'
         }
-        
-        
-        // 获取数据
         getCityList();
         api.addEventListener({
             name: 'editStudy'
@@ -191,13 +172,13 @@
                 alert(JSON.stringify(err));
             }
         });
-        
     };
-      // 打开时间选择器
-    function openTime(ele) {                                                                                                                                     for (var i = 0; i < $api.domAll('input').length; i++) {             $api.domAll('input')[i].blur()         }
+
+     // 打开时间选择器
+   function openTime(ele) {                                                                                                                                     for (var i = 0; i < $api.domAll('input').length; i++) {             $api.domAll('input')[i].blur()         }
         var data = $api.attr(ele, 'data-val');
         var text;
-        if (data == 'startTime') {
+        if (data == 'start') {
             text = '选择开始时间'
         } else {
             text = '选择结束时间'
@@ -225,186 +206,10 @@
                 alert(JSON.stringify(err));
             }
         });
-    }
-    // 获取数据
-    function getCityList() {
-        api.ajax({
-            url: apiSite + '/api/user_center/editEducationIndex',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: $api.getStorage('userToken'),
-                    education_id: api.pageParam.education_id
-                }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                
-                if (ret.data.info.degree == '1') {
-                    ret.data.info.degree = '专科'
-                } else if (ret.data.info.degree == '2') {
-                    ret.data.info.degree = '本科'
-                } else if (ret.data.info.degree == '3') {
-                    ret.data.info.degree = '硕士'
-                } else if (ret.data.info.degree == '4') {
-                    ret.data.info.degree = '博士'
-                } else if (ret.data.info.degree == '5'){
-                    ret.data.info.degree = '博士后'
-                } 
-                if (ret.data.info.end_date == '0000-00-00' ){
-                    ret.data.info.end_date = '至今'
-                }  else {
-
-                }
-                $api.val($api.byId('school'), ret.data.info.school);    
-                $api.val($api.byId('major'), ret.data.info.major);    
-                $api.text($api.byId('selectEdu'), ret.data.info.degree);   
-                $api.text($api.byId('time_1'), ret.data.info.start_date);    
-                $api.text($api.byId('time_2'), ret.data.info.end_date); 
-                $api.val($api.byId('textarea'), ret.data.info.description); 
-                $api.text($api.byId('textLength'), ret.data.info.description.length + '/300');
-            } else {
-                alert(JSON.stringify(err));
-            }
-        });
-    }
-    // 监听
-    function monitor() {
-        // 监听返回数据
-        api.addEventListener({
-            name: 'selectEdu'
-        }, function(ret, err) {
-            if (ret) {
-                $api.text($api.byId('selectEdu'), ret.value.selDate);
-            } else {
-                alert(JSON.stringify(err));
-            }
-        });
-        // 监听返回时间数据1
-        api.addEventListener({
-            name: 'selectTime_1'
-        }, function(ret, err) {
-            if (ret) {
-                $api.text($api.byId('time_1'), ret.value.selDate);
-            } else {
-                alert(JSON.stringify(err));
-            }
-        });
-        api.addEventListener({
-            name: 'selectTime_2'
-        }, function(ret, err) {
-            if (ret) {
-
-                $api.text($api.byId('time_2'), ret.value.selDate);
-            } else {
-                alert(JSON.stringify(err));
-            }
-        });
-    }
-    // 提交数据
-    function addStudy() {
-        // 获取数据
-        var school = $api.val($api.byId('school'));    
-        var major = $api.val($api.byId('major'));    
-        var selectEdu = $api.text($api.byId('selectEdu'));    
-        var time_1 = $api.text($api.byId('time_1'));    
-        var time_2 = $api.text($api.byId('time_2'))=='至今'?'0000-00-00':$api.text($api.byId('time_2')); 
-        var textarea = $api.val($api.byId('textarea')); 
-        if (selectEdu == '专科') {
-            selectEdu = 1
-        } else if (selectEdu == '本科') {
-            selectEdu = 2
-        } else if (selectEdu == '硕士') {
-            selectEdu = 3
-        } else if (selectEdu == '博士') {
-            selectEdu = 4
-        } else if (selectEdu == '博士后') {
-            selectEdu = 5
-        }
-        
-         api.ajax({
-            url: apiSite + url,
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
-                    education_id: api.pageParam.education_id,
-                    type: 3,
-                    school: school,
-                    major: major,
-                    degree: selectEdu,
-                    description: textarea,
-                    start_date: time_1,
-                    end_date: time_2
-                }
-            }
-        }, function(ret, err) {
-            if (ret) {
-
-             api.sendEvent({
-                 name: 'addStudy'
-             });
-             api.closeWin();
-            } else {
-                alert(JSON.stringify(err));
-            }
-        }); 
-           
-    }
-    // 删除数据
-    function delStudy () {
-        alert('删除')
-        api.ajax({
-            url: apiSite + '/api/user_center/deleteEducation',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
-                    education_id: api.pageParam.education_id
-                }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                // getData(ret.data.list)
-                api.sendEvent({
-                    name: 'addStudy'
-                });
-                api.closeWin();
-            } else {
-                alert(JSON.stringify(err));
-            }
-        });
-    }
-    // 编辑文本和修改文本长度内容
-    function changeText(ele) {
-
-        // alert();
-        $api.text($api.byId('textLength'), ele.value.length + '/300');
-    } 
-    // 选择学历
-    function selectEdu() {
-        api.openFrame({
-            name: 'me_info_study_addUndergo_selectEdu',
-            url: 'me_info_study_addUndergo_selectEdu.html',
-            rect: {
-                x: 0,
-                y: 0,
-                w: 'auto',
-                h: 'auto'
-            },
-            pageParam: {
-                name: 'value'
-            },
-            bounces: false
-        });
-
-    }
+   }
     function openSelect2(ele) {
         var text = $api.text(ele);
-        var data = ['专科','本科','硕士','博士','博士后'];
+        var data = ['文科','理科'];
         var selArr = []
         if (text!='必选') {
             for (var i = 0; i < data.length; i++) {
@@ -414,20 +219,14 @@
                 }
             }
         } else {
-            selArr = [2]
+            selArr = [1]
         }
         UIActionSelector.open({
             datas: [
                 {
-                    name:'专科'
+                    name:'文科'
                 },{
-                    name:'本科'
-                },{
-                    name:'硕士'
-                },{
-                    name:'博士'
-                },{
-                    name:'博士后'
+                    name:'理科'
                 }
             ],
             actives: selArr,
@@ -480,40 +279,104 @@
             }
         });
     }
-    // 选择时间
-    function selectTime(n) {
-        
-        if (n == 2) {
-            api.openFrame({
-                name: 'me_info_study_addUndergo_time_2',
-                url: 'me_info_study_addUndergo_time_2.html',
-                rect: {
-                    x: 0,
-                    y: 0,
-                    w: 'auto',
-                    h: 'auto'
-                },
-                pageParam: {
-                    name: 'value'
-                },
-                bounces: false
-            });
-        } else {
-            api.openFrame({
-            name: 'me_info_study_addUndergo_time',
-            url: 'me_info_study_addUndergo_time.html',
-            rect: {
-                x: 0,
-                y: 0,
-                w: 'auto',
-                h: 'auto'
-            },
-            pageParam: {
-                name: 'value'
-            },
-            bounces: false
+     // 获取数据
+    function getCityList() {
+        api.ajax({
+            url: apiSite + '/api/user_center/editEducationIndex',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: $api.getStorage('userToken'),
+                    education_id: api.pageParam.education_id
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.data.info.end_date == '0000-00-00' ){
+                     $api.text($api.byId('time_2'), '至今'); 
+                }
+                $api.val($api.byId('school'), ret.data.info.school);    
+                $api.text($api.byId('selectKe'), ret.data.info.major);   
+                $api.text($api.byId('time_1'), ret.data.info.start_date);    
+               
+                $api.val($api.byId('textarea'), ret.data.info.description); 
+                $api.text($api.byId('textLength'), ret.data.info.description.length + '/300');
+            } else {
+                alert(JSON.stringify(err));
+            }
         });
-        }
     }
+    // 提交数据
+    function addStudy() {
+        
+        // 获取数据
+        var school = $api.val($api.byId('school'));    
+        var selectKe = $api.text($api.byId('selectKe'));    
+        var time_1 = $api.text($api.byId('time_1'));    
+        var time_2 = $api.text($api.byId('time_2')); 
+        var textarea = $api.val($api.byId('textarea')); 
+        alert(selectKe)
+         api.ajax({
+            url: apiSite + url,
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    education_id: api.pageParam.education_id,
+                    type: 2,
+                    school: school,
+                    major: selectKe,
+                    degree: '',
+                    description: textarea,
+                    start_date: time_1,
+                    end_date: time_2
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+            alert(JSON.stringify(ret))
+             api.sendEvent({
+                 name: 'addStudy'
+             });
+             api.closeWin();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        }); 
+           
+    }
+     // 删除数据
+    function delStudy () {
+        api.ajax({
+            url: apiSite + '/api/user_center/deleteEducation',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    education_id: api.pageParam.education_id
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                // getData(ret.data.list)
+                api.sendEvent({
+                    name: 'addStudy'
+                });
+                api.closeWin();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    // 编辑文本和修改文本长度内容
+    function changeText(ele) {
+        // alert();
+        $api.text($api.byId('textLength'), ele.value.length + '/300');
+    } 
+
+    
 </script>
 </html>

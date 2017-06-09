@@ -4,37 +4,39 @@
     <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
        
         body, html {
             background-color: #F8F8F8;
         }
         
-       
+        
     </style>
 </head>
 <body>
-   
+    
     <header  class="header">
         <div class="head">
             <span class="callback"   tapmode="hover"   onclick="api.closeWin()">返回</span>
             <span class="winTitle">
-                其他联系方式
+                项目业绩
             </span>
-            <span class="rightBtn bj" id="voer"   tapmode="hover"   onclick="enter()">编辑</span> 
+            <span class="rightBtn bj"   tapmode="hover"   onclick="enter()">编辑</span> 
         </div>
     </header>
+    <div class="wrap">
+       
+    </div>
 </body>
-<script type="text/javascript" src="../../../script/api.js"></script>
-<script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
-    
     apiready = function(){
-        fnInit();
+	    fnInit();
         api.openFrame({
-            name: 'me_info_qtlxfs_frame',
-            url: './me_info_qtlxfs_frame.html',
+            name: 'txl_addFellow_project_frame',
+            url: './txl_addFellow_project_frame.html',
             rect: {
                 x: 0,
                 y: headerH,
@@ -46,33 +48,24 @@
         api.addEventListener({
             name: 'viewappear'
         }, function(ret, err) {
-            api.sendEvent({
-                    name: 'xgTel',
+                api.sendEvent({
+                    name: 'qtlxfsOpenWin'
                 });
             
         });
-       
     };
-    
-   function enter () {
-        if ($api.text($api.dom('.rightBtn')) == '编辑') {
-            $api.text($api.dom('.rightBtn'), '保存');
+    function enter () {
+        if ($api.text($api.dom('.bj')) == '编辑') {
+            $api.text($api.dom('.bj'), '保存');
             // 移除添加按钮绑定的事件
             api.sendEvent({
-                name: 'editPhone',
-                extra: {
-                    valueName1: '保存',
-                    
-                }
+                name: 'editDz'
             });
             
         } else {
-            $api.text($api.dom('.rightBtn'), '编辑');
+            $api.text($api.dom('.bj'), '编辑');
             api.sendEvent({
-                name: 'keepPhone',
-                extra: {
-                    valueName1: '编辑',
-                }
+                name: 'editDz'
             });
         }
     }

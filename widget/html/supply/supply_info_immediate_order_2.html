@@ -196,7 +196,7 @@
     </style>
 </head>
 <body>
-    <header  class="header">
+   <header  class="header">
         <div class="head">
             <span class="callback"   tapmode="hover"   onclick="api.closeWin()">返回</span>
             <span class="winTitle">
@@ -206,71 +206,7 @@
         </div>
     </header>
 
-    <div class="main clearfix">
-            <div class="resultList"></div>
-            <script type="text/x-dot-template" id="listT">
-                <div class="choose clearfix flex-def flex-cCenter">
-                    <img src="../../image/tx_3.jpg">
-                    <div class="fl issuerInfo">
-                        <p class="name">{{=it.nickname}}</p>
-                        {{?it.current_company==null&&it.current_position!=null}}
-                            <p> {{=it.current_position}}</p>
-                        {{??it.current_position==null&&it.current_company!=null}}
-                            <p>{{=it.current_company}}</p>
-                        {{??it.current_position==null&&it.current_company==null}}
-                        {{??}}
-                            <p>{{=it.current_company}} {{=it.current_position}}</p>
-                        {{?}}
-                    </div>
-                </div>
-                <div class="content clearfix">
-                    <img class="fl" src="../../image/tx_5.jpg">
-                    <div class="fl">
-                        <span class="_type"></span>
-                        <span class="title">{{=it.title}}</span>
-                        <p >{{=it.city}} - 
-                        {{?it.form == 1}}
-                            <span>线上</span>
-                        {{??}}
-                            <span>线下</span>
-                        {{?}}
-                        </p>
-                    </div>
-                </div>
-                <div class="price">
-                    <span><span id="unitPrice">{{=it.price}}</span>元 / {{=it.unit}}</span>
-                    <div class="fr count">
-                        <i class="fl"   tapmode="hover"   onclick="subtractCount()">-</i>
-                        <input id="buyCount" type="text" name="" value="1" onkeyup="computeTatol()">
-                        <i class="fr"   tapmode="hover"   onclick="addCount()">+</i>
-                    </div>
-                </div>
-            </script>
-            <div class="serveTime">
-                服务时间：
-                <i></i>
-                <span class="fr">2017-05-20 11: 20</span>
-            </div>
-            <div class="tel">
-                <p>联系电话：
-                    <input type="text" placeholder="13260228596" name="">
-                </p>
-            </div>
-            <div class="tel">
-                <p>备注：
-                    <input type="text" placeholder="填写备注" name="">
-                </p>
-            </div>
-    </div>
-    <footer>    
-    
-            <span class="priceTitle">
-                <span>合计：</span>
-                <span id="total">￥0</span>
-            </span>
-            
-            <span class="enter">确认支付</span>
-    </footer>
+  
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -278,79 +214,23 @@
 <script type="text/javascript">
     apiready = function(){
         fnInit();
-        // $api.css($api.dom('.main'), 'margin-top:'+ api.pageParam.headerH +';');
-        alert(JSON.stringify(api.pageParam.transmitData))
-        getData(api.pageParam.transmitData)
-        computeTatol();
+        api.openFrame({
+            name: 'supply_info_immediate_order_2_frame',
+            url: './supply_info_immediate_order_2_frame.html',
+            rect: {
+                x: 0,
+                y: headerH,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                transmitData: api.pageParam.transmitData,
+                supply_id: api.pageParam.supply_id
+            },
+            bounces: false,
+            
+        });
     };
-
-
-
-    // 计算总价
-    function computeTatol () {
-        var unitPrice = $api.text($api.byId('unitPrice')) || api.pageParam.transmitData.price;
-        var buyCount = $api.val($api.byId('buyCount')) || 1;
-        $api.text($api.byId('total'), '￥'+unitPrice * buyCount);
-        console.log(unitPrice + '*' + buyCount +'='+ buyCount*unitPrice)
-    }
-    
-    // 增减数量
-    var count = 0;
-     function addCount() {
-        $api.val($api.byId('buyCount'), ++count);
-         computeTatol();
-     }
-     function subtractCount() {
-        if (count < 1) {
-            count =1
-        }
-        $api.val($api.byId('buyCount'), --count);
-        computeTatol();
-     }
-    // 切换留言和详情
-    function datum(n,ele) {
-        for (var i = 0; i < $api.domAll('.no5Title').length; i++) {
-            $api.removeCls($api.domAll('.no5Title')[i], 'borderBottom');
-        }
-        if (n) { // 传入1  点击留言
-            $api.css($api.dom('.detail'), 'display:none');
-            $api.css($api.dom('.leaveWord'), 'display:block');
-            $api.addCls($api.first(ele, 'span'), 'borderBottom');
-        } else { // 点击详情
-            $api.css($api.dom('.detail'), 'display:block');
-            $api.css($api.dom('.leaveWord'), 'display:none');
-            $api.addCls($api.first(ele, 'span'), 'borderBottom');
-        }
-    }
-   
-
-
-
-    var a = 1;
-    $api.addEvt($api.dom('.main'), 'touchmove', function(event) {
-        if (window.scrollY > 300) {
-            a -= 0.1;
-            $api.css($api.byId('cloaswin'), 'opacity:'+ a +';');
-            if (a<0) {
-                a = 0;
-            }
-        } else {
-            a += 0.1;
-            $api.css($api.byId('cloaswin'), 'opacity:'+ a +';');
-            if (a>1) {
-                a = 1;
-            }
-        }
-    });
-    $api.addEvt($api.dom('.main'), 'touchend', function(event) {
-        if (window.scrollY > 300) {
-            // $api.css($api.dom('#cloaswin'), 'display:none');
-            $api.css($api.byId('cloaswin'), 'opacity:0;');
-        } else {
-            $api.css($api.byId('cloaswin'), 'opacity:1;');
-        }
-    });
-   
 </script>
 </html>
 
