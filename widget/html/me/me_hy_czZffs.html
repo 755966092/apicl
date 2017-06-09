@@ -12,7 +12,7 @@
         }
         .main {
             width: 6.1rem;
-            height: 5.06rem;
+            height: 5.66rem;
             background-color: #fff;
             border-radius: .2rem;
             margin: 0 auto;
@@ -118,13 +118,19 @@
 <body>
      <div class="main">
          <p class="title">充值￥<span class="money"></span>，请选择支付方式</p>
-         <p class="zf zf1"   tapmode="hover"   onclick="selectZfb()">
+        <p class="zf zf1"   tapmode="hover"   onclick="selType(this)">
             <span   class="icon select1 fl"></span>
             <!-- <input class="fl" type="radio" name="zf"> -->
             <span class="zfb fl"></span>
             <span class="text fl">支付宝支付</span>
         </p>
-         <p class="zf"   tapmode="hover"   onclick="selectWx()" >
+        <p class="zf"   tapmode="hover"   onclick="selType(this)" >
+            <span class="icon  fl"></span>
+            <!-- <input class="fl" type="radio" name="zf"> -->
+            <span class="wx fl"></span>
+           <span class="text fl">微信支付</span>
+        </p>
+        <p class="zf"   tapmode="hover"   onclick="selType(this)" >
             <span class="icon  fl"></span>
             <!-- <input class="fl" type="radio" name="zf"> -->
             <span class="wx fl"></span>
@@ -145,15 +151,14 @@
         $api.text($api.dom('.money'), money);
     }
         
-   function selectZfb() {
-        $api.addCls(document.getElementsByClassName('icon')[0], 'select1');
-        $api.removeCls(document.getElementsByClassName('icon')[1], 'select1');
-        // 支付宝支付
-   }
-   function selectWx() {
-        $api.addCls(document.getElementsByClassName('icon')[1], 'select1');
-        $api.removeCls(document.getElementsByClassName('icon')[0], 'select1');
-        // 支付宝支付
+  
+   function selType(ele) {
+        for (var i = 0; i < $api.domAll('.zf').length; i++) {
+            $api.removeCls($api.dom($api.domAll('.zf')[i], '.icon'), 'select1');
+        }
+        $api.addCls($api.dom(ele, '.icon'), 'select1');
+        console.log(ele)
+
    }
     function submit(ele) {
         var text = $api.text(ele)
