@@ -179,6 +179,7 @@
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/doT.min.js"></script>
     <script type="text/javascript">
+    var chatMessage;
      apiready = function() {
         // rongToken = api.pageParam.rongToken;
         // userToken = api.pageParam.userToken;
@@ -187,9 +188,18 @@
         // 监听打开加好友窗口  
         monitorEvent();
        
-        // 历史消息
-        historyNews();
         
+        
+        chatMessage = $api.getStorage('chatMessage');
+        if (chatMessage) {
+            getData(chatMessage)
+            console.log('使用缓存')
+            historyNews();
+        } else {
+            // 历史消息
+            historyNews();    
+            console.log('网络获取')
+        }
         // 滚动到底部触发的事件    
         // scrollBotton();
         api.addEventListener({
@@ -199,7 +209,7 @@
             // historyNews();
         });
 
-       
+           
         
     }
    
@@ -265,7 +275,12 @@
                     data[i].url = ret.data.list[data[i].targetId].head_img_url
                     data[i].nickname = ret.data.list[data[i].targetId].nickname
                 }
-                getData(data)
+                // 网络数据有更新 刷新数据 从新缓存数据
+                if (chatMessage !== data) {
+                    $api.setStorage('chatMessage', data);
+                    getData(data);
+                } 
+                
            } else {
                alert(JSON.stringify(err))
            }
