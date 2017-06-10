@@ -190,29 +190,41 @@
        
         
         
-        chatMessage = $api.getStorage('chatMessage');
-        if (chatMessage) {
-            getData(chatMessage)
-            console.log('使用缓存')
-            historyNews();
-        } else {
-            // 历史消息
-            historyNews();    
-            console.log('网络获取')
-        }
+        // chatMessage = $api.getStorage('chatMessage');
+        // if (chatMessage) {
+        //     getData(chatMessage)
+        //     console.log('使用缓存')
+        //     historyNews();
+        // } else {
+        //     // 历史消息
+        //     historyNews(cacheFieldName);    
+        //     console.log('网络获取')
+        // }
         // 滚动到底部触发的事件    
         // scrollBotton();
+        contrastCache('chatMessage',historyNews())
         api.addEventListener({
             name: 'refurbish'
         }, function(ret, err) {
             historicalNews();
-            // historyNews();
+            // historyNews(cacheFieldName);
         });
-
-           
-        
     }
-   
+    
+    function contrastCache(cacheFieldName,  fn) {
+        var cacheFieldName = $api.getStorage(cacheFieldName);
+         if (cacheFieldName) {
+            getData(cacheFieldName)
+            console.log('使用缓存');
+            fn(cacheFieldName);
+        } else {
+            // 历史消息
+            fn(cacheFieldName);    
+            console.log('网络获取');
+        }
+
+    }
+
     // 监听打开加好友窗口
     function monitorEvent() {
         // 监听showNews事件，显示添加好友框     
@@ -234,7 +246,7 @@
         });
     }
     // 历史消息
-    function historyNews(){
+    function historyNews(cacheFieldName){
         // 历史消息列表
         api.addEventListener({
             name: 'historNews'
@@ -251,14 +263,14 @@
                   script: 'getTotalCount();'
               });
                 // 获取聊天对方信息
-                getSideInfo(targetRongIdArr, ret.value.data);
+                getSideInfo(targetRongIdArr, ret.value.data, cacheFieldName);
             } else {
                 alert(JSON.stringify(err));
             }
         });
     }
      // 获取聊天对方信息
-    function getSideInfo(rongUserId, data) {
+    function getSideInfo(rongUserId, data, cacheFieldName) {
        api.ajax({
            url: apiSite + '/api/user/chatUserInfo',
            method: 'post',
@@ -276,7 +288,7 @@
                     data[i].nickname = ret.data.list[data[i].targetId].nickname
                 }
                 // 网络数据有更新 刷新数据 从新缓存数据
-                if (chatMessage !== data) {
+                if (cacheFieldName !== data) {
                     $api.setStorage('chatMessage', data);
                     getData(data);
                 } 
