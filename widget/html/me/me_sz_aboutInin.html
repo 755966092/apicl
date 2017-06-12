@@ -22,31 +22,20 @@
         background-size: .15rem .25rem;
         background-position: 7.05rem center;
         padding-left: .3rem;
-        margin-top: .01rem;
-    }
-    .text {
-        padding-right: .3rem;
         border-bottom: 1px solid #E1E1E1;
+
     }
-    .mt30 {
-        margin-top: .3rem;
-    }    
-    .bb {
-        border-bottom: 1px solid #E1E1E1;
-    }
-    .bb .text {
-        border: 0;
-    }
-    .btn {
-        width: 7.14rem;
-        height: .86rem;
-        background-color: #1AAD19;
-        margin: 0 auto;
-        border-radius: .1rem;
-        color: #fff;font-size: .34rem;
-        line-height: .86rem;
+    .version {
+        font-size: .36rem;
         text-align: center;
-        margin-top: .57rem;
+    }
+    .icon {
+        background: url(../../image/tx_4.jpg)no-repeat;
+        -webkit-background-size: 1rem 1rem;
+        background-size: 1rem 1rem;
+        background-position: center center;
+        width: 7.5rem;
+        height: 1.4rem;
     }
     </style>
 </head>
@@ -56,30 +45,25 @@
         <div class="head">
             <span class="callback" tapmode="hover" onclick="api.closeWin()">取消</span>
             <span class="winTitle">
-                设置
+                关于我在
             </span>
         </div>
     </header>
     <div class="main">
-       <ul class="mt30">
-            <li class="bb" ontouchstart="openPage(this)" data-val='codeSafe'>
-                <div class="text">帐号与安全</div>
+        <div class="icon"></div>
+        <p class="version">1.2.1</p>
+        <ul class="mt30">
+            <li >
+                    去评分
             </li>
-            <li class="mt30">
-                <div class="text">隐私</div>
+            <li >
+                    更新日志
             </li>
             <li class="bb">
-                <div class="text">通用</div>
-            </li>
-            <li class="mt30">
-                <div class="text">帮助与反馈</div>
-            </li>
-            <li class="bb" ontouchstart="openPage(this)" data-val='aboutInin'>
-                <div class="text">关于我在</div>
+                    联系我们
             </li>
        </ul>
-       <div class="btn">安全退出</div>
-       <div class="btn" ontouchstart="login()   ">清除缓存</div>
+      
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -90,21 +74,7 @@ apiready = function() {
 
 };
 
-function login() {
-    $api.clearStorage();
-    alert('清除缓存成功')
-}
 
-function openPage(ele) {
-    var val = $api.attr(ele, 'data-val');
-    api.openWin({
-        name: 'winName'+val,
-        url: './me_sz_'+ val +'.html',
-        pageParam: {
-            name: 'value'
-        }
-    });
-}
 </script>
 
 </html>

@@ -103,6 +103,7 @@
             text-align: center;
             line-height: .8rem;
             font-size: 0;
+            position: relative;
             background-color: #fff;
         }
         .nav span {
@@ -125,7 +126,17 @@
             background-position: center center;
         }
         .act{
-            color: #4162ff;
+            color: #27B24A;
+        }
+        .indexbar {
+            background: url('../../image/tabLine.png') no-repeat center bottom;
+            background-size: 63px auto;
+            color: #27B24A;
+            width: 25%;
+            left: 1.15rem;
+            bottom: 0;
+            position: absolute;
+            height: 2px;
         }
     </style>
 </head>
@@ -145,46 +156,8 @@
         <span class="head act"   tapmode="hover"   onclick="switchApr(0)">供</span>
         <span class="head"   tapmode="hover"   onclick="switchApr(1)">求</span>
         <span class="head"   tapmode="hover"   onclick="switchApr(2)">圈</span>
+        <div class="indexbar" id="indexbar"></div>
     </div>
-   <!--  <ul>
-        <li class="listContent">
-            <img class="img fl" src="../../image/tx_2.jpg">
-            <div class="fl title">
-                <div>
-                    <span class="fl">个人</span>
-                    <h3 class="fl">提供风景类蔬菜</h3>
-                </div>
-                <p>全部为本人原创作品</p>
-            </div>
-            <div class="jl_right fr">
-                    <p>
-                       <span class="money">30元/套</span>
-                    </p> 
-                    <p class="bearFruit ydz">
-                        <span class="time">开启中</span>
-                    </p>
-            </div>
-        </li>
-        <li class="listContent">
-            <img class="img fl" src="../../image/tx_2.jpg">
-            <div class="fl title">
-                <div>
-                    <span class="fl">个人</span>
-                    <h3 class="fl">提供风景类蔬菜提供风景类蔬菜</h3>
-                </div>
-                <p>全部为本人原创作品全部为本人原创作品</p>
-            </div>
-            <div class="jl_right fr">
-                    <p>
-                       <span class="money">30元/套</span>
-                    </p> 
-                    <p class="bearFruit ydz">
-                        <span class="time">开启中</span>
-                    </p>
-            </div>
-        </li>
-        
-    </ul> -->
         
     </div>
 </body>
@@ -193,15 +166,11 @@
 <script type="text/javascript">
     apiready = function(){
         fnInit();
-
-       
         var navH = $api.offset($api.dom('.head')).h;
         var frameH = navH + headerH;
         openAprGroup(frameH)
     };
-    function zj() {
-        $api.append($api.dom('ul'), '<li class="listContent"><span class="jl_left fl">提现-<span class="way">微信</span></span><div class="jl_right fr"><p><span>￥</span><span class="money">5</span></p><p class="bearFruit ydz"><span class="time">11月23日</span></p></div></li>')
-    }
+  
 
 
 
@@ -256,14 +225,24 @@
             });
             switchAprIndex(index);
         }
+       // 标题下面竖线
+    function sliderbarCallback(id, num) {
+        var width = parseInt((api.frameWidth - $api.offset($api.dom('.search')).w) / 3);
+        var move = num * width;
+
+        $api.css($api.byId(id),
+                "-webkit-transform:translate(" + move + "px,0);-webkit-transition: 300ms;"
+        );
+    }
 
      // 切换头部的标题颜色
     function switchAprIndex(index){
+        sliderbarCallback('indexbar',index)
         var aprItems = $api.domAll('.head');
         for (var i = 0; i < aprItems.length; i++) {
             $api.removeCls(aprItems[i], 'act');
         }
-        $api.addCls(aprItems[index], 'act');
+        $api.addCls(aprItems[index+1], 'act');
     }
 
    

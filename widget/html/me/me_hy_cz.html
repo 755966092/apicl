@@ -141,17 +141,20 @@
         }
    }
    function enter () {
-        var dom = $api.domAll('.listContent'),money;
+        var dom = $api.domAll('.listContent'),money,type;
         for (var i = 0; i < dom.length; i++) {
             if ($api.hasCls(dom[i], 'select')) {
                 var time = $api.attr(dom[i],'data-time');
                  // 提交time
                  if (time === 'san') {
                     money = 20;
+                    type = "三个月"
                  } else if (time === 'ban') {
                     money = 40;
+                    type = "半年"
                  } else {
                     money = 80
+                    type = "一年"
                  }
                  api.openFrame({
                      name: 'czZffs',
@@ -163,7 +166,8 @@
                          h: 'auto'
                      },
                      pageParam: {
-                         money: money
+                         money: money,
+                         type: type
                      },
                      bounces: false
                  });

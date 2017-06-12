@@ -1,95 +1,121 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <style>
-        body,html{
-            background-color: #F8F8F8;
-        }
-         
+    body,
+    html {
+        background-color: #F8F8F8;
+    }
+    
+    .main ul {
+        margin-top: .2rem;
+        background-color: #fff;
+    }
+    
+    .main ul li {
 
-        
-        .main {
-
-        }
-        .main ul li {
-            height: .82rem;
-            line-height: .82rem;
-            padding: 0 .3rem 0 .3rem;
-            font-size: .28rem;
-            border-bottom: 1px solid #EDEDED;
-            background: #fff;
-            position: relative;
-            margin-top: .2rem;
-        }
-        .main ul li .icon_zk {
-            display: inline-block;
-            padding-right: .15rem;
-            height: .8rem;
-            background: url(../../image/icon_member/icon_zk.png)no-repeat;
-            -webkit-background-size: .15rem .25rem;
-            background-size: .15rem .25rem;
-            background-position: 0 .3rem;
-            float: right;
-        }
-        
-        .icon_xl {
-            width: 7.5rem;
-            height: 1.31rem;
-            background: url(../../image/icon_gs/icon_xl.png)no-repeat;
-            -webkit-background-size: 1.56rem 1.31rem;
-            background-size: 1.56rem 1.31rem;
-            background-position: center center;
-            margin-top: 2.7rem;
-            margin-bottom: .3rem;
-        }
-       .possess {
-            text-align: center;
-            font-size: .24rem;
-            color: #555;
-            line-height: .4rem;
-       }
+        margin-top: .01rem; 
+        height: .82rem;
+        line-height: .82rem;
+        padding-left: .3rem;
+        font-size: .28rem;
+        background: #fff;
+        position: relative;
+    }
+    .main ul li .wrap {
+        padding-right: .3rem;
+        border-bottom: 1px solid #EDEDED;
+    }
+    .main ul li:last-child .wrap {
+        border: 0;  
+    }
+    .main ul li:last-child {
+        border-bottom: 1px solid #EDEDED;
+    }
+    .main ul li .icon_zk {
+        display: inline-block;
+        padding-right: .15rem;
+        height: .8rem;
+        background: url(../../image/icon_member/icon_zk.png)no-repeat;
+        -webkit-background-size: .15rem .25rem;
+        background-size: .15rem .25rem;
+        background-position: 0 .3rem;
+        float: right;
+    }
+    
+    .icon_xl {
+        width: 7.5rem;
+        height: 1.31rem;
+        background: url(../../image/icon_gs/icon_xl.png)no-repeat;
+        -webkit-background-size: 1.56rem 1.31rem;
+        background-size: 1.56rem 1.31rem;
+        background-position: center center;
+        margin-top: 2.7rem;
+        margin-bottom: .3rem;
+    }
+    
+    .possess {
+        text-align: center;
+        font-size: .24rem;
+        color: #555;
+        line-height: .4rem;
+    }
     </style>
 </head>
+
 <body>
-     <header  class="header">
+    <header class="header">
         <div class="head">
-            <span class="callback"   tapmode="hover"   onclick="api.closeWin()">返回</span>
+            <span class="callback" tapmode="hover" onclick="api.closeWin()">返回</span>
             <span class="winTitle">
                 公司主页
             </span>
         </div>
     </header>
-    <div class="main">  
+    <div class="main">
         <ul>
-            <li   tapmode="hover"   onclick="login(this)" data-val="zy"><span>第一学教育科技（北京）有限公司</span><span class="icon_zk"></span></li>
-            <li   tapmode="hover"   onclick="login(this)" data-val="wrz"><span>卓越创新（北京）投资管理控股有限公司</span><span class="icon_zk"></span></li>
+            <li tapmode="hover" onclick="login(this)" data-val="zy">
+               <div class="wrap">
+                    <span>第一学教育科技（北京）有限公司</span>
+                    <span class="icon_zk"></span>
+               </div>
+            </li>
+            <li tapmode="hover" onclick="login(this)" data-val="wrz">
+                <div class="wrap">
+                    <span>卓越创新（北京）投资管理控股有限公司</span>
+                    <span class="icon_zk"></span>   
+                </div>
+            </li>
         </ul>
         <div class="icon_xl"></div>
-        <p class="possess">拥有公司主页后<br>您公司的供求信息也会在主页中的到展示</p>
-
+        <p class="possess">拥有公司主页后
+            <br>您公司的供求信息也会在主页中的到展示</p>
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
-    apiready = function(){
-        fnInit();
-    };
-   function login (ele) {
-        var val = $api.attr(ele, 'data-val');
-        api.openWin({
-            name: val + 'Win',
-            url: './me_gs_' + val + '.html',
-            pageParam: {
-                name: 'value'
-            },
-            bounces: false
-        });
-   }
-   
+apiready = function() {
+    fnInit();
+};
+
+function login(ele) {
+    var val = $api.attr(ele, 'data-val');
+    api.openWin({
+        name: val + 'Win',
+        url: './me_gs_' + val + '.html',
+        pageParam: {
+            name: 'value'
+        },
+        bounces: false
+    });
+}
 </script>
+
 </html>

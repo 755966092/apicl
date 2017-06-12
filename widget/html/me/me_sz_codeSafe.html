@@ -48,6 +48,10 @@
         text-align: center;
         margin-top: .57rem;
     }
+    li .state {
+        margin-right: .3rem;
+        color: #9b9b9b;
+    }
     </style>
 </head>
 
@@ -56,30 +60,35 @@
         <div class="head">
             <span class="callback" tapmode="hover" onclick="api.closeWin()">取消</span>
             <span class="winTitle">
-                设置
+                帐号与安全
             </span>
         </div>
     </header>
     <div class="main">
        <ul class="mt30">
-            <li class="bb" ontouchstart="openPage(this)" data-val='codeSafe'>
-                <div class="text">帐号与安全</div>
+            <li >
+                <div class="text">
+                    微信
+                    <span class="fr state">已绑定</span>
+                </div>
             </li>
-            <li class="mt30">
-                <div class="text">隐私</div>
+            <li >
+                <div class="text">
+                    手机号
+                    <span class="fr state">13260227521</span>
+                </div>
             </li>
             <li class="bb">
-                <div class="text">通用</div>
+                <div class="text">
+                    邮箱
+                    <span class="fr state">已绑定</span>
+                </div>
             </li>
             <li class="mt30">
-                <div class="text">帮助与反馈</div>
-            </li>
-            <li class="bb" ontouchstart="openPage(this)" data-val='aboutInin'>
-                <div class="text">关于我在</div>
+                <div class="text">更改密码</div>
             </li>
        </ul>
-       <div class="btn">安全退出</div>
-       <div class="btn" ontouchstart="login()   ">清除缓存</div>
+      
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -90,21 +99,7 @@ apiready = function() {
 
 };
 
-function login() {
-    $api.clearStorage();
-    alert('清除缓存成功')
-}
 
-function openPage(ele) {
-    var val = $api.attr(ele, 'data-val');
-    api.openWin({
-        name: 'winName'+val,
-        url: './me_sz_'+ val +'.html',
-        pageParam: {
-            name: 'value'
-        }
-    });
-}
 </script>
 
 </html>
