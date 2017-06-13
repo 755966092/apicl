@@ -21,7 +21,9 @@
             box-sizing: border-box;
             border-bottom: 1px solid #ddd;
             padding-right: .35rem;
+            font-size: 0; 
         }
+
         
         .title {
             font-size: .3rem;
@@ -46,41 +48,64 @@
     </style>
 </head>
 <body>
-    <div class="main">  
-        <div class="listContent">
-           <div class="wrap flex-def flex-cCenter flex-zBetween">
-               <span class="title">充值会员-三个月</span>
-               <div class="rightText flex-def flex-zTopBottom flex-zEnd">
-                   <span class="money">￥5</span>
-                   <span class="time">2016-11-23 </span>
-               </div>
-           </div>
-        </div>
-        <div class="listContent">
-           <div class="wrap flex-def flex-cCenter flex-zBetween">
-               <span class="title">充值会员-三个月</span>
-               <div class="rightText flex-def flex-zTopBottom flex-zEnd">
-                   <span class="money">￥5</span>
-                   <span class="time">2016-11-23 </span>
-               </div>
-           </div>
-        </div>
-        <div class="listContent">
-           <div class="wrap flex-def flex-cCenter flex-zBetween">
-               <span class="title">充值会员-三个月</span>
-               <div class="rightText flex-def flex-zTopBottom flex-zEnd">
-                   <span class="money">￥5</span>
-                   <span class="time">2016-11-23 </span>
-               </div>
-           </div>
-        </div>
+    <div class="main resultList">  
+       
     </div>
+      <script type="text/x-dot-template" id="listT">
+        {{ for (var i = 0; i < it.length; i++) { }} 
+          <div class="listContent">
+            <div class="wrap flex-def flex-cCenter flex-zBetween">
+                <span class="title">{{=it[i].type}}</span>
+                <div class="rightText">
+                    <p class="money">￥{{=it[i].money}}</p>
+                    <p class="time">{{=it[i].create_time}}</p>
+                </div>
+            </div>
+          </div>
+        {{}}}
+      </script>
+
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
+    var type = ['提现','充值VIP','邀请','支付供应订单','供应订单收入','供应订单退款','付费入群'];
+
     apiready = function(){
+      requestData(    )
     };
-   
-</script>
+    function requestData() {
+      api.ajax({
+          url: apiSite + '/api/user_center/accountDetail',
+          method: 'post',
+          headers: apiHeader,
+          data: {
+               values: { 
+                 token: $api.getStorage('userToken'),
+                   
+               }
+          }
+      }, function(ret, err) {
+        if(ret) {
+          for (var i = 0; i < ret.data.list.length; i++) {
+            ret.data.list[i].type = type[ret.data.list[i].type-1]
+          }
+          alert(JSON.stringify(ret))
+          getData(ret.data.list)
+        } else {
+          alert(JSON.stringify(err))
+        }
+      })
+    }
+    // "WITHDRAW_STRING" => "提现",
+    //     "VIP_STRING" => "充值VIP",
+    //     "INVITE_STRING" => "邀请",
+    //     "SUPPLY_ORDER_PAY_STRING" => "支付供应订单",
+    //     "SUPPLY_ORDER_INCOME_STRING" => "供应订单收入",
+    //     "SUPPLY_ORDER_REFUND_STRING" => "供应订单退款",
+    //     "CIRCLE_MEMBER_STRING" => "付费入群"
+    // ],
+    
+    </script>
 </html>

@@ -112,7 +112,7 @@ header.header span.rightBtn {
     </header>
     <div class="main">
         <p class="bill"   tapmode="hover"   onclick="login(this)" data-val="wdzd">我的账单</p>
-        <h3>60.00</h3>
+        <h3 id="available_assets">0.00</h3>
         <p class="remainder">余额（元）</p>
         <p class="time">会员有效期至<span>2017</span>年<span>12</span>月<span>1</span>日</p>
     </div>
@@ -142,7 +142,8 @@ header.header span.rightBtn {
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
-	    fnInit()
+	    fnInit();
+        requestData();
     };
     function login(ele) {
        // 根据点击的按钮进入不同的页面
@@ -156,7 +157,25 @@ header.header span.rightBtn {
                 bounces: true
             });
     }
-   
+    
+    function requestData() {
+        api.ajax({      
+            url: apiSite + '/api/user_center/vipCenter',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                $api.text($api.byId('available_assets'), ret.data.available_assets  );
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
     
 </script>
 </html>
