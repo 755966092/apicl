@@ -6,8 +6,6 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-        
-        
         .state {
             height: 1.5rem;
             background-color: #fff;
@@ -278,7 +276,10 @@
             </div>            
         </div>
         <div class="orderTime">
-            <p>订单编号：<span class="code">2307542801230022</span><span class="label fr">复制</span></p>
+            <p>订单编号：
+                <span class="code" id="code">2307542801230022</span>
+                <span class="label fr" ontouchstart="copyString()"   id="copy">复制</span>
+            </p>
             <p>下单时间：<span class="code">2017-04-13 11：06：34</span></p>
             <p>取消原因：<span class="code">2307542801230022</span></p>
         </div>
@@ -292,8 +293,20 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
+        moduleInit();
     };
-    
+    function copyString() {
+        var val = $api.text($api.byId('code'));
+        clipBoard.set({
+            value: val
+        }, function(ret, err) {
+            if (ret) {
+                alert('复制成功');
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
   
 </script>
 </html>

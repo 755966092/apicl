@@ -98,7 +98,8 @@ var rong,
     listContact,
     db,
     UIActionSelector,
-    contacts;
+    contacts,
+    clipBoard;
 
 function moduleInit() {
     // 数据库模块
@@ -121,6 +122,8 @@ function moduleInit() {
     bMap = api.require('bMap');
     // 选择器
     UIActionSelector = api.require('UIActionSelector');
+    // 复制剪切板
+    clipBoard = api.require('clipBoard');
 
 }
 
