@@ -11,13 +11,13 @@
         }
 
         .main {
-            /*margin-top: .2rem;*/
+            margin-top: .2rem;
             font-size: 0;
             
         }
         
         .choose {
-            height: 1rem;
+            height: .7rem;
             background-color: #fff;
             padding: 0 .3rem;
         }
@@ -27,8 +27,9 @@
         }
          
          .choose img {
-            width: .71rem;
-            height: .71rem;
+            width: .5rem;
+            height: .5rem;
+            border-radius: 50%;
         }
          .issuerInfo {
             font-size: .28rem;
@@ -66,7 +67,7 @@
             box-sizing: border-box;
         }
         footer  #total{
-            color: #d0011b;
+            color: #F6A623;
             overflow: hidden;
             width: 3rem;
             text-align: left;
@@ -86,8 +87,15 @@
         }
         .content {
             background-color: #F8F8F8;
-            padding: .2rem .3rem;
+            padding-left: .3rem;
             position: relative;
+        }
+        .content .div {
+            padding-right: .2rem;
+            padding-top: .3rem;
+            padding-bottom: .3rem;
+            border-bottom: 1px solid #EFEFEF;
+            border-top: 1px solid #EFEFEF;
         }
         .content img {
             width: 1.45rem;
@@ -112,14 +120,14 @@
             position: absolute;
             bottom: .2rem;
             left: 1.95rem;
-            color: #d0011b;
+            color: #F6A623;
         }
         .main .price {
             padding: 0 .3rem;
             height: .8rem;
             line-height: .8rem;
             font-size: .34rem;
-            color: #d0011b;
+            color: #F6A623;
             background-color: #fff;
             margin-bottom: .2rem;
             /*position: relative;*/
@@ -130,8 +138,8 @@
             font-size: .28rem;
             height: .8rem;
             line-height: .8rem;
-            padding: 0 .3rem;
-            border-bottom: 1px solid #f8f8f8;
+            padding-left: .3rem;
+            box-sizing: border-box;
         }
         .tel input {
             height: .8rem;
@@ -147,21 +155,23 @@
             font-size: 0;
             text-align: center;
             line-height: .45rem;
-            background-color: #F8F8F8;
+            background-color: #fff;
         }
         .price .count i {
             display: inline-block;
-            width: .4rem;
-            height: .4rem;
+            border-radius: 50%;
+            width: .45rem;
+            height: .45rem;
             font-style: normal;
             line-height: .4rem;
             font-size: .48rem;
-            color: #333;
+            background-color: #fff;
+            color: #0ABB07;
         }
         .price .count input {
             background-color: #fff;
-            border-right: 1px solid #979797;
-            border-left: 1px solid #979797;
+            /*border-right: 1px solid #979797;*/
+            /*border-left: 1px solid #979797;*/
             width: .4rem;
             text-align: center;
             display: inline-block;
@@ -172,11 +182,18 @@
         }
         .serveTime {
             line-height: .8rem;
-            padding: 0 .3rem;
+            /*padding: 0 .3rem;*/
+            padding-left: .3rem;
             height: .8rem;
             background-color: #fff;
             font-size: .28rem;
-            
+            margin-top: 1px;
+            box-sizing: border-box;
+        }
+        .serveTime .wrap {
+            padding-right: .3rem;   
+            box-sizing: border-box;
+            border-bottom: 1px solid #EBEBEB;
         }
         .serveTime span{
             color: #9A9A9A;
@@ -192,40 +209,61 @@
             float: right;
             margin-left: .2rem;
         }
+        .icon {
+            width: .15rem;
+            display: inline-block;
+            height: .7rem;
+            background: url(../../image/icon_zk.png)no-repeat;
+            -webkit-background-size: .15rem .25rem;
+            background-size: .15rem .25rem;
+            background-position: 0 center;
 
+
+        }
+        .mt20 {
+            margin-top: .2rem;
+        }
+        .info {
+            background-color: #fff;
+        }
     </style>
 </head>
 <body>
    
     <div class="main clearfix">
             <div class="resultList"></div>
-            <script type="text/x-dot-template" id="listT">
-                <div class="choose clearfix flex-def flex-cCenter">
+            <!-- <script type="text/x-dot-template" id="listT"> -->
+                <div class="choose clearfix flex-def flex-zLeftRight flex-cCenter">
                     <img src="../../image/tx_3.jpg">
-                    <div class="fl issuerInfo">
-                        <p class="name">{{=it.nickname}}</p>
-                        {{?it.current_company==null&&it.current_position!=null}}
-                            <p> {{=it.current_position}}</p>
-                        {{??it.current_position==null&&it.current_company!=null}}
-                            <p>{{=it.current_company}}</p>
-                        {{??it.current_position==null&&it.current_company==null}}
-                        {{??}}
-                            <p>{{=it.current_company}} {{=it.current_position}}</p>
-                        {{?}}
+                    <div class="issuerInfo flex-item flex-def flex-zLeftRight flex-cCenter flex-zBetween">
+                        <div>
+                            <span class="name">{{=it.nickname}}</span>
+                            {{?it.current_company==null&&it.current_position!=null}}
+                                <span> {{=it.current_position}}</span>
+                            {{??it.current_position==null&&it.current_company!=null}}
+                                <span>{{=it.current_company}}</span>
+                            {{??it.current_position==null&&it.current_company==null}}
+                            {{??}}
+                                <span>{{=it.current_company}} {{=it.current_position}}</span>
+                            {{?}}
+                        </div>
+                        <span class="icon"></span>
                     </div>
                 </div>
                 <div class="content clearfix">
-                    <img class="fl" src="../../image/tx_5.jpg">
-                    <div class="fl">
-                        <span class="_type"></span>
-                        <span class="title">{{=it.title}}</span>
-                        <p >{{=it.city}} - 
-                        {{?it.form == 1}}
-                            <span>线上</span>
-                        {{??}}
-                            <span>线下</span>
-                        {{?}}
-                        </p>
+                    <div class="div clearfix">
+                        <img class="fl clearfix" src="../../image/tx_5.jpg">
+                        <div class="fl clearfix">
+                            <span class="_type"></span>
+                            <span class="title">{{=it.title}}</span>
+                            <p >{{=it.city}} - 
+                            {{?it.form == 1}}
+                                <span>线上</span>
+                            {{??}}
+                                <span>线下</span>
+                            {{?}}
+                            </p>
+                        </div>
                     </div>
                 </div>
                 <div class="price">
@@ -236,31 +274,44 @@
                         <i class="fr"   tapmode="hover"   onclick="addCount()">+</i>
                     </div>
                 </div>
-            </script>
-            <div class="serveTime" >
-                服务时间
-                <i></i>
-                <span class="fr" id="serverTime" ontouchstart="openTime(this)">请选择服务时间</span>
+            <!-- </script> -->
+            <div class="info">
+                <div class="serveTime" >
+                    <div class="wrap">
+                        服务时间
+                        <i></i>
+                        <span class="fr" id="serverTime" ontouchstart="openTime(this)">请选择服务时间</span>
+                    </div>
+                </div>
+                <div class="tel serveTime">
+                    <div class="wrap">
+                        联系电话
+                        <i></i>
+                        <span class="fr" id="defaultPhone"></span>
+                    </div>
+                </div>
+                <div class="tel serveTime">
+                    <div class="wrap">
+                        地址
+                        <i></i>
+                        <span class="fr" id="address"></span>
+                    </div>
+                </div>
+                <div class="tel serveTime">
+                    <div class="wrap">
+                        真实姓名
+                        <i></i>
+                        <span class="fr" id="real_name"></span>
+                    </div>
+                </div>
+                
             </div>
-            <div class="tel serveTime">
-                联系电话
-                <i></i>
-                <span class="fr" id="defaultPhone"></span>
-            </div>
-            <div class="tel serveTime">
-                地址
-                <i></i>
-                <span class="fr" id="address"></span>
-            </div>
-           <div class="tel serveTime">
-                真实姓名
-                <i></i>
-                <span class="fr" id="real_name"></span>
-            </div>
-            <div class="tel">
-                <p>备注：
-                    <input type="text" placeholder="填写备注" name="">
-                </p>
+            <div class="tel mt20">
+                <div class="wrap">
+                    <p>备注：
+                        <input type="text" placeholder="填写备注" name="">
+                    </p>
+                </div>
             </div>
     </div>
     <footer>    

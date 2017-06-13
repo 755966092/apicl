@@ -12,7 +12,6 @@
             height: 100%;
         }
         
-        
         .main {
             width: 5.3rem;
             height: 7.337rem;
@@ -73,32 +72,87 @@
     <div class="main flex-def flex-zTopBottom">  
        <div class="title flex-def ">
            <div class="headImg">
-               <img src="../../image/tx_4.jpg">
+               <img id="head_img_url" src="../../image/tx_4.jpg">
            </div>
            <div class="titleText">
                <p class="namw flex-def flex-cCenter">
-                   <span>Alexi</span>
+                   <span id="nickname">Alexi</span>
                    <span class="icon"></span>
                </p>
-               <p class="code">邀请码：<span class="info">45EEFW5G54</span></p>
+               <p class="code">邀请码：<span class="info" id="invitation_code">45EEFW5G54</span></p>
            </div>
         </div>
         <div class="QRCode flex-def flex-zCenter ">
-            <div id="qrcode"></div>
+            <img id="ewm" src="">
         </div>
     </div>
 
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
-<script type="text/javascript" src="../../script/qrcode.min.js"></script>
 <script type="text/javascript">
     apiready = function(){
         fnInit();
+       
+        $api.text($api.byId('nickname'), $api.getStorage('userName'));
+        var InviteInfo = $api.getStorage('InviteInfo');
+        if (InviteInfo) {
+            // 有缓存
+            console.log('使用缓存')
+            $api.text($api.byId('invitation_code'), InviteInfo.info.invitation_code);
+            $api.attr($api.byId('head_img_url'), 'src', InviteInfo.info.head_img_url);
+            createQrcode(InviteInfo.info.invitation_code)
+            requestData(InviteInfo);
+        } else {
+            // 没有缓存
+            requestData();
+            console.log('网路获取')
+        }
+
+       
     };
-    // 生成二维码
-    new QRCode(document.getElementById("qrcode"), "http://jindasdasdasdasdasdasdasdasdasdasdasdasdo.dev.naver.com/collie");
-   
-   
+    function requestData(cacheData) {
+        api.ajax({
+            url: apiSite + '/api/user_center/inviteInfo',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (cacheData == ret.data) {
+                    // 网络数据没有更新
+                } else {
+                    // 网络数据有更新
+                    $api.setStorage('InviteInfo', ret.data);
+                    createQrcode(ret.data.info.invitation_code)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+    function createQrcode(str) {
+         // 生成二维码
+        var scanner = api.require('scanner');
+        scanner.encode({
+            string: str,
+            save: {
+                imgPath: 'fs://',
+                imgName: 'album1.png',
+                size: 390
+            }
+        }, function(ret, err) {
+            if (ret.status) {
+                alert(JSON.stringify(ret))
+                $api.attr($api.byId('ewm'), 'src', ret.savePath);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    } 
 </script>
 </html>
