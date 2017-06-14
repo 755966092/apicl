@@ -249,11 +249,17 @@
         </div>
 
         <script type="text/x-dot-template" id="listT">
-            {{ for (var i = 0; i < it.length; i++) { }} 
-                <img class="fl imgpage" tapmode="hover" onclick="openImgPage(this)" data-id = '{{=i}}' src="{{=it[i]}}">
+            {{ for (var i = 0; i < it.img.length; i++) { }} 
+                <img class="fl imgpage" tapmode="hover" onclick="openImgPage(this)" data-id = '{{=i}}' src="{{=it.img[i]}}">
             {{ }; }}
+            {{?it.img.length==0&&it.video.length==0}}
                 <img  src="../../image/icon_supply/icon_addMedia_1.png" class="addImg" onclick="openImg()" tapmode="hover">
                 <img  src="../../image/icon_supply/icon_addMedia_2.png">
+            {{??it.video.length==0}}
+                <img  src="../../image/icon_supply/icon_addMedia_1.png" class="addImg" onclick="openImg()" tapmode="hover">
+            {{??it.img.length==0}}
+                <img  src="../../image/icon_supply/icon_addMedia_2.png">
+            {{?}}
         </script>
 
 
@@ -326,11 +332,14 @@
                   atitude,            //string  纬度
                   ongitude,           //string  经度; 
                   _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"]
-                  base64Data=[];
+                  base64Data={
+                    img: [],
+                    video: []
+                  };
     apiready = function(){
         
         moduleInit();
-        getData(base64Data);
+        
         // 获取位置
         getPos();
         // 公司|个人 显示不同的页面
@@ -341,6 +350,7 @@
         monitorEvent('_classify','_classify');
         monitorEvent('_unit','_unit');
 
+    getData(base64Data);
         // 删除图片
         delImg();
     };
@@ -355,7 +365,7 @@
                         $api.remove($api.domAll('.imgpage')[i]);
                     }
                 }
-                base64Data = base64Data.filter(function(item, index) {
+                base64Data = base64Data.img.filter(function(item, index) {
                     if (index != ret.value.imgId-1) {
                         return item
                     }
@@ -367,7 +377,6 @@
     }
     // 打开相册
     function openImg() {
-
         api.getPicture({
             sourceType: 'album',
             encodingType: 'png',
@@ -380,7 +389,7 @@
             saveToPhotoAlbum: false
         }, function(ret, err) {
             if (ret) {
-                base64Data.push(ret.base64Data);
+                base64Data.img.push(ret.base64Data);
                 getData(base64Data);
             } else {
                 alert(JSON.stringify(err));
