@@ -15,21 +15,50 @@
         }
         header.header .head_center {
             font-size: 0;
-            border: 1px solid #fff;
+            line-height: .8rem;
             border-radius: .05rem;
+            color: #999;
+        }
+        header.header .head_center_left:first-child {
+            margin-right: .5rem;
         }
         header .head_center span {
-            width: 1.74rem;
             text-align: center;
             font-size: .34rem;
-            height: .55rem;
-            line-height: .55rem;
-        }
-       
-        header .head_center span.select {
-           background-color: #fff;
-           color: #333;
+            height: .78rem;
+            line-height: .78rem;
+            box-sizing: border-box;
            
+        }
+        .select {
+           border-bottom: .05rem solid #F0F0F0;
+           color: #fff;
+        }
+        header .rightBtn {
+            font-size: 0;
+        }
+        header .search {
+            display: inline-block;
+            width: .34rem;
+            height: .35rem;
+    
+            margin-top: .23rem;
+            padding-right: .2rem;
+            margin-right: .2rem;
+            border-right: 1px solid #fff;
+            background: url(../../image/icon_search2.png)no-repeat;
+            -webkit-background-size: .34rem .35rem;
+            background-size: .34rem .35rem;
+            background-position: 0 center;
+        }
+        header .filter {
+            display: inline-block;
+            width: .34rem;
+            height: .3rem;
+            background: url(../../image/icon_supply/icon_sx1.png)no-repeat;
+            -webkit-background-size: .34rem .3rem;
+            background-size: .34rem .3rem;
+            background-position: 0 center;
         }
        
         .nav  {
@@ -241,10 +270,15 @@
         <div class="head">
             <span class="callback"   tapmode="hover"   onclick="api.closeWin()">返回</span>
             <span class="winTitle head_center">
-                <span class="head_center_left select">Ta供</span>
-                <span class="head_center_right">我供</span>
+                <span class=" head_center_left">Ta供</span>
+                <span class=" head_center_left">我供</span>
+                <!-- <span class=" head_center_left "   tapmode="hover"   onclick="switchApr(1)">我供</span>
+                <span class=" head_center_left "   tapmode="hover"   onclick="switchApr(0)">Ta供</span> -->
             </span>
-            <span class="rightBtn"   tapmode="hover"   onclick="openShadow()"></span> 
+           <!--  <span class="rightBtn"   tapmode="hover"   onclick="openShadow()">
+                <span class="search"></span>
+                <span ontouchstart='openShadow()' class="filter"></span>
+            </span>  -->
         </div>
     </header>
 
@@ -321,6 +355,13 @@
 <script type="text/javascript">
     apiready = function(){
         fnInit();
+        if (api.pageParam.flag) {
+            // 1 ta
+            // 0 wo
+            $api.addCls($api.domAll('.head_center_left')[0], 'select');
+        } else {
+            $api.addCls($api.domAll('.head_center_left')[1], 'select');
+        }
     };
    function listSelect () {
         api.openFrame({

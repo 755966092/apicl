@@ -5,14 +5,19 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
-    <style>
-        body,html{
-            background-color: rgba(0,0,0,0.1);
-            width: 100%;
+     <style>
+        html,body {
             height: 100%;
+            width: 100%;    
+            background-color: rgba(0,0,0,0.4);
         }
+
         body {
-            display: -webkit-box; 
+        }
+        .warp1 {
+            position: relative;
+            height: 100%;
+             display: -webkit-box; 
             display: flex; 
             -webkit-box-direction: normal;
             -webkit-box-orient: vertical;
@@ -20,72 +25,80 @@
             -webkit-box-align:  end;
             align-items: flex-end;
         }
-        header.header {
-            background-color: transparent;
-        }
-        .main {
-            float: right;
+        .warp {
+            margin-left: 1.5rem;
             width: 6rem;
             background-color: #fff;
-           -webkit-box-flex: 1.0;
-            flex-grow: 1;
-
-
-            padding-top: .42rem;
-            padding-left: .55rem;
+        }
+        .main {
+            background-color: #fff;
+            position: relative;
+            height: 100%;
             box-sizing: border-box;
         }
-        .relation {
-            font-size: 0;
-            width: 100%;
-
+        .main>div:first-child {
+            padding: .15rem .2rem;
+            padding-right: 0;
         }
-        .relation .title {
+
+        .main ul.no1 {
             font-size: .24rem;
-            color: #555;
-            line-height: .33rem;
+            width: 100%;
         }
-        .relation .list {
+        .main ul.no1 li {
             font-size: 0;
+            margin-bottom: .1rem;
         }
-        .relation .item:first-child {
-            border-top: 1px solid #d9d9d9;
-            margin-top: .17rem;
+        .main ul.no1 li:last-child {
+            margin-bottom: 0;
         }
-        .relation .item {
-            padding-right: .37rem;
-            box-sizing: border-box;
+        .main ul.no1 li p {
+            font-size: .24rem;
+            color: #9b9b9b;
+        }
+        .main ul.no1 li span {
+            font-size: .24rem;
             display: inline-block;
-            height: .68rem;
-            line-height: .68rem;
-            border-bottom: 1px solid #d9d9d9;
-            font-size: .24rem;
-            width: 100%;
+            margin-top: .1rem;
+            width: 1.78rem;
+            height: .79rem;
+            background-color: #F4F4F4;
+            border-radius: .06rem;
+            text-align: center;
+            /*line-height: .79rem;*/
+            padding-top: .08rem;
+            box-sizing: border-box;
+            color: #555;
+            margin-bottom: .2rem;
         }
-        .relation .item>span {
-            color: #777;
+        .main ul.no1 li span:nth-child(2), 
+        .main ul.no1 li span:nth-child(3) {
+            margin-right: .12rem;
         }
-        .sel>div {
-            background: url(../../image/icon_my/icon_enter.png)no-repeat;
-            background-position: right center;
-            -webkit-background-size: .44rem .33rem;
-            background-size: .44rem .33rem;
+        .main ul.no1 li span.sel {
+            background: url(../../image/icon_supply/icon_text4.png);
+            background-size: .96rem .6rem;
+            color: #27B24A;
         }
-
+       
+        .main ul.no1 li span.li_span4 {
+            background-size: 1.78rem .79rem;
+            width: 1.78rem;
+        }
           .main ul.no2 {
             font-size: .24rem;
-            margin-top: .37rem;
+            /*margin-top: .37rem;*/
 
         }
         .main ul.no2 p {
-            line-height: .68rem;
+            line-height: .79rem;
             color: #555;
             /*border-bottom: 1px solid #cbcbcb;*/
         }
         .main ul.no2 li {
             
             /*height: .84rem;*/
-            line-height: .68rem;
+            line-height: .79rem;
             border-top: 1px solid #CBCBCB;
             font-size: 0;
         }
@@ -96,21 +109,33 @@
         .main ul.no2 li span{
             border-radius: .08rem;
             float: left;
-            width: 1.5rem;
-            height: .68rem;
+            width: 1.78rem;
+            height: .79rem;
             font-size: .24rem;
             background-color: #F4F4F4;
             text-align: center;
             line-height: .68rem;
-            padding: 0 .14rem ;
+            /*padding: 0 .14rem ;*/
             box-sizing: border-box;
-            margin: .15rem .1rem;
+            /*margin: .15rem .1rem;*/
+            margin-top: .1rem;
+            margin-bottom: .1rem;
+            margin-right: .12rem;
             display: none;
             white-space:nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        .main ul.no2 li span.no {
+            margin-right: 0;
+        }
         .main ul.no2 li.sel span {
+            display: inline-block;
+        }
+
+        .main ul.no2 li.sel span.hide {
+            display: none;
+        }.main ul.no2 li.sel span.show {
             display: inline-block;
         }
         .main ul.no2 li:last-child {
@@ -120,7 +145,7 @@
         .spanSel {
             background: url(../../image/icon_supply/icon_text4.png)no-repeat;
             background-position: right center;
-            background-size: 1.5rem .71rem; 
+            background-size: 1.78rem .79rem; 
             color: #27B24A;
         }
         .main ul.no2 li span.no2Icon {
@@ -142,156 +167,262 @@
             background-position: 0 center;
         }
         .footer {
+            height: .78rem;
             width: 6rem;
-            height: .98rem;
-            background-color: #F8F8F8;
             font-size: 0;
+            z-index: 999;
+            position: absolute;
+            bottom: 0;
         }
-        .footer span{
-            width: 50%;
-            text-align: center;
-            line-height: .98rem;
+        .footer span {
+            height: .78rem;
+            width: 3rem;    
             font-size: .34rem;
+            text-align: center;
+            line-height: .78rem;
+            float: left;
+            background-color: #F8F8F8;
         }
         .footer span:last-child {
             background-color: #27B24A;
             color: #fff;
         }
+        
+        header.header {
+            opacity: 0;
+        }
     </style>
 </head>
-<body tapmode="hover" onclick="api.closeFrame();">
-    <header class="header"></header>
-    <div class="main" tapmode="hover" onclick="event.stopPropagation();">
-        <div class="relation">
-            <p class="title">关系</p>
-            <div class="list">
-                <div tapmode="hover" data-type='2' onclick="li_span(this);event.cancelBubble=true;" class="item sel"><div class="wrap">熟识好友<span>(双向通讯录)</span></div></div>
-                <div tapmode="hover" data-type='1' onclick="li_span(this);event.cancelBubble=true;" class="item"><div class="wrap">相识好友<span>(单向通讯录)</span></div></div>
-                <div tapmode="hover" data-type='3' onclick="li_span(this);event.cancelBubble=true;" class="item"><div class="wrap">尚未加入<span>(有通讯录)</span></div></div>
+<body   tapmode="hover" class=""   onclick="api.closeFrame()">
+   
+    <div class="warp1 flex-def flex-zBetween">
+         <!-- <header  class="header clearfix">
+            <div class="head">
+                <span class="callback"   tapmode="hover"   onclick="api.closeWin()">返回</span>
+                <span class="winTitle">
+                    找供求
+                </span>
+            </div>
+        </header> -->
+         <header class="header">
+        <div class="head"></div>
+    </header>
+        <div class="warp flex-item"   tapmode="hover"   onclick="api.closeFrame()">
+            <div class="main"   tapmode="hover"   onclick="event.cancelBubble=true;">
+                <div>
+                    <ul class="no1">
+                        <li>
+                             <p>类型</p>
+                            <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 sel">
+                               熟识好友<br>（双向通讯录）
+                            </span>
+                             
+                            <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 ">
+                                相识好友<br>（单向通讯录）
+                            </span>
+                            <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 ">
+                              尚未加入<br>（有通讯录）
+                            </span>
+                        </li>
+                     </ul>  
+                    <ul class="no2">
+                        <p>分类</p>
+                        <li class="no2List sel clearfix"   tapmode="hover"   onclick="li_spanP(this);event.cancelBubble=true;" >
+                            <p>学校<span class="no2Icon no2Icon2"></span></p>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span spanSel">全部</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">摄影</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no no2_li_Span">医疗</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">医疗</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">医疗</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no no2_li_Span">教育</span>
+                        </li>
+                        <li class="no2List clearfix"   tapmode="hover"   onclick="li_spanP(this);event.cancelBubble=true;">
+                            <p>公司<span class="no2Icon"></span></p>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span spanSel">全部</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">摄影摄</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no no2_li_Span">摄影摄</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">摄影摄</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">医疗</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no no2_li_Span">教育</span>
+                        </li>
+                        <li class="no2List clearfix"   tapmode="hover"   onclick="li_spanP(this);event.cancelBubble=true;">
+                            <p>行业<span class="no2Icon"></span></p>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span spanSel">全部</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">摄影摄影摄影</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no no2_li_Span">摄影摄影摄影</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">摄影摄影摄影</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">医疗</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no no2_li_Span">教育</span>
+                        </li>
+                        <li class="no2List clearfix"   tapmode="hover"   onclick="li_spanP(this);event.cancelBubble=true;">
+                            <p>地点<span class="no2Icon"></span></p>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span spanSel">全部</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">摄影摄影摄影</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no no2_li_Span">摄影摄影摄影</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">摄影摄影摄影</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">医疗</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no no2_li_Span">教育</span>
+                        </li>
+                        <li class="no2List clearfix"   tapmode="hover"   onclick="li_spanP(this);event.cancelBubble=true;">
+                            <p>自定义<span class="no2Icon"></span></p>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span spanSel">全部</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">摄影摄影摄影</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no no2_li_Span">摄影摄影摄影</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">摄影摄影摄影</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">医疗</span>
+                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no no2_li_Span">教育</span>
+                        </li>
+                    </ul>
+                </div>
+            </div> 
+            <div class="footer">
+                <span   tapmode="hover"   onclick="enter(0);event.stopPropagation();">重置</span>
+                <span   tapmode="hover"   onclick="enter(1);event.stopPropagation();">确定</span>
             </div>
         </div>
-        <ul class="no2">
-            <p>分类</p>
-            <li class="no2List  sel clearfix"   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" >
-                <p>学校<span class="no2Icon no2Icon2"></span></p>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span spanSel">全部</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">摄影</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">医疗</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">医疗</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">医疗</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">教育</span>
-            </li>
-            <li class="no2List clearfix"   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;">
-                <p>公司<span class="no2Icon"></span></p>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span spanSel">全部</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">摄影摄</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">摄影摄</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">摄影摄</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">医疗</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">教育</span>
-            </li>
-            <li class="no2List clearfix"   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;">
-                <p>行业<span class="no2Icon"></span></p>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span spanSel">全部</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">摄影摄影摄影</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">摄影摄影摄影</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">摄影摄影摄影</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">医疗</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">教育</span>
-            </li>
-            <li class="no2List clearfix"   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;">
-                <p>地点<span class="no2Icon"></span></p>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span spanSel">全部</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">摄影</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">医疗</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">教育</span>
-            </li>
-            <li class="no2List clearfix"   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;">
-                <p>自定义<span class="no2Icon"></span></p>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span spanSel">全部</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">摄影</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">医疗</span>
-                <span   tapmode="hover"   onclick="selfAdaption(this)" class="no2_li_Span">教育</span>
-            </li>
-        </ul>
-                
+        
     </div>
-    <div class="footer" onclick="event.stopPropagation();">
-        <span   tapmode="hover"   onclick="enter(0);event.stopPropagation();">重置</span>
-        <span   tapmode="hover"   onclick="enter(1);event.stopPropagation();">确定</span>
-    </div>
+    
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
         fnInit();
-    };
-    // 选中图标
+    }
+      // 选中图标
     function li_span(ele) {
-        var allDom = ele.parentNode.childNodes
-        var no2Icon = ele.parentNode.getElementsByClassName('no2Icon');
-        for (var i = 0; i< no2Icon.length; i++) {
-            $api.removeCls(no2Icon[i], 'no2Icon2');
-        }
-        $api.addCls(ele.getElementsByClassName('no2Icon')[0], 'no2Icon2');
+        flag = 1;
+        var allDom = $api.not($api.closest(ele, 'li'),'p')
         for (var i = 0; i < allDom.length; i++) {
             $api.removeCls(allDom[i], 'sel');
         }
         $api.addCls(ele, 'sel');
     }
-    function selfAdaption(ele) {
-        var allDom = ele.parentNode.getElementsByClassName("no2_li_Span")
-        for (var i = 0; i < allDom.length; i++) {
-            $api.removeCls(allDom[i], 'spanSel');
-        }
-        $api.addCls(ele, 'spanSel');
-    }
 
+    function li_spanP(ele) {
+        if ($api.hasCls(ele, 'sel')) {
+            $api.removeCls(ele, 'sel');
+             $api.removeCls($api.not(ele,'.no2_li_Span')[1], 'no2Icon2');
+
+        } else {
+            var allDom = $api.not($api.closest(ele, 'ul'),'p')
+            var allP = $api.domAll('.no2Icon');
+            for (var i = 0; i < allP.length; i++) {
+                 $api.removeCls(allP[i], 'no2Icon2');
+            }
+            $api.addCls($api.not(ele,'.no2_li_Span')[1], 'no2Icon2');
+            for (var i = 0; i< allDom.length; i++) {
+                $api.removeCls(allDom[i], 'sel');
+            }
+            $api.addCls(ele, 'sel');
+        }
+
+    }
+    function selfAdaption(ele) {
+        flag = 1;
+        var allDom = ele.parentNode.getElementsByClassName("no2_li_Span")
+        if ($api.hasCls(ele, 'spanSel')) {
+            for (var i = 0; i < allDom.length; i++) {
+                $api.addCls(allDom[i], 'show');
+                 $api.removeCls(allDom[i], 'hide');
+            }
+        } else {
+            for (var i = 0; i < allDom.length; i++) {
+                $api.removeCls(allDom[i], 'spanSel');
+                $api.removeCls(allDom[i], 'show');
+                $api.addCls(allDom[i], 'hide');
+            }
+            $api.addCls(ele, 'spanSel');
+            $api.addCls(ele, 'show');
+        }
+    }
 
     // 点击确定按钮： 1； 重置按钮 0
     function enter(n) {
         if (n) {
-            var sel = $api.dom('.sel');
-            var selVal = $api.attr(sel, 'data-type')
-            
+            var sel = $api.domAll('.no1 .sel');
+            var spanSel = $api.domAll('.spanSel');
+            var parameter = {
+                type: 1,
+                order: '',
+                sub_type: 1
+            }
+            // sel[0] = 类型个人 | 公司
+            // sel[1] = 类别自产自销 | 代理
+            // sel[2] = 排序智能排序 | 距离 | 价格 | 最新发布
+            parameter.type = ($api.text(sel[0]) == '个人') ? 1 : 2;
+            parameter.sub_type = ($api.text(sel[1]) == '自产自销') ? 1 : 2;
+
+            var order = $api.text(sel[2])
+            switch (order) {
+                case '智能排序': parameter.order = '';
+                break;
+                case '距离最近': parameter.order = 'distance';
+                break;
+                case '价格最低': parameter.order = 'price';
+                break;
+                case '最新发布': parameter.order = 'create_time';
+                break;
+
+            }
             // 发送事件, 刷新筛选结果
             api.sendEvent({
-                name: 'screeningResultsType',
+                name: 'screeningResults',
                 extra: {
-                    selVal: selVal 
+                    condition: parameter,
+                    flag: flag
                 }
             });
-            
              api.closeFrame();
 
-        } else {
-            var no1 = document.getElementsByClassName('list')[0]
-            var liArr = no1.getElementsByTagName('div');
+        }
+        else {
+            var no1 = document.getElementsByClassName('no1')[0]
+            var liArr = no1.getElementsByTagName('li');
             for (var i = 0; i < liArr.length; i++) {
-                $api.removeCls(liArr[i], 'sel');
-            }  
-            $api.addCls(liArr[0], 'sel');
-
-            for (var i = 0; i < $api.domAll('li').length; i++) {
-                $api.removeCls($api.domAll('li')[i], 'sel');
-                var lispan = $api.domAll('li')[i].getElementsByClassName('no2_li_Span')
-                for (var j = 0; j < lispan.length; j++) {
-                   $api.removeCls(lispan[j], 'spanSel');
+                for(var j = 0; j < liArr[i].childNodes.length ; j++) {
+                    $api.removeCls(liArr[i].childNodes[j], 'sel');
                 }
-                $api.addCls(lispan[0], 'spanSel');
+                $api.addCls(liArr[i].childNodes[3], 'sel');
+            }  
+            for (var i = 0; i < $api.domAll('.no2List').length; i++) {
+                $api.removeCls($api.domAll('.no2List')[i], 'sel');
+                for(var j = 0; j < $api.domAll('.no2List')[i].childNodes.length ; j++) {
+
+                    $api.removeCls($api.domAll('.no2List')[i].childNodes[j], 'hide');
+                    $api.removeCls($api.domAll('.no2List')[i].childNodes[j], 'spanSel');
+                }
+                $api.addCls($api.domAll('.no2List')[i].childNodes[3], 'spanSel');
             }
-            $api.addCls($api.domAll('li')[0], 'sel');
+            $api.addCls($api.domAll('.no2List')[0], 'sel');
+            var no2Icon = $api.domAll('.no2Icon')
+            for (var i = 0; i < no2Icon.length; i++) {
+                $api.removeCls(no2Icon[i], 'no2Icon2');
+            }
+            $api.addCls(no2Icon[0], 'no2Icon2');
 
 
-            var lavelArr = $api.domAll('.no2Icon')
-            for (var i = 0; i < lavelArr.length; i++) {
-               $api.removeCls(lavelArr[i], 'no2Icon2');
-            }
-            $api.addCls(lavelArr[0], 'no2Icon2');
-            // $api.addCls($api.domAll('li')[0], 'sel');
-           
         }
     }
+
+
+    // // 选中图标
+    // function li_span(ele) {
+    //     flag = 1;
+    //     var allDom = ele.parentNode.childNodes
+    //     var no2Icon = $api.domAll('.no2Icon')
+    //     for (var i = 0; i < no2Icon.length; i++) {
+    //         $api.removeCls(no2Icon[i], 'no2Icon2');
+    //     }
+    //     $api.addCls(ele.getElementsByClassName('no2Icon')[0], 'no2Icon2');
+    //     for (var i = 0; i < allDom.length; i++) {
+    //         $api.removeCls(allDom[i], 'sel');
+    //     }
+    //     $api.addCls(ele, 'sel');
+    // }
+    
+   
+   
 </script>
 </html>
