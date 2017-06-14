@@ -7,64 +7,109 @@
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
         html, body {
-            background-color: rgba(0,0,0,0);
             height: 100%;
+            width: 7.5rem;
+            background-color: rgba(0,0,0,0.2);
         }
         .main {
-            height: 100%;
-            /*background: url(../../image/icon_other/icon_shadow.png)no-repeat;*/
-            background: rgba(0,0,0,0.3);
-        }
-        .main ul {
-            width: 3.35rem;
-            height: 4.4rem;
-            background-color: #fff;
-            font-size: .28rem;
-            padding: 0 .18rem;
-            float: right;
-        }
-        .main ul li {
-            height: .88rem;
-            line-height: .88rem;
             width: 100%;
+            height: 100%;
+        }
+        .slide {
+            width: 6rem;
+            height: 100%;
+            margin-left: 1.5rem;
+            background-color: #fff;
+            font-size: 0;
+            box-sizing: border-box;
+            position: relative;
+        }
+        .wrap {
+             padding: .4rem 0  0 .2rem;
+        }
+        .slide .status {
+            padding-right: .2rem;
+            padding-bottom: .2rem;
+            margin-bottom: .3rem;
+        }
+        .bb {
+            border-bottom: 1px solid #ECECEC;
+        }
+        .slide p {
+            font-size: .24rem;
+            color: #555;
+            margin-bottom: .15rem;
+        }
+        .slide span {
+            margin-right: .13rem;
+            width: 1.78rem;
+            font-size: .24rem;
+            background-color: #F3F3F3;
+            border-radius: .1rem;
+            height: .8rem;
             text-align: center;
-            border-bottom: 1px solid #C8C7CC;
+            line-height: .8rem;
+            margin-bottom: .2rem;
         }
-        .main ul li:last-child {
-            border: 0;
+        .sel {
+            background: #f3f3f3 url(../../image/icon_supply/icon_text4.png)no-repeat;
+            -webkit-background-size: 1.78rem .8rem;
+            background-size: 1.78rem .8rem;
         }
-        
-        .main ul li:nth-child(2) {
-            background: url(../../image/icon_my/icon_dfk.png)no-repeat;
-            background-size: .34rem .29rem;
-            background-position: .76rem center;
+        .slide span.mr0 {
+            margin-right: 0;
         }
-        .main ul li:nth-child(3) {
-            background: url(../../image/icon_my/icon_dfh.png)no-repeat;
-            background-size: .32rem .29rem;
-            background-position: .76rem center;
+        .footer {
+            height: .78rem;
+            width: 100%;
+            font-size: 0;
+            line-height: .78rem;
+            position: absolute;
+            bottom: 0;right: 0;
         }
-        .main ul li:nth-child(4) {
-            background: url(../../image/icon_my/icon_dsh.png)no-repeat;
-            background-size: .34rem .28rem;
-            background-position: .76rem center;
+        .footer span {
+            border-radius: 0;
+            margin: 0;
+            width: 50%;
+            text-align: center;
+            font-size: .34rem;
+            position: absolute;
+            bottom: 0;
         }
-        .main ul li:nth-child(5) {
-            background: url(../../image/icon_my/icon_dpj.png)no-repeat;
-            background-size: .25rem .34rem;
-            background-position: .76rem center;
+        .footer span:last-child{
+            right: 0;
+            bottom: 0;
+            color: #fff;
+            background-color: #27B24A;
         }
     </style>
 </head>
 <body>
-     <div class="main"   tapmode="hover"   onclick="api.closeFrame()">
-         <ul>
-             <li   tapmode="hover"   onclick="selecctLsit(this)" data-val="all">全部状态</li>
-             <li   tapmode="hover"   onclick="selecctLsit(this)" data-val="dfk">待付款</li>
-             <li   tapmode="hover"   onclick="selecctLsit(this)" data-val="dfh">待发货</li>
-             <li   tapmode="hover"   onclick="selecctLsit(this)" data-val="dsh">待收货</li>
-             <li   tapmode="hover"   onclick="selecctLsit(this)" data-val="dpj">待评价</li>
-         </ul>
+     <div class="main" ontouchstart="api.closeFrame()">
+        <div class="slide" ontouchstart = 'event.stopPropagation();'>
+            <div class="wrap">
+                <div class="status bb">
+                    <p>全部状态</p>
+                    <span data-val="0" ontouchstart="selClass(this)" >全部状态</span>
+                    <span data-val="1" ontouchstart="selClass(this)">待付款</span>
+                    <span data-val="2" ontouchstart="selClass(this)" class="mr0">待发货</span>
+                    <span data-val="3" ontouchstart="selClass(this)">待收货</span>
+                    <span data-val="4" ontouchstart="selClass(this)">待评价</span>
+                </div>
+                <div class="status">
+                    <p>全部分类</p>
+                    <span data-val="5" ontouchstart="selClass(this)" >全部状态</span>
+                    <span data-val="6" ontouchstart="selClass(this)">待付款</span>
+                    <span data-val="7" ontouchstart="selClass(this)" class="mr0">待发货</span>
+                    <span data-val="8" ontouchstart="selClass(this)">待收货</span>
+                    <span data-val="9" ontouchstart="selClass(this)">待评价</span>
+                </div>
+            </div>
+             <div class="footer">
+                    <span ontouchstart="enter(0)">重置</span>
+                    <span ontouchstart="enter(1)">确定</span>
+            </div>
+        </div>
      </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -72,10 +117,28 @@
 <script type="text/javascript">
     apiready = function(){
     };
-    function selecctLsit(ele) {
-        var dataVal = $api.attr(ele, 'data-val');
-        alert(dataVal);
-        api.closeFrame();
+    function selClass(ele) {
+        var node = $api.not($api.closest(ele, '.status'), 'p')
+        for (var i = 0; i < node.length; i++) {
+            $api.removeCls(node[i], 'sel');
+        }
+        $api.addCls(ele, 'sel');
+    }
+    function enter(n) {
+        if (n) {
+            var arr=[]
+            // 确定
+            for (var i = 0; i < $api.domAll('.sel').length; i++) {
+                arr.push($api.attr($api.domAll('.sel')[i], 'data-val'))
+            }
+            alert(arr)
+        } else {
+            // 重置
+            var node = $api.domAll('span');
+            for (var i = 0; i < node.length; i++) {
+                $api.removeCls(node[i], 'sel');
+            }
+        }
     }
 </script>
 </html>
