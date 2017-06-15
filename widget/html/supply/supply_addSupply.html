@@ -25,12 +25,21 @@
         float: right;
         padding: 0 .13rem 0;
         box-sizing: border-box;
-       /* background: url(../../image/icon_supply/icon_tk.png)no-repeat;
-        -webkit-background-size: 2.48rem 1.67rem;
-        background-size: 2.48rem 1.67rem;*/
         background-color: #3A393F;
         font-size: .28rem;
-        margin-right: .25rem;
+        margin-right: .1rem;
+        position: relative;
+        margin-top: .2rem;
+      }
+      ul span {
+        position: absolute;
+        width: 0px;
+        height: 0px;
+        right: .3rem;
+        top: -.15rem;
+        border-right: 10px solid transparent;
+        border-left: 10px solid transparent;
+        border-bottom: 10px solid #3A393F;
       }
       ul li {
         padding-left: .87rem;
@@ -46,7 +55,7 @@
         background-size: .35rem .29rem;
         background-position: .25rem center;
       }
-      ul li:last-child {
+      ul li:nth-child(2) {
         background: url(../../image/icon_supply/icon_gong.png)no-repeat;
         -webkit-background-size: .28rem .28rem;
         background-size: .28rem .28rem;
@@ -61,6 +70,7 @@
        <ul>
            <li tapmode="hover" onclick="publish(1);event.stopPropagation();">发布供</li>
            <li tapmode="hover" onclick="publish(0);event.stopPropagation();">发布求</li>
+           <span></span>
        </ul>
    </div>   
 </body>
@@ -83,6 +93,9 @@
               url: './supply_releaseAsk_win.html'
             });
         }
+        setTimeout(function(){
+          api.closeFrame();
+        },500)
           // api.closeFrame()
         // api.closeFrame({
         //     name: 'supply_addSupply'

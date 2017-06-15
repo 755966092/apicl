@@ -21,20 +21,33 @@
         
         .wrap {
             width: 7.5rem;
-            height: 12.8rem;
+            /*height: 12.8rem;*/
+            box-sizing: border-box;
+
         }
         
         .addWin {
+            float: right;
+            margin-right: .1rem;
             width: 2.24rem;
             height: 1.74rem;
-            background: url(../../image/bg_news.png)no-repeat;
-            background-size: 2.24rem 1.74rem;
-            position: absolute;
-            right: 0.3rem;
-            top: 1.2rem;
-            padding-top: .1rem;
+            margin-top: .2rem;
+            background-color: #3A393F;
+            position: relative;
+            /*right: 0.3rem;*/
+            /*top: 1.2rem;*/
+            /*padding-top: .1rem;*/
         }
-        
+        .addWin span {
+        position: absolute;
+        width: 0px;
+        height: 0px;
+        right: .3rem;
+        top: -.15rem;
+        border-right: 10px solid transparent;
+        border-left: 10px solid transparent;
+        border-bottom: 10px solid #3A393F;
+      }
         .addWin p {
             color: #fff;
             padding-left: .9rem;
@@ -57,21 +70,28 @@
             -webkit-background-size: .41rem .41rem;
             background-size: .41rem .41rem;
         }
+        header.header {
+            opacity: 0;
+        }
     </style>
 </head>
 
-<body>
-    <div class="wrap"   tapmode="hover"   onclick="api.closeFrame()">
+<body tapmode="hover"   onclick="api.closeFrame()">
+    <header class="header">
+        <div class="head"></div>
+    </header>
+    <div class="wrap"   >
         <div class="addWin">
             <p   tapmode="hover"   onclick="addFellow(0);event.stopPropagation();">添加朋友</p>
             <p   tapmode="hover"   onclick="addFellow(1);event.stopPropagation();">扫一扫</p>
+            <span></span>
         </div>
     </div>
     <script type="text/javascript" src="../../script/api.js"></script>
     <script type="text/javascript" src="../../script/common.js"></script>
     <script type="text/javascript">
     apiready = function() {
-
+        fnInit();
     };
     // 点击添加好友和扫面二维码跳转到的页面
     function addFellow(n) {
@@ -86,6 +106,9 @@
                 url: './scan.html',
             });
         }
+        setTimeout(function(){
+            api.closeFrame();
+        },500)
     }
     </script>
 </body>

@@ -213,7 +213,7 @@
                     // sendToken (userToken,rongToken)
                     syncContacts(userToken, rongToken)
                     
-                    
+                   
 
                 } else {
                     api.toast({
@@ -259,7 +259,6 @@
     }
    
     function syncContacts(userToken, rongToken) {
-            console.log('syncContacts第一步：运行syncContacts函数')
             api.confirm({
                 title: '查找你的我在朋友',
                 msg: '我在将上传手机通讯录至我在服务器以匹配及推荐朋友。（上传通讯录仅用于匹配朋友，不会保存任何资料，亦不会作它用）',
@@ -267,12 +266,11 @@
             },function(ret,err){
                  // 打开数据库， 新建表格
                 openDb(userToken);
-                console.log('syncContacts第二步：打开数据库')
+                console.log(JSON.stringify(ret))
                 if(ret.buttonIndex == 1){
                     loginSuccess(userToken, rongToken);
                     rongyun(rongToken);
                 } else {
-                    console.log('syncContacts第三步：把本地通讯录同步到网络')
                      setTimeout(function(){
                          contacts.queryByPage({
                             pageIndex: 0
@@ -280,7 +278,7 @@
                             if (ret) {
                                 // console.log('syncContacts第四步：同步完成' + JSON.stringify(ret))
                                 api.ajax({
-                                    url: apiSite + 'api/contact/sync',
+                                    url: apiSite + '/api/contact/sync',
                                     method: 'post',
                                     headers: apiHeader,
                                     data: {
@@ -289,11 +287,10 @@
                                             contact_json:ret
                                         }
                                     }
-                                }, function(ret, err) {
+                                }, function(ret1, err1) {
                                     // 同步通讯录成功
                                     // 请求同步的数据，存到本地数据库
                                     console.log('上传通讯录数据'+JSON.stringify(ret))
-                                    console.log('上传通讯录数据'+JSON.stringify(err))
                                     requestData();
                                 })
                             } else {
@@ -311,26 +308,13 @@
 
     // 打开数据库
     function openDb(userToken) {
-        console.log('打开数据库'+userToken)
          // 打开数据库
         db.openDatabase({
-            name: 'db_'+userToken
+            name: 'db_'+$api.getStorage('userToken')
         }, function(ret, err) {
             if (ret.status) {
                 // alert('打开成功');
-                db.executeSql({
-                    name: 'db_'+userToken,
-                    sql: 'DROP TABLE IF EXISTS addressList; CREATE TABLE addressList(user_id int, nickname varchar(255), head_img_url varchar(255), current_position varchar(255),current_company varchar(255), titleSize int, title varchar(255), img varchar(255), flag varchar(255), litter varchar(255), type int);CREATE UNIQUE INDEX user_id_idx on addressList (user_id);'
-                }, function(ret, err) {
-                    // ;CREATE UNIQUE INDEX user_id_idx on addressList (user_id);
-                    if (ret.status) {
-                        console.log('打开成功数据库');
-                        // alert('执行成功')
-
-                    } else {
-                        alert('新建表错误:'+JSON.stringify(err));
-                    }
-                });
+                console.log("打开数据库成功")
             } else {
                 alert('新建库错误:'+JSON.stringify(err));
             }
@@ -338,7 +322,6 @@
     }
     // 请求数据
     function requestData() {
-        console.log('requestData请求数据')
         api.ajax({
             url: apiSite + '/api/contact/index',
             method: 'post',
@@ -349,7 +332,6 @@
                }
             }
        }, function(ret, err) {
-            console.log('请求数据2222222')
             disData(ret.data.single_list, 1)
             disData(ret.data.both_list, 2)
             disData(ret.data.unavailable_list, 3)
@@ -357,9 +339,9 @@
        })
            
     }
+    // 处理数据
     function disData (data, type) {
-        console.log('disData函数')
-        // console.log('disData'+data)
+        console.log('disData'+JSON.stringify(data))
         if (data != '') {
             for (var i = 0; i < data.length; i++) {
                 // single_list
@@ -378,15 +360,12 @@
                     data[i].current_company = '';
                 }
             }
-            console.log('disData函数22222222')
             // 模块数据格式
             litterSort(data, type)
-            // sqlSyntax(initialData);
         }
     }
     // 排序
     function litterSort(data,type) {
-        console.log('litterSort函数')
         for (var i = 0; i < data.length; i++) {
             for (var j = 0; j < data.length; j++) {
                 if (data[i].litter < data[j].litter) {
@@ -400,7 +379,6 @@
     }
     // 拼数据库语法字符串
     function sqlSyntax(data1, type) {
-        // console.log('数据库'+ type)
         console.log('sqlSyntax函数')
         for (var i = 0; i < data1.length; i++) {
             data1[i].flag = data1[i].litter[0];
@@ -412,24 +390,39 @@
             SQL += '("'+ data1[i].user_id +'","'+ data1[i].nickname +'","'+ data1[i].head_img_url +'","'+ data1[i].current_company +'","'+ data1[i].current_position+'","'+ data1[i].titleSize +'","'+ data1[i].title +'","'+ data1[i].img+'","'+ data1[i].flag +'","'+ data1[i].litter +'",'+ type +'),'
         }
         SQL = SQL.substring(0,SQL.length-1) + ';'
-        // console.log(SQL)
+    
         db.executeSql({
             name: SQLName,
-            sql: SQL
+            sql: 'CREATE TABLE IF NOT EXISTS addressList(user_id int, nickname varchar(255), head_img_url varchar(255), current_position varchar(255),current_company varchar(255), titleSize int, title varchar(255), img varchar(255), flag varchar(255), litter varchar(255), type int)'
         }, function(ret, err) {
+            // ;CREATE UNIQUE INDEX user_id_idx on addressList (user_id);
             if (ret.status) {
-                console.log('执行语句正确'+JSON.stringify(ret));
-             
-                // api.execScript({
-                //     frameName: 'frame1',
-                //     script: 'query()'
-                // });
-                // api.execScript({
-                //     frameName: 'txl_listWin_frame',
-                //     script: 'query()'
-                // });
+                 console.log('新建表格'+JSON.stringify(ret));
+                 db.executeSql({
+                     name: SQLName,
+                     sql: 'CREATE UNIQUE INDEX user_id_idx on addressList (user_id)'    
+                 }, function(ret, err){        
+                     if( ret.status ){
+                        console.log( JSON.stringify( ret ) );
+                        db.executeSql({
+                            name: SQLName,
+                            sql: SQL   
+                        }, function(ret, err){        
+                            if( ret.status ){
+                                console.log( '插入数据'+JSON.stringify( ret ) );
+                            }else{
+                                alert( JSON.stringify( err ) );
+                            }
+                        });
+                     }else{
+                         alert( JSON.stringify( err ) );
+                     }
+                 });
+               
+               
+                
             } else {
-                console.log('执行语句错误:' + JSON.stringify(err))
+                alert('新建表错误:'+JSON.stringify(err));
             }
         });
     }

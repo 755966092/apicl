@@ -8,8 +8,11 @@
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
         header.header {
-            background-color: #fff;
+            background-color: #f8f8f8;
             
+        }
+        header.header .head {
+            background-color: #f8f8f8;
         }
         header.header .callback {
             font-size: .28rem;
@@ -124,9 +127,7 @@
             <span class="callback"   tapmode="hover"   onclick="api.closeWin()">
                 取消
             </span>
-            <span class="winTitle">
-                
-            </span>
+            
         </div>
     </header>
     <div class="main">
@@ -184,6 +185,7 @@
     // 点击下一步后
     function nextStep() {
         var tel = $api.val($api.dom('#ipt'));
+        console.log(tel)
         var zoneCode = $api.text($api.dom('#zoneCode'));
         var mobile;
         api.confirm({
@@ -194,7 +196,7 @@
             if(ret.buttonIndex == 2){
                 // api.closeWin();
                 api.ajax({
-                        url: apiSite + 'api/login/registerStepOne',
+                        url: apiSite + '/api/login/registerStepOne',
                         method: 'post',
                         headers: apiHeader,
                         data: {
@@ -204,22 +206,35 @@
                             }
                         }
                 }, function(ret, err) {
-                        mobile = ret.data.mobile
-                            if (ret.code == 10005) {
-                                alert('该手机号以注册');
+                            console.log(JSON.stringify(ret))
+                            mobile = ret.data.mobile
+                            if (ret.code == 200){
+                                 nextTwo(mobile, zoneCode);
+                             } else {
+                                if (ret.data.is_user) {
+                                    alert(ret.msg);
+                                } else if (ret.data.is_set_password) {
+                                    alert(ret.msg);
+                                } else  {
+                                    alert(ret.msg);
+                                }
                                 $api.attr($api.dom('.nextStep'), 'disabled','true');
                                 $api.css($api.dom('.nextStep'), 'background:#C1E9C1');
-                            } else {
-                                nextTwo(mobile, zoneCode);
-                                if (ret.data.is_set_password) {
-                                    alert('该手机号以注册,请设置密码');
-                                    nextTwo(mobile, zoneCode);
-                                }
-                                if (ret.data.status == -1) {
-                                    alert('请激活手机号');
-                                    nextTwo(mobile, zoneCode);
-                                }
-                            } 
+                             }
+                            // if (ret.code == 10005) {
+                            //     alert('该手机号以注册');
+                              
+                            // } else {
+                               
+                            //     if (ret.data.is_set_password) {
+                            //         alert('该手机号以注册,请设置密码');
+                            //         nextTwo(mobile, zoneCode);
+                            //     }
+                            //     if (ret.data.status == -1) {
+                            //         alert('请激活手机号');
+                            //         nextTwo(mobile, zoneCode);
+                            //     }
+                            // } 
                             
                 });
             }
@@ -254,7 +269,7 @@
          // 进行下一步注册, 获取验证码
          // var tel = $api.val($api.dom('#tel')),
         api.ajax({
-            url: apiSite + 'api/common/sendMobileCode',
+            url: apiSite + '/api/common/sendMobileCode',
             method: 'post',
             headers: apiHeader,
             data: {
@@ -301,7 +316,7 @@
      // 判断手机号是否注册过该平台
     function judge(tel) {
         api.ajax({
-            url: apiSite + 'api/login/registerStepOne',
+            url: apiSite + '/api/login/registerStepOne',
             method: 'post',
             headers: apiHeader,
             data: {

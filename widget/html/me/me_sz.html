@@ -79,7 +79,7 @@
             </li>
        </ul>
        <div class="btn">安全退出</div>
-       <div class="btn" ontouchstart="login()   ">清除缓存</div>
+       <div class="btn" ontouchstart="login()">清除缓存</div>
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -93,6 +93,16 @@ apiready = function() {
 function login() {
     $api.clearStorage();
     alert('清除缓存成功')
+    api.openWin({
+        name: 'winName',
+        url: '../enroll/me_login.html'
+    });
+    setTimeout(function() {
+        api.closeWin({
+            name: 'main'
+        });
+    },500)
+    
 }
 
 function openPage(ele) {
