@@ -72,6 +72,25 @@
         addFilter();
     };
 
+    // 网络获取数据
+    function requestData() {
+        api.ajax({
+            url: apiSite + '/api/contact/index',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                console.log(JSON.stringify(ret))
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
     // 添加筛选条件
     function addFilter() {
         api.addEventListener({
@@ -152,6 +171,7 @@
         }, function(ret, err) {
             if (ret.status) {
                 dakai(paixv(ret.data))
+                console.log('查询数据库'+JSON.stringify(ret))
             } else {
                 console.log(JSON.stringify(err));
             }
@@ -284,6 +304,10 @@
             }
         });
     }
+
+
+
+
 </script>
 </html>
 

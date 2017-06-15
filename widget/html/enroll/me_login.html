@@ -209,9 +209,10 @@
                     // alert('缓存信息：' + $api.getStorage('userToken'))
                     // 把当前的usertoken和rongtoken广播出去
                     // sendToken (userToken,rongToken)
+                    syncContacts(userToken, rongToken)
+                    
+                    
 
-                    loginSuccess(userToken, rongToken);
-                    rongyun(rongToken);
                 } else {
                     api.toast({
                         msg: ret.msg
@@ -238,16 +239,6 @@
             }
         });
     }
-    // function sendToken (userToken,rongToken) {
-    //     api.sendEvent({
-    //         name: 'sendToken',
-    //         extra: {
-    //             userToken: userToken, 
-    //             rongToken: rongToken
-    //         }
-    //     });
-    // }
-
     // 注册
     function register() {
         api.openWin({
@@ -265,5 +256,206 @@
         });
     }
    
+    function syncContacts(userToken, rongToken) {
+            console.log('syncContacts第一步：运行syncContacts函数')
+            api.confirm({
+                title: '查找你的我在朋友',
+                msg: '我在将上传手机通讯录至我在服务器以匹配及推荐朋友。（上传通讯录仅用于匹配朋友，不会保存任何资料，亦不会作它用）',
+                buttons:['不允许', '好']
+            },function(ret,err){
+                 // 打开数据库， 新建表格
+                openDb(userToken);
+                console.log('syncContacts第二步：打开数据库')
+                if(ret.buttonIndex == 1){
+                    loginSuccess(userToken, rongToken);
+                    rongyun(rongToken);
+                } else {
+                    console.log('syncContacts第三步：把本地通讯录同步到网络')
+                     setTimeout(function(){
+                         contacts.queryByPage({
+                            pageIndex: 0
+                        }, function(ret, err) {
+                            if (ret) {
+                                api.ajax({
+                                    url: apiSite + 'api/contact/sync',
+                                    method: 'post',
+                                    headers: apiHeader,
+                                    data: {
+                                        values: { 
+                                            token: userToken,
+                                            contact_json:ret
+                                        }
+                                    }
+                                }, function(ret, err) {
+                                    // 同步通讯录成功
+                                    // 请求同步的数据，存到本地数据库
+                                    console.log('syncContacts第四步：同步完成')
+                                    requestData();
+                                })
+                            } else {
+                                alert(JSON.stringify(err));
+                            }
+                        });
+                    },100)
+                    loginSuccess(userToken, rongToken);
+                    rongyun(rongToken);
+                    
+                }
+                
+            });
+    }
+
+    // 打开数据库
+    function openDb(userToken) {
+        console.log('打开数据库'+userToken)
+         // 打开数据库
+        db.openDatabase({
+            name: 'db_'+userToken
+        }, function(ret, err) {
+            if (ret.status) {
+                // alert('打开成功');
+                db.executeSql({
+                    name: 'db_'+userToken,
+                    sql: 'drop table if exists CREATE TABLE addressList(user_id int, nickname varchar(255), head_img_url varchar(255), current_position varchar(255),current_company varchar(255), titleSize int, title varchar(255), img varchar(255), flag varchar(255), litter varchar(255), type int);CREATE UNIQUE INDEX user_id_idx on addressList (user_id);'
+                }, function(ret, err) {
+                    // ;CREATE UNIQUE INDEX user_id_idx on addressList (user_id);
+                    if (ret.status) {
+                        console.log('打开成功数据库');
+                        // alert('执行成功')
+
+                    } else {
+                        alert('新建表错误:'+JSON.stringify(err));
+                    }
+                });
+            } else {
+                alert('新建库错误:'+JSON.stringify(err));
+            }
+        });
+    }
+    // 请求数据
+    function requestData() {
+        console.log('requestData请求数据')
+        api.ajax({
+            url: apiSite + '/api/contact/index',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+               values: { 
+                  token: $api.getStorage('userToken'),
+               }
+            }
+       }, function(ret, err) {
+            console.log('请求数据2222222')
+            disData(ret.data.single_list, 1)
+            disData(ret.data.both_list, 2)
+            disData(ret.data.unavailable_list, 3)
+            disData(ret.data.friend_list, 4)
+       })
+           
+    }
+    function disData (data, type) {
+        console.log('disData函数')
+        // console.log('disData'+data)
+        if (data != '') {
+            for (var i = 0; i < data.length; i++) {
+                // single_list
+                // both_list
+                // friend_list
+                // 去除空格
+                data[i].nickname = $api.trimAll(data[i].nickname)
+                data[i].litter = PinyinHelper.getShortPinyin(data[i].nickname).toUpperCase();
+                data[i].title = data[i].nickname;
+                data[i].img = data[i].head_img_url;
+                data[i].titleSize = 15;
+                if (data[i].current_position == null) {
+                    data[i].current_position = '';
+                } 
+                if (data[i].current_company == null) {
+                    data[i].current_company = '';
+                }
+            }
+            // 模块数据格式
+            litterSort(data, type)
+            // sqlSyntax(initialData);
+        }
+    }
+    // 排序
+    function litterSort(data,type) {
+        console.log('litterSort函数')
+        for (var i = 0; i < data.length; i++) {
+            for (var j = 0; j < data.length; j++) {
+                if (data[i].litter < data[j].litter) {
+                    var temp = data[i];
+                    data[i] = data[j];
+                    data[j] = temp;
+                }
+            }
+         }
+         sqlSyntax(data, type);
+        //  for (var i = 0; i < data.length; i++) {
+        //     // console.log("letter+++:"+data[i].litter)
+        //      data[0].flag = data[0].litter[0]
+        //      // data[i].flag = data[i].litter[0]
+             
+        //     if (i>0) {
+        //         if (data[i].litter[0] !== data[i-1].litter[0]) {
+        //             // console.log("letter+++:"+data[i].litter)
+        //             data[i].flag = data[i].litter[0];
+        //             // console.log("flag+++:"+data[i].flag)
+        //         }
+        //     }
+        //  }
+        // // console.log('数据：'+JSON.stringify(data))
+        // var arr = {}
+        // var a;
+        // for (var i = 0; i < data.length; i++) {
+            
+        //     if (data[i].flag) {
+        //         arr[data[i].flag] = [];
+        //         a = i;
+        //     } 
+        //     // if (data[a].flag ) {
+                
+        //     // }
+        //     arr[data[a].flag].push (data[i])
+        // }
+        // console.log(JSON.stringify(arr))
+        // return arr;
+    }
+    // 拼数据库语法字符串
+    function sqlSyntax(data1, type) {
+        // console.log('数据库'+ type)
+        console.log('sqlSyntax函数')
+        for (var i = 0; i < data1.length; i++) {
+            data1[i].flag = data1[i].litter[0];
+        }
+        // console.log('数据库语法字符串:'+data1);
+        var SQLName = 'db_'+$api.getStorage('userToken');
+        var SQL = 'INSERT OR REPLACE INTO addressList(user_id,nickname,head_img_url,current_company,current_position,titleSize,title,img,flag,litter,type) VALUES '
+        for (var i = 0; i < data1.length; i++) {
+            SQL += '("'+ data1[i].user_id +'","'+ data1[i].nickname +'","'+ data1[i].head_img_url +'","'+ data1[i].current_company +'","'+ data1[i].current_position+'","'+ data1[i].titleSize +'","'+ data1[i].title +'","'+ data1[i].img+'","'+ data1[i].flag +'","'+ data1[i].litter +'",'+ type +'),'
+        }
+        SQL = SQL.substring(0,SQL.length-1) + ';'
+        // console.log(SQL)
+        db.executeSql({
+            name: SQLName,
+            sql: SQL
+        }, function(ret, err) {
+            if (ret.status) {
+                console.log('执行语句正确'+JSON.stringify(ret));
+             
+                // api.execScript({
+                //     frameName: 'frame1',
+                //     script: 'query()'
+                // });
+                // api.execScript({
+                //     frameName: 'txl_listWin_frame',
+                //     script: 'query()'
+                // });
+            } else {
+                console.log('执行语句错误:' + JSON.stringify(err))
+            }
+        });
+    }
 </script>
 </html>
