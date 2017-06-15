@@ -143,6 +143,7 @@
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
     var userToken, rongToken;
 
@@ -179,6 +180,7 @@
         }
     }
     function login() {
+        $api.byId('psd').blur();
         // 登陆 测试不输入账号密码
         var mobile = $api.val($api.dom('#txzh'));
         var password = $api.val($api.dom('#psd'));
@@ -276,20 +278,22 @@
                             pageIndex: 0
                         }, function(ret, err) {
                             if (ret) {
+                                // console.log('syncContacts第四步：同步完成' + JSON.stringify(ret))
                                 api.ajax({
                                     url: apiSite + 'api/contact/sync',
                                     method: 'post',
                                     headers: apiHeader,
                                     data: {
                                         values: { 
-                                            token: userToken,
+                                            token: $api.getStorage('userToken'),
                                             contact_json:ret
                                         }
                                     }
                                 }, function(ret, err) {
                                     // 同步通讯录成功
                                     // 请求同步的数据，存到本地数据库
-                                    console.log('syncContacts第四步：同步完成')
+                                    console.log('上传通讯录数据'+JSON.stringify(ret))
+                                    console.log('上传通讯录数据'+JSON.stringify(err))
                                     requestData();
                                 })
                             } else {
@@ -316,7 +320,7 @@
                 // alert('打开成功');
                 db.executeSql({
                     name: 'db_'+userToken,
-                    sql: 'drop table if exists CREATE TABLE addressList(user_id int, nickname varchar(255), head_img_url varchar(255), current_position varchar(255),current_company varchar(255), titleSize int, title varchar(255), img varchar(255), flag varchar(255), litter varchar(255), type int);CREATE UNIQUE INDEX user_id_idx on addressList (user_id);'
+                    sql: 'DROP TABLE IF EXISTS addressList; CREATE TABLE addressList(user_id int, nickname varchar(255), head_img_url varchar(255), current_position varchar(255),current_company varchar(255), titleSize int, title varchar(255), img varchar(255), flag varchar(255), litter varchar(255), type int);CREATE UNIQUE INDEX user_id_idx on addressList (user_id);'
                 }, function(ret, err) {
                     // ;CREATE UNIQUE INDEX user_id_idx on addressList (user_id);
                     if (ret.status) {
@@ -374,6 +378,7 @@
                     data[i].current_company = '';
                 }
             }
+            console.log('disData函数22222222')
             // 模块数据格式
             litterSort(data, type)
             // sqlSyntax(initialData);
@@ -392,35 +397,6 @@
             }
          }
          sqlSyntax(data, type);
-        //  for (var i = 0; i < data.length; i++) {
-        //     // console.log("letter+++:"+data[i].litter)
-        //      data[0].flag = data[0].litter[0]
-        //      // data[i].flag = data[i].litter[0]
-             
-        //     if (i>0) {
-        //         if (data[i].litter[0] !== data[i-1].litter[0]) {
-        //             // console.log("letter+++:"+data[i].litter)
-        //             data[i].flag = data[i].litter[0];
-        //             // console.log("flag+++:"+data[i].flag)
-        //         }
-        //     }
-        //  }
-        // // console.log('数据：'+JSON.stringify(data))
-        // var arr = {}
-        // var a;
-        // for (var i = 0; i < data.length; i++) {
-            
-        //     if (data[i].flag) {
-        //         arr[data[i].flag] = [];
-        //         a = i;
-        //     } 
-        //     // if (data[a].flag ) {
-                
-        //     // }
-        //     arr[data[a].flag].push (data[i])
-        // }
-        // console.log(JSON.stringify(arr))
-        // return arr;
     }
     // 拼数据库语法字符串
     function sqlSyntax(data1, type) {
