@@ -375,7 +375,9 @@
     apiready = function(){
         
         moduleInit();
-        
+        if (api.pageParam.supply_id) {
+            requireData();
+        }
         // 获取位置
         getPos();
         // 公司|个人 显示不同的页面
@@ -601,8 +603,8 @@
     }
 
 
-   // 获取位置
-   function getPos() {
+    // 获取位置
+    function getPos() {
         if (api.systemType == 'ios') {
             bMap.initMapSDK(function(ret) {
                 if (ret.status) {
@@ -615,7 +617,7 @@
             getLocation();
         }
         
-   }
+    }
     // 获取经纬度
     function getLocation() {
         bMap.getLocation({
@@ -653,6 +655,27 @@
 
             }
         });
+    }
+
+    // 编辑供应的数据
+    function requireData() {
+        api.ajax({
+            url: apiSite + '/api/supply/detail',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       supply_id: api.pageParam.supply_id
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                alert(JSON.stringify(ret))
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
     }
 </script>
 </html>

@@ -292,7 +292,18 @@
             background-position: center bottom;
         }
          
-        
+         .loading {
+            width: 1.28rem;
+            height: 1.28rem;
+            background: url(../../image/loading_more.gif)no-repeat;
+            background-size: 1.28rem 1.28rem;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            margin: auto;
+         }
          #cloaswin {
             width: .44rem;  
             height: .44rem; 
@@ -303,16 +314,6 @@
             top: .55rem;                
             left: .3rem;        
          }  
-         .label {
-            font-size: .2rem;
-            color: #0076FF;
-            border: 1px solid #0076FF;
-            text-align: center;
-            /*line-height: .3rem;*/
-            padding: 0 .05rem;
-            margin-right: .1rem;
-            border-radius: .06rem;
-        }
     </style>
 </head>     
 <body>
@@ -434,14 +435,12 @@
                         <div>查看全部</div>
                     </div>
                 {{?}}
-                
             </div>
-          
         </div>
-         <footer>    
-            <span ontouchstart="handleBtn(this,0)"><i class="sus"></i>暂停</span>
-            <span ontouchstart="handleBtn(this,1)"><i></i>删除</span>
-            <span ontouchstart="editSupply()">编辑</span>
+        <footer>    
+            <span><i class="sus"></i>暂停</span>
+            <span><i></i>删除</span>
+            <span tapmode="hover" onclick="immediateOrder()">编辑</span>
         </footer>
     </script>
   
@@ -452,13 +451,42 @@
 <script type="text/javascript" src="../../script/jquery.min.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
+    var transmitData,_dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
     apiready = function(){
         // 初始化页面
-        initialise()
+        initialise(api.pageParam.flag, api.pageParam.compaby_name, 1)
     };
+
+    // var form = new FormData();
+    // form.append("token", "b678d8a0-f0d8-c67e-50b0-4d839ea864d7");
+    // form.append("supply_id", "1");
+
+    // var settings = {
+    //   "async": true,
+    //   "crossDomain": true,
+    //   "url": "http://wozai.tonyliangli.cn/api/supply/detail",
+    //   "method": "POST",
+    //   "processData": false,
+    //   "contentType": false,
+    //   "mimeType": "multipart/form-data",
+    //   "data": form
+    // }
+    // $.ajax(settings).done(function (response) {
+    //     // $api.css($api.dom('.loading'), 'display:none');
+    //     // console.log(typeof JSON.parse(response).data.info.image_json)
+    //     // getData(JSON.parse(response).data)
+    // });
+
+
+
     // 初始化页面
-    function  initialise() {
+    function  initialise(flag, compaby_name, supply_id) {
+        if (flag) {
+            $api.css($api.byId('companyTtile'), 'display:block');
+            $api.text($api.byId('compaby_name'), compaby_name);
+        } else {
+            $api.css($api.byId('companyTtile'), 'display:none');
+        }
         // 请求数据
         api.ajax({
             url: apiSite + '/api/supply/detail',
@@ -467,7 +495,7 @@
             data: {
                values: { 
                    token: $api.getStorage('userToken'),
-                   supply_id: api.pageParam.supply_id
+                   supply_id: supply_id
                }
             }
         }, function(ret, err) {
@@ -477,66 +505,65 @@
             } else {
                 ret.data.info.image_json = '0'
             }   
-            if ( ret.data.info.unit > 0) {
-                 ret.data.info.unit = _dataSource[ ret.data.info.unit-1]
-            } else {
-                 ret.data.info.unit = '未定义'
-            }
+            ret.data.info.unit = _dataSource[ret.data.info.unit-1]
             $api.css($api.dom('.loading'), 'display:none');     
             getData(ret.data);
+            // ret.data
+            transmitData = ret.data.info;
         })
     }
-    function handleBtn(ele,n) {
-
-        var url;
-        if (n) {
-            // 删除按钮
-            url = '/api/supply/delete'
-        } else {
-            // 暂停按钮
-            url = '/api/supply/pause'
-            if ($api.text(ele) === '暂停') {
-                $api.html(ele, '<i class="sus"></i>开始');
-            } else {
-                $api.html(ele, '<i class="sus"></i>暂停');
-            }
-            
-
+    // 换算单位
+  
+    // 切换留言和详情
+    function datum(n,ele) {
+        for (var i = 0; i < $api.domAll('.no5Title').length; i++) {
+            $api.removeCls($api.domAll('.no5Title')[i], 'borderBottom');
         }
-        api.ajax({
-            url: apiSite + url,
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                   values: { 
-                       token: $api.getStorage('userToken'),
-                       supply_id: api.pageParam.supply_id
-                   }
-            }
-        }, function(ret, err) {
-            if(ret) {
-                alert(JSON.stringify(ret))
-                if (url === '/api/supply/delete') {
-                    api.sendEvent({
-                        name: 'renovateMySupply'
-                    });
-                    setTimeout(function() {api.closeWin();},500)
-                }
-            } else {
-                alert(JSON.stringify(err))
-            }
-        })
+        if (n) { // 传入1  点击留言
+            $api.css($api.dom('.detail'), 'display:none');
+            $api.css($api.dom('.leaveWord'), 'display:block');
+            $api.addCls($api.first(ele, 'span'), 'borderBottom');
+        } else { // 点击详情
+            $api.css($api.dom('.detail'), 'display:block');
+            $api.css($api.dom('.leaveWord'), 'display:none');
+            $api.addCls($api.first(ele, 'span'), 'borderBottom');
+        }
     }
+   
 
-    // 编辑供应
-    function editSupply() {
+
+    
+    // $api.dom('.resultList').addEventListener("scroll", function(event) {
+    //     console.log($api.dom('.resultList').scrollY)
+    //     if (window.scrollY > 300) {
+    //         // $api.css($api.dom('#cloaswin'), 'display:none');
+    //         $api.css($api.byId('cloaswin'), 'opacity:0;');
+    //     } else {
+    //         $api.css($api.byId('cloaswin'), 'opacity:1;');
+    //     }
+    // });
+    function immediateOrder() {
+        // 下单
+        // api.openWin({
+        //     name: 'supply_info_immediate_order',
+        //     url: './supply_info_immediate_order_2.html',
+        //     softInputMode: 'pan',
+        //     pageParam: {
+        //         transmitData: transmitData,
+        //         supply_id: api.pageParam.supply_id
+        //     }
+        // });
+        // 接单
         api.openWin({
-            name: 'supply_releaseSupply_win',
-            url: '../supply/supply_releaseSupply_win.html',
+            name: 'supply_info_immediate_order',
+            url: './supply_info_immediate_order.html',
+            softInputMode: 'pan',
             pageParam: {
+                transmitData: transmitData,
                 supply_id: api.pageParam.supply_id
             }
         });
     }
+   
 </script>
 </html>
