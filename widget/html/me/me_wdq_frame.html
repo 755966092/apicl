@@ -209,12 +209,14 @@
     </div>
     <script type="text/x-dot-template" id="listT">
         <div class="wrap">
-            <div class="title flex-def flex-cCenter flex-zCenter">
-                <span class="line"></span>
-                <span class="icon"></span>
-                <span class="text">待认证</span>
-                <span class="line"></span>
-            </div>
+            {{?it.verify_waiting_list.length !== 0}}
+                <div class="title flex-def flex-cCenter flex-zCenter">
+                    <span class="line"></span>
+                    <span class="icon"></span>
+                    <span class="text">待认证</span>
+                    <span class="line"></span>
+                </div>
+            {{?}}
             <div class="complete">
                 {{ for (var i = 0; i < it.verify_waiting_list.length; i++) { }} 
                     <div class="item">
@@ -236,13 +238,14 @@
                     </div>
                 {{ }; }}
             </div>
-           
-            <div class="title des flex-def flex-cCenter flex-zCenter">
-                <span class="line"></span>
-                <span class="icon"></span>
-                <span class="text">已创建</span>
-                <span class="line"></span>
-            </div>
+            {{?it.available_list.length !== 0}}
+                <div class="title des flex-def flex-cCenter flex-zCenter">
+                    <span class="line"></span>
+                    <span class="icon"></span>
+                    <span class="text">已创建</span>
+                    <span class="line"></span>
+                </div>
+            {{?}}
             <div class="complete">
                 {{ for (var i = 0; i < it.available_list.length; i++) { }} 
                 <div class="item">

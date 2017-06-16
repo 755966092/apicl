@@ -34,8 +34,16 @@
          .state h3 {
              font-size: .34rem;
              line-height: .48rem;
+             width: 6.1rem;
+            white-space:nowrap;
+             overflow: hidden;
+             text-overflow: ellipsis;
          }.state p {
              font-size: .24rem;
+             width: 6.1rem;
+            white-space:nowrap;
+             overflow: hidden;
+             text-overflow: ellipsis;
              color: #666;
              line-height: .33rem;
              margin-top: .1rem;
@@ -230,16 +238,16 @@
 <body>
     <div class="hull">
         <div class="main resultList">  
-      
-          <!-- <div class="state flex-def flex-cCenter">
+       
+       <!--  <div class="state flex-def flex-cCenter">
                 <div class="icon2"></div>
-                  <div class="text">
+                <div class="text flex-">
                     <h3>订单关闭</h3>
                     <p>订单已取消</p>
                 </div>
-            </div>
+        </div>
            
-            <div class="userPosition">
+        <div class="userPosition">
                 <div class="wrap flex-def flex-zTopBottom flex-zCenter">
                     <h3>姓名</h3>
                     <p>北京市海淀区清华科技园创业大厦110</p>
@@ -252,7 +260,7 @@
                 <p>服务形式：<span>线上</span></p>
             </div>
             
-             <div class="userInfo flex-def flex-cCenter">
+            <div class="userInfo flex-def flex-cCenter">
                 <img src="../../image/tx_4.jpg">
                 <div class="text flex-def flex-zBetween flex-item">
                     <div class="left">
@@ -304,7 +312,7 @@
             <div class="remark">
                 备注：<span>备注备注</span>
             </div>
-            <div class="appraise">评价</div> -->
+            <div class="appraise">评价</div> --> 
         </div>
         <script type="text/x-dot-template" id="listT">
             <div class="state flex-def flex-cCenter">
@@ -367,7 +375,7 @@
                         </div>
                         <div class="info flex-def flex-zBetween">
                             <p class="infoText">{{=it.supply_info.description}}</p>
-                            <p class="count">x1</p>                   
+                            <p class="count">x{{=it.order_info.amount}}</p>                   
                         </div>
                     </div>
                 </div>
@@ -392,10 +400,16 @@
                 <p>取消原因：<span class="code">{{=it.order_info.reason}}</span></p>
             </div>
             <div class="remark">
-                备注：<span>备注备注</span>
+                备注：<span>{{=it.order_info.reason}}</span>
             </div>
+            {{?it.button_info.finish.is_show}}
+                <div class="appraise">完成</div>
+            {{??it.button_info.buttonArr.length==1 && it.button_info.delete.is_show}}
+
+            {{??}}
+                 <div class="appraise">评价</div>
+            {{?}}
         </script>
-        <div class="appraise">评价</div>
     </div>
     <div class="loading"></div>
 </body>
@@ -416,8 +430,9 @@
             headers: apiHeader,
             data: {
                    values: { 
-                       token: $api.getStorage('userToken'),
-                       order_id: 35
+                        // token: $api.getStorage('userToken'),
+                        token: 'b678d8a0-f0d8-c67e-50b0-4d839ea864d7',
+                        order_id: api.pageParam.order_id
                    }
             }
         }, function(ret, err) {
@@ -435,9 +450,9 @@
                 //      
                 //      
                 //      .discount   卖家为买家优惠
-                //      .finish
+                //      .finish 完成订单
                 //      
-                //      .cancel
+                //      .cancel 取消订单
                 //      .confirm_cancel 卖家同意买家取消供应订单操作
                 //      .refuse_cancel  卖家拒绝买家取消供应订单操作
                 //      .refund     卖家为买家退款
@@ -470,6 +485,8 @@
                         case 'comment': ret.data.button_info.buttonArr[i].key = '评价订单'; break;
                         case 'delete': ret.data.button_info.buttonArr[i].key = '删除订单'; break;
                         case 'pay': ret.data.button_info.buttonArr[i].key = '付款'; break;
+                        case 'finish': ret.data.button_info.buttonArr[i].key = '完成'; break;
+                        case 'cancel': ret.data.button_info.buttonArr[i].key = '取消订单'; break;
 
                         // 卖家页面
                         case 'confirm_service': ret.data.button_info.buttonArr[i].key = '确认接单'; break;
