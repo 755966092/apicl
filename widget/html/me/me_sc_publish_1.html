@@ -62,9 +62,10 @@
             color: #0076FF;
             border: 1px solid #0076FF;
             text-align: center;
-            line-height: .3rem;
+            /*line-height: .3rem;*/
             padding: 0 .05rem;
             margin-right: .1rem;
+            border-radius: .06rem;
         }
         .item {
             background-color: #fff;
@@ -79,8 +80,8 @@
    </style>
 </head>
 <body>
-    <div class="main">
-        <div class="wrap">
+    <div class="main resultList">
+       <!--  <div class="wrap">
             <div class="item">
                 <div class="user flex-cCenter flex-def">
                     <div class="img">
@@ -114,48 +115,94 @@
                     </div>
                 </div>
             </div>
-        </div>
-         <div class="wrap">
-            <div class="item">
-                <div class="user flex-cCenter flex-def">
-                    <div class="img">
-                        <img src="../../image/tx_4.jpg">
-                    </div>
-                    <div class="text ">
-                        <h3>姓名</h3>
-                        <p>上海策赢网络科技 董事长</p>
-                    </div>
-                </div>
-                <div class="info flex-cCenter flex-def">
-                    <div class="img">
-                        <img src="../../image/tx_4.jpg">
-                    </div>
-                    <div class="text flex-item">
-                        <div class="top flex-def flex-zBetween">
-                            <div class="div">
-                                <span class="label">个人</span>
-                                <span class="title">提供风景类素材</span>
-                            </div>
-                            <span class="price">30元/套</span>
-                        </div>
-                        <div class="bottom flex-def flex-zBetween">
-                            <div class="left">
-                                全部为本人原创作品
-                            </div>
-                            <div class="right">
-                                暂停
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </div> -->
     </div>
+    <script type="text/x-dot-template" id="listT">
+        {{ for (var i = 0; i < it.length; i++) { }} 
+            <div class="wrap">
+                <div class="item">
+                    <div class="user flex-cCenter flex-def">
+                        <div class="img">
+                            <img src="{{=it[i].head_img_url}}">
+                        </div>
+                        <div class="text ">
+                            <h3>{{=it[i].nickname}}</h3>
+                            {{?it[i].current_company == null}}
+                               
+                            {{??it[i].current_position == null}}
+                                <p>{{=it[i].current_company}}</p>
+                            {{??}}
+                                <p>{{=it[i].current_company}} {{=it[i].current_position}}</p>
+                            {{?}}
+                        </div>
+                    </div>
+                    <div class="info flex-cCenter flex-def">
+                        <div class="img">
+                            <img src="{{=it[i].image_json[0]}}">
+                        </div>
+                        <div class="text flex-item">
+                            <div class="top flex-def flex-zBetween">
+                                <div class="div">
+                                    {{?it[i].type==1}}
+                                    <span class="label">个人</span>
+                                    {{??}}
+                                    <span class="label">公司</span>
+                                    {{?}}
+                                    <span class="title">{{=it[i].title}}</span>
+                                </div>
+                                <span class="price">{{=it[i].price}}元/{{=it[i].unit}}</span>
+                            </div>
+                            <div class="bottom flex-def flex-zBetween">
+                                <div class="left">
+                                    {{=it[i].description}}
+                                </div>
+                                <div class="right">
+                                    暂停
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{ }; }}
+    </script>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
+    var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
     apiready = function(){
+        requestData();
     };
+    function requestData() {
+        api.ajax({
+            url: apiSite + '/api/user_center/supplyCollect',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+
+                console.log(JSON.stringify(ret))
+                for (var i = 0; i < ret.data.list.length; i++) {
+                    if ( ret.data.list[i].unit > 0) {
+                         ret.data.list[i].unit = _dataSource[ ret.data.list[i].unit-1]
+                    } else {
+                         ret.data.list[i].unit = '未定义'
+                    }
+                    ret.data.list[i].image_json = eval(ret.data.list[i].image_json)
+                }
+                getData(ret.data.list)
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
 </script>
 </html>

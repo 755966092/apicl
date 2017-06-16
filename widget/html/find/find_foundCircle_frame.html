@@ -266,12 +266,17 @@
                         price: price,
                         type: type,
                         apply_reason: '测试'
-                       
                    }
             }
         }, function(ret, err) {
             if(ret) {
-                alert(JSON.stringify(ret))
+                
+                if (api.pageParam.flag == 'frame4Open') {
+                    api.sendEvent({
+                        name: 'frame4Open',
+                    });
+                    api.closeWin();
+                }
             } else {
                 alert(JSON.stringify(err))
             }
