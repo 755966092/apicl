@@ -355,10 +355,18 @@
     var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
     apiready = function(){
         requireData();
+        api.addEventListener({
+            name: 'filterOrder'
+        }, function(ret, err) {
+            if (ret) {
+                requireData(ret.value.type, ret.value.status, ret.value.sub_type);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     };
     // 获取数据
-    function requireData() {
-        console.log('开始请求数据')
+    function requireData(type, status, sub_type) {
         api.ajax({
             url: apiSite + '/api/user_center/buyerSupplyOrder',
             method: 'post',
@@ -367,11 +375,12 @@
                    values: { 
                        // token: $api.getStorage('userToken'),
                        token: 'b678d8a0-f0d8-c67e-50b0-4d839ea864d7',
-                       
+                       type: type || undefined,
+                       status: status  || undefined,
+                       sub_type: sub_type  || undefined
                    }
             }
         }, function(ret, err) {
-            console.log('请求数据')
             if(ret) {
                 for (var i = 0; i < ret.data.list.length; i++) {
                     if ( ret.data.list[i].unit > 0) {
@@ -417,10 +426,6 @@
                         }
                     }
                 }
-                
-                console.log(JSON.stringify(ret))
-
-
                 getData(ret.data.list)
             } else {
                 alert(JSON.stringify(err))

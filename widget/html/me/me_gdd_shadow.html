@@ -88,21 +88,25 @@
      <div class="main" ontouchstart="api.closeFrame()">
         <div class="slide" ontouchstart = 'event.stopPropagation();'>
             <div class="wrap">
-                <div class="status bb">
-                    <p>全部状态</p>
-                    <span data-val="0" ontouchstart="selClass(this)" >全部状态</span>
+                <div class="status no1 bb">
+                    <p>状态</p>
+                    <span data-val="" ontouchstart="selClass(this)" class="sel flag">全部状态</span>
                     <span data-val="1" ontouchstart="selClass(this)">待付款</span>
-                    <span data-val="2" ontouchstart="selClass(this)" class="mr0">待发货</span>
-                    <span data-val="3" ontouchstart="selClass(this)">待收货</span>
-                    <span data-val="4" ontouchstart="selClass(this)">待评价</span>
+                    <span data-val="3,4,6" ontouchstart="selClass(this)" class="mr0">待完成</span>
+                    <span data-val="7,8,15" ontouchstart="selClass(this)">已完成</span>
+                    <span data-val="2,10,12,13,14,16" ontouchstart="selClass(this)">已取消</span>
                 </div>
-                <div class="status">
-                    <p>全部分类</p>
-                    <span data-val="5" ontouchstart="selClass(this)" >全部状态</span>
-                    <span data-val="6" ontouchstart="selClass(this)">待付款</span>
-                    <span data-val="7" ontouchstart="selClass(this)" class="mr0">待发货</span>
-                    <span data-val="8" ontouchstart="selClass(this)">待收货</span>
-                    <span data-val="9" ontouchstart="selClass(this)">待评价</span>
+                <div class="status no2 bb">
+                    <p>类型</p>
+                    <span data-val="" ontouchstart="selClass(this)" class="sel flag">全部类型</span>
+                    <span data-val="1" ontouchstart="selClass(this)">TA卖</span>
+                    <span data-val="2" ontouchstart="selClass(this)" class="mr0">TA公司卖</span>
+                </div>
+                <div class="status no3">
+                    <p>分类</p>
+                    <span data-val="" ontouchstart="selClass(this)" class="sel flag">全部分类</span>
+                    <span data-val="1" ontouchstart="selClass(this)">自产自销</span>
+                    <span data-val="2" ontouchstart="selClass(this)" class="mr0">代理</span>
                 </div>
             </div>
              <div class="footer">
@@ -116,7 +120,19 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
+        // 保持按钮选择的内容
+        keepBtn()
     };
+    // 保持上次选中的按钮
+    function keepBtn() {
+        var node = $api.domAll('span');
+            for (var i = 0; i < node.length; i++) {
+                $api.removeCls(node[i], 'sel');
+            }
+            $api.addCls($api.dom('.no1 span[data-val="'+ api.pageParam.status +'"]'), 'sel');
+            $api.addCls($api.dom('.no2 span[data-val="'+ api.pageParam.type +'"]'), 'sel');
+            $api.addCls($api.dom('.no3 span[data-val="'+ api.pageParam.sub_type +'"]'), 'sel');
+    }
     function selClass(ele) {
         var node = $api.not($api.closest(ele, '.status'), 'p')
         for (var i = 0; i < node.length; i++) {
@@ -126,19 +142,58 @@
     }
     function enter(n) {
         if (n) {
-            var arr=[]
+            var type,sub_type,status
             // 确定
             for (var i = 0; i < $api.domAll('.sel').length; i++) {
-                arr.push($api.attr($api.domAll('.sel')[i], 'data-val'))
+                status = $api.attr($api.domAll('.sel')[0], 'data-val');
+                type = $api.attr($api.domAll('.sel')[1], 'data-val');
+                sub_type = $api.attr($api.domAll('.sel')[2], 'data-val');
             }
-            alert(arr)
+            // alert(status+'--'+type+'--'+sub_type)
+            api.sendEvent({
+                name: 'filterOrder',
+                extra: {
+                    status: status, 
+                    type: type, 
+                    sub_type: sub_type
+                }
+            });
+            setTimeout(function() {
+                api.closeFrame();
+            },500)
         } else {
             // 重置
             var node = $api.domAll('span');
             for (var i = 0; i < node.length; i++) {
                 $api.removeCls(node[i], 'sel');
             }
+            var flag = $api.domAll('.flag');
+            for (var i = 0; i < flag.length; i++) {
+                $api.addCls(flag[i], 'sel');
+            }
         }
     }
+    // 1-买家待付款，1
+        // 待完成 3,4,6
+        // 已完成 7,8,15
+        // 已取消 2,10,12,13,14,16
+    // 
+    // 
+    // 
+    // 2-买家取消付款，
+    // 3-等待卖家接单，
+    // 4-待确认服务，
+    // 5-卖家拒绝接单，
+    // 6-卖家等待买家确认完成，
+    // 7-卖家确认完成服务，
+    // 8-买家确认完成服务，
+    // 9-买家等待卖家确认取消订单，
+    // 10-买家取消订单，
+    // 11-卖家拒绝取消订单，
+    // 12-卖家取消订单，
+    // 13-系统取消未付款订单，
+    // 14-系统取消未接单服务，
+    // 15-系统完成服务，
+    // 16-系统取消服务
 </script>
 </html>

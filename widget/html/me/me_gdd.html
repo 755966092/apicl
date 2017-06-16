@@ -38,21 +38,28 @@
             font-size: 0;
         }
         header .search {
-            display: inline-block;
             width: .34rem;
             height: .35rem;
-    
-            margin-top: .23rem;
+            /*margin-top: .23rem;*/
             padding-right: .2rem;
-            margin-right: .2rem;
+            /*margin-right: .2rem;*/
             border-right: 1px solid #fff;
             background: url(../../image/icon_search2.png)no-repeat;
             -webkit-background-size: .34rem .35rem;
             background-size: .34rem .35rem;
             background-position: 0 center;
         }
+
+        .rightBtn .wrap:last-child {
+            padding-left: .2rem;
+            box-sizing: border-box;
+        }
+        .wrap {
+            height: .7rem;
+            width: .5rem;
+            
+        }
         header .filter {
-            display: inline-block;
             width: .34rem;
             height: .3rem;
             background: url(../../image/icon_supply/icon_sx1.png)no-repeat;
@@ -73,9 +80,13 @@
                 <span class=" head_center_left select"   tapmode="hover"   onclick="switchApr(0)">Ta供</span>
                 <span class=" head_center_left "   tapmode="hover"   onclick="switchApr(1)">我供</span>
             </span>
-            <span class="rightBtn">
-                <span class="search"></span>
-                <span ontouchstart='openShadow()' class="filter"></span>
+            <span class="rightBtn flex-def flex-zEnd">
+                <span class="wrap flex-def flex-cCenter">
+                    <span class="search"></span>
+                </span>
+                <span class="wrap flex-def flex-cCenter" ontouchstart='openShadow()'>
+                    <span  class="filter"></span>
+                </span>
             </span> 
         </div>
     </header>
@@ -84,8 +95,20 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
+    var type='',status='',sub_type='';
     apiready = function(){
         fnInit();
+        api.addEventListener({
+            name: 'filterOrder'
+        }, function(ret, err) {
+            if (ret) {
+                type = ret.value.type || '',
+                status = ret.value.status || '',
+                sub_type = ret.value.sub_type  || '';
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
         openAprGroup(headerH);
     };
 
@@ -156,7 +179,9 @@
                 h: api.winHeight-headerH
             },
             pageParam: {
-                name: 'value'
+                type: type,
+                status: status,
+                sub_type: sub_type
             },
             bounces: false
         });
