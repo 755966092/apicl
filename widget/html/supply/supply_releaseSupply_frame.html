@@ -388,10 +388,18 @@
         monitorEvent('_classify','_classify');
         monitorEvent('_unit','_unit');
 
-    getData(base64Data);
+        getData(base64Data);
         // 删除图片
         delImg();
     };
+    // 编辑供应
+    function editSupply(data) {
+        var titleIpt = $api.byId('title'),
+            descriptionIpt = $api.byId('description')
+        $api.val(titleIpt, data.info.title);
+        $api.val(descriptionIpt, data.info.description);
+
+    }
     // 删除图片
     function delImg() {
         api.addEventListener({
@@ -409,7 +417,7 @@
                     }
                 })
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         });
     }
@@ -430,7 +438,7 @@
                 base64Data.img.push(ret.base64Data);
                 getData(base64Data);
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         });
     }
@@ -491,7 +499,7 @@
                     if(ret) {
                         alert(JSON.stringify(ret))
                     } else {
-                        alert(JSON.stringify(err))
+                        alert(JSON.stringify(err.msg))
                     }
                 })
             
@@ -519,7 +527,7 @@
                 }
             }
            } else {
-               alert(JSON.stringify(err));
+               alert(JSON.stringify(err.msg));
            }
         });
     }
@@ -539,7 +547,7 @@
            if (ret) {
             $api.text($api.dom('.'+ calssName +''), ret.value.selDate);
            } else {
-               alert(JSON.stringify(err));
+               alert(JSON.stringify(err.msg));
            }
         });
     }
@@ -610,7 +618,7 @@
                 if (ret.status) {
                    getLocation();
                 } else {
-                    alert(JSON.stringify(err))
+                    alert(JSON.stringify(err.msg))
                 }
             });
         } else {
@@ -672,8 +680,9 @@
         }, function(ret, err) {
             if(ret) {
                 alert(JSON.stringify(ret))
+                editSupply(ret.data)
             } else {
-                alert(JSON.stringify(err))
+                alert(JSON.stringify(err.msg))
             }
         })
     }

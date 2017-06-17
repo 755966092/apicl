@@ -148,7 +148,7 @@
         </div>
         <div class="main clearfix" style="font-size: 0">
             <p class="mobile ">在校经历</p>
-            <textarea rows="6" placeholder="主要在校经历" id="textarea" maxlength="300" onkeyup="changeText(this)"></textarea>
+            <textarea rows="6" placeholder="主要在校经历" id="textarea" maxlength="300" oninput="changeText(this)"></textarea>
             <p class="mobile fr" id="textLength"> 0/300</p>
         </div>
     </div>
@@ -166,15 +166,15 @@
      
         if (api.pageParam.flag == 1) {
             url = '/api/user_center/editEducation';
-            $api.text($api.byId('main_no3'), '删除');
+            // $api.text($api.byId('main_no3'), '删除');
            
-            $api.css($api.byId('over'), 'display:inline-block');
-            $api.css($api.byId('main_no3'), 'background-color:#DF214E');
-            $api.removeAttr($api.byId('main_no3'), '  tapmode="hover"   onclick');
-            $api.rmEvt($api.byId('main_no3'), 'click', addStudy);
-            $api.addEvt($api.byId('main_no3'), 'click', function(){
-                delStudy();
-            });
+            // $api.css($api.byId('over'), 'display:inline-block');
+            // $api.css($api.byId('main_no3'), 'background-color:#DF214E');
+            // $api.removeAttr($api.byId('main_no3'), '  tapmode="hover"   onclick');
+            // $api.rmEvt($api.byId('main_no3'), 'click', addStudy);
+            // $api.addEvt($api.byId('main_no3'), 'click', function(){
+            //     delStudy();
+            // });
         } else {
             url = '/api/user_center/addEducation'
         }
@@ -188,13 +188,14 @@
             if (ret) {
                 addStudy();
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         });
         
     };
       // 打开时间选择器
-    function openTime(ele) {                                                                                                                                     for (var i = 0; i < $api.domAll('input').length; i++) {             $api.domAll('input')[i].blur()         }
+    function openTime(ele) {
+        for (var i = 0; i < $api.domAll('input').length; i++) {$api.domAll('input')[i].blur()}
         var data = $api.attr(ele, 'data-val');
         var text;
         if (data == 'startTime') {
@@ -222,7 +223,7 @@
             if (ret) {
                 $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day);
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         });
     }
@@ -265,7 +266,7 @@
                 $api.val($api.byId('textarea'), ret.data.info.description); 
                 $api.text($api.byId('textLength'), ret.data.info.description.length + '/300');
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         });
     }
@@ -278,7 +279,7 @@
             if (ret) {
                 $api.text($api.byId('selectEdu'), ret.value.selDate);
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         });
         // 监听返回时间数据1
@@ -288,7 +289,7 @@
             if (ret) {
                 $api.text($api.byId('time_1'), ret.value.selDate);
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         });
         api.addEventListener({
@@ -298,7 +299,7 @@
 
                 $api.text($api.byId('time_2'), ret.value.selDate);
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         });
     }
@@ -348,14 +349,13 @@
              });
              api.closeWin();
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         }); 
            
     }
     // 删除数据
     function delStudy () {
-        alert('删除')
         api.ajax({
             url: apiSite + '/api/user_center/deleteEducation',
             method: 'post',
@@ -374,7 +374,7 @@
                 });
                 api.closeWin();
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         });
     }
@@ -403,6 +403,7 @@
 
     }
     function openSelect2(ele) {
+        for (var i = 0; i < $api.domAll('input').length; i++) {$api.domAll('input')[i].blur()}
         var text = $api.text(ele);
         var data = ['专科','本科','硕士','博士','博士后'];
         var selArr = []
@@ -476,7 +477,7 @@
                     $api.text(ele, ret.level1);
                 }
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         });
     }

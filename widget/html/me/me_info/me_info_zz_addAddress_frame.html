@@ -4,7 +4,7 @@
     <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
     <style>
        
         body, html {
@@ -51,47 +51,67 @@
     </style>
 </head>
 <body>
-    <header  class="header">
-        <div class="head">
-            <span class="callback"   tapmode="hover"   onclick="api.closeWin()">取消</span>
-            <span class="winTitle">
-                新增地址
-            </span>
-        </div>
-    </header>
+   
+    <div class="main">
+        <ul>
+            <li>
+                <span class="title" >省</span>
+                <span class="text provinces" data-val="provinces"   tapmode="hover"   onclick="selCity(this)">所在省份</span>
+            </li>
+            <li>
+                <span class="title" >市</span>
+                <span class="text cities" data-val="cities"   tapmode="hover"   onclick="selCity(this)">所在城市</span>
+            </li>
+            <li>
+                <span class="title" >区</span>
+                <span class="text city" data-val="city"   tapmode="hover"   onclick="selCity(this)">所在城区</span>
+            </li>
+            <li>
+                <span class="title">详细地址</span>
+                <input type="text" class="address" name="" oninput ="iptCom()" placeholder="街道门牌信息">
+            </li>
+            <li>
+                <span class="title">邮政编码</span>
+                <input type="text" class="zipcode" name="" oninput ="iptCom()" placeholder="邮政编码">
+            </li>
+        </ul>
+    </div>
+    <div class="main_no3 ">
+        <button   tapmode="hover"   onclick="addAddRess()" class="btn" disabled>保存</button>
+    </div>
 </body>
-<script type="text/javascript" src="../../script/api.js"></script>
-<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../../script/api.js"></script>
+<script type="text/javascript" src="../../../script/common.js"></script>
 <script type="text/javascript">
-var url;
+var url, provinces, cities, city, address, zipcode;
+
     apiready = function(){
-	    fnInit();
-        api.openFrame({
-            name: 'txl_addFellow_address_addAddress_frame',
-            url: 'txl_addFellow_address_addAddress_frame.html',
-            rect: {
-                x: 0,
-                y: headerH,
-                w: 'auto',
-                h: 'auto'
-            },
-            pageParam: {
-                userToken: api.pageParam.userToken || $api.getStorage('userToken'),
-                flag: api.pageParam.flag
-            },
-            softInputMode:'pan',
-            bounces: false
-        });
-        
+       
+        if (api.pageParam.flag) {
+            // 1 编辑
+            url = '/api/user_center/editAddress'
+            getCityList();
+        } else {
+            // 0 新增
+            url = '/api/user_center/addAddress'
+        }
+        // 城市选择器返回的内容
+        install();
+
     };
-    function addRess() {
-         api.ajax({
+    function addAddRess() {
+        // provinces =  $api.text($api.dom('.provinces')),
+        // cities =  $api.text($api.dom('.cities')),
+        // city =  $api.text($api.dom('.city')),
+        // address =  $api.val($api.dom('.address')),
+        // zipcode =  $api.val($api.dom('.zipcode'));
+        api.ajax({
             url: apiSite + url,
             method: 'post',
             headers: apiHeader,
             data: {
                 values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    token: $api.getStorage('userToken'),
                     province: provinces,
                     city: cities,
                     district: city,
@@ -103,11 +123,10 @@ var url;
             }
         }, function(ret, err) {
             if (ret) {
-                // getData(ret.data.list)
-                api.closeWin();
                 api.sendEvent({
                     name: 'addCity'
                 });
+                api.closeWin();
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -124,8 +143,8 @@ var url;
         homeText.push(cities)
         homeText.push(city)
         api.openFrame({
-            name: 'txl_addFellow_address_addAddress_selCity',
-            url: './txl_addFellow_address_addAddress_selCity.html',
+            name: 'selCity',
+            url: './me_info_zz_addAddress_selCity.html',
             rect: {
                 x: 0,
                 y: 0,
@@ -143,7 +162,6 @@ var url;
         api.addEventListener({
             name: 'selCity'
         }, function(ret, err) {
-            alert('监听到的数据'+JSON.stringify(ret))
             if (ret) {
                 $api.text($api.dom('.provinces'), ret.value.provinces);
                 $api.text($api.dom('.cities'), ret.value.cities);
@@ -155,8 +173,6 @@ var url;
         // 判断按钮变色
         iptCom();
     }
-
-
     // 请求地址列表
     function getCityList() {
         api.ajax({
@@ -165,13 +181,13 @@ var url;
             headers: apiHeader,
             data: {
                 values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    token: $api.getStorage('userToken'),
                     address_id: api.pageParam.address_id
                 }
             }
         }, function(ret, err) {
             if (ret) {
-                // alert(JSON.stringify(ret))
+                alert(JSON.stringify(ret))
                 $api.text($api.dom('.provinces'), ret.data.info.province);
                 $api.text($api.dom('.cities'), ret.data.info.city);
                 $api.text($api.dom('.city'), ret.data.info.district);
@@ -185,8 +201,7 @@ var url;
         });
     }
     
-    var provinces, cities, city, address, zipcode;
-
+    
     
     // 按钮变色
     function iptCom() {

@@ -48,6 +48,10 @@
             background:  #A3DEA3;
           
         }
+        #over {
+        display: none;
+        color: #DF214E;
+       }
     </style>
 </head>
 <body>
@@ -57,171 +61,64 @@
             <span class="winTitle">
                 新增地址
             </span>
+             <span class="rightBtn bj" id="over" ontouchstart="delDz()">删除</span> 
         </div>
     </header>
-    <div class="main">
-        <ul>
-            <li>
-                <span class="title" >省</span>
-                <span class="text provinces" data-val="provinces"   tapmode="hover"   onclick="selCity(this)">所在省份</span>
-            </li>
-            <li>
-                <span class="title" >市</span>
-                <span class="text cities" data-val="cities"   tapmode="hover"   onclick="selCity(this)">所在城市</span>
-            </li>
-            <li>
-                <span class="title" >区</span>
-                <span class="text city" data-val="city"   tapmode="hover"   onclick="selCity(this)">所在城区</span>
-            </li>
-            <li>
-                <span class="title">详细地址</span>
-                <input type="text" class="address" name="" onkeyup ="iptCom()" placeholder="街道门牌信息">
-            </li>
-            <li>
-                <span class="title">邮政编码</span>
-                <input type="text" class="zipcode" name="" onkeyup ="iptCom()" placeholder="邮政编码">
-            </li>
-        </ul>
-    </div>
-    <div class="main_no3 ">
-        <!-- <button   tapmode="hover"   onclick="address()" class="btn">保存</button> -->
-        <button   tapmode="hover"   onclick="addRess()" class="btn" disabled>保存</button>
-    </div>
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
 <script type="text/javascript">
-var url;
     apiready = function(){
 	    fnInit();
-       
+        
         if (api.pageParam.flag) {
             // 1 编辑
-            getCityList();
-            url = '/api/user_center/editAddress'
+            $api.text($api.dom('.winTitle'), '修改地址');
+            $api.css($api.byId('over'), 'display:inline-block');
         } else {
             // 0 新增
-            url = '/api/user_center/addAddress'
         }
-        // 城市选择器返回的内容
-        install();
+        api.openFrame({
+            name: 'me_info_zz_addAddress_frame',
+            url: './me_info_zz_addAddress_frame.html',
+            rect: {
+                x: 0,
+                y: headerH,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                    flag: api.pageParam.flag,
+                    address_id: api.pageParam.address_id
+            },
+            bounces: false
+        });
 
     };
-    function addRess() {
+     // 删除地址
+    function delDz () {
          api.ajax({
-            url: apiSite + url,
+            url: apiSite + '/api/user_center/deleteAddress',
             method: 'post',
             headers: apiHeader,
             data: {
                 values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
-                    province: provinces,
-                    city: cities,
-                    district: city,
-                    address: address,
-                    zipcode: zipcode,
-                    note: '住址',
+                    token: $api.getStorage('userToken'),
                     address_id: api.pageParam.address_id
                 }
             }
         }, function(ret, err) {
             if (ret) {
                 // getData(ret.data.list)
-                api.closeWin();
+                // alert(JSON.stringify(ret))
                 api.sendEvent({
                     name: 'addCity'
                 });
+                api.closeWin();
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         });
-    }
-    // 城市选择器
-    function selCity(ele) {
-        var val = $api.attr(ele, 'data-val');
-        var provinces = $api.text($api.dom('.provinces')),
-            cities = $api.text($api.dom('.cities')),
-            city = $api.text($api.dom('.city'));
-        var homeText=[];
-        homeText.push(provinces)
-        homeText.push(cities)
-        homeText.push(city)
-        api.openFrame({
-            name: 'selCity',
-            url: './me_info_zz_addAddress_selCity.html',
-            rect: {
-                x: 0,
-                y: 0,
-                w: 'auto',
-                h: 'auto'
-            },
-            pageParam: {
-                homeText:homeText
-            },
-            bounces: false
-        });
-    }
-    // 设置页面内容
-    function install() {
-        api.addEventListener({
-            name: 'selCity'
-        }, function(ret, err) {
-            alert('监听到的数据'+JSON.stringify(ret))
-            if (ret) {
-                $api.text($api.dom('.provinces'), ret.value.provinces);
-                $api.text($api.dom('.cities'), ret.value.cities);
-                $api.text($api.dom('.city'), ret.value.city);
-            } else {
-                alert(JSON.stringify(err));
-            }
-        });
-        // 判断按钮变色
-        iptCom();
-    }
-
-
-    // 请求地址列表
-    function getCityList() {
-        api.ajax({
-            url: apiSite + '/api/user_center/editAddressIndex',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
-                    address_id: api.pageParam.address_id
-                }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                // alert(JSON.stringify(ret))
-                $api.text($api.dom('.provinces'), ret.data.info.province);
-                $api.text($api.dom('.cities'), ret.data.info.city);
-                $api.text($api.dom('.city'), ret.data.info.district);
-                $api.val($api.dom('.address'), ret.data.info.address);
-                // $api.val($api.dom('.zipcode'), ret.data.info.city);
-                $api.val($api.dom('.zipcode'), '邮编');
-                iptCom();
-            } else {
-                alert(JSON.stringify(err));
-            }
-        });
-    }
-    
-    var provinces, cities, city, address, zipcode;
-
-    
-    // 按钮变色
-    function iptCom() {
-            provinces =  $api.text($api.dom('.provinces')),
-            cities =  $api.text($api.dom('.cities')),
-            city =  $api.text($api.dom('.city')),
-            address =  $api.val($api.dom('.address')),
-            zipcode =  $api.val($api.dom('.zipcode'));
-        if (provinces !== '' && cities !== '' && city !== '' && address !== '' && zipcode !== '') {
-            $api.css($api.dom('.btn'), 'background:  #08BB08');
-            $api.removeAttr($api.dom('.btn'),'disabled');
-        }
     }
 </script>
 </html>

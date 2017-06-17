@@ -55,7 +55,7 @@ function exitApp() {
                 if (ret.status) {
                     alert(JSON.stringify(ret));
                 } else {
-                    alert(JSON.stringify(err));
+                    alert(JSON.stringify(err.msg));
                 }
             });
         });

@@ -134,7 +134,7 @@
         </div>
         <div class="main clearfix" style="font-size: 0">
             <p class="mobile ">在校经历</p>
-            <textarea rows="6" id="textarea" placeholder="主要在校经历" maxlength="300" onkeyup="changeText(this)"></textarea>
+            <textarea rows="6" id="textarea" placeholder="主要在校经历" maxlength="300" oninput="changeText(this)"></textarea>
             <p class="mobile fr" id="textLength"> 0/300</p>
         </div>
     </div>
@@ -150,32 +150,34 @@
         moduleInit();
         if (api.pageParam.flag == 1) {
             url = '/api/user_center/editEducation';
-            $api.text($api.byId('main_no3'), '删除');
-            $api.text($api.byId('title'), '修改学习经历');
-            $api.css($api.byId('over'), 'display:inline-block');
-            $api.css($api.byId('main_no3'), 'background-color:#DF214E');
-            $api.removeAttr($api.byId('main_no3'), '  tapmode="hover"   onclick');
-            $api.rmEvt($api.byId('main_no3'), 'click', addStudy);
-            $api.addEvt($api.byId('main_no3'), 'click', function(){
-                delStudy();
-            });
+            // $api.text($api.byId('main_no3'), '删除');
+            // $api.text($api.byId('title'), '修改学习经历');
+            // $api.css($api.byId('over'), 'display:inline-block');
+            // $api.css($api.byId('main_no3'), 'background-color:#DF214E');
+            // $api.removeAttr($api.byId('main_no3'), '  tapmode="hover"   onclick');
+            // $api.rmEvt($api.byId('main_no3'), 'click', addStudy);
+            // $api.addEvt($api.byId('main_no3'), 'click', function(){
+            //     delStudy();
+            // });
+            getCityList();
         } else {
             url = '/api/user_center/addEducation'
         }
-        getCityList();
+        
         api.addEventListener({
             name: 'editStudy'
         }, function(ret, err) {
             if (ret) {
                 addStudy();
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         });
     };
 
      // 打开时间选择器
-   function openTime(ele) {                                                                                                                                     for (var i = 0; i < $api.domAll('input').length; i++) {             $api.domAll('input')[i].blur()         }
+   function openTime(ele) {
+        for (var i = 0; i < $api.domAll('input').length; i++) {$api.domAll('input')[i].blur()}
         var data = $api.attr(ele, 'data-val');
         var text;
         if (data == 'start') {
@@ -203,11 +205,12 @@
             if (ret) {
                 $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day);
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         });
    }
     function openSelect2(ele) {
+        for (var i = 0; i < $api.domAll('input').length; i++) {$api.domAll('input')[i].blur()}
         var text = $api.text(ele);
         var data = ['文科','理科'];
         var selArr = []
@@ -275,7 +278,7 @@
                     $api.text(ele, ret.level1);
                 }
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         });
     }
@@ -303,7 +306,7 @@
                 $api.val($api.byId('textarea'), ret.data.info.description); 
                 $api.text($api.byId('textLength'), ret.data.info.description.length + '/300');
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         });
     }
@@ -316,7 +319,7 @@
         var time_1 = $api.text($api.byId('time_1'));    
         var time_2 = $api.text($api.byId('time_2')); 
         var textarea = $api.val($api.byId('textarea')); 
-        alert(selectKe)
+        
          api.ajax({
             url: apiSite + url,
             method: 'post',
@@ -336,13 +339,12 @@
             }
         }, function(ret, err) {
             if (ret) {
-            alert(JSON.stringify(ret))
              api.sendEvent({
                  name: 'addStudy'
              });
              api.closeWin();
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         }); 
            
@@ -367,7 +369,7 @@
                 });
                 api.closeWin();
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         });
     }

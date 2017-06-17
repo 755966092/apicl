@@ -89,6 +89,7 @@
             float: right;
         }
        textarea {
+        
         background-color: #fff;
         text-align: left;
         width: 100%;    
@@ -99,7 +100,7 @@
         outline: none; 
         resize: none;
        }
-       #textLength {
+       #textLength,#textLength2 {
         background-color: #fff;
         width: 100%;  
         padding-right:.3rem ; 
@@ -141,9 +142,9 @@
                    <p>
                         时间段
                         <span class="telIpt" >
-                            <span   tapmode="hover"   onclick="selectTime(1)" id="time_1">请选择</span >
+                            <span   tapmode="hover"  data-val='startTime'   onclick="selectTime(this,1)" id="time_1">请选择</span >
                             --
-                            <span   tapmode="hover"   onclick="selectTime(2)" id="time_2">请选择</span>
+                            <span   tapmode="hover"  data-val='endTime'     onclick="selectTime(this,2)" id="time_2">请选择</span>
                         </span>
                     </p>
                 </div>
@@ -151,13 +152,13 @@
         </div>
         <div class="main clearfix" style="font-size: 0">
             <p class="mobile ">项目描述</p>
-            <textarea rows="6" placeholder="主要经历" id="textarea" maxlength="300" onkeyup="changeText(this)"></textarea>
+            <textarea rows="6" placeholder="主要经历" id="textarea" maxlength="300" oninput="changeText(this)"></textarea>
             <p class="mobile fr" id="textLength"> 0/300</p>
         </div>
         <div class="main clearfix" style="font-size: 0">
             <p class="mobile ">业绩描述</p>
-            <textarea rows="6" placeholder="主要经历" id="textarea2" maxlength="300" onkeyup="changeText(this)"></textarea>
-            <p class="mobile fr" id="textLength"> 0/300</p>
+            <textarea rows="6" placeholder="主要经历" id="textarea2" maxlength="300" oninput="changeText(this)"></textarea>
+            <p class="mobile fr" id="textLength2"> 0/300</p>
         </div>
     </div>
      <div class="main_no3" id="main_no3"   tapmode="hover"   onclick="addStudy()">
@@ -171,14 +172,7 @@
     apiready = function(){
         if (api.pageParam.flag == 1) {
             url = '/api/user_center/editProject';
-            $api.text($api.byId('main_no3'), '删除');
-            $api.text($api.byId('title'), '修改项目业绩');
-            $api.css($api.byId('main_no3'), 'background-color:#DF214E');
-            $api.removeAttr($api.byId('main_no3'), '  tapmode="hover"   onclick');
-            $api.rmEvt($api.byId('main_no3'), 'click', addStudy);
-            $api.addEvt($api.byId('main_no3'), 'click', function(){
-                delStudy();
-            });
+          
             
         } else {
             url = '/api/user_center/addProject'
@@ -210,6 +204,7 @@
             }
         }, function(ret, err) {
             if (ret) {
+                console.log(JSON.stringify(ret))
                 ret.data.info.end_date = ret.data.info.end_date == '0000-00-00'?'至今':ret.data.info.end_date;
                 $api.val($api.byId('company_name'), ret.data.info.name);    
                 $api.val($api.byId('company_position'), ret.data.info.role);    
@@ -221,7 +216,7 @@
                 $api.text($api.byId('textLength'), ret.data.info.description.length + '/300');
                 $api.text($api.byId('textLength2'), ret.data.info.achievement.length + '/300');
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         });
     }
@@ -234,7 +229,7 @@
         //     if (ret) {
         //         $api.text($api.byId('selectEdu'), ret.value.selDate);
         //     } else {
-        //         alert(JSON.stringify(err));
+        //         alert(JSON.stringify(err.msg));
         //     }
         // });
         // 监听返回时间数据1
@@ -244,7 +239,7 @@
             if (ret) {
                 $api.text($api.byId('time_1'), ret.value.selDate);
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         });
         api.addEventListener({
@@ -254,7 +249,7 @@
 
                 $api.text($api.byId('time_2'), ret.value.selDate);
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         });
     }
@@ -294,73 +289,50 @@
                 });
                 api.closeWin();
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err.msg));
             }
         }); 
            
     }
-    // 删除数据
-    function delStudy () {
-        api.ajax({
-            url: apiSite + '/api/user_center/deleteProject',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
-                    project_id: api.pageParam.project_id
-                }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                // alert(JSON.stringify(ret))
-                // getData(ret.data.list)
-                api.sendEvent({
-                    name: 'addStudy'
-                });
-                api.closeWin();
-            } else {
-                alert(JSON.stringify(err));
-            }
-        });
-    }
+   
     // 编辑文本和修改文本长度内容
     function changeText(ele) {
         $api.text($api.next(ele), ele.value.length + '/300');
     } 
     // 选择时间
-    function selectTime(n) {
-        if (n == 2) {
-            api.openFrame({
-                name: 'me_info_study_addUndergo_time_2',
-                url: 'me_info_study_addUndergo_time_2.html',
-                rect: {
-                    x: 0,
-                    y: 0,
-                    w: 'auto',
-                    h: 'auto'
-                },
-                pageParam: {
-                    name: 'value'
-                },
-                bounces: false
-            });
+    // 打开时间选择器
+    function selectTime(ele) {
+        for (var i = 0; i < $api.domAll('input').length; i++) {$api.domAll('input')[i].blur()}
+        var data = $api.attr(ele, 'data-val');
+        var text;
+        if (data == 'startTime') {
+            text = '选择开始时间'
         } else {
-            api.openFrame({
-            name: 'me_info_study_addUndergo_time',
-            url: 'me_info_study_addUndergo_time.html',
-            rect: {
-                x: 0,
-                y: 0,
-                w: 'auto',
-                h: 'auto'
-            },
-            pageParam: {
-                name: 'value'
-            },
-            bounces: false
-        });
+            text = '选择结束时间'
         }
+        var date, date1, date2;
+        var current = $api.text(ele);
+        if (current!='请选择') {
+            current = current.split('-')
+            date = current[0];
+            date1 = current[1];
+            date2 = current[2];
+        } else　{
+            date = new Date().getFullYear();
+            date1 = new Date().getMonth();
+            date2 = new Date().getDate();
+        }
+        api.openPicker({
+            type: 'date',
+            date: date+'-'+date1+'-'+date2,
+            title: text
+        }, function(ret, err) {
+            if (ret) {
+                $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day);
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
     }
 </script>
 </html>
