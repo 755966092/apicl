@@ -277,7 +277,7 @@
         </script>
 
 
-        <p class="position" id="position"  tapmode="hover"   onclick="getPos()">北京 北京 海淀区</p>
+        <p class="position" id="position"  tapmode="hover"   onclick="openPosition()">选择地址</p>
     </div>
     <div class="classify clearfix">
         <ul>
@@ -400,6 +400,13 @@
         $api.val(descriptionIpt, data.info.description);
 
     }
+    // 选择地址页面
+    function openPosition() {
+        api.openWin({
+            name: 'supply_releasePosition_win',
+            url: './supply_releasePosition_win.html'
+        });
+    }
     // 删除图片
     function delImg() {
         api.addEventListener({
@@ -470,7 +477,7 @@
             description = $api.val($api.byId('description'));        //string  详细内容
             // image_json = [],          //string  图片（格式：["abc.jpg","ddd.jpg"]）
             company_id = 1;      // 公司ID（类型为2-我公司卖时必传）
-            alert('标题 : '+ title +'---类别ID : '+sub_type+'---分类ID : '+category_id+'---价格 : '+price+'----形式'+form+'---内容: '+description +"---省份"+ province + "---地区" +city+ "---地址" +address+ "---纬度" +latitude+'---纬度: '+longitude)
+            // alert('标题 : '+ title +'---类别ID : '+sub_type+'---分类ID : '+category_id+'---价格 : '+price+'----形式'+form+'---内容: '+description +"---省份"+ province + "---地区" +city+ "---地址" +address+ "---纬度" +latitude+'---纬度: '+longitude)
                 api.ajax({
                     url: apiSite + '/api/supply/add',
                     method: 'post',
@@ -654,6 +661,7 @@
                 province = ret.city;
                 city = ret.district;
                 address = ret.address;
+                // alert(JSON.stringify(ret))
                 // alert('地区'+ret.district + '省份'+ret.city +'地址'+ret.address )
                 $api.text($api.byId('position'), address);
                 // ret.district // 地区

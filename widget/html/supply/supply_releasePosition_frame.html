@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style type="text/css">
+        input {
+            display: block;
+            margin: 0 auto;
+            height: .8rem;
+            width: 7rem;
+            text-align: center;
+            border: 1px solid #000;
+        }
+        li {
+            font-size: .28rem;
+            color: #000;
+            padding-left: .3rem;
+            padding-top: .1rem;
+            padding-bottom: .1rem;
+        }
+    </style>
+</head>
+<body>
+   <input type="text" oninput="sea2(this)">
+   <ul class="resultList" >
+   </ul>
+    <script type="text/x-dot-template" id="listT">
+        {{ for (var i = 0; i < it.length; i++) { }} 
+            <li ontouchstart="function_name(this)"  >{{=it[i]}}</li>
+        {{ }; }}
+    </script>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        moduleInit();
+        getPos();
+        // sea();
+    };
+
+    // 获取位置
+    function getPos() {
+        if (api.systemType == 'ios') {
+            bMap.initMapSDK(function(ret) {
+                if (ret.status) {
+                   getLocation();
+                } else {
+                    alert(JSON.stringify(err.msg))
+                }
+            });
+        } else {
+            getLocation();
+        }
+        
+    }
+    // 获取经纬度
+    function getLocation() {
+        bMap.getLocation({
+            accuracy: '1km',
+            autoStop: true,
+            filter: 1
+        }, function(ret, err) {
+            if (ret.status) {
+                getCoords(ret.lon, ret.lat)
+            } else {
+                alert(err.code);
+            }
+        });
+    }
+    // 根据经纬度获取地址
+    function getCoords(lon,lat) {
+        bMap.getNameFromCoords({
+            lon: lon,
+            lat: lat
+        }, function(ret, err) {
+            if (ret.status) {
+                // province = ret.city;
+                // city = ret.district;
+                // address = ret.address;
+                // console.log(JSON.stringify(ret))
+                // alert('地区'+ret.district + '省份'+ret.city +'地址'+ret.address )
+                // ret.district // 地区
+                // ret.city // 省份
+                // ret.address // 地址
+                // getData(ret.poiList)
+
+
+            }
+        });
+    }
+    function sea() {
+        $api.addEvt($api.dom('input'), 'keyup', function(event) {
+            if (event.keyCode == 13) {
+                bMap.autocomplete({
+                    keyword: $api.val($api.dom('input')),
+                    // city: '北京'
+                }, function(ret) {
+                    if (ret.status) {
+                        console.log(JSON.stringify(ret))
+                        getData(ret.results)
+                    } else {
+                        alert(JSON.stringify(err));
+                    }
+                });
+            }
+        });
+        // var val = $api.val(ele);
+        // console.log(val)
+        
+    }
+    function sea2(ele) {
+        bMap.autocomplete({
+            keyword: $api.val(ele),
+            // city: '北京'
+        }, function(ret) {
+            if (ret.status) {
+                console.log(JSON.stringify(ret))
+                getData(ret.results)
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    function function_name(ele) {
+        var val = $api.text(ele);
+        bMap.getCoordsFromName({
+            city: '中国',
+            address: val
+        }, function(ret, err) {
+            if (ret.status) {
+                alert(JSON.stringify(ret));
+            } else {
+                alert(JSON.stringify(err))
+            }
+
+        });
+    }
+</script>
+</html>
