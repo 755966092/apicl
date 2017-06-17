@@ -6,6 +6,7 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
+       
         body, html {
             background-color: #F8F8F8;
         }
@@ -103,34 +104,35 @@
         text-align: right; 
         border-top: 1px solid #EFEFEF;   
        }
-       #over {
-        display: none;
-        color: #129F13;
-       }
+       
     </style>
 </head>
 <body>
     <div class="wrap">
         <div class="main clearfix">
-            <p class="mobile ">学习经历（小学）</p>
+            <p class="mobile ">工作经历</p>
             <div class="main_no1 yd">
                <p>
-                    学校
-                    <input maxlength="11" type="text" id="school" class="telIpt" name="" placeholder ="必填" >
+                    公司
+                    <input maxlength="11" type="text" id="company_name" class="telIpt" name="" placeholder ="必填" >
+               </p>
+               <p>
+                    职务
+                    <input maxlength="11" type="text" id="company_position" class="telIpt" name="" placeholder ="必填" >
                </p>
                <p>
                     时间段
                     <span class="telIpt" >
-                        <span data-val='start'   tapmode="hover"   onclick="openTime(this)" id="time_1">请选择</span >
+                        <span   tapmode="hover" data-val='startTime'  onclick="openTime(this,1)" id="time_1">请选择</span >
                         --
-                        <span   tapmode="hover"   onclick="openTime(this)" id="time_2">请选择</span>
+                        <span   tapmode="hover"   onclick="openTime(this,2)" id="time_2">请选择</span>
                     </span>
                </p>
            </div>
         </div>
         <div class="main clearfix" style="font-size: 0">
-            <p class="mobile ">在校经历</p>
-            <textarea rows="6" id="textarea" placeholder="主要在校经历" maxlength="300" oninput="changeText(this)"></textarea>
+            <p class="mobile ">经历描述</p>
+            <textarea rows="6" placeholder="主要经历" id="textarea" maxlength="300" oninput="changeText(this)"></textarea>
             <p class="mobile fr" id="textLength"> 0/300</p>
         </div>
     </div>
@@ -143,35 +145,153 @@
 <script type="text/javascript">
     var url;
     apiready = function(){
-
         if (api.pageParam.flag == 1) {
-            url = '/api/user_center/editEducation';
+            url = '/api/user_center/editWork';
+            // 获取数据
             getCityList();
         } else {
-            url = '/api/user_center/addEducation'
+            url = '/api/user_center/addWork'
         }
-        // fnInit();
-        // monitor();
-        
-        api.addEventListener({
-            name: 'editStudy'
+        // 大学
+        fnInit();
+        // 监听返回数据
+        monitor();
+    };
+
+    // 获取数据
+    function getCityList() {
+        api.ajax({
+            url: apiSite + '/api/user_center/editWorkIndex',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    work_id: api.pageParam.work_id
+                }
+            }
         }, function(ret, err) {
             if (ret) {
-                addStudy();
+                ret.data.info.end_date = ret.data.info.end_date == '0000-00-00'?'至今':ret.data.info.end_date;
+                $api.val($api.byId('company_name'), ret.data.info.company_name);    
+                $api.val($api.byId('company_position'), ret.data.info.position);    
+                // $api.text($api.byId('selectEdu'), ret.data.info.degree);   
+                $api.text($api.byId('time_1'), ret.data.info.start_date);    
+                $api.text($api.byId('time_2'), ret.data.info.end_date); 
+                $api.val($api.byId('textarea'), ret.data.info.description); 
+                $api.text($api.byId('textLength'), ret.data.info.description.length + '/300');
             } else {
                 alert(JSON.stringify(err.msg));
             }
         });
-    };
-    
-    // 打开时间选择器
-    function openTime(ele) {                                                                                                                                     
-        for (var i = 0; i < $api.domAll('input').length; i++) {
-            $api.domAll('input')[i].blur()
-        }
+    }
+    // 监听
+    function monitor() {
+        // 监听返回数据
+        // api.addEventListener({
+        //     name: 'selectEdu'
+        // }, function(ret, err) {
+        //     if (ret) {
+        //         $api.text($api.byId('selectEdu'), ret.value.selDate);
+        //     } else {
+        //         alert(JSON.stringify(err.msg));
+        //     }
+        // });
+        // 监听返回时间数据1
+        api.addEventListener({
+            name: 'selectTime_1'
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.byId('time_1'), ret.value.selDate);
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
+        api.addEventListener({
+            name: 'selectTime_2'
+        }, function(ret, err) {
+            if (ret) {
+
+                $api.text($api.byId('time_2'), ret.value.selDate);
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
+    }
+    // 提交数据
+    function addStudy() {
+        // 获取数据
+        var company_name = $api.val($api.byId('company_name'));    
+        var position = $api.val($api.byId('company_position'));    
+        var time_1 = $api.text($api.byId('time_1'));    
+        var time_2 = $api.text($api.byId('time_2'))=='至今'?'0000-00-00':$api.text($api.byId('time_2')); 
+        var textarea = $api.val($api.byId('textarea')); 
+        
+         api.ajax({
+            url: apiSite + url,
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    work_id: api.pageParam.work_id,
+                    company_id: '',
+                    company_name: company_name,
+                    position: position,
+                    description: textarea,
+                    start_date: time_1,
+                    end_date: time_2
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                api.sendEvent({
+                    name: 'addStudy'
+                });
+                api.closeWin();
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        }); 
+           
+    }
+    // 删除数据
+    function delStudy () {
+        alert('删除')
+        api.ajax({
+            url: apiSite + '/api/user_center/deleteWork',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    work_id: api.pageParam.work_id
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                alert(JSON.stringify(ret))
+                // getData(ret.data.list)
+                api.sendEvent({
+                    name: 'addStudy'
+                });
+                api.closeWin();
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
+    }
+    // 编辑文本和修改文本长度内容
+    function changeText(ele) {
+        // alert();
+        $api.text($api.byId('textLength'), ele.value.length + '/300');
+    } 
+      // 打开时间选择器
+    function openTime(ele) {
+        for (var i = 0; i < $api.domAll('input').length; i++) {$api.domAll('input')[i].blur()}
         var data = $api.attr(ele, 'data-val');
         var text;
-        if (data == 'start') {
+        if (data == 'startTime') {
             text = '选择开始时间'
         } else {
             text = '选择结束时间'
@@ -200,103 +320,5 @@
             }
         });
     }
-    // 编辑文本和修改文本长度内容
-    function changeText(ele) {
-        // alert();
-        $api.text($api.byId('textLength'), ele.value.length + '/300');
-    } 
-
-    // 获取数据
-    function getCityList() {
-        api.ajax({
-            url: apiSite + '/api/user_center/editEducationIndex',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: $api.getStorage('userToken'),
-                    education_id: api.pageParam.education_id
-                }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                alert(JSON.stringify(ret))
-                if (ret.data.info.end_date == '0000-00-00' ){
-                     $api.text($api.byId('time_2'), '至今'); 
-                } else {
-                    $api.text($api.byId('time_2'), ret.data.info.end_date);    
-                }
-                $api.val($api.byId('school'), ret.data.info.school);    
-                $api.text($api.byId('time_1'), ret.data.info.start_date);    
-               
-                $api.val($api.byId('textarea'), ret.data.info.description); 
-                $api.text($api.byId('textLength'), ret.data.info.description.length + '/300');
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
-    }
-    // 提交数据
-    function addStudy() {
-        // 获取数据
-        var school = $api.val($api.byId('school'));    
-        var time_1 = $api.text($api.byId('time_1'));    
-        var time_2 = $api.text($api.byId('time_2')); 
-        var textarea = $api.val($api.byId('textarea')); 
-        api.ajax({
-            url: apiSite + url,
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
-                    education_id: api.pageParam.education_id,
-                    type: 1,
-                    school: school,
-                    major: '',
-                    degree: '',
-                    description: textarea,
-                    start_date: time_1,
-                    end_date: time_2
-                }
-            }
-        }, function(ret, err) {
-            if (ret) {
-            alert(JSON.stringify(ret))
-             api.sendEvent({
-                 name: 'addStudy'
-             });
-             api.closeWin();
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        }); 
-           
-    }
-     // 删除数据
-    function delStudy () {
-        api.ajax({
-            url: apiSite + '/api/user_center/deleteEducation',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
-                    education_id: api.pageParam.education_id
-                }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                // getData(ret.data.list)
-                api.sendEvent({
-                    name: 'addStudy'
-                });
-                api.closeWin();
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
-    }
- 
 </script>
 </html>

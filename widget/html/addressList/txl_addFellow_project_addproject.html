@@ -11,9 +11,9 @@
             background-color: #F8F8F8;
         }
        
-       #over {
+        #over {
         display: none;
-        color: #129F13;
+        color: #DF214E;
        }
     </style>
 </head>
@@ -25,7 +25,7 @@
             <span class="winTitle">
                 新增项目业绩
             </span>
-            <span class="rightBtn"   tapmode="hover"   onclick="addStudy()" id="over">完成</span> 
+            <span class="rightBtn"   tapmode="hover"   onclick="delStudy()" id="over">删除</span> 
         </div>
     </header>
   
@@ -37,7 +37,10 @@
 
         
         fnInit();
-        
+        if(api.pageParam.flag) {
+            $api.css($api.byId('over'), 'display:inline-block');
+            $api.text($api.dom('.winTitle'), '修改项目业绩');
+        }
         api.openFrame({
             name: 'txl_addFellow_project_addproject_frome',
             url: './txl_addFellow_project_addproject_frome.html',
@@ -59,9 +62,29 @@
              $api.css($api.byId('over'), 'display:inline-block');
         }
     };
-    function addStudy() {
-        api.sendEvent({
-            name: 'addStudy'
+     // 删除数据
+    function delStudy () {
+        api.ajax({
+            url: apiSite + '/api/user_center/deleteProject',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    project_id: api.pageParam.project_id
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                // alert(JSON.stringify(ret))
+                // getData(ret.data.list)
+                api.sendEvent({
+                    name: 'addStudy'
+                });
+                api.closeWin();
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
         });
     }
    

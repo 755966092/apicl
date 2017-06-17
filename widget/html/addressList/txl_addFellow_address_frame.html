@@ -85,7 +85,7 @@
     </div>
      <script type="text/x-dot-template" id="listT">
         {{ for (var i = 0; i < it.length; i++) { }} 
-            <div class="dzlist" data-val="{{=it[i].address_id}}" >
+            <div class="dzlist" ontouchstart="openEdit(this)" data-val="{{=it[i].address_id}}"  >
                 <div class="left fl">
                     <h3>{{=it[i].note}}</h3>
                     <p>
@@ -95,7 +95,7 @@
                         <span class="address">{{=it[i].address}}</span>
                     </p>
                 </div>
-                <span   tapmode="hover"   onclick="openEdit(this)" data-val="{{=it[i].address_id}}" class="right fr"></span>
+                <span  id="btnStatus"  class="right fr"></span>
                 <!-- <span   tapmode="hover"   onclick="delDz2(this)"  class="edit right fr"></span> -->
                 <!-- <span   tapmode="hover"   onclick="openEdit(this)" class=" fr"></span> -->
            </div>
@@ -135,9 +135,9 @@
     function openEdit(ele) {
         var val = $api.attr(ele, 'data-val');
 
-        if ($api.hasCls(ele, 'edit')) {
+        if ($api.hasCls($api.byId('btnStatus'), 'edit')) {
             // 删除按钮状态下删除地址
-            $api.remove($api.closest(ele, '.dzlist'));
+            $api.remove($api.closest($api.byId('btnStatus'), '.dzlist'));
             delDz2(val);
         } else {
             // 编辑按钮状态下 进入编辑页面

@@ -67,11 +67,11 @@
             </li>
             <li>
                 <span class="title">详细地址</span>
-                <input type="text" class="address" name="" onkeyup ="iptCom()" placeholder="街道门牌信息">
+                <input type="text" class="address" name="" oninput ="iptCom()" placeholder="街道门牌信息">
             </li>
             <li>
                 <span class="title">邮政编码</span>
-                <input type="text" class="zipcode" name="" onkeyup ="iptCom()" placeholder="邮政编码">
+                <input type="text" class="zipcode" name="" oninput ="iptCom()" placeholder="邮政编码">
             </li>
         </ul>
     </div>
@@ -85,8 +85,6 @@
 <script type="text/javascript">
 var url;
     apiready = function(){
-	    // fnInit();
-       
         if (api.pageParam.flag) {
             // 1 编辑
             getCityList();
@@ -158,7 +156,6 @@ var url;
         api.addEventListener({
             name: 'selCity'
         }, function(ret, err) {
-            alert('监听到的数据'+JSON.stringify(ret))
             if (ret) {
                 $api.text($api.dom('.provinces'), ret.value.provinces);
                 $api.text($api.dom('.cities'), ret.value.cities);
@@ -201,8 +198,6 @@ var url;
     }
     
     var provinces, cities, city, address, zipcode;
-
-    
     // 按钮变色
     function iptCom() {
             provinces =  $api.text($api.dom('.provinces')),

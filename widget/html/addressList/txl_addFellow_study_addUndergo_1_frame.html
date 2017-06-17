@@ -4,7 +4,7 @@
     <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
     <style>
        
         body, html {
@@ -71,7 +71,7 @@
             font-size: .27rem;
             color: #B1A9AB;
             height: .8rem;  
-            background: url(../../image/icon_zk.png)no-repeat;
+            background: url(../../../image/icon_zk.png)no-repeat;
             background-size: .15rem .25rem;
             background-position: right  center;
                 
@@ -80,7 +80,7 @@
             display: none;
             width: .24rem;
             height: .8rem;
-            background: url(../../image/icon_login/icon-clearText.png)no-repeat;
+            background: url(../../../image/icon_login/icon-clearText.png)no-repeat;
             background-size: .24rem .24rem;
             background-position: 0 center;
             float: right;
@@ -111,15 +111,6 @@
 </head>
 <body>
      
-    <!-- <header  class="header">
-        <div class="head">
-            <span class="callback"   tapmode="hover"   onclick="api.closeWin()">取消</span>
-            <span class="winTitle">
-                新增学习经历
-            </span>
-            <span class="rightBtn bj" id="voer"   tapmode="hover"   onclick="addStudy()">完成</span> 
-        </div>
-    </header> -->
     <div class="wrap">
         <div class="main clearfix">
             <p class="mobile ">学习经历（大专及以上）</p>
@@ -148,7 +139,7 @@
         </div>
         <div class="main clearfix" style="font-size: 0">
             <p class="mobile ">在校经历</p>
-            <textarea rows="6" placeholder="主要在校经历" id="textarea" maxlength="300" onkeyup="changeText(this)"></textarea>
+            <textarea rows="6" placeholder="主要在校经历" id="textarea" maxlength="300" oninput="changeText(this)"></textarea>
             <p class="mobile fr" id="textLength"> 0/300</p>
         </div>
     </div>
@@ -156,8 +147,8 @@
            保存
        </div>
 </body>
-<script type="text/javascript" src="../../script/api.js"></script>
-<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../../script/api.js"></script>
+<script type="text/javascript" src="../../../script/common.js"></script>
 <script type="text/javascript">
     var url;
     apiready = function(){
@@ -166,22 +157,14 @@
      
         if (api.pageParam.flag == 1) {
             url = '/api/user_center/editEducation';
-            $api.text($api.byId('main_no3'), '删除');
+            getCityList();
            
-            $api.css($api.byId('over'), 'display:inline-block');
-            $api.css($api.byId('main_no3'), 'background-color:#DF214E');
-            $api.removeAttr($api.byId('main_no3'), '  tapmode="hover"   onclick');
-            $api.rmEvt($api.byId('main_no3'), 'click', addStudy);
-            $api.addEvt($api.byId('main_no3'), 'click', function(){
-                delStudy();
-            });
         } else {
             url = '/api/user_center/addEducation'
         }
         
         
         // 获取数据
-        getCityList();
         api.addEventListener({
             name: 'editStudy'
         }, function(ret, err) {
@@ -194,7 +177,8 @@
         
     };
       // 打开时间选择器
-    function openTime(ele) {                                                                                                                                     for (var i = 0; i < $api.domAll('input').length; i++) {             $api.domAll('input')[i].blur()         }
+    function openTime(ele) {
+        for (var i = 0; i < $api.domAll('input').length; i++) {$api.domAll('input')[i].blur()}
         var data = $api.attr(ele, 'data-val');
         var text;
         if (data == 'startTime') {
@@ -355,7 +339,6 @@
     }
     // 删除数据
     function delStudy () {
-        alert('删除')
         api.ajax({
             url: apiSite + '/api/user_center/deleteEducation',
             method: 'post',
@@ -384,8 +367,26 @@
         // alert();
         $api.text($api.byId('textLength'), ele.value.length + '/300');
     } 
-    
+    // 选择学历
+    function selectEdu() {
+        api.openFrame({
+            name: 'me_info_study_addUndergo_selectEdu',
+            url: 'me_info_study_addUndergo_selectEdu.html',
+            rect: {
+                x: 0,
+                y: 0,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                name: 'value'
+            },
+            bounces: false
+        });
+
+    }
     function openSelect2(ele) {
+        for (var i = 0; i < $api.domAll('input').length; i++) {$api.domAll('input')[i].blur()}
         var text = $api.text(ele);
         var data = ['专科','本科','硕士','博士','博士后'];
         var selArr = []
@@ -463,40 +464,6 @@
             }
         });
     }
-    // 选择时间
-    function selectTime(n) {
-        
-        if (n == 2) {
-            api.openFrame({
-                name: 'me_info_study_addUndergo_time_2',
-                url: 'me_info_study_addUndergo_time_2.html',
-                rect: {
-                    x: 0,
-                    y: 0,
-                    w: 'auto',
-                    h: 'auto'
-                },
-                pageParam: {
-                    name: 'value'
-                },
-                bounces: false
-            });
-        } else {
-            api.openFrame({
-            name: 'me_info_study_addUndergo_time',
-            url: 'me_info_study_addUndergo_time.html',
-            rect: {
-                x: 0,
-                y: 0,
-                w: 'auto',
-                h: 'auto'
-            },
-            pageParam: {
-                name: 'value'
-            },
-            bounces: false
-        });
-        }
-    }
+   
 </script>
 </html>

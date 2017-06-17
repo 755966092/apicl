@@ -90,31 +90,11 @@
 <body>
     
     <div class="wrap resultList">
-         <!-- <div class="dzlist" data-id='{{=it[i].project_id}}'>
-                <div class="clearfix kuo">
-                <img src="../../image/tx_2.jpg">
-                <div class="left fl">
-                    <h3>{{=it[i].name}}</h3>
-                    p>{{=it[i].start_date}} - {{=it[i].end_date}},{{=it[i].url}}&nbsp;&nbsp;{{=it[i].role}}</p> 
-                    <p>{{=it[i].url}}&nbsp;&nbsp;{{=it[i].role}}</p>
-                </div>
-                <span   tapmode="hover"   onclick="openEdit(this)" data-type='{{=it[i].type}}' data-id='{{=it[i].project_id}}' class="right fr"></span></div>
-                <div class="schoolInfo">{{=it[i].description}}</div>
-                <div class="schoolInfo">{{=it[i].achievement}}</div>
-            </div> -->
-            
-       <!-- <div class="dzlist">
-           <div class="left fl">
-                <h3>方小姐</h3>
-                <p>北京市海淀区清华科技园创业大厦110</p>
-           </div>
-           <span   tapmode="hover"   onclick="openEdit(this)" class="right fr"></span>
-       </div> -->
     </div>
 
     <script type="text/x-dot-template" id="listT">
         {{ for (var i = 0; i < it.length; i++) { }} 
-            <div class="dzlist" data-id='{{=it[i].project_id}}'>
+            <div class="dzlist" ontouchstart="openEdit(this)" data-type='{{=it[i].type}}' data-id='{{=it[i].project_id}}' >
                 <div class="clearfix kuo">
                 <img src="../../image/tx_2.jpg">
                 <div class="left fl">
@@ -122,7 +102,7 @@
                     <!-- <p>{{=it[i].start_date}} - {{=it[i].end_date}},{{=it[i].url}}&nbsp;&nbsp;{{=it[i].role}}</p> -->
                     <p>{{=it[i].url}}&nbsp;&nbsp;{{=it[i].role}}</p>
                 </div>
-                <span   tapmode="hover"   onclick="openEdit(this)" data-type='{{=it[i].type}}' data-id='{{=it[i].project_id}}' class="right fr"></span></div>
+                <span id="btnStatus" class="right fr"></span></div>
                 <div class="schoolInfo">{{=it[i].description}}</div>
                 <div class="schoolInfo">{{=it[i].achievement}}</div>
             </div>
@@ -173,9 +153,9 @@
         var val = $api.attr(ele, 'data-id');
         // var type = $api.attr(ele, 'data-type');
 
-        if ($api.hasCls(ele, 'edit')) {
+        if ($api.hasCls($api.byId('btnStatus'), 'edit')) {
             // 删除按钮状态下删除地址
-            $api.remove($api.closest(ele, '.dzlist'));
+            $api.remove($api.closest($api.byId('btnStatus'), '.dzlist'));
             delDz2(val);
         } else {
             // 编辑按钮状态下 进入编辑页面

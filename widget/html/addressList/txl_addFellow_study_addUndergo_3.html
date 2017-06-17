@@ -116,7 +116,7 @@
             <span class="winTitle" id="title">
                 新增学习经历
             </span>
-            <span class="rightBtn bj" id="voer"   tapmode="hover"   onclick="enter()">完成</span> 
+            <span class="rightBtn bj" id="over"   tapmode="hover"   onclick="addStudy()">删除</span> 
         </div>
     </header>
    
@@ -129,6 +129,10 @@
         fnInit();
         if (api.pageParam.flag ==1) {
              $api.text($api.byId('title'), '修改学习经历');
+              $api.css($api.byId('over'), 'color:#DF214E');
+              $api.css($api.byId('over'), 'display:inline-block');
+        } else {
+           $api.css($api.byId('over'), 'display:none');
         }
          api.openFrame({
             name: 'txl_addFellow_study_addUndergo_3_frame',
@@ -148,9 +152,28 @@
         });
      
     }
-    function enter() {
-        api.sendEvent({
-            name: 'editStudy'
+     // 删除数据
+    function delStudy () {
+        api.ajax({
+            url: apiSite + '/api/user_center/deleteEducation',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    education_id: api.pageParam.education_id
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                // getData(ret.data.list)
+                api.sendEvent({
+                    name: 'addStudy'
+                });
+                api.closeWin();
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
         });
     }
 </script>

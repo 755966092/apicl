@@ -117,171 +117,39 @@
             <span class="winTitle">
                 新增工作经历
             </span>
-            <span class="rightBtn bj" id="voer"   tapmode="hover"   onclick="addStudy()">完成</span> 
+            <span class="rightBtn bj" id="over"   tapmode="hover"   onclick="delStudy()">删除</span> 
         </div>
     </header>
-    <div class="wrap">
-        <div class="main clearfix">
-            <p class="mobile ">工作经历</p>
-            <div class="main_no1 yd">
-               <p>
-                    公司
-                    <input maxlength="11" type="text" id="company_name" class="telIpt" name="" placeholder ="必填" >
-               </p>
-               <p>
-                    职务
-                    <input maxlength="11" type="text" id="company_position" class="telIpt" name="" placeholder ="必填" >
-               </p>
-               <p>
-                    时间段
-                    <span class="telIpt" >
-                        <span   tapmode="hover"   onclick="selectTime(this,1)" id="time_1">请选择</span >
-                        --
-                        <span   tapmode="hover"   onclick="selectTime(this,2)" id="time_2">请选择</span>
-                    </span>
-               </p>
-           </div>
-        </div>
-        <div class="main clearfix" style="font-size: 0">
-            <p class="mobile ">经历描述</p>
-            <textarea rows="6" placeholder="主要经历" id="textarea" maxlength="300" onkeyup="changeText(this)"></textarea>
-            <p class="mobile fr" id="textLength"> 0/300</p>
-        </div>
-    </div>
-     <div class="main_no3" id="main_no3"   tapmode="hover"   onclick="addStudy()">
-           保存
-       </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     var url;
     apiready = function(){
-
+        fnInit()
         if (api.pageParam.flag == 1) {
-            url = '/api/user_center/editWork';
-            $api.text($api.byId('main_no3'), '删除');
-            $api.text($api.byId('title'), '修改工作经历');
-            $api.css($api.byId('over'), 'display:inline-block');
-            $api.css($api.byId('main_no3'), 'background-color:#DF214E');
-            $api.removeAttr($api.byId('main_no3'), '  tapmode="hover"   onclick');
-            $api.rmEvt($api.byId('main_no3'), 'click', addStudy);
-            $api.addEvt($api.byId('main_no3'), 'click', function(){
-                delStudy();
-            });
-            
+             $api.css($api.byId('over'), 'display:inline-block');
+            $api.text($api.dom('.winTitle'), '修改工作经历');
         } else {
-            url = '/api/user_center/addWork'
         }
-        // 大学
-        fnInit();
-        // 监听返回数据
-        monitor();
-        // 获取数据
-            getCityList();
-        
+        api.openFrame({
+            name: 'txl_addFellow_workExper_addExper_frame',
+            url: './txl_addFellow_workExper_addExper_frame.html',
+            rect: {
+                x: 0,
+                y: headerH,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                flag: api.pageParam.flag,
+                work_id: api.pageParam.work_id
+            },
+            bounces: false
+        });
     };
-
-    // 获取数据
-    function getCityList() {
-        api.ajax({
-            url: apiSite + '/api/user_center/editWorkIndex',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
-                    work_id: api.pageParam.work_id
-                }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                ret.data.info.end_date = ret.data.info.end_date == '0000-00-00'?'至今':ret.data.info.end_date;
-                $api.val($api.byId('company_name'), ret.data.info.company_name);    
-                $api.val($api.byId('company_position'), ret.data.info.position);    
-                // $api.text($api.byId('selectEdu'), ret.data.info.degree);   
-                $api.text($api.byId('time_1'), ret.data.info.start_date);    
-                $api.text($api.byId('time_2'), ret.data.info.end_date); 
-                $api.val($api.byId('textarea'), ret.data.info.description); 
-                $api.text($api.byId('textLength'), ret.data.info.description.length + '/300');
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
-    }
-    // 监听
-    function monitor() {
-        // 监听返回数据
-        // api.addEventListener({
-        //     name: 'selectEdu'
-        // }, function(ret, err) {
-        //     if (ret) {
-        //         $api.text($api.byId('selectEdu'), ret.value.selDate);
-        //     } else {
-        //         alert(JSON.stringify(err.msg));
-        //     }
-        // });
-        // 监听返回时间数据1
-        api.addEventListener({
-            name: 'selectTime_1'
-        }, function(ret, err) {
-            if (ret) {
-                $api.text($api.byId('time_1'), ret.value.selDate);
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
-        api.addEventListener({
-            name: 'selectTime_2'
-        }, function(ret, err) {
-            if (ret) {
-
-                $api.text($api.byId('time_2'), ret.value.selDate);
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
-    }
-    // 提交数据
-    function addStudy() {
-        // 获取数据
-        var company_name = $api.val($api.byId('company_name'));    
-        var position = $api.val($api.byId('company_position'));    
-        var time_1 = $api.text($api.byId('time_1'));    
-        var time_2 = $api.text($api.byId('time_2'))=='至今'?'0000-00-00':$api.text($api.byId('time_2')); 
-        var textarea = $api.val($api.byId('textarea')); 
-        
-         api.ajax({
-            url: apiSite + url,
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
-                    work_id: api.pageParam.work_id,
-                    company_id: '',
-                    company_name: company_name,
-                    position: position,
-                    description: textarea,
-                    start_date: time_1,
-                    end_date: time_2
-                }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                api.sendEvent({
-                    name: 'addStudy'
-                });
-                api.closeWin();
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        }); 
-           
-    }
-    // 删除数据
+     // 删除数据
     function delStudy () {
-        alert('删除')
         api.ajax({
             url: apiSite + '/api/user_center/deleteWork',
             method: 'post',
@@ -304,47 +172,6 @@
                 alert(JSON.stringify(err.msg));
             }
         });
-    }
-    // 编辑文本和修改文本长度内容
-    function changeText(ele) {
-        // alert();
-        $api.text($api.byId('textLength'), ele.value.length + '/300');
-    } 
-    // 选择时间
-    function selectTime(ele,n) {
-        var time = $api.text(ele).split("-");
-        
-        if (n == 2) {
-            api.openFrame({
-                name: 'me_info_study_addUndergo_time_2',
-                url: '../me/me_info/me_info_study_addUndergo_time_2.html',
-                rect: {
-                    x: 0,
-                    y: 0,
-                    w: 'auto',
-                    h: 'auto'
-                },
-                pageParam: {
-                    time: time
-                },
-                bounces: false
-            });
-        } else {
-            api.openFrame({
-            name: 'me_info_study_addUndergo_time',
-            url: '../me/me_info/me_info_study_addUndergo_time.html',
-            rect: {
-                x: 0,
-                y: 0,
-                w: 'auto',
-                h: 'auto'
-            },
-            pageParam: {
-                time: time
-            },
-            bounces: false
-        });
-        }
     }
 </script>
 </html>
