@@ -291,13 +291,13 @@
             <li   tapmode="hover"   onclick="selectType(this)" data-val="_type">
                 <div class="wrap">
                     <span>类型</span>
-                    <span class="spanno2 _type"></span>
+                    <span id="_type" class="spanno2 _type"></span>
                 </div>
             </li>
             <li class="companyName">
                 <div class="wrap">
                     <span>公司</span>
-                    <span class="spanno2"></span>
+                    <span id="company_name" class="spanno2"></span>
                 </div>
             </li>
             <li   tapmode="hover"   onclick="selectType(this)" data-val="_genre">
@@ -309,7 +309,7 @@
             <li class="border100" tapmode="hover"   onclick="selectType(this)" data-val="_classify">
                 <div class="wrap">
                     <span>分类</span>
-                    <span class="spanno2 _classify"></span>
+                    <span class="spanno2 _classify" id="category_id"></span>
                 </div>
             </li>
 
@@ -317,7 +317,7 @@
             <li class="mt37"  tapmode="hover" >
                 <div class="wrap">
                     <span>赏金</span>
-                    <input type="text" name="" placeholder="选填" id="price">
+                    <input type="number" name="" placeholder="选填" id="price">
                 </div>
             </li>
             <li   tapmode="hover"   onclick="selectType(this)" data-val="_format">
@@ -371,15 +371,17 @@
                   base64Data={
                     img: [],
                     video: []
-                  };
+                  },
+                  categoryArr = ['全部','教育','摄影','摄影','医疗'];
     apiready = function(){
         
         moduleInit();
         if (api.pageParam.supply_id) {
             requireData();
+        } else {
+            // 获取位置
+            getPos();
         }
-        // 获取位置
-        getPos();
         // 公司|个人 显示不同的页面
         showDifPage()
         // 选择类别
@@ -395,9 +397,32 @@
     // 编辑供应
     function editSupply(data) {
         var titleIpt = $api.byId('title'),
-            descriptionIpt = $api.byId('description')
+            descriptionIpt = $api.byId('description'),
+            price = $api.byId('price'),
+            _type = $api.byId('_type'),
+            sub_type = $api.byId('sub_type'),
+            form = $api.byId('form'),
+            unit = $api.byId('unit'),
+            category_id = $api.byId('category_id'),
+            position = $api.byId('position');
         $api.val(titleIpt, data.info.title);
         $api.val(descriptionIpt, data.info.description);
+        $api.val(price, data.info.price);
+
+        var unitText = data.info.unit > 0 ? _dataSource[data.info.unit-1] : '未定义';
+        var _categoryId =  categoryArr[data.info.category_id-1]
+        $api.text(position, data.info.address);
+        $api.text(unit, unitText);
+        $api.text(category_id, _categoryId);
+        data.info.type == 1 ? $api.text(_type, '个人') : $api.text(_type, '公司');
+        if (data.info.type == 2) {
+            $api.css($api.dom('.companyName'), 'display:block');
+            $api.text($api.byId('company_name'), data.info.company_name);
+
+        }
+        data.info.sub_type == 1 ? $api.text(sub_type, '自产自销') : $api.text(sub_type, '代理')
+        data.info.form == 1 ? $api.text(form, '线上') : $api.text(form, '线下')
+
 
     }
     // 选择地址页面
@@ -676,7 +701,7 @@
     // 编辑供应的数据
     function requireData() {
         api.ajax({
-            url: apiSite + '/api/supply/detail',
+            url: apiSite + '/api/supply/editIndex',
             method: 'post',
             headers: apiHeader,
             data: {
