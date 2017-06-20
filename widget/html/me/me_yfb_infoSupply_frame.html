@@ -454,39 +454,20 @@
     var transmitData,_dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
     apiready = function(){
         // 初始化页面
-        initialise(api.pageParam.flag, api.pageParam.compaby_name, 1)
+        initialise();
+        api.addEventListener({
+            name: 'renovateMySupply'
+        }, function(ret, err) {
+            if (ret) {
+                initialise();
+                alert('监听到')
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     };
-
-    // var form = new FormData();
-    // form.append("token", "b678d8a0-f0d8-c67e-50b0-4d839ea864d7");
-    // form.append("supply_id", "1");
-
-    // var settings = {
-    //   "async": true,
-    //   "crossDomain": true,
-    //   "url": "http://wozai.tonyliangli.cn/api/supply/detail",
-    //   "method": "POST",
-    //   "processData": false,
-    //   "contentType": false,
-    //   "mimeType": "multipart/form-data",
-    //   "data": form
-    // }
-    // $.ajax(settings).done(function (response) {
-    //     // $api.css($api.dom('.loading'), 'display:none');
-    //     // console.log(typeof JSON.parse(response).data.info.image_json)
-    //     // getData(JSON.parse(response).data)
-    // });
-
-
-
     // 初始化页面
-    function  initialise(flag, compaby_name, supply_id) {
-        if (flag) {
-            $api.css($api.byId('companyTtile'), 'display:block');
-            $api.text($api.byId('compaby_name'), compaby_name);
-        } else {
-            $api.css($api.byId('companyTtile'), 'display:none');
-        }
+    function  initialise() {
         // 请求数据
         api.ajax({
             url: apiSite + '/api/supply/detail',
@@ -495,7 +476,7 @@
             data: {
                values: { 
                    token: $api.getStorage('userToken'),
-                   supply_id: supply_id
+                   supply_id: api.pageParam.supply_id
                }
             }
         }, function(ret, err) {
@@ -512,36 +493,9 @@
             transmitData = ret.data.info;
         })
     }
-    // 换算单位
   
-    // 切换留言和详情
-    function datum(n,ele) {
-        for (var i = 0; i < $api.domAll('.no5Title').length; i++) {
-            $api.removeCls($api.domAll('.no5Title')[i], 'borderBottom');
-        }
-        if (n) { // 传入1  点击留言
-            $api.css($api.dom('.detail'), 'display:none');
-            $api.css($api.dom('.leaveWord'), 'display:block');
-            $api.addCls($api.first(ele, 'span'), 'borderBottom');
-        } else { // 点击详情
-            $api.css($api.dom('.detail'), 'display:block');
-            $api.css($api.dom('.leaveWord'), 'display:none');
-            $api.addCls($api.first(ele, 'span'), 'borderBottom');
-        }
-    }
-   
 
 
-    
-    // $api.dom('.resultList').addEventListener("scroll", function(event) {
-    //     console.log($api.dom('.resultList').scrollY)
-    //     if (window.scrollY > 300) {
-    //         // $api.css($api.dom('#cloaswin'), 'display:none');
-    //         $api.css($api.byId('cloaswin'), 'opacity:0;');
-    //     } else {
-    //         $api.css($api.byId('cloaswin'), 'opacity:1;');
-    //     }
-    // });
     function immediateOrder() {
         // 下单
         // api.openWin({

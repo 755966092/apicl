@@ -460,7 +460,16 @@
     var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
     apiready = function(){
         // 初始化页面
-        initialise()
+        initialise();
+        api.addEventListener({
+            name: 'renovateMySupply'
+        }, function(ret, err) {
+            if (ret) {
+                initialise();
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
     };
     // 初始化页面
     function  initialise() {
@@ -476,19 +485,23 @@
                }
             }
         }, function(ret, err) {
-            if (ret.data.info.image_json != 'null') {
-                // 解析图片json
-                ret.data.info.image_json = eval(ret.data.info.image_json);    
+            if (ret.code == 200) {
+                if (ret.data.info.image_json != 'null') {
+                    // 解析图片json
+                    ret.data.info.image_json = eval(ret.data.info.image_json);    
+                } else {
+                    ret.data.info.image_json = '0'
+                }   
+                if ( ret.data.info.unit > 0) {
+                     ret.data.info.unit = _dataSource[ ret.data.info.unit-1]
+                } else {
+                     ret.data.info.unit = '未定义'
+                }
+                $api.css($api.dom('.loading'), 'display:none');     
+                getData(ret.data);
             } else {
-                ret.data.info.image_json = '0'
-            }   
-            if ( ret.data.info.unit > 0) {
-                 ret.data.info.unit = _dataSource[ ret.data.info.unit-1]
-            } else {
-                 ret.data.info.unit = '未定义'
+                alert(ret.msg)
             }
-            $api.css($api.dom('.loading'), 'display:none');     
-            getData(ret.data);
         })
     }
     function handleBtn(ele,n) {
