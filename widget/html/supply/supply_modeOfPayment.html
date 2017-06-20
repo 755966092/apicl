@@ -175,8 +175,11 @@
                 }
             }, function(ret, err) {
                 if(ret) {
-                    alert(JSON.stringify(ret))
-                    api.closeFrame();
+                    if (ret.code !== 200) {
+                        alert(JSON.stringify(ret.msg))
+                    } else {
+                        api.closeFrame();
+                    }
                 } else {
                     alert(JSON.stringify(err.msg))
                 }

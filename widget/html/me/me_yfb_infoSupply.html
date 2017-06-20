@@ -57,13 +57,21 @@
             background-color: #fff;
         }
         .title2 .typeIcon {
+            line-height: .24rem;
+            text-align: center;
+            border-radius: .04rem;
             width: .41rem;
             height: .24rem;
-            background: url(../../image/icon_supply/icon_gs2.png)no-repeat;
-            -webkit-background-size: .41rem .24rem;
-            background-size: .41rem .24rem;
-            padding-right: .1rem;
+            /*background: url(../../image/icon_supply/icon_gs2.png)no-repeat;*/
+            /*-webkit-background-size: .41rem .24rem;*/
+            /*background-size: .41rem .24rem;*/
+            /*padding-right: .1rem;*/
+            font-size: .16rem;
+            color: #576c96;
+            border: 1px solid #576c96;
+            margin-right: .1rem;
         }
+        
         .title2 .shareIcon {
             width: .258rem;
             height: .36rem;
@@ -347,7 +355,7 @@
             <div class="title2">
                 <div class="top flex-def flex-zBetween">
                     <div class="titleName flex-def flex-zLeftRight flex-cCenter">
-                        <span class="typeIcon"></span>
+                        <span class="typeIcon">{{=it.info.type}}</span>
                         <p>{{=it.info.title}}</p>
                     </div>
                     <div class="shareIcon"></div>
@@ -461,15 +469,15 @@
     apiready = function(){
         // 初始化页面
         initialise();
-        api.addEventListener({
-            name: 'renovateMySupply'
-        }, function(ret, err) {
-            if (ret) {
-                initialise();
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
+        // api.addEventListener({
+        //     name: 'renovateMySupply'
+        // }, function(ret, err) {
+        //     if (ret) {
+        //         initialise();
+        //     } else {
+        //         alert(JSON.stringify(err.msg));
+        //     }
+        // });
     };
     // 初始化页面
     function  initialise() {
@@ -485,7 +493,9 @@
                }
             }
         }, function(ret, err) {
+
             if (ret.code == 200) {
+
                 if (ret.data.info.image_json != 'null') {
                     // 解析图片json
                     ret.data.info.image_json = eval(ret.data.info.image_json);    
@@ -497,6 +507,7 @@
                 } else {
                      ret.data.info.unit = '未定义'
                 }
+                ret.data.info.type = ret.data.info.type === 1 ? "个人" : "公司";
                 $api.css($api.dom('.loading'), 'display:none');     
                 getData(ret.data);
             } else {
@@ -532,7 +543,7 @@
                    }
             }
         }, function(ret, err) {
-            if(ret.code!==200) {
+            if(ret.code==200) {
                 // alert(JSON.stringify(ret))
                 if (url === '/api/supply/delete') {
                     api.sendEvent({

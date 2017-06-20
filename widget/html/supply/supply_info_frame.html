@@ -55,14 +55,22 @@
             border-bottom: 1px solid #E8E8E8;
             background-color: #fff;
         }
-        .title2 .typeIcon {
+         .title2 .typeIcon {
+            line-height: .24rem;
+            text-align: center;
+            border-radius: .04rem;
             width: .41rem;
             height: .24rem;
-            background: url(../../image/icon_supply/icon_gs2.png)no-repeat;
-            -webkit-background-size: .41rem .24rem;
-            background-size: .41rem .24rem;
-            padding-right: .1rem;
+            /*background: url(../../image/icon_supply/icon_gs2.png)no-repeat;*/
+            /*-webkit-background-size: .41rem .24rem;*/
+            /*background-size: .41rem .24rem;*/
+            /*padding-right: .1rem;*/
+            font-size: .16rem;
+            color: #576c96;
+            border: 1px solid #576c96;
+            margin-right: .1rem;
         }
+
         .title2 .shareIcon {
             width: .258rem;
             height: .36rem;
@@ -344,7 +352,7 @@
             <div class="title2">
                 <div class="top flex-def flex-zBetween">
                     <div class="titleName flex-def flex-zLeftRight flex-cCenter">
-                        <span class="typeIcon"></span>
+                        <span class="typeIcon">{{=it.info.type}}</span>
                         <p>{{=it.info.title}}</p>
                     </div>
                     <div class="shareIcon"></div>
@@ -481,7 +489,7 @@
             {{??}}
                 <span id="collect" ontouchstart="supplyCollect(this)"><i></i>收藏</span>
             {{?}}
-            <span tapmode="hover" onclick="immediateOrder()">立即下单</span>
+            <span tapmode="hover"onclick="immediateOrder(this)">立即下单</span>
         </footer>
     </script>
   
@@ -563,44 +571,18 @@
             } else {
                 ret.data.info.unit = '未定义'
             }
-            console.log(JSON.stringify(ret))
+            ret.data.info.type = ret.data.info.type === 1 ? "个人" : "公司";
             $api.css($api.dom('.loading'), 'display:none');     
             getData(ret.data);
             // ret.data
             transmitData = ret.data.info;
         })
     }
-    // 换算单位
   
-    // 切换留言和详情
-    function datum(n,ele) {
-        for (var i = 0; i < $api.domAll('.no5Title').length; i++) {
-            $api.removeCls($api.domAll('.no5Title')[i], 'borderBottom');
-        }
-        if (n) { // 传入1  点击留言
-            $api.css($api.dom('.detail'), 'display:none');
-            $api.css($api.dom('.leaveWord'), 'display:block');
-            $api.addCls($api.first(ele, 'span'), 'borderBottom');
-        } else { // 点击详情
-            $api.css($api.dom('.detail'), 'display:block');
-            $api.css($api.dom('.leaveWord'), 'display:none');
-            $api.addCls($api.first(ele, 'span'), 'borderBottom');
-        }
-    }
+
+
    
-
-
-    
-    // $api.dom('.resultList').addEventListener("scroll", function(event) {
-    //     console.log($api.dom('.resultList').scrollY)
-    //     if (window.scrollY > 300) {
-    //         // $api.css($api.dom('#cloaswin'), 'display:none');
-    //         $api.css($api.byId('cloaswin'), 'opacity:0;');
-    //     } else {
-    //         $api.css($api.byId('cloaswin'), 'opacity:1;');
-    //     }
-    // });
-    function immediateOrder() {
+    function immediateOrder(ele) {
         // 下单
         api.openWin({
             name: 'supply_info_immediate_order',
@@ -608,7 +590,6 @@
             softInputMode: 'pan',
             pageParam: {
                 transmitData: transmitData,
-                supply_id: api.pageParam.supply_id
             }
         });
         // 接单

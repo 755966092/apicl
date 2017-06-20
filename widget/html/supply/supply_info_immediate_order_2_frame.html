@@ -104,22 +104,26 @@
            
         }
         .content ._type {
-            display: inline-block;
+            /*display: inline-block;*/
             height: .28rem;
             width: .63rem;
-            background: url(../../image/icon_supply/icon_gs.png)no-repeat;
-            -webkit-background-size: .63rem .28rem;
-            background-size: .63rem .28rem;
+            font-size: .2rem;
+            border: 1px solid #0076FF;
+            color: #0076FF;
+            border-radius: .06rem;
             margin-right: .1rem;
+            text-align: center;
+            line-height: .28rem;
         }
         .content .title {
             font-size: .34rem;
         }
         .content p {
             font-size: .24rem;
-            position: absolute;
-            bottom: .2rem;
-            left: 1.95rem;
+            /*position: absolute;*/
+            /*bottom: .2rem;*/
+            /*left: 1.95rem;*/
+
             color: #F6A623;
         }
         .main .price {
@@ -234,7 +238,7 @@
             <div class="resultList"></div>
             <script type="text/x-dot-template" id="listT">
                 <div class="choose clearfix flex-def flex-zLeftRight flex-cCenter">
-                    <img src="../../image/tx_3.jpg">
+                    <img src="{{=it.head_img_url}}">
                     <div class="issuerInfo flex-item flex-def flex-zLeftRight flex-cCenter flex-zBetween">
                         <div>
                             <span class="name">{{=it.nickname}}</span>
@@ -251,12 +255,14 @@
                     </div>
                 </div>
                 <div class="content clearfix">
-                    <div class="div clearfix">
+                    <div class="div flex-def">
                         <img class="fl clearfix" src="../../image/tx_5.jpg">
-                        <div class="fl clearfix">
-                            <span class="_type"></span>
-                            <span class="title">{{=it.title}}</span>
-                            <p >{{=it.city}} - 
+                        <div class="flex-def flex-zTopBottom flex-zBetween">
+                            <div class="flex-def flex-cCenter">
+                                <span class="_type">{{=it.type}}</span>
+                                <span class="title">{{=it.title}}</span>
+                            </div>
+                            <p class="flex-def">{{=it.city}} - 
                             {{?it.form == 1}}
                                 <span>线上</span>
                             {{??}}
@@ -270,7 +276,7 @@
                     <span><span id="unitPrice">{{=it.price}}</span>元 / {{=it.unit}}</span>
                     <div class="fr count">
                         <i class="fl"   tapmode="hover"   onclick="subtractCount()">-</i>
-                        <input id="buyCount" type="text" name="" value="1" onkeyup="computeTatol()">
+                        <input id="buyCount" type="number" name="" value="1" onkeyup="computeTatol()">
                         <i class="fr"   tapmode="hover"   onclick="addCount()">+</i>
                     </div>
                 </div>
@@ -283,14 +289,14 @@
                         <span class="fr" id="serverTime" ontouchstart="openTime(this)">请选择服务时间</span>
                     </div>
                 </div>
-                <div class="tel serveTime">
+                <div class="tel serveTime" ontouchstart='openPhonePage(1)'>
                     <div class="wrap">
                         联系电话
                         <i></i>
                         <span class="fr" id="defaultPhone"></span>
                     </div>
                 </div>
-                <div class="tel serveTime">
+                <div class="tel serveTime" id="addressWrap" ontouchstart='openPhonePage(0)'>
                     <div class="wrap">
                         地址
                         <i></i>
@@ -333,19 +339,78 @@
 <script type="text/javascript">
     var price=0;
     apiready = function(){
-        
         getData(api.pageParam.transmitData)
         computeTatol();
         // 初始化页面
         initPage();
-
-        
+        // 线上服务不要地址
+        if (api.pageParam.transmitData.form === 1) {
+            $api.css($api.byId('addressWrap'), 'display:none');
+        } else {
+            api.addEventListener({
+                name: 'callbackAddress'
+            }, function(ret, err) {
+                if (ret) {
+                    $api.text($api.byId('address'), ret.value.callbackAddress);
+                } else {
+                    alert(JSON.stringify(err));
+                }
+            });
+        }
+        api.addEventListener({
+            name: 'callbackPhone'
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.byId('defaultPhone'), ret.value.phone);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+       
+    // {
+    //     "comment_count": 0,
+    //     "status": 1,
+    //     "title": "测试17",
+    //     "category_name": "测试分类1",
+    //     "user_id": 1,
+    //     "nickname": "李彤亮",
+    //     "image_json": [],
+    //     "avg_point": 0,
+    //     "create_time": "2017-06-20 14:49:41",
+    //     "head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+    //     "city": "海淀区",
+    //     "sold_count": 0,
+    //     "type": "个人",
+    //     "current_company": null,
+    //     "supply_id": 31,
+    //     "unit": "次",
+    //     "sub_type": 1,
+    //     "price": "123.00",
+    //     "category_id": 1,
+    //     "form": 1,
+    //     "current_position": null,
+    //     "description": "测试17"
+    // }
 
     };
+    // 选择电话
+    function openPhonePage(n) {
+        if (n) {
+            api.openWin({
+                name: 'supply_getStroagePhone',
+                url: './supply_getStroagePhone.html'
+            });
+        } else {
+            api.openWin({
+                name: 'supply_getStroageAddress',
+                url: './supply_getStroageAddress.html'
+            });
+        }
+    }
     // 确认支付
     function enterPay() {
         // 获取表单数据
-         var supply_id = api.pageParam.supply_id;        //   int 供应ID
+         var supply_id = api.pageParam.transmitData.supply_id;        //   int 供应ID
          // console.log(supply_id)
          var amount = $api.val($api.byId('buyCount'));        //  int 数量
          // console.log(amount)
@@ -388,21 +453,20 @@
         var userPhone = $api.getStorage('userPhone') || '';
         var userAddress = $api.getStorage('userAddress') || '';
         var real_name = $api.getStorage('real_name') || '';
-        // 设置地址
-        if (userAddress) {
+        if (userAddress != null) {
             $api.text($api.byId('address'), userAddress[0].province +' '+userAddress[0].city +' '+userAddress[0].district +' '+userAddress[0].district);
             $api.attr($api.byId('address'), 'data-id', userAddress[0].address_id);
         } else {
              $api.text($api.byId('address'), '未设置默认地址')
         }
         // 设置真实姓名
-        if (real_name) {
+        if (real_name != null) {
             $api.text($api.byId('real_name'), real_name);
         } else {
             $api.text($api.byId('real_name'), '未设置真实姓名');
         }
         // 设置电话
-        if (userPhone) {
+        if (userPhone != null) {
             for (var i = 0; i < userPhone.length; i++) {
                 if (userPhone[i].is_default) {
                     $api.attr($api.byId('defaultPhone'), 'data-id', userPhone[i].contact_id);
@@ -417,12 +481,15 @@
        // 打开时间选择器
     }
     // 选择时间
-    function openTime(ele) {                                                                                                                                     for (var i = 0; i < $api.domAll('input').length; i++) {             $api.domAll('input')[i].blur()         }
+    function openTime(ele) {
+        for (var i = 0; i < $api.domAll('input').length; i++) {
+            $api.domAll('input')[i].blur()
+        }
         var text = '选择服务时间';
 
         var date, date1, date2, date3, date4;
         var current = $api.text(ele);
-        if (current!='请选择服务时间') {
+        if (current != '请选择服务时间') {
             current = current.split(' ')
             var current1 = current[0].split('-')
             var current2 = current[1].split(':')
@@ -432,24 +499,24 @@
             date2 = current[2];
             date3 = current[3];
             date4 = current[4];
-        } else　{
+        } else　 {
             date = new Date().getFullYear();
             date1 = new Date().getMonth();
             date2 = new Date().getDate();
         }
         api.openPicker({
             type: 'date-time',
-            date: date+'-'+date1+'-'+date2+' '+date3+':'+date4,
+            date: date + '-' + date1 + '-' + date2 + ' ' + date3 + ':' + date4,
             title: text
         }, function(ret, err) {
             if (ret) {
-                if (ret.minute<10) {
-                    ret.minute = '0'+ret.minute
+                if (ret.minute < 10) {
+                    ret.minute = '0' + ret.minute
                 }
-                if (ret.hour<10) {
-                    ret.hour = '0'+ret.hour
+                if (ret.hour < 10) {
+                    ret.hour = '0' + ret.hour
                 }
-                $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day+' '+ret.hour+':'+ret.minute);
+                $api.text(ele, ret.year + '-' + ret.month + '-' + ret.day + ' ' + ret.hour + ':' + ret.minute);
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -467,7 +534,7 @@
     
     // 增减数量
     var count = 0;
-     function addCount() {
+    function addCount() {
         $api.val($api.byId('buyCount'), ++count);
          computeTatol();
      }
@@ -478,50 +545,11 @@
         $api.val($api.byId('buyCount'), --count);
         computeTatol();
      }
-    // 切换留言和详情
-    function datum(n,ele) {
-        for (var i = 0; i < $api.domAll('.no5Title').length; i++) {
-            $api.removeCls($api.domAll('.no5Title')[i], 'borderBottom');
-        }
-        if (n) { // 传入1  点击留言
-            $api.css($api.dom('.detail'), 'display:none');
-            $api.css($api.dom('.leaveWord'), 'display:block');
-            $api.addCls($api.first(ele, 'span'), 'borderBottom');
-        } else { // 点击详情
-            $api.css($api.dom('.detail'), 'display:block');
-            $api.css($api.dom('.leaveWord'), 'display:none');
-            $api.addCls($api.first(ele, 'span'), 'borderBottom');
-        }
-    }
    
 
 
 
-    var a = 1;
-    $api.addEvt($api.dom('.main'), 'touchmove', function(event) {
-        if (window.scrollY > 300) {
-            a -= 0.1;
-            $api.css($api.byId('cloaswin'), 'opacity:'+ a +';');
-            if (a<0) {
-                a = 0;
-            }
-        } else {
-            a += 0.1;
-            $api.css($api.byId('cloaswin'), 'opacity:'+ a +';');
-            if (a>1) {
-                a = 1;
-            }
-        }
-    });
-    $api.addEvt($api.dom('.main'), 'touchend', function(event) {
-        if (window.scrollY > 300) {
-            // $api.css($api.dom('#cloaswin'), 'display:none');
-            $api.css($api.byId('cloaswin'), 'opacity:0;');
-        } else {
-            $api.css($api.byId('cloaswin'), 'opacity:1;');
-        }
-    });
-   
+  
 </script>
 </html>
 
