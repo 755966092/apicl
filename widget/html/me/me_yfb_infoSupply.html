@@ -448,7 +448,7 @@
         </div>
          <footer>    
             <span ontouchstart="handleBtn(this,0)">
-                <i class="sus"></i>暂停
+                <i class="sus"></i>{{=it.info.status}}
             </span>
             <span ontouchstart="handleBtn(this,1)">
                 <i></i>
@@ -469,15 +469,6 @@
     apiready = function(){
         // 初始化页面
         initialise();
-        // api.addEventListener({
-        //     name: 'renovateMySupply'
-        // }, function(ret, err) {
-        //     if (ret) {
-        //         initialise();
-        //     } else {
-        //         alert(JSON.stringify(err.msg));
-        //     }
-        // });
     };
     // 初始化页面
     function  initialise() {
@@ -508,6 +499,8 @@
                      ret.data.info.unit = '未定义'
                 }
                 ret.data.info.type = ret.data.info.type === 1 ? "个人" : "公司";
+                ret.data.info.status = ret.data.info.status === 1 ? '暂停' : (ret.data.info.status = ret.data.info.status === 2 ? '开启' : '已删除');
+
                 $api.css($api.dom('.loading'), 'display:none');     
                 getData(ret.data);
             } else {
@@ -516,18 +509,18 @@
         })
     }
     function handleBtn(ele,n) {
-
         var url;
         if (n) {
             // 删除按钮
             url = '/api/supply/delete'
         } else {
             // 暂停按钮
-            url = '/api/supply/pause'
             if ($api.text(ele) === '暂停') {
-                $api.html(ele, '<i class="sus"></i>开始');
+                $api.html(ele, '<i class="sus"></i>开启');
+                url = '/api/supply/pause'
             } else {
                 $api.html(ele, '<i class="sus"></i>暂停');
+                url = '/api/supply/show'
             }
             
 
@@ -544,11 +537,10 @@
             }
         }, function(ret, err) {
             if(ret.code==200) {
-                // alert(JSON.stringify(ret))
-                if (url === '/api/supply/delete') {
                     api.sendEvent({
                         name: 'renovateMySupply'
                     });
+                if (url === '/api/supply/delete') {
                     setTimeout(function() {api.closeWin();},500)
                 }
             } else {

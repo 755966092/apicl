@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        html,body {
+            width: 7.5rem;
+            height: 100%;
+            background-color: rgba(0,0,0,0.3);
+        }
+        
+        .refund {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        .refund .main {
+            width: 4rem;
+            height: 3rem;
+            background-color: #fff;
+            position: absolute;
+            top: 0;bottom: 0;right: 0;left: 0;
+            margin: auto;
+            font-size: 0;
+            text-align: center;
+        }
+        .refund .main h3 {
+            font-size: .34rem;
+            margin: .3rem;
+        }
+        .refund .main p {
+            font-size: .24rem;
+            color: #3294FF;
+
+        }
+        .refund .main input {
+            border: 1px solid #d9d9d9;
+            width: 60%;
+        }
+        .refund .main .quxiao {
+            height: .8rem;
+            line-height: .8rem;
+            width: 100%;
+            font-size: 0;
+
+        }
+        .refund .main .quxiao span {
+            font-size: .3rem;
+            width: 50%;
+        }
+        .refund .main .quxiao span:last-child {
+            background-color: #0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="refund" ontouchstart="api.closeFrame()">
+        <div class="main flex-def flex-cCenter flex-zTopBottom flex-zBetween" ontouchstart='event.stopPropagation();'>
+            <div>
+                <h3>输入退款金额</h3>
+                <input type="number" name="">
+                <p ontouchstart="allTotal()">全额退款</p>
+            </div>
+            <div class="quxiao">
+                <span ontouchstart="enter(0)">取消</span>
+                <span ontouchstart="enter(1)">确定</span>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript">
+   apiready = function(){
+       
+   }
+    function allTotal() {
+        $api.attr($api.dom('input'), 'value', api.pageParam.tatol);
+    }
+    function enter(n) {
+        if (n) {
+            // n = 1; 确定退款
+            // n = 0; 取消退款
+            var money = $api.attr($api.dom('input'), 'value');
+            var param = api.pageParam.param
+            param.money = money;
+            api.ajax({
+                url: apiSite + '/api/supply_order/sellerRefundService',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                       values: param
+                }
+            }, function(ret, err) {
+                if(ret) {
+                    // alert(JSON.stringify(ret))
+                    if (ret.code === 200) {
+                        setTimeout(function(){api.closeFrame();},500)
+                    } else {
+                        alert(ret.msg)
+                    }
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
+        } else {
+            api.closeFrame();
+        }
+    }
+</script>
+</html>

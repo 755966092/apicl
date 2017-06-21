@@ -304,7 +304,11 @@
                 <div class="borderb">
                     <div class="main_no2 flex-def flex-cCenter">
                         <div class="img">
+                            {{?it[i].image_json[0] == null}}
+                            <img src="../../image/noimage.jpg">
+                            {{??}}
                             <img src="{{=it[i].image_json[0]}}">
+                            {{?}}
                         </div>
                         <div class="title flex-item">
                              <div class="flex-def flex-cCenter">
@@ -335,7 +339,7 @@
                     </div>
                     <p class="appraise flex-def flex-cCenter flex-zEnd">
                         {{for(var j = 0; j < it[i].button.buttonArr.length; j++){ }}
-                                <span ontouchstart="oriderOperate(this)" class="btn" data-url='{{=it[i].button.buttonArr[j].url}}'>{{=it[i].button.buttonArr[j].key}}</span>
+                                <span data-moeny='{{=it[i].total_money}}' data-id='{{=it[i].order_id}}' data-supply='{{=it[i].supply_id}}' onclick="event.stopPropagation();" ontouchstart="oriderOperate(this)" class="btn" data-url='{{=it[i].button.buttonArr[j].url}}'>{{=it[i].button.buttonArr[j].key}}</span>
                         {{ }; }}
                     </p>
                 </div>
@@ -354,6 +358,7 @@
 <script type="text/javascript">
     var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
     apiready = function(){
+        moduleInit();
         requireData();
         api.addEventListener({
             name: 'filterOrder'
@@ -373,8 +378,8 @@
             headers: apiHeader,
             data: {
                    values: { 
-                       // token: $api.getStorage('userToken'),
-                       token: 'b678d8a0-f0d8-c67e-50b0-4d839ea864d7',
+                       token: $api.getStorage('userToken'),
+                       // token: 'b678d8a0-f0d8-c67e-50b0-4d839ea864d7',
                        type: type || undefined,
                        status: status  || undefined,
                        sub_type: sub_type  || undefined
@@ -503,8 +508,134 @@
         });
    }
 
+    function oriderOperate(ele) {
+        var url = $api.attr(ele, 'data-url');
+        var id = $api.attr(ele, 'data-id');
+        var supplyId = $api.attr(ele, 'data-supply');
+         var obj = {};
+       
+        if ($api.text(ele) === '再来一单') {
+            api.openWin({
+                name: 'supply_info_immediate_order_2',
+                url: '../supply/supply_info_immediate_order_2.html',
+                pageParam: {
+                    supplyId: supplyId
+                }
+            });
+        } else if ($api.text(ele) === '取消订单')  {
+            var UIActionSelector = api.require('UIActionSelector');
+            UIActionSelector.open({
+                datas: [
+                    {
+                        name:'取消原因1'
+                    },{
+                        name:'取消原因2'
+                    },{
+                        name:'取消原因3'
+                    }
+                ],
+                actives: [1],
+                layout: {
+                    row: 7,
+                    col: 1,
+                    height: 30,
+                    size: 16,
+                    sizeActive: 18,
+                    rowSpacing: 5,
+                    colSpacing: 5,
+                    maskBg: 'rgba(0,0,0,0.5)',
+                    bg: '#fff',
+                    color: '#888',
+                    colorSelected: '#000'
+                },
+                animation: true,
+                cancel: {
+                    text: '取消',
+                    size: 12,
+                    w: 90,
+                    h: 35,
+                    bg: '#eee',
+                    // bgActive: '#ccc',
+                    color: '#000',
+                    // colorActive: '#fff'
+                },
+                ok: {
+                    text: '确定',
+                    size: 12,
+                    w: 90,
+                    h: 35,
+                    bg: '#eee',
+                    // bgActive: '#ccc',
+                    color: '#000',
+                    // colorActive: '#fff'
+                },
+                title: {
+                    text: '请选择退款原因',
+                    size: 20,
+                    h: 35,
+                    bg: '#eee',
+                    color: '#000'
+                },
+                fixedOn: api.frameName
+            }, function(ret, err) {
+                if (ret) {
+                    if (ret.eventType == 'ok') {
+                        obj = {
+                            token: $api.getStorage('userToken'),
+                            order_id: id,
+                            reason:  ret.level1
+                        }
+                        ajaxOperate(obj, url)
+                    }
+                } else {
+                    alert(JSON.stringify(err.msg));
+                }
+            });
+        } else if (flagText === '退款') {
+            var tatol = $api.attr(ele, 'data-moeny');
+            api.openFrame({
+                name: 'me_gdd_info_frame_refund',
+                url: './me_gdd_info_frame_refund.html',
+                rect: {
+                    x: 0,
+                    y: 0,
+                    w: api.winWidth,
+                    h: api.winHeight
+                },
+                pageParam: {
+                    tatol: tatol,
+                    param: param
+                },
+                bounces: false
+            });
+        }else {
+            obj = {
+                token: $api.getStorage('userToken'),
+                order_id: id
+            };
+            ajaxOperate(obj, url);
+        }
+    }
 
-
-    
+    function ajaxOperate(obj, url) {
+        api.ajax({
+            url: apiSite + url,
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: obj
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code !== 200) {
+                    alert(JSON.stringify(ret.msg))
+                } else {
+                    requireData();
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
 </script>
 </html>

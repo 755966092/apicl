@@ -210,10 +210,44 @@
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
-<script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
+    var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
     apiready = function(){
         fnInit();
+        if (api.pageParam.supplyId) {
+            // 请求数据
+            api.ajax({
+                url: apiSite + '/api/supply/detail',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       supply_id:api.pageParam.supplyId
+                   }
+                }
+            }, function(ret, err) {
+                if (ret.data.info.image_json != 'null') {
+                    // 解析图片json
+                    ret.data.info.image_json = eval(ret.data.info.image_json);    
+                } else {
+                    ret.data.info.image_json = '0'
+                }   
+                if (ret.data.info.unit > 0) {
+                    ret.data.info.unit = _dataSource[ret.data.info.unit-1]
+                } else {
+                    ret.data.info.unit = '未定义'
+                }
+                ret.data.info.type = ret.data.info.type === 1 ? "个人" : "公司";
+                // ret.data
+                openPage(ret.data.info,headerH)
+            })
+        } else {
+             openPage(api.pageParam.transmitData,headerH)
+        }
+       
+    };
+    function openPage(transmitData) {
         api.openFrame({
             name: 'supply_info_immediate_order_2_frame',
             url: './supply_info_immediate_order_2_frame.html',
@@ -224,13 +258,11 @@
                 h: 'auto'
             },
             pageParam: {
-                transmitData: api.pageParam.transmitData,
-               
+                transmitData: transmitData
             },
             bounces: false,
-            
         });
-    };
+    }
 </script>
 </html>
 
