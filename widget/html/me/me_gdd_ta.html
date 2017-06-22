@@ -248,8 +248,8 @@
                     <i></i>
                 </div>
             </div>
-            <div class="list" tapmode="hover" data-id="{{=it[i].order_id}}" onclick="openInfo(this)" data-val='info'>
-                <div class="borderb">
+            <div class="list"  >
+                <div class="borderb" data-id="{{=it[i].order_id}}" tapmode="hover" onclick="openInfo(this)" data-val='info'>
                     <div class="main_no2 flex-def flex-cCenter">
                         <div class="img">
                             {{?it[i].image_json[0] == null}}
@@ -285,9 +285,9 @@
                             <span>合计: </span>￥{{=it[i].total_money}}元
                         </p>
                     </div>
-                    <p class="appraise flex-def flex-cCenter flex-zEnd">
+                    <p class="appraise flex-def flex-cCenter flex-zEnd" tapmode='hover' onclick="event.stopPropagation();">
                         {{for(var j = 0; j < it[i].button.buttonArr.length; j++){ }}
-                                <span data-moeny='{{=it[i].total_money}}' data-id='{{=it[i].order_id}}' data-supply='{{=it[i].supply_id}}' onclick="event.stopPropagation();" tapmode='hover' onclick="oriderOperate(this)" class="btn" data-url='{{=it[i].button.buttonArr[j].url}}'>{{=it[i].button.buttonArr[j].key}}</span>
+                                <span data-moeny='{{=it[i].total_money}}' data-id='{{=it[i].order_id}}' data-supply='{{=it[i].supply_id}}'  tapmode='hover' onclick="oriderOperate(this)" class="btn" data-url='{{=it[i].button.buttonArr[j].url}}'>{{=it[i].button.buttonArr[j].key}}</span>
                         {{ }; }}
                     </p>
                 </div>
@@ -572,6 +572,12 @@
                 }
             });
         } else if (flagText === '删除订单') {
+            obj = {
+                token: token,
+                order_id: id,
+            }
+            ajaxOperate(obj,url)
+        }  else if (flagText === '完成订单') {
             obj = {
                 token: token,
                 order_id: id,

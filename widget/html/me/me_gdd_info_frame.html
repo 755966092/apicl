@@ -356,11 +356,13 @@
             </div>
             {{?it.button_info.finish.is_show || it.button_info.confirm_finish.is_show}} 
                 <div class="appraise" data-id='{{=it.order_info.order_id}}' ontouchstart="completeOrder(this)">完成</div>
-            {{??it.button_info.buttonArr.length==1 && it.button_info.delete.is_show}}
+            
 
-            {{??}}
+            {{??it.button_info.comment.is_show}}
                  <div class="appraise">评价</div>
+            {{??}}
             {{?}}
+
         </script>
     </div>
     <div class="loading"></div>
@@ -588,6 +590,22 @@
                         alert(JSON.stringify(err.msg));
                     }
                 });
+        } else if (flagText === '补差价') {
+            api.openFrame({
+                name: 'me_gdd_info_frame_sale',
+                url: './me_gdd_info_frame_sale.html',
+                rect: {
+                    x: 0,
+                    y: 0,
+                    w: api.winWidth,
+                    h: api.winHeight
+                },
+                pageParam: {
+                    param: param,
+                    flag: 'priceDifference'
+                },
+                bounces: false
+            });
         } else if (flagText === '退款') {
             var tatol = $api.text($api.dom('.totalNumber'));
             api.openFrame({
