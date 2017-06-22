@@ -233,5 +233,4 @@ function getData(data) {
     $api.html(list, html);
     // console.log('渲染完成')
     // alert('getData:' + JSON.stringify(data))
-
 }

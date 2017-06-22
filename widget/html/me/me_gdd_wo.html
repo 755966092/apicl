@@ -166,7 +166,7 @@
         .main_no3 .appraise span {
             font-size: .28rem;
             width: 1.34rem;
-            line-height: .54rem;
+            line-height: .6rem;
             display: inline-block;
             height: .54rem;
             text-align: center;
@@ -220,7 +220,7 @@
             border-radius: .06rem;
             margin-right: .12rem;
             padding: 0 .02rem;
-            line-height: .24rem;
+            line-height: .35rem;
             height: .24rem;
         }
     </style>
@@ -288,7 +288,7 @@
                     </div>
                     <p class="appraise flex-def flex-cCenter flex-zEnd">
                         {{for(var j = 0; j < it[i].button.buttonArr.length; j++){ }}
-                                <span data-moeny='{{=it[i].total_money}}' data-id='{{=it[i].order_id}}' onclick="event.stopPropagation();" ontouchstart="oriderOperate(this)" class="btn" data-url='{{=it[i].button.buttonArr[j].url}}'>{{=it[i].button.buttonArr[j].key}}</span>
+                                <span data-moeny='{{=it[i].total_money}}' data-id='{{=it[i].order_id}}' onclick="event.stopPropagation();" tapmode='hover' onclick="oriderOperate(this)" class="btn" data-url='{{=it[i].button.buttonArr[j].url}}'>{{=it[i].button.buttonArr[j].key}}</span>
                         {{ }; }}
                     </p>
                 </div>
@@ -388,7 +388,17 @@
                             }
                         }
                     }
-                    getData(ret.data.list)
+                    if (getData(ret.data.list)) {
+                        if (api.systemType === 'ios') {
+                            for (var i = 0; i < $api.domAll('.btn').length; i++) {
+                                $api.css($api.domAll('.btn')[i], 'line-height:.54rem');
+                            }
+                            for (var i = 0; i < $api.domAll('.label').length; i++) {
+                                
+                                 $api.css($api.domAll('.label')[i], 'line-height:.24rem');
+                            }
+                        }
+                    }
                 } else {
                     alert(ret.msg)
                 }
@@ -397,6 +407,16 @@
             }
         })
     }
+      // doT模版获取数据
+    function getData(data) {
+        var listTText = $api.byId('listT').text;
+        var fnListT = doT.template(listTText);
+        var html = fnListT(data);
+        var list = $api.dom('.resultList');
+        // 替换resultList所有内容
+        $api.html(list, html);
+        return true;
+    } 
     function closeShadow() {
         $api.css($api.dom('.shadow'), 'display:none');
         $api.removeCls($api.dom('.up'), 'up');

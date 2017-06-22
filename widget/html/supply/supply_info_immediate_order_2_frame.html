@@ -490,7 +490,19 @@
                 if (ret.hour < 10) {
                     ret.hour = '0' + ret.hour
                 }
-                $api.text(ele, ret.year + '-' + ret.month + '-' + ret.day + ' ' + ret.hour + ':' + ret.minute);
+                var time = new Date();
+                if (
+                    ret.year < time.getFullYear() || 
+                    (ret.year === time.getFullYear() && ret.month < time.getMonth()+1) ||
+                    (ret.year === time.getFullYear() && ret.month === time.getMonth()+1 && ret.day < time.getDate()) ||
+                    (ret.year === time.getFullYear() && ret.month === time.getMonth()+1 && ret.day === time.getDate() && ret.hour < time.getHours()) ||
+                    (ret.year === time.getFullYear() && ret.month === time.getMonth()+1 && ret.day === time.getDate() && ret.hour === time.getHours() && ret.minute < time.getMinutes() )
+                          ) {
+                    alert('服务时间不能早于当前时间')
+                } else {
+                    $api.text(ele, ret.year + '-' + ret.month + '-' + ret.day + ' ' + ret.hour + ':' + ret.minute);
+                }        
+               
             } else {
                 alert(JSON.stringify(err.msg));
             }
