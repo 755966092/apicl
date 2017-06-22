@@ -5,7 +5,6 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
-    
     <style type="text/css">
         html, body {
             background-color: #f8f8f8;
@@ -228,57 +227,6 @@
 </head>
 <body>
 <div class="main resultList">
-  
-   <!--  <div class="warp" onclick="event.stopPropagation();">
-        <div class="main_no1 flex-def flex-cCenter">
-            <img src="../../image/tx_1.jpg">
-            <div class="flex-item flex-def flex-cCenter flex-zBetween">
-                <div>
-                    <span>陈胜东</span>
-                <span>(上海策赢网络科技 董事长)</span>
-                </div>
-                <i></i>
-            </div>
-            <span class="fr">知情人</span>
-        </div>
-        <div class="list" tapmode="hover" onclick="openInfo(this)" data-val='info'>
-            <div class="borderb">
-                <div class="main_no2 flex-def flex-cCenter">
-                    <div class="img">
-                        <img src="../../image/tx_2.jpg">
-                    </div>
-                    <div class="title flex-item">
-                         <div class="flex-def flex-cCenter">
-                            <span class="label">个人</span>
-                            <h3 class="">提供风景类蔬菜提供</h3>
-                        </div>
-                        <p>全部为本人</p>
-                    </div>
-                    <div class="jl_right flex-cEnd flex-zTopBottom flex-def">
-                        <p>
-                            <span class="money">300d00元/套</span>
-                        </p>
-                        <p class="bearFruit ydz">
-                            <span class="count">x1</span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="main_no3">
-                <div class="price">
-                    <p class="wrap">
-                        <span>合计: </span>￥30元
-                    </p>
-                </div>
-                <p class="appraise flex-def flex-cCenter flex-zEnd">
-                    <span>删除订单</span>
-                    <span>追加评论</span>
-                    <span>再次购买</span>
-                </p>
-            </div>
-        </div>
-    </div> -->
-   
 </div>
 <script type="text/x-dot-template" id="listT">
     {{ for (var i = 0; i < it.length; i++) { }} 
@@ -347,10 +295,6 @@
         </div>
     {{ }; }}
 </script>
-
-
-
-   
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -368,6 +312,13 @@
             } else {
                 alert(JSON.stringify(err.msg));
             }
+        });
+         // 下拉刷新
+        api.setCustomRefreshHeaderInfo({
+            bgColor: '#EFEFF4',
+        }, function(ret, err) {
+            //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
+            requireData();
         });
     };
     // 获取数据
@@ -387,51 +338,58 @@
             }
         }, function(ret, err) {
             if(ret) {
-                for (var i = 0; i < ret.data.list.length; i++) {
-                    if ( ret.data.list[i].unit > 0) {
-                         ret.data.list[i].unit = _dataSource[ ret.data.list[i].unit-1]
-                    } else {
-                         ret.data.list[i].unit = '未定义'
-                    }
-                    ret.data.list[i].image_json = eval(ret.data.list[i].image_json)
+                if(ret.code == 200) {
+                    console.log(JSON.stringify(ret))
+                    // 停止下拉刷新
+                    api.refreshHeaderLoadDone()
+                    for (var i = 0; i < ret.data.list.length; i++) {
+                        if ( ret.data.list[i].unit > 0) {
+                            ret.data.list[i].unit = _dataSource[ ret.data.list[i].unit-1]
+                        } else {
+                            ret.data.list[i].unit = '未定义'
+                        }
+                        ret.data.list[i].image_json = eval(ret.data.list[i].image_json)
 
-                    // 处理按钮
-                    ret.data.list[i].button.buttonArr=[];
-                    for(key in ret.data.list[i].button) {
-                        for(key1 in ret.data.list[i].button[key]) {
-                            if (ret.data.list[i].button[key].is_show == true){
-                                console.log(key)
-                                // key 即是要显示的按钮
-                                ret.data.list[i].button[key].key = key;
-                                ret.data.list[i].button.buttonArr.push(ret.data.list[i].button[key])
-                                break;
-                                // console.log(key1 +':::'+ret.data.list[i].button[key][key1])
+                        // 处理按钮
+                        ret.data.list[i].button.buttonArr=[];
+                        for(key in ret.data.list[i].button) {
+                            for(key1 in ret.data.list[i].button[key]) {
+                                if (ret.data.list[i].button[key].is_show == true){
+                                    console.log(key)
+                                    // key 即是要显示的按钮
+                                    ret.data.list[i].button[key].key = key;
+                                    ret.data.list[i].button.buttonArr.push(ret.data.list[i].button[key])
+                                    break;
+                                    // console.log(key1 +':::'+ret.data.list[i].button[key][key1])
+                                }
+                            }
+                        } 
+                        for (var j = 0; j < ret.data.list[i].button.buttonArr.length; j++) {
+                            switch(ret.data.list[i].button.buttonArr[j].key){
+                                case 'confirm_finish': ret.data.list[i].button.buttonArr[j].key = '确认完成'; break;
+                                case 'extra': ret.data.list[i].button.buttonArr[j].key = '补差价'; break;
+                                case 'again': ret.data.list[i].button.buttonArr[j].key = '再来一单'; break;
+                                case 'comment': ret.data.list[i].button.buttonArr[j].key = '评价订单'; break;
+                                case 'delete': ret.data.list[i].button.buttonArr[j].key = '删除订单'; break;
+                                case 'pay': ret.data.list[i].button.buttonArr[j].key = '付款'; break;
+                                case 'finish': ret.data.list[i].button.buttonArr[j].key = '完成订单'; break;
+                                case 'cancel': ret.data.list[i].button.buttonArr[j].key = '取消订单'; break;
+
+                                // 卖家页面
+                                case 'confirm_service': ret.data.list[i].button.buttonArr[j].key = '确认接单'; break;
+                                case 'refuse_cancel': ret.data.list[i].button.buttonArr[j].key = '拒绝接单'; break;
+                                case 'extend': ret.data.list[i].button.buttonArr[j].key = '延迟服务'; break;
+                                case 'discount': ret.data.list[i].button.buttonArr[j].key = '优惠'; break;
+                                case 'confirm_cancel': ret.data.list[i].button.buttonArr[j].key = '同意取消'; break;
+                                case 'refuse_cancel': ret.data.list[i].button.buttonArr[j].key = '拒绝取消'; break;
+                                case 'refund': ret.data.list[i].button.buttonArr[j].key = '退款'; break;
                             }
                         }
-                    } 
-                    for (var j = 0; j < ret.data.list[i].button.buttonArr.length; j++) {
-                        switch(ret.data.list[i].button.buttonArr[j].key){
-                            case 'confirm_finish': ret.data.list[i].button.buttonArr[j].key = '确认完成'; break;
-                            case 'extra': ret.data.list[i].button.buttonArr[j].key = '补差价'; break;
-                            case 'again': ret.data.list[i].button.buttonArr[j].key = '再来一单'; break;
-                            case 'comment': ret.data.list[i].button.buttonArr[j].key = '评价订单'; break;
-                            case 'delete': ret.data.list[i].button.buttonArr[j].key = '删除订单'; break;
-                            case 'pay': ret.data.list[i].button.buttonArr[j].key = '付款'; break;
-                            case 'finish': ret.data.list[i].button.buttonArr[j].key = '完成订单'; break;
-                            case 'cancel': ret.data.list[i].button.buttonArr[j].key = '取消订单'; break;
-
-                            // 卖家页面
-                            case 'confirm_service': ret.data.list[i].button.buttonArr[j].key = '确认接单'; break;
-                            case 'refuse_cancel': ret.data.list[i].button.buttonArr[j].key = '拒绝接单'; break;
-                            case 'extend': ret.data.list[i].button.buttonArr[j].key = '延迟服务'; break;
-                            case 'discount': ret.data.list[i].button.buttonArr[j].key = '优惠'; break;
-                            case 'confirm_cancel': ret.data.list[i].button.buttonArr[j].key = '同意取消'; break;
-                            case 'refuse_cancel': ret.data.list[i].button.buttonArr[j].key = '拒绝取消'; break;
-                            case 'refund': ret.data.list[i].button.buttonArr[j].key = '退款'; break;
-                        }
                     }
+                    getData(ret.data.list)
+                } else {
+                    alert(ret.msg)
                 }
-                getData(ret.data.list)
             } else {
                 alert(JSON.stringify(err.msg))
             }
@@ -508,13 +466,15 @@
         });
    }
 
+    // 操作按钮
     function oriderOperate(ele) {
         var url = $api.attr(ele, 'data-url');
         var id = $api.attr(ele, 'data-id');
         var supplyId = $api.attr(ele, 'data-supply');
+        var token = $api.getStorage('userToken');
          var obj = {};
-       
-        if ($api.text(ele) === '再来一单') {
+        var flagText = $api.text(ele);
+        if (flagText === '再来一单') {
             api.openWin({
                 name: 'supply_info_immediate_order_2',
                 url: '../supply/supply_info_immediate_order_2.html',
@@ -522,7 +482,7 @@
                     supplyId: supplyId
                 }
             });
-        } else if ($api.text(ele) === '取消订单')  {
+        } else if (flagText === '取消订单') {
             var UIActionSelector = api.require('UIActionSelector');
             UIActionSelector.open({
                 datas: [
@@ -581,7 +541,7 @@
                 if (ret) {
                     if (ret.eventType == 'ok') {
                         obj = {
-                            token: $api.getStorage('userToken'),
+                            token: token,
                             order_id: id,
                             reason:  ret.level1
                         }
@@ -591,26 +551,35 @@
                     alert(JSON.stringify(err.msg));
                 }
             });
-        } else if (flagText === '退款') {
-            var tatol = $api.attr(ele, 'data-moeny');
+        } else if (flagText === '删除订单') {
+            obj = {
+                token: token,
+                order_id: id,
+            }
+            ajaxOperate(obj,url)
+        } else if (flagText === '付款') {
             api.openFrame({
-                name: 'me_gdd_info_frame_refund',
-                url: './me_gdd_info_frame_refund.html',
+                name: 'supply_modeOfPayment',
+                url: '../supply/supply_modeOfPayment.html',
+                bounces: false,
                 rect: {
                     x: 0,
                     y: 0,
-                    w: api.winWidth,
-                    h: api.winHeight
+                    w: 'auto',
+                    h: 'auto'
                 },
                 pageParam: {
-                    tatol: tatol,
-                    param: param
-                },
-                bounces: false
+                    obj: {
+                        token: token,
+                        order_id: id,
+                    },
+                    price: $api.attr(ele, 'data-moeny'),
+                    flag: 1
+                }
             });
-        }else {
+        } else {
             obj = {
-                token: $api.getStorage('userToken'),
+                token: token,
                 order_id: id
             };
             ajaxOperate(obj, url);

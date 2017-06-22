@@ -160,14 +160,24 @@
         var text = $api.text(ele)
         if (text === '确定') {
             var pay_method = $api.attr($api.dom('.select1'), 'data-val');
-            var obj = api.pageParam.obj;
-            obj.token = $api.getStorage('userToken');
-            obj.pay_method = pay_method;
-            obj.service_time = obj.service_time+':00'
             // alert($api.attr($api.dom('.select1'), 'data-val'))
-            console.log(JSON.stringify(obj))
+            // console.log(JSON.stringify(obj))
+            
+            var url;
+            if (api.pageParam.flag == 1) {
+                url = '/api/supply_order/buyerPayService';
+                obj = api.pageParam.obj
+                obj.pay_method = pay_method;
+            } else {
+                url = '/api/supply_order/buyerCreateOrder';
+                
+                var obj = api.pageParam.obj;
+                obj.token = $api.getStorage('userToken');
+                obj.pay_method = pay_method;
+                obj.service_time = obj.service_time+':00'
+            }
             api.ajax({
-                url: apiSite + '/api/supply_order/buyerCreateOrder',
+                url: apiSite + url,
                 method: 'post',
                 headers: apiHeader,
                 data: {

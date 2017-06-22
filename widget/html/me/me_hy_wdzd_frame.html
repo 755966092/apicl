@@ -70,7 +70,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    var type = ['提现','充值VIP','邀请','支付供应订单','供应订单收入','供应订单退款','付费入群'];
+    var type = ["提现","充值VIP","邀请","支付供应订单","供应订单补差价","供应订单收入","供应订单退款","支付求助订单","求助订单收入","求助订单退款","付费入群"]
 
     apiready = function(){
       requestData(    )
@@ -83,7 +83,6 @@
           data: {
                values: { 
                  token: $api.getStorage('userToken'),
-                   
                }
           }
       }, function(ret, err) {
@@ -91,21 +90,24 @@
           for (var i = 0; i < ret.data.list.length; i++) {
             ret.data.list[i].type = type[ret.data.list[i].type-1]
           }
-          alert(JSON.stringify(ret))
           getData(ret.data.list)
         } else {
           alert(JSON.stringify(err.msg))
         }
       })
     }
-    // "WITHDRAW_STRING" => "提现",
+    
+    //      "WITHDRAW_STRING" => "提现",
     //     "VIP_STRING" => "充值VIP",
     //     "INVITE_STRING" => "邀请",
-    //     "SUPPLY_ORDER_PAY_STRING" => "支付供应订单",
+    //     "SUPPLY_ORDER_PAY_STRING" => "邀请",
+    //     "SUPPLY_ORDER_EXTRA_STRING" => "供应订单补差价",
     //     "SUPPLY_ORDER_INCOME_STRING" => "供应订单收入",
     //     "SUPPLY_ORDER_REFUND_STRING" => "供应订单退款",
+    //     "DEMAND_ORDER_PAY_STRING" => "支付求助订单",
+    //     "DEMAND_ORDER_INCOME_STRING" => "求助订单收入",
+    //     "DEMAND_ORDER_REFUND_STRING" => "求助订单退款",
     //     "CIRCLE_MEMBER_STRING" => "付费入群"
-    // ],
     
     </script>
 </html>

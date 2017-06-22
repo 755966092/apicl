@@ -60,9 +60,8 @@
     <div class="refund" ontouchstart="api.closeFrame()">
         <div class="main flex-def flex-cCenter flex-zTopBottom flex-zBetween" ontouchstart='event.stopPropagation();'>
             <div>
-                <h3>输入退款金额</h3>
-                <input type="number" name="">
-                <p ontouchstart="allTotal()">全额退款</p>
+                <h3>输入优惠金额</h3>
+                <input type="number" id="money">
             </div>
             <div class="quxiao">
                 <span ontouchstart="enter(0)">取消</span>
@@ -78,18 +77,15 @@
    apiready = function(){
        
    }
-    function allTotal() {
-        $api.attr($api.dom('input'), 'value', api.pageParam.tatol);
-    }
     function enter(n) {
         if (n) {
             // n = 1; 确定退款
             // n = 0; 取消退款
-            var moner = $api.val($$api.dom('input'));
+            var money = $api.val($api.byId('money'));
             var param = api.pageParam.param
             param.money = money;
             api.ajax({
-                url: apiSite + '/api/supply_order/sellerRefundService',
+                url: apiSite + '/api/supply_order/sellerDiscountService',
                 method: 'post',
                 headers: apiHeader,
                 data: {
@@ -97,7 +93,6 @@
                 }
             }, function(ret, err) {
                 if(ret) {
-                    // alert(JSON.stringify(ret))
                     if (ret.code === 200) {
                         setTimeout(function(){api.closeFrame();},500)
                     } else {
