@@ -156,7 +156,6 @@
         param.point = $api.domAll('.sel').length;
         param.is_anon = $api.hasCls($api.dom('.flag'), 'selColor') ? 1 : -1;
         param.image_json = [];
-        alert(param)
         api.ajax({
             url: apiSite + url,
             method: 'post',
@@ -166,7 +165,14 @@
             }
         }, function(ret, err) {
             if(ret) {
-                alert(JSON.stringify(ret))
+                if (ret.code === 200) {
+                    api.sendEvent({
+                        name: 'filterOrder'
+                    });
+                    setTimeout(function(){api.closeWin();},500)
+                } else {
+                    alert(ret.msg)
+                }
             } else {
                 alert(JSON.stringify(err))
             }

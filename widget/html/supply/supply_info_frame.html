@@ -1,9 +1,8 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
@@ -266,6 +265,19 @@
             background-color: #fff;
             border-top: .01rem solid #F8F8F8;
          }
+         footer.footer {
+            color: #fff;
+            font-size: .3rem;   
+            height: .88rem;   
+            position: fixed;
+            text-align: center;
+            line-height: .88rem;    
+            bottom: 0;  
+            left: 0;    
+            width: 100%;
+            border-top: .01rem solid #F8F8F8;
+            background-color: #0ABB07;     
+         }
          footer span {
             font-size: .18rem;  
             color: #999;
@@ -333,7 +345,6 @@
                 {{??it.info.image_json[0]=='0'}}
                     <img src="../../image/tx_4.jpg">
                 {{?}}
-                
             </div>
             <div class="title flex-def flex-zLeftRight flex-cCenter">
                 <img src="{{=it.info.head_img_url}}" alt="">
@@ -397,13 +408,12 @@
                 </div>
                 <div class="infoData">
                     <p>{{=it.info.description}}</p>
-                    {{?it.info.image_json[0]!='0'}}
+                    {{?it.info.image_json.length != 0}}
                         {{for(var i=0;i< it.info.image_json.length; i++){ }}
                             <img src="{{=it.info.image_json[i]}}">
                         {{ }; }}
-                    {{??it.info.image_json[0]=='0'}}
+                    {{??it.info.image_json.length == 0}}
                     {{?}}
-                    
                 </div>
             </div>
             <div class="comment">
@@ -411,28 +421,27 @@
                     <span class="commentCount">评论（{{=it.info.comment_count}}）</span>
                     <span class="commentIcon"></span>
                 </div>
-                {{for(var i = 0;i < it.info.comment_count;i++){ }}
-                <div class="commentContent">
-                    <div class="commentContentTitle flex-def flex-zLeftRight">
-                        <img src="{{=it.last_comment.head_img_url}}">
-                        <div class="commentName flex-def flex-zBetween flex-zLeftRight flex-cCenter">
-                            <div class="commentNameLeft">
-                                <div class="name">{{=it.last_comment.nickname}}</div>
-                                <div class="avg_point">
-                                    {{for(var i = 0;i < it.last_comment.point;i++){ }}
-                                        <span class="avg_pointIcon"></span>
-                                    {{};}}
-                                    
+                {{?it.last_comment!=null}}
+                    <div class="commentContent">
+                        <div class="commentContentTitle flex-def flex-zLeftRight">
+                            <img src="{{=it.last_comment.head_img_url}}">
+                            <div class="commentName flex-def flex-zBetween flex-zLeftRight flex-cCenter">
+                                <div class="commentNameLeft">
+                                    <div class="name">{{=it.last_comment.nickname}}</div>
+                                    <div class="avg_point">
+                                        {{ for(var j = 0;j < it.last_comment.point;j++){ }}
+                                            <span class="avg_pointIcon"></span>
+                                        {{ }; }}
+                                    </div>
+                                </div>
+                                <div class="commentNameRight">
+                                    {{=it.last_comment.create_time}}
                                 </div>
                             </div>
-                            <div class="commentNameRight">
-                                {{=it.last_comment.create_time}}
-                            </div>
                         </div>
+                        <p class="commentText">{{=it.last_comment.content}}</p>
                     </div>
-                    <p class="commentText">{{=it.last_comment.content}}</p>
-                </div>
-                {{};}}
+                {{?}}
                 
                 {{?it.info.comment_count==0}}
                 {{??}}
@@ -440,10 +449,10 @@
                         <div>查看全部</div>
                     </div>
                 {{?}}
-                
             </div>
           
         </div>
+        {{?!it.is_self_add}}
         <footer>    
             <span><i></i>聊天</span>
             {{?it.is_collect}}
@@ -453,6 +462,9 @@
             {{?}}
             <span tapmode="hover"onclick="immediateOrder(this)">立即下单</span>
         </footer>
+        {{??}}
+        <footer class="footer" ontouchstart="editSupply()">编辑</footer>
+        {{?}}
     </script>
   
     
@@ -467,6 +479,16 @@
         // 初始化页面
         initialise(api.pageParam.flag, api.pageParam.compaby_name, api.pageParam.supply_id)
     };
+    // 编辑供应
+    function editSupply() {
+        api.openWin({
+            name: 'winName',
+            url: './supply_releaseSupply_win.html',
+            pageParam: {
+                supply_id: api.pageParam.supply_id
+            }
+        });
+    }
     // 收藏供应
     function supplyCollect(ele) {
         var url;
@@ -509,8 +531,7 @@
             $api.text($api.byId('compaby_name'), compaby_name);
         } else {
             $api.css($api.byId('companyTtile'), 'display:none');
-        }
-        console.log(supply_id)
+        }   
         // 请求数据
         api.ajax({
             url: apiSite + '/api/supply/detail',
@@ -523,20 +544,16 @@
                }
             }
         }, function(ret, err) {
-            console.log(JSON.stringify(ret))
-            if (ret.data.info.image_json != 'null') {
-                // 解析图片json
-                ret.data.info.image_json = eval(ret.data.info.image_json);    
-            } else {
-                ret.data.info.image_json = '0'
-            }   
+           
+            // 解析图片json
+            ret.data.info.image_json = eval(ret.data.info.image_json);    
             if (ret.data.info.unit > 0) {
                 ret.data.info.unit = _dataSource[ret.data.info.unit-1]
             } else {
                 ret.data.info.unit = '未定义'
             }
             ret.data.info.type = ret.data.info.type === 1 ? "个人" : "公司";
-            $api.css($api.dom('.loading'), 'display:none');     
+            $api.css($api.dom('.loading'), 'display:none'); 
             getData(ret.data);
             // ret.data
             transmitData = ret.data.info;
