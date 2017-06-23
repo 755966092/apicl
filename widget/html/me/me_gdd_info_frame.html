@@ -359,7 +359,7 @@
             
 
             {{??it.button_info.comment.is_show}}
-                 <div class="appraise">评价</div>
+                 <div class="appraise" tapmode='hover' onclick="commentSupply()">评价</div>
             {{??}}
             {{?}}
 
@@ -377,6 +377,21 @@
         moduleInit();
         requestData();
     };
+    // 评价
+    function commentSupply() {
+        var obj = {
+            token:$api.getStorage('userToken'),
+            order_id: api.pageParam.order_id
+        }
+        api.openWin({
+            name: 'supply_commentPage',
+            url: '../supply/supply_commentPage.html',
+            pageParam: {
+                obj: obj,
+                flag: flag
+            }
+        });
+    }
     // 获取数据
     function requestData() {
         api.ajax({
@@ -391,9 +406,14 @@
                    }
             }
         }, function(ret, err) {
-           
             if(ret) {
                 if (ret.code === 200){
+                    // console.log(JSON.stringify(ret))
+                    if (ret.data.identity === 'buyer') {
+                        flag = 1
+                    } else {
+                        flag = 0
+                    }
                     $api.css($api.dom('.loading'), 'display:none');
                     $api.css($api.dom('.hull'), 'display:block');
                     // alert(JSON.stringify(ret))
