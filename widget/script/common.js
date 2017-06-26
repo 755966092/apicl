@@ -172,8 +172,10 @@ function historicalNews() {
 function receiveMsg() {
     // 监听连接器变化
     rong.setConnectionStatusListener(function(ret, err) {
-        // alert(JSON.stringify(ret))
-        // alert('你以被顶下线');
+        // alert(JSON.stringify(ret.result.connectionStatus))
+        if (ret.result.connectionStatus === 'KICKED') {
+            alert('你以被顶下线');
+        }
     });
     rong.setOnReceiveMessageListener(function(ret, err) {
         // 接收消息监听器接收到消息后刷新列表
@@ -220,17 +222,17 @@ function changeTime(time) {
 
 // doT模版获取数据
 function getData(data) {
-    // console.log('渲染模版111')
+    console.log('渲染模版111')
     var listTText = $api.byId('listT').text;
-    // console.log('渲染模版222')
+    console.log('渲染模版222')
     var fnListT = doT.template(listTText);
-    // console.log('渲染模版333')
+    console.log('渲染模版333')
     var html = fnListT(data);
-    // console.log('渲染模版444')
+    console.log('渲染模版444')
     var list = $api.dom('.resultList');
-    // console.log('渲染模版555')
-    // 替换resultList所有内容
+    console.log('渲染模版555')
+        // 替换resultList所有内容
     $api.html(list, html);
-    // console.log('渲染完成')
-    // alert('getData:' + JSON.stringify(data))
+    console.log('渲染完成')
+        // alert('getData:' + JSON.stringify(data))
 }

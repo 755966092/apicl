@@ -370,7 +370,7 @@
     apiready = function(){
         
         moduleInit();
-        if (api.pageParam.supply_id) {
+        if (api.pageParam.demand_id) {
             requireData();
         } else {
             // 获取位置
@@ -403,7 +403,7 @@
         var unitText = data.info.unit > 0 ? _dataSource[data.info.unit-1] : '未定义';
         var _categoryId =  categoryArr[data.info.category_id-1]
         $api.text(position, data.info.address);
-        $api.text(unit, unitText);
+        // $api.text(unit, unitText);
         $api.text(category_id, _categoryId);
         data.info.type == 1 ? $api.text(_type, '我卖') : $api.text(_type, '我公司卖');
         if (data.info.type == 2) {
@@ -759,7 +759,7 @@
             data: {
                    values: { 
                        token: $api.getStorage('userToken'),
-                       demand_id
+                       demand_id: api.pageParam.demand_id
                    }
             }
         }, function(ret, err) {

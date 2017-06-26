@@ -308,6 +308,11 @@
                 background-size: .4rem .35rem;
             background-position: center bottom;
          }
+         footer span i.cancelCollect {
+            background: url(../../image/icon_supply/icon_collect02.png)no-repeat;
+            background-size: .4rem .35rem;
+            background-position: center bottom;
+         }
          .loading {
             width: 1.28rem;
             height: 1.28rem;
@@ -417,7 +422,11 @@
             </div>
             <div class="comment">
                 <div class="commentTitle flex-def flex-cCenter flex-zBetween">
+                    {{?!it.info.comment_count}}
+                    <span class="commentCount">评论（0）</span>
+                    {{??}}
                     <span class="commentCount">评论（{{=it.info.comment_count}}）</span>
+                    {{?}}
                     <span class="commentIcon"></span>
                 </div>
                 {{?it.last_comment!=null}}
@@ -459,7 +468,7 @@
             {{??}}
                 <span id="collect" ontouchstart="supplyCollect(this)"><i></i>收藏</span>
             {{?}}
-            <span tapmode="hover"onclick="immediateOrder(this)">立即下单</span>
+            <span tapmode="hover"onclick="immediateOrder()">立即接单</span>
         </footer>
         {{??}}
         <footer class="footer" ontouchstart="editSupply()">编辑</footer>
@@ -492,7 +501,7 @@
     function supplyCollect(ele) {
         var url;
         if ($api.text(ele) === '收藏') {
-            $api.html(ele, '<i></i>取消收藏');
+            $api.html(ele, '<i class="cancelCollect"></i>取消收藏');
             url = '/api/supply/collect';
         } else {
             $api.html(ele, '<i></i>收藏');
@@ -511,11 +520,14 @@
             }
         }, function(ret, err) {
             if(ret) {
-                // alert(JSON.stringify(ret))
                 if ($api.text(ele) === '收藏') {
-                    alert('取消收藏成功');
+                    api.toast({
+                        msg: '取消收藏成功'
+                    });
                 } else {
-                    alert('收藏供应成功');
+                    api.toast({
+                        msg: '收藏供应成功'
+                    });
                 }
                
             } else {
@@ -554,31 +566,24 @@
             $api.css($api.dom('.loading'), 'display:none'); 
             var statusArr=["求助中","帮助中","已结束","已失效","已删除"]
             ret.data.info.status = statusArr[ret.data.info.status-1]
+            console.log(JSON.stringify(ret))
             getData(ret.data);
             // ret.data
             transmitData = ret.data.info;
         })
     }
-    function immediateOrder(ele) {
-        // 下单
+    function immediateOrder() {
+       
+        // 接单
         api.openWin({
-            name: 'demand_info_immediate_order',
-            url: './demand_info_immediate_order_2.html',
+            name: 'supply_info_immediate_order',
+            url: './supply_info_immediate_order.html',
             softInputMode: 'pan',
             pageParam: {
                 transmitData: transmitData,
+                demand_id: api.pageParam.demand_id
             }
         });
-        // 接单
-        // api.openWin({
-        //     name: 'demand_info_immediate_order',
-        //     url: './demand_info_immediate_order.html',
-        //     softInputMode: 'pan',
-        //     pageParam: {
-        //         transmitData: transmitData,
-        //         demand_id: api.pageParam.demand_id
-        //     }
-        // });
     }
    
 </script>

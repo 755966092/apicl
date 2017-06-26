@@ -77,15 +77,27 @@
                 {{?}}
 
                 {{?it[i].type == 1}}
+                    {{?i == 0}}
                     <div class="move moveFlag" onclick="selPhone(this)" tapmode="hover" data-id="{{=it[i].contact_id}}" data-sub_type="{{=it[i].sub_type}}" data-type="{{=it[i].type}}" >
                         <div class="wrap">
                             <div class="item flex-def flex-cCenter">
                                 <span class="label">{{=it[i].sub_type}}：</span>
                                 <span class="flex-item" data-id="{{=it[i].contact_id}}" >{{=it[i].phone}}</span>
-                                <span data-phone='{{=it[i].phone}}' class="clearIcon icon"></span>
+                                <span data-phone='{{=it[i].phone}}' data-id="{{=it[i].contact_id}}"  class="clearIcon icon"></span>
                             </div>
                         </div>
                     </div>
+                    {{??}}
+                    <div class="move moveFlag" onclick="selPhone(this)" tapmode="hover" data-id="{{=it[i].contact_id}}" data-sub_type="{{=it[i].sub_type}}" data-type="{{=it[i].type}}" >
+                        <div class="wrap">
+                            <div class="item flex-def flex-cCenter">
+                                <span class="label">{{=it[i].sub_type}}：</span>
+                                <span class="flex-item" data-id="{{=it[i].contact_id}}" >{{=it[i].phone}}</span>
+                                <span data-phone='{{=it[i].phone}}' class="icon"></span>
+                            </div>
+                        </div>
+                    </div>
+                    {{?}}
                 {{?}}
 
                 {{?it[i].flag == 2}}
@@ -209,10 +221,12 @@
     
     function callbackPhone() {
         var phone = $api.attr($api.dom('.clearIcon'), 'data-phone');
+        var id = $api.attr($api.dom('.clearIcon'), 'data-id');
         api.sendEvent({
             name: 'callbackPhone',
             extra: {
-               phone: phone
+               phone: phone,
+               id: id
             }
         });
         setTimeout(function() {api.closeWin();}, 500)

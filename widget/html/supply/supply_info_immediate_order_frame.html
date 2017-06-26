@@ -62,7 +62,7 @@
             box-sizing: border-box;
         }
         footer .price {
-            color: #d0011b;
+            color: #F6A623;
         }
 
         footer span.enter {
@@ -88,13 +88,15 @@
            
         }
         .content ._type {
-            display: inline-block;
             height: .28rem;
             width: .63rem;
-            background: url(../../image/icon_supply/icon_gs.png)no-repeat;
-            -webkit-background-size: .63rem .28rem;
-            background-size: .63rem .28rem;
+            font-size: .2rem;
+            border: 1px solid #0076FF;
+            color: #0076FF;
+            border-radius: .06rem;
             margin-right: .1rem;
+            text-align: center;
+            line-height: .28rem;
         }
         .content .title {
             font-size: .34rem;
@@ -104,13 +106,14 @@
             position: absolute;
             bottom: .2rem;
             left: 1.95rem;
+            color: #F6A623;
         }
         .main .price {
             padding: 0 .3rem;
             height: .8rem;
             line-height: .8rem;
             font-size: .34rem;
-            color: #d0011b;
+            color: #F6A623;
             background-color: #fff;
             margin-bottom: .2rem;
         }
@@ -153,7 +156,7 @@
         }
         
         footer  #total{
-            color: #d0011b;
+            color: #F6A623;
             overflow: hidden;
             width: 3rem;
             text-align: left;
@@ -163,40 +166,60 @@
 </head>
 <body>
     <div class="main clearfix">
-            <div class="choose clearfix">
-                <img src="../../image/tx_3.jpg">
-                <div class="fl issuerInfo">
-                    <p>陈升的</p>
-                    <p>上海百度悠闲公司 董事长</p>
-                </div>
-            </div>
-            <div class="content clearfix">
-                <img class="fl" src="../../image/tx_5.jpg">
-                <div class="fl">
-                    <span class="_type"></span>
-                    <span class="title">提供风景类素材</span>
-                    <p >北京 - 线上</p>
-                </div>
-            </div>
-            <div class="price">
-                <p>赏金：￥<span>1000</span></p>
-            </div>
-             <div class="serveTime" >
-                服务时间
+            <div class="resultList"></div>
+                <script type="text/x-dot-template" id="listT">
+                    <div class="choose clearfix">
+                        <img src="{{=it.head_img_url}}">
+                        <div class="fl issuerInfo">
+                            <p>{{=it.nickname}}</p>
+                            {{?it.current_company==null&&it.current_position!=null}}
+                                <span> {{=it.current_position}}</span>
+                            {{??it.current_position==null&&it.current_company!=null}}
+                                <span>{{=it.current_company}}</span>
+                            {{??it.current_position==null&&it.current_company==null}}
+                            {{??}}
+                                <span>{{=it.current_company}} {{=it.current_position}}</span>
+                            {{?}}
+                        </div>
+                    </div>
+                    <div class="content flex-def">
+                        {{?it.image_json[0] == null}}
+                        <img src="../../image/noimage.jpg">
+                        {{??}}
+                        <img src="{{=it.image_json[0]}}">
+                        {{?}}
+                        <div >
+                            <span class="_type">{{=it.type}}</span>
+                            <span class="title">{{=it.title}}</span>
+                            <p>{{=it.city}} - 
+                            {{?it.form == 1}}
+                                <span>线上</span>
+                            {{??}}
+                                <span>线下</span>
+                            {{?}}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="price">
+                        <p>赏金：￥<span>{{=it.reward}}</span></p>
+                    </div>
+                </script>
+            <!--  <div class="serveTime" >
+                交易时间
                 <i></i>
-                <span class="fr" id="serverTime" ontouchstart="openTime(this)">请选择服务时间</span>
-            </div>
-            <div class="tel serveTime">
+                <span class="fr" id="serverTime" ontouchstart="openTime(this)">请选择交易时间</span>
+            </div> -->
+            <div class="tel serveTime" ontouchstart='openPhonePage(1)'>
                 联系电话
                 <i></i>
                 <span class="fr" id="defaultPhone"></span>
             </div>
-            <div class="tel serveTime">
+           <!--  <div class="tel serveTime" id="addressWrap" ontouchstart='openPhonePage(0)'>
                 地址
                 <i></i>
                 <span class="fr" id="address"></span>
             </div>
-           <div class="tel serveTime">
+           <div class="tel serveTime" onclick="openEditName()" tapmode="hover">
                 真实姓名
                 <i></i>
                 <span class="fr" id="real_name"></span>
@@ -205,7 +228,7 @@
                 <p>备注：
                     <input type="text" placeholder="填写备注" name="">
                 </p>
-            </div>
+            </div> -->
     </div>
     <footer>    
     
@@ -213,21 +236,55 @@
                 <span>赏金：</span>
                 <span id="total">
                     <span>￥</span>
-                    <span id="price">123</span>
+                    <span id="price"></span>
                 </span>
             </span>
             
-            <span class="enter">确认接单</span>
+            <span class="enter" ontouchstart="enteroOrder()">确认接单</span>
     </footer>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
     apiready = function(){
-        // fnInit();
         initPage()
+        console.log(JSON.stringify(api.pageParam.transmitData))
+        getData(api.pageParam.transmitData)
+        api.addEventListener({
+            name: 'callbackPhone'
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.byId('defaultPhone'), ret.value.phone);
+                $api.attr($api.byId('defaultPhone'), 'data-id', ret.value.id);
+
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     };
 
+    // 编辑姓名
+    function openEditName() {
+        api.openWin({
+            name: 'supply_editName',
+            url: './supply_editName.html'
+        });
+    }
+    // 选择电话
+    function openPhonePage(n) {
+        if (n) {
+            api.openWin({
+                name: 'supply_getStroagePhone',
+                url: './supply_getStroagePhone.html'
+            });
+        } else {
+            api.openWin({
+                name: 'supply_getStroageAddress',
+                url: './supply_getStroageAddress.html'
+            });
+        }
+    }
     // 初始化页面
     function initPage() {
         var userPhone = $api.getStorage('userPhone') || '';
@@ -246,6 +303,8 @@
         } else {
             $api.text($api.byId('real_name'), '未设置真实姓名');
         }
+        // 设置赏金
+        $api.text($api.byId('price'), api.pageParam.transmitData.reward);
         // 设置电话
         if (userPhone) {
             for (var i = 0; i < userPhone.length; i++) {
@@ -261,30 +320,7 @@
         }
        // 打开时间选择器
     }
-    var a = 1;
-    $api.addEvt($api.dom('.main'), 'touchmove', function(event) {
-        if (window.scrollY > 300) {
-            a -= 0.1;
-            $api.css($api.byId('cloaswin'), 'opacity:'+ a +';');
-            if (a<0) {
-                a = 0;
-            }
-        } else {
-            a += 0.1;
-            $api.css($api.byId('cloaswin'), 'opacity:'+ a +';');
-            if (a>1) {
-                a = 1;
-            }
-        }
-    });
-    $api.addEvt($api.dom('.main'), 'touchend', function(event) {
-        if (window.scrollY > 300) {
-            // $api.css($api.dom('#cloaswin'), 'display:none');
-            $api.css($api.byId('cloaswin'), 'opacity:0;');
-        } else {
-            $api.css($api.byId('cloaswin'), 'opacity:1;');
-        }
-    });
+
    // 选择时间
     function openTime(ele) {                                                                                                                                     for (var i = 0; i < $api.domAll('input').length; i++) {             $api.domAll('input')[i].blur()         }
         var text = '选择服务时间';
@@ -323,6 +359,30 @@
                 alert(JSON.stringify(err.msg));
             }
         });
+    }
+
+    // 确认接单
+    function enteroOrder() {
+        var phone = $api.text($api.byId('defaultPhone'));
+        var id = $api.attr($api.byId('defaultPhone'), 'data-id');
+        api.ajax({
+            url: apiSite + '/api/demand_order/helperCreateOrder',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       demand_id: api.pageParam.transmitData.demand_id,
+                       contact_id: id
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                alert(JSON.stringify(ret))
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
     }
 </script>
 </html>

@@ -55,13 +55,31 @@
     };
     function enter() {
         var name = $api.val($api.dom('input'));
-        api.sendEvent({
-            name: 'editSupplyName',
-            extra: {
-                name: name
+       
+        api.ajax({
+            url: apiSite + '/api/user_center/editBasicInfo',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       real_name: name
+                   }
             }
-        });
-        api.closeWin();
+        }, function(ret, err) {
+            if(ret) {
+                api.sendEvent({
+                    name: 'editSupplyName',
+                    extra: {
+                        name: name
+                    }
+                });
+                api.closeWin();
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+        
     }
 </script>
 </html>

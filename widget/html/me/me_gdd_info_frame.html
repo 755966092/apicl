@@ -543,6 +543,7 @@
                 }
             });
         } else if (flagText === '延迟服务'){
+            ajaxOperate(param, url)
             requestData();
         } else if (flagText === '取消订单'){
             var UIActionSelector = api.require('UIActionSelector');
@@ -673,7 +674,7 @@
     function completeOrder(ele) {
         var id = $api.attr(ele, 'data-id');
         api.ajax({
-            url: apiSite + '/api/supply_order/buyerFinishService',
+            url: apiSite + '/api/supply_order/buyerConfirmFinishService',
             method: 'post',
             headers: apiHeader,
             data: {

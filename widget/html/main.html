@@ -29,7 +29,7 @@
         
        
         header ul li span.rightBtn {
-            font-size: .8rem;
+            font-size: .65rem;
              line-height: .7rem;
              position: absolute;
              right: .3rem;
@@ -271,7 +271,15 @@ apiready = function() {
             alert(JSON.stringify(err.msg));
         }
     });
-
+    cacheData();
+}
+// 做缓存
+function cacheData() {
+    console.log('main执行')
+    api.execScript({
+        frameName: 'frame4',
+        script: 'userInfo();'
+    });
 }
 
 // 通讯录添加好友

@@ -256,7 +256,11 @@
                 </div>
                 <div class="content clearfix">
                     <div class="div flex-def">
-                        <img class="fl clearfix" src="../../image/tx_5.jpg">
+                        {{?it.image_json[0] == null}}
+                        <img  src="../../image/noimage.jpg">
+                        {{??}}
+                        <img  src="{{=it.image_json[0]}}">
+                        {{?}}
                         <div class="flex-def flex-zTopBottom flex-zBetween">
                             <div class="flex-def flex-cCenter">
                                 <span class="_type">{{=it.type}}</span>
@@ -284,9 +288,9 @@
             <div class="info">
                 <div class="serveTime" >
                     <div class="wrap">
-                        服务时间
+                        交易时间
                         <i></i>
-                        <span class="fr" id="serverTime" ontouchstart="openTime(this)">请选择服务时间</span>
+                        <span class="fr" id="serverTime" ontouchstart="openTime(this)">请选择交易时间</span>
                     </div>
                 </div>
                 <div class="tel serveTime" ontouchstart='openPhonePage(1)'>
@@ -373,6 +377,7 @@
             name: 'editSupplyName'
         }, function(ret, err) {
             if (ret) {
+                alert(JSON.stringify(ret))
                  $api.text($api.byId('real_name'), ret.value.name);
             } else {
                 alert(JSON.stringify(err));
@@ -475,14 +480,14 @@
     }
     // 选择时间
     function openTime(ele) {
+        console.log('111')
         for (var i = 0; i < $api.domAll('input').length; i++) {
             $api.domAll('input')[i].blur()
         }
-        var text = '选择服务时间';
-
+        var text = '选择交易时间';
         var date, date1, date2, date3, date4;
         var current = $api.text(ele);
-        if (current != '请选择服务时间') {
+        if (current != '请选择交易时间') {
             current = current.split(' ')
             var current1 = current[0].split('-')
             var current2 = current[1].split(':')

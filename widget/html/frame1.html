@@ -150,6 +150,8 @@
         // requestData();
         query();
 
+        alert($api.getStorage('userName'))
+
     }
     function openS() {
         api.openWin({
@@ -222,10 +224,21 @@
             }, function(ret, err) {
                 if (ret) {
                     // alert(JSON.stringify(ret));
+                    addFriends();
                 } else {
                     // alert(JSON.stringify(err.msg));
                 }
             });
+    }
+     // 打开人脉详情
+    function addFriends() {
+        api.openWin({
+            name: 'txl_memberInfo_Win',
+            url: './addressList/txl_memberInfo_Win.html',
+            pageParam: {
+                name: 'value'
+            }
+        });
     }
     function f_check_uppercase(obj)   {          
        if (/[A-Z]/.test(obj))    {   

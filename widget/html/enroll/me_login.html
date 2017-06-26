@@ -265,18 +265,20 @@
     }
    
     function syncContacts(userToken, rongToken) {
-            api.confirm({
-                title: '查找你的我在朋友',
-                msg: '我在将上传手机通讯录至我在服务器以匹配及推荐朋友。（上传通讯录仅用于匹配朋友，不会保存任何资料，亦不会作它用）',
-                buttons:['不允许', '好']
-            },function(ret,err){
-                 // 打开数据库， 新建表格
+            // api.confirm({
+            //     title: '查找你的我在朋友',
+            //     msg: '我在将上传手机通讯录至我在服务器以匹配及推荐朋友。（上传通讯录仅用于匹配朋友，不会保存任何资料，亦不会作它用）',
+            //     buttons:['不允许', '好']
+            // },function(ret,err){
+            //      // 打开数据库， 新建表格
+              
+                
+            // });
                 openDb(userToken);
-                console.log(JSON.stringify(ret))
-                if(ret.buttonIndex == 1){
-                    loginSuccess(userToken, rongToken);
-                    rongyun(rongToken);
-                } else {
+                // if(ret.buttonIndex == 1){
+                //     loginSuccess(userToken, rongToken);
+                //     rongyun(rongToken);
+                // } else {
                      setTimeout(function(){
                          contacts.queryByPage({
                             pageIndex: 0
@@ -287,6 +289,7 @@
                                     url: apiSite + '/api/contact/sync',
                                     method: 'post',
                                     headers: apiHeader,
+                                    timeout: 0,
                                     data: {
                                         values: { 
                                             token: userToken,
@@ -297,6 +300,7 @@
                                     // 同步通讯录成功
                                     // 请求同步的数据，存到本地数据库
                                     console.log('上传通讯录数据'+JSON.stringify(ret))
+                                    console.log('上传结果'+JSON.stringify(ret1))
                                     requestData(userToken);
                                 })
                             } else {
@@ -307,9 +311,7 @@
                     loginSuccess(userToken, rongToken);
                     rongyun(rongToken);
                     
-                }
-                
-            });
+                // }
     }
 
     // 打开数据库
@@ -338,6 +340,7 @@
                }
             }
        }, function(ret, err) {
+            console.log('上传完请求:'+JSON.stringify(ret))
             disData(ret.data.single_list, 1)
             disData(ret.data.both_list, 2)
             disData(ret.data.unavailable_list, 3)
