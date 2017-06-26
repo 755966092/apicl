@@ -55,31 +55,56 @@
     };
     function enter() {
         var name = $api.val($api.dom('input'));
-       
         api.ajax({
-            url: apiSite + '/api/user_center/editBasicInfo',
+            url: apiSite + '/api/user_center/editBasicInfoIndex',
             method: 'post',
             headers: apiHeader,
             data: {
                    values: { 
                        token: $api.getStorage('userToken'),
-                       real_name: name
                    }
             }
         }, function(ret, err) {
             if(ret) {
-                api.sendEvent({
-                    name: 'editSupplyName',
-                    extra: {
-                        name: name
-                    }
-                });
-                api.closeWin();
+                if (ret.data.info.real_name != null) {
+                    // 已经有真实姓名
+                    closeW(name);
+                } else {
+                    // 没有真实姓名
+                    api.ajax({
+                        url: apiSite + '/api/user_center/editBasicInfo',
+                        method: 'post',
+                        headers: apiHeader,
+                        data: {
+                               values: { 
+                                   token: $api.getStorage('userToken'),
+                                   real_name: name
+                               }
+                        }
+                    }, function(ret, err) {
+                        if(ret) {
+                            closeW(name)
+                        } else {
+                            alert(JSON.stringify(err))
+                        }
+                    })
+                }
             } else {
                 alert(JSON.stringify(err))
             }
         })
         
+        
+    }
+
+    function closeW(name) {
+        api.sendEvent({
+            name: 'editSupplyName',
+            extra: {
+                name: name
+            }
+        });
+        api.closeWin();
     }
 </script>
 </html>

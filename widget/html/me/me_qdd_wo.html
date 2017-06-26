@@ -5,6 +5,7 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    
     <style type="text/css">
         html, body {
             background-color: #f8f8f8;
@@ -12,7 +13,7 @@
         .nav {
             height: .8rem;
             border-bottom: 1px solid #D3D3D3;
-            font-size: 0;   
+            font-size: 0;       
         }
         .nav .head {
             font-size: .28rem;  
@@ -59,7 +60,6 @@
             border-radius: 50%;
             margin-right: .2rem;    
         }
-        
         .main_no1 span:first-child {
             line-height: .7rem;
             font-size: .3rem;   
@@ -68,7 +68,7 @@
          .main_no1 span:nth-child(2) {
             line-height: .7rem;
             color: #999;
-            font-size: .3rem;   
+            font-size: .24rem;   
             line-height: .33rem;    
         }
         .main_no1 i {
@@ -250,7 +250,7 @@
                 </div>
             </div>
             <div class="list"  >
-                <div class="borderb" data-id="{{=it[i].order_id}}" tapmode="hover" onclick="openInfo(this)" data-val='info'>
+                <div class="borderb" tapmode="hover" onclick="openInfo(this)" data-id="{{=it[i].order_id}}"  data-val='info'>
                     <div class="main_no2 flex-def flex-cCenter">
                         <div class="img">
                             {{?it[i].image_json[0] == null}}
@@ -272,23 +272,23 @@
                         </div>
                         <div class="jl_right flex-cEnd flex-zTopBottom flex-def">
                             <p>
-                                <span class="money">{{=it[i].price}}元/{{=it[i].unit}}</span>
+                                <span class="money">{{=it[i].reward}}元</span>
                             </p>
-                            <p class="bearFruit ydz">
+                            <!-- <p class="bearFruit ydz">
                                 <span class="count">x{{=it[i].amount}}</span>
-                            </p>
+                            </p> -->
                         </div>
                     </div>
                 </div>
                 <div class="main_no3">
                     <div class="price">
                         <p class="wrap">
-                            <span>合计: </span>￥{{=it[i].total_money}}元
+                            <span>合计: </span>￥{{=it[i].reward}}元
                         </p>
                     </div>
                     <p class="appraise flex-def flex-cCenter flex-zEnd" tapmode='hover' onclick="event.stopPropagation();">
                         {{for(var j = 0; j < it[i].button.buttonArr.length; j++){ }}
-                                <span data-moeny='{{=it[i].total_money}}' data-id='{{=it[i].order_id}}' data-supply='{{=it[i].supply_id}}'  tapmode='hover' onclick="oriderOperate(this)" class="btn" data-url='{{=it[i].button.buttonArr[j].url}}'>{{=it[i].button.buttonArr[j].key}}</span>
+                                <span data-moeny='{{=it[i].total_money}}' data-id='{{=it[i].order_id}}' tapmode='hover' onclick="oriderOperate(this)" class="btn" data-url='{{=it[i].button.buttonArr[j].url}}'>{{=it[i].button.buttonArr[j].key}}</span>
                         {{ }; }}
                     </p>
                 </div>
@@ -296,14 +296,16 @@
         </div>
     {{ }; }}
 </script>
+
+
+
+   
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
     apiready = function(){
-        moduleInit();
         requireData();
         api.addEventListener({
             name: 'filterOrder'
@@ -325,7 +327,7 @@
     // 获取数据
     function requireData(type, status, sub_type) {
         api.ajax({
-            url: apiSite + '/api/user_center/buyerSupplyOrder',
+            url: apiSite + '/api/user_center/hostDemandOrder',
             method: 'post',
             headers: apiHeader,
             data: {
@@ -339,51 +341,35 @@
             }
         }, function(ret, err) {
             if(ret) {
-                if(ret.code == 200) {
-                    console.log(JSON.stringify(ret))
+                console.log('我求'+JSON.stringify(ret))
+                if (ret.code === 200) {
                     // 停止下拉刷新
-                    api.refreshHeaderLoadDone()
+                    api.refreshHeaderLoadDone();
+                    
                     for (var i = 0; i < ret.data.list.length; i++) {
-                        if ( ret.data.list[i].unit > 0) {
-                            ret.data.list[i].unit = _dataSource[ ret.data.list[i].unit-1]
-                        } else {
-                            ret.data.list[i].unit = '未定义'
-                        }
                         ret.data.list[i].image_json = eval(ret.data.list[i].image_json)
-
                         // 处理按钮
                         ret.data.list[i].button.buttonArr=[];
                         for(key in ret.data.list[i].button) {
                             for(key1 in ret.data.list[i].button[key]) {
                                 if (ret.data.list[i].button[key].is_show == true){
-                                    console.log(key)
                                     // key 即是要显示的按钮
                                     ret.data.list[i].button[key].key = key;
                                     ret.data.list[i].button.buttonArr.push(ret.data.list[i].button[key])
                                     break;
-                                    // console.log(key1 +':::'+ret.data.list[i].button[key][key1])
                                 }
                             }
                         } 
                         for (var j = 0; j < ret.data.list[i].button.buttonArr.length; j++) {
                             switch(ret.data.list[i].button.buttonArr[j].key){
-                                case 'confirm_finish': ret.data.list[i].button.buttonArr[j].key = '确认完成'; break;
-                                case 'extra': ret.data.list[i].button.buttonArr[j].key = '补差价'; break;
-                                case 'again': ret.data.list[i].button.buttonArr[j].key = '再来一单'; break;
-                                case 'comment': ret.data.list[i].button.buttonArr[j].key = '评价订单'; break;
-                                case 'delete': ret.data.list[i].button.buttonArr[j].key = '删除订单'; break;
-                                case 'pay': ret.data.list[i].button.buttonArr[j].key = '付款'; break;
+                                case 'cancel_order': ret.data.list[i].button.buttonArr[j].key = '取消订单'; break;
+                                case 'confirm_help': ret.data.list[i].button.buttonArr[j].key = '确认帮助'; break;
+                                case 'refuse_help': ret.data.list[i].button.buttonArr[j].key = '拒绝帮助'; break;
                                 case 'finish': ret.data.list[i].button.buttonArr[j].key = '完成订单'; break;
+                                case 'delete': ret.data.list[i].button.buttonArr[j].key = '删除订单'; break;
+                                case 'confirm_finish': ret.data.list[i].button.buttonArr[j].key = '确认完成'; break;
+                                case 'comment': ret.data.list[i].button.buttonArr[j].key = '评价'; break;
                                 case 'cancel': ret.data.list[i].button.buttonArr[j].key = '取消订单'; break;
-
-                                // 卖家页面
-                                case 'confirm_service': ret.data.list[i].button.buttonArr[j].key = '确认接单'; break;
-                                case 'refuse_cancel': ret.data.list[i].button.buttonArr[j].key = '拒绝接单'; break;
-                                case 'extend': ret.data.list[i].button.buttonArr[j].key = '延迟服务'; break;
-                                case 'discount': ret.data.list[i].button.buttonArr[j].key = '优惠'; break;
-                                case 'confirm_cancel': ret.data.list[i].button.buttonArr[j].key = '同意取消'; break;
-                                case 'refuse_cancel': ret.data.list[i].button.buttonArr[j].key = '拒绝取消'; break;
-                                case 'refund': ret.data.list[i].button.buttonArr[j].key = '退款'; break;
                             }
                         }
                     }
@@ -406,7 +392,7 @@
             }
         })
     }
-     // doT模版获取数据
+      // doT模版获取数据
     function getData(data) {
         var listTText = $api.byId('listT').text;
         var fnListT = doT.template(listTText);
@@ -415,7 +401,7 @@
         // 替换resultList所有内容
         $api.html(list, html);
         return true;
-    }
+    } 
     function closeShadow() {
         $api.css($api.dom('.shadow'), 'display:none');
         $api.removeCls($api.dom('.up'), 'up');
@@ -456,44 +442,28 @@
             $api.css($api.dom('.lx'), 'display:none');
             $api.css($api.dom('.zt'), 'display:block');
         }
-        // api.openFrame({
-        //     name: 'shadow',
-        //     url: './me_gdd_shadow.html',
-        //     rect: {
-        //         x: 0,
-        //         y: api.pageParam.headerH,
-        //         w: 'auto',
-        //         h: 'auto'
-        //     },
-        //     bounces: false
-        // });
-        // api.bringFrameToFront({
-        //     from: 'shadow'
-        // });
 
    }
-   // 打开订单详情
-   function openInfo(ele) {
+    // 打开订单详情
+    function openInfo(ele) {
         var val = $api.attr(ele,'data-val');
         var order_id = $api.attr(ele,'data-id');
-
         api.openWin({
             name: val,
             url: './me_gdd_' + val + '.html',
             pageParam: {
-                flag: 1,
+                flag: 0,
                 order_id: order_id
             }
         });
-   }
-
+    }
     // 操作按钮
     function oriderOperate(ele) {
         var url = $api.attr(ele, 'data-url');
         var id = $api.attr(ele, 'data-id');
         var supplyId = $api.attr(ele, 'data-supply');
+        var obj = {};
         var token = $api.getStorage('userToken');
-         var obj = {};
         var flagText = $api.text(ele);
         if (flagText === '再来一单') {
             api.openWin({
@@ -503,7 +473,7 @@
                     supplyId: supplyId
                 }
             });
-        } else if (flagText === '取消订单') {
+        } else if (flagText === '取消订单')  {
             var UIActionSelector = api.require('UIActionSelector');
             UIActionSelector.open({
                 datas: [
@@ -562,7 +532,7 @@
                 if (ret) {
                     if (ret.eventType == 'ok') {
                         obj = {
-                            token: token,
+                            token: $api.getStorage('userToken'),
                             order_id: id,
                             reason:  ret.level1
                         }
@@ -572,13 +542,7 @@
                     alert(JSON.stringify(err.msg));
                 }
             });
-        } else if (flagText === '删除订单') {
-            obj = {
-                token: token,
-                order_id: id,
-            }
-            ajaxOperate(obj,url)
-        } else if (flagText === '评价订单') {
+        }  else if (flagText === '评价订单') {
             obj = {
                 token: token,
                 order_id: id,
@@ -588,38 +552,47 @@
                 url: '../supply/supply_commentPage.html',
                 pageParam: {
                     obj: obj,
-                    flag: 1
+                    flag: 0
                 }
             });
-        }  else if (flagText === '完成订单') {
+        } else if (flagText === '完成订单') {
+            obj = {
+                token: token,
+                order_id: id
+            }
+            ajaxOperate(obj,url)
+        } else if (flagText === '确认接单') {
             obj = {
                 token: token,
                 order_id: id,
             }
             ajaxOperate(obj,url)
-        } else if (flagText === '付款') {
+        } else if (flagText === '拒绝接单') {
+            obj = {
+                token: token,
+                order_id: id,
+            }
+            ajaxOperate(obj,url)
+        } else if (flagText === '退款') {
+            var tatol = $api.attr(ele, 'data-moeny');
             api.openFrame({
-                name: 'supply_modeOfPayment',
-                url: '../supply/supply_modeOfPayment.html',
-                bounces: false,
+                name: 'me_gdd_info_frame_refund',
+                url: './me_gdd_info_frame_refund.html',
                 rect: {
                     x: 0,
                     y: 0,
-                    w: 'auto',
-                    h: 'auto'
+                    w: api.winWidth,
+                    h: api.winHeight
                 },
                 pageParam: {
-                    obj: {
-                        token: token,
-                        order_id: id,
-                    },
-                    price: $api.attr(ele, 'data-moeny'),
-                    flag: 1
-                }
+                    tatol: tatol,
+                    param: param
+                },
+                bounces: false
             });
-        } else {
+        }else {
             obj = {
-                token: token,
+                token: $api.getStorage('userToken'),
                 order_id: id
             };
             ajaxOperate(obj, url);
@@ -646,5 +619,6 @@
             }
         })
     }
+    
 </script>
 </html>

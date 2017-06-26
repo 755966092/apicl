@@ -6,47 +6,185 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-        
-        
-       
-        
+        body,html{
+            background-color: #F8F8F8;
+        }
+         header.header .winTitle {
+            width: auto;
+            font-size: 0;
+        }
+        header.header .head_center {
+            font-size: 0;
+            line-height: .8rem;
+            border-radius: .05rem;
+            color: #999;
+        }
+        header.header .head_center_left:first-child {
+            margin-right: .5rem;
+        }
+        header .head_center span {
+            text-align: center;
+            font-size: .34rem;
+            height: .78rem;
+            line-height: .78rem;
+            box-sizing: border-box;
+           
+        }
+        .select {
+           border-bottom: .05rem solid #F0F0F0;
+           color: #fff;
+        }
+        header .rightBtn {
+            font-size: 0;
+        }
+        header .search {
+            width: .34rem;
+            height: .35rem;
+            /*margin-top: .23rem;*/
+            padding-right: .2rem;
+            /*margin-right: .2rem;*/
+            border-right: 1px solid #fff;
+            background: url(../../image/icon_search2.png)no-repeat;
+            -webkit-background-size: .34rem .35rem;
+            background-size: .34rem .35rem;
+            background-position: 0 center;
+        }
+
+        .rightBtn .wrap:last-child {
+            padding-left: .2rem;
+            box-sizing: border-box;
+        }
+        .wrap {
+            height: .7rem;
+            width: .5rem;
+            
+        }
+        header .filter {
+            width: .34rem;
+            height: .3rem;
+            background: url(../../image/icon_supply/icon_sx1.png)no-repeat;
+            -webkit-background-size: .34rem .3rem;
+            background-size: .34rem .3rem;
+            background-position: 0 center;
+        }
     </style>
+
+
 </head>
 <body>
+
      <header  class="header">
         <div class="head">
             <span class="callback"   tapmode="hover"   onclick="api.closeWin()">返回</span>
-            <span class="winTitle">
-                求订单
+            <span class="winTitle head_center">
+                <span class=" head_center_left select"   tapmode="hover"   onclick="switchApr(0)">Ta求</span>
+                <span class=" head_center_left "   tapmode="hover"   onclick="switchApr(1)">我求</span>
             </span>
+            <span class="rightBtn flex-def flex-zEnd">
+                <span class="wrap flex-def flex-cCenter">
+                    <span class="search"></span>
+                </span>
+                <span class="wrap flex-def flex-cCenter" ontouchstart='openShadow()'>
+                    <span  class="filter"></span>
+                </span>
+            </span> 
         </div>
     </header>
-    <div class="main">  
-        <p>买方显示</p>
-        <p>卖方显示</p>
-    </div>
+    
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
+    var type='',status='',sub_type='';
     apiready = function(){
         fnInit();
+        api.addEventListener({
+            name: 'filterOrder'
+        }, function(ret, err) {
+            if (ret) {
+                type = ret.value.type || '',
+                status = ret.value.status || '',
+                sub_type = ret.value.sub_type  || '';
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
+        openAprGroup(headerH);
+    };
+
+   
+
+    // 打开frame组
+    function openAprGroup (frameH){
+        api.openFrameGroup({
+            name: 'publishGroup1',
+            rect: {
+                 x: 0, 
+                 y: headerH, 
+                 w: 'auto',
+                 h: 'auto'
+            },
+            scrollEnabled: true,
+            index: 0,
+            frames: [{
+                name: 'me_qdd_ta', 
+                url: './me_qdd_ta.html',
+                pageParam: {
+                    headerH: headerH
+                }
+            },{
+                name: 'me_qdd_wo', 
+                url: './me_qdd_wo.html',
+                pageParam: {
+                    headerH: headerH
+                }
+            }]
+        }, function(ret, err) {
+            if (ret) {
+                switchAprIndex(ret.index)
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
+    }
+
+
+    // 显示的页面
+     function switchApr(index){
+            api.setFrameGroupIndex ({
+                name: 'publishGroup1',
+                index: index,
+                scroll: true
+            });
+            switchAprIndex(index);
+        }
+
+     // 切换头部的标题颜色
+    function switchAprIndex(index){
+        var aprItems = $api.domAll('.head_center_left');
+        for (var i = 0; i < aprItems.length; i++) {
+            $api.removeCls(aprItems[i], 'select');
+        }
+        $api.addCls(aprItems[index], 'select');
+    }
+
+    function openShadow() {
         api.openFrame({
-            name: 'me_qdd_frame',
-            url: './me_qdd_frame.html',
+            name: 'me_qdd_shadow',
+            url: './me_qdd_shadow.html',
             rect: {
                 x: 0,
                 y: headerH,
-                w: 'auto',
-                h: 'auto'
+                w: api.winWidth,
+                h: api.winHeight-headerH
             },
             pageParam: {
-                name: 'value'
+                type: type,
+                status: status,
+                sub_type: sub_type
             },
             bounces: false
         });
-    };
-    
-  
+    }
 </script>
 </html>
