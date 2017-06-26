@@ -306,7 +306,12 @@
          }
          footer span:nth-child(2) i {
             background: url(../../image/icon_supply/icon_collect.png)no-repeat;
-                background-size: .4rem .35rem;
+            background-size: .4rem .35rem;
+            background-position: center bottom;
+         }
+         footer span i.cancelCollect {
+            background: url(../../image/icon_supply/icon_collect02.png)no-repeat;
+            background-size: .4rem .35rem;
             background-position: center bottom;
          }
          .loading {
@@ -445,7 +450,7 @@
                 
                 {{?it.info.comment_count==0}}
                 {{??}}
-                    <div class="btn flex-def flex-cCenter">
+                    <div data-avg="{{=it.info.avg_point}}" class="btn flex-def flex-cCenter" tapmode="hover" onclick="openCommentPage(this)">
                         <div>查看全部</div>
                     </div>
                 {{?}}
@@ -479,6 +484,18 @@
         // 初始化页面
         initialise(api.pageParam.flag, api.pageParam.compaby_name, api.pageParam.supply_id)
     };
+    // 打开评论页面
+    function openCommentPage(ele) {
+        var avg = $api.attr(ele, 'data-avg');
+        api.openWin({
+            name: 'supply_commentPage_win',
+            url: './supply_commentPage_win.html',
+            pageParam: {
+                supply_id: api.pageParam.supply_id,
+                avg: avg
+            }
+        });
+    }
     // 编辑供应
     function editSupply() {
         api.openWin({
@@ -493,7 +510,7 @@
     function supplyCollect(ele) {
         var url;
         if ($api.text(ele) === '收藏') {
-            $api.html(ele, '<i></i>取消收藏');
+            $api.html(ele, '<i class="cancelCollect"></i>取消收藏');
             url = '/api/supply/collect';
         } else {
             $api.html(ele, '<i></i>收藏');
@@ -514,9 +531,14 @@
             if(ret) {
                 // alert(JSON.stringify(ret))
                 if ($api.text(ele) === '收藏') {
-                    alert('取消收藏成功');
+                    api.toast({
+                        msg: '取消收藏成功'
+                    });
                 } else {
-                    alert('收藏供应成功');
+                    
+                    api.toast({
+                        msg: '收藏供应成功'
+                    });
                 }
                
             } else {

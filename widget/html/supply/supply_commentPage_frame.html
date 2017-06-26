@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style type="text/css">
+        .commentContent {
+            font-size: 0;
+            padding: .25rem .3rem .25rem .3rem;
+            border-bottom: 1px solid #d9d9d9;
+            background-color: #fff;
+        }
+        .commentContentTitle img {
+            width: .76rem;
+            height: .76rem;
+            
+        }
+        .commentContentTitle .img {
+            width: .76rem;
+            height: .76rem;
+            margin-right: .2rem;
+        }
+        .commentName {
+            width: 6.24rem;
+        }
+ 
+        .commentNameLeft {
+            font-size: 0;
+        }
+        .commentNameLeft .name {
+            font-size: .26rem;
+            color: #5D7099;
+            margin-right: .12rem;   
+        }
+        .commentNameRight {
+            font-size: .24rem;
+            color: #999;
+        }
+        .commentText {
+            font-size: .3rem;
+            color: #555;
+            /*margin-top: .18rem;*/
+        }
+        .avg_pointIcon {
+            width: .245rem;
+            height: .245rem;
+            background: url(../../image/icon_supply/icon_xx.png)no-repeat;
+            -webkit-background-size: .245rem .245rem;
+            background-size: .245rem .245rem;
+            margin-right: .06rem;
+        }
+        .commentCount {
+            font-size: .3rem;
+            color: #555;
+            margin-right: .2rem;
+        }
+        .avg_point {
+            font-size: 0;
+        }
+        .commentTitle {
+            height: .81rem;
+            background-color: #fff;
+            padding-left: .3rem;
+            margin-bottom: .2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="comment resultList"> </div>
+    <script type="text/x-dot-template" id="listT">
+        <div class="commentTitle flex-def flex-cCenter">
+            <span class="commentCount">全部评价</span>
+            <span class="avg_point">
+                {{for(var i = 0;i < it[0].avg;i++){ }}
+                    <span class="avg_pointIcon"></span>
+                {{};}}
+            </span>
+        </div>
+        {{ for(var i=0; i < it.length; i++ ) { }}
+            <div class="commentContent">
+                <div class="commentContentTitle flex-def flex-zLeftRight">
+                    <div class="img">
+                        <img src="{{=it[i].head_img_url}}">
+                    </div>
+                    <div class="flex-def flex-zTopBottom">
+                        <div class="commentName flex-def flex-zBetween flex-zLeftRight flex-cCenter">
+                            <div class="wrap">
+                                <div class="commentNameLeft flex-def flex-cCenter">
+                                    <div class="name">{{=it[i].nickname}}</div>
+                                    <div class="avg_point">
+                                        {{ for(var j = 0;j < it[i].point;j++){ }}
+                                            <span class="avg_pointIcon"></span>
+                                        {{ }; }}
+                                    </div>
+                                </div>
+                                <p class="commentText">{{=it[i].content}}</p>
+                                
+                            </div>
+                        </div>
+                        <div class="commentNameRight">
+                            {{=it[i].create_time}}
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        {{ }; }}
+    </script>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        requireData();
+    };
+    function requireData() {
+        api.ajax({
+            url: apiSite + '/api/supply/commentList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       supply_id: api.pageParam.supply_id
+                       
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                console.log(JSON.stringify(ret))
+                ret.data.list[0].avg = api.pageParam.avg
+                getData(ret.data.list)
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+</script>
+</html>
