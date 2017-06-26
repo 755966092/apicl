@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        html,body {
+            width: 7.5rem;
+            height: 100%;
+        }
+        .state {
+            height: 1.5rem;
+            background-color: #fff;
+            padding: 0 .3rem;
+         }
+         .state .icon {
+             width: .56rem;
+             height: .597rem;
+             background: url(../../image/icon_my/icon_clearOrder.png)no-repeat;
+             -webkit-background-size: .56rem .59rem;
+             background-size: .56rem .59rem;
+             margin-right: .22rem;
+         }
+         .state .icon2 {
+             width: .56rem;
+             height: .597rem;
+             background: url(../../image/icon_my/icon_orderCom.png)no-repeat;
+             -webkit-background-size: .56rem .59rem;
+             background-size: .56rem .59rem;
+             margin-right: .22rem;
+         }
+         .state h3 {
+             font-size: .34rem;
+             line-height: .48rem;
+             width: 6.1rem;
+           /* white-space:nowrap;
+             overflow: hidden;
+             text-overflow: ellipsis;*/
+         }.state p {
+             font-size: .24rem;
+             width: 6.1rem;
+           /* white-space:nowrap;
+             overflow: hidden;
+             text-overflow: ellipsis;*/
+             color: #666;
+             line-height: .33rem;
+             margin-top: .1rem;
+        }
+        
+
+        .userInfo {
+            height: 1rem;
+            background-color: #fff;
+            margin-top: .2rem;
+            padding: 0 .3rem;
+            border-bottom: 1px solid #E6E6E6;
+         }.userInfo img {
+            width: .7rem;
+            height: .7rem;
+            margin-right: .2rem;
+         }.userInfo .userName {
+             font-size: .3rem;
+             line-height: .42rem;
+         }.userInfo .position {
+             font-size: .24rem;
+             line-height: .33rem;
+             color: #999;
+         }.userInfo .icon_tel {
+            margin-right: .3rem;
+            width: .34rem;
+            height: .325rem;
+            background: url(../../image/icon_my/icon_tel.png)no-repeat;
+            background-size: .34rem .325rem;
+         }.userInfo .icon_chat {
+            width: .39rem;
+            height: .34rem;
+            background: url(../../image/icon_my/icon_chat.png)no-repeat;
+            background-size: .39rem .34rem;
+        }
+
+        .userPosition {
+            margin-top: .2rem;
+            height: 1.2rem;
+            padding-left: .3rem;
+            background: #fff url(../../image/icon_my/icon_position.png)no-repeat;
+            -webkit-background-size: .32rem .429rem;
+            background-size: .32rem .429rem;
+            background-position: .3rem center;
+
+         }.userPosition h3 {
+            font-size: .3rem;
+            line-height: .42rem;
+         }.userPosition p {
+            font-size: .24rem;
+            line-height: .33rem;
+         }.userPosition .wrap {
+            padding-left: .55rem;
+            height: 1.2rem;
+            border-bottom: 1px solid #E2E2E2;
+            box-sizing: border-box;
+        }
+        .serverTime {
+            height: .797rem;
+            background: #fff url(../../image/icon_my/icon_time.png) no-repeat;
+            -webkit-background-size: .34rem .34rem;
+            background-size: .34rem .34rem;
+            background-position: .3rem center;
+            padding-left: .3rem;
+         }.serverTime p {
+            padding-left: .55rem;
+            font-size: .3rem;
+            line-height: .797rem;
+            border-bottom: 1px solid #E2E2E2;
+            box-sizing: border-box;
+        }
+        .serverType {
+            height: .797rem;
+            background: #fff url(../../image/icon_my/icon_fw.png) no-repeat;
+            -webkit-background-size: .34rem .31rem;
+            background-size: .34rem .31rem;
+            background-position: .3rem center;
+            border-bottom: 1px solid #E2E2E2;
+
+         }.serverType p {
+            border: 0;
+        }
+        
+        .label{
+            font-size: .20rem;
+            color: #0076FF;
+            /*line-height: .26rem;*/
+            line-height: .35rem;
+            height: .26rem;
+            border-radius: .06rem;
+            margin-right: .1rem;
+            padding: 0 .05rem;
+            border: 1px solid #0076FF;
+        }
+        
+        .orderInfo {
+            background-color: #fff;
+            border-bottom: 1px solid #ECECEC;
+            padding: .3rem .3rem;
+            box-sizing: border-box;
+         }.orderInfo .top {
+            height: 1.81rem;
+            font-size: 0;
+         }.orderInfo .top img {
+            width: .91rem;
+            height: .91rem;
+            margin-right: .2rem;
+         }.orderInfo .top .text .supplyName{
+            font-size: .28rem;
+            color: #333;
+         }.orderInfo .top .text .price{
+            font-size: .34rem;
+         }.orderInfo .top .text .infoText{
+            font-size: .24rem;
+            color: #555;
+         }.orderInfo .top .text .count{
+            font-size: .28rem;
+            color: #999;
+         }.orderInfo .top .info{
+            margin-top: .1rem;
+        }
+
+        .orderInfo .bottom .wrap{
+            height: 1.71rem;
+            border-top: 1px solid #ECECEC;
+            box-sizing: border-box;
+            font-size: 0;
+            padding-top: .2rem;
+         }.orderInfo .bottom {
+            padding-left: .3rem;
+         }.total {
+            font-size: .24rem;
+            text-align: right;
+         }.totalData {
+            font-size: .34rem;
+            color: #1AAD19;
+         }.totalNumber{
+            color: #1AAD19;
+         }.btn {
+            width: 1.34rem;
+            height: .54rem;
+            text-align: center;
+            /*line-height: .54rem;*/
+            line-height: .6rem;
+            font-size: .28rem;
+            border-radius: .06rem;
+            margin-left: .32rem;
+            border: 1px solid #000;
+         }.btnGroup {
+            text-align: right;
+            margin-top: .5rem;
+        }
+        .orderTime {
+            height: 1.96rem;
+            background-color: #fff;
+            margin-top: .2rem;
+            padding: .3rem;
+         }p {
+            font-size: .24rem;
+            line-height: .48rem;
+         } p .code {
+            color: #3f3f3f;
+        }
+
+        .remark {
+            height: .8rem;
+            background: #fff url(../../image/icon_my/icon_bz.png)no-repeat;
+            -webkit-background-size: .34rem .33rem;
+            background-size: .34rem .33rem;
+            background-position: .3rem center;
+            font-size: .24rem;
+            margin-top: .2rem;
+            line-height: .8rem;
+            padding-left: .73rem;
+         }span {
+            color: #3f3f3f;
+        }
+            
+        .appraise {
+            width: 7.5rem;
+            background-color: #1AAD19;
+            font-size: .34rem;
+            text-align: center;
+            height: .9rem;
+            line-height: .9rem;
+            color: #fff;
+            margin-top: .75rem;
+        }
+        .hull {
+            display: none;
+        }
+       
+    </style>
+</head>
+<body>
+    <div class="hull">
+        <div class="main resultList">  
+        </div>
+        <script type="text/x-dot-template" id="listT">
+            <div class="state flex-def flex-cCenter">
+
+                {{?it.status_info.text == '交易成功'}}
+                    <div class="icon2"></div>
+                {{??}}
+                    <div class="icon"></div>
+                {{?}}
+                <div class="text">
+                    <h3>{{=it.status_info.text}}</h3>
+                    <p>{{=it.status_info.description}}</p>
+                </div>
+            </div>
+            {{?it.order_info.name == null}} 
+
+            {{??}}
+            <div class="userPosition">
+                <div class="wrap flex-def flex-zTopBottom flex-zCenter">
+                    <h3>{{=it.order_info.name}}</h3>
+                    <p>{{=it.order_info.address}}</p>
+                </div>
+            </div>
+            {{?}}
+            
+            {{?it.order_info.service_time}}
+            <div class="serverTime">
+                <p>服务时间：<span>{{=it.order_info.service_time}}</span></p>
+            </div>
+            {{??}}
+            {{?}}
+
+
+            <div class="serverTime serverType">
+                <p>服务形式：
+                    {{?it.demand_info.form==1}}
+                    <span>线上</span>
+                    {{??}}
+                    <span>线下</span>
+                    {{?}}
+                </p>
+            </div>
+            
+             <div class="userInfo flex-def flex-cCenter">
+                {{?it.host_info}}
+                <img src="{{=it.host_info.head_img_url}}">
+                <div class="text flex-def flex-zBetween flex-item">
+                    <div class="left">
+                        <p class="userName">{{=it.host_info.nickname}}</p>
+                        <!-- 需要融云id才可以发起聊天 -->
+                        <!-- <p class="position">上海策赢网络科技 董事长</p> -->
+                    </div>
+                    <div class="right flex-def flex-cCenter">
+                        <span ontouchstart="callTpl()" class="icon_tel"></span>
+                        <!-- 卖家电话字段 -->
+                        <span class="icon_chat"></span>
+                    </div>
+                </div>
+                {{??}}
+                <img src="{{=it.helper_info.head_img_url}}">
+                <div class="text flex-def flex-zBetween flex-item">
+                    <div class="left">
+                        <p class="userName">{{=it.helper_info.nickname}}</p>
+                        <!-- 需要融云id才可以发起聊天 -->
+                        <!-- <p class="position">上海策赢网络科技 董事长</p> -->
+                    </div>
+                    <div class="right flex-def flex-cCenter">
+                        <span ontouchstart="callTpl()" class="icon_tel"></span>
+                        <!-- 卖家电话字段 -->
+                        <span class="icon_chat"></span>
+                    </div>
+                </div>
+                {{?}}
+            </div>
+            <div class="orderInfo">
+                <div class="top flex-def">
+                    <img src="{{=it.demand_info.image[0]}}">
+                    <div class="text flex-item">
+                        <div class="title flex-def flex-zBetween">
+                            <div class="flex-def flex-cCenter">
+                                <span class="label">个人</span>
+                                <p class="supplyName">{{=it.demand_info.title}}</p>
+                            </div>
+                            <p class="price">{{=it.demand_info.reward}}元</p>
+                        </div>
+                        <div class="info flex-def flex-zBetween">
+                            <p class="infoText">{{=it.demand_info.description}}</p>
+                            <p class="count">x{{=it.order_info.amount}}</p>                   
+                        </div>
+                    </div>
+                </div>
+                <div class="bottom">
+                    <div class="wrap">
+                        <p class="total">合计：<span class="totalData">￥<span class="totalNumber">{{=it.order_info.money}}</span>元</span></p>
+
+                        <div class="btnGroup">
+
+                            {{for(var i = 0; i < it.button_info.buttonArr.length; i++){ }}
+                                {{?it.button_info.buttonArr[i].key === '确认完成' || it.button_info.buttonArr[i].key === '完成' || it.button_info.buttonArr[i].key === '评价订单'}}
+                                {{??}}
+                                <span data-demandId='{{=it.demand_info.demand_id}}' data-orderId='{{=it.order_info.order_id}}' ontouchstart="oriderOperate(this)" class="btn" data-url='{{=it.button_info.buttonArr[i].url}}'>{{=it.button_info.buttonArr[i].key}}</span>
+                                {{?}}
+                            {{ }; }}
+                        </div>
+                    </div>
+                </div>            
+            </div>
+            <div class="orderTime">
+                <p>订单编号：
+                    <span class="code" id="code">{{=it.order_info.gen_order_id}}</span>
+                    <span class="label fr" ontouchstart="copyString()"   id="copy">复制</span>
+                </p>
+                <p>下单时间：<span class="code">{{=it.order_info.create_time}}</span></p>
+                <p>取消原因：<span class="code">{{=it.order_info.reason}}</span></p>
+            </div>
+            <div class="remark">
+                备注：<span>{{=it.order_info.reason}}</span>
+            </div>
+            {{?it.button_info.finish.is_show || it.button_info.confirm_finish.is_show}} 
+                <div class="appraise" data-id='{{=it.order_info.order_id}}' ontouchstart="completeOrder(this)">完成</div>
+            
+
+            {{??it.button_info.comment.is_show}}
+                 <div class="appraise" tapmode='hover' onclick="commentSupply()">评价</div>
+            {{??}}
+            {{?}}
+
+        </script>
+    </div>
+    <div class="loading"></div>
+    
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        moduleInit();
+        requestData();
+    };
+    // 评价
+    function commentSupply() {
+        var obj = {
+            token:$api.getStorage('userToken'),
+            order_id: api.pageParam.order_id
+        }
+        api.openWin({
+            name: 'supply_commentPage',
+            url: '../supply/supply_commentPage.html',
+            pageParam: {
+                obj: obj,
+                flag: flag
+            }
+        });
+    }
+    // 获取数据
+    function requestData() {
+        api.ajax({
+            url: apiSite + '/api/demand_order/detail',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                        token: $api.getStorage('userToken'),
+                        // token: 'b678d8a0-f0d8-c67e-50b0-4d839ea864d7',
+                        order_id: api.pageParam.order_id
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                
+                if (ret.code === 200){
+                    $api.css($api.dom('.loading'), 'display:none');
+                    $api.css($api.dom('.hull'), 'display:block');
+                    // 要显示的按钮
+                    // .button_info
+                    //      .pay
+                    //      .confirm_service    卖家确认供应订单接单操作
+                    //      .refuse_service     卖家拒绝供应订单接单操作
+                    //      
+                    //      
+                    //      .discount   卖家为买家优惠
+                    //      .finish 完成订单
+                    //      
+                    //      .cancel 取消订单
+                    //      .confirm_cancel 卖家同意买家取消供应订单操作
+                    //      .refuse_cancel  卖家拒绝买家取消供应订单操作
+                    //      .refund     卖家为买家退款
+                    //      
+                    //      .confirm_finish 买家同意买家完成供应订单操作  -- 完成订单
+                    //      .extra      买家补差价操作  -- 补全差价
+                    //      .again      买家购买供应操作    -- 再来一单
+                    //      .comment    买家评价订单操作    -- 评价订单
+                    //      .delete     买家删除订单        -- 删除订单
+                    //      
+                     //      
+                    ret.data.button_info.buttonArr=[];
+                    for(key in ret.data.button_info) {
+                        for(key1 in ret.data.button_info[key]) {
+                            if (ret.data.button_info[key].is_show == true){
+                                console.log(key)
+                                // key 即是要显示的按钮
+                                ret.data.button_info[key].key = key;
+                                ret.data.button_info.buttonArr.push(ret.data.button_info[key])
+                                break;
+                                // console.log(key1 +':::'+ret.data.button_info[key][key1])
+                            }
+                        }
+                    } 
+                    console.log(JSON.stringify(ret))
+                    for (var i = 0; i < ret.data.button_info.buttonArr.length; i++) {
+                        switch(ret.data.button_info.buttonArr[i].key){
+                            case 'cancel_order': ret.data.button_info.buttonArr[i].key = '取消订单'; break;
+                            case 'confirm_help': ret.data.button_info.buttonArr[i].key = '确认帮助'; break;
+                            case 'refuse_help': ret.data.button_info.buttonArr[i].key = '拒绝帮助'; break;
+                            case 'finish': ret.data.button_info.buttonArr[i].key = '完成订单'; break;
+                            case 'delete': ret.data.button_info.buttonArr[i].key = '删除订单'; break;
+                            case 'confirm_finish': ret.data.button_info.buttonArr[i].key = '确认完成'; break;
+                            case 'comment': ret.data.button_info.buttonArr[i].key = '评价'; break;
+                            case 'cancel': ret.data.button_info.buttonArr[i].key = '取消订单'; break;
+                        }
+                    }
+
+                    if (getData(ret.data)) {
+                        if (api.systemType === 'ios') {
+                            for (var i = 0; i < $api.domAll('.btn').length; i++) {
+                                $api.css($api.domAll('.btn')[i], 'line-height:.54rem');
+                            }
+                            for (var i = 0; i < $api.domAll('.label').length; i++) {
+                                
+                                 $api.css($api.domAll('.label')[i], 'line-height:.26rem');
+                            }
+                        }
+                    }
+                } else {
+                    alert(JSON.stringify(ret));
+                    setTimeout(function() {
+                        api.closeWin();
+                    },500)
+                }
+                
+            } else {
+                alert(JSON.stringify(err.msg))
+            }
+        })
+    }
+    // doT模版获取数据
+    function getData(data) {
+        var listTText = $api.byId('listT').text;
+        var fnListT = doT.template(listTText);
+        var html = fnListT(data);
+        var list = $api.dom('.resultList');
+        // 替换resultList所有内容
+        $api.html(list, html);
+        return true;
+    }
+    // 复制订单号
+    function copyString() {
+        var val = $api.text($api.byId('code'));
+        clipBoard.set({
+            value: val
+        }, function(ret, err) {
+            if (ret) {
+                alert('复制成功');
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
+    }
+    // 操作按钮
+    function oriderOperate(ele) {
+        var url = $api.attr(ele, 'data-url');
+        var orderId = $api.attr(ele, 'data-orderId');
+        var demandId = $api.attr(ele, 'data-demandId');
+        // alert(url)
+        var param = {};
+        param.token = $api.getStorage('userToken');
+        param.order_id = orderId;
+
+        var flagText = $api.text(ele);
+
+        if (flagText === '再来一单') {
+            api.openWin({
+                name: 'demand_info_immediate_order_2',
+                url: '../supply/demand_info_immediate_order_2.html',
+                pageParam: {
+                    demandId: demandId
+                }
+            });
+        } else if (flagText === '延迟服务'){
+            ajaxOperate(param, url)
+            requestData();
+        } else if (flagText === '取消订单'){
+            var UIActionSelector = api.require('UIActionSelector');
+                UIActionSelector.open({
+                    datas: [
+                        {
+                            name:'取消原因1'
+                        },{
+                            name:'取消原因2'
+                        },{
+                            name:'取消原因3'
+                        }
+                    ],
+                    actives: [1],
+                    layout: {
+                        row: 7,
+                        col: 1,
+                        height: 30,
+                        size: 16,
+                        sizeActive: 18,
+                        rowSpacing: 5,
+                        colSpacing: 5,
+                        maskBg: 'rgba(0,0,0,0.5)',
+                        bg: '#fff',
+                        color: '#888',
+                        colorSelected: '#000'
+                    },
+                    animation: true,
+                    cancel: {
+                        text: '取消',
+                        size: 12,
+                        w: 90,
+                        h: 35,
+                        bg: '#eee',
+                        // bgActive: '#ccc',
+                        color: '#000',
+                        // colorActive: '#fff'
+                    },
+                    ok: {
+                        text: '确定',
+                        size: 12,
+                        w: 90,
+                        h: 35,
+                        bg: '#eee',
+                        // bgActive: '#ccc',
+                        color: '#000',
+                        // colorActive: '#fff'
+                    },
+                    title: {
+                        text: '请选择退款原因',
+                        size: 20,
+                        h: 35,
+                        bg: '#eee',
+                        color: '#000'
+                    },
+                    fixedOn: api.frameName
+                }, function(ret, err) {
+                    if (ret) {
+                        if (ret.eventType == 'ok') {
+                            param.reason = ret.level1;
+                          
+                            ajaxOperate(param, url)
+                        }
+                    } else {
+                        alert(JSON.stringify(err.msg));
+                    }
+                });
+        } else if (flagText === '补差价') {
+            api.openFrame({
+                name: 'me_gdd_info_frame_sale',
+                url: './me_gdd_info_frame_sale.html',
+                rect: {
+                    x: 0,
+                    y: 0,
+                    w: api.winWidth,
+                    h: api.winHeight
+                },
+                pageParam: {
+                    param: param,
+                    flag: 'priceDifference'
+                },
+                bounces: false
+            });
+        } else if (flagText === '退款') {
+            var tatol = $api.text($api.dom('.totalNumber'));
+            api.openFrame({
+                name: 'me_gdd_info_frame_refund',
+                url: './me_gdd_info_frame_refund.html',
+                rect: {
+                    x: 0,
+                    y: 0,
+                    w: api.winWidth,
+                    h: api.winHeight
+                },
+                pageParam: {
+                    tatol: tatol,
+                    param: param
+                },
+                bounces: false
+            });
+        }else if (flagText === '确认帮助') {
+            api.openFrame({
+                name: 'supply_modeOfPayment',
+                url: '../supply/supply_modeOfPayment.html',
+                rect: {
+                    x: 0,
+                    y: 0,
+                    w: api.winWidth,
+                    h: api.winHeight
+                },
+                pageParam: {
+                    obj: param,
+                    price: $api.text($api.dom('.totalNumber')),
+                    flag: 3
+                },
+                bounces: false
+            });
+        } else {
+            ajaxOperate(param ,url)
+        }
+
+    }
+    // 拨打电话
+    function callTpl(){
+        api.call({
+            type: 'tel',
+            number: '10086'
+        });
+    }
+    function completeOrder(ele) {
+        var id = $api.attr(ele, 'data-id');
+        api.ajax({
+            url: apiSite + '/api/supply_order/hostConfirmFinishService',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       order_id: id
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code == 200) {
+                    requestData();
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+
+    function ajaxOperate(obj, url) {
+        api.ajax({
+            url: apiSite + url,
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: obj
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code !== 200) {
+                    alert(JSON.stringify(ret.msg))
+                } else {
+                    requestData();
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+</script>
+</html>
