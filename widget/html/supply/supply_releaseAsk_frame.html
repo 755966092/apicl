@@ -368,7 +368,6 @@
                   },
                   categoryArr = ['全部','教育','摄影','摄影','医疗'];
     apiready = function(){
-        
         moduleInit();
         if (api.pageParam.demand_id) {
             requireData();
@@ -405,7 +404,7 @@
         $api.text(position, data.info.address);
         // $api.text(unit, unitText);
         $api.text(category_id, _categoryId);
-        data.info.type == 1 ? $api.text(_type, '我卖') : $api.text(_type, '我公司卖');
+        data.info.type == 1 ? $api.text(_type, '我求') : $api.text(_type, '我公司求');
         if (data.info.type == 2) {
             $api.css($api.dom('.companyName'), 'display:block');
             $api.text($api.byId('company_name'), data.info.company_name);
@@ -444,7 +443,17 @@
             title: '选择截至时间'
         }, function(ret, err) {
             if (ret) {
-                $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day);
+                var time = new Date();
+                if (
+                    ret.year < time.getFullYear() || 
+                    (ret.year === time.getFullYear() && ret.month < time.getMonth()+1) ||
+                    (ret.year === time.getFullYear() && ret.month === time.getMonth()+1 && ret.day < time.getDate())) {
+                    alert('截至时间不能早于当前时间')
+                } else {
+                    $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day);
+                }        
+
+                
             } else {
                 alert(JSON.stringify(err.msg));
             }

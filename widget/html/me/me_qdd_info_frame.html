@@ -441,7 +441,6 @@
                     for(key in ret.data.button_info) {
                         for(key1 in ret.data.button_info[key]) {
                             if (ret.data.button_info[key].is_show == true){
-                                console.log(key)
                                 // key 即是要显示的按钮
                                 ret.data.button_info[key].key = key;
                                 ret.data.button_info.buttonArr.push(ret.data.button_info[key])
@@ -450,7 +449,6 @@
                             }
                         }
                     } 
-                    console.log(JSON.stringify(ret))
                     for (var i = 0; i < ret.data.button_info.buttonArr.length; i++) {
                         switch(ret.data.button_info.buttonArr[i].key){
                             case 'cancel_order': ret.data.button_info.buttonArr[i].key = '取消订单'; break;
@@ -532,76 +530,7 @@
                     type: 'demand'
                 }
             });
-        } else if (flagText === '延迟服务'){
-            ajaxOperate(param, url)
-            requestData();
-        } else if (flagText === '取消订单'){
-            var UIActionSelector = api.require('UIActionSelector');
-                UIActionSelector.open({
-                    datas: [
-                        {
-                            name:'取消原因1'
-                        },{
-                            name:'取消原因2'
-                        },{
-                            name:'取消原因3'
-                        }
-                    ],
-                    actives: [1],
-                    layout: {
-                        row: 7,
-                        col: 1,
-                        height: 30,
-                        size: 16,
-                        sizeActive: 18,
-                        rowSpacing: 5,
-                        colSpacing: 5,
-                        maskBg: 'rgba(0,0,0,0.5)',
-                        bg: '#fff',
-                        color: '#888',
-                        colorSelected: '#000'
-                    },
-                    animation: true,
-                    cancel: {
-                        text: '取消',
-                        size: 12,
-                        w: 90,
-                        h: 35,
-                        bg: '#eee',
-                        // bgActive: '#ccc',
-                        color: '#000',
-                        // colorActive: '#fff'
-                    },
-                    ok: {
-                        text: '确定',
-                        size: 12,
-                        w: 90,
-                        h: 35,
-                        bg: '#eee',
-                        // bgActive: '#ccc',
-                        color: '#000',
-                        // colorActive: '#fff'
-                    },
-                    title: {
-                        text: '请选择退款原因',
-                        size: 20,
-                        h: 35,
-                        bg: '#eee',
-                        color: '#000'
-                    },
-                    fixedOn: api.frameName
-                }, function(ret, err) {
-                    if (ret) {
-                        if (ret.eventType == 'ok') {
-                            param.reason = ret.level1;
-                          
-                            ajaxOperate(param, url)
-                        }
-                    } else {
-                        alert(JSON.stringify(err.msg));
-                    }
-                });
-        } else if (flagText === '拒绝帮助') {
+        } else if (flagText === '拒绝帮助' || flagText === '取消订单') {
             var reasonList = JSON.parse($api.attr(ele, 'data-reasonList'));
             var datas = []
             for(key in reasonList) {
@@ -610,6 +539,7 @@
                     id:key
                 })
             }
+            console.log(JSON.stringify(datas))
             var UIActionSelector = api.require('UIActionSelector');
                 UIActionSelector.open({
                     datas: datas,
@@ -659,13 +589,11 @@
                 }, function(ret, err) {
                     if (ret) {
                         if (ret.eventType == 'ok') {
-                            console.log(ret.selectedInfo[0].id)
                             obj = {
                                 token: $api.getStorage('userToken'),
-                                order_id: id,
+                                order_id: orderId,
                                 reason: ret.selectedInfo[0].id
                             }
-                            console.log('obj::'+JSON.stringify(obj))
                             ajaxOperate(obj, url)
                         }
                     } else {

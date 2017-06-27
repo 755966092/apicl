@@ -463,125 +463,7 @@
         var obj = {};
         var token = $api.getStorage('userToken');
         var flagText = $api.text(ele);
-        if (flagText === '再来一单') {
-            api.openWin({
-                name: 'supply_info_immediate_order_2',
-                url: '../supply/supply_info_immediate_order_2.html',
-                pageParam: {
-                    supplyId: supplyId
-                }
-            });
-        } else if (flagText === '取消订单')  {
-            var UIActionSelector = api.require('UIActionSelector');
-            UIActionSelector.open({
-                datas: [
-                    {
-                        name:'取消原因1'
-                    },{
-                        name:'取消原因2'
-                    },{
-                        name:'取消原因3'
-                    }
-                ],
-                actives: [1],
-                layout: {
-                    row: 7,
-                    col: 1,
-                    height: 30,
-                    size: 16,
-                    sizeActive: 18,
-                    rowSpacing: 5,
-                    colSpacing: 5,
-                    maskBg: 'rgba(0,0,0,0.5)',
-                    bg: '#fff',
-                    color: '#888',
-                    colorSelected: '#000'
-                },
-                animation: true,
-                cancel: {
-                    text: '取消',
-                    size: 12,
-                    w: 90,
-                    h: 35,
-                    bg: '#eee',
-                    // bgActive: '#ccc',
-                    color: '#000',
-                    // colorActive: '#fff'
-                },
-                ok: {
-                    text: '确定',
-                    size: 12,
-                    w: 90,
-                    h: 35,
-                    bg: '#eee',
-                    // bgActive: '#ccc',
-                    color: '#000',
-                    // colorActive: '#fff'
-                },
-                title: {
-                    text: '请选择退款原因',
-                    size: 20,
-                    h: 35,
-                    bg: '#eee',
-                    color: '#000'
-                },
-                fixedOn: api.frameName
-            }, function(ret, err) {
-                if (ret) {
-                    if (ret.eventType == 'ok') {
-                        obj = {
-                            token: $api.getStorage('userToken'),
-                            order_id: id,
-                            reason:  ret.level1
-                        }
-                        ajaxOperate(obj, url)
-                    }
-                } else {
-                    alert(JSON.stringify(err.msg));
-                }
-            });
-        } else if (flagText === '评价') {
-            obj = {
-                token: token,
-                order_id: id,
-            }
-            api.openWin({
-                name: 'supply_commentPage',
-                url: '../supply/supply_commentPage.html',
-                pageParam: {
-                    obj: obj,
-                    flag: 0,
-                    type: 'demand'
-                }
-            });
-        } else if (flagText === '完成订单') {
-            obj = {
-                token: token,
-                order_id: id
-            }
-            ajaxOperate(obj,url)
-        } else if (flagText === '确认帮助') {
-            obj = {
-                token: token,
-                order_id: id,
-            }
-            api.openFrame({
-                name: 'supply_modeOfPayment',
-                url: '../supply/supply_modeOfPayment.html',
-                rect: {
-                    x: 0,
-                    y: 0,
-                    w: api.winWidth,
-                    h: api.winHeight
-                },
-                pageParam: {
-                    obj: obj,
-                    price: $api.attr(ele,'data-moeny'),
-                    flag: 3
-                },
-                bounces: false
-            });
-        } else if (flagText === '拒绝帮助') {
+        if (flagText === '取消订单' || flagText === '拒绝帮助') {
             var reasonList = JSON.parse($api.attr(ele, 'data-reasonList'));
             var datas = []
             for(key in reasonList) {
@@ -639,24 +521,45 @@
                 }, function(ret, err) {
                     if (ret) {
                         if (ret.eventType == 'ok') {
-                            console.log(ret.selectedInfo[0].id)
                             obj = {
                                 token: $api.getStorage('userToken'),
                                 order_id: id,
                                 reason: ret.selectedInfo[0].id
                             }
-                            console.log('obj::'+JSON.stringify(obj))
                             ajaxOperate(obj, url)
                         }
                     } else {
                         alert(JSON.stringify(err.msg));
                     }
                 });
-        } else if (flagText === '退款') {
-            var tatol = $api.attr(ele, 'data-moeny');
+        } else if (flagText === '评价') {
+            obj = {
+                token: token,
+                order_id: id,
+            }
+            api.openWin({
+                name: 'supply_commentPage',
+                url: '../supply/supply_commentPage.html',
+                pageParam: {
+                    obj: obj,
+                    flag: 0,
+                    type: 'demand'
+                }
+            });
+        } else if (flagText === '完成订单') {
+            obj = {
+                token: token,
+                order_id: id
+            }
+            ajaxOperate(obj,url)
+        } else if (flagText === '确认帮助') {
+            obj = {
+                token: token,
+                order_id: id,
+            }
             api.openFrame({
-                name: 'me_gdd_info_frame_refund',
-                url: './me_gdd_info_frame_refund.html',
+                name: 'supply_modeOfPayment',
+                url: '../supply/supply_modeOfPayment.html',
                 rect: {
                     x: 0,
                     y: 0,
@@ -664,12 +567,13 @@
                     h: api.winHeight
                 },
                 pageParam: {
-                    tatol: tatol,
-                    param: param
+                    obj: obj,
+                    price: $api.attr(ele,'data-moeny'),
+                    flag: 3
                 },
                 bounces: false
             });
-        }else {
+        }  else {
             obj = {
                 token: $api.getStorage('userToken'),
                 order_id: id
@@ -700,5 +604,9 @@
         })
     }
     
+    // 取消订单 || 拒绝接单操作
+    function cacelOrder(ele) {
+    
+    }
 </script>
 </html>

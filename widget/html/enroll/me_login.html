@@ -232,7 +232,7 @@
     function loginSuccess () {
         // 登陆完成
          api.openWin({
-            name: 'main',
+            name: 'mainPage',
             url: '../main.html',
             slidBackEnabled: false,
             pageParam: {
@@ -279,7 +279,7 @@
                 //     loginSuccess(userToken, rongToken);
                 //     rongyun(rongToken);
                 // } else {
-                     setTimeout(function(){
+                     // setTimeout(function(){
                          contacts.queryByPage({
                             pageIndex: 0
                         }, function(ret, err) {
@@ -293,21 +293,23 @@
                                     data: {
                                         values: { 
                                             token: userToken,
-                                            contact_json:ret.contacts
+                                            contact_json:ret
                                         }
                                     }
                                 }, function(ret1, err1) {
                                     // 同步通讯录成功
                                     // 请求同步的数据，存到本地数据库
-                                    console.log('上传通讯录数据'+JSON.stringify(ret))
+                                    console.log('上传通讯录数据'+JSON.stringify(ret.contacts))
                                     console.log('上传结果'+JSON.stringify(ret1))
-                                    requestData(userToken);
+                                    if (ret1.code == 200) {
+                                        requestData(userToken);
+                                    }
                                 })
                             } else {
                                 alert(JSON.stringify(err.msg));
                             }
                         });
-                    },100)
+                    // },100)
                     loginSuccess(userToken, rongToken);
                     rongyun(rongToken);
                     

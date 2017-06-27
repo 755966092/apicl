@@ -149,7 +149,9 @@
         moduleInit()
         // requestData();
         query();
+        
     }
+   
     function openS() {
         api.openWin({
             name: 'txl_fellowSearch',
@@ -174,14 +176,15 @@
     }
     // 打开初始好友
     function contactFriend () {
-        api.openWin({
-                name: 'txl_contactFriend_win',
-                url: './addressList/txl_contactFriend_win.html',
-                bounces: false,
-                pageParam: {
-                    headerH: headerH
-                }
-           });   
+        console.log($api.getStorage('selectData'))
+        // api.openWin({
+        //         name: 'txl_contactFriend_win',
+        //         url: './addressList/txl_contactFriend_win.html',
+        //         bounces: false,
+        //         pageParam: {
+        //             headerH: headerH
+        //         }
+        //    });   
     }
 
     function dakai(data1) {
@@ -243,9 +246,12 @@
        }    
        return false;   
     }
-  
+    function ceshiexc() {
+        console.log('执行成功')
+    }
     // 查询数据库
     function query() {
+        console.log('执行query')
         var SQLName = 'db_'+$api.getStorage('userToken');
         // 查询数据库
         db.selectSql({
@@ -260,8 +266,14 @@
                 //     }
                 // },1)
                 // 
-                console.log('frame1::::::'+JSON.stringify(ret))
-                dakai(paixv(ret.data))
+                // console.log('frame1::::::'+JSON.stringify(ret))
+                if (ret.data.length === 0) {
+                    console.log('暂无数据')
+                    query();
+                } else {
+                    console.log('有数据')
+                    dakai(paixv(ret.data))
+                }
             } else {
                 console.log(JSON.stringify(err));
             }
