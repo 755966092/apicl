@@ -469,10 +469,9 @@
    function openInfo(ele) {
         var val = $api.attr(ele,'data-val');
         var order_id = $api.attr(ele,'data-id');
-
         api.openWin({
             name: val,
-            url: './me_gdd_' + val + '.html',
+            url: './me_qdd_info.html',
             pageParam: {
                 flag: 1,
                 order_id: order_id
@@ -571,7 +570,7 @@
                 order_id: id,
             }
             ajaxOperate(obj,url)
-        } else if (flagText === '评价订单') {
+        } else if (flagText === '评价') {
             obj = {
                 token: token,
                 order_id: id,
@@ -581,7 +580,8 @@
                 url: '../supply/supply_commentPage.html',
                 pageParam: {
                     obj: obj,
-                    flag: 1
+                    flag: 1,
+                    type: 'demand'
                 }
             });
         }  else if (flagText === '完成订单') {

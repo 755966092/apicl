@@ -144,12 +144,26 @@
     // 发表评价
     function publishComment() {
         var url;
-        if (api.pageParam.flag===1) {
-            // ta 买家评论
-            url = '/api/supply_order/buyerCommentService'
+        if (api.pageParam.type === 'demand') {
+            // 求助订单
+
+            if (api.pageParam.flag===1) {
+                // ta 帮助者
+                url = '/api/demand_order/helperCommentHelp'
+            } else {
+                // 求助者
+                url = '/api/demand_order/hostCommentHelp'
+            }
         } else {
-            url = '/api/supply_order/sellerCommentService'
+            // 供求订单
+            if (api.pageParam.flag===1) {
+                // ta 买家评论
+                url = '/api/supply_order/buyerCommentService'
+            } else {
+                url = '/api/supply_order/sellerCommentService'
+            }
         }
+        alert(url+'---'+ api.pageParam.flag)
         var param = {}
         param = api.pageParam.obj;
         param.content = $api.val($api.dom('textarea'));

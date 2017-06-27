@@ -288,7 +288,7 @@
                     </div>
                     <p class="appraise flex-def flex-cCenter flex-zEnd" tapmode='hover' onclick="event.stopPropagation();">
                         {{for(var j = 0; j < it[i].button.buttonArr.length; j++){ }}
-                                <span data-moeny='{{=it[i].total_money}}' data-id='{{=it[i].order_id}}' tapmode='hover' onclick="oriderOperate(this)" class="btn" data-url='{{=it[i].button.buttonArr[j].url}}'>{{=it[i].button.buttonArr[j].key}}</span>
+                                <span data-reasonList='{{=JSON.stringify(it[i].reason_list)}}' data-moeny='{{=it[i].reward}}' data-id='{{=it[i].order_id}}' tapmode='hover' onclick="oriderOperate(this)" class="btn" data-url='{{=it[i].button.buttonArr[j].url}}'>{{=it[i].button.buttonArr[j].key}}</span>
                         {{ }; }}
                     </p>
                 </div>
@@ -413,10 +413,9 @@
     function filter(ele) {
         alert($api.text(ele))
         closeShadow();
-
     }
     // 打开筛选列表
-   function listSelect (n, ele) {
+    function listSelect (n, ele) {
         var childNode = $api.dom(ele,'span');
         $api.removeCls($api.dom('.up'), 'up');
         for (var i = 0; i < $api.domAll('.head').length; i++) {
@@ -442,8 +441,7 @@
             $api.css($api.dom('.lx'), 'display:none');
             $api.css($api.dom('.zt'), 'display:block');
         }
-
-   }
+    }
     // 打开订单详情
     function openInfo(ele) {
         var val = $api.attr(ele,'data-val');
@@ -542,7 +540,7 @@
                     alert(JSON.stringify(err.msg));
                 }
             });
-        }  else if (flagText === '评价订单') {
+        } else if (flagText === '评价') {
             obj = {
                 token: token,
                 order_id: id,
@@ -552,7 +550,8 @@
                 url: '../supply/supply_commentPage.html',
                 pageParam: {
                     obj: obj,
-                    flag: 0
+                    flag: 0,
+                    type: 'demand'
                 }
             });
         } else if (flagText === '完成订单') {
@@ -566,13 +565,93 @@
                 token: token,
                 order_id: id,
             }
-            ajaxOperate(obj,url)
+            api.openFrame({
+                name: 'supply_modeOfPayment',
+                url: '../supply/supply_modeOfPayment.html',
+                rect: {
+                    x: 0,
+                    y: 0,
+                    w: api.winWidth,
+                    h: api.winHeight
+                },
+                pageParam: {
+                    obj: obj,
+                    price: $api.attr(ele,'data-moeny'),
+                    flag: 3
+                },
+                bounces: false
+            });
         } else if (flagText === '拒绝帮助') {
-            obj = {
-                token: token,
-                order_id: id,
+            var reasonList = JSON.parse($api.attr(ele, 'data-reasonList'));
+            var datas = []
+            for(key in reasonList) {
+                datas.push({
+                    name:reasonList[key],
+                    id:key
+                })
             }
-            ajaxOperate(obj,url)
+            var UIActionSelector = api.require('UIActionSelector');
+                UIActionSelector.open({
+                    datas: datas,
+                    actives: [1],
+                    layout: {
+                        row: 7,
+                        col: 1,
+                        height: 30,
+                        size: 16,
+                        sizeActive: 18,
+                        rowSpacing: 5,
+                        colSpacing: 5,
+                        maskBg: 'rgba(0,0,0,0.5)',
+                        bg: '#fff',
+                        color: '#888',
+                        colorSelected: '#000'
+                    },
+                    animation: true,
+                    cancel: {
+                        text: '取消',
+                        size: 12,
+                        w: 90,
+                        h: 35,
+                        bg: '#eee',
+                        // bgActive: '#ccc',
+                        color: '#000',
+                        // colorActive: '#fff'
+                    },
+                    ok: {
+                        text: '确定',
+                        size: 12,
+                        w: 90,
+                        h: 35,
+                        bg: '#eee',
+                        // bgActive: '#ccc',
+                        color: '#000',
+                        // colorActive: '#fff'
+                    },
+                    title: {
+                        text: '请选择退款原因',
+                        size: 20,
+                        h: 35,
+                        bg: '#eee',
+                        color: '#000'
+                    },
+                    fixedOn: api.frameName
+                }, function(ret, err) {
+                    if (ret) {
+                        if (ret.eventType == 'ok') {
+                            console.log(ret.selectedInfo[0].id)
+                            obj = {
+                                token: $api.getStorage('userToken'),
+                                order_id: id,
+                                reason: ret.selectedInfo[0].id
+                            }
+                            console.log('obj::'+JSON.stringify(obj))
+                            ajaxOperate(obj, url)
+                        }
+                    } else {
+                        alert(JSON.stringify(err.msg));
+                    }
+                });
         } else if (flagText === '退款') {
             var tatol = $api.attr(ele, 'data-moeny');
             api.openFrame({
@@ -600,6 +679,7 @@
     }
 
     function ajaxOperate(obj, url) {
+        console.log('请求参数::'+JSON.stringify(obj))
         api.ajax({
             url: apiSite + url,
             method: 'post',

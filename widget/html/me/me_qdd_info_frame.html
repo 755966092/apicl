@@ -341,7 +341,7 @@
                             {{for(var i = 0; i < it.button_info.buttonArr.length; i++){ }}
                                 {{?it.button_info.buttonArr[i].key === '确认完成' || it.button_info.buttonArr[i].key === '完成' || it.button_info.buttonArr[i].key === '评价订单'}}
                                 {{??}}
-                                <span data-demandId='{{=it.demand_info.demand_id}}' data-orderId='{{=it.order_info.order_id}}' ontouchstart="oriderOperate(this)" class="btn" data-url='{{=it.button_info.buttonArr[i].url}}'>{{=it.button_info.buttonArr[i].key}}</span>
+                                <span data-reasonList='{{=JSON.stringify(it.reason_list)}}' data-demandId='{{=it.demand_info.demand_id}}' data-orderId='{{=it.order_info.order_id}}' ontouchstart="oriderOperate(this)" class="btn" data-url='{{=it.button_info.buttonArr[i].url}}'>{{=it.button_info.buttonArr[i].key}}</span>
                                 {{?}}
                             {{ }; }}
                         </div>
@@ -522,12 +522,14 @@
 
         var flagText = $api.text(ele);
 
-        if (flagText === '再来一单') {
+        if (flagText === '评价') {
             api.openWin({
-                name: 'demand_info_immediate_order_2',
-                url: '../supply/demand_info_immediate_order_2.html',
+                name: 'supply_commentPage',
+                url: '../supply/supply_commentPage.html',
                 pageParam: {
-                    demandId: demandId
+                    obj: param,
+                    flag: api.pageParam.flag,
+                    type: 'demand'
                 }
             });
         } else if (flagText === '延迟服务'){
@@ -599,22 +601,77 @@
                         alert(JSON.stringify(err.msg));
                     }
                 });
-        } else if (flagText === '补差价') {
-            api.openFrame({
-                name: 'me_gdd_info_frame_sale',
-                url: './me_gdd_info_frame_sale.html',
-                rect: {
-                    x: 0,
-                    y: 0,
-                    w: api.winWidth,
-                    h: api.winHeight
-                },
-                pageParam: {
-                    param: param,
-                    flag: 'priceDifference'
-                },
-                bounces: false
-            });
+        } else if (flagText === '拒绝帮助') {
+            var reasonList = JSON.parse($api.attr(ele, 'data-reasonList'));
+            var datas = []
+            for(key in reasonList) {
+                datas.push({
+                    name:reasonList[key],
+                    id:key
+                })
+            }
+            var UIActionSelector = api.require('UIActionSelector');
+                UIActionSelector.open({
+                    datas: datas,
+                    actives: [1],
+                    layout: {
+                        row: 7,
+                        col: 1,
+                        height: 30,
+                        size: 16,
+                        sizeActive: 18,
+                        rowSpacing: 5,
+                        colSpacing: 5,
+                        maskBg: 'rgba(0,0,0,0.5)',
+                        bg: '#fff',
+                        color: '#888',
+                        colorSelected: '#000'
+                    },
+                    animation: true,
+                    cancel: {
+                        text: '取消',
+                        size: 12,
+                        w: 90,
+                        h: 35,
+                        bg: '#eee',
+                        // bgActive: '#ccc',
+                        color: '#000',
+                        // colorActive: '#fff'
+                    },
+                    ok: {
+                        text: '确定',
+                        size: 12,
+                        w: 90,
+                        h: 35,
+                        bg: '#eee',
+                        // bgActive: '#ccc',
+                        color: '#000',
+                        // colorActive: '#fff'
+                    },
+                    title: {
+                        text: '请选择退款原因',
+                        size: 20,
+                        h: 35,
+                        bg: '#eee',
+                        color: '#000'
+                    },
+                    fixedOn: api.frameName
+                }, function(ret, err) {
+                    if (ret) {
+                        if (ret.eventType == 'ok') {
+                            console.log(ret.selectedInfo[0].id)
+                            obj = {
+                                token: $api.getStorage('userToken'),
+                                order_id: id,
+                                reason: ret.selectedInfo[0].id
+                            }
+                            console.log('obj::'+JSON.stringify(obj))
+                            ajaxOperate(obj, url)
+                        }
+                    } else {
+                        alert(JSON.stringify(err.msg));
+                    }
+                });
         } else if (flagText === '退款') {
             var tatol = $api.text($api.dom('.totalNumber'));
             api.openFrame({
