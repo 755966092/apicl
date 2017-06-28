@@ -64,6 +64,7 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
+    var selVal=0;
     apiready = function(){
         moduleInit();
         // requestData()
@@ -97,8 +98,9 @@
             name: 'screeningResultsType'
         }, function(ret, err) {
             if (ret) {
+                selVal = ret.value.selVal
                 listContact.close();
-                alert(ret.value.selVal)
+                // alert('监听到的参数:'+ret.value.selVal)
                 query(parseInt(ret.value.selVal));
             } else {
                 alert(JSON.stringify(err.msg));
@@ -115,7 +117,9 @@
                 w: api.winWidth,
                 h: api.winHeight
             },
-
+            pageParam: {
+                selVal: selVal
+            },
             bounces: false
         });
     }

@@ -212,15 +212,16 @@
                 <div>
                     <ul class="no1">
                         <li>
+                         
                              <p>类型</p>
-                            <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 sel">
+                            <span   tapmode="hover" data-type='2'   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 sel">
                                熟识好友<br>（双向通讯录）
                             </span>
                              
-                            <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 ">
+                            <span   tapmode="hover"  data-type='1'   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 ">
                                 相识好友<br>（单向通讯录）
                             </span>
-                            <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 ">
+                            <span   tapmode="hover" data-type='3'  onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 ">
                               尚未加入<br>（有通讯录）
                             </span>
                         </li>
@@ -289,6 +290,11 @@
 <script type="text/javascript">
     apiready = function(){
         fnInit();
+        // 设置选中的条件
+        if (api.pageParam.selVal) {
+            $api.removeCls($api.dom('.no1 .sel'), 'sel');
+            $api.addCls($api.dom('.no1 .li_span[data-type="'+ api.pageParam.selVal +'"]'), 'sel');
+        }
     }
       // 选中图标
     function li_span(ele) {
@@ -341,37 +347,19 @@
     // 点击确定按钮： 1； 重置按钮 0
     function enter(n) {
         if (n) {
-            var sel = $api.domAll('.no1 .sel');
+            // 1 初识好友
+            // 2 熟识好友
+            // 3 尚未加入
+            // 4 一度人脉
+            var selVal = $api.attr($api.dom('.no1 .sel'), 'data-type');
             var spanSel = $api.domAll('.spanSel');
-            var parameter = {
-                type: 1,
-                order: '',
-                sub_type: 1
-            }
-            // sel[0] = 类型个人 | 公司
-            // sel[1] = 类别自产自销 | 代理
-            // sel[2] = 排序智能排序 | 距离 | 价格 | 最新发布
-            parameter.type = ($api.text(sel[0]) == '个人') ? 1 : 2;
-            parameter.sub_type = ($api.text(sel[1]) == '自产自销') ? 1 : 2;
-
-            var order = $api.text(sel[2])
-            switch (order) {
-                case '智能排序': parameter.order = '';
-                break;
-                case '距离最近': parameter.order = 'distance';
-                break;
-                case '价格最低': parameter.order = 'price';
-                break;
-                case '最新发布': parameter.order = 'create_time';
-                break;
-
-            }
+            
+            
             // 发送事件, 刷新筛选结果
             api.sendEvent({
                 name: 'screeningResultsType',
                 extra: {
-                    condition: parameter,
-                    flag: flag
+                    selVal:selVal
                 }
             });
              api.closeFrame();
