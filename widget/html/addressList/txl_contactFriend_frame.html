@@ -30,7 +30,6 @@
     };
     // 查询数据库
     function query(condition) {
-        console.log('查询')
         // 查询条件 condition
         var SQLName = 'db_'+$api.getStorage('userToken');
         var SQLsentence;
@@ -39,21 +38,17 @@
         } else {
             SQLsentence = 'SELECT * FROM addressList';
         }
-        console.log('查询2')
         // 查询数据库
         db.selectSql({
             name: SQLName,
             sql: SQLsentence
         }, function(ret, err) {
             if (ret.status) {
-                console.log('查询3')
                 dakai(paixv(ret.data))
-                console.log('查询数据库'+JSON.stringify(ret))
-                if (ret.data == null) {
+                if (ret.data == '') {
                     $api.css($api.dom('p'), 'display:block');
                 }
             } else {
-                console.log(JSON.stringify(err));
             }
         });
     }
@@ -65,7 +60,6 @@
        return false;   
     }   
     function paixv (data) {
-        console.log('排序函数1')
         for (var i = 0; i < data.length; i++) {
                 if (f_check_uppercase(data[0].flag)) {
                     data[0].initial = data[0].flag;
@@ -84,7 +78,6 @@
              }
             // for (var i = 0; i < data.length; i++) {
             //     if (data[i].initial == '#') {
-            //         console.log(JSON.stringify(data[i]))
             //     }
             // }
             var arr = {}
@@ -92,14 +85,11 @@
             for (var i = 0; i < data.length; i++) {
                 if (data[i].initial) {
                 //     if (data[i].initial == "#") {
-                //         console.log(666)
                 //         if (arr[data[i].initial]) {
                 //             arr[data[i].initial].push (data[i])
-                //             console.log(888)
                 //         } else {
                 //             arr[data[i].initial] = [];
                 //             arr[data[i].initial].push (data[i])
-                //             console.log(777)
                 //         }
                 //     } else {
                         arr[data[i].initial] = [];
@@ -108,14 +98,10 @@
                 } 
                 arr[data[a].initial].push (data[i])
             }
-            // console.log(JSON.stringify(arr))
-            // console.log('处理完的数据:'+JSON.stringify(arr))
-            console.log('排序函数2')
             return arr;
 
     }
     function dakai(data1) {
-        console.log('排序函数1')
         // var searchHei = $api.offset($api.dom('.search')).h
         listContact.open({
                 x : 0,

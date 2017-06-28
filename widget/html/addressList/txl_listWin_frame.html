@@ -50,6 +50,13 @@
             top: 0;
             left: 2.8rem;
         }
+        p {
+            text-align: center;
+            font-size: .34rem;
+            color: #555;
+            margin-top: .5rem;
+            display: none;
+        }
    </style>
 </head>
 <body>
@@ -58,6 +65,10 @@
         <span class="searchIcon"></span>
         <span class="sxIcon"  tapmode="hover" onclick="openSlideBar()"></span>
     </div>
+    <p data-type='1'>暂无初识好友</p>
+    <p data-type='2'>暂无熟识好友</p>
+    <p data-type='3'>暂无尚未加入好友</p>
+    <p data-type='4'>暂无好友</p>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -176,6 +187,18 @@
             if (ret.status) {
                 dakai(paixv(ret.data))
                 console.log('查询数据库'+JSON.stringify(ret))
+                for (var i = 0; i < $api.domAll('p').length; i++) {
+                    $api.css($api.domAll('p')[i], 'display:none');
+                }
+                if (ret.data == '' && condition===0) {
+                    $api.css($api.dom('p[data-type="4"]'), 'display:block');
+                } else if(ret.data == '' && condition===1) {
+                    $api.css($api.dom('p[data-type="1"]'), 'display:block');
+                }else if(ret.data == '' && condition===2) {
+                    $api.css($api.dom('p[data-type="2"]'), 'display:block');
+                }else if(ret.data == '' && condition===3) {
+                    $api.css($api.dom('p[data-type="3"]'), 'display:block');
+                }
             } else {
                 console.log(JSON.stringify(err));
             }
@@ -256,13 +279,13 @@
                 bgColor: '#f8f8f8',
                 // 分割线颜色
                 borderColor: '#EDEDED',
-                // rightBtn: [{
-                //     color: '#000',
-                //     title: '备注'
-                // },{
-                //     color: '#000',
-                //     title: '删除'
-                // }],
+                rightBtn: [{
+                    color: '#000',
+                    title: '备注'
+                },{
+                    color: '#000',
+                    title: '删除'
+                }],
                 imgHeight: 32,
                 groupTitle: {
                     color: '#999',       
