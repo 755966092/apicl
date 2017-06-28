@@ -12,22 +12,71 @@
     </style>
 </head>
 <body>
-	 <input type="date" name="bday">
-     <div data-id='1' data-obj='{name: "bbb"}' ></div>
-     <script type="text/javascript" src="script/api.js"></script>
+	<input type="date" name="bday">
+    <div data-id='1' data-obj='{name: "bbb"}' ></div>
+    <script type="text/javascript" src="script/api.js"></script>
+    <script type="text/javascript" src="script/pinyin4js.js"></script>
     <script type="text/javascript" >
-        // var formatTime = new Date().toISOString().match(/(\d{4}-\d{2}-\d{2})/)[1];
-        // console.log(formatTime)
-        var time = new Date();
-        console.log(time.getFullYear())
-        console.log(time.getMonth()+1)
-        console.log(time.getDate())
-        console.log(time.getHours())
-        console.log(time.getMinutes())
-        console.log(time.getSeconds())
-        console.log($api.attr($api.dom('div'), 'data-obj'))
+        var schoolList = ['北京大学','清华大学','北京师范大学','北京理工大学','同济大学','南开大学','复旦大学','山东科技大学','青岛海洋大学','中石油大学']
+        var obj = {};
+        for (var i = 0; i < schoolList.length; i++) {
+            obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]] = [];
+        }
+        for (var i = 0; i < schoolList.length; i++) {
+            obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]].push({title:schoolList[i]});
+        }
 
-        console.log($api.dom('div[data-id="1"]'))
+        console.log(obj)
+        function f_check_uppercase(obj)   {          
+           if (/[A-Z]/.test(obj))    {   
+              return true;   
+           }    
+           return false;   
+        }
+    
+    function paixv (data) {
+        for (var i = 0; i < data.length; i++) {
+                if (f_check_uppercase(data[0].flag)) {
+                    data[0].initial = data[0].flag;
+                } else {
+                    data[0].initial = '#';
+                }
+                if (i>0) {
+                    if (data[i].flag !== data[i-1].flag) {
+                        if (f_check_uppercase(data[i].flag)) {
+                            data[i].initial = data[i].flag;
+                        } else {
+                            data[i].initial = '#';
+                        }
+                    }
+                }
+             }
+            var arr = {}
+            var a;
+            for (var i = 0; i < data.length; i++) {
+                
+                if (data[i].initial) {
+                    if (data[i].initial == '#') {
+                        if (arr[data[i].initial]) {
+                            arr[data[i].initial].push (data[i])
+                        } else {
+                            arr[data[i].initial] = [];
+                            arr[data[i].initial].push (data[i])
+                        }
+                    } else {
+                        arr[data[i].initial] = [];
+                        a = i;
+                    }
+                } 
+                // if (data[a].initial ) {
+                    
+                // }
+       
+                arr[data[a].initial].push (data[i])
+            }
+            // console.log('处理完的数据:'+JSON.stringify(arr))
+            return arr;
+    }
     </script>
 </body>
 </html>

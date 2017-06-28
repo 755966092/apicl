@@ -5,7 +5,7 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
-     <style>
+    <style>
         html,body {
             height: 100%;
             width: 100%;    
@@ -184,20 +184,20 @@
                         </li>
                      </ul>  
                     <ul class="no2">
-                        <li class="no2List sel clearfix"   tapmode="hover"   onclick="li_spanP(this);event.cancelBubble=true;" >
-                            <p>学校<span class="no2Icon">北京大学</span></p>
+                        <li class="no2List sel clearfix" tapmode="hover" data-val="school" onclick="li_spanP(this);event.cancelBubble=true;" >
+                            <p>学校<span class="no2Icon school"></span></p>
                         </li>
-                        <li class="no2List clearfix"   tapmode="hover"   onclick="li_spanP(this);event.cancelBubble=true;">
-                            <p>公司<span class="no2Icon"></span></p>
+                        <li class="no2List clearfix" tapmode="hover" data-val="commpany" onclick="li_spanP(this);event.cancelBubble=true;">
+                            <p>公司<span class="no2Icon commpany"></span></p>
                         </li>
-                        <li class="no2List clearfix"   tapmode="hover"   onclick="li_spanP(this);event.cancelBubble=true;">
-                            <p>行业<span class="no2Icon"></span></p>
+                        <li class="no2List clearfix" tapmode="hover" data-val="trade" onclick="li_spanP(this);event.cancelBubble=true;">
+                            <p>行业<span class="no2Icon trade"></span></p>
                         </li>
-                        <li class="no2List clearfix"   tapmode="hover"   onclick="li_spanP(this);event.cancelBubble=true;">
-                            <p>地点<span class="no2Icon"></span></p>
+                        <li class="no2List clearfix"   tapmode="hover" data-val="place"  onclick="li_spanP(this);event.cancelBubble=true;">
+                            <p>地点<span class="no2Icon place"></span></p>
                         </li>
-                        <li class="no2List clearfix"   tapmode="hover"   onclick="li_spanP(this);event.cancelBubble=true;">
-                            <p>自定义<span class="no2Icon"></span></p>
+                        <li class="no2List clearfix"   tapmode="hover" data-val="custom"  onclick="li_spanP(this);event.cancelBubble=true;">
+                            <p>自定义<span class="no2Icon custom"></span></p>
                         </li>
                     </ul>
                 </div>
@@ -214,6 +214,7 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
+    var val;
     apiready = function(){
         fnInit();
         // 设置选中的条件
@@ -221,6 +222,22 @@
             $api.removeCls($api.dom('.no1 .sel'), 'sel');
             $api.addCls($api.dom('.no1 .li_span[data-type="'+ api.pageParam.selVal +'"]'), 'sel');
         }
+        jiant('school');
+        jiant('commpany');
+        jiant('trade');
+        jiant('place');
+        jiant('custom');
+    }
+    function jiant(val) {
+        api.addEventListener({
+            name: 'select'+ val
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.dom('.'+ val +''), ret.value.schoolName);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     }
       // 选中图标
     function li_span(ele) {
@@ -233,23 +250,21 @@
     }
 
     function li_spanP(ele) {
-        if ($api.hasCls(ele, 'sel')) {
-            $api.removeCls(ele, 'sel');
-             $api.removeCls($api.not(ele,'.no2_li_Span')[1], 'no2Icon2');
-
-        } else {
-            var allDom = $api.not($api.closest(ele, 'ul'),'p')
-            var allP = $api.domAll('.no2Icon');
-            for (var i = 0; i < allP.length; i++) {
-                 $api.removeCls(allP[i], 'no2Icon2');
-            }
-            $api.addCls($api.not(ele,'.no2_li_Span')[1], 'no2Icon2');
-            for (var i = 0; i< allDom.length; i++) {
-                $api.removeCls(allDom[i], 'sel');
-            }
-            $api.addCls(ele, 'sel');
-        }
-
+        val = $api.attr(ele, 'data-val');
+        api.openFrame({
+            name: 'txl_slideBar_selectItem',
+            url: './txl_slideBar_selectItem.html',
+            rect: {
+                x: 0,
+                y: 0,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                val: val
+            },
+            bounces: false
+        });
     }
     // 点击确定按钮： 1； 重置按钮 0
     function enter(n) {

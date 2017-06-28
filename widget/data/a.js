@@ -1,48 +1,27 @@
-{
-	"code": 200,
-	"msg": "",
-	"time": 1498547113,
-	"data": {
-		"list": [{
-			"demand_id": 22,
-			"title": "1",
-			"type": 1,
-			"reward": "1.00",
-			"description": "啊",
-			"image_json": "[]",
-			"status": 3
-		}, {
-			"demand_id": 21,
-			"title": "11",
-			"type": 1,
-			"reward": "1.00",
-			"description": "22",
-			"image_json": "[]",
-			"status": 1
-		}, {
-			"demand_id": 20,
-			"title": "测试5",
-			"type": 1,
-			"reward": "1.00",
-			"description": "测试",
-			"image_json": "[]",
-			"status": 1
-		}, {
-			"demand_id": 19,
-			"title": "测试求额的3",
-			"type": 1,
-			"reward": "1.00",
-			"description": "BS",
-			"image_json": "[]",
-			"status": 3
-		}, {
-			"demand_id": 18,
-			"title": "111的求2",
-			"type": 1,
-			"reward": "1.00",
-			"description": "测试",
-			"image_json": "[]",
-			"status": 3
-		}]
-	}
-}
+ A: [{
+ 		title: '北京大学'
+ 	}, {
+ 		title: '北京理工大学'
+ 	}, {
+ 		title: '北京师范大学'
+ 	}],
+ 	Q: [{
+ 		title: '清华大学'
+ 	}, {
+ 		title: '青岛海洋大学'
+ 	}],
+ 	N: [{
+ 		title: '南开大学'
+ 	}],
+ 	F: [{
+ 		title: '复旦大学'
+ 	}],
+ 	S: [{
+ 		title: '山东科技大学'
+ 	}],
+ 	Z: [{
+ 		title: '中石油大学'
+ 	}],
+ 	T: [{
+ 		title: '同济大学'
+ 	}]

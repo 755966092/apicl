@@ -5,11 +5,11 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
-     <style>
+    <style>
         html,body {
             height: 100%;
             width: 100%;    
-            background-color: rgba(0,0,0,0.4);
+            background-color: rgba(0,0,0,0);
         }
 
         body {
@@ -37,81 +37,7 @@
             box-sizing: border-box;
         }
         .main>div:first-child {
-            padding: .15rem .2rem;
-            padding-right: 0;
-        }
-
-        .main ul.no1 {
-            font-size: .24rem;
-            width: 100%;
-        }
-        .main ul.no1 li {
-            font-size: 0;
-            margin-bottom: .1rem;
-        }
-        .main ul.no1 li:last-child {
-            margin-bottom: 0;
-        }
-        .main ul.no1 li p {
-            font-size: .24rem;
-            color: #9b9b9b;
-        }
-        .main ul.no1 li span {
-            font-size: .24rem;
-            display: inline-block;
-            margin-top: .1rem;
-            width: 1.78rem;
-            height: .79rem;
-            background-color: #F4F4F4;
-            border-radius: .06rem;
-            text-align: center;
-            /*line-height: .79rem;*/
-            padding-top: .08rem;
-            box-sizing: border-box;
-            color: #555;
-            margin-bottom: .2rem;
-        }
-        .main ul.no1 li span:nth-child(2), 
-        .main ul.no1 li span:nth-child(3) {
-            margin-right: .12rem;
-        }
-        .main ul.no1 li span.sel {
-            background: url(../../image/icon_supply/icon_text4.png);
-            background-size: .96rem .6rem;
-            color: #27B24A;
-        }
-       
-        .main ul.no1 li span.li_span4 {
-            background-size: 1.78rem .79rem;
-            width: 1.78rem;
-        }
-          .main ul.no2 {
-            font-size: .24rem;
-            /*margin-top: .37rem;*/
-
-        }
-        .main ul.no2 p {
-            line-height: .79rem;
-            color: #555;
-            /*border-bottom: 1px solid #cbcbcb;*/
-        }
-        .main ul.no2 li {
-            
-            /*height: .84rem;*/
-            line-height: .79rem;
-            border-top: 1px solid #CBCBCB;
-            font-size: 0;
-            padding-right: .36rem;
-        }
-        .main ul.no2 li p {
-            font-size: .24rem;
-            color: #333;
-            background: url(../../image/icon_zk.png)no-repeat;
-            -webkit-background-size: .15rem .25rem;
-            background-size: .15rem .25rem;
-            background-position: right center;
-        }
-        
+         }
         .footer {
             height: .78rem;
             width: 6rem;
@@ -137,171 +63,197 @@
         header.header {
             opacity: 0;
         }
-        .no2Icon {
+        .selected {
+            box-sizing: border-box;
+            padding-left: .2rem;
+            font-size: 0;
+            line-height: .81rem;
+        }
+        .selected span {
+            font-size: .26rem;
+        }
+        .selected .selectedText {
+            width: 4rem;
             white-space: nowrap;
-            text-overflow: ellipsis;
             overflow: hidden;
-            text-align: right;
-            width: 3rem;
-            color: #999999;
-            float: right;
-            font-size: .24rem;
-            margin-right: .25rem;
+            text-overflow: ellipsis;
+            color: #999;
+
         }
     </style>
 </head>
 <body   tapmode="hover" class=""   onclick="api.closeFrame()">
    
     <div class="warp1 flex-def flex-zBetween">
-         <!-- <header  class="header clearfix">
-            <div class="head">
-                <span class="callback"   tapmode="hover"   onclick="api.closeWin()">返回</span>
-                <span class="winTitle">
-                    找供求
-                </span>
-            </div>
-        </header> -->
-         <header class="header">
-        <div class="head"></div>
-    </header>
+        <header class="header">
+            <div class="head"></div>
+        </header>
         <div class="warp flex-item"   tapmode="hover"   onclick="api.closeFrame()">
             <div class="main"   tapmode="hover"   onclick="event.cancelBubble=true;">
                 <div>
-                   
+                   <p class="selected"><span>已选择：</span><span class="selectedText">请选择学校</span></p>
+
                 </div>
             </div> 
             <div class="footer">
-                <span   tapmode="hover"   onclick="enter(0);event.stopPropagation();">重置</span>
+                <span   tapmode="hover"   onclick="enter(0);event.stopPropagation();">取消</span>
                 <span   tapmode="hover"   onclick="enter(1);event.stopPropagation();">确定</span>
             </div>
         </div>
-        
     </div>
     
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
+    var flag = 0,eventName,discriminate;
     apiready = function(){
         fnInit();
+        moduleInit();
+        switch(api.pageParam.val) {
+            case 'school' :
+                eventName = 'selectschool';
+                discriminate = '请选择学校'
+                break;
+            case 'commpany' :
+                eventName = 'selectcommpany';
+                discriminate = '请选择公司'
+                break;
+            case 'trade' :
+                eventName = 'selecttrade';
+                discriminate = '请选择行业'
+                break;
+            case 'place' :
+                eventName = 'selectplace';
+                discriminate = '请选择地点'
+                break;
+            case 'custom' :
+                eventName = 'selectcustom';
+                discriminate = '请选择自定义'
+                break;
+        }
+        $api.text($api.dom('.selectedText'), discriminate);
+        openList(handleData(api.pageParam.val))
+    }
+    // 打开列表
+    function openList(data) {
+        var str='';
         // 设置选中的条件
-        var UIListCheck = api.require('UIListCheck');
-            UIListCheck.open({
-                rect:{
-                   x: 0,
-                   y: 44,
-                   w: api.frameWidth,
-                   h: api.frameHeight - 104
-                },
-                contacts:[{
-                    "employee_id": 191,
-                    "name": "王科研",
-                    "phonetic": "WangKeYang",//名字的拼音
-                    "namephonetic": "WangKeYang88",
-                    "remark": "备注",
-                    "position": "研发",
-                    "dept_id": "002000",
-                    "isdeleted": "N",
-                    "tags": "",
-                    "dept_name": "",
-                    "isremark": 1,
-                    "phones": [
-                        {
-                        "phone": "13366148872",
-                        "type": "1"
+        listContact.open({
+            x: api.frameWidth - $api.offset($api.dom('.warp')).w,
+            y: headerH + $api.offset($api.dom('.selected')).h,
+            w: $api.offset($api.dom('.warp')).w,
+            h: api.frameHeight - headerH - $api.offset($api.dom('.footer')).h - $api.offset($api.dom('.selected')).h,
+            imgHeight: 32,
+            groupTitle: {
+                color: '#999',       
+                size: 14,   
+                bgColor: '#f8f8f8'
+            },
+            rightBg: '#fff',
+            indicator: {
+                bgColor: 'rgba(0,0,0,0)',
+                color: '#5A5A5A'
+            },
+            cellBgColor: '#fff',
+            // 搜索框
+            searchBar: {
+                bgColor: '#F8F8F8',         //（可选项）搜索条背景色，字符串，默认透明，支持 rgb，rgba，#
+                placeholder: '搜索',      //（可选项）搜索条提示文字，字符串类型，默认空，不传则不显示提示文字
+                textFieldBgColor: '#fff'
+            },
+            data: data,
+            fixedOn: api.frameName
+        }, function(ret, err) {
+            if (ret) {
+                flag = 1;
+                console.log(str.indexOf(data[ret.key][ret.index].title))
+                console.log(data[ret.key][ret.index].title)
+                if (str.indexOf(data[ret.key][ret.index].title) != -1) {
+                    // 已选
+                    str = str.replace(data[ret.key][ret.index].title,'')
+                    listContact.refreshItem({
+                        index: ret.index,
+                        key: ret.key,
+                        data: {
+                            title: data[ret.key][ret.index].title,
+                            titleColor: '#000'            
                         }
-                    ]
-                },{
-                    "employee_id": 192,
-                    "name": "王科学",
-                    "phonetic": "WangKeYang",//名字的拼音
-                    "namephonetic": "WangKeYang88",
-                    "remark": "备注",
-                    "position": "研发",
-                    "dept_id": "002000",
-                    "isdeleted": "N",
-                    "tags": "",
-                    "dept_name": "",
-                    "isremark": 1,
-                    "phones": [
-                        {
-                        "phone": "13366148872",
-                        "type": "1"
+                    });
+                    $api.text($api.dom('.selectedText'), str);
+                } else {
+                    // 未选
+                    str += data[ret.key][ret.index].title+' '
+                    $api.text($api.dom('.selectedText'), str);
+                    listContact.refreshItem({
+                        index: ret.index,
+                        key: ret.key,
+                        data: {
+                            title: data[ret.key][ret.index].title,
+                            titleColor: '#f00'            
                         }
-                    ]
-                },{
-                    "employee_id": 193,
-                    "name": "王科技",
-                    "phonetic": "WangKeYang88",//名字的拼音
-                    "namephonetic": "WangKeYang88",
-                    "remark": "备注",
-                    "position": "研发",
-                    "dept_id": "002000",
-                    "isdeleted": "N",
-                    "tags": "",
-                    "dept_name": "",
-                    "isremark": 1,
-                    "phones": [
-                        {
-                        "phone": "13366148872",
-                        "type": "1"
-                        }
-                    ]
-                }],
-                fixedOn: api.frameName
-            }, function(ret) {
-                if (ret) {
-                    alert(JSON.stringify(ret));
-                } 
-            });
-       }
+                    });
+                }
+                
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    
+    // 处理数据
+    function handleData(val) {
+        var schoolList;
+        switch(val) {
+            case 'school' :
+            schoolList = ['北京大学','清华大学','北京师范大学','北京理工大学','同济大学','南开大学','复旦大学','山东科技大学','青岛海洋大学','中石油大学'];
+            break;
+            case 'commpany' :
+            schoolList = ['第一学教育科技有限公司','跨考教育','四达留学','百度公司','腾讯公司','美团公司','复旦大学','山东科技大学','青岛海洋大学','中石油大学'];
+            break;
+            case 'trade' :
+            schoolList = ['制造业','服务业','餐饮','教育','医疗','艺术','复旦大学','山东科技大学','青岛海洋大学','中石油大学'];
+            break;
+            case 'place' :
+            schoolList = ['北京','上海','美国','深圳','英国','法国','荷兰','山东科技大学','青岛海洋大学','中石油大学'];
+            break;
+            case 'custom' :
+            schoolList = ['自定义数据','自定义数据2','自定义数据3','北京理工大学','同济大学','南开大学','复旦大学','山东科技大学','青岛海洋大学','中石油大学'];
+            break;
+        }
+        
+        var obj = {};
+        for (var i = 0; i < schoolList.length; i++) {
+            obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]] = [];
+        }
+        for (var i = 0; i < schoolList.length; i++) {
+            obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]].push({title:schoolList[i]});
+        }
+        return obj
+    }
     // 点击确定按钮： 1； 重置按钮 0
     function enter(n) {
         if (n) {
-            // 1 初识好友
-            // 2 熟识好友
-            // 3 尚未加入
-            // 4 一度人脉
-            var selVal = $api.attr($api.dom('.no1 .sel'), 'data-type');
-            var spanSel = $api.domAll('.spanSel');
-            
-            
+            var schoolName = $api.text($api.dom('.selectedText'));
             // 发送事件, 刷新筛选结果
-            api.sendEvent({
-                name: 'screeningResultsType',
-                extra: {
-                    selVal:selVal
-                }
-            });
-             api.closeFrame();
+            if (flag === 0) {
+
+            } else {
+                api.sendEvent({
+                    name: eventName,
+                    extra: {
+                        schoolName:schoolName
+                    }
+                });
+            }
+            api.closeFrame();
 
         }
         else {
-            var no1 = document.getElementsByClassName('no1')[0]
-            var liArr = no1.getElementsByTagName('li');
-            for (var i = 0; i < liArr.length; i++) {
-                for(var j = 0; j < liArr[i].childNodes.length ; j++) {
-                    $api.removeCls(liArr[i].childNodes[j], 'sel');
-                }
-                $api.addCls(liArr[i].childNodes[3], 'sel');
-            }  
-            for (var i = 0; i < $api.domAll('.no2List').length; i++) {
-                $api.removeCls($api.domAll('.no2List')[i], 'sel');
-                for(var j = 0; j < $api.domAll('.no2List')[i].childNodes.length ; j++) {
-
-                    $api.removeCls($api.domAll('.no2List')[i].childNodes[j], 'hide');
-                    $api.removeCls($api.domAll('.no2List')[i].childNodes[j], 'spanSel');
-                }
-                $api.addCls($api.domAll('.no2List')[i].childNodes[3], 'spanSel');
-            }
-            $api.addCls($api.domAll('.no2List')[0], 'sel');
-            var no2Icon = $api.domAll('.no2Icon')
-            for (var i = 0; i < no2Icon.length; i++) {
-                $api.removeCls(no2Icon[i], 'no2Icon2');
-            }
-            $api.addCls(no2Icon[0], 'no2Icon2');
-
-
+            flag = 0;
+            api.closeFrame();
+            $api.text($api.dom('.selectedText'), discriminate);
         }
     }
 </script>
