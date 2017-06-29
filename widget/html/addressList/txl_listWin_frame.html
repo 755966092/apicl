@@ -75,7 +75,7 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
-    var selVal=0;
+    var selVal=0,selectedObj;
     apiready = function(){
         moduleInit();
         // requestData()
@@ -110,6 +110,7 @@
         }, function(ret, err) {
             if (ret) {
                 selVal = ret.value.selVal
+                selectedObj = ret.value.selectedObj
                 listContact.close();
                 // alert('监听到的参数:'+ret.value.selVal)
                 query(parseInt(ret.value.selVal));
@@ -129,7 +130,8 @@
                 h: api.winHeight
             },
             pageParam: {
-                selVal: selVal
+                selVal: selVal,
+                selectedObj: selectedObj
             },
             bounces: false
         });

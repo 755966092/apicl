@@ -222,14 +222,39 @@
             $api.removeCls($api.dom('.no1 .sel'), 'sel');
             $api.addCls($api.dom('.no1 .li_span[data-type="'+ api.pageParam.selVal +'"]'), 'sel');
         }
-        jiant('school');
-        jiant('commpany');
-        jiant('trade');
-        jiant('place');
-        jiant('custom');
+        // 进入筛选页面初始化页面
+        initPage();
+        listenEvent('school');
+        listenEvent('commpany');
+        listenEvent('trade');
+        listenEvent('place');
+        listenEvent('custom');
 
     }
-    function jiant(val) {
+    // 进入筛选页面初始化页面
+    function initPage() {
+        // 进入筛选页面初始化页面
+        if (api.pageParam.selectedObj) {
+            selectedObj = api.pageParam.selectedObj
+            if (api.pageParam.selectedObj.school) {
+                $api.text($api.dom('.school'), api.pageParam.selectedObj.school[0].str);
+            }
+            if(api.pageParam.selectedObj.commpany) {
+                $api.text($api.dom('.commpany'), api.pageParam.selectedObj.commpany[0].str);
+            } 
+            if(api.pageParam.selectedObj.trade) {
+                $api.text($api.dom('.trade'), api.pageParam.selectedObj.trade[0].str);
+            }         
+            if(api.pageParam.selectedObj.place) {
+                $api.text($api.dom('.place'), api.pageParam.selectedObj.place[0].str);
+            }         
+            if(api.pageParam.selectedObj.custom) {
+                $api.text($api.dom('.custom'), api.pageParam.selectedObj.custom[0].str);
+            }         
+        }
+    }
+    // 监听事件
+    function listenEvent(val) {
         api.addEventListener({
             name: 'select'+ val
         }, function(ret, err) {
@@ -244,7 +269,7 @@
             }
         });
     }
-      // 选中图标
+    // 选中类型图标
     function li_span(ele) {
         flag = 1;
         var allDom = $api.not($api.closest(ele, 'li'),'p')
@@ -253,7 +278,7 @@
         }
         $api.addCls(ele, 'sel');
     }
-
+    // 选择学校/公司/行业
     function li_spanP(ele) {
         val = $api.attr(ele, 'data-val');
         api.openFrame({
@@ -288,7 +313,8 @@
             api.sendEvent({
                 name: 'screeningResultsType',
                 extra: {
-                    selVal:selVal
+                    selVal: selVal,
+                    selectedObj: selectedObj
                 }
             });
              api.closeFrame();
