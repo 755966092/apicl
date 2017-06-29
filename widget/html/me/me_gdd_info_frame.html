@@ -281,7 +281,7 @@
             
              <div class="userInfo flex-def flex-cCenter">
                 {{?it.buyer_info}}
-                <img src="{{=it.buyer_info.head_img_url}}">
+                <img id="userHead_img" src="{{=it.buyer_info.head_img_url}}">
                 <div class="text flex-def flex-zBetween flex-item">
                     <div class="left">
                         <p class="userName">{{=it.buyer_info.nickname}}</p>
@@ -291,7 +291,8 @@
                     <div class="right flex-def flex-cCenter">
                         <span ontouchstart="callTpl()" class="icon_tel"></span>
                         <!-- 卖家电话字段 -->
-                        <span class="icon_chat"></span>
+                       
+                        <span ontouchstart="openChatPage(this)" class="icon_chat" data-rong_id='{{=it.buyer_info.rongcloud_user_id}}'></span>
                     </div>
                 </div>
                 {{??}}
@@ -305,7 +306,7 @@
                     <div class="right flex-def flex-cCenter">
                         <span ontouchstart="callTpl()" class="icon_tel"></span>
                         <!-- 卖家电话字段 -->
-                        <span class="icon_chat"></span>
+                        <span ontouchstart="openChatPage(this)" class="icon_chat" data-rong_id='{{=it.seller_info.rongcloud_user_id}}'></span>
                     </div>
                 </div>
                 {{?}}
@@ -336,7 +337,7 @@
                             {{for(var i = 0; i < it.button_info.buttonArr.length; i++){ }}
                                 {{?it.button_info.buttonArr[i].key === '确认完成' || it.button_info.buttonArr[i].key === '完成' || it.button_info.buttonArr[i].key === '评价订单'}}
                                 {{??}}
-                                <span data-supplyId='{{=it.supply_info.supply_id}}' data-id='{{=it.order_info.order_id}}' ontouchstart="oriderOperate(this)" class="btn" data-url='{{=it.button_info.buttonArr[i].url}}'>{{=it.button_info.buttonArr[i].key}}</span>
+                                <span data-reasonList='{{=JSON.stringify(it.reason_list)}}' data-supplyId='{{=it.supply_info.supply_id}}' data-id='{{=it.order_info.order_id}}' ontouchstart="oriderOperate(this)" class="btn" data-url='{{=it.button_info.buttonArr[i].url}}'>{{=it.button_info.buttonArr[i].key}}</span>
                                 {{?}}
                             {{ }; }}
                         </div>
@@ -377,6 +378,27 @@
         moduleInit();
         requestData();
     };
+    // 聊天
+    function openChatPage(ele) {
+        var rong_id = $api.attr(ele, 'data-rong_id');
+        var userName = $api.text($api.dom('.userName'));
+        // 头像 昵称 供应名字 价格 单位
+        var userHeadImg = $api.attr($api.byId('userHead_img'), 'src');
+        var supplyName = $api.text($api.dom('.supplyName'));
+        var priceUint = $api.text($api.dom('.price'));
+
+        api.openWin({
+            name: 'winName',
+            url: '../news/chatPage.html',
+            pageParam: {
+                targetRongId: rong_id,
+                nickname: userName,
+                userHeadImg: userHeadImg,
+                supplyName: supplyName,
+                priceUint: priceUint
+            }
+        });
+    }
     // 评价
     function commentSupply() {
         var obj = {
@@ -407,8 +429,8 @@
             }
         }, function(ret, err) {
             if(ret) {
+                    console.log('获取的数据:'+JSON.stringify(ret))
                 if (ret.code === 200){
-                    // console.log(JSON.stringify(ret))
                     if (ret.data.identity === 'buyer') {
                         flag = 1
                     } else {
@@ -546,17 +568,17 @@
             ajaxOperate(param, url)
             requestData();
         } else if (flagText === '取消订单'){
+            var reasonList = JSON.parse($api.attr(ele, 'data-reasonList'));
+            var datas = []
+            for(key in reasonList) {
+                datas.push({
+                    name:reasonList[key],
+                    id:key
+                })
+            }
             var UIActionSelector = api.require('UIActionSelector');
                 UIActionSelector.open({
-                    datas: [
-                        {
-                            name:'取消原因1'
-                        },{
-                            name:'取消原因2'
-                        },{
-                            name:'取消原因3'
-                        }
-                    ],
+                    datas: datas,
                     actives: [1],
                     layout: {
                         row: 7,

@@ -122,11 +122,10 @@
         }
         console.log('125行: '+JSON.stringify(selectedArr))
         settingText();
-        if (openList(handleData(api.pageParam.val))) {
-            setting();
-        }
+        openList(handleData(api.pageParam.val))
         if (selectedObj[val]) {
             $api.text($api.dom('.selectedText'), selectedObj[val][0].str);
+
         } else {
             settingText();
         }
@@ -166,6 +165,16 @@
             str = ''
         }
         listContact.open({
+            x: -1000,
+            y: -1000,
+            w: 5,
+            h: 5,
+            data: [],
+            fixedOn: api.frameName
+        },function(ret,err){
+        })
+        listContact.close();
+        listContact.open({
             x: api.frameWidth - $api.offset($api.dom('.warp')).w,
             y: headerH + $api.offset($api.dom('.selected')).h,
             w: $api.offset($api.dom('.warp')).w,
@@ -184,6 +193,7 @@
             cellBgColor: '#fff',
             // 搜索框
             searchBar: {
+                h: 40,
                 bgColor: '#F8F8F8',         //（可选项）搜索条背景色，字符串，默认透明，支持 rgb，rgba，#
                 placeholder: '搜索',      //（可选项）搜索条提示文字，字符串类型，默认空，不传则不显示提示文字
                 textFieldBgColor: '#fff'
@@ -192,6 +202,7 @@
             fixedOn: api.frameName
         }, function(ret, err) {
             if (ret) {
+                // alert(JSON.stringify(ret))
                 flag = 1;
                 if (str.indexOf(data[ret.key][ret.index].title) != -1) {
                     // 已选
@@ -201,7 +212,8 @@
                         key: ret.key,
                         data: {
                             title: data[ret.key][ret.index].title,
-                            titleColor: '#000'            
+                            titleColor: '#000',
+                            titleSize:12            
                         }
                     });
                     $api.text($api.dom('.selectedText'), str);
@@ -230,7 +242,8 @@
                         key: ret.key,
                         data: {
                             title: data[ret.key][ret.index].title,
-                            titleColor: '#f00'            
+                            titleColor: '#f00',
+                            titleSize:12            
                         }
                     });
                 }
@@ -239,12 +252,10 @@
                 alert(JSON.stringify(err));
             }
         });
-        return true
     }
 
     function setting() {
         // 设置已选条件
-        console.log(JSON.stringify(selectedObj[val]))
         if (selectedObj[val] != null) {
             for (var i = 0; i < selectedObj[val].length; i++) {
                 listContact.refreshItem({
@@ -252,13 +263,12 @@
                     key: selectedObj[val][i].key,
                     data: {
                         title: selectedObj[val][i].title,
-                        titleColor: '#f00'            
+                        titleColor: '#f00',
+                        titleSize:12            
                     }
                 });
-                console.log(JSON.stringify(selectedObj[val][i]))
             }
         }
-    // ------------------------------
     }
     // 处理数据
     function handleData(val) {
@@ -286,8 +296,15 @@
             obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]] = [];
         }
         for (var i = 0; i < schoolList.length; i++) {
-            obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]].push({title:schoolList[i]});
+            obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]].push({title:schoolList[i],titleSize:12});
         }
+
+        if (selectedObj[val] != null) {
+            for (var i = 0; i < selectedObj[val].length; i++) {
+                obj[selectedObj[val][i].key][selectedObj[val][i].index].titleColor = '#f00'
+            }
+        }
+        console.log(JSON.stringify(obj))
         return obj
     }
     // 点击确定按钮： 1； 重置按钮 0
@@ -295,8 +312,6 @@
         if (n) {
             var schoolName = $api.text($api.dom('.selectedText'));
             // 发送事件, 刷新筛选结果
-            console.log('发送时间的时候:'+JSON.stringify(selectedObj[val]))
-            
             if (flag === 0) {
 
             } else {

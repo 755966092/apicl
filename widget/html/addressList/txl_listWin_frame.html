@@ -65,10 +65,10 @@
         <span class="searchIcon"></span>
         <span class="sxIcon"  tapmode="hover" onclick="openSlideBar()"></span>
     </div>
-    <p data-type='1'>暂无初识好友</p>
-    <p data-type='2'>暂无熟识好友</p>
-    <p data-type='3'>暂无尚未加入好友</p>
-    <p data-type='4'>暂无好友</p>
+    <p data-type='1' class="no1">暂无初识好友</p>
+    <p data-type='2' class="no2">暂无熟识好友</p>
+    <p data-type='3' class="no3">暂无尚未加入好友</p>
+    <p data-type='4' class="no4">暂无好友</p>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -129,6 +129,7 @@
                 w: api.winWidth,
                 h: api.winHeight
             },
+            slidBackEnabled: false,
             pageParam: {
                 selVal: selVal,
                 selectedObj: selectedObj
@@ -193,13 +194,17 @@
                     $api.css($api.domAll('p')[i], 'display:none');
                 }
                 if (ret.data == '' && condition===0) {
-                    $api.css($api.dom('p[data-type="4"]'), 'display:block');
+                    console.log(1111 + condition)
+                    $api.css($api.dom('p.no4'), 'display:block');
                 } else if(ret.data == '' && condition===1) {
-                    $api.css($api.dom('p[data-type="1"]'), 'display:block');
+                    console.log(2222 + condition)
+                    $api.css($api.dom('p.no1'), 'display:block');
                 }else if(ret.data == '' && condition===2) {
-                    $api.css($api.dom('p[data-type="2"]'), 'display:block');
+                    console.log(333 + condition)
+                    $api.css($api.dom('p.no2'), 'display:block');
                 }else if(ret.data == '' && condition===3) {
-                    $api.css($api.dom('p[data-type="3"]'), 'display:block');
+                    console.log(444 + condition)
+                    $api.css($api.dom('p.no3'), 'display:block');
                 }
             } else {
                 console.log(JSON.stringify(err));
@@ -273,6 +278,16 @@
     }
     function dakai(data1) {
         var searchHei = $api.offset($api.dom('.search')).h
+        listContact.open({
+            x: -1000,
+            y: -1000,
+            w: 5,
+            h: 5,
+            data: [],
+            fixedOn: api.frameName
+        },function(ret,err){
+        })
+        listContact.close();
         listContact.open({
                 x : 0,
                 y : searchHei,

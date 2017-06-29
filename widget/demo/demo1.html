@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <style>
+        html,body {
+            height: 100%;
+            width: 100%;    
+            background-color: rgba(0,0,0,0);
+        }
+        .warp1 {
+            position: relative;
+            height: 100%;
+             display: -webkit-box; 
+            display: flex; 
+            -webkit-box-direction: normal;
+            -webkit-box-orient: vertical;
+            flex-direction: column;
+            -webkit-box-align:  end;
+            align-items: flex-end;
+        }
+        .warp {
+            margin-left: 1.5rem;
+            width: 6rem;
+            background-color: #fff;
+        }
+        .main {
+            background-color: #fff;
+            position: relative;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        .main>div:first-child {
+         }
+        .footer {
+            height: .78rem;
+            width: 6rem;
+            font-size: 0;
+            z-index: 999;
+            position: absolute;
+            bottom: 0;
+        }
+        .footer span {
+            height: .78rem;
+            width: 3rem;    
+            font-size: .34rem;
+            text-align: center;
+            line-height: .78rem;
+            float: left;
+            background-color: #F8F8F8;
+        }
+        .footer span:last-child {
+            background-color: #27B24A;
+            color: #fff;
+        }
+        
+        header.header {
+            opacity: 0;
+        }
+        .selected {
+            box-sizing: border-box;
+            padding-left: .2rem;
+            font-size: 0;
+            line-height: .81rem;
+        }
+        .selected span {
+            font-size: .26rem;
+        }
+        .selected .selectedText {
+            width: 4rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #999;
+
+        }
+    </style>
+</head>
+<body   tapmode="hover" class=""   onclick="api.closeFrame()">
+   
+    <div class="warp1 flex-def flex-zBetween">
+        <header class="header">
+            <div class="head"></div>
+        </header>
+        <div class="warp flex-item"   tapmode="hover"   onclick="api.closeFrame()">
+            <div class="main"   tapmode="hover"   onclick="event.cancelBubble=true;">
+                <div>
+                   <p class="selected"><span>已选择：</span><span class="selectedText">请选择学校</span></p>
+
+                </div>
+            </div> 
+            <div class="footer">
+                <span   tapmode="hover"   onclick="enter(0);event.stopPropagation();">取消</span>
+                <span   tapmode="hover"   onclick="enter(1);event.stopPropagation();">确定</span>
+            </div>
+        </div>
+    </div>
+    
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript" src="../script/pinyin4js.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        moduleInit();
+        openList(handleData('school'))
+    }
+   
+    // 打开列表
+    function openList(data) {
+        listContact.open({
+            x: 0,
+            y: 0,
+            w: 'auto',
+            h: 'auto',
+            imgHeight: 32,
+            groupTitle: {
+                color: '#999',       
+                size: 14,   
+                bgColor: '#f8f8f8'
+            },
+            rightBg: '#fff',
+            indicator: {
+                bgColor: 'rgba(0,0,0,0)',
+                color: '#5A5A5A'
+            },
+            cellBgColor: '#fff',
+            // 搜索框
+            searchBar: {
+                h: 40,
+                bgColor: '#F8F8F8',         //（可选项）搜索条背景色，字符串，默认透明，支持 rgb，rgba，#
+                placeholder: '搜索',      //（可选项）搜索条提示文字，字符串类型，默认空，不传则不显示提示文字
+                textFieldBgColor: '#fff'
+            },
+            data: data,
+            fixedOn: api.frameName
+        }, function(ret, err) {
+            if (ret) {
+                alert(JSON.stringify(ret))
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+        return true
+    }
+    // 处理数据
+    function handleData(val) {
+        var schoolList;
+        switch(val) {
+            case 'school' :
+            schoolList = ['北京大学','清华大学','北京师范大学','北京理工大学','同济大学','南开大学','复旦大学','山东科技大学','青岛海洋大学','中石油大学'];
+            break;
+            case 'commpany' :
+            schoolList = ['第一学教育科技有限公司','跨考教育','四达留学','百度公司','腾讯公司','美团公司','复旦大学','山东科技大学','青岛海洋大学','中石油大学'];
+            break;
+            case 'trade' :
+            schoolList = ['制造业','服务业','餐饮','教育','医疗','艺术','复旦大学','山东科技大学','青岛海洋大学','中石油大学'];
+            break;
+            case 'place' :
+            schoolList = ['北京','上海','美国','深圳','英国','法国','荷兰','山东科技大学','青岛海洋大学','中石油大学'];
+            break;
+            case 'custom' :
+            schoolList = ['自定义数据','自定义数据2','自定义数据3','北京理工大学','同济大学','南开大学','复旦大学','山东科技大学','青岛海洋大学','中石油大学'];
+            break;
+        }
+        
+        var obj = {};
+        for (var i = 0; i < schoolList.length; i++) {
+            obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]] = [];
+        }
+        for (var i = 0; i < schoolList.length; i++) {
+            obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]].push({title:schoolList[i],titleSize:12});
+        }
+        return obj
+    }
+    
+</script>
+</html>

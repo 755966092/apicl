@@ -288,7 +288,7 @@
                     </div>
                     <p class="appraise flex-def flex-cCenter flex-zEnd" tapmode='hover' onclick="event.stopPropagation();">
                         {{for(var j = 0; j < it[i].button.buttonArr.length; j++){ }}
-                                <span data-moeny='{{=it[i].total_money}}' data-id='{{=it[i].order_id}}' data-supply='{{=it[i].supply_id}}'  tapmode='hover' onclick="oriderOperate(this)" class="btn" data-url='{{=it[i].button.buttonArr[j].url}}'>{{=it[i].button.buttonArr[j].key}}</span>
+                                <span data-reasonList='{{=JSON.stringify(it[i].reason_list)}}' data-moeny='{{=it[i].total_money}}' data-id='{{=it[i].order_id}}' data-supply='{{=it[i].supply_id}}'  tapmode='hover' onclick="oriderOperate(this)" class="btn" data-url='{{=it[i].button.buttonArr[j].url}}'>{{=it[i].button.buttonArr[j].key}}</span>
                         {{ }; }}
                     </p>
                 </div>
@@ -340,7 +340,7 @@
         }, function(ret, err) {
             if(ret) {
                 if(ret.code == 200) {
-                    console.log(JSON.stringify(ret))
+                    console.log('列表页'+JSON.stringify(ret))
                     // 停止下拉刷新
                     api.refreshHeaderLoadDone()
                     for (var i = 0; i < ret.data.list.length; i++) {
@@ -504,17 +504,17 @@
                 }
             });
         } else if (flagText === '取消订单') {
+            var reasonList = JSON.parse($api.attr(ele, 'data-reasonList'));
+            var datas = []
+            for(key in reasonList) {
+                datas.push({
+                    name:reasonList[key],
+                    id:key
+                })
+            }
             var UIActionSelector = api.require('UIActionSelector');
             UIActionSelector.open({
-                datas: [
-                    {
-                        name:'取消原因1'
-                    },{
-                        name:'取消原因2'
-                    },{
-                        name:'取消原因3'
-                    }
-                ],
+                datas: datas,
                 actives: [1],
                 layout: {
                     row: 7,

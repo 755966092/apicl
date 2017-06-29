@@ -85,11 +85,71 @@
             margin-left: .3rem;
             border: 1px solid #E3E3E3;
         }
+        .supply_info {
+            width: 7.5rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 0 .36rem;
+            box-sizing: border-box;
+            font-size: 0;
+            height: .7rem;
+            line-height: .7rem;
+            background-color: #fff;
+            border-bottom: 1px solid #d9d9d9;
+        }
+        .hide {
+            display: none;
+        }
+        .supply_info img {
+            width: .5rem;
+            height: .5rem;
+            border-radius: 50%;
+            margin-right: .1rem;
+        }
+        .supply_info .zk {
+            width: .15rem;
+            height: .7rem;
+            background: url(../../image/icon_zk.png)no-repeat;
+            -webkit-background-size: .15rem .25rem;
+            background-size: .15rem .25rem;
+            background-position: 0 center;
+        }
+        .supply_info div.div {
+            color: #3f3f3f;
+            font-size: .26rem;
+        }
+        .promptText {
+            display: none;
+            width: 4.463rem;
+            height: .6rem ;
+            background-color: #CFCFCF;
+            font-size: .22rem;
+            color: #fff;
+            text-align: center;
+            margin: 0 auto;
+            margin-top: .2rem;
+            border-radius: .1rem;
+        }
     </style>
 </head>
 <body id="body">
+    <div class="supply_info hide flex-def flex-cCenter">
+        <img  src="../../image/noimage.jpg">
+        <div class="flex-item flex-def">
+            <div class="div flex-item">
+                <span id="userName">userName</span>(
+                <span id="supplyName">supplyName</span>
+                <span id="price">price</span>)
+            </div>
+            <span class="zk"></span>
+        </div>
+    </div>
+    <p class="promptText">请勿发布违法违规内容，共同营造文明和谐的聊天环境</p>
     <div class="main">
-        <!-- <p class="time">04:19</p>
+        
+    </div>
+    <!-- <p class="time">04:19</p>
         <div class="oneself clearfix">
             <img class="fr" src="../../image/tx_2.jpg">
             <p class="fr"> d第一 </p>
@@ -98,7 +158,6 @@
             <img class="fl" src="../../image/tx_2.jpg">
             <p class="fl">qwwwwwwww</p>
         </div> -->
-    </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -112,8 +171,17 @@ var  mainH, _main, scrollH;
     apiready = function(){
 
         moduleInit();
-
-
+        console.log($api.html($api.dom('.main')))
+        
+        if (api.pageParam.supplyName) {
+            $api.removeCls($api.dom('.supply_info'), 'hide');
+            $api.text($api.byId('userName'), api.pageParam.nickname);
+            $api.text($api.byId('supplyName'), api.pageParam.supplyName);
+            $api.text($api.byId('price'), api.pageParam.priceUint);
+            $api.attr($api.dom('.supply_info img'), 'src', api.pageParam.userHeadImg);
+            $api.css($api.dom('.main'), 'margin-top: .7rem');
+            $api.css($api.dom('.promptText'), 'margin-top: .9rem');
+        }
 
 
 
