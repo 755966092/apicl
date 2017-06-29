@@ -120,19 +120,16 @@
                 selectedArr.push(selectedObj[val][i])
             }
         }
-
-        
-        console.log(JSON.stringify(selectedArr))
+        console.log('125行: '+JSON.stringify(selectedArr))
         settingText();
         if (openList(handleData(api.pageParam.val))) {
             setting();
         }
-        if (api.pageParam.str) {
-            $api.text($api.dom('.selectedText'), api.pageParam.str);
+        if (selectedObj[val]) {
+            $api.text($api.dom('.selectedText'), selectedObj[val][0].str);
         } else {
             settingText();
         }
-        
     }
     // 设置文字
     function settingText () {
@@ -162,9 +159,12 @@
     }
     // 打开列表
     function openList(data) {
-        var str= api.pageParam.str ||'';
-       
-        
+        var str;
+        if (selectedObj[val]) {
+            str= selectedObj[val][0].str ||'';
+        } else {
+            str = ''
+        }
         listContact.open({
             x: api.frameWidth - $api.offset($api.dom('.warp')).w,
             y: headerH + $api.offset($api.dom('.selected')).h,
@@ -212,14 +212,17 @@
                         }
                     }
                     console.log('删除后:'+JSON.stringify(selectedArr));
+                    selectedArr[0].str = str;
                 } else {
                     // 未选
                     str += data[ret.key][ret.index].title+' ';
                     selectedArr.push({
                         title: data[ret.key][ret.index].title,
                         key: ret.key,
-                        index: ret.index
+                        index: ret.index,
+                        str:''
                     });
+                    selectedArr[0].str = str;
                     console.log('删除前:'+JSON.stringify(selectedArr));
                     $api.text($api.dom('.selectedText'), str);
                     listContact.refreshItem({
