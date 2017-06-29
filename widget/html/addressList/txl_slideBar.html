@@ -214,7 +214,7 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
-    var val;
+    var val, selectedObj={},str;
     apiready = function(){
         fnInit();
         // 设置选中的条件
@@ -234,6 +234,8 @@
         }, function(ret, err) {
             if (ret) {
                 $api.text($api.dom('.'+ val +''), ret.value.schoolName);
+                selectedObj[val] = ret.value.selectedArr;
+                str = ret.value.schoolName;
             } else {
                 alert(JSON.stringify(err));
             }
@@ -261,7 +263,9 @@
                 h: 'auto'
             },
             pageParam: {
-                val: val
+                val: val,
+                selectedObj:　selectedObj,
+                str: str
             },
             bounces: false
         });

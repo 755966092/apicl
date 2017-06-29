@@ -107,10 +107,35 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
-    var flag = 0,eventName,discriminate;
+    var flag = 0,eventName,discriminate,selectedArr=[];
+    var selectedObj ;
+    var val ;
     apiready = function(){
         fnInit();
         moduleInit();
+        selectedObj = api.pageParam.selectedObj;
+        val = api.pageParam.val;
+        if (selectedObj[val] != null) {
+            for (var i = 0; i < selectedObj[val].length; i++) {
+                selectedArr.push(selectedObj[val][i])
+            }
+        }
+
+        
+        console.log(JSON.stringify(selectedArr))
+        settingText();
+        if (openList(handleData(api.pageParam.val))) {
+            setting();
+        }
+        if (api.pageParam.str) {
+            $api.text($api.dom('.selectedText'), api.pageParam.str);
+        } else {
+            settingText();
+        }
+        
+    }
+    // 设置文字
+    function settingText () {
         switch(api.pageParam.val) {
             case 'school' :
                 eventName = 'selectschool';
@@ -134,12 +159,12 @@
                 break;
         }
         $api.text($api.dom('.selectedText'), discriminate);
-        openList(handleData(api.pageParam.val))
     }
     // 打开列表
     function openList(data) {
-        var str='';
-        // 设置选中的条件
+        var str= api.pageParam.str ||'';
+       
+        
         listContact.open({
             x: api.frameWidth - $api.offset($api.dom('.warp')).w,
             y: headerH + $api.offset($api.dom('.selected')).h,
@@ -168,8 +193,6 @@
         }, function(ret, err) {
             if (ret) {
                 flag = 1;
-                console.log(str.indexOf(data[ret.key][ret.index].title))
-                console.log(data[ret.key][ret.index].title)
                 if (str.indexOf(data[ret.key][ret.index].title) != -1) {
                     // 已选
                     str = str.replace(data[ret.key][ret.index].title,'')
@@ -182,9 +205,22 @@
                         }
                     });
                     $api.text($api.dom('.selectedText'), str);
+                    for (var i = 0; i < selectedArr.length; i++) {
+                        if (selectedArr[i].title === data[ret.key][ret.index].title) {
+                            selectedArr.splice(i,1);
+                            break;
+                        }
+                    }
+                    console.log('删除后:'+JSON.stringify(selectedArr));
                 } else {
                     // 未选
-                    str += data[ret.key][ret.index].title+' '
+                    str += data[ret.key][ret.index].title+' ';
+                    selectedArr.push({
+                        title: data[ret.key][ret.index].title,
+                        key: ret.key,
+                        index: ret.index
+                    });
+                    console.log('删除前:'+JSON.stringify(selectedArr));
                     $api.text($api.dom('.selectedText'), str);
                     listContact.refreshItem({
                         index: ret.index,
@@ -200,8 +236,27 @@
                 alert(JSON.stringify(err));
             }
         });
+        return true
     }
-    
+
+    function setting() {
+        // 设置已选条件
+        console.log(JSON.stringify(selectedObj[val]))
+        if (selectedObj[val] != null) {
+            for (var i = 0; i < selectedObj[val].length; i++) {
+                listContact.refreshItem({
+                    index: selectedObj[val][i].index,
+                    key: selectedObj[val][i].key,
+                    data: {
+                        title: selectedObj[val][i].title,
+                        titleColor: '#f00'            
+                    }
+                });
+                console.log(JSON.stringify(selectedObj[val][i]))
+            }
+        }
+    // ------------------------------
+    }
     // 处理数据
     function handleData(val) {
         var schoolList;
@@ -237,13 +292,16 @@
         if (n) {
             var schoolName = $api.text($api.dom('.selectedText'));
             // 发送事件, 刷新筛选结果
+            console.log('发送时间的时候:'+JSON.stringify(selectedObj[val]))
+            
             if (flag === 0) {
 
             } else {
                 api.sendEvent({
                     name: eventName,
                     extra: {
-                        schoolName:schoolName
+                        schoolName: schoolName,
+                        selectedArr: selectedArr
                     }
                 });
             }
