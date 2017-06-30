@@ -1,104 +1,164 @@
-06 - 29 17: 44: 35.450 I / app3c(2): 获取的数据: {
-	"code": 200,
-	"data": {
-		"button_info": {
-			"extra": {
-				"is_show": false,
-				"url": "/api/supply_order/buyerpayextramoney"
+var name, targetRongId;
+apiready = function() {
+	moduleInit();
+	targetRongId = api.pageParam.targetRongId;
+	nickname = api.pageParam.nickname;
+	clearState(targetRongId);
+	var a = document.getElementById("title");
+	$api.html(a, nickname);
+	fnInit();
+	api.setWinAttr({
+		softInputMode: "resize",
+	});
+	api.openFrame({
+		name: "chattContent",
+		url: "./chatContent.html",
+		softInputMode: "resize",
+		rect: {
+			x: 0,
+			y: headerH,
+			w: "auto",
+			h: "auto"
+		},
+		pageParam: {
+			nickname: nickname,
+			targetRongId: targetRongId,
+			userHeadImg: api.pageParam.userHeadImg,
+			supplyName: api.pageParam.supplyName,
+			priceUint: api.pageParam.priceUint,
+		},
+		bounces: true
+	});
+	api.execScript({
+		name: "main",
+		script: "getTotalCount();"
+	})
+};
+
+function clearState(a) {
+	rong.clearMessagesUnreadStatus({
+		conversationType: "PRIVATE",
+		targetId: a
+	}, function(b, c) {})
+}
+
+function chatTools() {
+	UIChatBox.open({
+		placeholder: "请输入内容",
+		maxRows: 6,
+		autoFocus: true,
+		emotionPath: "widget://res/img/emotion",
+		texts: {
+			recordBtn: {
+				normalTitle: "按住说话",
+				activeTitle: "松开结束"
 			},
-			"discount": {
-				"is_show": false,
-				"url": "/api/supply_order/sellerdiscountservice"
-			},
-			"finish": {
-				"is_show": false,
-				"url": ""
-			},
-			"confirm_service": {
-				"is_show": false,
-				"url": "/api/supply_order/sellerconfirmservice"
-			},
-			"cancel": {
-				"is_show": false,
-				"url": ""
-			},
-			"confirm_finish": {
-				"is_show": false,
-				"url": "/api/supply_order/buyerconfirmfinishservice"
-			},
-			"refuse_cancel": {
-				"is_show": false,
-				"url": "/api/supply_order/sellerrefusecancelservice"
-			},
-			"comment": {
-				"is_show": true,
-				"url": "/api/supply_order/buyercommentservice"
-			},
-			"delete": {
-				"is_show": true,
-				"url": "/api/supply_order/buyerdeleteorder"
-			},
-			"pay": {
-				"is_show": false,
-				"url": "/api/supply_order/buyerpay"
-			},
-			"again": {
-				"is_show": false,
-				"url": "/api/supply_order/buyercreateorder"
-			},
-			"refuse_service": {
-				"is_show": false,
-				"url": "/api/supply_order/sellerrefuseservice"
-			},
-			"extend": {
-				"is_show": false,
-				"url": "/api/supply_order/buyerextendservice"
-			},
-			"refund": {
-				"is_show": false,
-				"url": "/api/supply_order/sellerrefundservice"
-			},
-			"confirm_cancel": {
-				"is_show": false,
-				"url": "/api/supply_order/sellerconfirmcancelservice"
+			sendBtn: {
+				title: "发送"
 			}
 		},
-		"status_info": {
-			"description": "订单已取消，钱款将自动退回",
-			"icon": "",
-			"text": "订单关闭"
+		styles: {
+			inputBar: {
+				borderColor: "#d9d9d9",
+				bgColor: "#f2f2f2"
+			},
+			inputBox: {
+				borderColor: "#B3B3B3",
+				bgColor: "#FFFFFF"
+			},
+			emotionBtn: {
+				normalImg: "widget://image/chatPage/face1.png"
+			},
+			extrasBtn: {
+				normalImg: "widget://image/chatPage/add1.png"
+			},
+			keyboardBtn: {
+				normalImg: "widget://image/chatPage/key1.png"
+			},
+			speechBtn: {
+				normalImg: "widget://image/chatPage/cam1.png"
+			},
+			recordBtn: {
+				normalBg: "#c4c4c4",
+				activeBg: "#999999",
+				color: "#000",
+				size: 14
+			},
+			indicator: {
+				target: "both",
+				color: "#c4c4c4",
+				activeColor: "#9e9e9e"
+			},
+			sendBtn: {
+				titleColor: "#fff",
+				bg: "#4cc518",
+				activeBg: "#46a91e",
+				titleSize: 14
+			}
 		},
-		"order_info": {
-			"amount": 1,
-			"order_id": 92,
-			"gen_order_id": "201706291545534370798408",
-			"extra_money": "0.00",
-			"total_money": 1,
-			"reason": null,
-			"discount_money": "0.00",
-			"refund_money": "0.00",
-			"create_time": "2017-06-29 15:45:53",
-			"service_time": "2017-06-29 15:45:00",
-			"money": "1.00"
-		},
-		"identity": "buyer",
-		"reason_list": [],
-		"seller_info": {
-			"rongcloud_user_id": "c83a957779f8e15eaac8502a198252eb",
-			"user_id": 1,
-			"nickname": "李彤亮",
-			"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png"
-		},
-		"supply_info": {
-			"unit": 2,
-			"price": "1.00",
-			"title": "我我发布",
-			"supply_id": 42,
-			"image": [],
-			"description": "测试",
-			"form": 1
+		extras: {
+			titleSize: 10,
+			titleColor: "#a3a3a3",
+			btns: [{
+				title: "图片",
+				normalImg: "widget://image/chatPage/album1.png",
+				activeImg: "widget://image/chatPage/album2.png"
+			}, {
+				title: "拍照",
+				normalImg: "widget://image/chatPage/loc1.png",
+				activeImg: "widget://image/chatPage/loc2.png"
+			}, {
+				title: "位置",
+				normalImg: "widget://image/chatPage/loc1.png",
+				activeImg: "widget://image/chatPage/loc2.png"
+			}]
 		}
-	},
-	"msg": "",
-	"time": 1498729478
+	}, function(a, b) {
+		if (a) {
+			if (a.eventType === "send") {
+				sendMsg(a.msg)
+			}
+			if (a.eventType === "clickExtras") {
+				alert("点击了第" + a.index + "个附加按钮")
+			}
+		} else {
+			alert(JSON.stringify(b.msg))
+		}
+	})
 }
+
+function sendMsg(b) {
+	var a;
+	rong.sendTextMessage({
+		conversationType: "PRIVATE",
+		targetId: targetRongId,
+		text: b,
+		extra: ""
+	}, function(c, d) {
+		if (c.status == "prepare") {
+			a = c.result.message.content.text
+		} else {
+			if (c.status == "success") {
+				api.sendEvent({
+					name: "sendMsg",
+					extra: {
+						msg: a
+					}
+				})
+			} else {
+				if (c.status == "error") {
+					api.alert({
+						title: "title",
+						msg: "第三个message" + d.code,
+					}, function(e, f) {
+						if (e) {
+							alert(JSON.stringify(e))
+						} else {
+							alert(JSON.stringify(f.msg))
+						}
+					})
+				}
+			}
+		}
+	})
+};
