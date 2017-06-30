@@ -387,13 +387,13 @@
             // 获取位置
             getPos();
         }
-        // 公司|个人 显示不同的页面
-        showDifPage()
-        // 选择类别478402
-        monitorEvent('_genre','_genre');
-        monitorEvent('_format','_format');
-        monitorEvent('_classify','_classify');
-        monitorEvent('_unit','_unit');
+        // // 公司|个人 显示不同的页面
+        // showDifPage()
+        // // 选择类别478402
+        // monitorEvent('_genre','_genre');
+        // monitorEvent('_format','_format');
+        // monitorEvent('_classify','_classify');
+        // monitorEvent('_unit','_unit');
 
         getData(base64Data);
         // 删除图片
@@ -682,25 +682,104 @@
     // 选择类型  公司 | 个人
     function selectType(ele) {
         var person =  $api.text(ele.getElementsByClassName('spanno2')[0]);
-
         var _data = $api.attr(ele, 'data-val');
         var flag;
-        var _dataSource = [];
+        var _dataSource = [],_dataSource2=[];
         if (_data == '_type') {
-            _dataSource = ['个人','公司'];
+            _dataSource = [
+                {
+                    name: '个人'
+                },
+                {
+                    name: '公司'
+                }
+            ];
+            _dataSource2 = ['个人','公司']
             flag = 0;
-            // var text = $api.text($api.dom('.type1'));
         } else if (_data == '_genre') {
-            _dataSource = ['自产自销','代理'];
+            _dataSource = [
+                {
+                    name: '自产自销'
+                },
+                {
+                    name: '代理'
+                }
+            ];
+            _dataSource2 = ['自产自销','代理']
             flag = 1;
         } else if (_data == '_format') {
-            _dataSource = ['线上','线下'];
+            _dataSource = [
+                {
+                    name: '线上'
+                },{
+                    name: '线下'
+                }
+            ];
+            _dataSource2 = ['线上','线下']
             flag = 2;
         }else if (_data == '_classify') {
-            _dataSource = ['全部','教育','摄影','医疗'];
+            _dataSource = [
+                {
+                    name: '全部'
+                },{
+                    name: '教育'
+                },{
+                    name: '摄影'
+                },{
+                    name: '医疗'
+                }
+            ];
+            _dataSource2 = ['全部','教育','摄影','医疗']
             flag = 3;
         } else if (_data == '_unit') {
-            _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
+            _dataSource = [
+                {
+                    name: "次"
+                },
+                {
+                    name: "幅"
+                },
+                {
+                    name: "单"
+                },
+                {
+                    name: "小时"
+                },
+                {
+                    name: "分钟"
+                },
+                {
+                    name: "天"
+                },
+                {
+                    name: "周"
+                },
+                {
+                    name: "月"
+                },
+                {
+                    name: "份"
+                },
+                {
+                    name: "个"
+                },
+                {
+                    name: "扇"
+                },
+                {
+                    name: "课时" 
+                },
+                {
+                    name: "面议"
+                },
+                {
+                    name: "其他"
+                },
+                {
+                    name: "未定义" 
+                }
+            ];
+            _dataSource2 = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"]
             flag = 4;
             // "1": "次",
             // "2": "幅",
@@ -718,27 +797,98 @@
             // "14": "其他",
             // "15": "未定义"
         }
-        
-
-        api.openFrame({
-                name: '_type',
-                url: 'supply_selectType.html',
-                rect: {
-                    x: 0,
-                    y: 0,
-                    w: 'auto',
-                    h: 'auto'
-                },
-                pageParam: {
-                    dataSource: _dataSource,
-                    flag: flag,
-                    defaultVal: person
-                },
-                bounces: false
-            });
+        var active = [];
+        if (_dataSource2.indexOf(person) == -1) {
+            active = [1]
+        } else {
+            active.push(_dataSource2.indexOf(person))
+        }
+        UIActionSelector.open({
+            datas: _dataSource,
+            actives: active,
+            layout: {
+                row: 7,
+                col: 1,
+                height: 30,
+                size: 16,
+                sizeActive: 18,
+                rowSpacing: 5,
+                colSpacing: 5,
+                maskBg: 'rgba(0,0,0,0.5)',
+                bg: '#fff',
+                color: '#888',
+                colorSelected: '#000'
+            },
+            animation: true,
+            cancel: {
+                text: '取消',
+                size: 12,
+                w: 90,
+                h: 35,
+                bg: '#eee',
+                // bgActive: '#ccc',
+                color: '#000',
+                // colorActive: '#fff'
+            },
+            ok: {
+                text: '确定',
+                size: 12,
+                w: 90,
+                h: 35,
+                bg: '#eee',
+                // bgActive: '#ccc',
+                color: '#000',
+                // colorActive: '#fff'
+            },
+            title: {
+                text: '请选择',
+                size: 20,
+                h: 35,
+                bg: '#eee',
+                color: '#000'
+            },
+            fixedOn: api.frameName
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.eventType == 'ok') {
+                    $api.text($api.dom('.'+ _data +''), ret.level1);
+                    if (_dataSource2[1]  == '公司') {
+                        if (ret.level1 == '公司') {
+                            type = 2;
+                            for (var i = 0; i < $api.domAll('.companyName').length; i++) {
+                                
+                                $api.css($api.domAll('.companyName')[i], 'display: block');
+                            }
+                        } else {
+                            type = 1;
+                            for (var i = 0; i < $api.domAll('.companyName').length; i++) {
+                                
+                                $api.css($api.domAll('.companyName')[i], 'display: none');
+                            }
+                        }
+                    }
+                }
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
+        // api.openFrame({
+        //     name: '_type',
+        //     url: 'supply_selectType.html',
+        //     rect: {
+        //         x: 0,
+        //         y: 0,
+        //         w: 'auto',
+        //         h: 'auto'
+        //     },
+        //     pageParam: {
+        //         dataSource: _dataSource,
+        //         flag: flag,
+        //         defaultVal: person
+        //     },
+        //     bounces: false
+        // });
     }
-
-
     // 获取位置
     function getPos() {
         if (api.systemType === 'ios') {

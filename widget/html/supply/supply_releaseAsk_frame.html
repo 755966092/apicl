@@ -375,11 +375,11 @@
             getPos();
         }
         // 我公司卖|我卖 显示不同的页面
-        showDifPage()
-        // 选择类别478402
-        monitorEvent('_genre','_genre');
-        monitorEvent('_format','_format');
-        monitorEvent('_classify','_classify');
+        // showDifPage()
+        // // 选择类别478402
+        // monitorEvent('_genre','_genre');
+        // monitorEvent('_format','_format');
+        // monitorEvent('_classify','_classify');
 
         getData(base64Data);
         // 删除图片
@@ -596,6 +596,7 @@
                     }
                 }, function(ret, err) {
                     if(ret) {
+                        alert(JSON.stringify(ret))
                         if (api.pageParam.demand_id) {
                             // 编辑应用返回我发布的页面
                             api.sendEvent({
@@ -620,31 +621,31 @@
     }
 
 
-    // 我公司卖|我卖 显示不同的页面
-    function showDifPage () {
-        api.addEventListener({
-           name: 'selectType'
-        }, function(ret, err) {
-           if (ret) {
-            $api.text($api.dom('._type'), ret.value.selDate);
-            if (ret.value.selDate == '我公司卖') {
-                type = 2;
-                for (var i = 0; i < $api.domAll('.companyName').length; i++) {
+    // // 我公司卖|我卖 显示不同的页面
+    // function showDifPage () {
+    //     api.addEventListener({
+    //        name: 'selectType'
+    //     }, function(ret, err) {
+    //        if (ret) {
+    //         $api.text($api.dom('._type'), ret.value.selDate);
+    //         if (ret.value.selDate == '我公司卖') {
+    //             type = 2;
+    //             for (var i = 0; i < $api.domAll('.companyName').length; i++) {
                     
-                    $api.css($api.domAll('.companyName')[i], 'display: block');
-                }
-            } else {
-                type = 1;
-                for (var i = 0; i < $api.domAll('.companyName').length; i++) {
+    //                 $api.css($api.domAll('.companyName')[i], 'display: block');
+    //             }
+    //         } else {
+    //             type = 1;
+    //             for (var i = 0; i < $api.domAll('.companyName').length; i++) {
                     
-                    $api.css($api.domAll('.companyName')[i], 'display: none');
-                }
-            }
-           } else {
-               alert(JSON.stringify(err.msg));
-           }
-        });
-    }
+    //                 $api.css($api.domAll('.companyName')[i], 'display: none');
+    //             }
+    //         }
+    //        } else {
+    //            alert(JSON.stringify(err.msg));
+    //        }
+    //     });
+    // }
     // 提现谁看
     function remindWho() {
         api.openWin({
@@ -653,53 +654,158 @@
             
         });
     }
-    // 监听事件， 修改页面文本内容
-    function monitorEvent(eventName, calssName) {
-        api.addEventListener({
-           name: eventName
-        }, function(ret, err) {
-           if (ret) {
-            $api.text($api.dom('.'+ calssName +''), ret.value.selDate);
-           } else {
-               alert(JSON.stringify(err.msg));
-           }
-        });
-    }
+    // // 监听事件， 修改页面文本内容
+    // function monitorEvent(eventName, calssName) {
+    //     api.addEventListener({
+    //        name: eventName
+    //     }, function(ret, err) {
+    //        if (ret) {
+    //         $api.text($api.dom('.'+ calssName +''), ret.value.selDate);
+    //        } else {
+    //            alert(JSON.stringify(err.msg));
+    //        }
+    //     });
+    // }
     // 选择类型  我公司卖 | 我卖
     function selectType(ele) {
         var person =  $api.text(ele.getElementsByClassName('spanno2')[0]);
         var _data = $api.attr(ele, 'data-val');
         var flag;
-        var _dataSource = [];
+        var _dataSource2 = [],_dataSource=[];
         if (_data == '_type') {
-            _dataSource = ['我卖','我公司卖'];
+            _dataSource = [
+                {
+                    name:'我求'
+                },
+                {
+                    name:'我公司求'
+                }
+            ]
+            _dataSource2 = ['我求','我公司求'];
             flag = 0;
             // var text = $api.text($api.dom('.type1'));
         }  else if (_data == '_format') {
-            _dataSource = ['线上','线下'];
+            _dataSource = [
+                {
+                    name: '线上'
+                },
+                {
+                    name: '线下'
+                }
+            ]
+            _dataSource2 = ['线上','线下'];
             flag = 2;
         }else if (_data == '_classify') {
-            _dataSource = ['全部','教育','摄影','医疗'];
+            _dataSource = [
+                {
+                    name:'全部'
+                },
+                {
+                    name:'教育'
+                },
+                {
+                    name: '摄影'
+                },
+                {
+                    name: '医疗'
+                }
+            ]
+            _dataSource2 = ['全部','教育','摄影','医疗'];
             flag = 3;
         }
         
+        var active = [];
+        if (_dataSource2.indexOf(person) == -1) {
+            active = [1]
+        } else {
+            active.push(_dataSource2.indexOf(person))
+        }
+        UIActionSelector.open({
+            datas: _dataSource,
+            actives: active,
+            layout: {
+                row: 7,
+                col: 1,
+                height: 30,
+                size: 16,
+                sizeActive: 18,
+                rowSpacing: 5,
+                colSpacing: 5,
+                maskBg: 'rgba(0,0,0,0.5)',
+                bg: '#fff',
+                color: '#888',
+                colorSelected: '#000'
+            },
+            animation: true,
+            cancel: {
+                text: '取消',
+                size: 12,
+                w: 90,
+                h: 35,
+                bg: '#eee',
+                // bgActive: '#ccc',
+                color: '#000',
+                // colorActive: '#fff'
+            },
+            ok: {
+                text: '确定',
+                size: 12,
+                w: 90,
+                h: 35,
+                bg: '#eee',
+                // bgActive: '#ccc',
+                color: '#000',
+                // colorActive: '#fff'
+            },
+            title: {
+                text: '请选择',
+                size: 20,
+                h: 35,
+                bg: '#eee',
+                color: '#000'
+            },
+            fixedOn: api.frameName
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.eventType == 'ok') {
+                    $api.text($api.dom('.'+ _data +''), ret.level1);
+                    if (_dataSource2[1]  == '我公司求') {
+                        if (ret.level1 == '我公司求') {
+                            type = 2;
+                            for (var i = 0; i < $api.domAll('.companyName').length; i++) {
+                                
+                                $api.css($api.domAll('.companyName')[i], 'display: block');
+                            }
+                        } else {
+                            type = 1;
+                            for (var i = 0; i < $api.domAll('.companyName').length; i++) {
+                                
+                                $api.css($api.domAll('.companyName')[i], 'display: none');
+                            }
+                        }
+                    }
+                }
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
 
-        api.openFrame({
-                name: '_type',
-                url: 'supply_selectType.html',
-                rect: {
-                    x: 0,
-                    y: 0,
-                    w: 'auto',
-                    h: 'auto'
-                },
-                pageParam: {
-                    dataSource: _dataSource,
-                    flag: flag,
-                    defaultVal: person
-                },
-                bounces: false
-            });
+        // api.openFrame({
+        //     name: '_type',
+        //     url: 'supply_selectType.html',
+        //     rect: {
+        //         x: 0,
+        //         y: 0,
+        //         w: 'auto',
+        //         h: 'auto'
+        //     },
+        //     pageParam: {
+        //         dataSource: _dataSource,
+        //         flag: flag,
+        //         defaultVal: person
+        //     },
+        //     bounces: false
+        // });
     }
 
 
