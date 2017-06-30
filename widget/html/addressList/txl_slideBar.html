@@ -184,19 +184,19 @@
                         </li>
                      </ul>  
                     <ul class="no2">
-                        <li class="no2List sel clearfix" tapmode="hover" data-val="school" onclick="li_spanP(this);event.cancelBubble=true;" >
+                        <li tapmode="hover" data-val="school" onclick="li_spanP(this);event.cancelBubble=true;" >
                             <p>学校<span class="no2Icon school"></span></p>
                         </li>
-                        <li class="no2List clearfix" tapmode="hover" data-val="commpany" onclick="li_spanP(this);event.cancelBubble=true;">
+                        <li tapmode="hover" data-val="commpany" onclick="li_spanP(this);event.cancelBubble=true;">
                             <p>公司<span class="no2Icon commpany"></span></p>
                         </li>
-                        <li class="no2List clearfix" tapmode="hover" data-val="trade" onclick="li_spanP(this);event.cancelBubble=true;">
+                        <li tapmode="hover" data-val="trade" onclick="li_spanP(this);event.cancelBubble=true;">
                             <p>行业<span class="no2Icon trade"></span></p>
                         </li>
-                        <li class="no2List clearfix"   tapmode="hover" data-val="place"  onclick="li_spanP(this);event.cancelBubble=true;">
+                        <li tapmode="hover" data-val="place" onclick="li_spanP(this);event.cancelBubble=true;">
                             <p>地点<span class="no2Icon place"></span></p>
                         </li>
-                        <li class="no2List clearfix"   tapmode="hover" data-val="custom"  onclick="li_spanP(this);event.cancelBubble=true;">
+                        <li tapmode="hover" data-val="custom" onclick="li_spanP(this);event.cancelBubble=true;">
                             <p>自定义<span class="no2Icon custom"></span></p>
                         </li>
                     </ul>
@@ -236,20 +236,20 @@
         // 进入筛选页面初始化页面
         if (api.pageParam.selectedObj) {
             selectedObj = api.pageParam.selectedObj
-            if (api.pageParam.selectedObj.school) {
-                $api.text($api.dom('.school'), api.pageParam.selectedObj.school[0].str);
+            if (selectedObj.school) {
+                $api.text($api.dom('.school'), selectedObj.school[0].str);
             }
-            if(api.pageParam.selectedObj.commpany) {
-                $api.text($api.dom('.commpany'), api.pageParam.selectedObj.commpany[0].str);
+            if(selectedObj.commpany) {
+                $api.text($api.dom('.commpany'), selectedObj.commpany[0].str);
             } 
-            if(api.pageParam.selectedObj.trade) {
-                $api.text($api.dom('.trade'), api.pageParam.selectedObj.trade[0].str);
+            if(selectedObj.trade) {
+                $api.text($api.dom('.trade'), selectedObj.trade[0].str);
             }         
-            if(api.pageParam.selectedObj.place) {
-                $api.text($api.dom('.place'), api.pageParam.selectedObj.place[0].str);
+            if(selectedObj.place) {
+                $api.text($api.dom('.place'), selectedObj.place[0].str);
             }         
-            if(api.pageParam.selectedObj.custom) {
-                $api.text($api.dom('.custom'), api.pageParam.selectedObj.custom[0].str);
+            if(selectedObj.custom) {
+                $api.text($api.dom('.custom'), selectedObj.custom[0].str);
             }         
         }
     }
@@ -308,8 +308,6 @@
             // 4 一度人脉
             var selVal = $api.attr($api.dom('.no1 .sel'), 'data-type');
             var spanSel = $api.domAll('.spanSel');
-            
-            
             // 发送事件, 刷新筛选结果
             api.sendEvent({
                 name: 'screeningResultsType',
@@ -322,24 +320,32 @@
 
         }
         else {
+            // 重置
+            $api.text($api.dom('.school'), '');
+            $api.text($api.dom('.commpany'), '');
+            $api.text($api.dom('.trade'), '');
+            $api.text($api.dom('.place'), '');
+            $api.text($api.dom('.custom'), '');
+            selectedObj = {};
             var no1 = document.getElementsByClassName('no1')[0]
             var liArr = no1.getElementsByTagName('li');
+
             for (var i = 0; i < liArr.length; i++) {
                 for(var j = 0; j < liArr[i].childNodes.length ; j++) {
                     $api.removeCls(liArr[i].childNodes[j], 'sel');
                 }
                 $api.addCls(liArr[i].childNodes[3], 'sel');
             }  
-            for (var i = 0; i < $api.domAll('.no2List').length; i++) {
-                $api.removeCls($api.domAll('.no2List')[i], 'sel');
-                for(var j = 0; j < $api.domAll('.no2List')[i].childNodes.length ; j++) {
+            // for (var i = 0; i < $api.domAll('.no2List').length; i++) {
+            //     $api.removeCls($api.domAll('.no2List')[i], 'sel');
+            //     for(var j = 0; j < $api.domAll('.no2List')[i].childNodes.length ; j++) {
 
-                    $api.removeCls($api.domAll('.no2List')[i].childNodes[j], 'hide');
-                    $api.removeCls($api.domAll('.no2List')[i].childNodes[j], 'spanSel');
-                }
-                $api.addCls($api.domAll('.no2List')[i].childNodes[3], 'spanSel');
-            }
-            // $api.addCls($api.domAll('.no2List')[0], 'sel');
+            //         $api.removeCls($api.domAll('.no2List')[i].childNodes[j], 'hide');
+            //         $api.removeCls($api.domAll('.no2List')[i].childNodes[j], 'spanSel');
+            //     }
+            //     $api.addCls($api.domAll('.no2List')[i].childNodes[3], 'spanSel');
+            // }
+            // $api.addCls($a], 'sel');
             // var no2Icon = $api.domAll('.no2Icon')
             // for (var i = 0; i < no2Icon.length; i++) {
             //     $api.removeCls(no2Icon[i], 'no2Icon2');
