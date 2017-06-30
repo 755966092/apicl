@@ -207,14 +207,14 @@
     <script type="text/javascript" src="../../../data/city_3.js"></script>
     <script type="text/javascript">
     var  userName, zName ,headImg, sex, hometown, birthday,imgChche ;
-    
+    var imgCache;
         apiready = function(){
             moduleInit();
             myAjax();
             // 修改性别
             // monitor('xiugaisex', $api.dom('.sex'));
             // 修改生日
-            monitor('xiugaisr' , $api.dom('.sr'));
+            // monitor('xiugaisr' , $api.dom('.sr'));
             // 修改家乡
             // monitor('xiugaijx' , $api.dom('.jx'));
             // 修改头像
@@ -291,258 +291,276 @@
             }
         });
     }
-        // 打开选择器
-        function selectList(ele) {
-            var label = $api.attr(ele, 'data-val');
-            var selText = $api.text($api.dom(ele, '.'+label+''));
-            var _dataSource2 = [],_dataSource = [],col=1;
-            var active = [];
+    // 打开选择器
+    function selectList(ele) {
+        var label = $api.attr(ele, 'data-val');
+        var selText = $api.text($api.dom(ele, '.'+label+''));
+        var _dataSource2 = [],_dataSource = [],col=1;
+        var active = [];
+        
+        if (label === 'sex') {
+            _dataSource = [
+                {
+                    name: '男'
+                },{
+                    name: '女'
+                }
+            ]
+            _dataSource2 = ['男','女']
+            if (_dataSource2.indexOf(selText) == -1) {
+                active = [1]
+            } else {
+                active.push(_dataSource2.indexOf(selText))
+            }
             
-            if (label === 'sex') {
-                _dataSource = [
-                    {
-                        name: '男'
-                    },{
-                        name: '女'
+        } else {
+            col=2;
+            _dataSource = city;
+            var selText1 = selText.split('-')
+            active = [];
+            for (var i = 0; i < _dataSource.length; i++) {
+                if (_dataSource[i].name == selText1[0]) {
+                    active.push(i);
+                    for (var j = 0; j < _dataSource[i].sub.length; j++) {
+                        if (_dataSource[i].sub[j].name == selText1[1]) {
+                            active.push(j);
+                            break;
+                        }
                     }
-                ]
-                _dataSource2 = ['男','女']
-                if (_dataSource2.indexOf(selText) == -1) {
-                    active = [1]
+                    break;
+                }
+            }
+        } 
+        var fontsize = 16,rowLength = 5;
+        if (api.systemType === 'ios') {
+            fontsize = 20;
+            rowLength = 7;
+        }
+        UIActionSelector.open({
+            datas: _dataSource,
+            actives: active,
+            layout: {
+                row: rowLength,
+                col: col,
+                height: 30,
+                size: fontsize,
+                sizeActive: fontsize+2,
+                rowSpacing: 5,
+                colSpacing: 5,
+                maskBg: 'rgba(0,0,0,0.5)',
+                bg: '#fff',
+                color: '#888',
+                colorSelected: '#000'
+            },
+            animation: true,
+            cancel: {
+                text: '取消',
+                size: 16,
+                w: 60,
+                h: 40,
+                bg: '#eee',
+                // bgActive: '#ccc',
+                color: '#000',
+                // colorActive: '#fff'
+            },
+            ok: {
+                text: '完成',
+                size: 16,
+                w: 60,
+                h: 40,
+                bg: '#eee',
+                // bgActive: '#ccc',
+                color: '#000',
+                // colorActive: '#fff'
+            },
+            title: {
+                text: '请选择',
+                size: 20,
+                h: 40,
+                bg: '#F0F0F0',
+                color: '#000'
+            },
+            fixedOn: api.frameName
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.eventType == 'ok') {
+                    if (col === 2) {
+                        $api.text($api.dom(ele, '.'+ label +''), ret.level1+'-'+ret.level2);
+                    } else if (ret.level1 === '男' ) {
+                        $api.attr($api.dom(ele, '.sex'), 'data-val', 1);
+                        $api.text($api.dom(ele, '.'+ label +''), ret.level1);
+                    } else {
+                        $api.attr($api.dom(ele, '.sex'), 'data-val', 2);
+                        $api.text($api.dom(ele, '.'+ label +''), ret.level1);
+                    }
+                   reviseData();
+                }
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
+    }
+        
+    // 修改文本内容
+    function reviseContent(userName1, zName1, headImg1, sex1, hometown1, birthday1) {
+        var name = $api.dom('.name'),
+            nicheng = $api.dom('.nickname'),
+            head = $api.dom('.headImg'),
+            sexImg = $api.dom('.sex'),
+            birthday = $api.dom('.sr'),
+            hometown = $api.dom('.jx');
+        // 设置真实姓名
+        $api.text(name, zName1);
+        // 设置用户昵称
+        $api.text(nicheng,userName1);
+        // 设置用户头像
+        $api.attr(head, 'src', headImg1);
+        // 设置用户性别
+        if (sex1 == 1 ) {
+            $api.text(sexImg, '男');
+            $api.attr(sexImg, 'data-val', 1);
+            
+        } else {
+            $api.text(sexImg, '女');
+            $api.attr(sexImg, 'data-val', 2);
+
+        }
+        // 设置用户家乡
+        hometown1 = hometown1.replace(',','-')
+        $api.text(hometown, hometown1);
+        // 设置用户生日
+        $api.text(birthday, birthday1);
+    }
+    // 监听事件
+    function monitor (eve, ele) {
+        api.addEventListener({
+            name: eve
+        }, function(ret, err) {
+            var val = ret.value.selDate;
+            if (ret) {
+                if (eve == 'changeHead') {
+                    // 处理用户头像
+                    $api.attr(ele, 'src', val);
+                    reviseData();
+                } else if (eve == 'xiugaisex') {
+                    // 处理用户性别
+                    if (val == '男' ) {
+                        $api.text(ele, '男');
+                        $api.attr(ele, 'data-val', 1);
+                    } else {
+                        $api.text(ele, '女');
+                        $api.attr(ele, 'data-val', 2);
+                    }
+                    reviseData();
                 } else {
-                    active.push(_dataSource2.indexOf(selText))
+                    $api.text(ele, val);
+                    reviseData();
                 }
                 
+                
             } else {
-                col=2;
-                _dataSource = city;
-                var selText1 = selText.split('-')
-                active = [];
-                for (var i = 0; i < _dataSource.length; i++) {
-                    if (_dataSource[i].name == selText1[0]) {
-                        active.push(i);
-                        for (var j = 0; j < _dataSource[i].sub.length; j++) {
-                            if (_dataSource[i].sub[j].name == selText1[1]) {
-                                active.push(j);
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                }
-            } 
-            var fontsize = 16;
-            if (api.systemType === 'ios') {
-                fontsize = 20;
+                alert(JSON.stringify(err.msg));
             }
-            UIActionSelector.open({
-                datas: _dataSource,
-                actives: active,
-                layout: {
-                    row: 7,
-                    col: col,
-                    height: 30,
-                    size: fontsize,
-                    sizeActive: fontsize+2,
-                    rowSpacing: 5,
-                    colSpacing: 5,
-                    maskBg: 'rgba(0,0,0,0.5)',
-                    bg: '#fff',
-                    color: '#888',
-                    colorSelected: '#000'
-                },
-                animation: true,
-                cancel: {
-                    text: '取消',
-                    size: 16,
-                    w: 60,
-                    h: 40,
-                    bg: '#eee',
-                    // bgActive: '#ccc',
-                    color: '#000',
-                    // colorActive: '#fff'
-                },
-                ok: {
-                    text: '完成',
-                    size: 16,
-                    w: 60,
-                    h: 40,
-                    bg: '#eee',
-                    // bgActive: '#ccc',
-                    color: '#000',
-                    // colorActive: '#fff'
-                },
-                title: {
-                    text: '请选择',
-                    size: 20,
-                    h: 40,
-                    bg: '#F0F0F0',
-                    color: '#000'
-                },
-                fixedOn: api.frameName
-            }, function(ret, err) {
-                if (ret) {
-                    if (ret.eventType == 'ok') {
-                        if (col === 2) {
-                            $api.text($api.dom(ele, '.'+ label +''), ret.level1+'-'+ret.level2);
-                        } else if (ret.level1 === '男' ) {
-                            $api.attr($api.dom(ele, '.sex'), 'data-val', 1);
-                            $api.text($api.dom(ele, '.'+ label +''), ret.level1);
-                        } else {
-                            $api.attr($api.dom(ele, '.sex'), 'data-val', 2);
-                            $api.text($api.dom(ele, '.'+ label +''), ret.level1);
-                        }
-                       reviseData();
+        });
+        
+    }
+    // 修改资料
+    function reviseData () {
+        var name = $api.text($api.dom('.name')) || userName;
+        var niCheng = $api.text($api.dom('.nickname')) || zName;
+        var headImg = $api.attr($api.dom('.headImg'),'src') || headImg;
+        var sex = $api.attr($api.dom('.sex'),'data-val') || sex;
+        var jx = $api.text($api.dom('.jx')) || hometown;
+        var sr = $api.text($api.dom('.sr')) || birthday;
+
+
+        // 上传数据
+         api.ajax({
+                url: apiSite + '/api/user_center/editBasicInfo',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: { 
+                        token: $api.getStorage('userToken'),
+                        head_img_url: 'http://img1.skqkw.cn:888/2014/12/08/07/rf5rlvjegvz-10335.jpg',
+                        real_name: name,
+                        nickname: niCheng,
+                        sex: sex,
+                        hometown:jx,
+                        birthday:sr
                     }
-                } else {
-                    alert(JSON.stringify(err.msg));
                 }
-            });
+            }, function(ret, err) {
+                    alert(JSON.stringify(ret))
+            })
+         // myAjax();
+    }
+
+    // 获取个人资料
+    function myAjax() {
+        if ($api.getStorage('userInfo')) {
+            // 有缓存
+            console.log('缓存' + $api.getStorage('imgCache'))
+            userName = $api.getStorage('userInfo').info.nickname,
+            zName = $api.getStorage('userInfo').info.real_name,
+            headImg = $api.getStorage('imgCache'),
+            sex = $api.getStorage('userInfo').info.sex,
+            // sex = ($api.getStorage('userInfo').info.sex === 1)?'男':'女',
+            // 家乡
+            hometown = $api.getStorage('userInfo').info.hometown, 
+            // 生日
+            birthday = $api.getStorage('userInfo').info.birthday;
+            reviseContent(userName,zName, headImg, sex, hometown, birthday);
+            if ($api.getStorage('userInfo') != requireData()) {
+                requireData();
+            }
+        } else {
+            console.log('网络')
+            // 无缓存
+            requireData();
         }
         
-        // 修改文本内容
-        function reviseContent(userName1, zName1, headImg1, sex1, hometown1, birthday1) {
-            var name = $api.dom('.name'),
-                nicheng = $api.dom('.nickname'),
-                head = $api.dom('.headImg'),
-                sexImg = $api.dom('.sex'),
-                birthday = $api.dom('.sr'),
-                hometown = $api.dom('.jx');
-            // 设置真实姓名
-            $api.text(name, zName1);
-            // 设置用户昵称
-            $api.text(nicheng,userName1);
-            // 设置用户头像
-            $api.attr(head, 'src', headImg1);
-            // 设置用户性别
-            if (sex1 == 1 ) {
-                $api.text(sexImg, '男');
-                $api.attr(sexImg, 'data-val', 1);
-                
-            } else {
-                $api.text(sexImg, '女');
-                $api.attr(sexImg, 'data-val', 2);
-
-            }
-            // 设置用户家乡
-            hometown1 = hometown1.replace(',','-')
-            $api.text(hometown, hometown1);
-            // 设置用户生日
-            $api.text(birthday, birthday1);
-        }
-        // 监听事件
-        function monitor (eve, ele) {
-            api.addEventListener({
-                name: eve
-            }, function(ret, err) {
-                var val = ret.value.selDate;
-                if (ret) {
-                    if (eve == 'changeHead') {
-                        // 处理用户头像
-                        $api.attr(ele, 'src', val);
-                        reviseData();
-                    } else if (eve == 'xiugaisex') {
-                        // 处理用户性别
-                        if (val == '男' ) {
-                            $api.text(ele, '男');
-                            $api.attr(ele, 'data-val', 1);
-                        } else {
-                            $api.text(ele, '女');
-                            $api.attr(ele, 'data-val', 2);
-                        }
-                        reviseData();
-                    } else {
-                        $api.text(ele, val);
-                        reviseData();
+    }
+    function requireData() {
+         api.ajax({
+                url: apiSite + '/api/user_center/editBasicInfoIndex',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: { 
+                        token: $api.getStorage('userToken')
                     }
-                    
-                    
+                }
+            }, function(ret, err) {
+                if (ret) {
+                    $api.setStorage('userInfo', ret.data);
+                    userName = ret.data.info.nickname,
+                    zName = ret.data.info.real_name,
+                    headImg = ret.data.info.head_img_url,
+                    sex = ret.data.info.sex,
+                    // 家乡
+                    hometown = ret.data.info.hometown, 
+                    // 生日
+                    birthday = ret.data.info.birthday;
+                    // 设置本地缓存
+                    $api.setStorage('real_name', zName); 
+                    $api.setStorage('hometown', hometown); 
+                    $api.setStorage('birthday', birthday);
+                    // 图片缓存
+                    api.imageCache({
+                        url: headImg
+                    }, function(ret, err) {
+                        if(ret.status) {
+                            $api.setStorage('imgCache', ret.url);
+                        }
+                    });
+                    reviseContent(userName,zName, headImg, sex, hometown, birthday);
+                    return ret.data;
                 } else {
                     alert(JSON.stringify(err.msg));
                 }
             });
-            
-        }
-        // 修改资料
-        function reviseData () {
-            var name = $api.text($api.dom('.name')) || userName;
-            var niCheng = $api.text($api.dom('.nickname')) || zName;
-            var headImg = $api.attr($api.dom('.headImg'),'src') || headImg;
-            var sex = $api.attr($api.dom('.sex'),'data-val') || sex;
-            var jx = $api.text($api.dom('.jx')) || hometown;
-            var sr = $api.text($api.dom('.sr')) || birthday;
-
-
-            // 上传数据
-             api.ajax({
-                    url: apiSite + '/api/user_center/editBasicInfo',
-                    method: 'post',
-                    headers: apiHeader,
-                    data: {
-                        values: { 
-                            token: $api.getStorage('userToken'),
-                            head_img_url: 'http://img1.skqkw.cn:888/2014/12/08/07/rf5rlvjegvz-10335.jpg',
-                            real_name: name,
-                            nickname: niCheng,
-                            sex: sex,
-                            hometown:jx,
-                            birthday:sr
-                        }
-                    }
-                }, function(ret, err) {
-                        alert(JSON.stringify(ret))
-                })
-             // myAjax();
-        }
-
-        // 获取个人资料
-        function myAjax() {
-            api.ajax({
-                    url: apiSite + '/api/user_center/editBasicInfoIndex',
-                    method: 'post',
-                    headers: apiHeader,
-                    data: {
-                        values: { 
-                            token: $api.getStorage('userToken')
-                        }
-                    }
-                }, function(ret, err) {
-                    if (ret) {
-                            userName = ret.data.info.nickname,
-                            zName = ret.data.info.real_name,
-                            headImg = ret.data.info.head_img_url,
-                            sex = ret.data.info.sex,
-                            // sex = (ret.data.info.sex === 1)?'男':'女',
-                            // 家乡
-                            hometown = ret.data.info.hometown, 
-                            // 生日
-                            birthday = ret.data.info.birthday;
-                            // 设置本地缓存
-                            // $api.setStorage('userName', userName); 
-                            $api.setStorage('real_name', zName); 
-                            // $api.setStorage('sex', sex); 
-                            $api.setStorage('hometown', hometown); 
-                            $api.setStorage('birthday', birthday);
-                            
-                            // 初始化页面内容   
-                            reviseContent(userName,zName, headImg, sex, hometown, birthday);
-                            // 图片缓存
-                            api.imageCache({
-                                url: headImg,
-                                policy: 'cache_else_network'
-                            }, function(ret, err) {
-                                if (ret) {
-                                    $api.setStorage('headImg', ret.url); 
-                                } else {
-                                    alert(JSON.stringify(err.msg));
-                                }
-                            });
-                    } else {
-                        alert(JSON.stringify(err.msg));
-                    }
-                });
-        }
-
+    }
     </script>
 </body>
 </html>

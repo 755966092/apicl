@@ -291,52 +291,85 @@
         
         // 获取用户信息
         function userInfo() {
-                 api.ajax({
-                    url: apiSite + '/api/user_center/index',
-                    method: 'post',
-                    headers: apiHeader,
-                    data: {
-                        values: { 
-                            token: $api.getStorage('userToken')
-                        }
+                var userCenterData = $api.getStorage('UserCenter');
+                if (userCenterData) {
+                    // 缓存
+                    console.log('h缓存')
+                    // userName = userCenterData.info.nickname,
+                    // headImg =  $api.getStorage('imgCache'),
+                    // sex = userCenterData.info.sex,
+                    // // sex = (userCenterData.info.sex === 1)?'男':'女',
+                    // // 当前公司
+                    // currentCompany = userCenterData.info.current_company, 
+                    // // 当前职位
+                    // currentPosition = userCenterData.info.current_position;
+                    reviseContent(userCenterData.info.nickname, $api.getStorage('imgCache'), userCenterData.info.sex, userCenterData.info.current_company, userCenterData.info.current_position);
+                    var workData = requireData();
+                    if (userCenterData != workData) {
+                        userName = workData.info.nickname,
+                        headImg =  $api.getStorage('imgCache'),
+                        sex = workData.info.sex,
+                        // 当前公司
+                        currentCompany = workData.info.current_company, 
+                        // 当前职位
+                        currentPosition = workData.info.current_position;
+                        reviseContent(workData.info.nickname, $api.getStorage('imgCache'), workData.info.sex, workData.info.current_company, workData.info.current_position);
                     }
-                }, function(ret, err) {
-                    if (ret) {
-                            userName = ret.data.info.nickname,
-                            headImg = ret.data.info.head_img_url,
-                            sex = ret.data.info.sex,
-                            // sex = (ret.data.info.sex === 1)?'男':'女',
-                            // 当前公司
-                            currentCompany = ret.data.info.current_company, 
-                            // 当前职位
-                            currentPosition = ret.data.info.current_position;
-                            // 设置本地缓存
-                            $api.setStorage('userName', userName); 
-                            
-                            $api.setStorage('userSex', sex); 
-                            $api.setStorage('currentCompany', currentCompany); 
-                            $api.setStorage('currentPosition', currentPosition);
-                            
-                            // 初始化页面内容   
-                            reviseContent(userName, headImg, sex, currentCompany, currentPosition);
-                            // 图片缓存
-                            api.imageCache({
-                                url: headImg,
-                                policy: 'cache_else_network'
-                            }, function(ret, err) {
-                                if (ret) {
-                                    $api.setStorage('headImg', ret.url); 
-                                } else {
-                                    alert(JSON.stringify(err.msg));
-                                }
-                            });
-                    } else {
-                        alert(JSON.stringify(err.msg));
-                    }
-                });
+                } else {
+                    // 无缓冲
+                    console.log('网络')
+                    requireData();
+                }
+                
             // }
         }
-        //
+        function requireData() {
+            api.ajax({
+                url: apiSite + '/api/user_center/index',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: { 
+                        token: $api.getStorage('userToken')
+                    }
+                }
+            }, function(ret, err) {
+                if (ret) {
+                    $api.setStorage('UserCenter', ret.data);
+                    userName = ret.data.info.nickname,
+                    headImg = ret.data.info.head_img_url,
+                    sex = ret.data.info.sex,
+                    // sex = (ret.data.info.sex === 1)?'男':'女',
+                    // 当前公司
+                    currentCompany = ret.data.info.current_company, 
+                    // 当前职位
+                    currentPosition = ret.data.info.current_position;
+                    // 设置本地缓存
+                    $api.setStorage('userName', userName); 
+                    
+                    $api.setStorage('userSex', sex); 
+                    $api.setStorage('currentCompany', currentCompany); 
+                    $api.setStorage('currentPosition', currentPosition);
+                    
+                    // 初始化页面内容   
+                    reviseContent(userName, headImg, sex, currentCompany, currentPosition);
+                    // 图片缓存
+                    api.imageCache({
+                        url: headImg,
+                        policy: 'cache_else_network'
+                    }, function(ret, err) {
+                        if (ret) {
+                            $api.setStorage('imgCache', ret.url); 
+                        } else {
+                            alert(JSON.stringify(err.msg));
+                        }
+                    });
+                    return ret.data
+                } else {
+                    alert(JSON.stringify(err.msg));
+                }
+            });
+        }
     	function login(ele) {
            // 根据点击的按钮进入不同的页面
             var val = $api.attr(ele, 'data-val');
