@@ -6,7 +6,6 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-
         .no_data {
          background-color: #f8f8f8; 
          text-align: center;
@@ -326,7 +325,6 @@
     }
     // 筛选后页面变化
     function viewResults(ele) {
-       
         $api.css($api.dom('.results'), 'background: #fff url(../../image/icon_zk.png)no-repeat;background-position: right center;-webkit-background-size: .15rem .25rem;background-size: .15rem .25rem;');
         // $api.css(ele, 'b');
         // getData(data2);
@@ -357,15 +355,19 @@
                     filter: 1
                 }, function(ret, err) {
                     if (ret.status) {
-                        latitude = ret.lat;
-                        longitude = ret.lon;
+                        data.latitude = ret.lat;
+                        data.longitude = ret.lon;
                     } else {
                         alert(err.code);
                     }
                 });
             }
         }
-
+        // 缓存字段  supply_publish_1
+        var supplyCache = $api.getStorage('supply_publish_1');
+        if (supplyCache) {
+            getData(supplyCache);
+        }
         api.ajax({
             url: apiSite + '/api/supply/index',
             method: 'post',
@@ -378,32 +380,34 @@
                     sub_type: data.sub_type || '',
                     // category_ids: '',     
                     order: data.order || '',
-                    latitude: latitude || '',      
-                    longitude: longitude || ''     
+                    latitude: data.latitude || '',      
+                    longitude: data.longitude || ''     
                }
             }
         }, function(ret, err) {
             if(ret) {
-                console.log(JSON.stringify(ret))
                 // 停止下拉刷新
                 api.refreshHeaderLoadDone()
-                for (var i = 0; i < ret.data.list.length; i++) {
-                    // 解析图片json
-                    ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
+                if (supplyCache === ret.data.list) {
 
-                    if(ret.data.list[i].unit == 0) {
-                        ret.data.list[i].unit = _dataSource[_dataSource.length-1]
-                    } else {
-                        ret.data.list[i].unit = _dataSource[ret.data.list[i].unit-1]
+                } else {
+                    for (var i = 0; i < ret.data.list.length; i++) {
+                        // 解析图片json
+                        ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
+
+                        if(ret.data.list[i].unit == 0) {
+                            ret.data.list[i].unit = _dataSource[_dataSource.length-1]
+                        } else {
+                            ret.data.list[i].unit = _dataSource[ret.data.list[i].unit-1]
+                        }
+                        ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
+                        
                     }
-                    ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
-                    // 处理时间
-                    // 1. 如果是今天， 显示时间
-                    // 2. 如果是昨天显示昨天，
-                    // 3. 大于昨天显示天数
+                    $api.setStorage('supply_publish_1', ret.data.list);
+                    getData(ret.data.list);
+                    selfAdaption();
                 }
-                getData(ret.data.list);
-                selfAdaption();
+                
             } else {
                 alert(JSON.stringify(err.msg))
             }
