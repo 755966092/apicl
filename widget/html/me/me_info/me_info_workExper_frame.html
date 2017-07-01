@@ -15,7 +15,7 @@
         }
         .dzlist {
             height: 1.6rem;
-            border-bottom: 1px solid #E3E3E3;
+            border-bottom: .01rem solid #E3E3E3;
             background-color: #fff;
             padding: 0 .3rem;
             font-size: 0;
@@ -215,8 +215,11 @@
                     }
                 }
                 getData(ret.data.list);
-                if (ret.data.list) {
+                if (ret.data.list.length != 0) {
                     $api.setStorage('userWorkExperience', ret.data.list);
+                    api.sendEvent({
+                        name: 'showEditText'
+                    });
                 }
             } else {
                 alert(JSON.stringify(err.msg));

@@ -287,22 +287,11 @@
                 vScrollBarEnabled: false
             });
     	}
-
-        
         // 获取用户信息
         function userInfo() {
                 var userCenterData = $api.getStorage('UserCenter');
                 if (userCenterData) {
                     // 缓存
-                    console.log('h缓存')
-                    // userName = userCenterData.info.nickname,
-                    // headImg =  $api.getStorage('imgCache'),
-                    // sex = userCenterData.info.sex,
-                    // // sex = (userCenterData.info.sex === 1)?'男':'女',
-                    // // 当前公司
-                    // currentCompany = userCenterData.info.current_company, 
-                    // // 当前职位
-                    // currentPosition = userCenterData.info.current_position;
                     reviseContent(userCenterData.info.nickname, $api.getStorage('imgCache'), userCenterData.info.sex, userCenterData.info.current_company, userCenterData.info.current_position);
                     var workData = requireData();
                     if (userCenterData != workData) {
@@ -317,7 +306,6 @@
                     }
                 } else {
                     // 无缓冲
-                    console.log('网络')
                     requireData();
                 }
                 

@@ -22,20 +22,30 @@
 
         }
         .item {
-             padding-left: .3rem;
-             line-height: .797rem;
+            padding-right: .36rem;
+            line-height: .797rem;
             box-sizing: border-box;
             font-size: 0;
             display: inline-block;
             height: .797rem;
             background-color: #fff;
             width: 100%;
-            border-bottom: 1px solid #EBEBEB;
+            border-bottom: .01rem solid #d9d9d9;
+            margin-top: .01rem;
         }
+        .wrap {
+            padding-left: .36rem;
+            background-color: #fff;
+        }
+
+
         .item span,
         .item input {
-            font-size: .3rem;
+            font-size: .28rem;
             outline: none;
+        }
+        .item input {
+            font-family: 'microsoft yahei';
         }
         .addPhone {
             height: .797rem;
@@ -74,11 +84,17 @@
         .label {
             margin-right: .2rem;
         }
+        .wrapMove .moveFlag:last-child,
+        .wrapFixed .fixedFlag:last-child {
+            border-bottom: .01rem solid #d9d9d9;
+        }
+        
    </style>
 </head>
 <body>
     <div class="main resultList"></div>
     <script type="text/x-dot-template" id="listT">
+            <div class="wrapMove">
             {{ for (var i = 0; i < it.length; i++) { }} 
                 {{?it[i].flag == 1}}
                     <p class="type moveTitle">即使通讯</p>
@@ -86,27 +102,35 @@
 
                 {{?it[i].type == 1}}
                     <div class="move moveFlag" data-id="{{=it[i].contact_id}}" data-sub_type="{{=it[i].sub_type}}" data-type="{{=it[i].type}}" >
-                        <div class="item">
-                            <span class="label">{{=it[i].sub_type}}：</span>
-                            <input type="text" onchange="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].info}}" disabled="true">
-                            <span class="clearIcon" data-id="{{=it[i].contact_id}}"  tapmode="hover" onclick="clearItem(this)"></span>
+                        <div class="wrap">
+                            <div class="item">
+                                <span class="label">{{=it[i].sub_type}}：</span>
+                                <input style="font-family: 'microsoft yahei';" type="text" onchange="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].info}}" disabled="true">
+                                <span class="clearIcon" data-id="{{=it[i].contact_id}}"  tapmode="hover" onclick="clearItem(this)"></span>
+                            </div>
                         </div>
                     </div>
                 {{?}}
-
+            {{}}}
+            </div>
+            <div class="wrapFixed">
+            {{ for (var i = 0; i < it.length; i++) { }} 
                 {{?it[i].flag == 2}}
                     <p class="type fixedTitle">网站</p>
                 {{?}}
                 {{?it[i].type == 2}}
                     <div class="move fixedFlag"  data-id="{{=it[i].contact_id}}" data-sub_type="{{=it[i].sub_type}}" data-type="{{=it[i].type}}">
-                        <div class="item" >
-                            <span class="label">网站：</span>
-                            <input type="text" onchange="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].info}}" disabled="true">
-                            <span class="clearIcon" data-id="{{=it[i].contact_id}}" tapmode="hover" onclick="clearItem(this)"></span>
+                        <div class="wrap">
+                            <div class="item" >
+                                <span class="label">网站：</span>
+                                <input style="font-family: 'microsoft yahei';" type="text" onchange="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].info}}" disabled="true">
+                                <span class="clearIcon" data-id="{{=it[i].contact_id}}" tapmode="hover" onclick="clearItem(this)"></span>
+                            </div>
                         </div>
                     </div>
                 {{?}}
             {{ }; }} 
+            </div>
    </script>
     <div class="addPhone" tapmode onclick="addPhone()">
         <div class="addIcon"></div>
@@ -223,6 +247,11 @@
         }, function(ret, err) {
             if (ret) {
                 handleData(litterSort(ret.data.list))
+                if (ret.data.list.length != 0) {
+                    api.sendEvent({
+                        name: 'showEditText'
+                    });
+                }
                 // getData(ret.data.list);
                 // alert(JSON.stringify(ret.data))
                 monitorEvent();
@@ -241,7 +270,7 @@
                 data[i].sub_type = 'QQ'
             }
         }
-        
+        console.log(JSON.stringify(data))
         getData(data);
         if (data) {
             $api.setStorage('userOtherContacts', data);

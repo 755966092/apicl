@@ -6,9 +6,8 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
     <style>
-       
-        body, html {
-            background-color: #F8F8F8;
+        .hide {
+            display: none;
         }
     </style>
 </head>
@@ -20,7 +19,7 @@
             <span class="winTitle">
                 电话
             </span>
-            <span class="rightBtn bj" id="voer"   tapmode="hover"   onclick="enter()">编辑</span> 
+            <span class="rightBtn bj hide" id="over"   tapmode="hover"   onclick="enter()">编辑</span> 
         </div>
     </header>
 </body>
@@ -48,6 +47,15 @@
                     name: 'xgTel',
                 });
             
+        });
+        api.addEventListener({
+            name: 'showEditText'
+        }, function(ret, err) {
+            if (ret) {
+                $api.removeCls($api.byId('over'), 'hide');
+            } else {
+                alert(JSON.stringify(err));
+            }
         });
        
     };

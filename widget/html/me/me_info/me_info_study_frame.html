@@ -201,9 +201,9 @@
                 layout: {
                     row: 7,
                     col: 1,
-                    height: 30,
-                    size: 16,
-                    sizeActive: 18,
+                    height: 26,
+                    size: 20,
+                    sizeActive: 24,
                     rowSpacing: 5,
                     colSpacing: 5,
                     maskBg: 'rgba(0,0,0,0.5)',
@@ -214,7 +214,7 @@
                 animation: true,
                 cancel: {
                     text: '取消',
-                    size: 12,
+                    size: 16,
                     w: 90,
                     h: 35,
                     bg: '#eee',
@@ -224,7 +224,7 @@
                 },
                 ok: {
                     text: '确定',
-                    size: 12,
+                    size: 16,
                     w: 90,
                     h: 35,
                     bg: '#eee',
@@ -235,7 +235,7 @@
                 title: {
                     text: '请选择',
                     size: 20,
-                    h: 35,
+                    h: 44,
                     bg: '#eee',
                     color: '#000'
                 },
@@ -333,10 +333,13 @@
                         ret.data.list[i].end_date = '至今'
                     }   
                 }
-
+                
                 getData(ret.data.list);
-                if (ret.data.list) {
+                if (ret.data.list.length != 0) {
                     $api.setStorage('userLearningExperience', ret.data.list);
+                    api.sendEvent({
+                        name: 'showEditText'
+                    });
                 }
             } else {
                 alert(JSON.stringify(err.msg));

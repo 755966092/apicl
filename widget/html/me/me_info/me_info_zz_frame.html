@@ -166,8 +166,11 @@
             if (ret) {
                 getData(ret.data.list)
                 
-                if (ret.data.list) {
+                if (ret.data.list.length != 0) {
                     $api.setStorage('userAddress', ret.data.list);
+                    api.sendEvent({
+                        name: 'showEditText'
+                    });
                 }
             } else {
                 alert(JSON.stringify(err.msg));

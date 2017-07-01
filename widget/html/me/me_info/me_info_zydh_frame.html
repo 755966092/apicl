@@ -22,15 +22,16 @@
 
         }
         .item {
-             padding-left: .3rem;
-             line-height: .797rem;
+            padding-left: .3rem;
+            line-height: .797rem;
             box-sizing: border-box;
+            margin-top: .02rem;
             font-size: 0;
             display: inline-block;
             height: .797rem;
             background-color: #fff;
             width: 100%;
-            border-bottom: 1px solid #EBEBEB;
+            border-bottom: .01rem solid #d9d9d9;
         }
         .item span,
         .item input {
@@ -88,7 +89,7 @@
                     <div class="move moveFlag" data-id="{{=it[i].contact_id}}" data-sub_type="{{=it[i].sub_type}}" data-type="{{=it[i].type}}" >
                         <div class="item">
                             <span class="label">{{=it[i].sub_type}}：</span>
-                            <input type="text" onchange="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].phone}}" disabled="true">
+                            <input style="font-family: 'microsoft yahei';" type="text" onchange="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].phone}}" disabled="true">
                             <span class="clearIcon" data-id="{{=it[i].contact_id}}"  tapmode="hover" onclick="clearItem(this)"></span>
                         </div>
                     </div>
@@ -101,7 +102,7 @@
                     <div class="move fixedFlag"  data-id="{{=it[i].contact_id}}" data-sub_type="{{=it[i].sub_type}}" data-type="{{=it[i].type}}">
                         <div class="item" >
                             <span class="label">{{=it[i].sub_type}}：</span>
-                            <input type="text" onchange="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].phone}}" disabled="true">
+                            <input style="font-family: 'microsoft yahei';" type="text" onchange="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].phone}}" disabled="true">
                             <span class="clearIcon" data-id="{{=it[i].contact_id}}" tapmode="hover" onclick="clearItem(this)"></span>
                         </div>
                     </div>
@@ -110,7 +111,7 @@
    </script>
     <div class="addPhone" tapmode onclick="addPhone()">
         <div class="addIcon"></div>
-        <div>添加电话好号码</div>
+        <div>添加电话号码</div>
    </div>
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
@@ -227,7 +228,11 @@
                 // getData(ret.data.list);
                 // alert(JSON.stringify(ret.data))
                 
-
+                if(ret.data.list.length != 0) {
+                    api.sendEvent({
+                        name: 'showEditText'
+                    });
+                }
                 monitorEvent();
             } else {
                 alert('3'+JSON.stringify(err));
