@@ -264,7 +264,6 @@
 
         for (var i = 0; i < listContent.length; i++) {
             var imgArr = listContent[i].getElementsByClassName('content_img');
-            console.log(imgArr)
             var imgCount = imgArr.length
             if (imgCount == 1) {
                     $api.css(listContent[i].getElementsByClassName('content_img')[i], 'width:3.26rem;height:2.86rem;margin-top:.1rem');
@@ -345,9 +344,9 @@
     
     // 请求数据
     function requireData (data) {
-        var data = data || 1;
+        var data = data || {};
         var latitude,longitude;
-        if (data !== 1) {
+        if (data !== {}) {
             if (data.order == 'distance') {
                 bMap.getLocation({
                     accuracy: '100m',
@@ -367,6 +366,7 @@
         var supplyCache = $api.getStorage('supply_publish_1');
         if (supplyCache) {
             getData(supplyCache);
+            selfAdaption();
         }
         api.ajax({
             url: apiSite + '/api/supply/index',

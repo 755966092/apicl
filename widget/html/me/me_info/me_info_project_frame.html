@@ -14,28 +14,32 @@
             margin-top: .2rem;
         }
         .dzlist {
-            /*height: 1.6rem;*/
+            height: 1.9rem;
             border-bottom: 1px solid #E3E3E3;
             background-color: #fff;
-            padding: 0 .3rem .1rem;
+            padding: 0 .36rem;
             font-size: 0;
+        }
+        .dzlist .img {
+            height: 1.9rem;
+            box-sizing: border-box;
+            padding-top: .2rem;
         }
         .dzlist .left {
             width: 5.7rem;
-            margin-top: .35rem;
             /*margin-right: .5rem;*/
         }
         .dzlist h3 {
-            font-size: .28rem;
-            color: #222;
+            font-size: .34rem;
+            color: #000;
 
         }
         .dzlist p {
             font-size: .24rem;
-            color: #555;
+            color: #737373;
         }
         .dzlist .right {
-            height: 1rem;
+            height: .44rem;
             width: .44rem;
             background: url(../../../image/icon_my/icon_bj.png)no-repeat;
             background-size: .44rem .44rem;
@@ -47,8 +51,8 @@
         
         .dzlist img {
             width: .64rem;
+            height: .64rem;
             float: left;
-            margin-top: .35rem;
             margin-right: .1rem;
         }
         .main_no3 {
@@ -77,7 +81,6 @@
         .schoolInfo {
             font-size: .24rem;
             line-height: .4rem;
-            padding-left: .7rem;
             white-space:nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -90,21 +93,24 @@
 <body>
     
     <div class="wrap resultList">
+   
     </div>
     <script type="text/x-dot-template" id="listT">
         {{ for (var i = 0; i < it.length; i++) { }} 
             <div class="dzlist"  tapmode="hover"   onclick="openEdit(this)" data-type='{{=it[i].type}}' data-id='{{=it[i].project_id}}'>
-                <div class="clearfix kuo">
-                <img src="../../../image/tx_2.jpg">
-                <div class="left fl">
-                    <h3>{{=it[i].name}}</h3>
-                    <!-- <p>{{=it[i].start_date}} - {{=it[i].end_date}},{{=it[i].url}}&nbsp;&nbsp;{{=it[i].role}}</p> -->
-                    <p>{{=it[i].url}}&nbsp;&nbsp;{{=it[i].role}}</p>
+                <div class="flex-def kuo flex-cCenter">
+                    <div class="img flex-def flex-cStart">
+                        <img src="../../../image/tx_2.jpg">
+                    </div>
+                    <div class="left fl">
+                        <h3>{{=it[i].name}}</h3>
+                        <!-- <p>{{=it[i].start_date}} - {{=it[i].end_date}},{{=it[i].url}}&nbsp;&nbsp;{{=it[i].role}}</p> -->
+                        <p>{{=it[i].url}}&nbsp;&nbsp;{{=it[i].role}}</p>
+                        <div class="schoolInfo">{{=it[i].description}}</div>
+                        <div class="schoolInfo">{{=it[i].achievement}}</div>
+                    </div>
+                    <span    class="right fr" id="btnStatus"></span></div>
                 </div>
-                <span    class="right fr" id="btnStatus"></span></div>
-                <div class="schoolInfo">{{=it[i].description}}</div>
-                <div class="schoolInfo">{{=it[i].achievement}}</div>
-            </div>
         {{ }; }}
     </script>
     <div class="main_no3 ">
