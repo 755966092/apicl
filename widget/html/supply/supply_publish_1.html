@@ -436,6 +436,7 @@
             }
         }, function(ret, err) {
             if(ret) {
+                console.log(ret.data.list[0].create_time)
                 // 停止下拉刷新
                 api.refreshHeaderLoadDone()
                 if (supplyCache === ret.data.list) {
@@ -444,6 +445,7 @@
                     for (var i = 0; i < ret.data.list.length; i++) {
                         // 解析图片json
                         ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
+                        
 
                         if(ret.data.list[i].unit == 0) {
                             ret.data.list[i].unit = _dataSource[_dataSource.length-1]

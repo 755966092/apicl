@@ -196,7 +196,7 @@
 
 <script type="text/javascript">
 // var rongToken, userToken;
-var name,headImg = $api.getStorage('headImg'),youHeadImg;
+var name,headImg = $api.getStorage('imgCache'),youHeadImg;
 var messageId,targetRongId;
 var  mainH, _main, scrollH;
     apiready = function(){
@@ -221,7 +221,7 @@ var  mainH, _main, scrollH;
          getSideInfo(targetRongId)
         // 调整页面到输入框的后面
         
-
+        alert()
         // 滚动到底部
         slideBut();
         api.addEventListener({
@@ -403,9 +403,10 @@ var  mainH, _main, scrollH;
            }
        }, function(ret, err) {
            if(ret) {
-               youHeadImg = ret.data.list[rongUserId].head_img_url
-               // 获取最新消息
-               getNews()
+                console.log('406:'+JSON.stringify(ret))
+                youHeadImg = ret.data.list[rongUserId].head_img_url
+                // 获取最新消息
+                getNews()
                 
            } else {
                alert(JSON.stringify(err.msg))
@@ -422,12 +423,14 @@ var  mainH, _main, scrollH;
             // targetId: name,
             count: 20
         }, function(ret, err) {
+            console.log('425:'+JSON.stringify(ret))
             for (var i = ret.result.length-1; i >= 0 ; i--) {
                 if (ret.result[i].messageDirection == 'RECEIVE') {
                     // 消息方向：SEND(发送) 或者 RECEIVE(接受)
                     addReceMsg(ret.result[i].content.text, youHeadImg)
                 } else {
                     addSendMsg(ret.result[i].content.text, headImg);
+
                 }
                 
             }
@@ -440,7 +443,7 @@ var  mainH, _main, scrollH;
     }
     
     // 接收消息后新建消息
-    function addReceMsg(msg, headImg) {
+    function addReceMsg(msg, youHeadImg) {
         $api.append($api.dom('.main'),'<div class="other clearfix"><img class="fl" src="'+ youHeadImg +'"><p class="fl">' + msg + '</p></div>');
             slideBut();
     }
@@ -453,7 +456,7 @@ var  mainH, _main, scrollH;
     function addSendMsgTop(msg, headImg) {
         $api.prepend($api.dom('.main'),'<div class="oneself clearfix"><img class="fr" src="'+ headImg +'"><p class="fr"> ' + msg + ' </p></div>');
     }
-    function addReceMsgTop(msg, headImg) {
+    function addReceMsgTop(msg, youHeadImg) {
         $api.prepend($api.dom('.main'),'<div class="other clearfix"><img class="fl" src="'+ youHeadImg +'"><p class="fl">' + msg + '</p></div>');
     }
 
@@ -477,6 +480,7 @@ var  mainH, _main, scrollH;
                 oldestMessageId: messageId,
                 count: count
             }, function(ret, err) {
+                console.log('482:'+JSON.stringify(ret))
                 // alert(JSON.stringify(ret))
                 for (var i = 0; i < ret.result.length ; i++) {
                     if (ret.result[i].messageDirection == 'RECEIVE') {
@@ -552,7 +556,7 @@ var  mainH, _main, scrollH;
             text: msg,
             extra: ''
         }, function(ret, err) {
-            
+            console.log('558:'+JSON.stringify(ret))
             if (ret.status == 'prepare') {
               sendMsg = ret.result.message.content.text;
               // alert(JSON.stringify(ret));

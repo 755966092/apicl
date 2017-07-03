@@ -188,7 +188,8 @@
         // 监听打开加好友窗口  
         monitorEvent();
        
-        
+        // 缓存个人信息
+        requireData();
         
         // chatMessage = $api.getStorage('chatMessage');
         // if (chatMessage) {
@@ -211,6 +212,48 @@
         });
     }
     
+    function requireData() {
+            api.ajax({
+                url: apiSite + '/api/user_center/index',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: { 
+                        token: $api.getStorage('userToken')
+                    }
+                }
+            }, function(ret, err) {
+                if (ret) {
+                    $api.setStorage('UserCenter', ret.data);
+                    userName = ret.data.info.nickname,
+                    headImg = ret.data.info.head_img_url,
+                    sex = ret.data.info.sex,
+                    // 当前公司
+                    currentCompany = ret.data.info.current_company, 
+                    // 当前职位
+                    currentPosition = ret.data.info.current_position;
+                    // 设置本地缓存
+                    $api.setStorage('userName', userName); 
+                    $api.setStorage('userSex', sex); 
+                    $api.setStorage('currentCompany', currentCompany); 
+                    $api.setStorage('currentPosition', currentPosition);
+                    // 图片缓存
+                    api.imageCache({
+                        url: headImg,
+                        policy: 'cache_else_network'
+                    }, function(ret, err) {
+                        if (ret) {
+                            $api.setStorage('imgCache', ret.url); 
+                        } else {
+                            alert(JSON.stringify(err.msg));
+                        }
+                    });
+                } else {
+                    alert(JSON.stringify(err.msg));
+                }
+            });
+    }
+
     function contrastCache(cacheFieldName,  fn) {
         var cacheFieldName = $api.getStorage(cacheFieldName);
          if (cacheFieldName) {
