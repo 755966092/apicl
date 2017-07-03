@@ -156,6 +156,13 @@
         .comment_name {
             color: #576B95;
         }
+        .bbottomLoading {
+            text-align: center; 
+            font-size: .24rem;
+            color: #999;
+            line-height: .8rem;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -223,7 +230,7 @@
                 {{ }; }}
             {{?}}
     </script>
-  
+    <p class="bbottomLoading">正在加载...</p>
    
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -232,6 +239,7 @@
 
 <script type="text/javascript">
     var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
+    var dataList = [], page_num = 1, dataListFlag = [];
     apiready = function(){
         moduleInit();
         // 请求数据
@@ -242,6 +250,8 @@
         api.setCustomRefreshHeaderInfo({
             bgColor: '#EFEFF4',
         }, function(ret, err) {
+            page_num = 1;
+            $api.text($api.dom('.bbottomLoading'), '正在加载...');
             //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
             requireData();
         });
@@ -254,8 +264,31 @@
                 alert(JSON.stringify(err));
             }
         });
-    };
 
+         // 上啦加载
+        scrollBotton()
+
+    };
+    // 滚动到底部触发的事件
+    function scrollBotton() {
+        // 滚动到底部触发的事件
+        api.addEventListener({
+            name:'scrolltobottom',
+            extra:{
+                threshold:0            //设置距离底部多少距离时触发，默认值为0，数字类型
+            }
+        }, function(ret, err){        
+            // alert('已滚动到底部');
+            if ($api.text($api.dom('.bbottomLoading')) == '暂无更多供求') {
+
+            } else {
+                $api.css($api.dom('.bbottomLoading'), 'display: block');
+                page_num++;
+                requireData2();
+            }
+            
+        });
+    }
 
     
     // 根据上传图片的多少自适应图片的大小
@@ -270,12 +303,11 @@
 
             }  else {
                 for (var j = 0; j < imgCount; j++) {
-                    $api.css(listContent[i].getElementsByClassName('content_img')[j], 'height:1.56rem');
+                    $api.css(listContent[i].getElementsByClassName('content_img')[j], 'width:1.56rem;height:1.56rem');
                 }
             }
         }
     }
-    
     
     // doT模版获取数据
     function getData(data) {
@@ -381,7 +413,8 @@
                     // category_ids: '',     
                     order: data.order || '',
                     latitude: data.latitude || '',      
-                    longitude: data.longitude || ''     
+                    longitude: data.longitude || '',
+                    page_num: page_num     
                }
             }
         }, function(ret, err) {
@@ -404,6 +437,7 @@
                         
                     }
                     $api.setStorage('supply_publish_1', ret.data.list);
+                    dataList = ret.data.list;
                     getData(ret.data.list);
                     selfAdaption();
                 }
@@ -414,6 +448,73 @@
         })
     }
     
+    function requireData2 (data) {
+        console.log(page_num)
+        var data = data || {};
+        var latitude,longitude;
+        if (data !== {}) {
+            if (data.order == 'distance') {
+                bMap.getLocation({
+                    accuracy: '100m',
+                    autoStop: true,
+                    filter: 1
+                }, function(ret, err) {
+                    if (ret.status) {
+                        data.latitude = ret.lat;
+                        data.longitude = ret.lon;
+                    } else {
+                        alert(err.code);
+                    }
+                });
+            }
+        }
+        api.ajax({
+            url: apiSite + '/api/supply/index',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+               values: { 
+                    token: $api.getStorage('userToken'),
+                    // keyword: '',
+                    type: data.type || '', 
+                    sub_type: data.sub_type || '',
+                    // category_ids: '',     
+                    order: data.order || '',
+                    latitude: data.latitude || '',      
+                    longitude: data.longitude || '',
+                    page_num: page_num     
+               }
+            }
+        }, function(ret, err) {
+            console.log(page_num)
+           
+            if(ret) {
+                if (ret.data.list) {
+                    $api.text($api.dom('.bbottomLoading'), '暂无更多供求');
+                } else {
+                    $api.css($api.dom('.bbottomLoading'), 'display: none');
+                }
+                for (var i = 0; i < ret.data.list.length; i++) {
+                    // 解析图片json
+                    ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
+
+                    if(ret.data.list[i].unit == 0) {
+                        ret.data.list[i].unit = _dataSource[_dataSource.length-1]
+                    } else {
+                        ret.data.list[i].unit = _dataSource[ret.data.list[i].unit-1]
+                    }
+                    ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
+                }
+                for (var i = 0; i < ret.data.list.length; i++) {
+                    dataList.push(ret.data.list[i])
+                }
+                getData(dataList);
+                selfAdaption();
+            } else {
+                alert(JSON.stringify(err.msg))
+            }
+        })
+    }
     // 进入详情
     function info(ele) {
         var flag = 0;
@@ -434,7 +535,6 @@
                 supply_id: supply_id
             }
         });
-        
     }
 
 </script>

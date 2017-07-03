@@ -19,9 +19,11 @@
             position: absolute;
             top: 0;bottom: 0;left: 0;right: 0;margin: auto;
             box-sizing: border-box;
-            padding: .37rem;
+            padding: .37rem  0;
         }
-        
+        .main .title {
+            padding: 0 .36rem;
+        }
         .headImg {
             margin-right: .2rem;
         }
@@ -54,9 +56,9 @@
             font-size: .24rem;
         }
         .QRCode img{
-            margin-top: .6rem;
-            width: 3.9rem;
-            height: 3.9rem;
+            /*margin-top: .6rem;*/
+            width: 5.3rem;
+            height: 5.3rem;
         }
     </style>
 </head>
@@ -83,7 +85,7 @@
            </div>
         </div>
         <div class="QRCode flex-def flex-zCenter ">
-            <img id="ewm" src="">
+            <img id="ewm" src="../../image/tx_1.jpg">
         </div>
     </div>
 
@@ -143,11 +145,11 @@
             save: {
                 imgPath: 'fs://',
                 imgName: 'album1.png',
-                // size: '600'
+                size: 390
             }
         }, function(ret, err) {
             if (ret.status) {
-                alert(JSON.stringify(ret))
+                // alert(JSON.stringify(ret))
                 $api.attr($api.byId('ewm'), 'src', ret.savePath);
             } else {
                 alert(JSON.stringify(err.msg));
