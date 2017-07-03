@@ -102,11 +102,24 @@
 
         }
         .info .comIcon {
-            width: .41rem;
+            /*width: .41rem;
             height: .24rem;
             background: url(../../image/icon_supply/icon_gs2.png)no-repeat;
             -webkit-background-size: .41rem .24rem;
             background-size: .41rem .24rem;
+            margin-right: .1rem;*/
+            line-height: .24rem;
+            text-align: center;
+            border-radius: .04rem;
+            width: .41rem;
+            height: .24rem;
+            /*background: url(../../image/icon_supply/icon_gs2.png)no-repeat;*/
+            /*-webkit-background-size: .41rem .24rem;*/
+            /*background-size: .41rem .24rem;*/
+            /*padding-right: .1rem;*/
+            font-size: .16rem;
+            color: #576c96;
+            border: 1px solid #576c96;
             margin-right: .1rem;
         }
 
@@ -187,8 +200,8 @@
                                 <div class="titleLeft flex-def flex-zLeftRight flex-cCenter">
                                     <h3 class="name">{{=it[i].title}}</h3>
                                     <!-- <h3 class="name">{{=it[i].nickname}}</h3> -->
-                                    <span class="sexIcon"></span>
-                                    <span class="zmfIcon"></span>
+                                    <!-- <span class="sexIcon"></span> -->
+                                    <!-- <span class="zmfIcon"></span> -->
                                     <!-- <span class="zmfText">700分</span> -->
                                 </div>
                                 <div class="titleRight">
@@ -198,7 +211,11 @@
                             {{?it[i].company_name}}
                                 <div class="info">
                                     <p class="commanyName flex-def flex-cCenter">
-                                        <span class="comIcon"></span>
+                                        {{?{{=it[i].type}}==1}}
+                                        <span class="comIcon">个人</span>
+                                        {{??}}
+                                        <span class="comIcon">公司</span>
+                                        {{?}}
                                         <span>{{=it[i].company_name}}</span>
                                     </p>
                                 </div>

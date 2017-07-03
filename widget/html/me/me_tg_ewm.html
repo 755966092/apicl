@@ -42,10 +42,15 @@
         .titleText .icon{
             width: .24rem;
             height: .24rem;
-            background: url(../../image/icon_supply/icon_person.png);
+            background: url(../../image/icon_supply/icon_person.png)no-repeat;
             -webkit-background-size: .24rem .24rem ;
             background-size: .24rem .24rem ;
             margin-left: .2rem;
+        }
+        .titleText .icon2 {
+             background: url(../../image/icon_my/icon_my02.png)no-repeat;
+            -webkit-background-size: .24rem .24rem ;
+            background-size: .24rem .24rem ;
         }
         .code {
             font-size: .24rem;
@@ -79,7 +84,7 @@
            <div class="titleText">
                <p class="namw flex-def flex-cCenter">
                    <span id="nickname">Alexi</span>
-                   <span class="icon"></span>
+                   <span id="icon" class="icon"></span>
                </p>
                <p class="code">邀请码：<span class="info" id="invitation_code">45EEFW5G54</span></p>
            </div>
@@ -96,13 +101,13 @@
     apiready = function(){
         fnInit();
        
-        $api.text($api.byId('nickname'), $api.getStorage('userName'));
         var InviteInfo = $api.getStorage('InviteInfo');
         if (InviteInfo) {
             // 有缓存
             console.log('使用缓存')
             $api.text($api.byId('invitation_code'), InviteInfo.info.invitation_code);
             $api.attr($api.byId('head_img_url'), 'src', InviteInfo.info.head_img_url);
+            $api.text($api.byId('nickname'), InviteInfo.info.nickname);
             createQrcode(InviteInfo.info.invitation_code)
             requestData(InviteInfo);
         } else {
@@ -129,6 +134,12 @@
                     // 网络数据没有更新
                 } else {
                     // 网络数据有更新
+                    $api.text($api.byId('invitation_code'), ret.data.info.invitation_code);
+                    $api.attr($api.byId('head_img_url'), 'src', ret.data.info.head_img_url);
+                    $api.text($api.byId('nickname'), ret.data.info.nickname);
+                    if (ret.data.info.sex == 2) {
+                        $api.addCls($api.byId('icon'), 'icon2');
+                    }
                     $api.setStorage('InviteInfo', ret.data);
                     createQrcode(ret.data.info.invitation_code)
                 }

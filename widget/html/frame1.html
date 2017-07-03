@@ -286,7 +286,10 @@
         });
     }
     function paixv (data) {
+        console.log('未处理的数据:'+JSON.stringify(data))
+
         for (var i = 0; i < data.length; i++) {
+            data[i].placeholderImg = "widget://html/image/";
                 if (f_check_uppercase(data[0].flag)) {
                     data[0].initial = data[0].flag;
                 } else {
@@ -305,7 +308,6 @@
             var arr = {}
             var a;
             for (var i = 0; i < data.length; i++) {
-                
                 if (data[i].initial) {
                     if (data[i].initial == '#') {
                         if (arr[data[i].initial]) {
@@ -322,10 +324,9 @@
                 // if (data[a].initial ) {
                     
                 // }
-       
                 arr[data[a].initial].push (data[i])
             }
-            // console.log('处理完的数据:'+JSON.stringify(arr))
+            console.log('处理完的数据:'+JSON.stringify(arr))
             return arr;
     }
     </script>
