@@ -173,7 +173,8 @@
         "sub_type": 1,
     }]
     apiready = function(){
-        monitorEvent()
+        monitorEvent();
+        requireData();
     };
     // 监听点击保存和编辑按钮
     function monitorEvent () {
@@ -243,7 +244,7 @@
         }
         return data
     }
-    handleData(litterSort(data))
+   
 
     function clearItem(ele) {
         var father = $api.closest(ele, '.move');
@@ -263,6 +264,27 @@
                 name: 'value'
             }
         });
+    }
+
+    function requireData() {
+        api.ajax({
+            url: apiSite + '/api/user/contactList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       user_id: api.pageParam.userId
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                console.log(JSON.stringify(ret))
+                 handleData(litterSort(ret.data.list))
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
     }
 </script>
 </html>

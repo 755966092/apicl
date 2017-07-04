@@ -38,14 +38,14 @@
             <span class="winTitle" id="title">
 								
 						</span>
-            <span class="rightBtn"></span>
+            <span class="rightBtn" tapmode="hover" onclick="openMemberInfo()"></span>
         </div>
     </header>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
-	var name, targetRongId;
+	var name, targetRongId, userId;
 	apiready = function() {
     // 初始化模块
     moduleInit()
@@ -83,17 +83,32 @@
         },
         bounces: true
     });
-    // 初始化聊天界面
-    // chatTools();
-
     api.execScript({
         name: 'main',
         // frameName: 'fram0',
         script: 'getTotalCount();'
     });
 
+    api.addEventListener({
+        name: 'getUserId'
+    }, function(ret, err) {
+        if (ret) {
+            alert(JSON.stringify(ret));
+            userId = ret.value.userId
+        } else {
+            alert(JSON.stringify(err));
+        }
+    });
 };
-
+function openMemberInfo() {
+    api.openWin({
+        name: 'txl_memberInfo_Win',
+        url: '../addressList/txl_memberInfo_Win.html',
+        pageParam: {
+            userId: userId
+        }
+    });
+}
 function clearState(targetRongId) {
     rong.clearMessagesUnreadStatus({
         conversationType: 'PRIVATE',
@@ -102,149 +117,7 @@ function clearState(targetRongId) {
 
     })
 }
-// 聊天界面
-function chatTools() {
 
-
-    UIChatBox.open({
-        placeholder: '请输入内容',
-        maxRows: 6,
-        autoFocus: true,
-        emotionPath: 'widget://res/img/emotion',
-        texts: {
-            recordBtn: {
-                normalTitle: '按住说话',
-                activeTitle: '松开结束'
-            },
-            sendBtn: {
-                title: '发送'
-            }
-        },
-        styles: {
-            inputBar: {
-                borderColor: '#d9d9d9',
-                bgColor: '#f2f2f2'
-            },
-            inputBox: {
-                borderColor: '#B3B3B3',
-                bgColor: '#FFFFFF'
-            },
-            emotionBtn: {
-                normalImg: 'widget://image/chatPage/face1.png'
-            },
-            extrasBtn: {
-                normalImg: 'widget://image/chatPage/add1.png'
-            },
-            keyboardBtn: {
-                normalImg: 'widget://image/chatPage/key1.png'
-            },
-            speechBtn: {
-                normalImg: 'widget://image/chatPage/cam1.png'
-            },
-            recordBtn: {
-                normalBg: '#c4c4c4',
-                activeBg: '#999999',
-                color: '#000',
-                size: 14
-            },
-            indicator: {
-                target: 'both',
-                color: '#c4c4c4',
-                activeColor: '#9e9e9e'
-            },
-            sendBtn: {
-                titleColor: '#fff',
-                bg: '#4cc518',
-                activeBg: '#46a91e',
-                titleSize: 14
-            }
-        },
-        extras: {
-            titleSize: 10,
-            titleColor: '#a3a3a3',
-            btns: [{
-                title: '图片',
-                normalImg: 'widget://image/chatPage/album1.png',
-                activeImg: 'widget://image/chatPage/album2.png'
-            }, {
-                title: '拍照',
-                normalImg: 'widget://image/chatPage/loc1.png',
-                activeImg: 'widget://image/chatPage/loc2.png'
-            }, {
-                title: '位置',
-                normalImg: 'widget://image/chatPage/loc1.png',
-                activeImg: 'widget://image/chatPage/loc2.png'
-            }]
-        }
-    }, function(ret, err) {
-        if (ret) {
-
-            if (ret.eventType === 'send') {
-
-
-                // msg: 发送的消息
-
-                sendMsg(ret.msg);
-
-                // 发送消息后清空输入框
-                // UIChatTools.value({
-                //     msg: ''
-                // });
-                // 把聊天内容滑动到最下面
-            }
-            if (ret.eventType === 'clickExtras') {
-                alert('点击了第' + ret.index + '个附加按钮')
-            }
-        } else {
-            alert(JSON.stringify(err.msg));
-        }
-    });
-}
-
-/**
- * 发送消息 
- * sendMsg(msg)
- * msg: 发送的消息
- */
-function sendMsg(msg) {
-    var sendMsg;
-    rong.sendTextMessage({
-        conversationType: 'PRIVATE',
-        // 目标rongyun用户名
-        targetId: targetRongId,
-        // targetId: name,
-        text: msg,
-        extra: ''
-    }, function(ret, err) {
-
-        if (ret.status == 'prepare') {
-            sendMsg = ret.result.message.content.text;
-            // alert(JSON.stringify(ret));
-        } else if (ret.status == 'success') {
-
-            api.sendEvent({
-                name: 'sendMsg',
-                extra: {
-                    msg: sendMsg
-                }
-            });
-
-
-        } else if (ret.status == 'error') {
-            api.alert({
-                title: 'title',
-                msg: '第三个message' + err.code,
-            }, function(ret, err) {
-                if (ret) {
-                    alert(JSON.stringify(ret));
-                } else {
-                    alert(JSON.stringify(err.msg));
-                }
-            });
-        }
-
-    });
-}
 </script>
 
 </html>

@@ -63,19 +63,19 @@
             <li>
                 <div class="wrap">
                     <span class="title" >省</span>
-                    <span class="text provinces" data-val="provinces"   tapmode="hover"   onclick="selCity(this)">所在省份</span>
+                    <span class="text provinces" data-val="provinces"   tapmode="hover"   onclick="selectList(this)">所在省份</span>
                 </div>
             </li>
             <li>
                 <div class="wrap">
                     <span class="title" >市</span>
-                    <span class="text cities" data-val="cities"   tapmode="hover"   onclick="selCity(this)">所在城市</span>
+                    <span class="text cities" data-val="cities"   tapmode="hover"   onclick="selectList(this)">所在城市</span>
                 </div>
             </li>
             <li>
                 <div class="wrap">
                     <span class="title" >区</span>
-                    <span class="text city" data-val="city"   tapmode="hover"   onclick="selCity(this)">所在城区</span>
+                    <span class="text city" data-val="city"   tapmode="hover"   onclick="selectList(this)">所在城区</span>
                 </div>
             </li>
             <li>
@@ -96,11 +96,13 @@
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript" src="../../../data/city_level3.js"></script>
 <script type="text/javascript">
-var url, provinces, cities, city, address, zipcode;
+var url, provinces, cities,  address, zipcode;
 
     apiready = function(){
-       
+        console.log(cityLevel3)
+        moduleInit();
         if (api.pageParam.flag) {
             // 1 编辑
             url = '/api/user_center/editAddress'
@@ -214,12 +216,9 @@ var url, provinces, cities, city, address, zipcode;
             }
         });
     }
-    
-    
-    
     // 按钮变色
     function iptCom() {
-            provinces =  $api.text($api.dom('.provinces')),
+        provinces =  $api.text($api.dom('.provinces')),
             cities =  $api.text($api.dom('.cities')),
             city =  $api.text($api.dom('.city')),
             address =  $api.val($api.dom('.address')),
@@ -228,6 +227,100 @@ var url, provinces, cities, city, address, zipcode;
             $api.css($api.dom('.btn'), 'background:  #08BB08');
             $api.removeAttr($api.dom('.btn'),'disabled');
         }
+    }
+
+    // 打开选择器
+    function selectList(ele) {
+        
+        // var selText = $api.text($api.dom(ele, '.'+label+''));
+        // var _dataSource2 = [],_dataSource = [],col=1;
+        // var active = [];
+        // col=3;
+        // _dataSource = city;
+        // var selText1 = selText.split('-')
+        // active = [];
+        // for (var i = 0; i < _dataSource.length; i++) {
+        //     if (_dataSource[i].name == selText1[0]) {
+        //         active.push(i);
+        //         for (var j = 0; j < _dataSource[i].sub.length; j++) {
+        //             if (_dataSource[i].sub[j].name == selText1[1]) {
+        //                 active.push(j);
+        //                 break;
+        //             }
+        //         }
+        //         break;
+        //     }
+        // }
+        // var fontsize = 16,rowLength = 5;
+        // if (api.systemType === 'ios') {
+        //     fontsize = 20;
+        //     rowLength = 7;
+        // }
+        console.log(cityLevel3[0].name)
+        UIActionSelector.open({
+            datas: cityLevel3,
+            actives: [1,2,3],
+            layout: {
+                row: 7,
+                col: 3,
+                height: 30,
+                size: 16,
+                sizeActive: 18,
+                rowSpacing: 5,
+                colSpacing: 5,
+                maskBg: 'rgba(0,0,0,0.5)',
+                bg: '#fff',
+                color: '#888',
+                colorSelected: '#000'
+            },
+            animation: true,
+            cancel: {
+                text: '取消',
+                size: 16,
+                w: 60,
+                h: 40,
+                bg: '#eee',
+                // bgActive: '#ccc',
+                color: '#000',
+                // colorActive: '#fff'
+            },
+            ok: {
+                text: '完成',
+                size: 16,
+                w: 60,
+                h: 40,
+                bg: '#eee',
+                // bgActive: '#ccc',
+                color: '#000',
+                // colorActive: '#fff'
+            },
+            title: {
+                text: '请选择',
+                size: 20,
+                h: 40,
+                bg: '#F0F0F0',
+                color: '#000'
+            },
+            fixedOn: api.frameName
+        }, function(ret, err) {
+            if (ret) {
+                // if (ret.eventType == 'ok') {
+                //     if (col === 2) {
+                //         $api.text($api.dom(ele, '.'+ label +''), ret.level1+'-'+ret.level2);
+                //     } else if (ret.level1 === '男' ) {
+                //         $api.attr($api.dom(ele, '.sex'), 'data-val', 1);
+                //         $api.text($api.dom(ele, '.'+ label +''), ret.level1);
+                //     } else {
+                //         $api.attr($api.dom(ele, '.sex'), 'data-val', 2);
+                //         $api.text($api.dom(ele, '.'+ label +''), ret.level1);
+                //     }
+                //    reviseData();
+                // }
+                alert(JSON.stringify(ret))
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
     }
 </script>
 </html>

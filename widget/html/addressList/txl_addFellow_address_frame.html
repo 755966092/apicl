@@ -171,12 +171,13 @@
     // 请求地址列表
     function getCityList() {
         api.ajax({
-            url: apiSite + '/api/user_center/addressList',
+            url: apiSite + '/api/user/addressList',
             method: 'post',
             headers: apiHeader,
             data: {
                 values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken')
+                    token: $api.getStorage('userToken'),
+                    user_id: api.pageParam.userId
                 }
             }
         }, function(ret, err) {

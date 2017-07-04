@@ -309,12 +309,13 @@
     // 请求列表
     function getCityList() {
         api.ajax({
-            url: apiSite + '/api/user_center/educationList',
+            url: apiSite + '/api/user/educationList',
             method: 'post',
             headers: apiHeader,
             data: {
                 values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken')
+                    token: $api.getStorage('userToken'),
+                    user_id: api.pageParam.userId
                 }
             }
         }, function(ret, err) {

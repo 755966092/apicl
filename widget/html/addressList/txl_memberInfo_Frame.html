@@ -67,6 +67,11 @@
             /*float: left;*/
 
         }
+        .titleRight .sexIcon2 {
+            background: url(../../image/icon_my/icon_my02.png)no-repeat;
+            -webkit-background-size: .21rem .21rem;
+            background-size: .21rem .21rem;
+        }
         .company {
             display: -webkit-box; 
             display: flex;
@@ -77,7 +82,7 @@
             justify-content: space-between;
             position: relative;
         }
-        .company .companyName {
+        .company .companyName  {
             font-size: .24rem;
             color: #999;
             line-height: .33rem;
@@ -269,25 +274,28 @@
     </style>
 </head>
 <body>
-<p class="wran">加入会员后可查看对方最近一次活跃时间</p>
+    <p class="wran">加入会员后可查看对方最近一次活跃时间</p>
     <div class="main">
         <div class="title">
             <div class="headImg">
-                <img src="../../image/tx_4.jpg">
+                <img id="head_img_url" src="../../image/icon_defaultHead.png">
             </div>
-            <div class="titleRight">
+            <div class="titleRight flex-def flex-zTopBottom">
                 <div class="name">
                     <div class="nameNo1">
-                        <h3>陈胜东</h3>
-                        <span class="sexIcon"></span>
+                        <h3 id="nickname">陈胜东</h3>
+                        <span id="sex" class="sexIcon"></span>
                     </div>
                     <div class="activeTime">
                         <span class="shadow"></span>
                         1天前活跃
                     </div>
                 </div>
-                <div class="company">
-                    <span class="companyName">上海策赢网络科技 董事长</span>
+                <div class="company ">
+                    <span class="companyName">
+                        <span id="current_company"></span> 
+                        <span id="current_position"></span> 
+                    </span>
                     <span class="companyArrow"></span>
                 </div>
                 
@@ -317,7 +325,7 @@
             <li class="mt20" tapmode="hover" onclick="openInfo(this)" data-val="mainPhone">
                <div class="wrap">
                     <span>电话：</span>
-                    <span>18601125241</span>
+                    <span id="phone"></span>
                     <span class="icon"></span>
                </div>
             </li>
@@ -341,12 +349,13 @@
             <li class="mt20">
                 <div class="wrap">
                     <span>家乡：</span>
-                    <span>吉林</span>
+                    <span id="hometown"></span>
                     <span class="icon"></span>
                 </div>
             </li>
             <li>
                 <span>生日：</span>
+                <span id="birthday"></span>
                 <span class="icon"></span>
             </li>
             <li class="mt20" tapmode="hover" onclick="openInfo(this)" data-val="otherContact">
@@ -387,8 +396,57 @@
 <script type="text/javascript">
     apiready = function(){
         moduleInit();
-       
+        requireData();
     };
+    // 获取会员信息
+    function requireData() {
+        api.ajax({
+            url: apiSite + '/api/user/detail',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       user_id: api.pageParam.userId
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                console.log(JSON.stringify(ret))
+                initPage(ret.data)
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+    // 初始化页面
+    function initPage(data) {
+        var nickname = $api.byId('nickname');
+        var sex = $api.byId('sex');
+        var head_img_url = $api.byId('head_img_url');
+        var phone = $api.byId('phone');
+        var hometown = $api.byId('hometown');
+        var birthday = $api.byId('birthday');
+        var current_company = $api.byId('current_company');
+        var current_position = $api.byId('current_position');
+
+        if (data.info.current_position != null) {
+            $api.text(current_position, data.info.current_position);
+        }
+        if (data.info.current_company != null) {
+            $api.text(current_company, data.info.current_company);
+        }
+
+        $api.text(nickname, data.info.nickname);
+        $api.text(hometown, data.info.hometown);
+        $api.text(birthday, data.info.birthday);
+        $api.text(phone, data.contact.phone);
+        $api.attr(phone, 'data-contactId', data.contact.contact_id);
+        $api.attr(head_img_url, 'src', data.info.head_img_url);
+        if (data.info.sex === 2 ) {
+            $api.addCls(sex, 'sexIcon2');
+        }
+    }
     function addFriends() {
         api.openWin({
             name: 'txl_addFriendsInfo',
@@ -403,7 +461,7 @@
             url: './txl_addFellow_'+val+'_win.html',
             // url: './txl_addFellow_address_win.html',
             pageParam: {
-                name: 'value'
+                userId: api.pageParam.userId
             },
             bounces: false
         });

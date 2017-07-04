@@ -405,6 +405,12 @@ var  mainH, _main, scrollH;
            if(ret) {
                 console.log('406:'+JSON.stringify(ret))
                 youHeadImg = ret.data.list[rongUserId].head_img_url
+                api.sendEvent({
+                    name: 'getUserId',
+                    extra: {
+                        userId: ret.data.list[rongUserId].user_id, 
+                    }
+                });
                 // 获取最新消息
                 getNews()
                 

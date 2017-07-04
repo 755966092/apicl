@@ -43,6 +43,9 @@
                 w: 'auto',
                 h: 'auto'
             },
+            pageParam:{
+                userId: api.pageParam.userId
+            },
             bounces: false
         });
         api.addEventListener({
@@ -68,6 +71,98 @@
                 name: 'editDz'
             });
         }
+    }
+
+     // 打开选择器
+    function selectList(ele) {
+        var label = $api.attr(ele, 'data-val');
+        var selText = $api.text($api.dom(ele, '.'+label+''));
+        var _dataSource2 = [],_dataSource = [],col=1;
+        var active = [];
+        col=3;
+        _dataSource = city;
+        var selText1 = selText.split('-')
+        active = [];
+        for (var i = 0; i < _dataSource.length; i++) {
+            if (_dataSource[i].name == selText1[0]) {
+                active.push(i);
+                for (var j = 0; j < _dataSource[i].sub.length; j++) {
+                    if (_dataSource[i].sub[j].name == selText1[1]) {
+                        active.push(j);
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        var fontsize = 16,rowLength = 5;
+        if (api.systemType === 'ios') {
+            fontsize = 20;
+            rowLength = 7;
+        }
+        UIActionSelector.open({
+            datas: _dataSource,
+            actives: active,
+            layout: {
+                row: rowLength,
+                col: col,
+                height: 30,
+                size: fontsize,
+                sizeActive: fontsize+2,
+                rowSpacing: 5,
+                colSpacing: 5,
+                maskBg: 'rgba(0,0,0,0.5)',
+                bg: '#fff',
+                color: '#888',
+                colorSelected: '#000'
+            },
+            animation: true,
+            cancel: {
+                text: '取消',
+                size: 16,
+                w: 60,
+                h: 40,
+                bg: '#eee',
+                // bgActive: '#ccc',
+                color: '#000',
+                // colorActive: '#fff'
+            },
+            ok: {
+                text: '完成',
+                size: 16,
+                w: 60,
+                h: 40,
+                bg: '#eee',
+                // bgActive: '#ccc',
+                color: '#000',
+                // colorActive: '#fff'
+            },
+            title: {
+                text: '请选择',
+                size: 20,
+                h: 40,
+                bg: '#F0F0F0',
+                color: '#000'
+            },
+            fixedOn: api.frameName
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.eventType == 'ok') {
+                    if (col === 2) {
+                        $api.text($api.dom(ele, '.'+ label +''), ret.level1+'-'+ret.level2);
+                    } else if (ret.level1 === '男' ) {
+                        $api.attr($api.dom(ele, '.sex'), 'data-val', 1);
+                        $api.text($api.dom(ele, '.'+ label +''), ret.level1);
+                    } else {
+                        $api.attr($api.dom(ele, '.sex'), 'data-val', 2);
+                        $api.text($api.dom(ele, '.'+ label +''), ret.level1);
+                    }
+                   reviseData();
+                }
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
     }
 </script>
 </html>

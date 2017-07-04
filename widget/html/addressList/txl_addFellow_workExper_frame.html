@@ -83,7 +83,7 @@
 <body>
     
     <div class="wrap resultList">
-        <div class="dzlist">
+       <!--  <div class="dzlist">
             <div class="clearfix kuo">
             <img src="../../image/tx_2.jpg">
             <div class="left fl">
@@ -92,7 +92,7 @@
             </div>
             <span   tapmode="hover"   onclick="openEdit(this)" class="right fr"></span></div>
             <div class="schoolInfo">北京市海淀区清华科技园创业大厦110</div>
-        </div>
+        </div> -->
        <!-- <div class="dzlist">
            <div class="left fl">
                 <h3>方小姐</h3>
@@ -199,12 +199,13 @@
     // 请求地址列表
     function getCityList() {
         api.ajax({
-            url: apiSite + '/api/user_center/workList',
+            url: apiSite + '/api/user/workList',
             method: 'post',
             headers: apiHeader,
             data: {
                 values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken')
+                    token: $api.getStorage('userToken'),
+                    user_id: api.pageParam.userId
                 }
             }
         }, function(ret, err) {

@@ -232,20 +232,21 @@
                 fixedOn: api.frameName
             }, function(ret, err) {
                 if (ret) {
-                    // alert(JSON.stringify(ret));
-                    addFriends();
+                    alert(JSON.stringify(data1[ret.key][ret.index]));
+
+                    addFriends(data1[ret.key][ret.index].user_id);
                 } else {
                     // alert(JSON.stringify(err.msg));
                 }
             });
     }
      // 打开人脉详情
-    function addFriends() {
+    function addFriends(userId) {
         api.openWin({
             name: 'txl_memberInfo_Win',
             url: './addressList/txl_memberInfo_Win.html',
             pageParam: {
-                name: 'value'
+                userId: userId
             }
         });
     }
