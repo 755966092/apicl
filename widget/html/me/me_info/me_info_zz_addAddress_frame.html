@@ -99,9 +99,7 @@
 <script type="text/javascript" src="../../../data/city_level3.js"></script>
 <script type="text/javascript">
 var url, provinces, cities,  address, zipcode;
-
     apiready = function(){
-        console.log(cityLevel3)
         moduleInit();
         if (api.pageParam.flag) {
             // 1 编辑
@@ -111,16 +109,13 @@ var url, provinces, cities,  address, zipcode;
             // 0 新增
             url = '/api/user_center/addAddress'
         }
-        // 城市选择器返回的内容
-        install();
-
     };
     function addAddRess() {
-        // provinces =  $api.text($api.dom('.provinces')),
-        // cities =  $api.text($api.dom('.cities')),
-        // city =  $api.text($api.dom('.city')),
-        // address =  $api.val($api.dom('.address')),
-        // zipcode =  $api.val($api.dom('.zipcode'));
+        provinces =  $api.text($api.dom('.provinces')),
+        cities =  $api.text($api.dom('.cities')),
+        city =  $api.text($api.dom('.city')),
+        address =  $api.val($api.dom('.address')),
+        zipcode =  $api.val($api.dom('.zipcode'));
         api.ajax({
             url: apiSite + url,
             method: 'post',
@@ -148,47 +143,6 @@ var url, provinces, cities,  address, zipcode;
             }
         });
     }
-    // 城市选择器
-    function selCity(ele) {
-        var val = $api.attr(ele, 'data-val');
-        var provinces = $api.text($api.dom('.provinces')),
-            cities = $api.text($api.dom('.cities')),
-            city = $api.text($api.dom('.city'));
-        var homeText=[];
-        homeText.push(provinces)
-        homeText.push(cities)
-        homeText.push(city)
-        api.openFrame({
-            name: 'selCity',
-            url: './me_info_zz_addAddress_selCity.html',
-            rect: {
-                x: 0,
-                y: 0,
-                w: 'auto',
-                h: 'auto'
-            },
-            pageParam: {
-                homeText:homeText
-            },
-            bounces: false
-        });
-    }
-    // 设置页面内容
-    function install() {
-        api.addEventListener({
-            name: 'selCity'
-        }, function(ret, err) {
-            if (ret) {
-                $api.text($api.dom('.provinces'), ret.value.provinces);
-                $api.text($api.dom('.cities'), ret.value.cities);
-                $api.text($api.dom('.city'), ret.value.city);
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
-        // 判断按钮变色
-        iptCom();
-    }
     // 请求地址列表
     function getCityList() {
         api.ajax({
@@ -208,8 +162,7 @@ var url, provinces, cities,  address, zipcode;
                 $api.text($api.dom('.cities'), ret.data.info.city);
                 $api.text($api.dom('.city'), ret.data.info.district);
                 $api.val($api.dom('.address'), ret.data.info.address);
-                // $api.val($api.dom('.zipcode'), ret.data.info.city);
-                $api.val($api.dom('.zipcode'), '邮编');
+                $api.val($api.dom('.zipcode'), ret.data.info.zipcode);
                 iptCom();
             } else {
                 alert(JSON.stringify(err.msg));
@@ -218,7 +171,7 @@ var url, provinces, cities,  address, zipcode;
     }
     // 按钮变色
     function iptCom() {
-        provinces =  $api.text($api.dom('.provinces')),
+            provinces =  $api.text($api.dom('.provinces')),
             cities =  $api.text($api.dom('.cities')),
             city =  $api.text($api.dom('.city')),
             address =  $api.val($api.dom('.address')),
@@ -228,38 +181,40 @@ var url, provinces, cities,  address, zipcode;
             $api.removeAttr($api.dom('.btn'),'disabled');
         }
     }
-
     // 打开选择器
     function selectList(ele) {
-        
-        // var selText = $api.text($api.dom(ele, '.'+label+''));
-        // var _dataSource2 = [],_dataSource = [],col=1;
-        // var active = [];
-        // col=3;
-        // _dataSource = city;
-        // var selText1 = selText.split('-')
-        // active = [];
-        // for (var i = 0; i < _dataSource.length; i++) {
-        //     if (_dataSource[i].name == selText1[0]) {
-        //         active.push(i);
-        //         for (var j = 0; j < _dataSource[i].sub.length; j++) {
-        //             if (_dataSource[i].sub[j].name == selText1[1]) {
-        //                 active.push(j);
-        //                 break;
-        //             }
-        //         }
-        //         break;
-        //     }
-        // }
-        // var fontsize = 16,rowLength = 5;
-        // if (api.systemType === 'ios') {
-        //     fontsize = 20;
-        //     rowLength = 7;
-        // }
-        console.log(cityLevel3[0].name)
+        var provinces = $api.text($api.dom('.provinces')),
+            cities = $api.text($api.dom('.cities')),
+            city = $api.text($api.dom('.city'));
+        var homeText=[];
+        homeText.push(provinces)
+        homeText.push(cities)
+        homeText.push(city)
+
+        var active = [];
+        for (var i = 0; i < cityLevel3.length; i++) {
+            if (cityLevel3[i].name == homeText[0]) {
+                active.push(i);
+                for (var j = 0; j < cityLevel3[i].sub.length; j++) {
+                    if (cityLevel3[i].sub[j].name == homeText[1]) {
+                        active.push(j);
+                        for (var p = 0; p < cityLevel3[i].sub[j].sub.length; p++) {
+                            cityLevel3[i].sub[j].sub[p].name == homeText[2];
+                            active.push(p);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        var fontsize = 16,rowLength = 5;
+        if (api.systemType === 'ios') {
+            fontsize = 20;
+            rowLength = 7;
+        }
         UIActionSelector.open({
-            datas: cityLevel3,
-            actives: [1,2,3],
+            datas: 'widget://data/city_level3.json',
+            actives: active,
             layout: {
                 row: 7,
                 col: 3,
@@ -304,19 +259,14 @@ var url, provinces, cities,  address, zipcode;
             fixedOn: api.frameName
         }, function(ret, err) {
             if (ret) {
-                // if (ret.eventType == 'ok') {
-                //     if (col === 2) {
-                //         $api.text($api.dom(ele, '.'+ label +''), ret.level1+'-'+ret.level2);
-                //     } else if (ret.level1 === '男' ) {
-                //         $api.attr($api.dom(ele, '.sex'), 'data-val', 1);
-                //         $api.text($api.dom(ele, '.'+ label +''), ret.level1);
-                //     } else {
-                //         $api.attr($api.dom(ele, '.sex'), 'data-val', 2);
-                //         $api.text($api.dom(ele, '.'+ label +''), ret.level1);
-                //     }
-                //    reviseData();
-                // }
-                alert(JSON.stringify(ret))
+                // alert(JSON.stringify(ret))
+                if (ret.eventType == 'ok') {
+                    $api.text($api.dom('.provinces'), ret.level1);
+                    $api.text($api.dom('.cities'), ret.level2);
+                    $api.text($api.dom('.city'), ret.level3);
+                    // 判断按钮变色
+                    iptCom();
+                }
             } else {
                 alert(JSON.stringify(err.msg));
             }
