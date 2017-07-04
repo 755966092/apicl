@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <style type="text/css">
+        .study {
+            height: 1.24rem;
+            background-color: #fff;
+            padding: 0 .36rem;
+            border-bottom: .01rem solid #d9d9d9;
+        }
+        .study img {
+            width: .6rem;
+            height: .6rem;
+            margin-right: .2rem;
+        }
+        .study h3 {
+            font-size: .3rem;
+            line-height: .42rem;
+        }
+        .study p {
+            font-size: .24rem;
+            line-height: .33rem;
+            color: #999;
+        }
+        .selIcon {
+            width: .44rem;
+            height: .33rem;
+            background: url(../../../image/icon_my/icon_enter.png)no-repeat;
+            -webkit-background-size: .44rem .33rem;
+            background-size: .44rem .33rem;
+        }
+        .schoolInfo {
+            font-size: .24rem;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="wrap resultList">
+       <!--  <div class="study flex-def flex-cCenter">
+            <img src="../../../image/tx_2.jpg">
+            <div class="flex-item">
+                <h3>北京大学</h3>
+                <p>2013.1 - 2016.3, 金融，硕士</p>
+            </div>
+            <span class="selIcon"></span>
+        </div>
+        <div class="work study flex-def flex-cCenter">
+            <img src="../../../image/tx_2.jpg">
+            <div class="flex-item">
+                <h3>第一学</h3>
+                <p>开发</p>
+            <div class="schoolInfo">开发我再</div>
+            </div>
+            <span class="selIcon"></span>
+        </div> -->
+    </div>
+
+    <script type="text/x-dot-template" id="listT">
+        {{ for (var i = 0; i < it.length; i++) { }} 
+            {{?it[i].type == 2}}
+            <div class="study flex-def flex-cCenter" tapmode="hover" onclick="selStatus(this)" data-statusId="{{=it[i].status_id}}" data-type="{{=it[i].type}}">
+                <img src="../../../image/tx_2.jpg">
+                <div class="flex-item">
+                    <h3>{{=it[i].name}}</h3>
+                    <p>{{=it[i].start_date}}, {{=it[i].position}}，{{=it[i].degree}}</p>
+                </div>
+                {{?it[i].is_default == 1}}
+                    <span class="selIcon"></span>
+                {{??}}
+                    <span></span>
+                {{?}}
+            </div>
+            {{??}}
+            <div class="work study flex-def flex-cCenter" tapmode="hover" onclick="selStatus(this)" data-statusId="{{=it[i].status_id}}">
+                <img src="../../../image/tx_2.jpg">
+                <div class="flex-item">
+                    <h3>{{=it[i].name}}</h3>
+                    <p>{{=it[i].start_date}}, {{=it[i].position}}，{{=it[i].degree}}</p>
+                    <!-- <div class="schoolInfo">开发我再</div> -->
+                </div>
+                {{?it[i].is_default == 1}}
+                <span class="selIcon"></span>
+                {{??}}
+                <span></span>
+                {{?}}
+            </div>
+            {{?}}
+        {{ }; }}
+    </script>
+</body>
+<script type="text/javascript" src="../../../script/api.js"></script>
+<script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript" src="../../../script/doT.min.js"></script>
+<script type="text/javascript">
+    var zipcode;//邮编
+    apiready = function(){
+        // 请求地址列表
+	    requireData();
+    };
+   
+    // 请求地址列表
+    function requireData() {
+        api.ajax({
+            url: apiSite + '/api/user_center/getUserStatus',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: $api.getStorage('userToken')
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                for (var i = 0; i < ret.data.list.length; i++) {
+                    if (ret.data.list[i].type === 1) {
+                        // 工作
+                    } else {
+                        // 学习
+                        if (ret.data.list[i].degree == '1') {
+                            ret.data.list[i].degree = '专科'
+                        } else if (ret.data.list[i].degree == '2') {
+                            ret.data.list[i].degree = '本科'
+                        } else if (ret.data.list[i].degree == '3') {
+                            ret.data.list[i].degree = '硕士'
+                        } else if (ret.data.list[i].degree == '4') {
+                            ret.data.list[i].degree = '博士'
+                        } else if (ret.data.list[i].degree == '5'){
+                            ret.data.list[i].degree = '博士后'
+                        } else {
+                            ret.data.list[i].degree = ''
+                        }
+                    }
+                }
+                getData(ret.data.list);
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
+    }
+    // 选择默认
+    function selStatus(ele) {
+        var statusId = $api.attr(ele, 'data-statusId');
+        var type = $api.attr(ele, 'data-type');
+        for (var i = 0; i < $api.domAll('span').length; i++) {
+            $api.removeCls($api.domAll('span')[i], 'selIcon');
+        }
+        $api.addCls($api.dom(ele, 'span'), 'selIcon');
+        api.ajax({
+            url: apiSite + '/api/user_center/setDefaultStatus',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       type: type,
+                       status_id: statusId
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                alert(JSON.stringify(ret))
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+</script>
+</html>

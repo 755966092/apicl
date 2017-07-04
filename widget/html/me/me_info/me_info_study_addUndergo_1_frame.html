@@ -233,7 +233,31 @@
             title: text
         }, function(ret, err) {
             if (ret) {
-                $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day);
+                if (data == 'startTime') {
+                    var dateYear = new Date().getFullYear(),
+                        dateMonth = new Date().getMonth(),
+                        dateDay = new Date().getDate();
+                    // 开始时间
+                    if (ret.year > dateYear || ret.month > dateMonth || ret.day > dateDay) {
+                        api.toast({
+                            msg: '请选择早于当前的时间'
+                        });
+                    } else {
+                        $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day);
+                    }
+                } else {
+                    //结束时间
+                    var startTime = $api.text($api.byId('time_1')).split('-')
+                    if (ret.year > date || ret.month > date1 || ret.day > date2) {
+                        $api.text(ele, '至今');
+                    } else if (ret.year < startTime[0] || ret.month < startTime[1] || ret.day < startTime[2]) {
+                        api.toast({
+                            msg: '结束时间不能早于开始时间'
+                        });
+                    } else {
+                        $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day);
+                    }
+                }
             } else {
                 alert(JSON.stringify(err.msg));
             }
