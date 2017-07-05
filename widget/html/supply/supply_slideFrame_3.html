@@ -11,12 +11,6 @@
             width: 100%;    
             background-color: rgba(0,0,0,0.4);
         }
-
-        body {
-            
-          
-
-        }
         .warp1 {
             height: 100%;
              display: -webkit-box; 
@@ -97,7 +91,6 @@
             /*border-bottom: 1px solid #cbcbcb;*/
         }
         .main ul.no2 li {
-            
             /*height: .84rem;*/
             line-height: .79rem;
             border-top: 1px solid #CBCBCB;
@@ -105,6 +98,11 @@
         }
         .main ul.no2 li p {
             font-size: .24rem;
+            background: url(../../image/icon_zk.png)no-repeat;
+            -webkit-background-size: .15rem .25rem;
+            background-size: .15rem .25rem;
+            background-position: 5rem center;
+            padding-right: .36rem;
             color: #333;
         }
         .main ul.no2 li span{
@@ -147,23 +145,15 @@
             background: #E6FFE6;
             color: #27B24A;
         }
-        .main ul.no2 li span.no2Icon {
+        .main ul.no2 li span.selText {
             display: inline-block;
-            width: .25rem;
+            background-color: #fff;
+            color: #555;
             margin: 0;
-            background: url(../../image/icon_txl/icon_arrow.png)no-repeat;
-            -webkit-background-size: .25rem .15rem;
-            background-size: .25rem .15rem;
-            background-position: 0 center;
             float: right;
+            font-size: .24rem;
             margin-right: .37rem;
 
-        }
-        .main ul.no2 li span.no2Icon2 {
-             background: url(../../image/icon_txl/icon_arrow02.png)no-repeat;
-            -webkit-background-size: .25rem .15rem;
-            background-size: .25rem .15rem;
-            background-position: 0 center;
         }
         .footer {
             height: .98rem;
@@ -220,32 +210,14 @@
                      </ul>  
                     <ul class="no2">
                         <p>分类</p>
-                        <li class="no2List sel clearfix"   tapmode="hover"   onclick="li_spanP(this);event.cancelBubble=true;" >
-                            <p>TA自产自销的<span class="no2Icon no2Icon2"></span></p>
-                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span spanSel">全部</span>
-                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">摄影</span>
-                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no no2_li_Span">医疗</span>
-                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">医疗</span>
-                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">医疗</span>
-                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no no2_li_Span">教育</span>
+                        <li tapmode="hover" onclick="li_spanP(this);event.cancelBubble=true;" >
+                            <p>TA自产自销的<span class="selText"></span></p>
                         </li>
-                        <li class="no2List clearfix"   tapmode="hover"   onclick="li_spanP(this);event.cancelBubble=true;">
-                            <p>TA代理代办的<span class="no2Icon"></span></p>
-                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span spanSel">全部</span>
-                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">摄影摄</span>
-                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no no2_li_Span">摄影摄</span>
-                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">摄影摄</span>
-                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">医疗</span>
-                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no no2_li_Span">教育</span>
+                        <li tapmode="hover" onclick="li_spanP(this);event.cancelBubble=true;">
+                            <p>TA代理代办的<span class="selText"></span></p>
                         </li>
-                        <li class="no2List clearfix"   tapmode="hover"   onclick="li_spanP(this);event.cancelBubble=true;">
-                            <p>TA公司<span class="no2Icon"></span></p>
-                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span spanSel">全部</span>
-                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">摄影摄影摄影</span>
-                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no no2_li_Span">摄影摄影摄影</span>
-                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">摄影摄影摄影</span>
-                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no2_li_Span">医疗</span>
-                            <span   tapmode="hover"   onclick="selfAdaption(this);event.cancelBubble=true;" class="no no2_li_Span">教育</span>
+                        <li tapmode="hover" onclick="li_spanP(this);event.cancelBubble=true;">
+                            <p>TA公司<span class="selText"></span></p>
                         </li>
                     </ul>
                 </div>
@@ -275,45 +247,7 @@
         }
         $api.addCls(ele, 'sel');
     }
-
-    function li_spanP(ele) {
-        if ($api.hasCls(ele, 'sel')) {
-            $api.removeCls(ele, 'sel');
-             $api.removeCls($api.not(ele,'.no2_li_Span')[1], 'no2Icon2');
-
-        } else {
-            var allDom = $api.not($api.closest(ele, 'ul'),'p')
-            var allP = $api.domAll('.no2Icon');
-            for (var i = 0; i < allP.length; i++) {
-                 $api.removeCls(allP[i], 'no2Icon2');
-            }
-            $api.addCls($api.not(ele,'.no2_li_Span')[1], 'no2Icon2');
-            for (var i = 0; i< allDom.length; i++) {
-                $api.removeCls(allDom[i], 'sel');
-            }
-            $api.addCls(ele, 'sel');
-        }
-
-    }
-    function selfAdaption(ele) {
-        flag = 1;
-        var allDom = ele.parentNode.getElementsByClassName("no2_li_Span")
-        if ($api.hasCls(ele, 'spanSel')) {
-            for (var i = 0; i < allDom.length; i++) {
-                $api.addCls(allDom[i], 'show');
-                 $api.removeCls(allDom[i], 'hide');
-            }
-        } else {
-            for (var i = 0; i < allDom.length; i++) {
-                $api.removeCls(allDom[i], 'spanSel');
-                $api.removeCls(allDom[i], 'show');
-                $api.addCls(allDom[i], 'hide');
-            }
-            $api.addCls(ele, 'spanSel');
-            $api.addCls(ele, 'show');
-        }
-    }
-
+  
     // 点击确定按钮： 1； 重置按钮 0
     function enter(n) {
         if (n) {
@@ -360,27 +294,8 @@
                 }
                 $api.addCls(liArr[i].childNodes[3], 'sel');
             }  
-            for (var i = 0; i < $api.domAll('.no2List').length; i++) {
-                $api.removeCls($api.domAll('.no2List')[i], 'sel');
-                for(var j = 0; j < $api.domAll('.no2List')[i].childNodes.length ; j++) {
-                    $api.removeCls($api.domAll('.no2List')[i].childNodes[j], 'spanSel');
-                }
-                $api.addCls($api.domAll('.no2List')[i].childNodes[3], 'spanSel');
-            }
-            $api.addCls($api.domAll('.no2List')[0], 'sel');
-            var no2Icon = $api.domAll('.no2Icon')
-            for (var i = 0; i < no2Icon.length; i++) {
-                $api.removeCls(no2Icon[i], 'no2Icon2');
-            }
-            $api.addCls(no2Icon[0], 'no2Icon2');
 
         }
     }
-
-
-   
-    
-   
-   
 </script>
 </html>

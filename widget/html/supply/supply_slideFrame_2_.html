@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        html,body {
+            height: 100%;
+            width: 100%;    
+            background-color: rgba(0,0,0,0);
+        }
+
+        body {
+        }
+        .warp1 {
+            position: relative;
+            height: 100%;
+             display: -webkit-box; 
+            display: flex; 
+            -webkit-box-direction: normal;
+            -webkit-box-orient: vertical;
+            flex-direction: column;
+            -webkit-box-align:  end;
+            align-items: flex-end;
+        }
+        .warp {
+            margin-left: 1.5rem;
+            width: 6rem;
+            background-color: #fff;
+        }
+        .main {
+            background-color: #fff;
+            position: relative;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        .main>div:first-child {
+         }
+        .footer {
+            height: .78rem;
+            width: 6rem;
+            font-size: 0;
+            z-index: 999;
+            position: absolute;
+            bottom: 0;
+        }
+        .footer span {
+            height: .78rem;
+            width: 3rem;    
+            font-size: .34rem;
+            text-align: center;
+            line-height: .78rem;
+            float: left;
+            background-color: #F8F8F8;
+        }
+        .footer span:last-child {
+            background-color: #27B24A;
+            color: #fff;
+        }
+        
+        header.header {
+            opacity: 0;
+        }
+        .selected {
+            box-sizing: border-box;
+            padding-left: .2rem;
+            font-size: 0;
+            line-height: .81rem;
+        }
+        .selected span {
+            font-size: .26rem;
+        }
+        .selected .selectedText {
+            width: 4rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #999;
+
+        }
+    </style>
+</head>
+<body   tapmode="hover" class=""   onclick="api.closeFrame()">
+   
+    <div class="warp1 flex-def flex-zBetween">
+        <header class="header">
+            <div class="head"></div>
+        </header>
+        <div class="warp flex-item"   tapmode="hover"   onclick="api.closeFrame()">
+            <div class="main"   tapmode="hover"   onclick="event.cancelBubble=true;">
+                <div>
+                   <p class="selected"><span>已选择：</span><span class="selectedText">请选择学校</span></p>
+
+                </div>
+            </div> 
+            <div class="footer">
+                <span   tapmode="hover"   onclick="enter(0);event.stopPropagation();">取消</span>
+                <span   tapmode="hover"   onclick="enter(1);event.stopPropagation();">确定</span>
+            </div>
+        </div>
+    </div>
+    
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/pinyin4js.js"></script>
+<script type="text/javascript">
+    var flag = 0,eventName,discriminate,selectedArr=[];
+    var selectedObj ;
+    apiready = function(){
+        fnInit();
+        moduleInit();
+        selectedObj = api.pageParam.selectedObj;
+         if (selectedObj != 1) {
+            for (var i = 0; i < selectedObj.length; i++) {
+                selectedArr.push(selectedObj[i])
+            }
+        }
+        if (selectedObj) {
+            $api.text($api.dom('.selectedText'), selectedObj[0].str);
+        } else {
+            settingText();
+        }
+        openList(handleData())
+    }
+    // 设置文字
+    function settingText () {
+        $api.text($api.dom('.selectedText'), '选择分类');
+    }
+    // 打开列表
+    function openList(data) {
+        var str='';
+        console.log(JSON.stringify(api.pageParam.selectedObj))
+        if (api.pageParam.selectedObj == 0) {
+            str = ''
+        } else {
+            // console.log('132行: '+JSON.stringify(selectedObj[0]))
+            str = selectedObj[0].str ||''; 
+            // $api.text($api.dom('.selectedText'), str); 
+        }
+        listContact.open({
+            x: -1000,
+            y: -1000,
+            w: 5,
+            h: 5,
+            data: [],
+            fixedOn: api.frameName
+        },function(ret,err){
+        })
+        listContact.close();
+        listContact.open({
+            x: api.frameWidth - $api.offset($api.dom('.warp')).w,
+            y: headerH + $api.offset($api.dom('.selected')).h,
+            w: $api.offset($api.dom('.warp')).w,
+            h: api.frameHeight - headerH - $api.offset($api.dom('.footer')).h - $api.offset($api.dom('.selected')).h,
+            imgHeight: 32,
+            borderColor: '#d9d9d9',
+            groupTitle: {
+                color: '#999',       
+                size: 14,   
+                bgColor: '#f8f8f8'
+            },
+            rightBg: '#fff',
+            indicator: {
+                bgColor: 'rgba(0,0,0,0)',
+                color: '#5A5A5A'
+            },
+            cellBgColor: '#fff',
+            // 搜索框
+            searchBar: {
+                h: 40,
+                bgColor: '#F8F8F8',         //（可选项）搜索条背景色，字符串，默认透明，支持 rgb，rgba，#
+                placeholder: '搜索',      //（可选项）搜索条提示文字，字符串类型，默认空，不传则不显示提示文字
+                textFieldBgColor: '#fff'
+            },
+            data: data,
+            fixedOn: api.frameName
+        }, function(ret, err) {
+            if (ret) {
+                // alert(JSON.stringify(ret))
+                flag = 1;
+                if (str.indexOf(data[ret.key][ret.index].title) != -1) {
+                    // 已选
+                    str = str.replace(data[ret.key][ret.index].title,'')
+                    listContact.refreshItem({
+                        index: ret.index,
+                        key: ret.key,
+                        data: {
+                            title: data[ret.key][ret.index].title,
+                            titleColor: '#000',
+                            titleSize:14            
+                        }
+                    });
+                    $api.text($api.dom('.selectedText'), str);
+                    for (var i = 0; i < selectedArr.length; i++) {
+                        if (selectedArr[i].title === data[ret.key][ret.index].title) {
+                            selectedArr.splice(i,1);
+                            break;
+                        }
+                    }
+                    console.log('删除后:'+JSON.stringify(selectedArr));
+                    selectedArr[0].str = str;
+                } else {
+                    // 未选
+                    str += data[ret.key][ret.index].title+' ';
+                    selectedArr.push({
+                        title: data[ret.key][ret.index].title,
+                        key: ret.key,
+                        index: ret.index,
+                        str:''
+                    });
+                    selectedArr[0].str = str;
+                    console.log('删除前:'+JSON.stringify(selectedArr));
+                    $api.text($api.dom('.selectedText'), str);
+                    listContact.refreshItem({
+                        index: ret.index,
+                        key: ret.key,
+                        data: {
+                            title: data[ret.key][ret.index].title,
+                            titleColor: '#27B24A',
+                            titleSize:14            
+                        }
+                    });
+                }
+                
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    // 处理数据
+    function handleData() {
+        var schoolList = ['自定义数据','自定义数据2','自定义数据3','北京理工大学','同济大学','南开大学','复旦大学','山东科技大学','青岛海洋大学','中石油大学'];
+        var obj = {};
+        for (var i = 0; i < schoolList.length; i++) {
+            obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]] = [];
+        }
+        for (var i = 0; i < schoolList.length; i++) {
+            obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]].push({title:schoolList[i],titleSize:14});
+        }
+        if (selectedObj != 1) {
+            for (var i = 0; i < selectedObj.length; i++) {
+                obj[selectedObj[i].key][selectedObj[i].index].titleColor = '#27B24A'
+            }
+        }
+        // console.log(JSON.stringify(obj))
+        return obj
+    }
+    // 点击确定按钮： 1； 重置按钮 0
+    function enter(n) {
+        if (n) {
+            var schoolName = $api.text($api.dom('.selectedText'));
+            // 发送事件, 刷新筛选结果
+            if (flag === 0) {
+
+            } else {
+                api.sendEvent({
+                    name: 'selClass',
+                    extra: {
+                        schoolName: schoolName,
+                        selectedArr: selectedArr
+                    }
+                });
+            }
+            api.closeFrame();
+        }
+        else {
+            flag = 0;
+            api.closeFrame();
+            $api.text($api.dom('.selectedText'), discriminate);
+        }
+    }
+</script>
+</html>
