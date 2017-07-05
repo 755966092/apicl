@@ -281,7 +281,6 @@
                 alert(JSON.stringify(err));
             }
         });
-
          // 上啦加载
         scrollBotton()
 
@@ -325,23 +324,6 @@
             }
         }
     }
-    
-    // doT模版获取数据
-    function getData(data) {
-        
-        var listTText = $api.byId('listT').text;
-        
-        var fnListT = doT.template(listTText);
-        
-        var html = fnListT(data);
-        
-        var list = $api.dom('.resultList');
-        
-        // 替换resultList所有内容
-        $api.html(list, html);
-        // alert('getData:' + JSON.stringify(data))
-    }
-
     // 筛选后结果
     function bySelect() {
         api.addEventListener({
@@ -445,8 +427,8 @@
                     for (var i = 0; i < ret.data.list.length; i++) {
                         // 解析图片json
                         ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
-                        
-
+                        // 处理时间显示
+                        ret.data.list[i].create_time = initTime(ret.data.list[i].create_time)
                         if(ret.data.list[i].unit == 0) {
                             ret.data.list[i].unit = _dataSource[_dataSource.length-1]
                         } else {

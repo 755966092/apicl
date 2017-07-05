@@ -569,7 +569,9 @@
             }
         }, function(ret, err) {
             // 解析图片json
-            ret.data.info.image_json = eval(ret.data.info.image_json);    
+            ret.data.info.image_json = eval(ret.data.info.image_json); 
+            // 处理时间显示
+            ret.data.info.create_time = initTime(ret.data.info.create_time)   
             if (ret.data.info.unit > 0) {
                 ret.data.info.unit = _dataSource[ret.data.info.unit-1]
             } else {

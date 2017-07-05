@@ -222,17 +222,38 @@ function changeTime(time) {
 
 // doT模版获取数据
 function getData(data) {
-    console.log('渲染模版111')
+    // console.log('渲染模版111')
     var listTText = $api.byId('listT').text;
-    console.log('渲染模版222')
+    // console.log('渲染模版222')
     var fnListT = doT.template(listTText);
-    console.log('渲染模版333')
+    // console.log('渲染模版333')
     var html = fnListT(data);
-    console.log('渲染模版444')
+    // console.log('渲染模版444')
     var list = $api.dom('.resultList');
-    console.log('渲染模版555')
-        // 替换resultList所有内容
+    // console.log('渲染模版555')
+    // 替换resultList所有内容
     $api.html(list, html);
-    console.log('渲染完成')
-        // alert('getData:' + JSON.stringify(data))
+    // console.log('渲染完成')
+    // alert('getData:' + JSON.stringify(data))
+}
+
+// 处理时间显示
+function initTime(time) {
+    var timeRep = time;
+    time = time.replace(/-/g, ':').replace(' ', ':');
+    time = time.split(':');
+    var nowTime = new Date();
+    var pageTime = new Date(time[0], (time[1] - 1), time[2], time[3], time[4], time[5]);
+    if ((pageTime.getDate() != nowTime.getDate()) || (pageTime.getFullYear() != nowTime.getFullYear()) || ((pageTime.getMonth() + 1) != (nowTime.getMonth() + 1))) {
+        // 不是今天
+        return timeRep;
+    } else {
+        // 今天
+        if (nowTime.getHours() != pageTime.getHours()) {
+            return nowTime.getHours() - pageTime.getHours() + '小时之前'
+        } else {
+            // var timeText = nowTime.getMinutes() - pageTime.getMinutes()  == 0 ? '刚刚' : nowTime.getMinutes() - pageTime.getMinutes() + '分钟之前'
+            return nowTime.getMinutes() - pageTime.getMinutes() == 0 ? '刚刚' : nowTime.getMinutes() - pageTime.getMinutes() + '分钟之前'
+        }
+    }
 }

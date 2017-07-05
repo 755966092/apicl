@@ -1,14 +1,26 @@
-07 - 04 11: 28: 02.870 I / app3c(2): {
+07 - 05 14: 55: 27.331 I / app3c(2): {
 	"code": 200,
 	"data": {
 		"list": [{
-			"phone": "111111",
-			"sub_type": 1,
-			"contact_id": 89,
+			"status_id": 21,
+			"position": "至今",
+			"degree": "",
+			"start_date": "2016-06-04",
+			"is_default": -1,
+			"user_id": 18665,
 			"type": 1,
-			"is_default": 1
+			"name": "至今"
+		}, {
+			"status_id": 46,
+			"position": "物联网",
+			"degree": "3",
+			"start_date": "2015-06-04",
+			"is_default": 1,
+			"user_id": 18665,
+			"type": 2,
+			"name": "学习经历"
 		}]
 	},
 	"msg": "",
-	"time": 1499138884
+	"time": 1499237729
 }

@@ -228,7 +228,25 @@
         bySelect()
     };
 
-
+     // 处理时间显示
+    function initTime(time) {
+        var timeRep = time;
+        time=time.replace(/-/g,':').replace(' ',':');
+        time=time.split(':');
+        var nowTime = new Date();
+        var pageTime = new Date(time[0],(time[1]-1),time[2],time[3],time[4],time[5]);
+        if ((pageTime.getDate() != nowTime.getDate()) || (pageTime.getFullYear() != nowTime.getFullYear()) || ((pageTime.getMonth()+1) != (nowTime.getMonth()+1))) {
+            // 不是今天
+            return timeRep;
+        } else {
+            // 今天
+            if (nowTime.getHours() != pageTime.getHours()) {
+                return nowTime.getHours() - pageTime.getHours()+ '小时之前'
+            } else {
+                return nowTime.getMinutes() - pageTime.getMinutes() + '分钟之前'
+            }
+        }
+    }
     selfAdaption();
     // 根据上传图片的多少自适应图片的大小
     function selfAdaption() {
@@ -331,9 +349,7 @@
 
                    ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
                     // 处理时间
-                    // 1. 如果是今天， 显示时间
-                    // 2. 如果是昨天显示昨天，
-                    // 3. 大于昨天显示天数
+                    ret.data.list[i].create_time = initTime(ret.data.list[i].create_time)
                    
                     
                 }

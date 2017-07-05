@@ -76,7 +76,7 @@
                 {{?}}
             </div>
             {{??}}
-            <div class="work study flex-def flex-cCenter" tapmode="hover" onclick="selStatus(this)" data-statusId="{{=it[i].status_id}}">
+            <div class="work study flex-def flex-cCenter" tapmode="hover" onclick="selStatus(this)" data-statusId="{{=it[i].status_id}}" data-type="{{=it[i].type}}">
                 <img src="../../../image/tx_2.jpg">
                 <div class="flex-item">
                     <h3>{{=it[i].name}}</h3>
@@ -116,6 +116,7 @@
             }
         }, function(ret, err) {
             if (ret) {
+                console.log(JSON.stringify(ret))
                 for (var i = 0; i < ret.data.list.length; i++) {
                     if (ret.data.list[i].type === 1) {
                         // 工作
@@ -144,8 +145,10 @@
     }
     // 选择默认
     function selStatus(ele) {
-        var statusId = $api.attr(ele, 'data-statusId');
-        var type = $api.attr(ele, 'data-type');
+        var statusId = parseInt($api.attr(ele, 'data-statusId'));
+        var type = parseInt($api.attr(ele, 'data-type'));
+        console.log('type:'+type)
+        console.log('statusId:'+statusId)
         for (var i = 0; i < $api.domAll('span').length; i++) {
             $api.removeCls($api.domAll('span')[i], 'selIcon');
         }
@@ -163,7 +166,14 @@
             }
         }, function(ret, err) {
             if(ret) {
-                alert(JSON.stringify(ret))
+                api.toast({
+                    msg: '修改状态成功'
+                });
+                api.execScript({
+                    name: 'main',
+                    frameName: 'frame4',
+                    script: 'userInfo();'
+                });
             } else {
                 alert(JSON.stringify(err))
             }

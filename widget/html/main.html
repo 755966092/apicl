@@ -209,11 +209,11 @@
         </div>
         <div id="footer" class="border-t">
             <ul class="flex-wrap">
-                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con active "><span id="newsCount"></span>我在</li>
-                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con ">通讯录</li>
-                <li tapmode="hover" onclick="randomSwitchBtn( this );" data-val = '3' class="flex-con ">供求</li>
-                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">发现</li>
-                <li tapmode="hover" onclick="randomSwitchBtn( this );" class="flex-con">我</li>
+                <li ontouchstart="randomSwitchBtn( this );" class="flex-con active "><span id="newsCount"></span>我在</li>
+                <li ontouchstart="randomSwitchBtn( this );" class="flex-con ">通讯录</li>
+                <li ontouchstart="randomSwitchBtn( this );" data-val = '3' class="flex-con ">供求</li>
+                <li ontouchstart="randomSwitchBtn( this );" class="flex-con">发现</li>
+                <li ontouchstart="randomSwitchBtn( this );" class="flex-con">我</li>
             </ul>
         </div>
     </div>
@@ -228,10 +228,7 @@ var userToken, rongToken,footerH;
 apiready = function() {
     footerH = $api.offset($api.byId('footer')).h;
     fnInit();
-    console.log($api.getStorage('userToken'))
     // 获取传递参数
-    userToken = api.pageParam.userToken;
-    rongToken = api.pageParam.rongToken;
     moduleInit();
     $api.fixStatusBar($api.dom('header'));
     api.setStatusBarStyle({
@@ -250,9 +247,7 @@ apiready = function() {
     });
     api.addEventListener({
         name: 'searchSupply'
-
     }, function(ret, err) {
-      
         $api.html($api.dom('.supply'), '找供求<span   tapmode="hover"   onclick="addPublish()"></span>');
     });
     api.addEventListener({

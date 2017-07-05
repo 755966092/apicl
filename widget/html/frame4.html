@@ -198,7 +198,7 @@
                         <span class="userNameText userName">啊</span>
                         <!-- <img  class="sexImg" src=""> -->
                     <!-- </p> -->
-                    <p class="personalInfo">个人说明</p>
+                    <p class="personalInfo"></p>
                 </div>
                 <span></span>
             </li>
@@ -275,7 +275,7 @@
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/common.js"></script>
     <script type="text/javascript">
-    var  userName, headImg, sex, currentCompany, currentPosition,imgChche, userToken, rongToken;
+        var  userName, headImg, sex, currentCompany, currentPosition,imgChche, userToken, rongToken;
     	apiready = function(){
             userInfo();
             api.addEventListener({
@@ -324,6 +324,7 @@
                 }
             }, function(ret, err) {
                 if (ret) {
+                    console.log(JSON.stringify(ret))
                     $api.setStorage('UserCenter', ret.data);
                     userName = ret.data.info.nickname,
                     headImg = ret.data.info.head_img_url,
@@ -335,7 +336,6 @@
                     currentPosition = ret.data.info.current_position;
                     // 设置本地缓存
                     $api.setStorage('userName', userName); 
-                    
                     $api.setStorage('userSex', sex); 
                     $api.setStorage('currentCompany', currentCompany); 
                     $api.setStorage('currentPosition', currentPosition);
@@ -377,11 +377,14 @@
         function reviseContent(userName, headImg, sex, currentCompany, currentPosition) {
             var name = $api.dom('.userName'),
                 head = $api.dom('.headImg'),
-                sexImg = $api.dom('.sexImg');
+                sexImg = $api.dom('.sexImg'),
+                personalInfo = $api.dom('.personalInfo');
             // 设置用户昵称
             $api.text(name, userName);
             // 设置用户头像
             $api.attr(head, 'src', headImg);
+            // 设置当前状态
+            $api.text(personalInfo, currentCompany+'  '+currentPosition);
             // 设置用户性别
             if (sex == 1 ) {
                 $api.attr(sexImg, 'src', '../image/icon_my/icon_my01.png');

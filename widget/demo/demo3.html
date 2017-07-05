@@ -5,15 +5,75 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css"/>
-  
+  	<style type="text/css">
+  		body {
+  			font-size: 50px;
+  		}
+  		img {
+  			background-color: #f00;
+  		}
+  		img:hover {
+  			background-color: #0f0;
+  		}
+  	</style>
 </head>
 <body   tapmode="hover" class=""   onclick="api.closeFrame()">
-    
+    <div>
+    	<p>
+		<span>今天显示:</span>
+    	<span id="cennter">2017-07-05 09:44:16</span>
+    	</p>
+    	<p>
+		<span>以前显示:</span>
+    	<span>2017-07-05 09:44:16</span>
+    	</p>
+    </div>
+    <img src="../image/icon_add.png">
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/common.js"></script>
 <script type="text/javascript" src="../script/pinyin4js.js"></script>
 <script type="text/javascript" src="../data/city_level3.json"></script>
 <script type="text/javascript">
+	function initTime(time) {
+		var nowTime = new Date();
+		var pageTime = new Date(time);
+		if ((pageTime.getDate() != nowTime.getDate()) || (pageTime.getFullYear() != nowTime.getFullYear()) || ((pageTime.getMonth()+1) != (nowTime.getMonth()+1))) {
+			// 不是今天
+			return time;
+		} else {
+			// 今天
+			if (nowTime.getHours() != pageTime.getHours()) {
+				return nowTime.getHours() - pageTime.getHours()+ '小时之前'
+			} else {
+				return nowTime.getMinutes() - pageTime.getMinutes() + '分钟之前'
+			}
+		}
+	}
+	initTime('2017-07-05 11:44:13')
+	console.log(initTime('2017-07-05 11:44:13'))
+
+
+	// 昨天发布的
+	// 
+	// if (date - date2 > 0) {
+	// 	// 今天发布的
+	// 	var send = (date - date2) / 1000; // 秒
+	// 	var min = send/60;
+	// 	if (min > 60) {
+	// 		min = Math.floor(min/60)
+	// 		console.log(min+'小时之前')
+	// 	} else {
+	// 		min = Math.floor(min)
+	// 		console.log(min+'分钟之前')
+	// 	}
+	// 	console.log('分:'+send)
+	// 	console.log('秒:'+min)
+	// } else {
+	// 	console.log('昨天')
+	// }
+	// console.log(date - date2)
+	// console.log(Date.parse('2017-07-05 10:44:17'))
+
 </script>
 </html>

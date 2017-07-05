@@ -428,7 +428,6 @@
     };
     // 获取数据
     function requestData() {
-        
         api.ajax({
             url: apiSite + '/api/circle_topic/detail',
             method: 'post',
@@ -450,6 +449,7 @@
                 }
                 var count=0;
                 ret.data.info.topic_info.role = role[ret.data.info.topic_info.role]
+                ret.data.info.topic_info.create_time = initTime(ret.data.info.topic_info.create_time)
                 for (var i = 0; i < ret.data.list.length; i++) {
                     if (ret.data.list[i].root == 1) {
                         count++;
