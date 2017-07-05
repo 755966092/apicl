@@ -48,6 +48,9 @@
 
             font-size: 0;
             /*margin-bottom: .1rem;*/
+            border-bottom: .01rem solid #d9d9d9;
+            padding-bottom: .385rem;
+            margin-top: .235rem;
         }
         .main ul.no1 li:last-child {
             margin-bottom: 0;
@@ -59,8 +62,8 @@
         .main ul.no1 li span {
             font-size: .24rem;
             display: inline-block;
-            margin-top: .1rem;
-            margin-bottom: .1rem;
+            margin-top: .2rem;
+            /*margin-bottom: .1rem;*/
             width: 1.78rem;
             height: .79rem;
             background-color: #F4F4F4;
@@ -163,42 +166,25 @@
                     <ul class="no1">
                         <li>
                              <p>类型</p>
-                             <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 sel">个人</span>
-                             <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4">公司</span>
+                             <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 sel" data-type="type_1">个人</span>
+                             <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4" data-type="type_2">公司</span>
                         </li>
                         <li>
                              <p>类别</p>
-                             <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 sel">自产自销</span>
-                             <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4">代理</span>
+                             <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 sel" data-type="sub_type_1">自产自销</span>
+                             <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4" data-type="sub_type_2">代理</span>
                         </li>
-                        
                         <li>
                              <p>排序</p>
-                             <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 sel">全部</span>
-                             <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4">距离最近</span>
-                             <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4">价格最低</span>
-                             <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4">最新发布</span>
+                             <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 sel" data-type="all">全部</span>
+                             <span   tapmode="hover" data-type="distance"  onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4">距离最近</span>
+                             <span   tapmode="hover"  data-type="price" onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4">价格最低</span>
+                             <span   tapmode="hover"  data-type="create_time" onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4">最新发布</span>
                         </li>
                      </ul>  
                     <ul class="no2">
                         <li class="no2List sel clearfix"   tapmode="hover"   onclick="li_spanP(this);event.cancelBubble=true;" >
-                            <p>学校<span class="no2Icon">京大学北京大学北京大学北京大学京大学北京大学北京大学北京大学</span></p>
-                        </li>
-                        <li class="no2List clearfix"   tapmode="hover"   onclick="li_spanP(this);event.cancelBubble=true;">
-                            <p>公司<span class="no2Icon"></span></p>
-                           
-                        </li>
-                        <li class="no2List clearfix"   tapmode="hover"   onclick="li_spanP(this);event.cancelBubble=true;">
-                            <p>行业<span class="no2Icon"></span></p>
-                           
-                        </li>
-                        <li class="no2List clearfix"   tapmode="hover"   onclick="li_spanP(this);event.cancelBubble=true;">
-                            <p>地点<span class="no2Icon"></span></p>
-                            
-                        </li>
-                        <li class="no2List clearfix"   tapmode="hover"   onclick="li_spanP(this);event.cancelBubble=true;">
-                            <p>自定义<span class="no2Icon"></span></p>
-                            
+                            <p>分类<span class="no2Icon selText">选择分类</span></p>
                         </li>
                     </ul>
                 </div>
@@ -214,10 +200,68 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
+    var selectedObj=0,parameter,str,flag;
     apiready = function(){
-        fnInit()
+        fnInit();
+        api.addEventListener({
+            name: 'selClass'
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.dom('.no2Icon'), ret.value.schoolName);
+                selectedObj = ret.value.selectedArr;
+                // selectedObj[val][0].str = ret.value.schoolName;
+                str = ret.value.schoolName;
+                console.log('第一页面:'+JSON.stringify(selectedObj))
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+        initPage();
     }
-        
+    
+    // 进入筛选页面初始化页面
+    function initPage() {
+        // 进入筛选页面初始化页面
+        selectedObj = api.pageParam.selectedObj;
+        if (api.pageParam.selectedObj!=0) {
+            $api.text($api.dom('.selText'), api.pageParam.selectedObj[0].str);
+                
+        }
+        parameter = api.pageParam.parameter
+        if (api.pageParam.parameter != 0) {
+            for (var i = 0; i < $api.domAll('span[data-type]').length; i++) {
+                $api.removeCls($api.domAll('span[data-type]')[i], 'sel');
+            }
+            if (parameter.type == 1) {
+                // 1 个人
+                $api.addCls($api.dom('span[data-type="type_1"]'), 'sel');
+            } else {
+                // 2 公司
+                $api.addCls($api.dom('span[data-type="type_2"]'), 'sel');
+            }
+            if (parameter.sub_type == 1) {
+                // 1 自产自销
+                $api.addCls($api.dom('span[data-type="sub_type_1"]'), 'sel');
+            } else {
+                // 2 代理
+                $api.addCls($api.dom('span[data-type="sub_type_2"]'), 'sel');
+            }
+            if (parameter.order == 'distance') {
+                // 距离
+                $api.addCls($api.dom('span[data-type="distance"]'), 'sel');
+            } else if (parameter.order == 'price') {
+                // 价格
+                $api.addCls($api.dom('span[data-type="price"]'), 'sel');
+            } else if (parameter.order == 'create_time') {
+                // 时间
+                $api.addCls($api.dom('span[data-type="create_time"]'), 'sel');
+            } else {
+                // 排序
+                $api.addCls($api.dom('span[data-type="all"]'), 'sel');
+            }
+        }
+
+    }
       // 选中图标
     function li_span(ele) {
         flag = 1;
@@ -229,6 +273,21 @@
     }
 
     function li_spanP(ele) {
+        api.openFrame({
+            name: 'supply_slideFrame_',
+            url: './supply_slideFrame_.html',
+            rect: {
+                x: 0,
+                y: 0,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                selectedObj: selectedObj,
+                str: str
+            },
+            bounces: false
+        });
     }
     // 点击确定按钮： 1； 重置按钮 0
     function enter(n) {

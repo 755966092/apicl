@@ -240,9 +240,8 @@
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/common.js"></script>
 <script type="text/javascript">
+    var selectedObj = 0,parameter = 0;
     apiready = function(){
-
-      
         // var navH = $api.offset($api.dom('.head')).h;
         var navH = $api.offset($api.dom('.head')).h;
         var frameH = navH + api.pageParam.headerH;
@@ -256,6 +255,16 @@
         }, function(ret, err) {
             openAprGroup(frameH,api.winHeight - frameH - footerH);
         });
+        api.addEventListener({
+           name: 'selClass'
+        }, function(ret, err) {
+            selectedObj = ret.value.selectedArr
+        })
+        api.addEventListener({
+           name: 'screeningResults'
+        }, function(ret, err) {
+            parameter = ret.value.condition
+        })
     };
     // 打开frame组
     function openAprGroup (frameH, footerH, condition){
@@ -337,6 +346,10 @@
                 y: 0,
                 w: api.winWidth,
                 h: api.winHeight
+            },
+            pageParam: {
+                parameter: parameter,
+                selectedObj: selectedObj
             },
             bounces: false
         });

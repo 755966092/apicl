@@ -256,7 +256,7 @@
 
 <script type="text/javascript">
     var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
-    var dataList = [], page_num = 1, dataListFlag = [];
+    var dataList = [], page_num = 1, dataListFlag = [],selectedObj;
     apiready = function(){
         moduleInit();
         // 请求数据
@@ -277,6 +277,7 @@
         }, function(ret, err) {
             if (ret) {
                 requireData();
+                
             } else {
                 alert(JSON.stringify(err));
             }
@@ -325,18 +326,18 @@
         }
     }
     // 筛选后结果
+    
     function bySelect() {
         api.addEventListener({
            name: 'screeningResults'
         }, function(ret, err) {
-           
            if (ret.value.flag) {
             $api.css($api.dom('.title1'), 'display:block');
+            parameter = ret.value.parameter
            }
            requireData(ret.value.condition)
            selfAdaption();
         })
-
         api.addEventListener({
            name: 'addPublish'
         }, function(ret, err) {
