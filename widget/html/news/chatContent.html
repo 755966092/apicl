@@ -205,10 +205,10 @@
     <div class="shadow" >
         <p tapmode="hover" onclick="closeDiv(0);event.stopPropagation();">复制</p>
         <p tapmode="hover" onclick="closeDiv(1);event.stopPropagation();">发送给朋友</p>
-        <p tapmode="hover" onclick="closeDiv(1);event.stopPropagation();">收藏</p>
-        <p tapmode="hover" onclick="closeDiv(1);event.stopPropagation();">翻译</p>
-        <p tapmode="hover" onclick="closeDiv(1);event.stopPropagation();">删除</p>
-        <p tapmode="hover" onclick="closeDiv(1);event.stopPropagation();">更多</p>
+        <p tapmode="hover" onclick="closeDiv(2);event.stopPropagation();">收藏</p>
+        <p tapmode="hover" onclick="closeDiv(3);event.stopPropagation();">翻译</p>
+        <p tapmode="hover" onclick="closeDiv(4);event.stopPropagation();">删除</p>
+        <p tapmode="hover" onclick="closeDiv(5);event.stopPropagation();">更多</p>
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -218,7 +218,7 @@
 <script type="text/javascript">
 // var rongToken, userToken;
 var name,headImg = $api.getStorage('imgCache'),youHeadImg;
-var messageId,targetRongId,emotionData,userId,newsText;
+var messageId,targetRongId,emotionData,userId,newsText,msgId;
 var  mainH, _main, scrollH;
     apiready = function(){
 
@@ -290,18 +290,35 @@ var  mainH, _main, scrollH;
     function closeDiv(n) {
         $api.css($api.dom('.shadow'), 'display:none');
         // alert('292'+newsText)
-        clipBoard.set({
-            value: newsText
-        }, function(ret, err) {
-            if (ret) {
-                // alert('294'+JSON.stringify(ret));
-                api.toast({
-                    msg: '复制成功'
-                });
-            } else {
-                alert(JSON.stringify(err));
-            }
-        });
+        if (n === 4) {
+            $api.remove($api.dom('div[data-msgId="'+ msgId +'"]'));
+            var arrid = [];
+            arrid[0] = parseInt(msgId)
+            rong.deleteMessages({
+                messageIds: arrid
+            }, function(ret, err) {
+                if (ret.status){
+                    api.toast({ msg: '刪除成功' });
+                } else {
+                    api.toast({ msg: '刪除失败' });
+
+                }
+
+            })
+        } else {
+            clipBoard.set({
+                value: newsText
+            }, function(ret, err) {
+                if (ret) {
+                    // alert('294'+JSON.stringify(ret));
+                    api.toast({
+                        msg: '复制成功'
+                    });
+                } else {
+                    alert(JSON.stringify(err));
+                }
+            });
+        }
     }
     // 用户详情
     function openMemberInfo(ele) {
@@ -539,10 +556,9 @@ var  mainH, _main, scrollH;
             for (var i = ret.result.length-1; i >= 0 ; i--) {
                 if (ret.result[i].messageDirection == 'RECEIVE') {
                     // 消息方向：SEND(发送) 或者 RECEIVE(接受)
-                    addReceMsg(ret.result[i].content.text, youHeadImg)
-                    // alert(JSON.stringify(ret))
+                    addReceMsg(ret.result[i].content.text, youHeadImg,ret.result[i].messageId)
                 } else {
-                    addSendMsg(ret.result[i].content.text, headImg);
+                    addSendMsg(ret.result[i].content.text, headImg,ret.result[i].messageId);
 
                 }
                 
@@ -556,13 +572,13 @@ var  mainH, _main, scrollH;
     }
     
     // 接收消息后新建消息
-    function addReceMsg(msg, youHeadImg) {
-        $api.append($api.dom('.main'),'<div class="other clearfix"><img tapmode="hover" onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ youHeadImg +'"><p class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg +'"> '+ transText(msg) +'</p></div>');
+    function addReceMsg(msg, youHeadImg, msgId) {
+        $api.append($api.dom('.main'),'<div data-msgId="'+ msgId +'" class="other clearfix"><img tapmode="hover" onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ youHeadImg +'"><p data-msgId="'+ msgId +'" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg +'"> '+ transText(msg) +'</p></div>');
             slideBut();
     }
     // 发送消息后新建消息
-    function addSendMsg(msg, headImg) {
-        $api.append($api.dom('.main'),'<div class="oneself clearfix"><img  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg +'" > ' + transText(msg) + ' </p></div>');
+    function addSendMsg(msg, headImg, msgId) {
+        $api.append($api.dom('.main'),'<div data-msgId="'+ msgId +'" class="oneself clearfix"><img  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msgId +'" ontouchend="gtouchend()" data-newsText= "'+ msg +'" > ' + transText(msg) + ' </p></div>');
             slideBut();
     }
     // 查看历史记录 往上面添加消息
@@ -707,6 +723,7 @@ var  mainH, _main, scrollH;
         //开始按   
         function gtouchstart(ele){   
             newsText = $api.attr(ele, 'data-newsText');
+            msgId = $api.attr(ele, 'data-msgId');
             var e = window.event
             var x = e.touches[0].clientX ,y=e.touches[0].clientY 
             timeOutEvent = setTimeout("longPress("+x+","+y+")",500);

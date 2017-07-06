@@ -1,26 +1,30 @@
-07 - 05 14: 55: 27.331 I / app3c(2): {
-	"code": 200,
-	"data": {
-		"list": [{
-			"status_id": 21,
-			"position": "至今",
-			"degree": "",
-			"start_date": "2016-06-04",
-			"is_default": -1,
-			"user_id": 18665,
-			"type": 1,
-			"name": "至今"
-		}, {
-			"status_id": 46,
-			"position": "物联网",
-			"degree": "3",
-			"start_date": "2015-06-04",
-			"is_default": 1,
-			"user_id": 18665,
-			"type": 2,
-			"name": "学习经历"
-		}]
-	},
-	"msg": "",
-	"time": 1499237729
+ { 
+ "status": "success"
+ "result": [{ "extra": ""
+ "sentStatus": "SENT"
+ "messageId": 87
+ "sentTime": 1499327265154
+ "conversationType": "PRIVATE"
+ "messageDirection": "RECEIVE"
+ "receivedStatus": "READ"
+ "content": { "extra": ""
+ "text": "[尴尬]" }
+ "objectName": "RC:TxtMsg"
+ "senderUserId": "5b81284b29a52e022442207441f0025b"
+ "receivedTime": 1499327264502
+ "targetId": "5b81284b29a52e022442207441f0025b" }
+{ 
+	 "extra": ""
+	 "sentStatus": "SENT"
+	 "messageId": 86
+	 "sentTime": 1499327263958
+	 "conversationType": "PRIVATE"
+	 "messageDirection": "RECEIVE"
+	 "receivedStatus": "READ"
+	 "content": { "extra": ""
+	 "text": "[色]" }
+	 "objectName": "RC:TxtMsg"
+	 "senderUserId": "5b81284b29a52e022442207441f0025b"
+	 "receivedTime": 1499327263419
+	 "targetId": "5b81284b29a52e022442207441f0025b" 
 }
