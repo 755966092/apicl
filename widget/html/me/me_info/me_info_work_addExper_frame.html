@@ -336,7 +336,10 @@
                         dateMonth = new Date().getMonth(),
                         dateDay = new Date().getDate();
                     // 开始时间
-                    if (ret.year > dateYear || ret.month > dateMonth || ret.day > dateDay) {
+                    // 年不小于当前年份 (ret.year > dateYear)
+                    // 年等于今年 月份小于当前月份 if ((ret.year == dateYear) && (ret.month > dateMonth))
+                    // 年月等于 日小于当前日期 if (((ret.year == dateYear) && (ret.month == dateMonth)) && ret.day > dateDay)
+                    if ((ret.year > dateYear) || ((ret.year == dateYear) && (ret.month > dateMonth)) || (((ret.year == dateYear) && (ret.month == dateMonth)) && ret.day > dateDay)) {
                         api.toast({
                             msg: '请选择早于当前的时间'
                         });

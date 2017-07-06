@@ -272,6 +272,7 @@ apiready = function() {
         badge: 0
         // 清除角标
     });
+
 }
 
 
@@ -292,7 +293,15 @@ function getTotalCount() {
         if (ret.result == 0) {
             $api.html($api.byId('title'), '我在<span class="rightBtn"   tapmode="hover"   onclick="addFellow()">+</span> ');
             $api.css($api.byId('newsCount'), 'display: none');
+            api.setAppIconBadge({
+                badge: ret.result
+                // 清除角标
+            });
         } else {
+            api.setAppIconBadge({
+                badge: ret.result
+                // 清除角标
+            });
             $api.html($api.byId('title'), '我在(' +ret.result+ ')<span class="rightBtn"   tapmode="hover"   onclick="addFellow()">+</span> ');
             $api.css($api.byId('newsCount'), 'display: inline-block');
             $api.html($api.byId('newsCount'), ret.result);

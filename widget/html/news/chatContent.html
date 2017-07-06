@@ -178,10 +178,10 @@
     </div>
     <p class="promptText">请勿发布违法违规内容，共同营造文明和谐的聊天环境</p>
     <div class="main">
-        <!-- <p class="time">04:19</p>
+       <!--  <p class="time">04:19</p>
         <div class="oneself clearfix">
             <img class="fr" src="../../image/tx_2.jpg">
-            <p class="fr"> d第一 </p>
+            <p class="fr"> <img src="../../image/chatPage/emotion/Expression_10.png" width="30" height="30"> </p>
         </div>
         <div class="other clearfix">
             <img class="fl" src="../../image/tx_2.jpg">
@@ -197,7 +197,7 @@
 <script type="text/javascript">
 // var rongToken, userToken;
 var name,headImg = $api.getStorage('imgCache'),youHeadImg;
-var messageId,targetRongId;
+var messageId,targetRongId,emotionData;
 var  mainH, _main, scrollH;
     apiready = function(){
 
@@ -258,9 +258,51 @@ var  mainH, _main, scrollH;
         changeHeight();
         // 初始化聊天窗口
         window.setTimeout('chatTools()', 500)
-         
+        var sourcePath = "widget://image/chatPage/emotion";//表情存放目录
+           getImgsPaths(sourcePath, function (emotion) {
+            emotionData = emotion;
+        });
 
     };
+    
+    // 再加上
+    function getImgsPaths(sourcePathOfChatBox, callback){
+        var jsonPath = "widget://image/chatPage/emotion/emotion.json";//表情的JSON数组
+        api.readFile({
+                path: jsonPath
+        },function(ret,err){
+            if(ret.status){
+                var emotionArray = JSON.parse(ret.data);
+                var emotion = {};
+                for(var idx in emotionArray){
+                        var emotionItem = emotionArray[idx];
+                        var emotionText = emotionItem["text"];
+                        var emotionUrl = "../../image/chatBox/emotion/"+emotionItem["name"]+".png";
+                        emotion[emotionText] = emotionUrl;
+                }
+                /*把emotion对象 回调出去*/
+                if("function" === typeof(callback)){
+                        callback(emotion);
+                }
+            }
+        });
+    }
+    // 表情转换
+    function transText(text, imgWidth, imgHeight){
+        var imgWidth = imgWidth || 30;
+        var imgHeight = imgHeight || 30;
+        var regx = /\[(.*?)\]/gm;
+        var textTransed = text.replace(regx,function(match){
+            var imgSrc = emotionData[match];
+            if(!imgSrc){
+                    //说明不对应任何表情，直接返回
+                    return match;
+            }
+            var img = "<img src='"+imgSrc+"' width='"+imgWidth+"' height='"+imgHeight+"'>";
+            return img;
+        });
+        return textTransed;
+    }
     // 监听键盘高度改变事件
     function changeHeight() {
         UIChatBox.addEventListener({
@@ -298,7 +340,7 @@ var  mainH, _main, scrollH;
         UIChatBox.open({
             placeholder: '请输入内容',
             maxRows: 6,
-            emotionPath: 'widget://res/img/emotion',
+            emotionPath: 'widget://image/chatPage/emotion',
             texts: {
                 recordBtn: {
                     normalTitle: '按住说话',
@@ -314,7 +356,7 @@ var  mainH, _main, scrollH;
                     bgColor: '#f2f2f2'
                 },
                 inputBox: {
-                    borderColor: '#B3B3B3',
+                    borderColor: '#d9d9d9',
                     bgColor: '#FFFFFF'
                 },
                 emotionBtn: {
@@ -374,6 +416,7 @@ var  mainH, _main, scrollH;
                         // ios下输入框为空的时候不发送消息
                     } else {
                         sendMsg(ret.msg);
+                        console.log('419:'+JSON.stringify(transText(ret.msg)))
                     }
                    
                     // 把聊天内容滑动到最下面
@@ -388,6 +431,21 @@ var  mainH, _main, scrollH;
      
     }
 
+     //文字表情转换
+    function transEmo(emoMsg) {
+            var emoPath, transMsg;
+            var reg = /\[(.*?)\]/gm;
+            transMsg = emoMsg.replace(reg, function(match) {
+                    for (var i = 0, len = emoData.length; i < len; i++) {
+                            if (emoData[i].text === match) {
+                                    emoPath = 'image/emotion/' + emoData[i].name + '.png';
+                                    return '<img width="20" height="20" src="' + emoPath + '" />'
+                            }
+                    }
+                    return match;
+            });
+            return transMsg;
+    }
     // 获取聊天对方信息
     function getSideInfo(rongUserId) {
         rongUserIdArr = rongUserId.split();
@@ -450,20 +508,22 @@ var  mainH, _main, scrollH;
     
     // 接收消息后新建消息
     function addReceMsg(msg, youHeadImg) {
-        $api.append($api.dom('.main'),'<div class="other clearfix"><img class="fl" src="'+ youHeadImg +'"><p class="fl">' + msg + '</p></div>');
+        $api.append($api.dom('.main'),'<div class="other clearfix"><img class="fl" src="'+ youHeadImg +'"><p class="fl">' + transText(msg) + '</p></div>');
+        console.log('513:'+msg)
             slideBut();
     }
     // 发送消息后新建消息
     function addSendMsg(msg, headImg) {
-        $api.append($api.dom('.main'),'<div class="oneself clearfix"><img class="fr" src="'+ headImg +'"><p class="fr"> ' + msg + ' </p></div>');
+        $api.append($api.dom('.main'),'<div class="oneself clearfix"><img class="fr" src="'+ headImg +'"><p class="fr"> ' + transText(msg) + ' </p></div>');
+        console.log('518:'+msg)
             slideBut();
     }
     // 查看历史记录 往上面添加消息
     function addSendMsgTop(msg, headImg) {
-        $api.prepend($api.dom('.main'),'<div class="oneself clearfix"><img class="fr" src="'+ headImg +'"><p class="fr"> ' + msg + ' </p></div>');
+        $api.prepend($api.dom('.main'),'<div class="oneself clearfix"><img class="fr" src="'+ headImg +'"><p class="fr"> ' + transText(msg) + ' </p></div>');
     }
     function addReceMsgTop(msg, youHeadImg) {
-        $api.prepend($api.dom('.main'),'<div class="other clearfix"><img class="fl" src="'+ youHeadImg +'"><p class="fl">' + msg + '</p></div>');
+        $api.prepend($api.dom('.main'),'<div class="other clearfix"><img class="fl" src="'+ youHeadImg +'"><p class="fl">' + transText(msg) + '</p></div>');
     }
 
     // 滚动到页面底部
