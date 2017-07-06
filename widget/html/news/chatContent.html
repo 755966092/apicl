@@ -30,8 +30,8 @@
         .main .other {
             margin-bottom: .3rem;
         }
-        .main .oneself img,
-        .main .other img {
+        .main .oneself img.oneselfImg,
+        .main .other img.otherImg {
             width: .72rem;
             height: .72rem;
             
@@ -180,11 +180,11 @@
     <div class="main">
        <!--  <p class="time">04:19</p>
         <div class="oneself clearfix">
-            <img class="fr" src="../../image/tx_2.jpg">
-            <p class="fr"> <img src="../../image/chatPage/emotion/Expression_10.png" width="30" height="30"> </p>
+            <img class="fr oneselfImg" src="../../image/tx_2.jpg">
+            <p class="fr flex-def flex-cCenter"> <img src="../../image/chatPage/emotion/Expression_10.png" width="20" height="20"> </p>
         </div>
         <div class="other clearfix">
-            <img class="fl" src="../../image/tx_2.jpg">
+            <img class="fl otherImg" src="../../image/tx_2.jpg">
             <p class="fl">qwwwwwwww</p>
         </div> -->
     </div>
@@ -277,7 +277,7 @@ var  mainH, _main, scrollH;
                 for(var idx in emotionArray){
                         var emotionItem = emotionArray[idx];
                         var emotionText = emotionItem["text"];
-                        var emotionUrl = "../../image/chatBox/emotion/"+emotionItem["name"]+".png";
+                        var emotionUrl = "../../image/chatPage/emotion/"+emotionItem["name"]+".png";
                         emotion[emotionText] = emotionUrl;
                 }
                 /*把emotion对象 回调出去*/
@@ -289,8 +289,8 @@ var  mainH, _main, scrollH;
     }
     // 表情转换
     function transText(text, imgWidth, imgHeight){
-        var imgWidth = imgWidth || 30;
-        var imgHeight = imgHeight || 30;
+        var imgWidth = imgWidth || 20;
+        var imgHeight = imgHeight || 20;
         var regx = /\[(.*?)\]/gm;
         var textTransed = text.replace(regx,function(match){
             var imgSrc = emotionData[match];
@@ -298,7 +298,7 @@ var  mainH, _main, scrollH;
                     //说明不对应任何表情，直接返回
                     return match;
             }
-            var img = "<img src='"+imgSrc+"' width='"+imgWidth+"' height='"+imgHeight+"'>";
+            var img = '<img src="'+imgSrc+'" width="'+imgWidth+'" height="'+imgHeight+'">';
             return img;
         });
         return textTransed;
@@ -416,7 +416,6 @@ var  mainH, _main, scrollH;
                         // ios下输入框为空的时候不发送消息
                     } else {
                         sendMsg(ret.msg);
-                        console.log('419:'+JSON.stringify(transText(ret.msg)))
                     }
                    
                     // 把聊天内容滑动到最下面
@@ -461,7 +460,6 @@ var  mainH, _main, scrollH;
            }
        }, function(ret, err) {
            if(ret) {
-                console.log('406:'+JSON.stringify(ret))
                 youHeadImg = ret.data.list[rongUserId].head_img_url
                 api.sendEvent({
                     name: 'getUserId',
@@ -487,7 +485,6 @@ var  mainH, _main, scrollH;
             // targetId: name,
             count: 20
         }, function(ret, err) {
-            console.log('425:'+JSON.stringify(ret))
             for (var i = ret.result.length-1; i >= 0 ; i--) {
                 if (ret.result[i].messageDirection == 'RECEIVE') {
                     // 消息方向：SEND(发送) 或者 RECEIVE(接受)
@@ -508,22 +505,20 @@ var  mainH, _main, scrollH;
     
     // 接收消息后新建消息
     function addReceMsg(msg, youHeadImg) {
-        $api.append($api.dom('.main'),'<div class="other clearfix"><img class="fl" src="'+ youHeadImg +'"><p class="fl">' + transText(msg) + '</p></div>');
-        console.log('513:'+msg)
+        $api.append($api.dom('.main'),'<div class="other clearfix"><img class="fl otherImg" src="'+ youHeadImg +'"><p class="fl flex-def flex-cCenter"> '+ transText(msg) +'</p></div>');
             slideBut();
     }
     // 发送消息后新建消息
     function addSendMsg(msg, headImg) {
-        $api.append($api.dom('.main'),'<div class="oneself clearfix"><img class="fr" src="'+ headImg +'"><p class="fr"> ' + transText(msg) + ' </p></div>');
-        console.log('518:'+msg)
+        $api.append($api.dom('.main'),'<div class="oneself clearfix"><img class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter"> ' + transText(msg) + ' </p></div>');
             slideBut();
     }
     // 查看历史记录 往上面添加消息
     function addSendMsgTop(msg, headImg) {
-        $api.prepend($api.dom('.main'),'<div class="oneself clearfix"><img class="fr" src="'+ headImg +'"><p class="fr"> ' + transText(msg) + ' </p></div>');
+        $api.prepend($api.dom('.main'),'<div class="oneself clearfix"><img class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter"> ' + transText(msg) + ' </p></div>');
     }
     function addReceMsgTop(msg, youHeadImg) {
-        $api.prepend($api.dom('.main'),'<div class="other clearfix"><img class="fl" src="'+ youHeadImg +'"><p class="fl">' + transText(msg) + '</p></div>');
+        $api.prepend($api.dom('.main'),'<div class="other clearfix"><img class="fl otherImg" src="'+ youHeadImg +'"><p class="fl flex-def flex-cCenter">' + transText(msg) + '</p></div>');
     }
 
     // 滚动到页面底部
