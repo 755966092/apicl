@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html >
 
 <head>
     <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
@@ -47,15 +47,41 @@
         ul li {
             display: -webkit-box; 
             display: flex; 
+            width: 7.5rem;
             height: 1.24rem;
             background-color: #fff;
             display: -webkit-box; 
             display: flex; 
             padding: 0 0 0 .17rem;
             box-sizing: border-box;
-
+            position: relative;
+            overflow: hidden;
+        }
+        ul li .slide {
+            position: absolute;
+            right: 0;
+            font-size: 0rem;
+            z-index: 1;
+            display: inline-block;
+            width: 3rem;
+            line-height: 1.24rem;
+            color: #fff;
+        }
+        .stamp {
+            background-color: #C8C7CD;
+            width: 1.8rem;
+            font-size: .3rem;
+            text-align: center;
+        }
+        .del {
+            background-color: #E53933;
+            width: 1.2rem;
+            font-size: .3rem;
+            text-align: center;
         }
         ul li .warp {
+            position: relative;
+            z-index: 20;
             display: -webkit-box; 
             display: flex; 
             -webkit-box-align:  center;
@@ -63,6 +89,7 @@
             padding-right: .17rem;
             box-sizing: border-box;
             width: 100%;
+            background-color: #fff;
 
         }
          ul li .headImg {
@@ -116,13 +143,50 @@
     </style>
 </head>
 
-<body id="body"   tapmode="hover"   onclick="closeNews()">
-    <div id="news_wrap" class=" clearfix"   tapmode="hover"   onclick="closeNews()">
-         <div class="search"   tapmode="hover"   onclick="openS()">
+<body id="body" tapmode="hover" onclick="closeNews()">
+    <div id="news_wrap" class="clearfix" tapmode="hover" onclick="closeNews()">
+        <div class="search"   tapmode="hover"   onclick="openS()">
             <span class="searchIcon"></span>
             <span class="searchText">搜索</span>
         </div>
-        
+       <!--  <ul>
+            <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" ontouchstart=";event.stopPropagation();"   tapmode="hover"   onclick="openChat(this)">
+                <div class="warp" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove(this)" ontouchend="gtouchend(this)">
+                    <div class="headImg">
+                        <img class="fl" src="../image/tx_4.jpg">
+                    </div>
+                    <div class="contentRight">
+                        <div class="name">
+                            <h3>{{=it[i].nickname}}</h3>
+                            <span class="time">速度度速度度速度度</span>
+                        </div>
+                        <p>{{=i{{=it[i].latestMessagelatestMessagelatestMessagelatestMessagelatestMessagelatestMessagelatestMessage.text}}</p>
+                    </div>
+                </div>
+                <span class="slide">
+                    <span class="stamp">标为已读</span>
+                    <span class="del" tapmode="hover" onclick="delNesItem(this);event.stopPropagation()">删除</span>
+                </span>
+            </li>
+            <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" ontouchstart=";event.stopPropagation();"  tapmode="hover"   onclick="openChat(this)">
+                <div class="warp" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove(this)" ontouchend="gtouchend(this)">
+                    <div class="headImg ">
+                        <img class="fl" src="../image/tx_4.jpg">
+                    </div>
+                    <div class="contentRight">
+                        <div class="name">
+                            <h3>{{=it[i].nickname}}</h3>
+                            <span class="time">速度度速度度速度度</span>
+                        </div>
+                        <p>{{=i{{=it[i].latestMessagelatestMessagelatestMessagelatestMessagelatestMessagelatestMessagelatestMessage.text}}</p>
+                    </div>
+                </div>
+                <span class="slide">
+                    <span class="stamp">标为已读</span>
+                    <span class="del">删除</span>
+                </span>
+            </li>
+        </ul> -->
         <ul class="resultList">
             <!-- <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" ontouchstart=";event.stopPropagation();"   tapmode="hover"   onclick="openChat(this)">
                 <div class="warp">
@@ -145,7 +209,7 @@
         <script type="text/x-dot-template" id="listT">
             {{ for (var i = 0; i < it.length; i++) { }} 
                 <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" ontouchstart=";event.stopPropagation();"   tapmode="hover"   onclick="openChat(this)">
-                    <div class="warp">
+                    <div class="warp" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove(this)" ontouchend="gtouchend(this)">
                         <div class="headImg">
                              <img class="fl" src="{{=it[i].url}}">
                              {{?it[i].unreadMessageCount == 0 }}
@@ -161,6 +225,10 @@
                             <p>{{=it[i].latestMessage.text}}</p>
                         </div>
                     </div>
+                    <span class="slide">
+                        <span class="stamp" data-targetId="{{=it[i].targetId}}" tapmode="hover" onclick="delNesItem(this,1);event.stopPropagation()">标为已读</span>
+                        <span class="del" data-targetId="{{=it[i].targetId}}" tapmode="hover" onclick="delNesItem(this,0);event.stopPropagation()">删除</span>
+                    </span>
                 </li>
                 {{ }; }}
                 
@@ -181,16 +249,12 @@
     <script type="text/javascript">
     var chatMessage;
      apiready = function() {
-        // rongToken = api.pageParam.rongToken;
-        // userToken = api.pageParam.userToken;
         moduleInit()
         console.log($api.getStorage('userToken'))
         // 监听打开加好友窗口  
         monitorEvent();
-       
         // 缓存个人信息
         requireData();
-        
         // chatMessage = $api.getStorage('chatMessage');
         // if (chatMessage) {
         //     getData(chatMessage)
@@ -211,7 +275,55 @@
             // historyNews(cacheFieldName);
         });
     }
-    
+    function delNesItem(ele,n) {
+        var targetId = $api.attr(ele, 'data-targetId');
+        if (n) {
+             // 之前调用 init 和 connect 的代码省略
+            rong.clearMessagesUnreadStatus({
+                conversationType: 'PRIVATE',
+                targetId: targetId
+            }, function(ret, err) {
+                historicalNews();
+            })
+        } else {
+            $api.remove($api.closest(ele, 'li'));
+            rong.removeConversation({
+                conversationType: 'PRIVATE',
+                targetId: targetId
+            }, function(ret, err) {
+                // api.toast({ msg: ret.status });
+            })
+        }
+
+
+       
+    }
+    var startX,startY;
+    var endX,endY;
+    function gtouchstart(ele){
+        var e = window.event;
+        startX = e.touches[0].pageX;
+        startY = e.touches[0].pageY;
+        console.log(startY)
+    };   
+    function gtouchmove(){   
+        var e = window.event;
+        endX = e.touches[0].pageX;
+        endY = e.touches[0].pageY;  
+    };   
+    function gtouchend(ele) {
+        var X = endX - startX,
+        Y = Math.abs(endY - startY);  
+        if ( X < -10 && Y < 100) {
+            for (var i = 0; i < $api.domAll('.warp').length; i++) {
+                $api.css($api.domAll('.warp')[i], 'left: 0rem ');
+             } 　　　　　　
+            $api.css(ele, 'left: -3rem ');
+        } else if(X > 10 && Y < 10) {
+            $api.css(ele, 'left: 0rem ');
+        }   
+    }
+
     function requireData() {
             api.ajax({
                 url: apiSite + '/api/user_center/index',
@@ -397,7 +509,11 @@
 
     // 关闭添加好友弹窗
     function closeNews() {
-        $api.removeCls($api.dom('.addWin'), 'show')
+        console.log('1111')
+        for (var i = 0; i < $api.domAll('.warp').length; i++) {
+            $api.css($api.domAll('.warp')[i], 'left: 0rem ');
+        } 
+        $api.removeCls($api.dom('.addWin'), 'show');
     }
 
     // doT模版获取数据
