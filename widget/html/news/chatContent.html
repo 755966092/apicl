@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta charset="utf-8">
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
@@ -40,16 +40,18 @@
         .main .other p {
             background-color: #A0E75A;
             font-size: .28rem;
-            min-height: .8rem;
-            min-width: 0.1rem;
+            min-height: .72rem;
+            /*min-width: 0.1rem;*/
             max-width: 3.76rem;
             color: #000;
-            line-height: .5rem;
+            line-height: .72rem;
             margin-right: .3rem;
             box-sizing: border-box;
-            padding: .15rem .2rem;
+            padding: 0 .2rem;
+            /*height: .72rem;*/
             border-radius: .1rem;
             position: relative;
+            word-break:break-all;
             z-index: 2;
 
         }
@@ -107,9 +109,6 @@
             top: .25rem;
             left: -.22rem;
         }
-        .main .other {
-
-        }
         .main .other p {
             background-color: #fff;
             margin-right: 0;
@@ -162,9 +161,24 @@
             margin-top: .2rem;
             border-radius: .1rem;
         }
+        .shadow {
+            background-color: #fff;
+            border: .01rem solid #d9d9d9;
+            font-size: 0;
+            line-height: .8rem;
+            position: fixed;
+            padding: .2rem .3rem;
+            display: none;
+            z-index: 1000;
+             box-shadow: 2px 2px 20px #888888;
+        }
+        .shadow p {
+            font-size: .3rem;
+        }
+
     </style>
 </head>
-<body id="body">
+<body id="body" ontouchstart="closeDiv1();">
     <div class="supply_info hide flex-def flex-cCenter">
         <img  src="../../image/noimage.jpg">
         <div class="flex-item flex-def">
@@ -181,14 +195,21 @@
        <!--  <p class="time">04:19</p>
         <div class="oneself clearfix">
             <img class="fr oneselfImg" src="../../image/tx_2.jpg">
-            <p class="fr flex-def flex-cCenter"> <img src="../../image/chatPage/emotion/Expression_10.png" width="20" height="20"> </p>
+            <p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart()" ontouchmove="gtouchmove()" ontouchend="gtouchend()"> <img src="../../image/chatPage/emotion/Expression_10.png" width="20" height="20"> </p>
         </div>
         <div class="other clearfix">
             <img class="fl otherImg" src="../../image/tx_2.jpg">
-            <p class="fl">qwwwwwwww</p>
+            <p class="fl flex-def flex-cCenter">asdas 大神 阿请勿发布违法违规内容，共同营造文明和谐的聊天环境请勿发布违法违规内容，共同营造文明和谐的聊天环境斯达啊阿三啊 </p>
         </div> -->
     </div>
-   
+    <div class="shadow" >
+        <p tapmode="hover" onclick="closeDiv(0);event.stopPropagation();">复制</p>
+        <p tapmode="hover" onclick="closeDiv(1);event.stopPropagation();">发送给朋友</p>
+        <p tapmode="hover" onclick="closeDiv(1);event.stopPropagation();">收藏</p>
+        <p tapmode="hover" onclick="closeDiv(1);event.stopPropagation();">翻译</p>
+        <p tapmode="hover" onclick="closeDiv(1);event.stopPropagation();">删除</p>
+        <p tapmode="hover" onclick="closeDiv(1);event.stopPropagation();">更多</p>
+    </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -197,7 +218,7 @@
 <script type="text/javascript">
 // var rongToken, userToken;
 var name,headImg = $api.getStorage('imgCache'),youHeadImg;
-var messageId,targetRongId,emotionData;
+var messageId,targetRongId,emotionData,userId,newsText;
 var  mainH, _main, scrollH;
     apiready = function(){
 
@@ -221,7 +242,6 @@ var  mainH, _main, scrollH;
          getSideInfo(targetRongId)
         // 调整页面到输入框的后面
         
-        alert()
         // 滚动到底部
         slideBut();
         api.addEventListener({
@@ -264,7 +284,37 @@ var  mainH, _main, scrollH;
         });
 
     };
-    
+    function closeDiv1() {
+        $api.css($api.dom('.shadow'), 'display:none');
+    }
+    function closeDiv(n) {
+        $api.css($api.dom('.shadow'), 'display:none');
+        // alert('292'+newsText)
+        clipBoard.set({
+            value: newsText
+        }, function(ret, err) {
+            if (ret) {
+                // alert('294'+JSON.stringify(ret));
+                api.toast({
+                    msg: '复制成功'
+                });
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    // 用户详情
+    function openMemberInfo(ele) {
+        // var userId = $api.attr(ele, 'data-id');
+        api.openWin({
+            name: 'txl_memberInfo_Win',
+            url: '../addressList/txl_memberInfo_Win.html',
+            pageParam: {
+                userId: userId
+            }
+        });
+        // alert(userId +'--'+ api.pageParam.userId)
+    }
     // 再加上
     function getImgsPaths(sourcePathOfChatBox, callback){
         var jsonPath = "widget://image/chatPage/emotion/emotion.json";//表情的JSON数组
@@ -338,7 +388,7 @@ var  mainH, _main, scrollH;
     // 聊天界面
     function chatTools() {
         UIChatBox.open({
-            placeholder: '请输入内容',
+            // placeholder: '请输入内容',
             maxRows: 6,
             emotionPath: 'widget://image/chatPage/emotion',
             texts: {
@@ -461,6 +511,7 @@ var  mainH, _main, scrollH;
        }, function(ret, err) {
            if(ret) {
                 youHeadImg = ret.data.list[rongUserId].head_img_url
+                userId = ret.data.list[rongUserId].user_id
                 api.sendEvent({
                     name: 'getUserId',
                     extra: {
@@ -489,6 +540,7 @@ var  mainH, _main, scrollH;
                 if (ret.result[i].messageDirection == 'RECEIVE') {
                     // 消息方向：SEND(发送) 或者 RECEIVE(接受)
                     addReceMsg(ret.result[i].content.text, youHeadImg)
+                    // alert(JSON.stringify(ret))
                 } else {
                     addSendMsg(ret.result[i].content.text, headImg);
 
@@ -505,20 +557,20 @@ var  mainH, _main, scrollH;
     
     // 接收消息后新建消息
     function addReceMsg(msg, youHeadImg) {
-        $api.append($api.dom('.main'),'<div class="other clearfix"><img class="fl otherImg" src="'+ youHeadImg +'"><p class="fl flex-def flex-cCenter"> '+ transText(msg) +'</p></div>');
+        $api.append($api.dom('.main'),'<div class="other clearfix"><img tapmode="hover" onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ youHeadImg +'"><p class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg +'"> '+ transText(msg) +'</p></div>');
             slideBut();
     }
     // 发送消息后新建消息
     function addSendMsg(msg, headImg) {
-        $api.append($api.dom('.main'),'<div class="oneself clearfix"><img class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter"> ' + transText(msg) + ' </p></div>');
+        $api.append($api.dom('.main'),'<div class="oneself clearfix"><img  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg +'" > ' + transText(msg) + ' </p></div>');
             slideBut();
     }
     // 查看历史记录 往上面添加消息
     function addSendMsgTop(msg, headImg) {
-        $api.prepend($api.dom('.main'),'<div class="oneself clearfix"><img class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter"> ' + transText(msg) + ' </p></div>');
+        $api.prepend($api.dom('.main'),'<div class="oneself clearfix"><img class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg +'"> ' + transText(msg) + ' </p></div>');
     }
     function addReceMsgTop(msg, youHeadImg) {
-        $api.prepend($api.dom('.main'),'<div class="other clearfix"><img class="fl otherImg" src="'+ youHeadImg +'"><p class="fl flex-def flex-cCenter">' + transText(msg) + '</p></div>');
+        $api.prepend($api.dom('.main'),'<div class="other clearfix"><img class="fl otherImg" tapmode="hover" onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" src="'+ youHeadImg +'"><p class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg +'">' + transText(msg) + '</p></div>');
     }
 
     // 滚动到页面底部
@@ -650,5 +702,41 @@ var  mainH, _main, scrollH;
                 
         });
     }
+
+        var timeOutEvent=0;//定时器   
+        //开始按   
+        function gtouchstart(ele){   
+            newsText = $api.attr(ele, 'data-newsText');
+            var e = window.event
+            var x = e.touches[0].clientX ,y=e.touches[0].clientY 
+            timeOutEvent = setTimeout("longPress("+x+","+y+")",500);
+            //这里设置定时器，定义长按500毫秒触发长按事件，时间可以自己改，个人感觉500毫秒非常合适   
+            return false;   
+        };   
+        //手释放，如果在500毫秒内就释放，则取消长按事件，此时可以执行onclick应该执行的事件   
+        function gtouchend(){   
+            clearTimeout(timeOutEvent);//清除定时器   
+            if(timeOutEvent!=0){   
+                //这里写要执行的内容（尤如onclick事件）   
+            }   
+            return false;   
+        };   
+        //如果手指有移动，则取消所有事件，此时说明用户只是要移动而不是长按   
+        function gtouchmove(){   
+            clearTimeout(timeOutEvent);//清除定时器   
+            timeOutEvent = 0;   
+        };   
+        //真正长按后应该执行的内容   
+        function longPress(x,y){
+            if (api.frameWidth - (x+10) < api.frameWidth/2) {
+                x = x - 150
+            }
+            if (api.winHeight - (y+10) < api.winHeight/2) {
+                y = y - 320
+            }
+            timeOutEvent = 0; 
+            $api.css($api.dom('.shadow'), 'display:inline-block;top:' + 2*y/100 + 'rem;left:' + 2*x/100 + 'rem;');
+            //执行长按要执行的内容，如弹出菜单   
+        }  
 </script>
 </html>
