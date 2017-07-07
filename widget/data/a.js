@@ -1,83 +1,32 @@
-[{
-	"info": "1给2备注",
-	"sub_type": 1,
-	"contact_id": 50,
-	"type": 2
-}, {
-	"info": "etutrt",
-	"sub_type": 1,
-	"contact_id": 49,
-	"type": 2
-}, {
-	"info": "wwweertyuii",
-	"sub_type": 1,
-	"contact_id": 48,
-	"type": 2
-}, {
-	"info": "wwwwwwweeeee",
-	"sub_type": 1,
-	"contact_id": 45,
-	"type": 2
-}, {
-	"info": "wwwwwww",
-	"sub_type": 1,
-	"contact_id": 42,
-	"type": 2
-}, {
-	"info": "wtamajd",
-	"sub_type": 1,
-	"contact_id": 41,
-	"type": 1
-}, {
-	"info": "755966",
-	"sub_type": 2,
-	"contact_id": 40,
-	"type": 1
-}]
-07 - 07 11: 49: 00.140 I / app3c(2): 259[{
-	"info": "12",
-	"sub_type": 2,
-	"contact_id": 2,
-	"type": 1
-}]
-07 - 07 11: 49: 00.189 I / app3c(2): 260[{
-	"info": "1给2备注",
-	"sub_type": 1,
-	"contact_id": 50,
-	"type": 2
-}, {
-	"info": "etutrt",
-	"sub_type": 1,
-	"contact_id": 49,
-	"type": 2
-}, {
-	"info": "wwweertyuii",
-	"sub_type": 1,
-	"contact_id": 48,
-	"type": 2
-}, {
-	"info": "wwwwwwweeeee",
-	"sub_type": 1,
-	"contact_id": 45,
-	"type": 2
-}, {
-	"info": "wwwwwww",
-	"sub_type": 1,
-	"contact_id": 42,
-	"type": 2
-}, {
-	"info": "wtamajd",
-	"sub_type": 1,
-	"contact_id": 41,
-	"type": 1
-}, {
-	"info": "755966",
-	"sub_type": 2,
-	"contact_id": 40,
-	"type": 1
-}, {
-	"info": "12",
-	"sub_type": 2,
-	"contact_id": 2,
-	"type": 1
-}]
+07 - 07 16: 20: 48.157 I / app3c(2): {
+	"code": 200,
+	"data": {
+		"status": [],
+		"info": {
+			"current_position": null,
+			"current_degree": null,
+			"nickname": null,
+			"real_name": null,
+			"birthday": null,
+			"user_id": 18665,
+			"hometown": null,
+			"sex": null,
+			"head_img_url": null,
+			"current_company": null
+		},
+		"extra": null,
+		"contact": {
+			"update_time": "2017-07-07 10:29:56",
+			"phone": "13260227521",
+			"sub_type": 1,
+			"is_default": 1,
+			"remark_user_id": 18536,
+			"create_time": "2017-07-07 10:29:56",
+			"user_id": 18665,
+			"type": 1,
+			"contact_id": 3
+		}
+	},
+	"msg": "",
+	"time": 1499415647
+}

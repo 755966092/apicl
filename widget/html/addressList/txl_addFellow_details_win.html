@@ -9,22 +9,7 @@
         body,html{
             background-color: #F8F8F8;
         }
-        header.header {
-            font-size: 0;
-        }
-        header.header .rightBtn {
-            display: inline-block;
-            width: .8rem;
-            height: .8rem;
-            bottom: 0;
-            right: 0;
-            line-height: .8rem;
-            background: url(../../image/icon_supply/icon_share2.png)no-repeat;
-            -webkit-background-size: .27rem .37rem;
-            background-size: .27rem .37rem;
-            background-position: center center;
-
-        }
+        
         
     </style>
 </head>
@@ -36,9 +21,9 @@
                 返回
             </span>
             <span class="winTitle">
-                公司主页
+                详细资料
             </span>
-            <div class="rightBtn"></div>
+            <!-- <div class="rightBtn">保存</div> -->
         </div>
     </header>
    
@@ -49,8 +34,8 @@
     apiready = function(){
         fnInit();
         api.openFrame({
-            name: 'txl_addFellow_companyPage_frame',
-            url: './txl_addFellow_companyPage_frame.html',
+            name: 'txl_addFellow_details_frame',
+            url: './txl_addFellow_details_frame.html',
             rect: {
                 x: 0,
                 y: headerH,
@@ -58,7 +43,11 @@
                 h: 'auto'
             },
             pageParam: {
-                headerH: headerH
+                userId: api.pageParam.userId,
+                paramNickname: api.pageParam.paramNickname,
+                paramRealName: api.pageParam.paramRealName,
+                paramSex: api.pageParam.paramSex,
+                paramHeadImg: api.pageParam.paramHeadImg
             },
             bounces: false,
             softInputMode: 'pan'

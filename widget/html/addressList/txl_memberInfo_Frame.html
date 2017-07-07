@@ -140,8 +140,8 @@
             width: .44rem;
             height: .7rem;
             background: url(../../image/icon_my/icon_gdd.png)no-repeat;
-            -webkit-background-size: .44rem .43em;
-            background-size: .44rem .43rem;
+            -webkit-background-size: .42rem .41em;
+            background-size: .42rem .41rem;
             background-position: 0 center;
             vertical-align: bottom;
             margin-right: .1rem;
@@ -168,8 +168,7 @@
             width: .44rem;
             height: .7rem;
             background: url(../../image/icon_my/icon_qdd.png)no-repeat;
-            -webkit-background-size: .44rem .32rem;
-            background-size: .44rem .32rem;
+            background-size: .48rem .35rem;
             background-position: 0 center;
             vertical-align: bottom;
             margin-right: .1rem;
@@ -187,7 +186,7 @@
         }
         
         .mt20 {
-            margin-top: .2rem;
+            margin-top: .36rem;
             padding-right: 0;
             border-bottom: 0;
         }
@@ -251,18 +250,18 @@
             height: .458rem;
         }
         .btn {
-            width: 6.785rem;
+             width: 6.785rem;
             height: .841rem;
             border-radius: .06rem;
-            background-color: #27B24A;
-            border: 1px solid #27B24A;
+            background-color: #1AAD19;
+            border: .01rem solid #189c17;
             margin: 0 auto;
             line-height: .841rem;
             text-align: center;
             font-size: .34rem;
             color: #fff;
-            margin-top: 1rem;
-            margin-bottom: 1rem;
+            margin-top: .36rem;
+            margin-bottom: .2rem;
         }
         .activeTime {
             font-size: .22rem;
@@ -292,7 +291,7 @@
 <body>
     <!-- <p class="wran">加入会员后可查看对方最近一次活跃时间</p> -->
     <div class="main">
-        <div class="title">
+        <div class="title" tapmode="hover" onclick="openInfo(this)" data-val="details">
             <div class="headImg">
                 <img id="head_img_url" src="../../image/icon_defaultHead.png">
             </div>
@@ -413,6 +412,7 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
+    var paramNickname,paramRealName,paramSex,paramHeadImg;
     apiready = function(){
         moduleInit();
         requireData();
@@ -431,8 +431,11 @@
             }
         }, function(ret, err) {
             if(ret) {
-                console.log(JSON.stringify(ret))
-                initPage(ret.data)
+                initPage(ret.data);
+                paramNickname = ret.data.info.nickname;
+                paramRealName = ret.data.info.real_name;
+                paramSex = ret.data.info.sex;
+                paramHeadImg = ret.data.info.head_img_url;
             } else {
                 alert(JSON.stringify(err))
             }
@@ -443,6 +446,7 @@
         var nickname = $api.byId('nickname');
         var sex = $api.byId('sex');
         var head_img_url = $api.byId('head_img_url');
+
         var phone = $api.byId('phone');
         var hometown = $api.byId('hometown');
         var birthday = $api.byId('birthday');
@@ -480,7 +484,11 @@
             url: './txl_addFellow_'+val+'_win.html',
             // url: './txl_addFellow_address_win.html',
             pageParam: {
-                userId: api.pageParam.userId
+                userId: api.pageParam.userId,
+                paramNickname: paramNickname,
+                paramRealName: paramRealName,
+                paramSex: paramSex,
+                paramHeadImg: paramHeadImg
             },
             bounces: false
         });
