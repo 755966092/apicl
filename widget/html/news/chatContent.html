@@ -322,14 +322,21 @@ var  mainH, _main, scrollH;
     }
     // 用户详情
     function openMemberInfo(ele) {
-        // var userId = $api.attr(ele, 'data-id');
-        api.openWin({
-            name: 'txl_memberInfo_Win',
-            url: '../addressList/txl_memberInfo_Win.html',
-            pageParam: {
-                userId: userId
-            }
-        });
+        var flag = $api.attr(ele, 'data-id');
+        if (flag == 1 ) {
+            api.openWin({
+                name: 'txl_memberInfo_Win',
+                url: '../addressList/txl_memberInfo_Win.html',
+            });    
+        } else {
+            api.openWin({
+                name: 'txl_memberInfo_Win',
+                url: '../addressList/txl_memberInfo_Win.html',
+                pageParam: {
+                    userId: userId
+                }
+            });
+        }
         // alert(userId +'--'+ api.pageParam.userId)
     }
     // 再加上
@@ -578,7 +585,7 @@ var  mainH, _main, scrollH;
     }
     // 发送消息后新建消息
     function addSendMsg(msg, headImg, msgId) {
-        $api.append($api.dom('.main'),'<div data-msgId="'+ msgId +'" class="oneself clearfix"><img  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msgId +'" ontouchend="gtouchend()" data-newsText= "'+ msg +'" > ' + transText(msg) + ' </p></div>');
+        $api.append($api.dom('.main'),'<div data-msgId="'+ msgId +'" class="oneself clearfix"><img tapmode="hover" data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msgId +'" ontouchend="gtouchend()" data-newsText= "'+ msg +'" > ' + transText(msg) + ' </p></div>');
             slideBut();
     }
     // 查看历史记录 往上面添加消息
@@ -586,7 +593,7 @@ var  mainH, _main, scrollH;
         $api.prepend($api.dom('.main'),'<div class="oneself clearfix"><img class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg +'"> ' + transText(msg) + ' </p></div>');
     }
     function addReceMsgTop(msg, youHeadImg) {
-        $api.prepend($api.dom('.main'),'<div class="other clearfix"><img class="fl otherImg" tapmode="hover" onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" src="'+ youHeadImg +'"><p class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg +'">' + transText(msg) + '</p></div>');
+        $api.prepend($api.dom('.main'),'<div class="other clearfix"><img tapmode="hover" onclick="openMemberInfo(this)" class="fl otherImg" tapmode="hover" onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" src="'+ youHeadImg +'"><p class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg +'">' + transText(msg) + '</p></div>');
     }
 
     // 滚动到页面底部

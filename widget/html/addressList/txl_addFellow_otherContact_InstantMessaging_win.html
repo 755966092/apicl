@@ -143,12 +143,13 @@
         var tel = $api.val($api.dom('input'));
         val = $api.attr($api.dom('.select'),'data-val') == 'QQ' ? 2 : 1
         api.ajax({
-            url: apiSite + '/api/user_center/addOtherContact',
+            url: apiSite + '/api/remark_user/addOtherContact',
             method: 'post',
             headers: apiHeader,
             data: {
                 values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    token: $api.getStorage('userToken'),
+                    remark_user_id: api.pageParam.userId,
                     info: tel,
                     type: 1,
                     sub_type: val

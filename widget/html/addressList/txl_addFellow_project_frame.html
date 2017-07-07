@@ -119,7 +119,7 @@
     var zipcode;//邮编
     apiready = function(){
         // 请求地址列表
-	    getCityList();
+	    requireData();
         // 删除
         delDz();
         // 监听增加地址事件
@@ -129,7 +129,7 @@
             name: 'addStudy'
         }, function(ret, err) {
             if (ret) {
-                getCityList();
+                requireData();
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -141,7 +141,7 @@
         api.addEventListener({
             name: '_addStudy'
         }, function(ret, err) {
-            getCityList();
+            requireData();
             if (ret) {
             } else {
                 alert(JSON.stringify(err.msg));
@@ -179,7 +179,7 @@
             name: 'txl_addFellow_project_addproject',
             url: './txl_addFellow_project_addproject.html',
             pageParam: {
-                userToken: api.pageParam.userToken || $api.getStorage('userToken'),
+                userId: api.pageParam.userId,
                 flag: 0
             },
             bounces: false
@@ -187,7 +187,8 @@
     }
 
     // 请求地址列表
-    function getCityList() {
+    function requireData() {
+        var allProjectArr;
         api.ajax({
             url: apiSite + '/api/user/projectList',
             method: 'post',
@@ -199,15 +200,34 @@
                 }
             }
         }, function(ret, err) {
-            if (ret) {
-                for (var i = 0; i < ret.data.list.length; i++) {
-                    if (ret.data.list[i].end_date == '0000-00-00' ){
-                        ret.data.list[i].end_date = '至今'
+            if (ret.code == 200) {
+                allProjectArr = ret.data.list;
+                api.ajax({
+                    url: apiSite + '/api/remark_user/projectList',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                        values: { 
+                            token: $api.getStorage('userToken'),
+                            remark_user_id: api.pageParam.userId
+                        }
                     }
-                }
-                getData(ret.data.list)
+                }, function(ret, err) {
+                    if (ret.code == 200) {
+                        allProjectArr = allProjectArr.concat(ret.data.list);
+                        for (var i = 0; i < allProjectArr.length; i++) {
+                            if (allProjectArr[i].end_date == '0000-00-00' ){
+                                allProjectArr[i].end_date = '至今'
+                            }
+                        }
+                        
+                        getData(allProjectArr)
+                    } else {
+                        alert(JSON.stringify(ret.msg));
+                    }
+                });
             } else {
-                alert(JSON.stringify(err.msg));
+                alert(JSON.stringify(ret.msg));
             }
         });
     }

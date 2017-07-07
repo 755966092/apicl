@@ -79,7 +79,7 @@
             
         </div>
     </header>
-    <div class="main clearfix">
+   <!--  <div class="main clearfix">
        <div class="main_no2">
            <p>网址
                 <input style="font-family: 'microsoft yahei';" type="text" name="" placeholder="输入网址" class="fr">
@@ -88,7 +88,7 @@
        <div class="main_no3 ">
            <button   tapmode="hover"   onclick="addTel()">保存</button>
        </div>
-    </div>
+    </div> -->
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -96,6 +96,20 @@
     var val = 1;
     apiready = function(){
 	    fnInit();
+        api.openFrame({
+            name: 'txl_addFellow_otherContact_website_frame',
+            url: './txl_addFellow_otherContact_website_frame.html',
+            rect: {
+                x: 0,
+                y: headerH,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                userId: api.pageParam.userId
+            },
+            bounces: true
+        });
     };
     // 添加电话完成
     function addTel() {

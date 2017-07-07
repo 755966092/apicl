@@ -75,7 +75,7 @@
     </style>
 </head>
 <body>
-     <header  class="header">
+    <!--  <header  class="header">
         <div class="head">
             <span class="callback"   tapmode="hover"   onclick="api.closeWin()">返回</span>
             <span class="winTitle">
@@ -83,7 +83,7 @@
             </span>
             
         </div>
-    </header>
+    </header> -->
     <div class="main clearfix">
        <div class="main_no2">
            <p>网址
@@ -100,18 +100,19 @@
 <script type="text/javascript">
     var val = 1;
     apiready = function(){
-	    fnInit();
+	   
     };
     // 添加电话完成
     function addTel() {
         var tel = $api.val($api.dom('input'));
         api.ajax({
-            url: apiSite + '/api/user_center/addOtherContact',
+            url: apiSite + '/api/remark_user/addOtherContact',
             method: 'post',
             headers: apiHeader,
             data: {
                 values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    token: $api.getStorage('userToken'),
+                    remark_user_id: api.pageParam.userId,
                     info: tel,
                     type: 2,
                     sub_type: val
@@ -119,6 +120,7 @@
             }
         }, function(ret, err) {
             if (ret) {
+                alert(JSON.stringify(ret))
                 api.closeWin();
             }
         })

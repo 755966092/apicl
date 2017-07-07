@@ -41,20 +41,35 @@
         moduleInit();
         fnInit();
         if (1) {
-             api.openFrame({
-                name: 'txl_memberInfo_Frame',
-                url: './txl_memberInfo_Frame.html',
-                rect: {
-                    x: 0,
-                    y: headerH,
-                    w: 'auto',
-                    h: 'auto'
-                },
-                pageParam: {
-                    userId: api.pageParam.userId
-                },
-                bounces: false
-            });
+            var userId = api.pageParam.userId
+            if (userId) {
+                 api.openFrame({
+                    name: 'txl_memberInfo_Frame',
+                    url: './txl_memberInfo_Frame.html',
+                    rect: {
+                        x: 0,
+                        y: headerH,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        userId: api.pageParam.userId
+                    },
+                    bounces: false
+                });
+            } else {
+                api.openFrame({
+                    name: 'txl_memberInfo_Frame',
+                    url: './txl_memberInfo_Frame.html',
+                    rect: {
+                        x: 0,
+                        y: headerH,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    bounces: false
+                });
+         }
         } else {    
              api.openFrame({
                 name: 'txl_noMemberInfo_Frame',

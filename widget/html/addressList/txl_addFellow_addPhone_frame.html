@@ -176,14 +176,15 @@
         alert(tel + '---'+ sub_type + '---'+ type)
         checkPhone(tel);
         api.ajax({
-            url: apiSite + '/api/user_center/addContact',
+            url: apiSite + '/api/remark_user/addContact',
             method: 'post',
             headers: apiHeader,
             data: {
                 values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    token: $api.getStorage('userToken'),
+                    remark_user_id: api.pageParam.userId, 
                     phone: tel,
-                    type: val,
+                    type: type,
                     sub_type: sub_type
                 }
             }

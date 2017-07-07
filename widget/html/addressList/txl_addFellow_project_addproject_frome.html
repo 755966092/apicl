@@ -175,12 +175,8 @@
              // 获取数据
             getCityList();
         } else {
-            url = '/api/user_center/addProject'
+            url = '/api/remark_user/addProject'
         }
-        // 监听返回数据
-        monitor();
-       
-
         api.addEventListener({
             name: 'addStudy'
         }, function(ret, err) {
@@ -218,39 +214,6 @@
             }
         });
     }
-    // 监听
-    function monitor() {
-        // 监听返回数据
-        // api.addEventListener({
-        //     name: 'selectEdu'
-        // }, function(ret, err) {
-        //     if (ret) {
-        //         $api.text($api.byId('selectEdu'), ret.value.selDate);
-        //     } else {
-        //         alert(JSON.stringify(err.msg));
-        //     }
-        // });
-        // 监听返回时间数据1
-        api.addEventListener({
-            name: 'selectTime_1'
-        }, function(ret, err) {
-            if (ret) {
-                $api.text($api.byId('time_1'), ret.value.selDate);
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
-        api.addEventListener({
-            name: 'selectTime_2'
-        }, function(ret, err) {
-            if (ret) {
-
-                $api.text($api.byId('time_2'), ret.value.selDate);
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
-    }
     // 提交数据
     function addStudy() {
         // 获取数据
@@ -268,9 +231,9 @@
             headers: apiHeader,
             data: {
                 values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    token: $api.getStorage('userToken'),
+                    remark_user_id: api.pageParam.userId,
                     project_id: api.pageParam.project_id,
-                    // company_id: '',
                     name: name,
                     url: project_url,
                     role: position,
@@ -281,13 +244,13 @@
                 }
             }
         }, function(ret, err) {
-            if (ret) {
+            if (ret.code == 200) {
                 api.sendEvent({
                     name: '_addStudy'
                 });
                 api.closeWin();
             } else {
-                alert(JSON.stringify(err.msg));
+                alert(JSON.stringify(ret.msg));
             }
         }); 
            
@@ -326,7 +289,30 @@
             title: text
         }, function(ret, err) {
             if (ret) {
-                $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day);
+                   var dateYear = new Date().getFullYear(),
+                        dateMonth = new Date().getMonth()+1,
+                        dateDay = new Date().getDate();
+                 if (data == 'startTime') {
+                    // 开始时间
+                    if ((ret.year > dateYear) || ((ret.year == dateYear) && (ret.month > dateMonth)) || (((ret.year == dateYear) && (ret.month == dateMonth)) && ret.day > dateDay)) {                        api.toast({
+                            msg: '请选择早于当前的时间'
+                        });
+                    } else {
+                        $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day);
+                    }
+                } else {
+                    //结束时间
+                    var startTime = $api.text($api.byId('time_1')).split('-')
+                    if (ret.year > dateYear || ((ret.year == dateYear) && (ret.month > dateMonth)) || (((ret.year == dateYear) && (ret.month == dateMonth)) && ret.day > dateDay)) {
+                        $api.text(ele, '至今');
+                    } else if (ret.year < startTime[0] || ((ret.year == startTime[0]) && (ret.month < startTime[1])) || (((ret.year == startTime[0]) && (ret.month == startTime[1])) && ret.day < startTime[2])) {
+                        api.toast({
+                            msg: '结束时间不能早于开始时间'
+                        });
+                    } else {
+                        $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day);
+                    }
+                }
             } else {
                 alert(JSON.stringify(err.msg));
             }

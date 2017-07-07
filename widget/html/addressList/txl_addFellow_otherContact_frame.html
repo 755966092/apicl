@@ -126,7 +126,7 @@
             {{ }; }} 
             </div>
    </script>
-    <div class="addPhone" tapmode onclick="addPhone()">
+    <div class="addPhone" tapmode="hover" onclick="addPhone()">
         <div class="addIcon"></div>
         <div>添加新号码</div>
    </div>
@@ -229,6 +229,7 @@
 
      // 获取联系人列表
     function requireData() {
+        var allArr;
         api.ajax({
             url: apiSite + '/api/user/otherContactList',
             method: 'post',
@@ -241,8 +242,29 @@
             }
         }, function(ret, err) {
             if (ret) {
-                handleData(litterSort(ret.data.list))
-                monitorEvent();
+                allArr = ret.data.list;
+                console.log('246'+JSON.stringify(allArr))
+                api.ajax({
+                    url: apiSite + '/api/remark_user/otherContactList',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                        values: { 
+                            token: $api.getStorage('userToken'),
+                            remark_user_id: api.pageParam.userId
+                        } 
+                    }
+                }, function(ret, err) {
+                    if (ret) {
+                        console.log('259'+JSON.stringify(ret.data.list))
+                        allArr = allArr.concat(ret.data.list)
+                        console.log('260'+JSON.stringify(allArr))
+                        handleData(litterSort(allArr))
+                        monitorEvent();
+                    } else {
+                        alert('3'+JSON.stringify(err));
+                    }
+                });
             } else {
                 alert('3'+JSON.stringify(err));
             }
@@ -262,7 +284,6 @@
         getData(data);
     }
     function litterSort(data) {
-        
         for (var i = 0; i < data.length; i++) {
             for (var j = 0; j < data.length; j++) {
                 if (data[i].type < data[j].type) {
@@ -318,7 +339,7 @@
             name: 'txl_addFellow_otherContactFashion_win',
             url: './txl_addFellow_otherContactFashion_win.html',
             pageParam: {
-                userToken: api.pageParam.userToken || $api.getStorage('userToken')
+                userId: api.pageParam.userId
             },
             bounces: false
         });

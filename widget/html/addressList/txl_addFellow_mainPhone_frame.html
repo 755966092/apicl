@@ -81,7 +81,7 @@
    </style>
 </head>
 <body>
-   <!--  <div class="main ">
+  <!--   <div class="main ">
        <div class="move">
            <p>移动</p>
            <div class="item">
@@ -108,7 +108,9 @@
        <div class="addPhone">
             <div class="addIcon"></div>
             <div>添加电话好号码</div>
+            
        </div>
+                            <span class="clearIcon" tapmode="hover" onclick="clearItem(this)"></span>
     </div> -->
     <div class="main resultList"></div>
     <script type="text/x-dot-template" id="listT">
@@ -151,35 +153,14 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 
 <script type="text/javascript">
-    var data = [{
-        "contact_id": 1,
-        "phone": "11111",
-        "type": 1,
-        "sub_type": 2,
-    },{
-        "contact_id": 2,
-        "phone": "22222",
-        "type": 1,
-        "sub_type": 1,
-    },{
-        "contact_id": 3,
-        "phone": "33333",
-        "type": 2,
-        "sub_type": 2,
-    },{
-        "contact_id": 4,
-        "phone": "4444",
-        "type": 2,
-        "sub_type": 1,
-    }]
+   
     apiready = function(){
         monitorEvent();
         requireData();
     };
     // 监听点击保存和编辑按钮
     function monitorEvent () {
-        var clearIcon = $api.domAll('.clearIcon'),
-            ipt = $api.domAll('input');
+        var clearIcon,ipt;
         api.addEventListener({
             name: 'keepPhone'
         }, function(ret, err) {
@@ -190,7 +171,6 @@
                 for (var i = 0; i < ipt.length; i++) {
                     $api.attr(ipt[i], 'disabled', 'true');
                 }
-                
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -199,7 +179,9 @@
             name: 'editPhone'
         }, function(ret, err) {
             if (ret) {
-               for (var i = 0; i < clearIcon.length; i++) {
+                clearIcon = $api.domAll('.clearIcon');
+                ipt = $api.domAll('input');
+                for (var i = 0; i < clearIcon.length; i++) {
                    $api.css(clearIcon[i], 'display:inline-block');
                 }
                 for (var i = 0; i < ipt.length; i++) {
@@ -221,7 +203,6 @@
                 data[i].sub_type = '生活'
             }
         }
-        console.log(data)
         getData(data);
     }
     function litterSort(data) {
@@ -261,12 +242,13 @@
             name: 'winName',
             url: './txl_addFellow_addPhone_win.html',
             pageParam: {
-                name: 'value'
+                userId: api.pageParam.userId
             }
         });
     }
 
     function requireData() {
+        var allArr=[]
         api.ajax({
             url: apiSite + '/api/user/contactList',
             method: 'post',
@@ -279,12 +261,30 @@
             }
         }, function(ret, err) {
             if(ret) {
-                console.log(JSON.stringify(ret))
-                 handleData(litterSort(ret.data.list))
+                allArr = ret.data.list;
+                api.ajax({
+                    url: apiSite + '/api/remark_user/contactList',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                           values: { 
+                               token: $api.getStorage('userToken'),
+                               remark_user_id: api.pageParam.userId
+                           }
+                    }
+                }, function(ret, err) {
+                    if(ret) {
+                        allArr = allArr.concat(ret.data.list)
+                        handleData(litterSort(allArr))
+                    } else {
+                        alert(JSON.stringify(err))
+                    }
+                });
             } else {
                 alert(JSON.stringify(err))
             }
-        })
+        });
+       
     }
 </script>
 </html>

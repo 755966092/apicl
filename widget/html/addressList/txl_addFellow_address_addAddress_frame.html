@@ -104,40 +104,54 @@
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../data/city_level3.js"></script>
 <script type="text/javascript">
-var url;
+    var url, provinces, cities,  address, zipcode;
     apiready = function(){
+        moduleInit();
+        console.log(JSON.stringify(api.pageParam))
         if (api.pageParam.flag) {
             // 1 编辑
             getCityList();
             url = '/api/user_center/editAddress'
         } else {
             // 0 新增
-            url = '/api/user_center/addAddress'
+            url = '/api/remark_user/addAddress'
         }
+
         // 城市选择器返回的内容
         install();
 
     };
     function addRess() {
-         api.ajax({
+        provinces =  $api.text($api.dom('.provinces'));
+        cities =  $api.text($api.dom('.cities'));
+        city =  $api.text($api.dom('.city'));
+        address =  $api.val($api.dom('.address'));
+        zipcode =  $api.val($api.dom('.zipcode'));
+        console.log(provinces+'--'+cities+'--'+city+'--'+address+'--'+zipcode)
+        api.ajax({
             url: apiSite + url,
             method: 'post',
             headers: apiHeader,
             data: {
                 values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    token: $api.getStorage('userToken'),
+                    remark_user_id: api.pageParam.userId,
                     province: provinces,
                     city: cities,
                     district: city,
                     address: address,
                     zipcode: zipcode,
                     note: '住址',
-                    address_id: api.pageParam.address_id
+                    // address_id: api.pageParam.address_id
                 }
             }
         }, function(ret, err) {
+            console.log('150:'+JSON.stringify(ret))
+            console.log('151:'+JSON.stringify(err))
             if (ret) {
+
                 // getData(ret.data.list)
                 api.closeWin();
                 api.sendEvent({
@@ -148,29 +162,96 @@ var url;
             }
         });
     }
-    // 城市选择器
+
+   // 打开选择器
     function selCity(ele) {
-        var val = $api.attr(ele, 'data-val');
-        var provinces = $api.text($api.dom('.provinces')),
-            cities = $api.text($api.dom('.cities')),
+         provinces = $api.text($api.dom('.provinces'));
+            cities = $api.text($api.dom('.cities'));
             city = $api.text($api.dom('.city'));
         var homeText=[];
         homeText.push(provinces)
         homeText.push(cities)
         homeText.push(city)
-        api.openFrame({
-            name: 'txl_addFellow_address_addAddress_selCity',
-            url: './txl_addFellow_address_addAddress_selCity.html',
-            rect: {
-                x: 0,
-                y: 0,
-                w: 'auto',
-                h: 'auto'
+
+        var active = [];
+        for (var i = 0; i < cityLevel3.length; i++) {
+            if (cityLevel3[i].name == homeText[0]) {
+                active.push(i);
+                for (var j = 0; j < cityLevel3[i].sub.length; j++) {
+                    if (cityLevel3[i].sub[j].name == homeText[1]) {
+                        active.push(j);
+                        for (var p = 0; p < cityLevel3[i].sub[j].sub.length; p++) {
+                            cityLevel3[i].sub[j].sub[p].name == homeText[2];
+                            active.push(p);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        var fontsize = 16,rowLength = 5;
+        if (api.systemType === 'ios') {
+            fontsize = 20;
+            rowLength = 7;
+        }
+        UIActionSelector.open({
+            datas: 'widget://data/city_level3.json',
+            actives: active,
+            layout: {
+                row: 7,
+                col: 3,
+                height: 30,
+                size: 16,
+                sizeActive: 18,
+                rowSpacing: 5,
+                colSpacing: 5,
+                maskBg: 'rgba(0,0,0,0.5)',
+                bg: '#fff',
+                color: '#888',
+                colorSelected: '#000'
             },
-            pageParam: {
-                homeText:homeText
+            animation: true,
+            cancel: {
+                text: '取消',
+                size: 16,
+                w: 60,
+                h: 40,
+                bg: '#eee',
+                // bgActive: '#ccc',
+                color: '#000',
+                // colorActive: '#fff'
             },
-            bounces: false
+            ok: {
+                text: '完成',
+                size: 16,
+                w: 60,
+                h: 40,
+                bg: '#eee',
+                // bgActive: '#ccc',
+                color: '#000',
+                // colorActive: '#fff'
+            },
+            title: {
+                text: '请选择',
+                size: 20,
+                h: 40,
+                bg: '#F0F0F0',
+                color: '#000'
+            },
+            fixedOn: api.frameName
+        }, function(ret, err) {
+            if (ret) {
+                // alert(JSON.stringify(ret))
+                if (ret.eventType == 'ok') {
+                    $api.text($api.dom('.provinces'), ret.level1);
+                    $api.text($api.dom('.cities'), ret.level2);
+                    $api.text($api.dom('.city'), ret.level3);
+                    // 判断按钮变色
+                    iptCom();
+                }
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
         });
     }
     // 设置页面内容

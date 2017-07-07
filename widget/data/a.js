@@ -1,30 +1,83 @@
- { 
- "status": "success"
- "result": [{ "extra": ""
- "sentStatus": "SENT"
- "messageId": 87
- "sentTime": 1499327265154
- "conversationType": "PRIVATE"
- "messageDirection": "RECEIVE"
- "receivedStatus": "READ"
- "content": { "extra": ""
- "text": "[尴尬]" }
- "objectName": "RC:TxtMsg"
- "senderUserId": "5b81284b29a52e022442207441f0025b"
- "receivedTime": 1499327264502
- "targetId": "5b81284b29a52e022442207441f0025b" }
-{ 
-	 "extra": ""
-	 "sentStatus": "SENT"
-	 "messageId": 86
-	 "sentTime": 1499327263958
-	 "conversationType": "PRIVATE"
-	 "messageDirection": "RECEIVE"
-	 "receivedStatus": "READ"
-	 "content": { "extra": ""
-	 "text": "[色]" }
-	 "objectName": "RC:TxtMsg"
-	 "senderUserId": "5b81284b29a52e022442207441f0025b"
-	 "receivedTime": 1499327263419
-	 "targetId": "5b81284b29a52e022442207441f0025b" 
-}
+[{
+	"info": "1给2备注",
+	"sub_type": 1,
+	"contact_id": 50,
+	"type": 2
+}, {
+	"info": "etutrt",
+	"sub_type": 1,
+	"contact_id": 49,
+	"type": 2
+}, {
+	"info": "wwweertyuii",
+	"sub_type": 1,
+	"contact_id": 48,
+	"type": 2
+}, {
+	"info": "wwwwwwweeeee",
+	"sub_type": 1,
+	"contact_id": 45,
+	"type": 2
+}, {
+	"info": "wwwwwww",
+	"sub_type": 1,
+	"contact_id": 42,
+	"type": 2
+}, {
+	"info": "wtamajd",
+	"sub_type": 1,
+	"contact_id": 41,
+	"type": 1
+}, {
+	"info": "755966",
+	"sub_type": 2,
+	"contact_id": 40,
+	"type": 1
+}]
+07 - 07 11: 49: 00.140 I / app3c(2): 259[{
+	"info": "12",
+	"sub_type": 2,
+	"contact_id": 2,
+	"type": 1
+}]
+07 - 07 11: 49: 00.189 I / app3c(2): 260[{
+	"info": "1给2备注",
+	"sub_type": 1,
+	"contact_id": 50,
+	"type": 2
+}, {
+	"info": "etutrt",
+	"sub_type": 1,
+	"contact_id": 49,
+	"type": 2
+}, {
+	"info": "wwweertyuii",
+	"sub_type": 1,
+	"contact_id": 48,
+	"type": 2
+}, {
+	"info": "wwwwwwweeeee",
+	"sub_type": 1,
+	"contact_id": 45,
+	"type": 2
+}, {
+	"info": "wwwwwww",
+	"sub_type": 1,
+	"contact_id": 42,
+	"type": 2
+}, {
+	"info": "wtamajd",
+	"sub_type": 1,
+	"contact_id": 41,
+	"type": 1
+}, {
+	"info": "755966",
+	"sub_type": 2,
+	"contact_id": 40,
+	"type": 1
+}, {
+	"info": "12",
+	"sub_type": 2,
+	"contact_id": 2,
+	"type": 1
+}]

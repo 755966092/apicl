@@ -145,7 +145,7 @@
                 name: 'txl_addFellow_address_addAddress',
                 url: './txl_addFellow_address_addAddress.html',
                 pageParam: {
-                    userToken: api.pageParam.userToken || $api.getStorage('userToken'),
+                    userToken: $api.getStorage('userToken'),
                     flag: 1,
                     address_id: val
                 },
@@ -161,7 +161,7 @@
             name: 'txl_addFellow_address_addAddress',
             url: './txl_addFellow_address_addAddress.html',
             pageParam: {
-                userToken: api.pageParam.userToken || $api.getStorage('userToken'),
+                userId: api.pageParam.userId,
                 flag: 0
             },
             softInputMode:'pan'
@@ -170,6 +170,7 @@
 
     // 请求地址列表
     function getCityList() {
+        var allAddArr;
         api.ajax({
             url: apiSite + '/api/user/addressList',
             method: 'post',
@@ -182,7 +183,27 @@
             }
         }, function(ret, err) {
             if (ret) {
-                getData(ret.data.list)
+                console.log(JSON.stringify(ret.data.list))
+                allAddArr = ret.data.list;
+                api.ajax({
+                    url: apiSite + '/api/remark_user/addressList',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                        values: { 
+                            token: $api.getStorage('userToken'),
+                            remark_user_id: api.pageParam.userId
+                        }
+                    }
+                }, function(ret, err) {
+                    if (ret) {
+                        console.log(JSON.stringify(ret.data.list))
+                        allAddArr = allAddArr.concat(ret.data.list);
+                        getData(allAddArr)
+                    } else {
+                        alert(JSON.stringify(err.msg));
+                    }
+                });
             } else {
                 alert(JSON.stringify(err.msg));
             }

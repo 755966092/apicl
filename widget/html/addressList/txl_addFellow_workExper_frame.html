@@ -126,8 +126,9 @@
 <script type="text/javascript">
     var zipcode;//邮编
     apiready = function(){
+
         // 请求地址列表
-	    getCityList();
+	    requireData();
         // 删除
         delDz();
         // 监听增加地址事件
@@ -137,7 +138,7 @@
             name: 'addStudy'
         }, function(ret, err) {
             if (ret) {
-                getCityList();
+                requireData();
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -149,7 +150,7 @@
         api.addEventListener({
             name: 'addCity'
         }, function(ret, err) {
-            getCityList();
+            requireData();
             if (ret) {
             } else {
                 alert(JSON.stringify(err.msg));
@@ -171,7 +172,7 @@
                 name: 'txl_addFellow_workExper_addExper',
                 url: './txl_addFellow_workExper_addExper.html',
                 pageParam: {
-                    userToken: api.pageParam.userToken || $api.getStorage('userToken'),
+                    user_id: api.pageParam.userId,
                     flag: 1,
                     work_id: val
                 },
@@ -188,7 +189,7 @@
             name: 'txl_workExper_addExper',
             url: './txl_addFellow_workExper_addExper.html',
             pageParam: {
-                userToken: api.pageParam.userToken || $api.getStorage('userToken'),
+                userId: api.pageParam.userId,
                 flag: 0
             },
             softInputMode: 'pan',
@@ -197,7 +198,8 @@
     }
 
     // 请求地址列表
-    function getCityList() {
+    function requireData() {
+        var allWorkArr;
         api.ajax({
             url: apiSite + '/api/user/workList',
             method: 'post',
@@ -210,12 +212,32 @@
             }
         }, function(ret, err) {
             if (ret) {
-                for (var i = 0; i < ret.data.list.length; i++) {
-                    if (ret.data.list[i].end_date == '0000-00-00' ){
-                        ret.data.list[i].end_date = '至今'
+                allWorkArr = ret.data.list;
+                console.log('215:'+allWorkArr)
+                api.ajax({
+                    url: apiSite + '/api/remark_user/workList',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                        values: { 
+                            token: $api.getStorage('userToken'),
+                            remark_user_id: api.pageParam.userId
+                        }
                     }
-                }
-                getData(ret.data.list)
+                }, function(ret, err) {
+                    if (ret) {
+                        console.log('228:'+ret.data.list)
+                        allWorkArr = allWorkArr.concat(ret.data.list);
+                        for (var i = 0; i < allWorkArr.length; i++) {
+                            if (allWorkArr[i].end_date == '0000-00-00' ){
+                                allWorkArr[i].end_date = '至今'
+                            }
+                        }
+                        getData(allWorkArr)
+                    } else {
+                        alert(JSON.stringify(err.msg));
+                    }
+                });
             } else {
                 alert(JSON.stringify(err.msg));
             }

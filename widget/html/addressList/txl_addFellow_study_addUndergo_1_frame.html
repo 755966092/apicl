@@ -171,7 +171,7 @@
             getCityList();
            
         } else {
-            url = '/api/user_center/addEducation'
+            url = '/api/remark_user/addEducation'
         }
         
         
@@ -215,7 +215,30 @@
             title: text
         }, function(ret, err) {
             if (ret) {
-                $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day);
+                    var dateYear = new Date().getFullYear(),
+                        dateMonth = new Date().getMonth()+1,
+                        dateDay = new Date().getDate();
+                 if (data == 'startTime') {
+                    // 开始时间
+                    if ((ret.year > dateYear) || ((ret.year == dateYear) && (ret.month > dateMonth)) || (((ret.year == dateYear) && (ret.month == dateMonth)) && ret.day > dateDay)) {                        api.toast({
+                            msg: '请选择早于当前的时间'
+                        });
+                    } else {
+                        $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day);
+                    }
+                } else {
+                    //结束时间
+                    var startTime = $api.text($api.byId('time_1')).split('-')
+                    if (ret.year > dateYear || ((ret.year == dateYear) && (ret.month > dateMonth)) || (((ret.year == dateYear) && (ret.month == dateMonth)) && ret.day > dateDay)) {
+                        $api.text(ele, '至今');
+                    } else if (ret.year < startTime[0] || ((ret.year == startTime[0]) && (ret.month < startTime[1])) || (((ret.year == startTime[0]) && (ret.month == startTime[1])) && ret.day < startTime[2])) {
+                        api.toast({
+                            msg: '结束时间不能早于开始时间'
+                        });
+                    } else {
+                        $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day);
+                    }
+                }
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -324,7 +347,8 @@
             headers: apiHeader,
             data: {
                 values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    token: $api.getStorage('userToken'),
+                    remark_user_id: api.pageParam.userId,
                     education_id: api.pageParam.education_id,
                     type: 3,
                     school: school,
