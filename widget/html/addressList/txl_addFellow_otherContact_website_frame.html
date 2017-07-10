@@ -120,8 +120,56 @@
             }
         }, function(ret, err) {
             if (ret) {
-                alert(JSON.stringify(ret))
+                alert(JSON.stringify(ret));
+                insertData();
                 api.closeWin();
+            }
+        })
+    }
+    function insertData() {
+        var SQLName = 'db_'+$api.getStorage('userToken');
+        api.ajax({
+            url: apiSite + '/api/remark_user/otherContactList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       remark_user_id: api.pageParam.userId, 
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                console.log('334ret:'+JSON.stringify(ret))
+                var sql = 'INSERT OR REPLACE INTO tb_remarks_other_contact(list_id,user_id,other_contact_id,other_info,other_type,other_sub_type) VALUES '
+                for (var i = 0; i < ret.data.list.length; i++) {
+                    sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].contact_id  +'",'+api.pageParam.userId+','+ret.data.list[i].contact_id+',"'+ret.data.list[i].info+'",'+ret.data.list[i].type+','+ret.data.list[i].sub_type+'),'
+                }
+                sql = sql.substring(0,sql.length-1);
+                db.executeSql({
+                    name: SQLName,
+                    sql: sql   
+                }, function(ret, err){  
+                    console.log('334ret:'+JSON.stringify(ret))
+                    console.log('335err:'+JSON.stringify(err))
+                    if( ret.status ){
+                        db.selectSql({
+                            name: SQLName,
+                            sql: 'SELECT * FROM tb_remarks_other_contact WHERE user_id=' + api.pageParam.userId
+                        }, function(ret, err){  
+                            if( ret.status ){
+                                console.log('340:'+JSON.stringify(ret))
+                            }else{
+                                alert(JSON.stringify( err ) );
+                            }
+                        });
+                    }else{
+                        alert(JSON.stringify( err ) );
+                    }
+                });
+            } else {
+                alert(JSON.stringify(err))
+                alert(JSON.stringify(ret))
             }
         })
     }

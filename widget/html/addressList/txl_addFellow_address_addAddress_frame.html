@@ -109,7 +109,7 @@
     var url, provinces, cities,  address, zipcode;
     apiready = function(){
         moduleInit();
-        console.log(JSON.stringify(api.pageParam))
+        // console.log(JSON.stringify(api.pageParam))
         if (api.pageParam.flag) {
             // 1 编辑
             getCityList();
@@ -129,7 +129,6 @@
         city =  $api.text($api.dom('.city'));
         address =  $api.val($api.dom('.address'));
         zipcode =  $api.val($api.dom('.zipcode'));
-        console.log(provinces+'--'+cities+'--'+city+'--'+address+'--'+zipcode)
         api.ajax({
             url: apiSite + url,
             method: 'post',
@@ -148,15 +147,13 @@
                 }
             }
         }, function(ret, err) {
-            console.log('150:'+JSON.stringify(ret))
-            console.log('151:'+JSON.stringify(err))
             if (ret) {
-
+                insertData();
                 // getData(ret.data.list)
-                api.closeWin();
                 api.sendEvent({
                     name: 'addCity'
                 });
+                api.closeWin();
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -165,7 +162,7 @@
 
    // 打开选择器
     function selCity(ele) {
-         provinces = $api.text($api.dom('.provinces'));
+        provinces = $api.text($api.dom('.provinces'));
             cities = $api.text($api.dom('.cities'));
             city = $api.text($api.dom('.city'));
         var homeText=[];
@@ -270,8 +267,6 @@
         // 判断按钮变色
         iptCom();
     }
-
-
     // 请求地址列表
     function getCityList() {
         api.ajax({
@@ -312,6 +307,53 @@
             $api.css($api.dom('.btn'), 'background:  #08BB08');
             $api.removeAttr($api.dom('.btn'),'disabled');
         }
+    }
+    function insertData() {
+        var SQLName = 'db_'+$api.getStorage('userToken');
+        api.ajax({
+            url: apiSite + '/api/remark_user/addressList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       remark_user_id: api.pageParam.userId, 
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                console.log('334ret:'+JSON.stringify(ret.code))
+                var sql = 'INSERT OR REPLACE INTO tb_remarks_address(list_id,user_id,address_id,province,city,district, address, note) VALUES'
+                for (var i = 0; i < ret.data.list.length; i++) {
+                    sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].address_id  +'",'+api.pageParam.userId+','+ret.data.list[i].address_id+',"'+ret.data.list[i].province+'","'+ret.data.list[i].city+'","'+ret.data.list[i].district+'","'+ret.data.list[i].address+'","'+ret.data.list[i].note+'"),'
+                }
+                sql = sql.substring(0,sql.length-1);
+                db.executeSql({
+                    name: SQLName,
+                    sql: sql   
+                }, function(ret, err){  
+                    console.log('334ret:'+JSON.stringify(ret))
+                    console.log('335err:'+JSON.stringify(err))
+                    if( ret.status ){
+                        db.selectSql({
+                            name: SQLName,
+                            sql: 'SELECT * FROM tb_remarks_address WHERE user_id=' + api.pageParam.userId
+                        }, function(ret, err){  
+                            if( ret.status ){
+                                console.log('340:'+JSON.stringify(ret))
+                            }else{
+                                alert(JSON.stringify( err ) );
+                            }
+                        });
+                    }else{
+                        alert(JSON.stringify( err ) );
+                    }
+                });
+            } else {
+                alert(JSON.stringify(err))
+                alert(JSON.stringify(ret))
+            }
+        })
     }
 </script>
 </html>

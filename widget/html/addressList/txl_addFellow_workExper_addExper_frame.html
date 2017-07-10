@@ -153,6 +153,7 @@
 <script type="text/javascript">
     var url;
     apiready = function(){
+        moduleInit();
         if (api.pageParam.flag == 1) {
             url = '/api/user_center/editWork';
             // 获取数据
@@ -253,6 +254,7 @@
             }
         }, function(ret, err) {
             if (ret.code == 200) {
+                insertData();
                 api.sendEvent({
                     name: 'addStudy'
                 });
@@ -350,6 +352,54 @@
                 alert(JSON.stringify(err.msg));
             }
         });
+    }
+
+     function insertData() {
+        var SQLName = 'db_'+$api.getStorage('userToken');
+        api.ajax({
+            url: apiSite + '/api/remark_user/workList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       remark_user_id: api.pageParam.userId, 
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                console.log('334ret:'+JSON.stringify(ret))
+                var sql = 'INSERT OR REPLACE INTO tb_remarks_work(list_id,user_id,work_id,company_id,company_name,position, description, is_default, start_date, end_start) VALUES '
+                for (var i = 0; i < ret.data.list.length; i++) {
+                    sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].work_id  +'",'+api.pageParam.userId+','+ret.data.list[i].work_id+',"'+ret.data.list[i].company_id+'","'+ret.data.list[i].company_name+'","'+ret.data.list[i].position+'","'+ret.data.list[i].description+'",'+ret.data.list[i].is_default+',"'+ret.data.list[i].start_date+'","'+ret.data.list[i].end_start+'"),'
+                }
+                sql = sql.substring(0,sql.length-1);
+                db.executeSql({
+                    name: SQLName,
+                    sql: sql   
+                }, function(ret, err){  
+                    console.log('334ret:'+JSON.stringify(ret))
+                    console.log('335err:'+JSON.stringify(err))
+                    if( ret.status ){
+                        db.selectSql({
+                            name: SQLName,
+                            sql: 'SELECT * FROM tb_remarks_work WHERE user_id=' + api.pageParam.userId
+                        }, function(ret, err){  
+                            if( ret.status ){
+                                console.log('340:'+JSON.stringify(ret))
+                            }else{
+                                alert(JSON.stringify( err ) );
+                            }
+                        });
+                    }else{
+                        alert(JSON.stringify( err ) );
+                    }
+                });
+            } else {
+                alert(JSON.stringify(err))
+                alert(JSON.stringify(ret))
+            }
+        })
     }
 </script>
 </html>

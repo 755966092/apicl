@@ -419,17 +419,70 @@ function addPublish() {
 }
 function openRemarksDb() {
     var SQLName = 'db_'+$api.getStorage('userToken');
-    var createTable = 'CREATE TABLE IF NOT EXISTS tb_remarks(user_id INT PRIMARY KEY NOT NULL,ramarks_flag INT, remarks_extra_content VARCHAR(255), remarks_extra_image VARCHAR(255), remarks_birthday VARCHAR(255), remarks_sex VARCHAR(255), remarks_head_img_url VARCHAR(255), remarks_hometown VARCHAR(255), remarks_real_name VARCHAR(255), remarks_nickname VARCHAR(255), remarks_address VARCHAR(255), remarks_other_contact VARCHAR(255), remarks_contact VARCHAR(255), remarks_work VARCHAR(255), remarks_study VARCHAR(255), remarks_project VARCHAR(255))'
+    // 备注电话
     db.executeSql({
         name: SQLName,
-        sql: createTable
+        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_contact(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, contact_id int, phone varchar(255), type int, sub_type int, is_default int)'    
     }, function(ret, err){        
-        if( ret.status ){
-            alert( JSON.stringify( ret ) );
-        }else{
-            alert( JSON.stringify( err ) );
-        }
+       // alert('1main_ret:'+JSON.stringify(ret))
     });
+    // 备注其他联系方式
+    db.executeSql({
+        name: SQLName,
+        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_other_contact(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, other_contact_id int, other_info varchar(255), other_type int, other_sub_type int)'    
+    }, function(ret, err){        
+       // alert('2main_ret:'+JSON.stringify(ret))
+    });
+    // 备注地址
+    db.executeSql({
+        name: SQLName,
+        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_address(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, address_id int, province varchar(255), city varchar(255), district varchar(255), address varchar(255), note varchar(255))'    
+    }, function(ret, err){        
+       // alert('3main_ret:'+JSON.stringify(ret))
+    });
+    // 备注内容
+    // 备注学习经历
+    db.executeSql({
+        name: SQLName,
+        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_education(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, education_id int, type int, school varchar(255), major varchar(255), degree varchar(255), description varchar(255),start_date varchar(255),end_start varchar(255))'    
+    }, function(ret, err){        
+       // alert('4main_ret:'+JSON.stringify(ret))
+    });
+    // 备注工作经历
+    db.executeSql({
+        name: SQLName,
+        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_work(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, work_id int, company_id int, company_name varchar(255), position varchar(255), description varchar(255), is_default int,start_date varchar(255),end_start varchar(255))'    
+    }, function(ret, err){        
+       // alert('5main_ret:'+JSON.stringify(ret))
+    });
+    // 备注项目经历
+    db.executeSql({
+        name: SQLName,
+        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_project(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, project_id int, name varchar(255), url varchar(255), role varchar(255), description varchar(255), achievement varchar(255),start_date varchar(255),end_start varchar(255))'    
+    }, function(ret, err){        
+       // alert('6main_ret:'+JSON.stringify(ret))
+    });
+    // 
+     // db.executeSql({
+     //     name: SQLName,
+     //     sql: 'DROP TABLE tb_remarks_contact'    
+     // }, function(ret, err){        
+     //     if( ret.status ){
+     //         alert('1'+ JSON.stringify( ret ) );
+     //     }else{
+     //         alert( JSON.stringify( err ) );
+     //     }
+     // });
+     // db.executeSql({
+     //     name: SQLName,
+     //     sql: 'DROP TABLE tb_remarks_contact1'    
+     // }, function(ret, err){        
+     //     if( ret.status ){
+     //         alert('2'+ JSON.stringify( ret ) );
+     //     }else{
+     //         alert( JSON.stringify( err ) );
+     //     }
+     // });
 }  
  
 </script>

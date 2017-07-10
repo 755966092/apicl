@@ -6,11 +6,6 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-      
-        body, html {
-            background-color: #F8F8F8;
-        }
-        
         .main_no1 {
            margin-top: .6rem;
         }
@@ -122,6 +117,7 @@
 <script type="text/javascript">
     var type = 1, sub_type = 1;
     apiready = function(){
+        moduleInit();
         modilyType();
     };
     // 电话类型回调
@@ -173,7 +169,6 @@
     // // 添加电话完成
     function addTel() {
         var tel = $api.val($api.dom('input'));
-        alert(tel + '---'+ sub_type + '---'+ type)
         checkPhone(tel);
         api.ajax({
             url: apiSite + '/api/remark_user/addContact',
@@ -190,10 +185,12 @@
             }
         }, function(ret, err) {
             if (ret) {
-                alert(JSON.stringify(ret))
+                alert('188:'+JSON.stringify(ret))
+                insertData();
                 api.closeWin();
+            } else {
+             alert('192'+JSON.stringify(err.msg))
             }
-             alert(JSON.stringify(err.msg))
         })
     }
     function checkPhone(data){ 
@@ -205,5 +202,49 @@
         } 
     }
 
+    function insertData() {
+        var SQLName = 'db_'+$api.getStorage('userToken');
+        api.ajax({
+            url: apiSite + '/api/remark_user/contactList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       remark_user_id: api.pageParam.userId, 
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                var sql = 'INSERT OR REPLACE INTO tb_remarks_contact(list_id,user_id,contact_id,phone,type,sub_type, is_default) VALUES'
+                for (var i = 0; i < ret.data.list.length; i++) {
+                    sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].contact_id  +'",'+api.pageParam.userId+','+ret.data.list[i].contact_id+',"'+ret.data.list[i].phone+'",'+ret.data.list[i].type+','+ret.data.list[i].sub_type+','+ret.data.list[i].is_default+'),'
+                }
+                sql = sql.substring(0,sql.length-1);
+                db.executeSql({
+                    name: SQLName,
+                    sql: sql   
+                }, function(ret, err){  
+                    if( ret.status ){
+                        db.selectSql({
+                            name: SQLName,
+                            sql: 'SELECT * FROM tb_remarks_contact WHERE user_id=' + api.pageParam.userId
+                        }, function(ret, err){  
+                            if( ret.status ){
+                                console.log(JSON.stringify(ret))
+                            }else{
+                                alert(JSON.stringify( err ) );
+                            }
+                        });
+                    }else{
+                        alert(JSON.stringify( err ) );
+                    }
+                });
+            } else {
+                alert(JSON.stringify(err))
+                alert(JSON.stringify(ret))
+            }
+        })
+    }
 </script>
 </html>
