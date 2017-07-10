@@ -6,10 +6,13 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-        body,html{
-            background-color: #EFEFF4;
+        .no_data {
+             background-color: #EDECF3; 
+             text-align: center;
+             color: #999;  
+             font-size: .3rem;
+             margin-top: .5rem;
         }
-       
          .item {
             background-color: #fff;
             padding: .2rem .3rem;
@@ -163,6 +166,9 @@
     
     <div class="main resultList"></div>
     <script type="text/x-dot-template" id="listT">
+        {{?it.length === 0}}
+        <p class="no_data">暂无数据</p>
+        {{??}}
             {{ for (var i = 0; i < it.length; i++) { }} 
                 <div class="item flex-def">
                     <div class="headImg">
@@ -212,6 +218,7 @@
                 </div>
             </div>
             {{ }; }}
+        {{?}}
     </script>
    
 </body>

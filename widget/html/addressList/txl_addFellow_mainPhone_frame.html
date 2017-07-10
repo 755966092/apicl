@@ -250,42 +250,86 @@
     function requireData() {
         var allArr=[]
         api.ajax({
-            url: apiSite + '/api/user/contactList',
+            url: apiSite + '/api/remark_user/contactList',
             method: 'post',
             headers: apiHeader,
             data: {
                    values: { 
                        token: $api.getStorage('userToken'),
-                       user_id: api.pageParam.userId
+                       remark_user_id: api.pageParam.userId
                    }
             }
         }, function(ret, err) {
             if(ret) {
                 allArr = ret.data.list;
-                api.ajax({
-                    url: apiSite + '/api/remark_user/contactList',
-                    method: 'post',
-                    headers: apiHeader,
-                    data: {
-                           values: { 
-                               token: $api.getStorage('userToken'),
-                               remark_user_id: api.pageParam.userId
-                           }
-                    }
-                }, function(ret, err) {
-                    if(ret) {
-                        allArr = allArr.concat(ret.data.list)
-                        handleData(litterSort(allArr))
-                    } else {
-                        alert(JSON.stringify(err))
-                    }
-                });
+                if (allArr) {
+                    handleData(litterSort(allArr))
+                } else {
+                    api.ajax({
+                        url: apiSite + '/api/user/contactList',
+                        method: 'post',
+                        headers: apiHeader,
+                        data: {
+                               values: { 
+                                   token: $api.getStorage('userToken'),
+                                   user_id: api.pageParam.userId
+                               }
+                        }
+                    }, function(ret, err) {
+                        if(ret) {
+                            allArr = ret.data.list;
+                            handleData(litterSort(allArr))
+                        } else {
+                            alert(JSON.stringify(err))
+                        }
+                    });
+                }
             } else {
                 alert(JSON.stringify(err))
             }
         });
        
     }
+    /*
+    
+    api.ajax({
+        url: apiSite + '/api/remark_user/contactList',
+        method: 'post',
+        headers: apiHeader,
+        data: {
+               values: { 
+                   token: $api.getStorage('userToken'),
+                   remark_user_id: api.pageParam.userId
+               }
+        }
+    }, function(ret, err) {
+        if(ret) {
+            allArr = allArr.concat(ret.data.list)
+            handleData(litterSort(allArr))
+        } else {
+            alert(JSON.stringify(err))
+        }
+    });
+    
+    api.ajax({
+        url: apiSite + '/api/user/contactList',
+        method: 'post',
+        headers: apiHeader,
+        data: {
+               values: { 
+                   token: $api.getStorage('userToken'),
+                   user_id: api.pageParam.userId
+               }
+        }
+    }, function(ret, err) {
+        if(ret) {
+            allArr = ret.data.list;
+            
+        } else {
+            alert(JSON.stringify(err))
+        }
+    });
+     */
 </script>
 </html>
 

@@ -190,7 +190,7 @@
         <header>
             <ul>
                 <li class="border-b active" id="title">
-                    我在
+                    首页
                     <!-- <span id="addFellow"   tapmode="hover"   onclick="addFellow()"></span> -->
                     <span class="rightBtn"   tapmode="hover"   onclick="addFellow()">+</span> 
                 </li>
@@ -209,7 +209,7 @@
         </div>
         <div id="footer" class="border-t">
             <ul class="flex-wrap">
-                <li ontouchstart="randomSwitchBtn( this );" class="flex-con active "><span id="newsCount"></span>我在</li>
+                <li ontouchstart="randomSwitchBtn( this );" class="flex-con active "><span id="newsCount"></span>首页</li>
                 <li ontouchstart="randomSwitchBtn( this );" class="flex-con ">通讯录</li>
                 <li ontouchstart="randomSwitchBtn( this );" data-val = '3' class="flex-con ">供求</li>
                 <li ontouchstart="randomSwitchBtn( this );" class="flex-con">发现</li>
@@ -272,6 +272,7 @@ apiready = function() {
         badge: 0
         // 清除角标
     });
+    openRemarksDb()
 
 }
 
@@ -291,7 +292,7 @@ function addF() {
 function getTotalCount() {
     rong.getTotalUnreadCount(function(ret, err) {
         if (ret.result == 0) {
-            $api.html($api.byId('title'), '我在<span class="rightBtn"   tapmode="hover"   onclick="addFellow()">+</span> ');
+            $api.html($api.byId('title'), '首页<span class="rightBtn"   tapmode="hover"   onclick="addFellow()">+</span> ');
             $api.css($api.byId('newsCount'), 'display: none');
             api.setAppIconBadge({
                 badge: ret.result
@@ -302,9 +303,11 @@ function getTotalCount() {
                 badge: ret.result
                 // 清除角标
             });
-            $api.html($api.byId('title'), '我在(' +ret.result+ ')<span class="rightBtn"   tapmode="hover"   onclick="addFellow()">+</span> ');
-            $api.css($api.byId('newsCount'), 'display: inline-block');
-            $api.html($api.byId('newsCount'), ret.result);
+            if (ret.result) {
+                $api.html($api.byId('title'), '首页(' +ret.result+ ')<span class="rightBtn"   tapmode="hover"   onclick="addFellow()">+</span> ');
+                $api.css($api.byId('newsCount'), 'display: inline-block');
+                $api.html($api.byId('newsCount'), ret.result);
+            }
         }
     })
 }
@@ -414,9 +417,44 @@ function addPublish() {
         bounces: false
     });
 }
+function openRemarksDb() {
+    var SQLName = 'db_'+$api.getStorage('userToken');
+    var createTable = 'CREATE TABLE IF NOT EXISTS tb_remarks(user_id INT PRIMARY KEY NOT NULL,ramarks_flag INT, remarks_extra_content VARCHAR(255), remarks_extra_image VARCHAR(255), remarks_birthday VARCHAR(255), remarks_sex VARCHAR(255), remarks_head_img_url VARCHAR(255), remarks_hometown VARCHAR(255), remarks_real_name VARCHAR(255), remarks_nickname VARCHAR(255), remarks_address VARCHAR(255), remarks_other_contact VARCHAR(255), remarks_contact VARCHAR(255), remarks_work VARCHAR(255), remarks_study VARCHAR(255), remarks_project VARCHAR(255))'
+    db.executeSql({
+        name: SQLName,
+        sql: createTable
+    }, function(ret, err){        
+        if( ret.status ){
+            alert( JSON.stringify( ret ) );
+        }else{
+            alert( JSON.stringify( err ) );
+        }
+    });
+}  
  
 </script>
 
 
 
 
+<!-- 
+user_id 
+
+ramarks_flag
+
+remarks_extra_content
+ramarks_extra_image
+remarks_birthday
+remarks_sex
+remarks_head_img_url
+remarks_hometown
+remarks_real_name
+remarks_nickname
+
+remarks_address
+remarks_other_contact
+remarks_contact
+remarks_work
+remarks_study
+remarks_project
+ -->
