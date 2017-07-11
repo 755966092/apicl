@@ -6,10 +6,7 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-        body, html {
-            background-color: #F8F8F8;
-        }
-         .main_no1 {
+        .main_no1 {
         }
         .main_no1 p, .main_no2 p {
              background-color: #fff;
@@ -152,7 +149,7 @@
 <script type="text/javascript">
     var url;
     apiready = function(){
-
+        moduleInit();
         if (api.pageParam.flag == 1) {
             url = '/api/user_center/editEducation';
             getCityList();
@@ -299,12 +296,61 @@
              api.sendEvent({
                  name: 'addStudy'
              });
+             insertData();
              api.closeWin();
             } else {
                 alert(JSON.stringify(err.msg));
             }
         }); 
            
+    }
+
+    function insertData() {
+        var SQLName = 'db_'+$api.getStorage('userToken');
+        api.ajax({
+            url: apiSite + '/api/remark_user/educationList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       remark_user_id: api.pageParam.userId, 
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                console.log('334ret:'+JSON.stringify(ret))
+                var sql = 'INSERT OR REPLACE INTO tb_remarks_education(list_id,user_id,education_id,type,school,major, degree, description, start_date, end_start) VALUES '
+                for (var i = 0; i < ret.data.list.length; i++) {
+                    sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].education_id  +'",'+api.pageParam.userId+','+ret.data.list[i].education_id+','+ret.data.list[i].type+',"'+ret.data.list[i].school+'","'+ret.data.list[i].major+'",'+ret.data.list[i].degree+',"'+ret.data.list[i].description+'","'+ret.data.list[i].start_date+'","'+ret.data.list[i].end_start+'"),'
+                }
+                sql = sql.substring(0,sql.length-1);
+                db.executeSql({
+                    name: SQLName,
+                    sql: sql   
+                }, function(ret, err){  
+                    console.log('334ret:'+JSON.stringify(ret))
+                    console.log('335err:'+JSON.stringify(err))
+                    if( ret.status ){
+                        db.selectSql({
+                            name: SQLName,
+                            sql: 'SELECT * FROM tb_remarks_education WHERE user_id=' + api.pageParam.userId
+                        }, function(ret, err){  
+                            if( ret.status ){
+                                console.log('数据库内容:'+JSON.stringify(ret))
+                            }else{
+                                alert(JSON.stringify( err ) );
+                            }
+                        });
+                    }else{
+                        alert(JSON.stringify( err ) );
+                    }
+                });
+            } else {
+                alert(JSON.stringify(err))
+                alert(JSON.stringify(ret))
+            }
+        })
     }
      // 删除数据
     function delStudy () {

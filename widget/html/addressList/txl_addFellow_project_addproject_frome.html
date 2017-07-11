@@ -6,11 +6,7 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-        
-        body, html {
-            background-color: #F8F8F8;
-        }
-         .main_no1 .wrap {
+        .main_no1 .wrap {
             padding-left:  .36rem;
             background-color: #fff;
         }
@@ -170,6 +166,7 @@
 <script type="text/javascript">
     var url;
     apiready = function(){
+        moduleInit();
         if (api.pageParam.flag == 1) {
             url = '/api/user_center/editProject';
              // 获取数据
@@ -248,6 +245,7 @@
                 api.sendEvent({
                     name: '_addStudy'
                 });
+                insertData();
                 api.closeWin();
             } else {
                 alert(JSON.stringify(ret.msg));
@@ -255,7 +253,53 @@
         }); 
            
     }
-   
+     function insertData() {
+        var SQLName = 'db_'+$api.getStorage('userToken');
+        api.ajax({
+            url: apiSite + '/api/remark_user/projectList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       remark_user_id: api.pageParam.userId, 
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                console.log('334ret:'+JSON.stringify(ret))
+                var sql = 'INSERT OR REPLACE INTO tb_remarks_project(list_id,user_id,project_id,name,url,role, description, achievement, start_date, end_start) VALUES '
+                for (var i = 0; i < ret.data.list.length; i++) {
+                    sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].project_id  +'",'+api.pageParam.userId+','+ret.data.list[i].project_id+',"'+ret.data.list[i].name+'","'+ret.data.list[i].url+'","'+ret.data.list[i].role+'","'+ret.data.list[i].description+'","'+ret.data.list[i].achievement+'","'+ret.data.list[i].start_date+'","'+ret.data.list[i].end_date+'"),'
+                }
+                sql = sql.substring(0,sql.length-1);
+                db.executeSql({
+                    name: SQLName,
+                    sql: sql   
+                }, function(ret, err){  
+                    console.log('334ret:'+JSON.stringify(ret))
+                    console.log('335err:'+JSON.stringify(err))
+                    if( ret.status ){
+                        db.selectSql({
+                            name: SQLName,
+                            sql: 'SELECT * FROM tb_remarks_project WHERE user_id=' + api.pageParam.userId
+                        }, function(ret, err){  
+                            if( ret.status ){
+                                console.log('340:'+JSON.stringify(ret))
+                            }else{
+                                alert(JSON.stringify( err ) );
+                            }
+                        });
+                    }else{
+                        alert(JSON.stringify( err ) );
+                    }
+                });
+            } else {
+                alert(JSON.stringify(err))
+                alert(JSON.stringify(ret))
+            }
+        })
+    }
     // 编辑文本和修改文本长度内容
     function changeText(ele) {
         $api.text($api.next(ele), ele.value.length + '/300');
