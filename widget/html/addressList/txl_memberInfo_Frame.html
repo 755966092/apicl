@@ -298,7 +298,7 @@
             <div class="titleRight flex-def flex-zTopBottom">
                 <div class="name">
                     <div class="nameNo1">
-                        <h3 id="nickname">陈胜东</h3>
+                        <h3 id="nickname"></h3>
                         <span id="sex" class="sexIcon"></span>
                     </div>
                   <!--   <div class="activeTime">
@@ -579,12 +579,14 @@
                         if (retSelSql.data.length!= 0 && retSelSql.data[0].extra_image_url) {
                             // b本地数据库内容
                             $api.css(liRightIcon, 'background: url('+ retSelSql.data[0].extra_image_url +')');
-                        } else if (retAjax.data.extra.image_url) {
+                        } else if (retAjax.data.extra && retAjax.data.extra.image_url) {
                             // 线上备注内容
                             $api.css(liRightIcon, 'background: url('+ retAjax.data.extra.image_url +')');
                         } else {
                             // 会员原始信息
-                            $api.css(liRightIcon, 'background: url('+ retAjax.data.extra.image_url +')');
+                            if (retAjax.data.extra){
+                                $api.css(liRightIcon, 'background: url('+ retAjax.data.extra.image_url +')');
+                            }
                         } 
 
                         // 昵称

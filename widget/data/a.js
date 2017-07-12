@@ -1,16 +1,31 @@
-07 - 12 16: 11: 11.177 I / app3c(2): 202 {
-	"code": 200,
-	"data": {
-		"config": {
-			"sign": "C676C4C0A7EB47BA931303515B89A556",
-			"partnerid": "1485020672",
-			"package": "Sign=WXPay",
-			"noncestr": "5965d9a1d038e",
-			"timestamp": 1499847073,
-			"appid": "wxa0dd1a8435d4bd4f",
-			"prepayid": "wx20170712161113bf8ce1c4f60534992105"
-		}
+07 - 12 17: 41: 21.037 I / app3c(2): 465::: {
+	"show_status": {
+		"rongcloud": true,
+		"contact": true
 	},
-	"msg": "",
-	"time": 1499847073
+	"status": [],
+	"info": {
+		"current_position": null,
+		"rongcloud_user_id": null,
+		"nickname": "李新新",
+		"real_name": null,
+		"birthday": null,
+		"user_id": 17222,
+		"hometown": null,
+		"sex": null,
+		"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+		"current_company": null
+	},
+	"relationship_level": 3,
+	"extra": null,
+	"contact": {
+		"update_time": "2017-07-04 13:41:35",
+		"phone": "18606615070",
+		"sub_type": 2,
+		"is_default": 1,
+		"create_time": "2017-07-04 13:41:35",
+		"user_id": 17222,
+		"type": 1,
+		"contact_id": 92
+	}
 }
