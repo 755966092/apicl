@@ -97,6 +97,7 @@
 <script type="text/javascript">
     var val = 1;
     apiready = function(){
+        moduleInit();
 	   
     };
     // 添加电话完成
@@ -138,7 +139,7 @@
         }, function(ret, err) {
             if(ret) {
                 console.log('334ret:'+JSON.stringify(ret))
-                var sql = 'INSERT OR REPLACE INTO tb_remarks_other_contact(list_id,user_id,other_contact_id,other_info,other_type,other_sub_type) VALUES '
+                var sql = 'INSERT OR REPLACE INTO tb_remarks_other_contact(list_id,user_id,contact_id,info,type,sub_type) VALUES '
                 for (var i = 0; i < ret.data.list.length; i++) {
                     sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].contact_id  +'",'+api.pageParam.userId+','+ret.data.list[i].contact_id+',"'+ret.data.list[i].info+'",'+ret.data.list[i].type+','+ret.data.list[i].sub_type+'),'
                 }
@@ -149,6 +150,9 @@
                 }, function(ret, err){  
                     console.log('334ret:'+JSON.stringify(ret))
                     console.log('335err:'+JSON.stringify(err))
+                    api.sendEvent({
+                        name: 'addRemarkOtherContact'
+                    });
                     if( ret.status ){
                         db.selectSql({
                             name: SQLName,

@@ -6,8 +6,6 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-        .main_no1 {
-        }
         .main_no1 p, .main_no2 p {
              background-color: #fff;
             height: .8rem;
@@ -320,7 +318,7 @@
         }, function(ret, err) {
             if(ret) {
                 console.log('334ret:'+JSON.stringify(ret))
-                var sql = 'INSERT OR REPLACE INTO tb_remarks_education(list_id,user_id,education_id,type,school,major, degree, description, start_date, end_start) VALUES '
+                var sql = 'INSERT OR REPLACE INTO tb_remarks_education(list_id,user_id,education_id,type,school,major, degree, description, start_date, end_date) VALUES '
                 for (var i = 0; i < ret.data.list.length; i++) {
                     sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].education_id  +'",'+api.pageParam.userId+','+ret.data.list[i].education_id+','+ret.data.list[i].type+',"'+ret.data.list[i].school+'","'+ret.data.list[i].major+'",'+ret.data.list[i].degree+',"'+ret.data.list[i].description+'","'+ret.data.list[i].start_date+'","'+ret.data.list[i].end_date+'"),'
                 }
@@ -330,7 +328,10 @@
                     sql: sql   
                 }, function(ret, err){  
                     console.log('334ret:'+JSON.stringify(ret))
-                    console.log('335err:'+JSON.stringify(err))
+                    console.log('335err:'+JSON.stringify(err));
+                    api.sendEvent({
+                        name: 'addRemarksStudy'
+                    });
                     if( ret.status ){
                         db.selectSql({
                             name: SQLName,

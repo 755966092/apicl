@@ -150,9 +150,7 @@
             if (ret) {
                 insertData();
                 // getData(ret.data.list)
-                api.sendEvent({
-                    name: 'addCity'
-                });
+                
                 api.closeWin();
             } else {
                 alert(JSON.stringify(err.msg));
@@ -335,6 +333,9 @@
                     console.log('334ret:'+JSON.stringify(ret))
                     console.log('335err:'+JSON.stringify(err))
                     if( ret.status ){
+                        api.sendEvent({
+                            name: 'addRemarkCity'
+                        });
                         db.selectSql({
                             name: SQLName,
                             sql: 'SELECT * FROM tb_remarks_address WHERE user_id=' + api.pageParam.userId

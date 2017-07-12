@@ -155,8 +155,10 @@
 <script type="text/javascript">
    
     apiready = function(){
+        moduleInit();
         monitorEvent();
         requireData();
+
     };
     // 监听点击保存和编辑按钮
     function monitorEvent () {
@@ -190,6 +192,15 @@
 
             } else {
                 alert(JSON.stringify(err.msg));
+            }
+        });
+        api.addEventListener({
+            name: 'addRemarkContact'
+        }, function(ret, err) {
+            if (ret) {
+                requireData();
+            } else {
+                alert(JSON.stringify(err));
             }
         });
     }
@@ -248,46 +259,62 @@
     }
 
     function requireData() {
-        var allArr=[]
-        api.ajax({
-            url: apiSite + '/api/remark_user/contactList',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                   values: { 
-                       token: $api.getStorage('userToken'),
-                       remark_user_id: api.pageParam.userId
-                   }
-            }
-        }, function(ret, err) {
-            if(ret) {
-                allArr = ret.data.list;
-                if (allArr) {
-                    handleData(litterSort(allArr))
+        var SQLName = 'db_'+$api.getStorage('userToken');
+        db.selectSql({
+            name: SQLName,
+            sql: 'SELECT * FROM tb_remarks_contact WHERE user_id = ' + api.pageParam.userId
+        }, function(ret, err){        
+            if( ret.status ){
+                console.log('506::'+ JSON.stringify( ret ) );
+                if (ret.data.length != 0) {
+                    handleData(litterSort(ret.data))
+                    console.log('本地数据库')
                 } else {
                     api.ajax({
-                        url: apiSite + '/api/user/contactList',
+                        url: apiSite + '/api/remark_user/contactList',
                         method: 'post',
                         headers: apiHeader,
                         data: {
                                values: { 
                                    token: $api.getStorage('userToken'),
-                                   user_id: api.pageParam.userId
+                                   remark_user_id: api.pageParam.userId
                                }
                         }
                     }, function(ret, err) {
                         if(ret) {
-                            allArr = ret.data.list;
-                            handleData(litterSort(allArr))
+                            if (ret.data.list.length != 0) {
+                                console.log('线上备注')
+                                handleData(litterSort(ret.data.list))
+                            } else {
+                                api.ajax({
+                                    url: apiSite + '/api/user/contactList',
+                                    method: 'post',
+                                    headers: apiHeader,
+                                    data: {
+                                           values: { 
+                                               token: $api.getStorage('userToken'),
+                                               user_id: api.pageParam.userId
+                                           }
+                                    }
+                                }, function(ret, err) {
+                                    if(ret) {
+                                        console.log('用户自己的')
+                                        handleData(litterSort(ret.data.list))
+                                    } else {
+                                        alert(JSON.stringify(err))
+                                    }
+                                });
+                            }
                         } else {
                             alert(JSON.stringify(err))
                         }
                     });
                 }
-            } else {
-                alert(JSON.stringify(err))
+            }else{
+                alert( JSON.stringify( err ) );
             }
         });
+        
        
     }
     /*

@@ -111,8 +111,9 @@
 <script type="text/javascript">
     var zipcode;//邮编
     apiready = function(){
+        moduleInit();
         // 请求地址列表
-	    getCityList();
+	    requireData();
         // 删除地址
         delDz();
         // 箭头增加地址事件
@@ -122,9 +123,9 @@
     function addCity()　{
         // 箭头增加地址事件
         api.addEventListener({
-            name: 'addCity'
+            name: 'addRemarkCity'
         }, function(ret, err) {
-            getCityList();
+            requireData();
             if (ret) {
             } else {
                 alert(JSON.stringify(err.msg));
@@ -169,45 +170,64 @@
     }
 
     // 请求地址列表
-    function getCityList() {
-        var allAddArr;
-        api.ajax({
-            url: apiSite + '/api/user/addressList',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: $api.getStorage('userToken'),
-                    user_id: api.pageParam.userId
-                }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                console.log(JSON.stringify(ret.data.list))
-                allAddArr = ret.data.list;
-                api.ajax({
-                    url: apiSite + '/api/remark_user/addressList',
-                    method: 'post',
-                    headers: apiHeader,
-                    data: {
-                        values: { 
-                            token: $api.getStorage('userToken'),
-                            remark_user_id: api.pageParam.userId
+    function requireData() {
+        var SQLName = 'db_'+$api.getStorage('userToken');
+        db.selectSql({
+            name: SQLName,
+            sql: 'SELECT * FROM tb_remarks_address WHERE user_id=' + api.pageParam.userId
+        }, function(ret, err){        
+            if( ret.status ){
+                console.log('181:::' + JSON.stringify( ret ) );
+                if (ret.data.length != 0) {
+                    getData(ret.data);
+                } else {
+                    api.ajax({
+                        url: apiSite + '/api/remark_user/addressList',
+                        method: 'post',
+                        headers: apiHeader,
+                        data: {
+                            values: { 
+                                token: $api.getStorage('userToken'),
+                                user_id: api.pageParam.userId
+                            }
                         }
-                    }
-                }, function(ret, err) {
-                    if (ret) {
-                        console.log(JSON.stringify(ret.data.list))
-                        allAddArr = allAddArr.concat(ret.data.list);
-                        getData(allAddArr)
-                    } else {
-                        alert(JSON.stringify(err.msg));
-                    }
-                });
-            } else {
-                alert(JSON.stringify(err.msg));
+                    }, function(ret, err) {
+                        if (ret) {
+                            console.log(JSON.stringify(ret.data.list))
+                            if (ret.data.list.length != 0) {
+                                getData(ret.data.list)
+                            } else {
+                                api.ajax({
+                                    url: apiSite + '/api/user/addressList',
+                                    method: 'post',
+                                    headers: apiHeader,
+                                    data: {
+                                        values: { 
+                                            token: $api.getStorage('userToken'),
+                                            remark_user_id: api.pageParam.userId
+                                        }
+                                    }
+                                }, function(ret, err) {
+                                    if (ret) {
+                                        getData(ret.data.list)
+                                    } else {
+                                        alert(JSON.stringify(err.msg));
+                                    }
+                                });
+                            }
+                            
+                        } else {
+                            alert(JSON.stringify(err.msg));
+                        }
+                    });
+                }
+            }else{
+                alert( JSON.stringify( err ) );
             }
         });
+
+
+       
     }
 
     // 删除地址

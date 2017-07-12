@@ -169,29 +169,34 @@
     // // 添加电话完成
     function addTel() {
         var tel = $api.val($api.dom('input'));
-        checkPhone(tel);
-        api.ajax({
-            url: apiSite + '/api/remark_user/addContact',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: $api.getStorage('userToken'),
-                    remark_user_id: api.pageParam.userId, 
-                    phone: tel,
-                    type: type,
-                    sub_type: sub_type
+        if (checkPhone(tel)) {
+            api.ajax({
+                url: apiSite + '/api/remark_user/addContact',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: { 
+                        token: $api.getStorage('userToken'),
+                        remark_user_id: api.pageParam.userId, 
+                        phone: tel,
+                        type: type,
+                        sub_type: sub_type
+                    }
                 }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                alert('188:'+JSON.stringify(ret))
-                insertData();
-                api.closeWin();
-            } else {
-             alert('192'+JSON.stringify(err.msg))
-            }
-        })
+            }, function(ret, err) {
+                if (ret) {
+                    if (ret.code == 200) {
+                        insertData();
+                        api.closeWin();
+                    } else {
+                        alert(ret.msg)
+                    }
+                } else {
+                 alert('192'+JSON.stringify(err.msg))
+                }
+            })
+        }
+        
     }
     function checkPhone(data){ 
         var phone = /^1[34578]\d{9}$/,
@@ -200,6 +205,7 @@
             alert("电话号码有误，请重填");  
             return false; 
         } 
+        return true;
     }
 
     function insertData() {
@@ -226,15 +232,8 @@
                     sql: sql   
                 }, function(ret, err){  
                     if( ret.status ){
-                        db.selectSql({
-                            name: SQLName,
-                            sql: 'SELECT * FROM tb_remarks_contact WHERE user_id=' + api.pageParam.userId
-                        }, function(ret, err){  
-                            if( ret.status ){
-                                console.log(JSON.stringify(ret))
-                            }else{
-                                alert(JSON.stringify( err ) );
-                            }
+                        api.sendEvent({
+                            name: 'addRemarkContact'
                         });
                     }else{
                         alert(JSON.stringify( err ) );

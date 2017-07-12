@@ -5,8 +5,8 @@
 		"contact": true
 	},
 	"info": {
-		"user_id": 18661,
-		"nickname": "北京—丹姐",
+		"user_id": 18607,
+		"nickname": "朋友—婷婷",
 		"real_name": null,
 		"sex": null,
 		"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
@@ -17,35 +17,73 @@
 		"rongcloud_user_id": null
 	},
 	"contact": {
-		"contact_id": 119,
-		"create_time": "2017-07-10 10:07:10",
-		"update_time": "2017-07-10 10:07:10",
-		"user_id": 18661,
-		"phone": "18811523253",
+		"user_id": "18607",
+		"phone": "18453016787",
 		"type": 1,
 		"sub_type": 2,
-		"is_default": 1
+		"is_default": 1,
+		"create_time": "2017-07-12 11:18:59",
+		"update_time": "2017-07-12 11:18:59",
+		"contact_id": "145"
 	},
-	"extra": {
-		"extra_id": 6,
-		"remark_user_id": 18661,
-		"content": "北京背背",
-		"image_url": "/storage/emulated/0/Android/data/com.iinnet.apicloud/cache/disk/thumb/89f2ab38"
-	},
+	"extra": null,
 	"status": []
 }
-
-
 
 {
 	"code": 200,
 	"msg": "",
-	"time": 1499827838,
+	"time": 1499829539,
 	"data": {
 		"info": {
 			"user_id": 18536,
-			"nickname": "北京—丹姐",
-			"real_name": "备注3",
+			"nickname": "",
+			"real_name": "",
+			"sex": "",
+			"head_img_url": "",
+			"hometown": "",
+			"birthday": "",
+			"current_company": "",
+			"current_position": "",
+			"current_degree": ""
+		},
+		"extra": null,
+		"status": [],
+		"contact_list": [],
+		"other_contact_list": [],
+		"address_list": [],
+		"work_list": [],
+		"education_list": [],
+		"projectList": []
+	}
+}
+
+
+: [{
+	"remark_user_id": "18661",
+	"current_position": "",
+	"current_degree": "",
+	"current_company": "",
+	"nickname": "备注昵称",
+	"real_name": "",
+	"birthday": "2017-07-22",
+	"hometown": "天津-天津",
+	"sex": "2",
+	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"extra_id": "6",
+	"extra_content": "北京背背",
+	"extra_image_url": "/storage/emulated/0/Android/data/com.iinnet.apicloud/cache/disk/thumb/89f2ab38"
+}]
+
+120::: {
+	"code": 200,
+	"msg": "",
+	"time": 1499830618,
+	"data": {
+		"info": {
+			"user_id": 18536,
+			"nickname": "备注昵称",
+			"real_name": "",
 			"sex": 2,
 			"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
 			"hometown": "天津-天津",
@@ -57,7 +95,7 @@
 		"extra": {
 			"extra_id": 6,
 			"remark_user_id": 18661,
-			"content": "北京背背",
+		"content": "北京背背",
 			"image_url": "/storage/emulated/0/Android/data/com.iinnet.apicloud/cache/disk/thumb/89f2ab38"
 		},
 		"status": [],
@@ -145,3 +183,4 @@
 		"projectList": []
 	}
 }
+at txl_addFellow_label_frame.html: 120

@@ -523,8 +523,8 @@
                                 }
                             }
                         } else {
-                            $api.text(phone, data.contact[i].phone);
-                            $api.attr(phone, 'data-contactId', data.contact[i].contact_id);
+                            $api.text(phone, data.contact.phone);
+                            $api.attr(phone, 'data-contactId', data.contact.contact_id);
                         }
                     }else{
                         alert( JSON.stringify( err ) );
@@ -537,7 +537,7 @@
                     if( retSelSql.status ){
                         console.log('488::'+ JSON.stringify( retSelSql ) );
                         // 家乡
-                        if (retSelSql.data[0].hometown != "null") {
+                        if (retSelSql.data.length!= 0 && retSelSql.data[0].hometown && retSelSql.data[0].hometown != "null") {
                             // b本地数据库内容
                             $api.text(hometown, retSelSql.data[0].hometown);
                         } else if (retAjax.data.info.hometown) {
@@ -548,7 +548,7 @@
                             $api.text(hometown, data.info.hometown);
                         }
                         // 生日
-                        if (retSelSql.data[0].birthday  != "null") {
+                        if (retSelSql.data.length!= 0 && retSelSql.data[0].birthday  && retSelSql.data[0].birthday != "null") {
                             console.log('552'+JSON.stringify(retSelSql.data[0]))
                             // b本地数据库内容
                             $api.text(birthday, retSelSql.data[0].birthday);
@@ -560,7 +560,7 @@
                             $api.text(birthday, data.info.birthday);
                         }
                         // 头像
-                        if (retSelSql.data[0].head_img_url  != null) {
+                        if (retSelSql.data.length!= 0 && retSelSql.data[0].head_img_url) {
                             // b本地数据库内容
                             $api.attr(head_img_url, 'src', retSelSql.data[0].head_img_url);
                         } else if (retAjax.data.info.head_img_url) {
@@ -572,19 +572,22 @@
                         }
 
                         // 昵称
-                        if (retSelSql.data[0].nickname) {
+                        if (retSelSql.data.length!= 0 && retSelSql.data[0].nickname) {
+                            console.log('b本地数据库内容')
                             // b本地数据库内容
                             $api.text(nickname, retSelSql.data[0].nickname);
                         } else if (retAjax.data.info.nickname) {
+                            console.log('线上备注内容')
                             // 线上备注内容
                             $api.text(nickname, retAjax.data.info.nickname);
                         } else {
+                            console.log('会员原始信息')
                             // 会员原始信息
                             $api.text(nickname, data.info.nickname);
                         }
 
                         // 性别
-                        if (retSelSql.data[0].sex) {
+                        if (retSelSql.data.length!= 0 && retSelSql.data[0].sex) {
                             // b本地数据库内容
                             if (retSelSql.data[0].sex === 2 ) {
                                 $api.addCls(sex, 'sexIcon2');
@@ -617,10 +620,6 @@
                 alert(JSON.stringify(err))
             }
         })
-
-
-
-        
     }
     function addFriends() {
         api.openWin({

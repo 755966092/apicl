@@ -6,10 +6,6 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-        html,
-        body {
-            background-color: #F8F8F8;
-        }
         .wrap {
             margin-top: .2rem;
         }
@@ -118,6 +114,7 @@
 <script type="text/javascript">
     var zipcode;//邮编
     apiready = function(){
+        moduleInit();
         // 请求地址列表
 	    requireData();
         // 删除
@@ -188,48 +185,73 @@
 
     // 请求地址列表
     function requireData() {
-        var allProjectArr;
-        api.ajax({
-            url: apiSite + '/api/user/projectList',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: $api.getStorage('userToken'),
-                    user_id: api.pageParam.userId
-                }
-            }
-        }, function(ret, err) {
-            if (ret.code == 200) {
-                allProjectArr = ret.data.list;
-                api.ajax({
-                    url: apiSite + '/api/remark_user/projectList',
-                    method: 'post',
-                    headers: apiHeader,
-                    data: {
-                        values: { 
-                            token: $api.getStorage('userToken'),
-                            remark_user_id: api.pageParam.userId
+        db.selectSql({
+            name: SQLName,
+            sql: 'SELECT * FROM tb_remarks_project WHERE user_id=' + api.pageParam.userId 
+        }, function(ret, err){        
+            if( ret.status ){
+                if (ret.data.length != 0) {
+                    console.log('193:::'+ JSON.stringify( ret ) );
+                    for (var i = 0; i < ret.data.length; i++) {
+                        if (ret.data[i].end_date == '0000-00-00' ){
+                            ret.data[i].end_date = '至今'
                         }
-                    }
-                }, function(ret, err) {
-                    if (ret.code == 200) {
-                        allProjectArr = allProjectArr.concat(ret.data.list);
-                        for (var i = 0; i < allProjectArr.length; i++) {
-                            if (allProjectArr[i].end_date == '0000-00-00' ){
-                                allProjectArr[i].end_date = '至今'
+                    };
+                    getData(ret.data);
+                } else {
+                    api.ajax({
+                        url: apiSite + '/api/user/projectList',
+                        method: 'post',
+                        headers: apiHeader,
+                        data: {
+                            values: { 
+                                token: $api.getStorage('userToken'),
+                                user_id: api.pageParam.userId
                             }
                         }
-                        
-                        getData(allProjectArr)
-                    } else {
-                        alert(JSON.stringify(ret.msg));
-                    }
-                });
-            } else {
-                alert(JSON.stringify(ret.msg));
+                    }, function(ret, err) {
+                        if (ret.code == 200) {
+                            if (ret.data.list.length != 0) {
+                                for (var i = 0; i < ret.data.list.length; i++) {
+                                    if (ret.data.list[i].end_date == '0000-00-00' ){
+                                        ret.data.list[i].end_date = '至今'
+                                    }
+                                };
+                                getData(ret.data.list);
+                            } else {
+                                api.ajax({
+                                    url: apiSite + '/api/remark_user/projectList',
+                                    method: 'post',
+                                    headers: apiHeader,
+                                    data: {
+                                        values: { 
+                                            token: $api.getStorage('userToken'),
+                                            remark_user_id: api.pageParam.userId
+                                        }
+                                    }
+                                }, function(ret, err) {
+                                    if (ret.code == 200) {
+                                        for (var i = 0; i < allProjectArr.length; i++) {
+                                            if (allProjectArr[i].end_date == '0000-00-00' ){
+                                                allProjectArr[i].end_date = '至今'
+                                            }
+                                        };
+                                        getData(allProjectArr);
+                                    } else {
+                                        alert(JSON.stringify(ret.msg));
+                                    }
+                                });
+                            }
+                        } else {
+                            alert(JSON.stringify(ret.msg));
+                        }
+                    });
+                }
+            }else{
+                alert( JSON.stringify( err ) );
             }
         });
+        
     }
 
     // 删除地址

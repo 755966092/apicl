@@ -134,9 +134,11 @@
 <script type="text/javascript">
     var editArr=[];
     apiready = function(){
+        moduleInit();
         requireData();
+        monitorEvent();
         api.addEventListener({
-            name: 'xgTel'
+            name: 'addRemarkOtherContact'
         }, function(ret, err) {
             if (ret) {
                 requireData();
@@ -167,7 +169,6 @@
     function monitorEvent () {
         var clearIcon = $api.domAll('.clearIcon'),
             ipt = $api.domAll('input');
-
         api.addEventListener({
             name: 'keepPhone'
         }, function(ret, err) {
@@ -226,49 +227,67 @@
      // 获取联系人列表
     function requireData() {
         var allArr;
-        api.ajax({
-            url: apiSite + '/api/user/otherContactList',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: $api.getStorage('userToken'),
-                    user_id: api.pageParam.userId
-                } 
-            }
-        }, function(ret, err) {
-            if (ret) {
-                allArr = ret.data.list;
-                console.log('246'+JSON.stringify(allArr))
-                api.ajax({
-                    url: apiSite + '/api/remark_user/otherContactList',
-                    method: 'post',
-                    headers: apiHeader,
-                    data: {
-                        values: { 
-                            token: $api.getStorage('userToken'),
-                            remark_user_id: api.pageParam.userId
-                        } 
-                    }
-                }, function(ret, err) {
-                    if (ret) {
-                        console.log('259'+JSON.stringify(ret.data.list))
-                        allArr = allArr.concat(ret.data.list)
-                        console.log('260'+JSON.stringify(allArr))
-                        handleData(litterSort(allArr))
-                        monitorEvent();
-                    } else {
-                        alert('3'+JSON.stringify(err));
-                    }
-                });
-            } else {
-                alert('3'+JSON.stringify(err));
+        
+        db.selectSql({
+            name: SQLName,
+            sql: 'SELECT * FROM tb_remarks_other_contact WHERE user_id = ' + api.pageParam.userId
+        }, function(ret, err){        
+            if( ret.status ){
+                console.log('234' + JSON.stringify( ret ) );
+                if (ret.data.length != 0) {
+                    handleData(litterSort(ret.data))
+                } else {
+                    api.ajax({
+                        url: apiSite + '/api/remark_user/otherContactList',
+                        method: 'post',
+                        headers: apiHeader,
+                        data: {
+                            values: { 
+                                token: $api.getStorage('userToken'),
+                                user_id: api.pageParam.userId
+                            } 
+                        }
+                    }, function(ret, err) {
+                        if (ret) {
+                            if (ret.data.list.length != 0) {
+                                handleData(litterSort(ret.data.list))
+                            } else {
+                                api.ajax({
+                                    url: apiSite + '/api/user/otherContactList',
+                                    method: 'post',
+                                    headers: apiHeader,
+                                    data: {
+                                        values: { 
+                                            token: $api.getStorage('userToken'),
+                                            remark_user_id: api.pageParam.userId
+                                        } 
+                                    }
+                                }, function(ret, err) {
+                                    if (ret) {
+                                        handleData(litterSort(ret.data.list))
+                                        monitorEvent();
+                                    } else {
+                                        alert('3'+JSON.stringify(err));
+                                    }
+                                });
+                            }
+                            
+                        } else {
+                            alert('3'+JSON.stringify(err));
+                        }
+                    });
+                }
+            }else{
+                alert( JSON.stringify( err ) );
             }
         });
+
+       
     }
 
     // 处理数据
     function handleData(data) {
+        console.log('290行')
         for (var i = 0; i < data.length; i++) {
             if (data[i].sub_type == 1) {
                 data[i].sub_type = '微信'
@@ -276,10 +295,11 @@
                 data[i].sub_type = 'QQ'
             }
         }
-        
+        console.log('298行:::'+JSON.stringify(data))
         getData(data);
     }
     function litterSort(data) {
+        console.log('301行')
         for (var i = 0; i < data.length; i++) {
             for (var j = 0; j < data.length; j++) {
                 if (data[i].type < data[j].type) {

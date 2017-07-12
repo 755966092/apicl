@@ -6,10 +6,6 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-        html,
-        body {
-            background-color: #F8F8F8;
-        }
         .wrap {
             margin-top: .2rem;
         }
@@ -126,31 +122,22 @@
 <script type="text/javascript">
     var zipcode;//邮编
     apiready = function(){
+        moduleInit();
         // 请求地址列表
-	    getCityList();
+	    requireData();
         // 删除雪莉
         delDz();
         // 箭头增加地址事件
         addCity();
-
-        api.addEventListener({
-            name: 'addStudy'
-        }, function(ret, err) {
-            if (ret) {
-                getCityList();
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
     };
     // 箭头增加地址事件
     function addCity()　{
         // 箭头增加地址事件
         api.addEventListener({
-            name: 'addCity'
+            name: 'addRemarksStudy'
         }, function(ret, err) {
-            getCityList();
             if (ret) {
+                requireData();
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -310,67 +297,123 @@
     }
     
     // 请求列表
-    function getCityList() {
-        var allEducationArr;
-        api.ajax({
-            url: apiSite + '/api/user/educationList',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: $api.getStorage('userToken'),
-                    user_id: api.pageParam.userId
-                }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                allEducationArr = ret.data.list;
-                api.ajax({
-                    url: apiSite + '/api/remark_user/educationList',
-                    method: 'post',
-                    headers: apiHeader,
-                    data: {
-                        values: { 
-                            token: $api.getStorage('userToken'),
-                            remark_user_id: api.pageParam.userId
-                        }
-                    }
-                }, function(ret, err) {
-                    if (ret) {
-                        allEducationArr = allEducationArr.concat(ret.data.list);
-                        for (var i = 0; i < allEducationArr.length; i++) {
-                            if (allEducationArr[i].degree == '1') {
-                                allEducationArr[i].degree = '专科'
-                            } else if (allEducationArr[i].degree == '2') {
-                                allEducationArr[i].degree = '本科'
-                            } else if (allEducationArr[i].degree == '3') {
-                                allEducationArr[i].degree = '硕士'
-                            } else if (allEducationArr[i].degree == '4') {
-                                allEducationArr[i].degree = '博士'
-                            } else if (allEducationArr[i].degree == '5'){
-                                allEducationArr[i].degree = '博士后'
-                            } 
+    function requireData() {
+        db.selectSql({
+            name: SQLName,
+            sql: 'SELECT * FROM tb_remarks_education WHERE user_id=' + api.pageParam.userId 
+        }, function(ret, err){        
+            if( ret.status ){
+                if (ret.data.length != 0) {
+                    console.log('317:::' + JSON.stringify( ret ) );
+                    for (var i = 0; i < ret.data.length; i++) {
+                        if (ret.data[i].degree == '1') {
+                            ret.data[i].degree = '专科'
+                        } else if (ret.data[i].degree == '2') {
+                            ret.data[i].degree = '本科'
+                        } else if (ret.data[i].degree == '3') {
+                            ret.data[i].degree = '硕士'
+                        } else if (ret.data[i].degree == '4') {
+                            ret.data[i].degree = '博士'
+                        } else if (ret.data[i].degree == '5'){
+                            ret.data[i].degree = '博士后'
+                        } 
 
-                            if (allEducationArr[i].degree == 0) {     
-                                allEducationArr[i].degree = '';
+                        if (ret.data[i].degree == 0) {     
+                            ret.data[i].degree = '';
+                        }
+                        if (ret.data[i].end_date == '0000-00-00' ){
+                            ret.data[i].end_date = '至今'
+                        }   
+                    }
+                    getData(ret.data);
+                } else {
+                    api.ajax({
+                        url: apiSite + '/api/user/educationList',
+                        method: 'post',
+                        headers: apiHeader,
+                        data: {
+                            values: { 
+                                token: $api.getStorage('userToken'),
+                                user_id: api.pageParam.userId
                             }
-                            if (allEducationArr[i].end_date == '0000-00-00' ){
-                                allEducationArr[i].end_date = '至今'
-                            }   
                         }
+                    }, function(ret, err) {
+                        if (ret) {
+                            if(ret.data.list.length != 0) {
+                                for (var i = 0; i < ret.data.list.length; i++) {
+                                    if (ret.data.list[i].degree == '1') {
+                                        ret.data.list[i].degree = '专科'
+                                    } else if (ret.data.list[i].degree == '2') {
+                                        ret.data.list[i].degree = '本科'
+                                    } else if (ret.data.list[i].degree == '3') {
+                                        ret.data.list[i].degree = '硕士'
+                                    } else if (ret.data.list[i].degree == '4') {
+                                        ret.data.list[i].degree = '博士'
+                                    } else if (ret.data.list[i].degree == '5'){
+                                        ret.data.list[i].degree = '博士后'
+                                    } 
 
-                        getData(allEducationArr);
-                        $api.setStorage('userLearningExperience', allEducationArr);
-                    } else {
-                        alert(JSON.stringify(err.msg));
-                    }
-                });
-                getData(ret.data.list);
-                $api.setStorage('userLearningExperience', ret.data.list);
-            } else {
-                alert(JSON.stringify(err.msg));
+                                    if (ret.data.list[i].degree == 0) {     
+                                        ret.data.list[i].degree = '';
+                                    }
+                                    if (ret.data.list[i].end_date == '0000-00-00' ){
+                                        ret.data.list[i].end_date = '至今'
+                                    }   
+                                }
+                                getData(ret.data.list);
+                            } else {
+                                api.ajax({
+                                    url: apiSite + '/api/remark_user/educationList',
+                                    method: 'post',
+                                    headers: apiHeader,
+                                    data: {
+                                        values: { 
+                                            token: $api.getStorage('userToken'),
+                                            remark_user_id: api.pageParam.userId
+                                        }
+                                    }
+                                }, function(ret, err) {
+                                    if (ret) {
+                                        for (var i = 0; i < ret.data.list.length; i++) {
+                                            if (ret.data.list[i].degree == '1') {
+                                                ret.data.list[i].degree = '专科'
+                                            } else if (ret.data.list[i].degree == '2') {
+                                                ret.data.list[i].degree = '本科'
+                                            } else if (ret.data.list[i].degree == '3') {
+                                                ret.data.list[i].degree = '硕士'
+                                            } else if (ret.data.list[i].degree == '4') {
+                                                ret.data.list[i].degree = '博士'
+                                            } else if (ret.data.list[i].degree == '5'){
+                                                ret.data.list[i].degree = '博士后'
+                                            } 
+
+                                            if (ret.data.list[i].degree == 0) {     
+                                                ret.data.list[i].degree = '';
+                                            }
+                                            if (ret.data.list[i].end_date == '0000-00-00' ){
+                                                ret.data.list[i].end_date = '至今'
+                                            }   
+                                        }
+                                        getData(ret.data.list);
+                                        $api.setStorage('userLearningExperience', ret.data.list);
+                                    } else {
+                                        alert(JSON.stringify(err.msg));
+                                    }
+                                });
+                            }
+                            
+                            getData(ret.data.list);
+                            $api.setStorage('userLearningExperience', ret.data.list);
+                        } else {
+                            alert(JSON.stringify(err.msg));
+                        }
+                    });
+                }
+            }else{
+                alert( JSON.stringify( err ) );
             }
         });
+        
     }
 
     // 删除地址

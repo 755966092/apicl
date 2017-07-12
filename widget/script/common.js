@@ -99,9 +99,11 @@ var rong,
     db,
     UIActionSelector,
     contacts,
-    clipBoard;
+    clipBoard,
+    SQLName;
 
 function moduleInit() {
+    SQLName = 'db_' + $api.getStorage('userToken');
     // 数据库模块
     db = api.require('db');
     // 融云模块
@@ -257,5 +259,3 @@ function initTime(time) {
         }
     }
 }
-
-

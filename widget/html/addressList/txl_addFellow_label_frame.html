@@ -104,24 +104,54 @@
         //         alert(JSON.stringify(err))
         //     }
         // })
-        // api.ajax({
-        //     url: apiSite + '/api/remark_user/fullInfo',
-        //     method: 'post',
-        //     headers: apiHeader,
-        //     data: {
-        //            values: { 
-        //                token: $api.getStorage('userToken'),
-        //                remark_user_id: api.pageParam.userId
+        api.ajax({
+            url: apiSite + '/api/remark_user/fullInfo',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       remark_user_id: api.pageParam.userId
                        
-        //            }
-        //     }
-        // }, function(ret, err) {
-        //     if(ret) {
-        //          console.log('120:::'+JSON.stringify(ret))
-        //     } else {
-        //         alert(JSON.stringify(err))
-        //     }
-        // })
+                   }
+            }
+        }, function(retAjax, err) {
+            if(retAjax) {
+                 console.log('120:::'+JSON.stringify(retAjax))
+                 db.selectSql({
+                     name:  'db_'+$api.getStorage('userToken'),
+                     sql: 'SELECT * FROM tb_remarks_user_info WHERE remark_user_id = ' + api.pageParam.userId
+                 }, function(ret, err){        
+                     if( ret.status ){
+                         console.log( JSON.stringify( ret ) );
+                        if (ret.data.length != 0 && ret.data[0].extra_id) {
+                            if (ret.data[0].extra_content) {
+                                $api.val($api.byId('text'), ret.data[0].extra_content);
+                            }
+                            if (ret.data[0].extra_image_url) {
+                                $api.attr($api.byId('img'), 'src', ret.data[0].extra_image_url);
+                            }
+                            if (ret.data[0].extra_image_url && ret.data[0].extra_content) {
+                                $api.attr($api.byId('img'), 'src', ret.data[0].extra_image_url);
+                                $api.val($api.byId('text'), ret.data[0].extra_content);
+                            }
+                        } else {
+                            $api.val($api.byId('text'), retAjax.extra.content);
+                            $api.attr($api.byId('img'), 'src', retAjax.extra.image_url);
+                        }
+                     }else{
+                         alert( JSON.stringify( err ) );
+                     }
+                 });
+
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+
+
+
+
 
 
 
@@ -130,6 +160,7 @@
         if (textContent && imgContent) {
             $api.val($api.byId('text'), textContent);
             $api.attr($api.byId('img'), 'src', $api.getStorage(api.pageParam.userId+'_txl_label_img_content_cache'));
+            console.log(textContent)
         } else {
             api.ajax({
                 url: apiSite + '/api/remark_user/editBasicInfoIndex',
@@ -144,6 +175,7 @@
             }, function(ret, err) {
                 if(ret) {
                     if (ret.code === 200) {
+                        console.log(JSON.stringify(ret))
                         if ((textContent === ret.data.info.extra.content) && (imgContent === ret.data.info.extra.image_url)) {
                         } else {
                             $api.val($api.byId('text'),ret.data.info.extra.content);
