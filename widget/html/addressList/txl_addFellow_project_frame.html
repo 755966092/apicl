@@ -231,12 +231,12 @@
                                     }
                                 }, function(ret, err) {
                                     if (ret.code == 200) {
-                                        for (var i = 0; i < allProjectArr.length; i++) {
-                                            if (allProjectArr[i].end_date == '0000-00-00' ){
-                                                allProjectArr[i].end_date = '至今'
+                                        for (var i = 0; i < ret.data.list.length; i++) {
+                                            if (ret.data.list[i].end_date == '0000-00-00' ){
+                                                ret.data.list[i].end_date = '至今'
                                             }
                                         };
-                                        getData(allProjectArr);
+                                        getData(ret.data.list);
                                     } else {
                                         alert(JSON.stringify(ret.msg));
                                     }

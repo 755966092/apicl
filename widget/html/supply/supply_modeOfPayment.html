@@ -153,6 +153,7 @@
 <script type="text/javascript">
     var money;
     apiready = function(){
+        moduleInit();
         $api.text($api.dom('.money'), api.pageParam.price);
     }
     function selType(ele) {
@@ -188,8 +189,11 @@
                 var obj = api.pageParam.obj;
                 obj.token = $api.getStorage('userToken');
                 obj.pay_method = pay_method;
-                obj.service_time = obj.service_time+':00'
+                if (obj.service_time.length < 18) {
+                    obj.service_time = obj.service_time+':00'
+                }
             }
+            console.log('193:::'+JSON.stringify(obj));
             api.ajax({
                 url: apiSite + url,
                 method: 'post',
@@ -197,24 +201,69 @@
                 data: {
                        values: obj
                 }
-            }, function(ret, err) {
-                if(ret) {
-                    if (ret.code !== 200) {
-                        alert(JSON.stringify(ret.msg))
+            }, function(retAJAX, err) {
+                console.log("202"+JSON.stringify(retAJAX))
+                if(retAJAX) {
+                    if (retAJAX.code !== 200) {
+                        alert(JSON.stringify(retAJAX.msg))
                     } else {
                         if (api.pageParam.flag === 3) {
                             api.sendEvent({
                                 name: 'filterOrder'
                             });
                         } else {
-                            
-                        api.openWin({
-                            name: 'me_gdd',
-                            url: '../me/me_gdd.html'
-                        });
-                        }
-                        setTimeout(function(){api.closeFrame();},1000)
+                            if (pay_method === 'wechat') {
+                                // 微信支付
+                                wxPay.payOrder({
+                                    apiKey: retAJAX.data.config.appid,
+                                    orderId: retAJAX.data.config.prepayid,
+                                    mchId: retAJAX.data.config.partnerid,
+                                    nonceStr: retAJAX.data.config.noncestr,
+                                    timeStamp: retAJAX.data.config.timestamp,
+                                    package: retAJAX.data.config.package,
+                                    sign: retAJAX.data.config.sign
+                                }, function(ret, err) {
+                                    if (ret.status) {
+                                        //支付成功
+                                        api.openWin({
+                                            name: 'supply_payResult_win',
+                                            url: './supply_payResult_win.html',
+                                            pageParam: {
+                                                obj: obj,
+                                                price: api.pageParam.price,
+                                                form: api.pageParam.form,
+                                                flag: 1
+                                            }
+                                        });
+                                        setTimeout(function(){api.closeFrame();},1000)
+                                        console.log('支付成功')
+                                    } else {
+                                        // alert(err.code);
+                                        api.openWin({
+                                            name: 'supply_payResult_win',
+                                            url: './supply_payResult_win.html',
+                                            pageParam: {
+                                                config: retAJAX.data.config,
+                                                obj: obj,
+                                                price: api.pageParam.price,
+                                                form: api.pageParam.form,
+                                                flag: 0
+                                            }
+                                        });
+                                    }
+                                })
+                            } else if (pay_method === 'alipay') {
 
+                            } else {
+                                api.openWin({
+                                    name: 'me_gdd',
+                                    url: '../me/me_gdd.html'
+                                });
+                                setTimeout(function(){api.closeFrame();},1000)
+                            }
+                        
+                        }
+                        // setTimeout(function(){api.closeFrame();},1000)
                     }
                 } else {
                     alert(JSON.stringify(err.msg))

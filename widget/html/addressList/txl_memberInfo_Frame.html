@@ -357,7 +357,7 @@
                 <span>备注</span>
                 <span class="icon"></span>
                 <!-- <img class="liRight" src="../../image/tx_4.jpg"> -->
-                <span class="liRightIcon"></span>
+                <span class="liRightIcon" id="liRightIcon"></span>
             </li>
             <li class="mt20" tapmode="hover" onclick="openInfo(this)" data-val="companyPage">
                 <div class="wrap">
@@ -472,11 +472,16 @@
         var current_company = $api.byId('current_company');
         var current_position = $api.byId('current_position');
         var relationship_level = $api.byId('relationship_level');
+        var liRightIcon = $api.byId('liRightIcon');
         switch(data.relationship_level){
             case 1: $api.text(relationship_level, '熟识好友，点击查看您与他的交集');break;
             case 2: $api.text(relationship_level, '相识好友，点击查看您与他的交集');break;
             case 3: $api.text(relationship_level, '尚未加入，点击查看您与他的交集');break;
             case 4: $api.text(relationship_level, '初识好友，点击查看您与他的交集');break;
+            case 5: $api.text(relationship_level, '二度人脉，点击查看您与他的交集');break;
+            case 6: $api.text(relationship_level, '三度人脉，点击查看您与他的交集');break;
+            case 7: $api.text(relationship_level, '无任何关系, 是平台用户');break;
+            case 8: $api.text(relationship_level, '无任何关系, 不是平台用户');break;
         }
         /**
          * 优先本地数据库数据
@@ -569,7 +574,18 @@
                         } else {
                             // 会员原始信息
                             $api.attr(head_img_url, 'src', data.info.head_img_url);
-                        }
+                        } 
+                        // 备注图片
+                        if (retSelSql.data.length!= 0 && retSelSql.data[0].extra_image_url) {
+                            // b本地数据库内容
+                            $api.css(liRightIcon, 'background: url('+ retSelSql.data[0].extra_image_url +')');
+                        } else if (retAjax.data.extra.image_url) {
+                            // 线上备注内容
+                            $api.css(liRightIcon, 'background: url('+ retAjax.data.extra.image_url +')');
+                        } else {
+                            // 会员原始信息
+                            $api.css(liRightIcon, 'background: url('+ retAjax.data.extra.image_url +')');
+                        } 
 
                         // 昵称
                         if (retSelSql.data.length!= 0 && retSelSql.data[0].nickname) {

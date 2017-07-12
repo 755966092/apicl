@@ -19,6 +19,13 @@
             padding-top: .9rem;
             box-sizing: border-box;
         }
+        .main2 .main_1 {
+            background: #68B130 url(../../image/icon_supply/icon_pay_002.png)no-repeat;
+            -webkit-background-size: 1.34rem 1.38rem;
+            background-size: 1.34rem 1.38rem;
+            background-position: 5.5rem .65rem;
+            padding-top: .9rem;
+        }
         .main_1_left {
             font-size: 0;
             color: #fff;
@@ -66,6 +73,7 @@
             height: .8rem;
             line-height: .8rem;
             font-size: .3rem;
+            border-radius: .06rem
         }
         .main2 .failure{
             font-size: .3rem;
@@ -88,31 +96,84 @@
                 <p class="prompt">您的订单已经生效~~</p>
             </div>
         </div>
-        <h3>实付款：<span>¥ </span> <span>30.00</span></h3>
-        <p class="content"><span class="contentLabel">求助者：</span><span class="contentContent">方小姐</span></p>
-        <p class="content"><span class="contentLabel">手机号码：</span><span class="contentContent">155 5555 5555</span></p>
-        <p class="content"><span class="contentLabel">服务方式：</span><span class="contentContent">线下（北京市朝阳区）</span></p>
-        <p class="content"><span class="contentLabel">服务时间：</span><span class="contentContent">2017年08月21日</span></p>
-        <div class="btn">查看订单</div>
+        <h3>实付款：<span>¥ </span> <span id="price">30.00</span></h3>
+        <p class="content"><span class="contentLabel">求助者：</span><span id="serverPerson" class="contentContent">方小姐</span></p>
+        <p class="content"><span class="contentLabel">手机号码：</span><span id="phone" class="contentContent">155 5555 5555</span></p>
+        <p class="content"><span class="contentLabel">服务方式：</span><span id="serverType" class="contentContent">线下（北京市朝阳区）</span></p>
+        <p class="content"><span class="contentLabel">服务时间：</span><span id="serverTime" class="contentContent">2017年08月21日</span></p>
+        <div class="btn" ontouchstart="openOriderInfo()">查看订单</div>
     </div>
     <div class="main2">
         <div class="main_1">
             <div class="main_1_left">
-                <p class="result">付款成功</p>
-                <p class="prompt">您的订单已经生效~~</p>
+                <p class="result">付款失败</p>
+                <p class="prompt">请重新支付吧~~</p>
             </div>
         </div>
        <p class="failure">该订单会为您保留24小时（从下单几日算起），24小时内如果还未付款，系统将自动取消该订单，如需帮助，请联系我们的客服</p>
         <div class="btnGroup">
-            <span class="btn">重新支付</span>
+            <span class="btn" ontouchstart="repeatPay()">重新支付</span>
             <span class="btn">联系客服</span>
         </div>
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
-<script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript" >
-    
+    apiready = function(){
+        moduleInit();
+        console.log(JSON.stringify(api.pageParam))
+        if (api.pageParam.flag) {
+            // 支付成功
+            $api.text($api.byId('price'), api.pageParam.price);
+            $api.text($api.byId('serverTime'), api.pageParam.obj.service_time);
+            if (api.pageParam.form == 1) {
+                $api.text($api.byId('serverType'), '线上');
+            } else {
+                $api.text($api.byId('serverType'), '线下+地址');
+            }
+        } else {
+            // 支付失败
+            $api.css($api.dom('.main'), 'display: none');
+            $api.css($api.dom('.main2'), 'display: block');
+        }
+        
+        // 1 线上 2 线下
+    }
+    // 打开订单详情
+    function openOriderInfo() {
+        api.openWin({
+            name: 'me_gdd',
+            url: '../me/me_gdd.html'
+        });
+    }
+
+    function repeatPay() {
+         wxPay.payOrder({
+            apiKey: api.pageParam.config.appid,
+            orderId: api.pageParam.config.prepayid,
+            mchId: api.pageParam.config.partnerid,
+            nonceStr: api.pageParam.config.noncestr,
+            timeStamp: api.pageParam.config.timestamp,
+            package: api.pageParam.config.package,
+            sign: api.pageParam.config.sign
+        }, function(ret, err) {
+            if (ret.status) {
+                //支付成功
+                $api.css($api.dom('.main'), 'display: block');
+                $api.css($api.dom('.main2'), 'display: none');
+                $api.text($api.byId('price'), api.pageParam.price);
+                    $api.text($api.byId('serverTime'), api.pageParam.obj.service_time);
+                    if (api.pageParam.form == 1) {
+                        $api.text($api.byId('serverType'), '线上');
+                    } else {
+                        $api.text($api.byId('serverType'), '线下+地址');
+                    }
+            } else {
+                // alert(err.code);
+              
+            }
+        })
+    }
 </script>
 </html>

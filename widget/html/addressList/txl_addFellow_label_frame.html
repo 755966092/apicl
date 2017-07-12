@@ -149,57 +149,51 @@
             }
         })
 
-
-
-
-
-
-
-        var textContent = $api.getStorage(api.pageParam.userId+'_txl_label_text_content');
-        var imgContent = $api.getStorage(api.pageParam.userId+'_txl_label_img_content');
-        if (textContent && imgContent) {
-            $api.val($api.byId('text'), textContent);
-            $api.attr($api.byId('img'), 'src', $api.getStorage(api.pageParam.userId+'_txl_label_img_content_cache'));
-            console.log(textContent)
-        } else {
-            api.ajax({
-                url: apiSite + '/api/remark_user/editBasicInfoIndex',
-                method: 'post',
-                headers: apiHeader,
-                data: {
-                       values: { 
-                           token: $api.getStorage('userToken'),
-                           remark_user_id: api.pageParam.userId
-                       }
-                }
-            }, function(ret, err) {
-                if(ret) {
-                    if (ret.code === 200) {
-                        console.log(JSON.stringify(ret))
-                        if ((textContent === ret.data.info.extra.content) && (imgContent === ret.data.info.extra.image_url)) {
-                        } else {
-                            $api.val($api.byId('text'),ret.data.info.extra.content);
-                            $api.setStorage(api.pageParam.userId+'_txl_label_text_content', ret.data.info.extra.content);
-                            api.imageCache({
-                                url: ret.data.info.extra.image_url
-                            }, function(ret, err){
-                                if( ret ){
-                                    $api.attr($api.byId('img'), 'src', ret.url);
-                                    $api.setStorage(api.pageParam.userId+'_txl_label_img_content_cache', ret.url);
-                                    $api.setStorage(api.pageParam.userId+'_txl_label_img_content', ret.url);
-                                }else{
-                                     alert( JSON.stringify( err ) );
-                                }
-                            });
-                        }
-                    } else {
-                        alert(ret.msg)
-                    }
-                } else {
-                    alert(JSON.stringify(err))
-                }
-            })
-        }
+        // var textContent = $api.getStorage(api.pageParam.userId+'_txl_label_text_content');
+        // var imgContent = $api.getStorage(api.pageParam.userId+'_txl_label_img_content');
+        // if (textContent && imgContent) {
+        //     $api.val($api.byId('text'), textContent);
+        //     $api.attr($api.byId('img'), 'src', $api.getStorage(api.pageParam.userId+'_txl_label_img_content_cache'));
+        //     console.log(textContent)
+        // } else {
+        //     api.ajax({
+        //         url: apiSite + '/api/remark_user/editBasicInfoIndex',
+        //         method: 'post',
+        //         headers: apiHeader,
+        //         data: {
+        //                values: { 
+        //                    token: $api.getStorage('userToken'),
+        //                    remark_user_id: api.pageParam.userId
+        //                }
+        //         }
+        //     }, function(ret, err) {
+        //         if(ret) {
+        //             if (ret.code === 200) {
+        //                 console.log(JSON.stringify(ret))
+        //                 if ((textContent === ret.data.info.extra.content) && (imgContent === ret.data.info.extra.image_url)) {
+        //                 } else {
+        //                     $api.val($api.byId('text'),ret.data.info.extra.content);
+        //                     $api.setStorage(api.pageParam.userId+'_txl_label_text_content', ret.data.info.extra.content);
+        //                     api.imageCache({
+        //                         url: ret.data.info.extra.image_url
+        //                     }, function(ret, err){
+        //                         if( ret ){
+        //                             $api.attr($api.byId('img'), 'src', ret.url);
+        //                             $api.setStorage(api.pageParam.userId+'_txl_label_img_content_cache', ret.url);
+        //                             $api.setStorage(api.pageParam.userId+'_txl_label_img_content', ret.url);
+        //                         }else{
+        //                              alert( JSON.stringify( err ) );
+        //                         }
+        //                     });
+        //                 }
+        //             } else {
+        //                 alert(ret.msg)
+        //             }
+        //         } else {
+        //             alert(JSON.stringify(err))
+        //         }
+        //     })
+        // }
     }
     // 提交数据
     function submitData() {

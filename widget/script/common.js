@@ -100,9 +100,12 @@ var rong,
     UIActionSelector,
     contacts,
     clipBoard,
+    wxPay,
     SQLName;
 
 function moduleInit() {
+    // 微信支付
+    wxPay = api.require('wxPay');
     SQLName = 'db_' + $api.getStorage('userToken');
     // 数据库模块
     db = api.require('db');
