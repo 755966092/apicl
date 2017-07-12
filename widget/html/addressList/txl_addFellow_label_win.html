@@ -23,7 +23,7 @@
             <span class="winTitle">
                 备注
             </span>
-            <div class="rightBtn">保存</div>
+            <div class="rightBtn" ontouchstart="submitData()">保存</div>
         </div>
     </header>
    
@@ -42,10 +42,18 @@
                 w: 'auto',
                 h: 'auto'
             },
+            pageParam: {
+                userId: api.pageParam.userId 
+            },
             bounces: false,
             softInputMode: 'pan'
         });
     };
+    function submitData() {
+        api.sendEvent({
+            name: 'submitData'
+        });
+    }
    
 </script>
 </html>

@@ -134,12 +134,13 @@
         // nickname    string  昵称
         // sex int 性别（1-男，2-女）
         var head_img_url = $api.attr($api.dom('img'), 'src'),
-            real_name = $api.val($api.dom('.realName'),
-            nickname = $api.val($api.dom('.realName')),
-            sex = $api.text($api.dom('.sex')) == '男'? 1 : 2);
+            real_name = $api.val($api.dom('.realName')),
+            nickname = $api.val($api.dom('.nickName')),
+            sex = $api.text($api.dom('.sex')) == '男'? 1 : 2;
         if ((head_img_url == api.pageParam.paramHeadImg) && (real_name === api.pageParam.paramRealName) && (nickname === api.pageParam.paramNickname) && (sex == api.pageParam.paramSex)) {
             // 没修改不提交
         } else {
+            console.log(head_img_url+'--'+real_name+'--'+nickname)
             api.ajax({
                 url: apiSite + '/api/remark_user/editBasicInfo',
                 method: 'post',
@@ -148,12 +149,91 @@
                        values: { 
                             token: $api.getStorage('userToken'),
                             remark_user_id: api.pageParam.userId,
+                            head_img_url: head_img_url,
+                            real_name: real_name,
+                            nickname: nickname,
+                            sex: sex
                        }
                 }
             }, function(ret, err) {
             if(ret) {
                 if(ret.code == 200) {
-                    alert(JSON.stringify(ret))
+                    alert(JSON.stringify(ret));
+                    api.ajax({
+                        url: apiSite + '/api/remark_user/fullInfo',
+                        method: 'post',
+                        headers: apiHeader,
+                        data: {
+                              values: { 
+                                  token: $api.getStorage('userToken'),
+                                  remark_user_id: api.pageParam.userId
+                              }
+                        }
+                    }, function(ret, err) {
+                        if(ret) {
+                            // 缓存生日和家乡
+                            var sql = 'INSERT OR REPLACE INTO tb_remarks_user_info(remark_user_id, nickname, real_name, sex, head_img_url)  VALUES (' + api.pageParam.userId+',"'+ ret.data.info.nickname+'","'+ ret.data.info.real_name+'","'+ ret.data.info.sex+'","'+ ret.data.info.head_img_url + '")'
+                            db.selectSql({
+                                name: 'db_'+$api.getStorage('userToken'),
+                                sql: 'SELECT * FROM tb_remarks_user_info where remark_user_id=' + api.pageParam.userId
+                            }, function(ret1, err1){        
+                                if( ret1.status ){
+                                    if (ret1.data.length !== 0) {
+                                        console.log(JSON.stringify(ret1))
+                                        console.log('有数据,更新')
+                                        // 有数据 更新
+                                        db.executeSql({
+                                            name: 'db_'+$api.getStorage('userToken'),
+                                            sql: 'UPDATE tb_remarks_user_info SET nickname = "'+ ret.data.info.nickname +'",head_img_url = "'+ ret.data.info.head_img_url +'", real_name = "'+ ret.data.info.real_name +'", sex = "'+ ret.data.info.sex +'" WHERE remark_user_id = ' + api.pageParam.userId
+                                        }, function(ret, err){        
+                                            if( ret.status ){
+                                                console.log('688:' + JSON.stringify( ret ) );
+                                                db.selectSql({
+                                                   name: 'db_'+$api.getStorage('userToken'),
+                                                   sql: 'SELECT * FROM tb_remarks_user_info'
+                                               }, function(ret, err){        
+                                                   if( ret.status ){
+                                                       console.log('196:'+ JSON.stringify( ret ) );
+                                                   }else{
+                                                       alert( JSON.stringify( err ) );
+                                                   }
+                                               });
+                                            }else{
+                                                alert('690:' + JSON.stringify( err ) );
+                                            }
+                                        });
+                                    } else {
+                                        console.log('没有数据,插入')
+                                        // 没数据 插入新数据
+                                        db.executeSql({
+                                            name: 'db_'+$api.getStorage('userToken'),
+                                            sql: sql  
+                                        }, function(ret, err){        
+                                            if( ret.status ){
+                                               console.log( '684:::'+JSON.stringify( ret ) );
+                                               db.selectSql({
+                                                   name: 'db_'+$api.getStorage('userToken'),
+                                                   sql: 'SELECT * FROM tb_remarks_user_info'
+                                               }, function(ret, err){        
+                                                   if( ret.status ){
+                                                       console.log('209:'+ JSON.stringify( ret ) );
+                                                   }else{
+                                                       alert( JSON.stringify( err ) );
+                                                   }
+                                               });
+                                            }else{
+                                               alert( JSON.stringify( err ) );
+                                           }
+                                        });
+                                    }
+                                }else{
+                                    alert( JSON.stringify( err1 ) );
+                                }
+                            });
+                        } else {
+                           alert(JSON.stringify(err))
+                        }
+                    })
                 } else {
                     alert(JSON.stringify(ret.msg))
                 }

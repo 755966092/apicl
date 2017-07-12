@@ -263,8 +263,9 @@ apiready = function() {
     }, function(ret, err) {
         if (ret.status) {
             // alert('打开成功');
+            openRemarksDb()
         } else {
-            alert(JSON.stringify(err.msg));
+            alert('267:'+JSON.stringify(err.msg));
         }
     });
     // cacheData();
@@ -272,7 +273,7 @@ apiready = function() {
         badge: 0
         // 清除角标
     });
-    openRemarksDb()
+    
 
 }
 
@@ -461,6 +462,17 @@ function openRemarksDb() {
         sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_project(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, project_id int, name varchar(255), url varchar(255), role varchar(255), description varchar(255), achievement varchar(255),start_date varchar(255),end_start varchar(255))'    
     }, function(ret, err){        
        // alert('6main_ret:'+JSON.stringify(ret))
+    });
+    // 个人信息表
+    db.executeSql({
+        name: SQLName,
+        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_user_info(remark_user_id int PRIMARY KEY NOT NULL, current_position varchar(255), current_degree varchar(255), current_company varchar(255), nickname varchar(255), real_name varchar(255), birthday varchar(255), hometown varchar(255), sex int, head_img_url varchar(255), extra_id int, extra_content varchar(255), extra_image_url varchar(255))'    
+    }, function(ret, err){        
+        if( ret.status ){
+            // alert( JSON.stringify( ret ) );
+        }else{
+            alert('473'+ JSON.stringify( err ) );
+        }
     });
     // 
      // db.executeSql({

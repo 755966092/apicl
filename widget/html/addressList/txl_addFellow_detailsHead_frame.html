@@ -97,7 +97,7 @@
             <p>性别</p>
             <span class="sex"></span>
        </div>
-       <div class="btn">保存</div>
+       <div class="btn" onclick="submitData()" tapmode="hover">保存</div>
     </div>
   
 </body>
@@ -127,6 +127,38 @@
         }, function(ret, err) {
             if(ret) {
                 console.log(JSON.stringify(ret))
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+
+    function submitData() {
+        var img_url = $api.attr($api.dom('img'), 'src');
+        var realName = $api.val($api.dom('.realName'));
+        var nickName = $api.val($api.dom('.nickName'));
+        var sex = $api.text($api.dom('.sex')) == '男' ? 1 : 2;
+        api.ajax({
+            url: apiSite + '/api/remark_user/editBasicInfo',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                    values: {
+                        token: $api.getStorage('userToken'),
+                        remark_user_id: api.pageParam.userId,
+                        head_img_url: img_url,
+                        real_name: realName,
+                        nickName: nickName,
+                        sex: sex
+                    }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                   alert(JSON.stringify(ret))
+                } else {
+                    alert(ret.msg)
+                }
             } else {
                 alert(JSON.stringify(err))
             }

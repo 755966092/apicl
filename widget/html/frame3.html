@@ -172,32 +172,6 @@
             }
         });
     }
-    // 打开数据库
-    function openDb(userToken) {
-         // 打开数据库
-        db.openDatabase({
-            name: 'db_'+$api.getStorage('userToken')
-        }, function(ret, err) {
-            if (ret.status) {
-                alert('打开成功');
-                db.executeSql({
-                    name: 'db_'+$api.getStorage('userToken'),
-                    sql: 'DROP TABLE IF EXISTS addressList;CREATE TABLE addressList(user_id int, nickname varchar(255), head_img_url varchar(255), current_position varchar(255),current_company varchar(255), titleSize int, title varchar(255), img varchar(255), flag varchar(255), litter varchar(255), type int);CREATE UNIQUE INDEX user_id_idx on addressList (user_id);'
-                }, function(ret, err) {
-                    // ;CREATE UNIQUE INDEX user_id_idx on addressList (user_id);
-                    if (ret.status) {
-                        console.log(JSON.stringify(ret));
-                        alert('执行成功')
-
-                    } else {
-                        alert('新建表错误:'+JSON.stringify(err));
-                    }
-                });
-            } else {
-                alert('新建库错误:'+JSON.stringify(err));
-            }
-        });
-    }
     // 请求数据
     function requestData() {
         // console.log('请求数据')

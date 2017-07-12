@@ -333,7 +333,7 @@
         </div>
         <ul class="mt20">
             <li tapmode="hover" onclick="openInfo(this)" data-val="friendContact">
-                <span>熟识好友，点击查看您与他的交集</span>
+                <span id="relationship_level"><!-- 熟识好友，点击查看您与他的交集 --></span>
                 <span class="icon"></span>
             </li>
             <li class="mt20" tapmode="hover" onclick="openInfo(this)" data-val="mainPhone">
@@ -370,9 +370,6 @@
                 <span>中央财经大学 工商管理 硕士</span>
                 <span class="icon"></span>
             </li>
-           
-            
-           
             <li class="mt20" tapmode="hover" onclick="openInfo(this)" data-val="study">
                 <div class="wrap">
                     <span>学习经历</span>
@@ -389,14 +386,14 @@
                 <span>项目业绩</span>
                 <span class="icon"></span>
             </li>
-             <li class="mt20">
+             <li class="mt20" tapmode="hover" onclick="selectList()">
                 <div class="wrap">
                     <span>家乡：</span>
                     <span id="hometown"></span>
                     <span class="icon"></span>
                 </div>
             </li>
-            <li>
+            <li tapmode="hover" onclick="openTime()">
                 <span>生日：</span>
                 <span id="birthday"></span>
                 <span class="icon"></span>
@@ -411,11 +408,13 @@
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../data/city_3.js"></script>
 <script type="text/javascript">
     var paramNickname,paramRealName,paramSex,paramHeadImg;
     apiready = function(){
         moduleInit();
         requireData();
+        requireDetailData();
     };
     // 获取会员信息
     function requireData() {
@@ -431,6 +430,7 @@
             }
         }, function(ret, err) {
             if(ret) {
+                console.log(JSON.stringify(ret.data))
                 initPage(ret.data);
                 paramNickname = ret.data.info.nickname;
                 paramRealName = ret.data.info.real_name;
@@ -441,34 +441,186 @@
             }
         })
     }
+    function requireDetailData() {
+        api.ajax({
+            url: apiSite + '/api/remark_user/fullInfo',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       remark_user_id: api.pageParam.userId
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                console.log('478:::'+JSON.stringify(ret))
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
     // 初始化页面
     function initPage(data) {
+        console.log('465:::'+JSON.stringify(data))
         var nickname = $api.byId('nickname');
         var sex = $api.byId('sex');
         var head_img_url = $api.byId('head_img_url');
-
         var phone = $api.byId('phone');
         var hometown = $api.byId('hometown');
         var birthday = $api.byId('birthday');
         var current_company = $api.byId('current_company');
         var current_position = $api.byId('current_position');
+        var relationship_level = $api.byId('relationship_level');
+        switch(data.relationship_level){
+            case 1: $api.text(relationship_level, '熟识好友，点击查看您与他的交集');break;
+            case 2: $api.text(relationship_level, '相识好友，点击查看您与他的交集');break;
+            case 3: $api.text(relationship_level, '尚未加入，点击查看您与他的交集');break;
+            case 4: $api.text(relationship_level, '初识好友，点击查看您与他的交集');break;
+        }
+        /**
+         * 优先本地数据库数据
+         * 其次线上备注内容
+         * 最后用户原始信息
+         *
+         * 昵称 - 性别 - 头像 - 家乡 - 生日 - 当前公司 - 当前职位 === 数据库表名 tb_remarks_user_info
+         * 电话 === tb_remarks_contact
+         */
+        var SQLName = 'db_'+$api.getStorage('userToken');
+        api.ajax({
+            url: apiSite + '/api/remark_user/fullInfo',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       remark_user_id: api.pageParam.userId
+                   }
+            }
+        }, function(retAjax, err) {
+            if(retAjax) {
+                console.log('120:::'+JSON.stringify(retAjax));
+                db.selectSql({
+                    name: SQLName,
+                    sql: 'SELECT * FROM tb_remarks_contact WHERE user_id = ' + api.pageParam.userId
+                }, function(ret, err){        
+                    if( ret.status ){
+                        console.log('506::'+ JSON.stringify( ret ) );
+                        // $api.text(phone, data.contact.phone);
+                        // $api.attr(phone, 'data-contactId', data.contact.contact_id);
+                        if (ret.data.length != 0) {
+                            for (var i = 0; i < ret.data.length; i++) {
+                                if (ret.data[i].is_default == 1) {
+                                    $api.text(phone, ret.data[i].phone);
+                                    $api.attr(phone, 'data-contactId', ret.data[i].contact_id);
+                                }
+                            }
+                        } else if (retAjax.data.contact_list.length != 0) {
+                            for (var i = 0; i < retAjax.data.contact_list.length; i++) {
+                                if (retAjax.data.contact_list[i].is_default == 1) {
+                                    $api.text(phone, retAjax.data.contact_list[i].phone);
+                                    $api.attr(phone, 'data-contactId', retAjax.data.contact_list[i].contact_id);
+                                }
+                            }
+                        } else {
+                            $api.text(phone, data.contact[i].phone);
+                            $api.attr(phone, 'data-contactId', data.contact[i].contact_id);
+                        }
+                    }else{
+                        alert( JSON.stringify( err ) );
+                    }
+                });
+                db.selectSql({
+                    name: SQLName,
+                    sql: 'SELECT * FROM tb_remarks_user_info WHERE remark_user_id = ' + api.pageParam.userId
+                }, function(retSelSql, err){        
+                    if( retSelSql.status ){
+                        console.log('488::'+ JSON.stringify( retSelSql ) );
+                        // 家乡
+                        if (retSelSql.data[0].hometown != "null") {
+                            // b本地数据库内容
+                            $api.text(hometown, retSelSql.data[0].hometown);
+                        } else if (retAjax.data.info.hometown) {
+                            // 线上备注内容
+                            $api.text(hometown, retAjax.data.info.hometown);
+                        } else {
+                            // 会员原始信息
+                            $api.text(hometown, data.info.hometown);
+                        }
+                        // 生日
+                        if (retSelSql.data[0].birthday  != "null") {
+                            console.log('552'+JSON.stringify(retSelSql.data[0]))
+                            // b本地数据库内容
+                            $api.text(birthday, retSelSql.data[0].birthday);
+                        } else if (retAjax.data.info.birthday) {
+                            // 线上备注内容
+                            $api.text(birthday, retAjax.data.info.birthday);
+                        } else {
+                            // 会员原始信息
+                            $api.text(birthday, data.info.birthday);
+                        }
+                        // 头像
+                        if (retSelSql.data[0].head_img_url  != null) {
+                            // b本地数据库内容
+                            $api.attr(head_img_url, 'src', retSelSql.data[0].head_img_url);
+                        } else if (retAjax.data.info.head_img_url) {
+                            // 线上备注内容
+                            $api.attr(head_img_url, 'src', retAjax.data.info.head_img_url);
+                        } else {
+                            // 会员原始信息
+                            $api.attr(head_img_url, 'src', data.info.head_img_url);
+                        }
 
-        if (data.info.current_position != null) {
-            $api.text(current_position, data.info.current_position);
-        }
-        if (data.info.current_company != null) {
-            $api.text(current_company, data.info.current_company);
-        }
+                        // 昵称
+                        if (retSelSql.data[0].nickname) {
+                            // b本地数据库内容
+                            $api.text(nickname, retSelSql.data[0].nickname);
+                        } else if (retAjax.data.info.nickname) {
+                            // 线上备注内容
+                            $api.text(nickname, retAjax.data.info.nickname);
+                        } else {
+                            // 会员原始信息
+                            $api.text(nickname, data.info.nickname);
+                        }
 
-        $api.text(nickname, data.info.nickname);
-        $api.text(hometown, data.info.hometown);
-        $api.text(birthday, data.info.birthday);
-        $api.text(phone, data.contact.phone);
-        $api.attr(phone, 'data-contactId', data.contact.contact_id);
-        $api.attr(head_img_url, 'src', data.info.head_img_url);
-        if (data.info.sex === 2 ) {
-            $api.addCls(sex, 'sexIcon2');
-        }
+                        // 性别
+                        if (retSelSql.data[0].sex) {
+                            // b本地数据库内容
+                            if (retSelSql.data[0].sex === 2 ) {
+                                $api.addCls(sex, 'sexIcon2');
+                            }
+                        } else if (retAjax.data.info.sex) {
+                            // 线上备注内容
+                            if (retAjax.data.info.sex === 2 ) {
+                                $api.addCls(sex, 'sexIcon2');
+                            }
+                        } else {
+                            // 会员原始信息
+                            if (data.info.sex === 2 ) {
+                                $api.addCls(sex, 'sexIcon2');
+                            }
+                        } 
+
+                        
+                    }else{
+                        alert( JSON.stringify( err ) );
+                    }
+
+                });
+                if (data.info.current_positio) {
+                    $api.text(current_position, data.info.current_position);
+                }
+                if (data.info.current_company != null) {
+                    $api.text(current_company, data.info.current_company);
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+
+
+
+        
     }
     function addFriends() {
         api.openWin({
@@ -492,6 +644,210 @@
             },
             bounces: false
         });
+    }
+    // 打开选择器
+    function selectList() {
+        var _dataSource2 = [],_dataSource = [],col=1;
+        var active = [];
+        var selText = $api.text($api.byId('hometown'));
+            col=2;
+            _dataSource = city;
+            var selText1 = selText.split('-')
+            active = [];
+            for (var i = 0; i < _dataSource.length; i++) {
+                if (_dataSource[i].name == selText1[0]) {
+                    active.push(i);
+                    for (var j = 0; j < _dataSource[i].sub.length; j++) {
+                        if (_dataSource[i].sub[j].name == selText1[1]) {
+                            active.push(j);
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        var fontsize = 16,rowLength = 5;
+        if (api.systemType === 'ios') {
+            fontsize = 20;
+            rowLength = 7;
+        }
+        UIActionSelector.open({
+            datas: _dataSource,
+            actives: active,
+            layout: {
+                row: rowLength,
+                col: col,
+                height: 30,
+                size: fontsize,
+                sizeActive: fontsize+2,
+                rowSpacing: 5,
+                colSpacing: 5,
+                maskBg: 'rgba(0,0,0,0.5)',
+                bg: '#fff',
+                color: '#888',
+                colorSelected: '#000'
+            },
+            animation: true,
+            cancel: {
+                text: '取消',
+                size: 16,
+                w: 60,
+                h: 40,
+                bg: '#eee',
+                // bgActive: '#ccc',
+                color: '#000',
+                // colorActive: '#fff'
+            },
+            ok: {
+                text: '完成',
+                size: 16,
+                w: 60,
+                h: 40,
+                bg: '#eee',
+                // bgActive: '#ccc',
+                color: '#000',
+                // colorActive: '#fff'
+            },
+            title: {
+                text: '请选择',
+                size: 20,
+                h: 40,
+                bg: '#F0F0F0',
+                color: '#000'
+            },
+            fixedOn: api.frameName
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.eventType == 'ok') {
+                    $api.text($api.byId('hometown'), ret.level1+'-'+ret.level2);
+                    submitData(ret.level1+'-'+ret.level2,1)
+                }
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
+    }
+    // 打开时间选择器
+    function openTime() {
+        var date, date1, date2;
+        var current = $api.text($api.byId('birthday'));
+        if (current!='请选择') {
+            current = current.split('-')
+            date = current[0];
+            date1 = current[1];
+            date2 = current[2];
+            console.log(current)
+        } else　{
+            date = new Date().getFullYear();
+            date1 = new Date().getMonth();
+            date2 = new Date().getDate();
+        }
+        api.openPicker({
+            type: 'date',
+            date: date+'-'+date1+'-'+date2,
+            title: '选择生日'
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.byId('birthday'), ret.year+'-'+ret.month+'-'+ret.day);
+                submitData(ret.year+'-'+ret.month+'-'+ret.day,0)
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
+    }
+    function submitData(data, flag) {
+        var obj = {};
+        if (flag) {
+            obj = {
+                token: $api.getStorage('userToken'),
+                remark_user_id: api.pageParam.userId,
+                hometown: data,
+            }
+        } else {
+            obj = {
+                token: $api.getStorage('userToken'),
+                remark_user_id: api.pageParam.userId,
+                birthday: data
+            }
+        }
+        console.log(JSON.stringify(data))
+        api.ajax({
+            url: apiSite + '/api/remark_user/editBasicInfo',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: obj
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                   console.log('663:'+JSON.stringify(ret))
+                   api.ajax({
+                       url: apiSite + '/api/remark_user/fullInfo',
+                       method: 'post',
+                       headers: apiHeader,
+                       data: {
+                              values: { 
+                                  token: $api.getStorage('userToken'),
+                                  remark_user_id: api.pageParam.userId
+                              }
+                       }
+                   }, function(ret, err) {
+                       if(ret) {
+                        // 缓存生日和家乡
+                        var sql = 'INSERT OR REPLACE INTO tb_remarks_user_info(remark_user_id, birthday, hometown) VALUES (' + api.pageParam.userId+',"'+ ret.data.info.birthday+'","'+ ret.data.info.hometown + '")'
+
+                        db.selectSql({
+                            name: 'db_'+$api.getStorage('userToken'),
+                            sql: 'SELECT * FROM tb_remarks_user_info where remark_user_id=' + api.pageParam.userId
+                        }, function(ret1, err1){        
+                            if( ret1.status ){
+                                if (ret1.data.length !== 0) {
+                                    console.log(JSON.stringify(ret1))
+                                    console.log('有数据,更新')
+                                    // 有数据 更新
+                                    db.executeSql({
+                                        name: 'db_'+$api.getStorage('userToken'),
+                                        sql: 'UPDATE tb_remarks_user_info SET birthday = "'+ ret.data.info.birthday +'", hometown = "'+ ret.data.info.hometown +'" WHERE remark_user_id = ' + api.pageParam.userId
+                                    }, function(ret, err){        
+                                        if( ret.status ){
+                                            console.log('688:' + JSON.stringify( ret ) );
+                                        }else{
+                                            alert('690:' + JSON.stringify( err ) );
+                                        }
+                                    });
+                                } else {
+                                    console.log('没有数据,插入')
+                                    // 没数据 插入新数据
+                                    db.executeSql({
+                                        name: 'db_'+$api.getStorage('userToken'),
+                                        sql: sql  
+                                    }, function(ret, err){        
+                                        if( ret.status ){
+                                           console.log( '684:::'+JSON.stringify( ret ) );
+                                        }else{
+                                           alert( JSON.stringify( err ) );
+                                       }
+                                    });
+                                }
+                                
+                            }else{
+                                alert( JSON.stringify( err1 ) );
+                            }
+                        });
+                           
+                           
+                       } else {
+                           alert(JSON.stringify(err))
+                       }
+                   })
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
     }
 </script>
 </html>

@@ -7,10 +7,6 @@
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <link rel="stylesheet" type="text/css" href="../../css/flex.css"/>
    <style type="text/css">
-        html,body {
-            background-color: #f8f8f8;
-
-        }
         .main {
              font-size: 0;
         }
@@ -41,13 +37,14 @@
             margin-top: .65rem;
             position: relative;
         }
-        .img:before {
+        .delBtn {
             display: inline-block;
             content: "X";
             font-size: .3rem;
             color: #fff;
             width: .44rem;
             height: .44rem;
+            line-height: .46rem;
             border-radius: .22rem;
             background-color: #f00;
             position: absolute;
@@ -65,22 +62,237 @@
 <body>
     <div class="main">
         <p>备注</p>
-        <textarea name="" id="" cols="30" rows="10"></textarea>
-        <div class="img">
-            <img src="../../image/tx_3.jpg">
+        <textarea name="" id="text" cols="30" rows="10"></textarea>
+        <div class="img" tapmode="hover" onclick="openImg()">
+            <span class="delBtn" onclick="delImg();event.stopPropagation();" tapmode="hover" >x</span>
+            <img id="img" src="http://imgsrc.baidu.com/image/c0%3Dshijue%2C0%2C0%2C245%2C40/sign=18f55e5a72f0f736ccf34442623cd96c/9f2f070828381f305ab5e58ca3014c086e06f063.jpg">
         </div>
     </div>
-  
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
-<script type="text/javascript" src="../../script/doT.min.js"></script>
-<script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
     apiready = function(){
+        moduleInit(); 
+        api.addEventListener({
+            name: 'submitData'
+        }, function(ret, err) {
+            if (ret) {
+               submitData();
+            } else {
+               alert(JSON.stringify(err));
+            }
+        });   
+        requireData();    
     };
+    // 请求数据
+    function requireData() {
+        // api.ajax({
+        //     url: apiSite + '/api/remark_user/detail',
+        //     method: 'post',
+        //     headers: apiHeader,
+        //     data: {
+        //            values: { 
+        //                token: $api.getStorage('userToken'),
+        //                remark_user_id: api.pageParam.userId
+        //            }
+        //     }
+        // }, function(ret, err) {
+        //     if(ret) {
+        //         console.log('102:::'+JSON.stringify(ret))
+        //     } else {
+        //         alert(JSON.stringify(err))
+        //     }
+        // })
+        // api.ajax({
+        //     url: apiSite + '/api/remark_user/fullInfo',
+        //     method: 'post',
+        //     headers: apiHeader,
+        //     data: {
+        //            values: { 
+        //                token: $api.getStorage('userToken'),
+        //                remark_user_id: api.pageParam.userId
+                       
+        //            }
+        //     }
+        // }, function(ret, err) {
+        //     if(ret) {
+        //          console.log('120:::'+JSON.stringify(ret))
+        //     } else {
+        //         alert(JSON.stringify(err))
+        //     }
+        // })
 
-   
+
+
+        var textContent = $api.getStorage(api.pageParam.userId+'_txl_label_text_content');
+        var imgContent = $api.getStorage(api.pageParam.userId+'_txl_label_img_content');
+        if (textContent && imgContent) {
+            $api.val($api.byId('text'), textContent);
+            $api.attr($api.byId('img'), 'src', $api.getStorage(api.pageParam.userId+'_txl_label_img_content_cache'));
+        } else {
+            api.ajax({
+                url: apiSite + '/api/remark_user/editBasicInfoIndex',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                       values: { 
+                           token: $api.getStorage('userToken'),
+                           remark_user_id: api.pageParam.userId
+                       }
+                }
+            }, function(ret, err) {
+                if(ret) {
+                    if (ret.code === 200) {
+                        if ((textContent === ret.data.info.extra.content) && (imgContent === ret.data.info.extra.image_url)) {
+                        } else {
+                            $api.val($api.byId('text'),ret.data.info.extra.content);
+                            $api.setStorage(api.pageParam.userId+'_txl_label_text_content', ret.data.info.extra.content);
+                            api.imageCache({
+                                url: ret.data.info.extra.image_url
+                            }, function(ret, err){
+                                if( ret ){
+                                    $api.attr($api.byId('img'), 'src', ret.url);
+                                    $api.setStorage(api.pageParam.userId+'_txl_label_img_content_cache', ret.url);
+                                    $api.setStorage(api.pageParam.userId+'_txl_label_img_content', ret.url);
+                                }else{
+                                     alert( JSON.stringify( err ) );
+                                }
+                            });
+                        }
+                    } else {
+                        alert(ret.msg)
+                    }
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
+        }
+    }
+    // 提交数据
+    function submitData() {
+        var text = $api.val($api.byId('text'));
+        var img_url = $api.attr($api.byId('img'), 'src');
+        api.ajax({
+            url: apiSite + '/api/remark_user/editBasicInfo',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                        token: $api.getStorage('userToken'),
+                        remark_user_id: api.pageParam.userId,
+                        extra_content: text,
+                        extra_image_url: img_url
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                alert(JSON.stringify(ret));
+                api.ajax({
+                    url: apiSite + '/api/remark_user/fullInfo',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                          values: { 
+                              token: $api.getStorage('userToken'),
+                              remark_user_id: api.pageParam.userId
+                          }
+                    }
+                }, function(ret, err) {
+                    if(ret) {
+                        var SQLName = 'db_'+$api.getStorage('userToken');
+                        var sql = 'INSERT OR REPLACE INTO tb_remarks_user_info(remark_user_id, extra_id, extra_content, extra_image_url)  VALUES (' + api.pageParam.userId+','+ ret.data.extra.extra_id+',"'+ ret.data.extra.content+'","'+ ret.data.extra.image_url + '")'
+                         db.selectSql({
+                            name: 'db_'+$api.getStorage('userToken'),
+                            sql: 'SELECT * FROM tb_remarks_user_info where remark_user_id=' + api.pageParam.userId
+                        }, function(ret1, err1){        
+                            if( ret1.status ){
+                                if (ret1.data.length !== 0) {
+                                    console.log(JSON.stringify(ret1))
+                                    console.log('有数据,更新')
+                                    // 有数据 更新
+                                    db.executeSql({
+                                        name: 'db_'+$api.getStorage('userToken'),
+                                        sql: 'UPDATE tb_remarks_user_info SET extra_id = '+ ret.data.extra.extra_id +', extra_image_url = "'+ ret.data.extra.image_url +'", extra_content = "'+ ret.data.extra.content +'" WHERE remark_user_id = ' + api.pageParam.userId
+                                    }, function(ret, err){        
+                                        if( ret.status ){
+                                            console.log('688:' + JSON.stringify( ret ) );
+                                        }else{
+                                            alert('690:' + JSON.stringify( err ) );
+                                        }
+                                    });
+                                } else {
+                                    console.log('没有数据,插入')
+                                    // 没数据 插入新数据
+                                    db.executeSql({
+                                        name: 'db_'+$api.getStorage('userToken'),
+                                        sql: sql  
+                                    }, function(ret, err){        
+                                        if( ret.status ){
+                                           console.log( '684:::'+JSON.stringify( ret ) );
+                                        }else{
+                                           alert( JSON.stringify( err ) );
+                                       }
+                                    });
+                                }
+                            }else{
+                                alert( JSON.stringify( err1 ) );
+                            }
+                        });
+                       
+                    }else{
+                        alert( JSON.stringify( err ) );
+                    }
+                });
+                        
+            } else {
+                alert(JSON.stringify(err))
+            }
+        });
+    }
+    // 打开相册
+    function openImg() {
+        // if (val === 'camear') {
+        //      api.getPicture({
+        //             sourceType: 'camera',
+        //             mediaValue: 'pic',
+        //             encodingType: 'jpg',
+        //             destinationType: 'url',
+        //             quality: 80,
+        //             targetWidth: 750,
+        //             targetHeight: 750,
+        //             saveToPhotoAlbum: true // 拍照后是否保存照片到相册
+        //         }, function(ret, err) {
+        //             if (ret.data) {
+        //                 $api.attr($api.dom('img'),'src', ret.data);
+        //             } 
+        //         });
+        // } else {
+            api.getPicture({
+                sourceType: 'library',
+                mediaValue: 'pic',
+                encodingType: 'jpg',
+                destinationType: 'url',
+                quality: 80,
+                targetWidth: 750,
+                targetHeight: 750
+            }, function(ret, err) {
+                if (ret) {
+                    if (ret.data) {
+                        $api.attr($api.dom('img'),'src', ret.data);
+                        alert('tx2页面：'+ret.data)
+                    } 
+                    
+                } else {
+                    alert(JSON.stringify(err.msg));
+                }
+            });
+        // }
+    }
+    // 删除图片
+    function delImg() {
+        alert('删除图片')
+    }
 </script>
 </html>
 
