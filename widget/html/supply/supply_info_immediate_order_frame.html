@@ -289,14 +289,14 @@
         var userAddress = $api.getStorage('userAddress') || '';
         var real_name = $api.getStorage('real_name') || '';
         // 设置地址
-        if (userAddress) {
+        if (userAddress != '') {
             $api.text($api.byId('address'), userAddress[0].province +' '+userAddress[0].city +' '+userAddress[0].district +' '+userAddress[0].district);
             $api.attr($api.byId('address'), 'data-id', userAddress[0].address_id);
         } else {
              $api.text($api.byId('address'), '未设置默认地址')
         }
         // 设置真实姓名
-        if (real_name) {
+        if (real_name != '') {
             $api.text($api.byId('real_name'), real_name);
         } else {
             $api.text($api.byId('real_name'), '未设置真实姓名');
@@ -304,7 +304,7 @@
         // 设置赏金
         $api.text($api.byId('price'), api.pageParam.transmitData.reward);
         // 设置电话
-        if (userPhone) {
+        if (userPhone != '') {
             for (var i = 0; i < userPhone.length; i++) {
                 if (userPhone[i].is_default) {
                     $api.attr($api.byId('defaultPhone'), 'data-id', userPhone[i].contact_id);
@@ -337,7 +337,7 @@
             date4 = current[4];
         } else　{
             date = new Date().getFullYear();
-            date1 = new Date().getMonth();
+            date1 = new Date().getMonth()+1;
             date2 = new Date().getDate();
         }
         api.openPicker({
@@ -346,13 +346,24 @@
             title: text
         }, function(ret, err) {
             if (ret) {
-                if (ret.minute<10) {
-                    ret.minute = '0'+ret.minute
+                if (ret.minute < 10) {
+                    ret.minute = '0' + ret.minute
                 }
-                if (ret.hour<10) {
-                    ret.hour = '0'+ret.hour
+                if (ret.hour < 10) {
+                    ret.hour = '0' + ret.hour
                 }
-                $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day+' '+ret.hour+':'+ret.minute);
+                var time = new Date();
+                if (
+                    ret.year < time.getFullYear() || 
+                    (ret.year === time.getFullYear() && ret.month < time.getMonth()+1) ||
+                    (ret.year === time.getFullYear() && ret.month === time.getMonth()+1 && ret.day < time.getDate()) ||
+                    (ret.year === time.getFullYear() && ret.month === time.getMonth()+1 && ret.day === time.getDate() && ret.hour < time.getHours()) ||
+                    (ret.year === time.getFullYear() && ret.month === time.getMonth()+1 && ret.day === time.getDate() && ret.hour === time.getHours() && ret.minute < time.getMinutes() )
+                          ) {
+                    alert('服务时间不能早于当前时间')
+                } else {
+                    $api.text(ele, ret.year + '-' + ret.month + '-' + ret.day + ' ' + ret.hour + ':' + ret.minute);
+                }        
             } else {
                 alert(JSON.stringify(err.msg));
             }

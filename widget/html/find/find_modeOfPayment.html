@@ -147,6 +147,8 @@
 <script type="text/javascript">
     var money;
     apiready = function(){
+        moduleInit();
+        console.log('150:::'+JSON.stringify(api.pageParam))
         $api.text($api.dom('.money'), api.pageParam.price);
     }
     function selType(ele) {
@@ -159,16 +161,90 @@
     function submit(ele) {
         var text = $api.text(ele)
         if (text === '确定') {
-            alert($api.attr($api.dom('.select1'), 'data-val'))
-            api.closeFrame({
-                name: 'txEnter'
-            });
+            var payType = $api.attr($api.dom('.select1'), 'data-val');
+            api.ajax({
+                url: apiSite + '/api/circle/enter',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                       values: { 
+                            token: $api.getStorage('userToken'),
+                            circle_id:api.pageParam.circle_id,
+                            pay_method: payType
+                       }
+                }
+            }, function(ret, err) {
+                if(ret) {
+                    if (ret.code === 200) {
+                        if (payType == 'wechat') {
+                            wxPayFun(ret);
+                        } else if (payType == 'alipay') {
+                            aliPay.payOrder({
+                                orderInfo: ret.data.config
+                            },function(ret,err) {
+                                console.log('支付宝支付成功');
+                                openCircleInfo();
+                            });
+                        } else {
+                            
+                        }
+                            
+                    } else {
+                        alert(ret.msg)
+                    }
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
+            
         } else {
-            api.closeFrame({
-                name: 'txEnter'
-            });
+            api.closeFrame();
         }
         
+    }
+
+     function wxPayFun(retAJAX) {
+         wxPay.payOrder({
+            apiKey: retAJAX.data.config.appid,
+            orderId: retAJAX.data.config.prepayid,
+            mchId: retAJAX.data.config.partnerid,
+            nonceStr: retAJAX.data.config.noncestr,
+            timeStamp: retAJAX.data.config.timestamp,
+            package: retAJAX.data.config.package,
+            sign: retAJAX.data.config.sign
+        }, function(ret, err) {
+            if (ret.status) {
+                //支付成功
+              // payFruitPage(obj)
+              openCircleInfo();
+              console.log('微信支付成功')
+            } else {
+                alert(err.code);
+            }
+        })
+    }
+    function openCircleInfo() {
+        api.closeWin({
+            name: 'find_payAddCricle_win2'
+        });
+        api.execScript({
+            name: 'find_cricleInfo_win',
+            script: 'requestData();'
+        });
+        api.execScript({
+            name: 'find_dynamicState_win',
+            frameName: 'find_dynamicState_frame',
+            script: 'requestData();'
+        });
+        // 加入后打開圈子詳情
+        api.openWin({
+            name: 'find_cricleInfo_win',
+            url: './find_cricleInfo_win.html',
+            pageParam: {
+                circle_id: api.pageParam.circle_id
+            }
+        });
+        api.closeFrame();
     }
 </script>
 </html>

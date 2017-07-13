@@ -10,10 +10,8 @@
     <style>
         body,
         html {
-            background-color: #EDECF3;
             position: relative;
         }
-
         header.header {
             background-color: transparent;
             position: fixed;
@@ -254,12 +252,10 @@
             <script type="text/x-dot-template" id="listT">
                 <div class="member">
                     {{ for (var i = 0; i < 5; i++) { }} 
-                        
-                            <div class="memberInfo">
-                                <img src="{{=it[i].head_img_url}}" alt="">
-                                <p class="memberName">{{=it[i].nickname}}</p>
-                            </div>
-                        
+                        <div class="memberInfo">
+                            <img src="{{=it[i].head_img_url}}" alt="">
+                            <p class="memberName">{{=it[i].nickname}}</p>
+                        </div>
                     {{ }; }}
                 </div>
                     <p class="viewMore">查看更多圈联系人</p>
@@ -290,7 +286,6 @@
     apiready = function () {
         fnInit();
         requestData();
-        
     };
     // 编辑名片
     function editNote() {
@@ -341,7 +336,10 @@
                 $api.text($api.byId('note'), ret.data.note);
                 $api.attr($api.dom('.imgHead'), 'src', ret.data.info.image_url);
                 $api.attr($api.dom('.imgBg'), 'src', ret.data.info.image_url);
-
+                console.log("342:::"+JSON.stringify(ret))
+                // for (var i = 0; i < ret.data.member_list.length; i++) {
+                //     ret.data.member_list[i].head_img_url = eval(ret.data.member_list[i].head_img_url)
+                // }
                 getData(ret.data.member_list)
             } else {
                 alert(JSON.stringify(err.msg))

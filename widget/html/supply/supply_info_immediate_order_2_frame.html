@@ -338,7 +338,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    var price=0,paramPhone;
+    var price=0;
     apiready = function(){
         getData(api.pageParam.transmitData)
         computeTatol();
@@ -409,6 +409,7 @@
          var amount = $api.val($api.byId('buyCount'));        //  int 数量
          // console.log(amount)
          var service_time = $api.text($api.byId('serverTime'));        //    string  服务时间
+         var paramPhone = $api.text($api.byId('defaultPhone'));        //    string  服务时间
          // console.log(service_time)
          // var pay_method = ;        //  string  支付方式（仅限付费圈子：balance-余额，wechat-微信支付，alipay-支付宝）
          var name = $api.text($api.byId('real_name'));        //    string  姓名（线下供应必传）
@@ -425,7 +426,7 @@
             contact_id: contact_id,
             address_id: address_id
          }
-         // console.log(JSON.stringify(obj))
+         console.log("429:::"+JSON.stringify(obj))
         api.openFrame({
             name: 'supply_modeOfPayment',
             url: './supply_modeOfPayment.html',
@@ -468,7 +469,6 @@
                 if (userPhone[i].is_default) {
                     $api.attr($api.byId('defaultPhone'), 'data-id', userPhone[i].contact_id);
                     userPhone = userPhone[i].phone;
-                    paramPhone = userPhone[i].phone;
                     $api.text($api.byId('defaultPhone'), userPhone);
                     break;
                 }

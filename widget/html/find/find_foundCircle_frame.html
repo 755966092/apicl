@@ -246,7 +246,7 @@
         var title = $api.val($api.byId('title'));
         var description = $api.val($api.byId('description'));
         var image_url = $api.attr($api.byId('image_url'), 'src');
-        var price = $api.attr($api.byId('price'), 'src');
+        var price = $api.val($api.byId('price'));
         var type = $api.text($api.dom('.sel')) == '免费' ? 1 : 2;
         var obj = {
             title: title,
@@ -271,8 +271,10 @@
                    }
             }
         }, function(ret, err) {
+                console.log('274:::'+JSON.stringify(ret))
+                console.log("275:::"+JSON.stringify(err))
             if(ret) {
-                
+                api.closeWin();
                 if (api.pageParam.flag == 'frame4Open') {
                     api.sendEvent({
                         name: 'frame4Open',

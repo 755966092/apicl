@@ -153,6 +153,7 @@
 <script type="text/javascript">
     var money;
     apiready = function(){
+        console.log('156:::'+JSON.stringify(api.pageParam))
         moduleInit();
         $api.text($api.dom('.money'), api.pageParam.price);
     }
@@ -169,7 +170,6 @@
             var pay_method = $api.attr($api.dom('.select1'), 'data-val');
             // alert($api.attr($api.dom('.select1'), 'data-val'))
             // console.log(JSON.stringify(obj))
-            
             var url;
             if (api.pageParam.flag == 1) {
                 url = '/api/supply_order/buyerPayService';
@@ -208,40 +208,14 @@
                         alert(JSON.stringify(retAJAX.msg))
                     } else {
                         if (api.pageParam.flag === 3) {
+                            wxPayFun(retAJAX);
                             api.sendEvent({
                                 name: 'filterOrder'
                             });
                         } else {
                             if (pay_method === 'wechat') {
                                 // 微信支付
-                                wxPay.payOrder({
-                                    apiKey: retAJAX.data.config.appid,
-                                    orderId: retAJAX.data.config.prepayid,
-                                    mchId: retAJAX.data.config.partnerid,
-                                    nonceStr: retAJAX.data.config.noncestr,
-                                    timeStamp: retAJAX.data.config.timestamp,
-                                    package: retAJAX.data.config.package,
-                                    sign: retAJAX.data.config.sign
-                                }, function(ret, err) {
-                                    if (ret.status) {
-                                        //支付成功
-                                        api.openWin({
-                                            name: 'supply_payResult_win',
-                                            url: './supply_payResult_win.html',
-                                            pageParam: {
-                                                obj: obj,
-                                                price: api.pageParam.price,
-                                                form: api.pageParam.form,
-                                                flag: 1
-                                            }
-                                        });
-                                        setTimeout(function(){api.closeFrame();},1000)
-                                        console.log('支付成功')
-                                    } else {
-                                        // alert(err.code);
-                                        payFruitPage(obj)
-                                    }
-                                })
+                               wxPayFun(retAJAX);
                             } else if (pay_method === 'alipay') {
                                 aliPay.payOrder({
                                   orderInfo: retAJAX.data.config
@@ -269,7 +243,24 @@
         }
         
     }
-
+    function wxPayFun(retAJAX) {
+         wxPay.payOrder({
+            apiKey: retAJAX.data.config.appid,
+            orderId: retAJAX.data.config.prepayid,
+            mchId: retAJAX.data.config.partnerid,
+            nonceStr: retAJAX.data.config.noncestr,
+            timeStamp: retAJAX.data.config.timestamp,
+            package: retAJAX.data.config.package,
+            sign: retAJAX.data.config.sign
+        }, function(ret, err) {
+            if (ret.status) {
+                //支付成功
+              payFruitPage(obj)
+            } else {
+                alert(err.code);
+            }
+        })
+    }
     function payFruitPage(obj) {
          api.openWin({
             name: 'supply_payResult_win',
