@@ -239,21 +239,16 @@
                                         console.log('支付成功')
                                     } else {
                                         // alert(err.code);
-                                        api.openWin({
-                                            name: 'supply_payResult_win',
-                                            url: './supply_payResult_win.html',
-                                            pageParam: {
-                                                config: retAJAX.data.config,
-                                                obj: obj,
-                                                price: api.pageParam.price,
-                                                form: api.pageParam.form,
-                                                flag: 0
-                                            }
-                                        });
+                                        payFruitPage(obj)
                                     }
                                 })
                             } else if (pay_method === 'alipay') {
-
+                                aliPay.payOrder({
+                                  orderInfo: retAJAX.data.config
+                                },function(ret,err) {
+                                    console.log(JSON.stringify(ret));
+                                    payFruitPage(obj)
+                                });
                             } else {
                                 api.openWin({
                                     name: 'me_gdd',
@@ -273,6 +268,20 @@
             api.closeFrame();
         }
         
+    }
+
+    function payFruitPage(obj) {
+         api.openWin({
+            name: 'supply_payResult_win',
+            url: './supply_payResult_win.html',
+            pageParam: {
+                obj: obj,
+                price: api.pageParam.price,
+                form: api.pageParam.form,
+                flag: 1,
+                paramPhone: api.pageParam.paramPhone
+            }
+        });
     }
 </script>
 </html>

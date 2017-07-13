@@ -338,7 +338,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    var price=0;
+    var price=0,paramPhone;
     apiready = function(){
         getData(api.pageParam.transmitData)
         computeTatol();
@@ -438,7 +438,8 @@
             pageParam: {
                 obj: obj,
                 price: price,
-                form: api.pageParam.transmitData.form
+                form: api.pageParam.transmitData.form,
+                paramPhone: paramPhone
             },
             bounces: false
         });
@@ -448,24 +449,26 @@
         var userPhone = $api.getStorage('userPhone') || '';
         var userAddress = $api.getStorage('userAddress') || '';
         var real_name = $api.getStorage('real_name') || '';
-        if (userAddress != null) {
+        console.log(JSON.stringify(userAddress))
+        if (userAddress != '') {
             $api.text($api.byId('address'), userAddress[0].province +' '+userAddress[0].city +' '+userAddress[0].district +' '+userAddress[0].district);
             $api.attr($api.byId('address'), 'data-id', userAddress[0].address_id);
         } else {
              $api.text($api.byId('address'), '未设置默认地址')
         }
         // 设置真实姓名
-        if (real_name != null) {
+        if (real_name != '') {
             $api.text($api.byId('real_name'), real_name);
         } else {
             $api.text($api.byId('real_name'), '未设置真实姓名');
         }
         // 设置电话
-        if (userPhone != null) {
+        if (userPhone != '') {
             for (var i = 0; i < userPhone.length; i++) {
                 if (userPhone[i].is_default) {
                     $api.attr($api.byId('defaultPhone'), 'data-id', userPhone[i].contact_id);
                     userPhone = userPhone[i].phone;
+                    paramPhone = userPhone[i].phone;
                     $api.text($api.byId('defaultPhone'), userPhone);
                     break;
                 }
@@ -495,7 +498,7 @@
             date4 = current[4];
         } else　 {
             date = new Date().getFullYear();
-            date1 = new Date().getMonth();
+            date1 = new Date().getMonth()+1;
             date2 = new Date().getDate();
         }
         api.openPicker({
@@ -540,7 +543,6 @@
         }
         price = unitPrice * buyCount
         $api.text($api.byId('price'), price);
-
     }
     
     // 增减数量
@@ -549,15 +551,13 @@
         $api.val($api.byId('buyCount'), ++count);
          computeTatol();
      }
-     function subtractCount() {
+    function subtractCount() {
         if (count < 1) {
             count =1
         }
         $api.val($api.byId('buyCount'), --count);
         computeTatol();
-     }
-   
-
+    }
 
 
   

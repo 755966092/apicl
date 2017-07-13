@@ -101,9 +101,12 @@ var rong,
     contacts,
     clipBoard,
     wxPay,
+    aliPay,
     SQLName;
 
 function moduleInit() {
+    // 支付宝支付
+    aliPay = api.require('aliPay');
     // 微信支付
     wxPay = api.require('wxPay');
     SQLName = 'db_' + $api.getStorage('userToken');
