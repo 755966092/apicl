@@ -441,6 +441,7 @@
                 if (eve == 'changeHead') {
                     // 处理用户头像
                     $api.attr(ele, 'src', val);
+                    console.log('444:::'+val)
                     reviseData();
                 } else if (eve == 'xiugaisex') {
                     // 处理用户性别
@@ -482,7 +483,7 @@
                 data: {
                     values: { 
                         token: $api.getStorage('userToken'),
-                        head_img_url: 'http://img1.skqkw.cn:888/2014/12/08/07/rf5rlvjegvz-10335.jpg',
+                        head_img_url: headImg,
                         real_name: name,
                         nickname: niCheng,
                         sex: sex,
@@ -491,7 +492,12 @@
                     }
                 }
             }, function(ret, err) {
-                    alert(JSON.stringify(ret))
+                    alert(JSON.stringify(ret));
+                    api.execScript({
+                        name: 'main',
+                        frameName: 'frame4',
+                        script: 'userInfo();'
+                    });
             })
          // myAjax();
     }

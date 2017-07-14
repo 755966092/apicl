@@ -103,7 +103,7 @@
     apiready = function(){
         requireData();
         api.addEventListener({
-            name: 'renovateMySupply'
+            name: 'editSupplyAfter'
         }, function(ret, err) {
             if (ret) {
                 requireData();
@@ -129,6 +129,7 @@
                 // alert(JSON.stringify(ret))
                  for (var i = 0; i < ret.data.list.length; i++) {
                     ret.data.list[i].image_json = eval(ret.data.list[i].image_json)
+                    
                     if ( ret.data.list[i].unit > 0) {
                          ret.data.list[i].unit = _dataSource[ ret.data.list[i].unit-1]
                     } else {

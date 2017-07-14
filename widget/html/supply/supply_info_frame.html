@@ -482,7 +482,17 @@
     var transmitData,_dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
     apiready = function(){
         // 初始化页面
-        initialise(api.pageParam.flag, api.pageParam.compaby_name, api.pageParam.supply_id)
+        
+        initialise(api.pageParam.flag, api.pageParam.compaby_name, api.pageParam.supply_id);
+        api.addEventListener({
+            name: 'editSupplyAfter'
+        }, function(ret, err) {
+            if (ret) {
+                initialise(ret.value.flag, ret.value.compaby_name, ret.value.supply_id)
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     };
     // 打开评论页面
     function openCommentPage(ele) {
@@ -502,6 +512,8 @@
             name: 'winName',
             url: './supply_releaseSupply_win.html',
             pageParam: {
+                flag: api.pageParam.flag,
+                compaby_name: api.pageParam.compaby_name,
                 supply_id: api.pageParam.supply_id
             }
         });

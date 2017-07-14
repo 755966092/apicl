@@ -470,6 +470,15 @@
     apiready = function(){
         // 初始化页面
         initialise();
+        api.addEventListener({
+            name: 'editSupplyAfter'
+        }, function(ret, err) {
+            if (ret) {
+               initialise();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     };
     // 初始化页面
     function  initialise() {
@@ -534,7 +543,7 @@
         }, function(ret, err) {
             if(ret.code==200) {
                     api.sendEvent({
-                        name: 'renovateMySupply'
+                        name: 'editSupplyAfter'
                     });
                 if (url === '/api/supply/delete') {
                     setTimeout(function() {api.closeWin();},500)
