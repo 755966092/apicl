@@ -276,9 +276,7 @@ apiready = function() {
     ajpush.init(function(ret) {
         if (ret && ret.status){
             console.log('300:::'+JSON.stringify(ret))
-            ajpush.getRegistrationId(function(ret) {
-                console.log('315:::'+JSON.stringify(ret))
-            });
+            
             //success
         }
     });
@@ -291,15 +289,33 @@ apiready = function() {
              var title = ret.title;
              var content = ret.content;
              var extra = ret.extra;
-             alert(content)
+             console.log('292'+JSON.stringify(ret))
         }
     );
-    // var param = {alias:'myalias',tags:['tag1','tag2']};
-    // ajpush.bindAliasAndTags(param,function(ret) {
-    //         var statusCode = ret.statusCode;
-    //         console.log(JSON.stringify(ret))
-
-    // });
+    // 监听安卓
+    api.addEventListener({
+        name: 'appintent'
+    }, function(ret, err) {
+        if (ret && ret.appParam.ajpush) {
+            var ajpush = ret.appParam.ajpush;
+            var id = ajpush.id;
+            var title = ajpush.title;
+            var content = ajpush.content;
+            var extra = ajpush.extra;
+            console.log('307:::'+JSON.stringify(ret))
+        }
+    })
+    // 监听ios信息
+    api.addEventListener({
+        name: 'noticeclicked'
+    }, function(ret, err) {
+        if (ret && ret.value) {
+            var ajpush = ret.value;
+            var content = ajpush.content;
+            var extra = ajpush.extra;
+            console.log('318::key: "value", '+JSON.stringify(ret))
+        }
+    })
     
 }
 

@@ -57,17 +57,21 @@
             <span class="rightBtn bj" id="over"   tapmode="hover"   onclick="enter()">完成</span> 
         </div>
     </header>
-    <div class="main">
+    <div class="main" id="container">
         <img src="../../../image/tx_5.jpg" class="headImg">
         <!-- <img src="../../../image/tx_5.jpg"> -->
         <div>
             <span data-str="camear"   tapmode="hover"   onclick="upload(this)">拍照上传</span>
-            <span data-str="photo"   tapmode="hover"   onclick="upload(this)">相册上传</span>
+            <span data-str="photo"   tapmode="hover" id="fileToUpload"   onclick="upload(this)">相册上传</span>
         </div>
     </div>
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript" src="../../../script/jquery.min.js"></script>
+<script type="text/javascript" src="../../../script/qiniu.min.js"></script>
+<script type="text/javascript" src="../../../script/moxie.min.js"></script>
+<script type="text/javascript" src="../../../script/plupload.dev.js"></script>
 <script type="text/javascript">
     apiready = function(){
 	    fnInit();
@@ -106,7 +110,7 @@
                 if (ret) {
                     if (ret.data) {
                         $api.attr($api.dom('img'),'src', ret.data);
-                        alert('tx2页面：'+ret.data)
+                        console.log('tx2页面：'+ret.data)
                         // api.sendEvent({
                         //     name: 'headUrl',
                         //     extra: {
@@ -123,7 +127,7 @@
     }
     function enter () {
         var url = $api.attr($api.dom('img'),'src');
-        alert(url)
+        pushImg1(url)
         api.sendEvent({
             name: 'changeHead',
             extra: {
@@ -131,6 +135,102 @@
             }
         });
         api.closeWin();
+    }
+    function pushImg1(fileurl) {
+        console.log(fileurl)
+        // var fileurl = '/storage/emulated/0/UZMap/picture/p1357545.jpg'; //文件地址，也可通过文件选择器获得
+        var baseUrl = 'ot0c8ontv.bkt.clouddn.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com
+        var obj = api.require('qiniuUpfile');
+        obj.upfile({
+            file: fileurl,
+            name: 'hello'
+        }, function(ret, err) {
+            console.log('147:::'+JSON.parse(ret))
+            console.log('148:::'+JSON.parse(err))
+            if (ret.status) {
+                if (ret.oper == "complete") {
+                    //上传成功后组装访问路径，或直接访问文档
+                    // $api.text(b, baseUrl + ret.info.key);
+                    console.log(baseUrl + ret.info.key)
+                } else if (ret.oper == "progress") {
+                    //上传过程中获取进度数据
+                    console.log(ret.percent);
+                }
+            } 
+        });
+    }
+    function pushImg() {
+        var uploader = Qiniu.uploader({
+              runtimes: 'html5,flash,html4',      // 上传模式，依次退化
+              browse_button: 'fileToUpload',         // 上传选择的点选按钮，必需
+              // 在初始化时，uptoken，uptoken_url，uptoken_func三个参数中必须有一个被设置
+              // 切如果提供了多个，其优先级为uptoken > uptoken_url > uptoken_func
+              // 其中uptoken是直接提供上传凭证，uptoken_url是提供了获取上传凭证的地址，如果需要定制获取uptoken的过程则可以设置uptoken_func
+              // uptoken : getToken(), // uptoken是上传凭证，由其他程序生成
+              // uptoken_url: 'https://wozai.tonyliangli.cn/api/common/getQiNiuToken',         // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
+              uptoken_func: function(){    // 在需要获取uptoken时，该方法会被调用
+                 // do something
+                    var token;
+                    $.ajax({
+                         "async": false,
+                         "crossDomain": true,
+                         "url": "https://wozai.tonyliangli.cn/api/common/getQiNiuToken",
+                         "method": "POST",
+                         "processData": false,
+                         "contentType": false,
+                         "mimeType": "multipart/form-data",
+                         success: function(data) {
+                            var obj = JSON.parse(data);
+                            token = obj;
+                            console.log('163:::'+JSON.stringify(token))
+                        }
+                    });
+                    return token.data.token
+              },
+              get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
+              unique_names: true,              // 默认false，key为文件名。若开启该选项，JS-SDK会为每个文件自动生成key（文件名）
+              // save_key: true,                  // 默认false。若在服务端生成uptoken的上传策略中指定了sava_key，则开启，SDK在前端将不对key进行任何处理
+              domain: 'http://upload.qiniu.com/',     // bucket域名，下载资源时用到，必需
+              container: 'container',             // 上传区域DOM ID，默认是browser_button的父元素
+              max_file_size: '100mb',             // 最大文件体积限制
+              flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入flash，相对路径
+              max_retries: 0,                     // 上传失败最大重试次数
+              dragdrop: true,                     // 开启可拖曳上传
+              // drop_element: 'container',          // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
+              chunk_size: '4mb',                  // 分块上传时，每块的体积
+              auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
+              init: {
+                  'FilesAdded': function(up, files) {
+                      plupload.each(files, function(file) {
+                      });
+                  },
+                  'BeforeUpload': function(up, file) {
+                    console.log(1)
+                  },
+                  'UploadProgress': function(up, file) {
+                    console.log(2)
+                  },
+                  'FileUploaded': function(up, file, info) {
+                         // var res = JSON.parse(info.response).key;
+                         // var sourceLink = 'ot0c8ontv.bkt.clouddn.com' +"/"+ res; //获取上传成功后的文件的Url
+                         console.log(111)
+                  },
+                  'Error': function(up, err, errTip) {
+                         //上传出错时，处理相关的事情
+                         console.log(4)
+                  },
+                  'UploadComplete': function() {
+                    console.log(5)
+                  },
+                  'Key': function(up, file) {
+                      // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
+                      // 该配置必须要在unique_names: false，save_key: false时才生效
+                      var key = "";
+                      // do something with key here
+                      return key
+                  }
+              }
+          });
     }
 </script>
 </html>
