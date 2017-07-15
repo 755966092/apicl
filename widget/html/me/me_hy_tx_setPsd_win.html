@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+   
+</head>
+<body>
+     <header  class="header">
+        <div class="head">
+            <span class="callback"   tapmode="hover"   onclick="api.closeWin()">返回</span>
+            <span class="winTitle">
+                设置支付密码
+            </span>
+        </div>
+    </header>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        fnInit()
+        requireData();
+    }
+    function requireData() {
+        api.ajax({
+            url: apiSite + '/api/settings/checkPayPassword',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.data.is_set_pay_password) {
+                    // 已设置
+                    $api.text($api.dom('.winTitle'), '重置支付密码');
+                    openPage(ret.data.is_set_pay_password)
+                } else {
+                    // 未设置
+                    openPage(ret.data.is_set_pay_password)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+    function openPage(flag) {
+        var url;
+        if (flag) {
+            // 已设置支付密码
+            url = 'me_hy_tx_resetPsd_frame.html'
+        } else {
+            // 未设置支付密码
+            url = 'me_hy_tx_setPsd_frame.html'
+        }
+        api.openFrame({
+            name: url,
+            url: './'+url,
+            rect: {
+                x: 0,
+                y: headerH,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                money: api.pageParam.money,
+                type: api.pageParam.type,
+                headerH: headerH,
+                flag: flag
+            },
+            bounces: false
+        });
+    }
+        
+</script>
+</html>

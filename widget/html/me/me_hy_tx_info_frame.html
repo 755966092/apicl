@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style type="text/css">
+        .main {
+            margin-top: .36rem;
+        }
+        .name {
+            width: 7.5rem;
+            height: .8rem;
+            background-color: #fff;
+            border-bottom: .01rem solid #ECECEC;
+            font-size: 0;
+            padding: 0 .36rem;
+        }
+        .name .text {
+            font-size: .3rem;
+            line-height: .8rem;
+        }
+        .name input {
+            outline: none;
+            margin-left: .46rem;
+            width: 5rem;
+        }
+        p {
+            font-size: .24rem;
+            color: #999;
+            text-align: center;
+            margin-top: .2rem;
+        }
+        .btn {
+            width: 6.785rem;
+            height: .841rem;
+            border-radius: .06rem;
+            background-color: #1AAD19;
+            border: .01rem solid #189c17;
+            margin: 0 auto;
+            line-height: .841rem;
+            text-align: center;
+            font-size: .34rem;
+            color: #fff;
+            margin-top: .6rem;
+            margin-bottom: .2rem;
+        }
+    </style>
+</head>
+<body>
+      
+   <div class="main">
+        <div class="name">
+            <span class="text">支付宝帐号</span>
+            <input type="text" class="alipay" name="">
+        </div>
+        <div class="name">
+            <span class="text">收款人姓名</span>
+            <input type="text" class="realName" name="">
+        </div>
+        <p>填写收款人姓名可增加提现的可靠性</p>
+        <div class="btn" tapmode="hover" onclick="enter()">确认体现</div>
+        <p>2小时内到帐</p>
+   </div>
+    
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        
+    }
+    function enter() {
+        var alipay = $api.val($api.dom('.alipay'));
+        var realName = $api.val($api.dom('.realName'));
+       api.ajax({
+           url: apiSite + '/api/settings/checkPayPassword',
+           method: 'post',
+           headers: apiHeader,
+           data: {
+                  values: { 
+                      token: $api.getStorage('userToken'),
+                  }
+           }
+       }, function(ret, err) {
+           if(ret) {
+                // alert(JSON.stringify(ret.data.is_set_pay_password))
+                if (ret.data.is_set_pay_password) {
+                    // 有支付密码
+                    api.openFrame({
+                        name: 'me_hy_tx_psd',
+                        url: './me_hy_tx_psd.html',
+                        rect: {
+                            x: 0,
+                            y: 0,
+                            w: 'auto',
+                            h: 'auto'
+                        },
+                        pageParam: {
+                            alipay: alipay,
+                            realName: realName,
+                            money: api.pageParam.money
+                        },
+                        bounces: true
+                    });
+                } else {
+                    // 无支付密码
+                    api.openWin({
+                        name: 'me_hy_tx_setPsd_win',
+                        url: './me_hy_tx_setPsd_win.html'
+                    });
+                }
+           } else {
+               alert(JSON.stringify(err))
+           }
+       })
+       
+    }
+</script>
+</html> 

@@ -6,9 +6,6 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-        body,html {
-            background-color: #EDECF3;
-        }
         .contentText {
             background-color: #fff;
             font-size: .3rem;
@@ -349,7 +346,7 @@
             </li>
         </ul>        
     </div>
-    <div class="btn" tapmode="hover" onclick="addSupply()">发布</div>
+    <div class="btn" tapmode="hover" onclick="selImg()">发布</div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -521,9 +518,42 @@
             }
         });
     }
+     function selImg() {
+        var imgArr = [];
+        var baseUrl = 'ot0c8ontv.bkt.clouddn.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com
+        var obj = api.require('qiniuUpfile');
+        for (var i = 0; i < $api.domAll('.imgpage').length; i++) {
+            var fileurl = $api.attr($api.domAll('.imgpage')[i], 'data-url')
+            if (fileurl[0] != 'h' && fileurl[1] != 't') {
+                obj.upfile({
+                    file: fileurl,
+                }, function(ret, err) {
+                    if (ret.status) {
+                        if (ret.oper == "complete") {
+                            //上传成功后组装访问路径，或直接访问文档
+                            imgArr.push('http://'+baseUrl +'/'+ ret.info.key);
+                            duibi($api.domAll('.imgpage').length,imgArr)
+                        } else if (ret.oper == "progress") {
+                            //上传过程中获取进度数据
+                            // console.log(ret.percent);
+                        }
+                    }
+                });
+            } else {
+                imgArr.push(fileurl)
+                duibi($api.domAll('.imgpage').length,imgArr)
+            }
+        };
+    }
+    function duibi(a,b) {
+        if (a == b.length) {
+            addSupply(b)
+            console.log(b)
+        } 
+    }
 
     // 添加供应
-    function addSupply() {
+    function addSupply(imgUrlArr) {
         // 获取页面内容
         var token = $api.getStorage('userToken'),            //string  用户Token
             title = $api.val($api.byId('title')),           //string  标题
@@ -532,7 +562,7 @@
             // unit = _dataSource.indexOf($api.text($api.byId('unit')))+1,            //string  单位
             form = $api.text($api.byId('form')) == '线上' ? 1 : 2,            //int 形式（1-线上，2-线下）
             description = $api.val($api.byId('description'));        //string  详细内容
-            // image_json = [],          //string  图片（格式：["abc.jpg","ddd.jpg"]）
+            image_json = imgUrlArr,          //string  图片（格式：["abc.jpg","ddd.jpg"]）
             company_id = 1;      // 我公司卖ID（类型为2-我我公司卖卖时必传）
             end_date = $api.text($api.byId('endTime'));
             alert('标题 : '+ title +'---截至时间ID : '+end_date+'---分类ID : '+category_id+'---价格 : '+reward+'----形式'+form+'---内容: '+description +"---省份"+ province + "---地区" +city+ "---地址" +address+ "---纬度" +latitude+'---纬度: '+longitude)
@@ -562,7 +592,7 @@
                     reward: reward,
                     form: form,
                     description: description,
-                    image_json: [],
+                    image_json: imgUrlArr,
                     end_date:end_date,
                     company_id:1
                 }
@@ -582,7 +612,7 @@
                     reward: reward,
                     form: form,
                     description: description,
-                    image_json: [],
+                    image_json: imgUrlArr,
                     end_date:end_date,
                     company_id:1
                 }

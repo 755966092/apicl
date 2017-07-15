@@ -84,8 +84,11 @@
                     <span class="fr state">已绑定</span>
                 </div>
             </li>
-            <li class="mt30">
-                <div class="text">更改密码</div>
+            <li class="mt30" data-type="paypsd"  onclick="editInfo(this)" tapmode="hover">
+                <div class="text">创建/修改支付密码</div>
+            </li>
+            <li >
+                <div class="text">修改我在密码</div>
             </li>
        </ul>
       
@@ -94,11 +97,20 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
-apiready = function() {
-    fnInit()
+    apiready = function() {
+        fnInit()
 
-};
-
+    };
+    function editInfo(ele) {
+        var type = $api.attr(ele, 'data-type');
+        if (type === 'paypsd') {
+            api.openWin({
+                name: 'me_hy_tx_setPsd_win',
+                url: './me_hy_tx_setPsd_win.html',
+                
+            });
+        }
+    }
 
 </script>
 

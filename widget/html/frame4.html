@@ -337,8 +337,13 @@
                     // 设置本地缓存
                     $api.setStorage('userName', userName); 
                     $api.setStorage('userSex', sex); 
-                    $api.setStorage('currentCompany', currentCompany); 
-                    $api.setStorage('currentPosition', currentPosition);
+                    if (currentCompany != 'null') {
+                        console.log(currentCompany)
+                        $api.setStorage('currentCompany', currentCompany); 
+                    }
+                    if (currentPosition != 'null') {
+                        $api.setStorage('currentPosition', currentPosition);
+                    }
                     
                     // 初始化页面内容   
                     reviseContent(userName, headImg, sex, currentCompany, currentPosition);
@@ -384,7 +389,16 @@
             // 设置用户头像
             $api.attr(head, 'src', headImg);
             // 设置当前状态
-            $api.text(personalInfo, currentCompany+'  '+currentPosition);
+            console.log(currentCompany)
+            if (currentCompany != null && currentPosition == null) {
+                $api.text(personalInfo, currentCompany);
+            } else if (currentPosition != null && currentCompany == null) {
+                $api.text(personalInfo, currentPosition);
+            }else if (currentPosition == null && currentCompany == null) {
+                // $api.text(personalInfo, currentPosition);
+            } else {
+                $api.text(personalInfo, currentCompany+' '+currentPosition);
+            }
             // 设置用户性别
             if (sex == 1 ) {
                 $api.attr(sexImg, 'src', '../image/icon_my/icon_my01.png');

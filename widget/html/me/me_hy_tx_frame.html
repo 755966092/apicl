@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style type="text/css">
+        .main {
+            margin-top: .2rem;
+        }
+        .listContent {
+            padding-left: .36rem;
+            background-color: #fff;
+            box-sizing: border-box;
+        }
+        .title {
+            font-size: .28rem;
+            font-weight: 700;
+            padding-right: .36rem;
+            padding-top: .28rem;
+        }
+        .inputDiv flex-def {
+            border-bottom: .01rem solid #ECECEC;
+            box-sizing: border-box;
+        }
+
+        .surplusMoney {
+            color: #999;
+            font-size: .24rem;
+        }
+        .all {
+            color: #576B9E;
+            font-size: .24rem;
+        }
+        .surplus {
+            font-size: 0;
+            padding: 0 .36rem;
+            height: 1.04rem;
+            line-height: 1.04rem;
+            background-color: #fff;
+
+        }
+        .jl_left {
+            box-sizing: border-box;
+            line-height: 1.04rem;
+            font-size: .54rem;
+            margin-right: .2rem;
+        }
+        input {
+            line-height: 1.04rem;
+            font-size: .9rem;
+            outline: none;
+            width: 6rem;
+        }
+        .direction {
+            font-size: 0;
+            background-color: #fff;
+            margin-top: .2rem;
+        }
+        .direction .title {
+            padding: 0 .36rem;
+            padding-top: .28rem;
+        }
+        .directionIcon {
+            width: 7.5rem;
+            height: 1.05rem;
+            background: #fff url(../../image/icon_member/icon_zfb.png)no-repeat;
+            -webkit-background-size: .58rem .58rem;
+            background-size: .58rem .58rem;
+            background-position: .36rem center;
+            padding-left: .36rem;
+            box-sizing: border-box;
+            border-bottom: .01rem solid #ECECEC;
+        }
+        .directionIcon .wrap {
+            height: 1.05rem;
+            line-height: 1.05rem;
+            padding-left: 1rem;
+            font-size: .3rem;
+            padding-right: .36rem;
+        }
+      /*  .direction .directionIcon:last-child {
+            border-bottom: .01rem solid #ECECEC;
+             background: #fff url(../../image/icon_member/icon_wx.png)no-repeat;
+            -webkit-background-size: .58rem .58rem;
+            background-size: .58rem .58rem;
+            background-position: .36rem center;
+        }
+        .direction .directionIcon:last-child .wrap{
+            border-bottom: 0;
+        }*/
+       /* .selIcon {
+            display: inline-block;
+            height: 1.05rem;
+            width: .33rem;
+            background: url(../../image/icon_member/icon_cz01.png)no-repeat;
+            float: right;
+            -webkit-background-size: .33rem .33rem;
+            background-size: .33rem .33rem;
+            background-position: center center;
+        }*/
+       /* .sel {
+            background: url(../../image/icon_member/icon_cz02.png)no-repeat;
+            float: right;
+            -webkit-background-size: .33rem .33rem;
+            background-size: .33rem .33rem;
+            background-position: center center;
+        }*/
+        .btn {
+            width: 6.785rem;
+            height: .841rem;
+            border-radius: .06rem;
+            background-color: #1AAD19;
+            border: .01rem solid #189c17;
+            margin: 0 auto;
+            line-height: .841rem;
+            text-align: center;
+            font-size: .34rem;
+            color: #fff;
+            margin-top: 3rem;
+            margin-bottom: .2rem;
+        }
+        .time {
+            text-align: center;
+            font-size: .24rem;
+            color: #999;
+            margin-top: .2rem;
+        }
+    </style>
+</head>
+<body>
+      
+    <div class="main"> 
+        <div class="listContent">
+            <p class="title">提现金额</p>
+            <div class="inputDiv flex-def ">
+                <span class="jl_left">￥</span>  
+                <input  type="number flex-item"  placeholder="提现金额">
+            </div>
+        </div>
+
+        <div class="surplus">  
+            <span class="surplusMoney">帐户余额 <span>￥</span><span class="money">--</span>,</span>
+            <span class="all"   tapmode="hover"   onclick="allGet()">全部提现</span>
+            <span class="surplusMoney fr">手续费¥<span class="poundage">1.00</span></span>
+        </div>
+        <div class="direction">
+            <p class="title">提取至</p>
+            <div class="directionIcon" tapmode="hover" data-type="alipay" onclick="selType(this)">
+                <div class="wrap">
+                    支付宝
+                    <!-- <span class="selIcon sel"></span> -->
+                </div>
+            </div>
+            <!-- <div class="directionIcon" tapmode="hover" data-type="wxpay" onclick="selType(this)">
+                <div class="wrap">
+                    微信
+                    <span class="selIcon"></span>
+                </div>
+            </div> -->
+        </div>
+        <div class="btn" tapmode="hover" onclick="enter()">
+            确认提现
+        </div>
+        <p class="time">2小时内到账</p>
+    </div>
+    
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        requireData();
+    };
+    // 全部提现，把余额全部写进输入框
+   function allGet() {
+       var money = $api.text($api.dom('.money'));
+       $api.val($api.dom('input'), money);
+       // 情况input的placeholder属性
+       // $api.attr($api.dom('input'), 'placeholder', '');
+   }
+   function enter () {
+        // 获取用户输入的金额
+        var val = $api.val($api.dom('input'));
+        api.openFrame({
+            name: 'txEnter',
+            url: './me_hy_txEnter.html',
+            pageParam: {
+                money: val
+            }
+        });
+   }
+   function requireData() {
+       api.ajax({
+           url: apiSite + '/api/finance_center/withdrawIndex',
+           method: 'post',
+           headers: apiHeader,
+           data: {
+                  values: { 
+                      token: $api.getStorage('userToken'),
+                  }
+           }
+       }, function(ret, err) {
+           if(ret) {
+               console.log(JSON.stringify(ret));
+               // 设置余额
+               $api.text($api.dom('.money'), ret.data.balance);
+
+           } else {
+               alert(JSON.stringify(err))
+           }
+       })
+   }
+   // 选择提现类型
+   function selType(ele) {
+       var type = $api.attr(ele, 'data-type');
+       $api.removeCls($api.dom('.sel'), 'sel');
+       $api.addCls($api.dom(ele, '.selIcon'), 'sel');
+   }
+   // 按钮
+   function enter() {
+       var money = $api.val($api.dom('input'));
+       var type = $api.attr($api.dom('.sel'), 'data-type');
+       api.openWin({
+           name: 'me_hy_tx_info_win',
+           url: './me_hy_tx_info_win.html',
+           pageParam: {
+               money: money,
+               type: type
+           }
+       });
+   }
+</script>
+</html>

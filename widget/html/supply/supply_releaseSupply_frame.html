@@ -6,9 +6,7 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-        body,html {
-            background-color: #EDECF3;
-        }
+        
         .contentText {
             background-color: #fff;
             font-size: .3rem;
@@ -370,7 +368,7 @@
             </li>
         </ul>        
     </div>
-    <div class="btn" tapmode="hover" onclick="selImg()">发布</div>
+    <div class="btn" tapmode="hover" onclick="addSupply()">发布</div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -387,6 +385,7 @@
                     img: [],
                     video: []
                   },
+                  imgArr=[],
                   categoryArr = ['全部','教育','摄影','摄影','医疗'];
     apiready = function(){
         
@@ -502,7 +501,12 @@
                         $api.remove($api.domAll('.imgpage')[i]);
                     }
                 }
-                base64Data = base64Data.img.filter(function(item, index) {
+                base64Data.img = base64Data.img.filter(function(item, index) {
+                    if (index != ret.value.imgId-1) {
+                        return item
+                    }
+                })
+                imgArr = imgArr.filter(function (item, index) {
                     if (index != ret.value.imgId-1) {
                         return item
                     }
@@ -528,6 +532,23 @@
             if (ret) {
                 base64Data.img.push(ret.data);
                 getData(base64Data);
+                var baseUrl = 'ot0c8ontv.bkt.clouddn.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com
+                var obj = api.require('qiniuUpfile');
+                obj.upfile({
+                    file: ret.data,
+                }, function(retUpfile, err) {
+                    if (retUpfile.status) {
+                        if (retUpfile.oper == "complete") {
+                            //上传成功后组装访问路径，或直接访问文档
+                            imgArr.push('http://'+baseUrl +'/'+ retUpfile.info.key);
+                            console.log(imgArr)
+                            duibi($api.domAll('.imgpage').length,imgArr)
+                        } else if (retUpfile.oper == "progress") {
+                            //上传过程中获取进度数据
+                            // console.log(retUpfile.percent);
+                        }
+                    }
+                });
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -546,6 +567,9 @@
                 n: n+1
             }
         });
+    }
+    function pushImg(fileurl) {
+        
     }
     function selImg() {
         console.log('selimg')
@@ -575,17 +599,20 @@
             }
         };
     }
+    var releaseFlag = 0;
     function duibi(a,b) {
         if (a == b.length) {
-            addSupply(b)
-            console.log(b)
+            // addSupply(b)
+            // console.log(b)
+            releaseFlag = 1;
         } 
     }
     // 添加供应
-    function addSupply(imgUrlArr) {
+    function addSupply() {
         console.log('addsupply')
         // 获取页面内容
-        var token = $api.getStorage('userToken'),            //string  用户Token
+        if (releaseFlag) {
+            var token = $api.getStorage('userToken'),            //string  用户Token
             title = $api.val($api.byId('title')),           //string  标题
             sub_type = $api.text($api.byId('sub_type')) == '自产自销' ? 1 : 2,            //int 类别ID（1-自产自销，2-代理）
             category_id = 1,         //int 分类ID
@@ -593,7 +620,7 @@
             unit = _dataSource.indexOf($api.text($api.byId('unit')))+1,            //string  单位
             form = $api.text($api.byId('form')) == '线上' ? 1 : 2,            //int 形式（1-线上，2-线下）
             description = $api.val($api.byId('description'));        //string  详细内容
-            image_json = imgUrlArr,          //string  图片（格式：["abc.jpg","ddd.jpg"]）
+            image_json = imgArr,          //string  图片（格式：["abc.jpg","ddd.jpg"]）
             company_id = 1;      // 公司ID（类型为2-我公司卖时必传）
             // alert('标题 : '+ title +'---类别ID : '+sub_type+'---分类ID : '+category_id+'---价格 : '+price+'----形式'+form+'---内容: '+description +"---省份"+ province + "---地区" +city+ "---地址" +address+ "---纬度" +latitude+'---纬度: '+longitude)
             var category = $api.text($api.byId('category_id'));
@@ -649,45 +676,47 @@
                     company_id:1
                 }
             }
-                api.ajax({
-                    url: apiSite + url,
-                    method: 'post',
-                    headers: apiHeader,
-                    data: {
-                       values: obj
-                    }
-                }, function(ret, err) {
-                    alert(JSON.stringify(ret))
-                    if(ret) {
-                        if (ret.code == 200) {
-                            console.log(JSON.stringify(ret))
-                            if (api.pageParam.supply_id) {
-                                // 编辑应用返回我发布的页面
-                                api.sendEvent({
-                                    name: 'editSupplyAfter',
-                                     extra: {
-                                            flag: api.pageParam.flag,
-                                            compaby_name: api.pageParam.compaby_name,
-                                            supply_id: api.pageParam.supply_id
-                                    }
-                                });
-                                api.closeWin();
-                            } else {
-                                // 发布新供应返回供应列表
-                                api.sendEvent({
-                                    name: 'editSupplyAfter'
-                                });
-                                api.closeWin();
-                            }
+            api.ajax({
+                url: apiSite + url,
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                   values: obj
+                }
+            }, function(ret, err) {
+                alert(JSON.stringify(ret))
+                if(ret) {
+                    if (ret.code == 200) {
+                        console.log(JSON.stringify(ret))
+                        if (api.pageParam.supply_id) {
+                            // 编辑应用返回我发布的页面
+                            api.sendEvent({
+                                name: 'editSupplyAfter',
+                                 extra: {
+                                        flag: api.pageParam.flag,
+                                        compaby_name: api.pageParam.compaby_name,
+                                        supply_id: api.pageParam.supply_id
+                                }
+                            });
+                            api.closeWin();
                         } else {
-                            alert(ret.msg)
+                            // 发布新供应返回供应列表
+                            api.sendEvent({
+                                name: 'editSupplyAfter'
+                            });
+                            api.closeWin();
                         }
-                        
                     } else {
-                        alert(JSON.stringify(err.msg))
+                        alert(ret.msg)
                     }
-                })
-            
+                    
+                } else {
+                    alert(JSON.stringify(err.msg))
+                }
+            })
+        } else {
+            addSupply();
+        }   
     }
 
 
@@ -985,11 +1014,13 @@
     }
     // 根据经纬度获取地址
     function getCoords(lon,lat) {
-        console.log(getCoords)
+        console.log('getCoords')
         bMap.getNameFromCoords({
             lon: lon,
             lat: lat
         }, function(ret, err) {
+            console.log(JSON.stringify(ret))
+            console.log(JSON.stringify(err))
             if (ret.status) {
                 province = ret.city;
                 city = ret.district;

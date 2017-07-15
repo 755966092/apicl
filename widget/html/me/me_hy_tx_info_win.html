@@ -8,7 +8,7 @@
    
 </head>
 <body>
-    <header  class="header">
+     <header  class="header">
         <div class="head">
             <span class="callback"   tapmode="hover"   onclick="api.closeWin()">返回</span>
             <span class="winTitle">
@@ -16,6 +16,8 @@
             </span>
         </div>
     </header>
+   
+    
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -23,18 +25,22 @@
     apiready = function(){
         fnInit();
         api.openFrame({
-            name: 'me_hy_txInfo',
-            url: './me_hy_tx_frame.html',
+            name: 'me_hy_tx_info_frame',
+            url: './me_hy_tx_info_frame.html',
             rect: {
                 x: 0,
                 y: headerH,
                 w: 'auto',
                 h: 'auto'
             },
+            pageParam: {
+                money: api.pageParam.money,
+               	type: api.pageParam.type,
+                headerH: api.pageParam.headerH
+            },
             bounces: false
         });
-    };
-   
- 
+    }
+        
 </script>
 </html>
