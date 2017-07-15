@@ -414,7 +414,16 @@
     apiready = function(){
         moduleInit();
         requireData();
-        requireDetailData();
+        // requireDetailData();
+        api.addEventListener({
+            name: 'editUserInfo'
+        }, function(ret, err) {
+            if (ret) {
+                requireData();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     };
     // 获取会员信息
     function requireData() {
