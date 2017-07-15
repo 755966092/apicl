@@ -166,8 +166,6 @@
         } else {
             url = '/api/user_center/addWork'
         }
-        // 监听返回数据
-        monitor();
         // 获取数据
         getCityList();
         
@@ -200,39 +198,7 @@
             }
         });
     }
-    // 监听
-    function monitor() {
-        // 监听返回数据
-        // api.addEventListener({
-        //     name: 'selectEdu'
-        // }, function(ret, err) {
-        //     if (ret) {
-        //         $api.text($api.byId('selectEdu'), ret.value.selDate);
-        //     } else {
-        //         alert(JSON.stringify(err.msg));
-        //     }
-        // });
-        // 监听返回时间数据1
-        api.addEventListener({
-            name: 'selectTime_1'
-        }, function(ret, err) {
-            if (ret) {
-                $api.text($api.byId('time_1'), ret.value.selDate);
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
-        api.addEventListener({
-            name: 'selectTime_2'
-        }, function(ret, err) {
-            if (ret) {
-
-                $api.text($api.byId('time_2'), ret.value.selDate);
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
-    }
+   
     // 提交数据
     function addStudy() {
         // 获取数据
@@ -272,7 +238,6 @@
     }
     // 删除数据
     function delStudy () {
-        alert('删除')
         api.ajax({
             url: apiSite + '/api/user_center/deleteWork',
             method: 'post',
@@ -338,9 +303,6 @@
                     // 年不小于当前年份 (ret.year > dateYear)
                     // 年等于今年 月份小于当前月份 if ((ret.year == dateYear) && (ret.month > dateMonth))
                     // 年月等于 日小于当前日期 if (((ret.year == dateYear) && (ret.month == dateMonth)) && ret.day > dateDay)
-                    if ((ret.year > dateYear) || ((ret.year == dateYear) && (ret.month > dateMonth)) || (((ret.year == dateYear) && (ret.month == dateMonth)) && ret.day > dateDay)) {
-                        api.toast({
-                            msg: '请选择早于当前的时间'
                     // 年月等于 日小于当前日期 if (((ret.year == dateYear) && (ret.month == dateMonth)) && ret.day > dateDay)
                     if ((ret.year > dateYear) || ((ret.year == dateYear) && (ret.month > dateMonth)) || (((ret.year == dateYear) && (ret.month == dateMonth)) && ret.day > dateDay)) {
                         api.toast({

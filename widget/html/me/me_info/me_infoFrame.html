@@ -436,8 +436,10 @@
         api.addEventListener({
             name: eve
         }, function(ret, err) {
+
             var val = ret.value.selDate;
             if (ret) {
+
                 if (eve == 'changeHead') {
                     // 处理用户头像
                     $api.attr(ele, 'src', val);
@@ -517,9 +519,7 @@
             // 生日
             birthday = $api.getStorage('userInfo').info.birthday;
             reviseContent(userName,zName, headImg, sex, hometown, birthday);
-            if ($api.getStorage('userInfo') != requireData()) {
-                requireData();
-            }
+            requireData();
         } else {
             console.log('网络')
             // 无缓存
@@ -539,29 +539,29 @@
                 }
             }, function(ret, err) {
                 if (ret) {
-                    $api.setStorage('userInfo', ret.data);
-                    userName = ret.data.info.nickname,
-                    zName = ret.data.info.real_name,
-                    headImg = ret.data.info.head_img_url,
-                    sex = ret.data.info.sex,
-                    // 家乡
-                    hometown = ret.data.info.hometown, 
-                    // 生日
-                    birthday = ret.data.info.birthday;
-                    // 设置本地缓存
-                    $api.setStorage('real_name', zName); 
-                    $api.setStorage('hometown', hometown); 
-                    $api.setStorage('birthday', birthday);
-                    // 图片缓存
-                    api.imageCache({
-                        url: headImg
-                    }, function(ret, err) {
-                        if(ret.status) {
-                            $api.setStorage('imgCache', ret.url);
-                        }
-                    });
-                    reviseContent(userName,zName, headImg, sex, hometown, birthday);
-                    return ret.data;
+                        console.log('请求数据')
+                        $api.setStorage('userInfo', ret.data);
+                        userName = ret.data.info.nickname,
+                        zName = ret.data.info.real_name,
+                        headImg = ret.data.info.head_img_url,
+                        sex = ret.data.info.sex,
+                        // 家乡
+                        hometown = ret.data.info.hometown, 
+                        // 生日
+                        birthday = ret.data.info.birthday;
+                        // 设置本地缓存
+                        $api.setStorage('real_name', zName); 
+                        $api.setStorage('hometown', hometown); 
+                        $api.setStorage('birthday', birthday);
+                        // 图片缓存
+                        api.imageCache({
+                            url: headImg
+                        }, function(ret, err) {
+                            if(ret.status) {
+                                $api.setStorage('imgCache', ret.url);
+                            }
+                        });
+                        reviseContent(userName,zName, headImg, sex, hometown, birthday);
                 } else {
                     alert(JSON.stringify(err.msg));
                 }

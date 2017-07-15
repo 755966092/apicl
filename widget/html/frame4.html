@@ -293,18 +293,7 @@
                 if (userCenterData) {
                     // 缓存
                     reviseContent(userCenterData.info.nickname, $api.getStorage('imgCache'), userCenterData.info.sex, userCenterData.info.current_company, userCenterData.info.current_position);
-                    var workData = requireData();
-                    if (userCenterData != workData) {
-                        // console.log(JSON.stringify(workData))
-                        userName = workData.info.nickname,
-                        headImg =  $api.getStorage('imgCache'),
-                        sex = workData.info.sex,
-                        // 当前公司
-                        currentCompany = workData.info.current_company, 
-                        // 当前职位
-                        currentPosition = workData.info.current_position;
-                        reviseContent(workData.info.nickname, $api.getStorage('imgCache'), workData.info.sex, workData.info.current_company, workData.info.current_position);
-                    }
+                    requireData();
                 } else {
                     // 无缓冲
                     requireData();
@@ -324,41 +313,41 @@
                 }
             }, function(ret, err) {
                 if (ret) {
-                    console.log(JSON.stringify(ret))
-                    $api.setStorage('UserCenter', ret.data);
-                    userName = ret.data.info.nickname,
-                    headImg = ret.data.info.head_img_url,
-                    sex = ret.data.info.sex,
-                    // sex = (ret.data.info.sex === 1)?'男':'女',
-                    // 当前公司
-                    currentCompany = ret.data.info.current_company, 
-                    // 当前职位
-                    currentPosition = ret.data.info.current_position;
-                    // 设置本地缓存
-                    $api.setStorage('userName', userName); 
-                    $api.setStorage('userSex', sex); 
-                    if (currentCompany != 'null') {
-                        console.log(currentCompany)
-                        $api.setStorage('currentCompany', currentCompany); 
-                    }
-                    if (currentPosition != 'null') {
-                        $api.setStorage('currentPosition', currentPosition);
-                    }
-                    
-                    // 初始化页面内容   
-                    reviseContent(userName, headImg, sex, currentCompany, currentPosition);
-                    // 图片缓存
-                    api.imageCache({
-                        url: headImg,
-                        policy: 'cache_else_network'
-                    }, function(ret, err) {
-                        if (ret) {
-                            $api.setStorage('imgCache', ret.url); 
-                        } else {
-                            alert(JSON.stringify(err.msg));
+                    if ( $api.getStorage('UserCenter') != ret.data) {
+                        $api.setStorage('UserCenter', ret.data);
+                        userName = ret.data.info.nickname,
+                        headImg = ret.data.info.head_img_url,
+                        sex = ret.data.info.sex,
+                        // sex = (ret.data.info.sex === 1)?'男':'女',
+                        // 当前公司
+                        currentCompany = ret.data.info.current_company, 
+                        // 当前职位
+                        currentPosition = ret.data.info.current_position;
+                        // 设置本地缓存
+                        $api.setStorage('userName', userName); 
+                        $api.setStorage('userSex', sex); 
+                        if (currentCompany != 'null') {
+                            console.log(currentCompany)
+                            $api.setStorage('currentCompany', currentCompany); 
                         }
-                    });
-                    return ret.data
+                        if (currentPosition != 'null') {
+                            $api.setStorage('currentPosition', currentPosition);
+                        }
+                        
+                        // 初始化页面内容   
+                        reviseContent(userName, headImg, sex, currentCompany, currentPosition);
+                        // 图片缓存
+                        api.imageCache({
+                            url: headImg,
+                            policy: 'cache_else_network'
+                        }, function(ret, err) {
+                            if (ret) {
+                                $api.setStorage('imgCache', ret.url); 
+                            } else {
+                                alert(JSON.stringify(err.msg));
+                            }
+                        });
+                    }
                 } else {
                     alert(JSON.stringify(err.msg));
                 }
