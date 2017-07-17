@@ -173,8 +173,8 @@
     <div class="main">
         <div class="flex-def flex-cCenter flex-zCenter flex-zTopBottom">
             <div class="img">
-                <img id="image_url" class="circleHead" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1496926338823&di=28180f83aec11ebc9bdc69c88f59201b&imgtype=0&src=http%3A%2F%2Fwww.ld12.com%2Fupimg358%2Fallimg%2Fc140921%2F14112C1C3IP-4R5S.jpg">
-                <span></span>
+                <img id="image_url" class="circleHead" src="../../image/icon_defaultHead.png">
+                <span tapmode="hover" onclick="openCamera()"></span>
             </div>
             <input id="title" class="circleName" type="text" placeholder="圈子名称">
             <p class="warning">选择所属类型（必选）</p>
@@ -286,6 +286,52 @@
             }
         })
         console.log(JSON.stringify(obj))
+    }
+
+    function openCamera() {
+         var val = $api.attr(str, 'data-str')
+        // if (val === 'camear') {
+        //      api.getPicture({
+        //             sourceType: 'camera',
+        //             mediaValue: 'pic',
+        //             encodingType: 'jpg',
+        //             destinationType: 'url',
+        //             quality: 80,
+        //             targetWidth: 750,
+        //             targetHeight: 750,
+        //             saveToPhotoAlbum: true // 拍照后是否保存照片到相册
+        //         }, function(ret, err) {
+        //             if (ret.data) {
+        //                 $api.attr($api.dom('img'),'src', ret.data);
+        //             } 
+        //         });
+        // } else {
+            api.getPicture({
+                sourceType: 'library',
+                mediaValue: 'pic',
+                encodingType: 'jpg',
+                destinationType: 'url',
+                quality: 80,
+                targetWidth: 750,
+                targetHeight: 750
+            }, function(ret, err) {
+                if (ret) {
+                    if (ret.data) {
+                        $api.attr($api.dom('img'),'src', ret.data);
+                        console.log('tx2页面：'+ret.data)
+                        // api.sendEvent({
+                        //     name: 'headUrl',
+                        //     extra: {
+                        //         headUrl: ret.data, 
+                        //     }
+                        // });
+                    } 
+                    
+                } else {
+                    alert(JSON.stringify(err.msg));
+                }
+            });
+        }
     }
     
 </script>

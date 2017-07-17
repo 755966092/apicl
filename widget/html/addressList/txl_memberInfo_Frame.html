@@ -489,8 +489,10 @@
             case 4: $api.text(relationship_level, '初识好友，点击查看您与他的交集');break;
             case 5: $api.text(relationship_level, '二度人脉，点击查看您与他的交集');break;
             case 6: $api.text(relationship_level, '三度人脉，点击查看您与他的交集');break;
-            case 7: $api.text(relationship_level, '无任何关系, 是平台用户');break;
-            case 8: $api.text(relationship_level, '无任何关系, 不是平台用户');break;
+            case 7: $api.text(relationship_level, '四度人脉，点击查看您与他的交集');break;
+            case 8: $api.text(relationship_level, '五度人脉，点击查看您与他的交集');break;
+            case 9: $api.text(relationship_level, '六度人脉，点击查看您与他的交集');break;
+            case 10: $api.text(relationship_level, '无任何关系');break;
         }
         /**
          * 优先本地数据库数据
@@ -612,21 +614,27 @@
                             // 会员原始信息
                             $api.text(nickname, data.info.nickname);
                         }
-
+                        console.log('性别1:::::'+JSON.stringify(retSelSql.data))
+                        console.log('性别2:::::'+JSON.stringify(retAjax.data))
+                        console.log('性别3:::::'+JSON.stringify(data.data))
                         // 性别
                         if (retSelSql.data.length!= 0 && retSelSql.data[0].sex) {
                             // b本地数据库内容
-                            if (retSelSql.data[0].sex === 2 ) {
+                            if (retSelSql.data[0].sex == 2 ) {
+                                console.log('性别b本地数据库内容')
                                 $api.addCls(sex, 'sexIcon2');
                             }
                         } else if (retAjax.data.info.sex) {
+                            console.log('628:::::'+retAjax.data.info.sex)
                             // 线上备注内容
-                            if (retAjax.data.info.sex === 2 ) {
+                            if (retAjax.data.info.sex == 2 ) {
+                                console.log('线上本地数据库内容')
                                 $api.addCls(sex, 'sexIcon2');
                             }
                         } else {
                             // 会员原始信息
-                            if (data.info.sex === 2 ) {
+                            if (data.info.sex == 2 ) {
+                                console.log('原始信息本地数据库内容')
                                 $api.addCls(sex, 'sexIcon2');
                             }
                         } 
@@ -652,7 +660,10 @@
         api.openWin({
             name: 'txl_addFriendsInfo',
             url: './txl_addFriendsInfo.html',
-            bounces: false
+            bounces: false,
+            pageParam: {
+               userId: api.pageParam.userId
+            }
         });
     }
     function openInfo(ele) {

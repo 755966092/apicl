@@ -27,7 +27,7 @@
             display: inline-block;
             width: .26rem;
             height: .5rem;
-            background: url(../../image/icon_search.png)no-repeat;
+            background: url(../../image/icon_supply/icon_search.png)no-repeat;
             -webkit-background-size: .25rem .26rem;
             background-size: .25rem .26rem;
             background-position: 0 center;
@@ -246,20 +246,20 @@
                         {{?}}
                         <div class="stateTime" onclick="event.stopPropagation();">
                             <span class="timeInfo">{{=it[i].create_time}}</span>
-                            <span class="discussIcon" ontouchstart='commentBtn(this)' data-id='{{=it[i].topic_id}}'></span>
+                            <span class="discussIcon" tapmode="hover" onclick='commentBtn(this)' data-id='{{=it[i].topic_id}}'></span>
                         </div>
                         {{?it[i].comment_list.length!=0}}
                         <div class="discussInfo claerfix" onclick="event.stopPropagation();">
                                 {{ for (var j = 0; j < it[i].comment_list.length; j++) { }} 
                                     {{?it[i].comment_list[j].root==2}}
-                                        <div data-usrId='{{=it[i].comment_list[j].comment_id}}' data-id='{{=it[i].topic_id}}' ontouchstart='addComment(this);event.stopPropagation();'>
+                                        <div data-usrId='{{=it[i].comment_list[j].comment_id}}' data-id='{{=it[i].topic_id}}' tapmode="hover" onclick='addComment(this);event.stopPropagation();'>
                                             <span class="discussName">{{=it[i].comment_list[j].nickname}}</span>
-                                            <span class="text1">回{{=it[i].comment_list.length}}复</span>
+                                            <span class="text1">回复{{=it[i].comment_list.length}}</span>
                                             <span class="discussName">{{=it[i].comment_list[j].comment_nickname}}：</span>
                                             <span class="discussContent">{{=it[i].comment_list[j].content}}</span>
                                         </div>
                                     {{??}}
-                                        <div data-usrId='{{=it[i].comment_list[j].comment_id}}' data-id='{{=it[i].topic_id}}' ontouchstart='addComment(this);event.stopPropagation();'>
+                                        <div data-usrId='{{=it[i].comment_list[j].comment_id}}' data-id='{{=it[i].topic_id}}' tapmode="hover" onclick='addComment(this);event.stopPropagation();'>
                                             <span class="discussName">{{=it[i].comment_list[j].nickname}}：</span>
                                             <span class="discussContent">{{=it[i].comment_list[j].content}}</span>
                                         </div>

@@ -11,7 +11,7 @@
         .main textarea {
             font-size: .34rem;
             color: #333;
-            
+            outline: none;
             box-sizing: border-box;
             width: 100%;
             height: 2.84rem;
@@ -20,7 +20,7 @@
             margin-top: .2rem;
             resize: none;
         }
-        .a:not
+        /*.a:not*/
         .warn, .warn1 {
             text-align: center;
             font-size: 0;
@@ -94,7 +94,7 @@
         <p class="textContent">您可以自定义编辑好友请求内容，加深好友对自</p>
         <p class="textContent">己的初印象，提高好友通过率哦！</p>
     </div>
-    <div class="btn">发送</div>
+    <div class="btn" taomodu="hover" onclick="addFriend()">发送</div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -102,8 +102,34 @@
     apiready = function(){
         moduleInit();
         fnInit();
-       
     };
+    function addFriend() {
+        api.ajax({
+            url:  apiSite + '/api/friend/applyFriend',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       user_id: api.pageParam.userId
+                   }
+            }
+        },function(ret,err){
+            if (ret) {
+                // TODO
+                if (ret.code == 200) {
+                    // 添加成功
+                    api.closeWin();
+                }  else {
+                    alert(JSON.stringify(ret.msg))
+                }
+            } else {
+                api.alert({
+                    msg:('错误码：'+err.code+'；错误信息：'+err.msg+'网络状态码：'+err.statusCode)
+                });
+            };
+        });
+    }
   
 </script>
 </html>

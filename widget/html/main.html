@@ -316,7 +316,30 @@ apiready = function() {
             console.log('318::key: "value", '+JSON.stringify(ret))
         }
     })
-    
+    // 获得极光推送
+    ajpush.getRegistrationId(function(ret) {
+        var registrationId = ret.id;
+        var appVersion = api.appVersion;
+        $api.setStorage('registration_id', registrationId);
+        $api.setStorage('appVersion', appVersion);
+        api.ajax({
+            url: apiSite + '/api/settings/registerDevice',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       registration_id: registrationId,
+                       version: appVersion
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    });
 }
 
 // 通讯录添加好友

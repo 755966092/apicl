@@ -92,7 +92,7 @@
     <ul class="resultList"></ul>
     <script type="text/x-dot-template" id="listT">
         {{ for (var i = 0; i < it.length; i++) { }} 
-           <li   tapmode="hover"   onclick="openChat(this)" data-nickname = '{{=it[i].nickname}}' data-rongId='{{=it[i].rongcloud_user_id}}'>
+           <li   tapmode="hover"   onclick="addFriends(this)" data-userId="{{=it[i].user_id}}" data-nickname = '{{=it[i].nickname}}' data-rongId='{{=it[i].rongcloud_user_id}}'>
                 <img src="{{=it[i].head_img_url}}">
                 <div>
                     <h3>{{=it[i].nickname}}</h3>
@@ -108,6 +108,7 @@
 
 <script type="text/javascript">
     apiready = function(){
+        console.log(JSON.stringify(api.pageParam.val))
         if (api.pageParam.val=='') {
             $api.css($api.dom('.noContent'), 'display:block');
         } else {
@@ -126,12 +127,16 @@
         
     };
    
-    function addFriends() {
+    function addFriends(ele) {
+        var targetRongId = $api.attr(ele, 'data-rongId'),userId = $api.attr(ele, 'data-userId'),nickname = $api.attr(ele, 'data-nickname');  
+
         api.openWin({
             name: 'txl_memberInfo_Win',
             url: './txl_memberInfo_Win.html',
             pageParam: {
-                name: 'value'
+                targetRongId: targetRongId,
+                nickname: nickname,
+                userId: userId,
             }
         });
     }
@@ -147,15 +152,5 @@
             }
         });
    }
-    // // doT模版获取数据
-    // function getData(data) {
-    //     var listTText = $api.byId('listT').text;
-    //     var fnListT = doT.template(listTText);
-    //     var html = fnListT(data);
-    //     var list = $api.dom('.resultList');
-    //     // 替换resultList所有内容
-    //     $api.html(list, html);
-    //     // alert('getData:' + JSON.stringify(data))
-    // }
 </script>
 </html>
