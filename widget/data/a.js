@@ -1,23 +1,30 @@
-性别2::::: {
-	"info": {
-		"user_id": 296,
-		"nickname": "qwertyrttt",
-		"real_name": "",
-		"sex": 1,
+通讯录数据库::::: {
+	"data": [{
+		"user_id": "18617",
+		"nickname": "北京-石晓晓",
 		"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-		"hometown": null,
-		"birthday": null,
-		"current_company": null,
-		"current_position": null,
-		"current_degree": null
-	},
-	"extra": null,
-	"status": [],
-	"contact_list": [],
-	"other_contact_list": [],
-	"address_list": [],
-	"work_list": [],
-	"education_list": [],
-	"projectList": []
+		"current_position": "",
+		"current_company": "",
+		"current_degree": "null",
+		"current_contact": "",
+		"titleSize": "15",
+		"title": "北京-石晓晓",
+		"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+		"flag": "B",
+		"litter": "BJ-SXX",
+		"type": "3",
+		"sex": "null",
+		"remark_nickname": "北京-石晓晓",
+		"remark_real_name": "备注",
+		"remark_head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+		"remark_sex": "2",
+		"remark_birthday": "null",
+		"remark_hometown": "null",
+		"remark_current_company": "null",
+		"remark_current_position": "null",
+		"remark_current_degree": "null",
+		"remark_current_contact": "null"
+	}],
+	"status": true
 }
-at txl_memberInfo_Frame.html: 618
+at txl_addFellow_details_frame.html: 121
