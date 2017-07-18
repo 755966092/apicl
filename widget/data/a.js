@@ -1,86 +1,16 @@
-未处理的数据222: [{
-	"user_id": "18670",
-	"nickname": "177777",
-	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"current_position": "",
-	"current_company": "",
-	"current_degree": "",
-	"current_contact": "",
-	"titleSize": "15",
-	"title": "177777",
-	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"flag": "1",
-	"litter": "177777",
-	"type": "1",
-	"sex": "1",
-	"remark_nickname": "",
-	"remark_real_name": "",
-	"remark_head_img_url": "",
-	"remark_sex": "",
-	"remark_birthday": "",
-	"remark_hometown": "",
-	"remark_current_company": "",
-	"remark_current_position": "",
-	"remark_current_degree": "",
-	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "#"
-}, {
-	"user_id": "18610",
-	"nickname": "网签中心",
-	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"current_position": "",
-	"current_company": "",
-	"current_degree": "",
-	"current_contact": "",
-	"titleSize": "15",
-	"title": "网签中心",
-	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"flag": "W",
-	"litter": "WQZX",
-	"type": "3",
-	"sex": "1",
-	"remark_nickname": "",
-	"remark_real_name": "",
-	"remark_head_img_url": "",
-	"remark_sex": "",
-	"remark_birthday": "",
-	"remark_hometown": "",
-	"remark_current_company": "",
-	"remark_current_position": "",
-	"remark_current_degree": "",
-	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "W"
-}, {
-	"user_id": "18608",
-	"nickname": "网签张亚茹",
-	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"current_position": "",
-	"current_company": "",
-	"current_degree": "",
-	"current_contact": "",
-	"titleSize": "15",
-	"title": "网签张亚茹",
-	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"flag": "W",
-	"litter": "WQZYR",
-	"type": "3",
-	"sex": "1",
-	"remark_nickname": "",
-	"remark_real_name": "",
-	"remark_head_img_url": "",
-	"remark_sex": "",
-	"remark_birthday": "",
-	"remark_hometown": "",
-	"remark_current_company": "",
-	"remark_current_position": "",
-	"remark_current_degree": "",
-	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png"
-}]
-demo6.html: 145 Uncaught TypeError: Cannot read property 'initial'
-of undefined
-at paixv(demo6.html: 145)
-at demo6.html: 156
-paixv @ demo6.html: 145(anonymous) @ demo6.html: 156
+07 - 18 18: 14: 13.986 I / app3c(2): {
+	"code": 200,
+	"data": {
+		"info": {
+			"phone": "13260227523",
+			"sub_type": 1,
+			"is_default": 1,
+			"remark_user_id": 18670,
+			"user_id": 18665,
+			"type": 1,
+			"contact_id": 53
+		}
+	},
+	"msg": "",
+	"time": 1500372855
+}

@@ -108,7 +108,7 @@
             <div>添加电话好号码</div>
             
        </div>
-                            <span class="clearIcon" tapmode="hover" onclick="clearItem(this)"></span>
+                            <span class="clearIcon" tapmode="hover" onclick="clearItem(this);event.stopPropagation()"></span>
     </div> -->
     <div class="main resultList"></div>
     <script type="text/x-dot-template" id="listT">
@@ -117,11 +117,11 @@
                     <p class="type moveTitle">移动</p>
                 {{?}}
                 {{?it[i].type == 1}}
-                    <div class="move moveFlag">
+                    <div class="move moveFlag" data-contactId="{{=it[i].contact_id}}"  tapmode="hover" onclick="openEditPage(this)">
                         <div class="item">
                             <span class="label">{{=it[i].sub_type}}：</span>
                             <input type="text" value="{{=it[i].phone}}" disabled="true">
-                            <span class="clearIcon" tapmode="hover" onclick="clearItem(this)"></span>
+                            <span class="clearIcon" tapmode="hover" data-contactId="{{=it[i].contact_id}}" onclick="clearItem(this);event.stopPropagation()"></span>
                         </div>
                     </div>
                 {{?}}
@@ -131,11 +131,11 @@
                     <p class="type fixedTitle">固定</p>
                 {{?}}
                 {{?it[i].type == 2}}
-                    <div class="move fixedFlag">
+                    <div class="move fixedFlag" data-contactId="{{=it[i].contact_id}}" tapmode="hover" onclick="openEditPage(this)">
                         <div class="item" >
                             <span class="label">{{=it[i].sub_type}}：</span>
                             <input type="text" value="{{=it[i].phone}}" disabled="true">
-                            <span class="clearIcon" tapmode="hover" onclick="clearItem(this)"></span>
+                            <span class="clearIcon" tapmode="hover" data-contactId="{{=it[i].contact_id}}" onclick="clearItem(this);event.stopPropagation()"></span>
                         </div>
                     </div>
                 {{?}}
@@ -151,13 +151,29 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 
 <script type="text/javascript">
-   
+   var flag = 0; // 如果flag是0, 说明联系方式是用户本来的
     apiready = function(){
         moduleInit();
         monitorEvent();
         requireData();
 
     };
+    // 编辑联系方式
+    function openEditPage(ele) {
+        if (!flag) {
+            alert('不能编辑用户原始信息!')
+        } else {
+            var contactId = $api.attr(ele, 'data-contactId');
+            api.openWin({
+                name: 'txl_addFellow_addPhone_win',
+                url: './txl_addFellow_addPhone_win.html',
+                pageParam: {
+                    contactId: contactId,
+                    userId: api.pageParam.userId
+                }
+            });
+        }
+    }
     // 监听点击保存和编辑按钮
     function monitorEvent () {
         var clearIcon,ipt;
@@ -168,9 +184,9 @@
                 for (var i = 0; i < clearIcon.length; i++) {
                    $api.css(clearIcon[i], 'display:none');
                 }
-                for (var i = 0; i < ipt.length; i++) {
-                    $api.attr(ipt[i], 'disabled', 'true');
-                }
+                // for (var i = 0; i < ipt.length; i++) {
+                //     // $api.attr(ipt[i], 'disabled', 'true');
+                // }
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -237,14 +253,48 @@
    
 
     function clearItem(ele) {
-        var father = $api.closest(ele, '.move');
-        $api.remove(father);
-        if ($api.domAll('.moveFlag').length == 0) {
-            $api.remove($api.dom('.moveTitle'));
-        } 
-        if ($api.domAll('.fixedFlag').length == 0) {
-             $api.remove($api.dom('.fixedTitle'));
+        if (!flag) {
+            alert('不能删除用户默认联系方式!')
+        } else {
+            var contact_id = $api.attr(ele, 'data-contactId');
+            var father = $api.closest(ele, '.move');
+            $api.remove(father);
+            if ($api.domAll('.moveFlag').length == 0) {
+                $api.remove($api.dom('.moveTitle'));
+            } 
+            if ($api.domAll('.fixedFlag').length == 0) {
+                 $api.remove($api.dom('.fixedTitle'));
+            }
+            api.ajax({
+                url: apiSite + '/remark_user/deleteContact',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                       values: { 
+                           token: $api.getStorage('userToken'),
+                           remark_user_id: api.pageParam.userId,
+                           contact_id: contact_id
+                       }
+                }
+            }, function(ret, err) {
+                if(ret) {
+                    // 从本地数据库删除
+                    db.executeSql({
+                        name: 'db_'+$api.getStorage('userToken'),
+                        sql: ' DELETE FROM tb_remarks_contact WHERE contact_id = ' + contact_id  
+                    }, function(ret, err){        
+                        if( ret.status ){
+                            requireData();
+                        }else{
+                            alert( JSON.stringify( err ) );
+                        }
+                    });
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
         }
+        
     }
     function addPhone() {
         api.openWin({
@@ -265,6 +315,7 @@
             if( ret.status ){
                 console.log('506::'+ JSON.stringify( ret ) );
                 if (ret.data.length != 0) {
+                    flag = 1;
                     handleData(litterSort(ret.data))
                     console.log('本地数据库')
                 } else {
@@ -282,6 +333,7 @@
                         if(ret) {
                             if (ret.data.list.length != 0) {
                                 console.log('线上备注')
+                                flag = 1;
                                 handleData(litterSort(ret.data.list))
                             } else {
                                 api.ajax({
@@ -296,7 +348,8 @@
                                     }
                                 }, function(ret, err) {
                                     if(ret) {
-                                        console.log('用户自己的')
+                                        console.log('用户自己的');
+                                        flag = 0
                                         handleData(litterSort(ret.data.list))
                                     } else {
                                         alert(JSON.stringify(err))
@@ -315,46 +368,7 @@
         
        
     }
-    /*
-    
-    api.ajax({
-        url: apiSite + '/remark_user/contactList',
-        method: 'post',
-        headers: apiHeader,
-        data: {
-               values: { 
-                   token: $api.getStorage('userToken'),
-                   remark_user_id: api.pageParam.userId
-               }
-        }
-    }, function(ret, err) {
-        if(ret) {
-            allArr = allArr.concat(ret.data.list)
-            handleData(litterSort(allArr))
-        } else {
-            alert(JSON.stringify(err))
-        }
-    });
-    
-    api.ajax({
-        url: apiSite + '/user/contactList',
-        method: 'post',
-        headers: apiHeader,
-        data: {
-               values: { 
-                   token: $api.getStorage('userToken'),
-                   user_id: api.pageParam.userId
-               }
-        }
-    }, function(ret, err) {
-        if(ret) {
-            allArr = ret.data.list;
-            
-        } else {
-            alert(JSON.stringify(err))
-        }
-    });
-     */
+  
 </script>
 </html>
 

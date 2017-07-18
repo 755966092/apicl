@@ -91,20 +91,20 @@
            <div class="wrap">
                <p   tapmode="hover"   onclick="selectClass(this)"  data-val="1">
                     移动电话
-                    <span class="selClass select"></span>
+                    <span class="selClass selClass1 select"></span>
                </p>
            </div>
            <p   tapmode="hover"   onclick="selectClass(this)"  data-val="2">
                 固定电话
-                <span class="selClass"></span>
+                <span class="selClass selClass2"></span>
            </p>
        </div>
        <div class="main_no2">
            <p class="telClass"   tapmode="hover"   onclick="selTel()">类别
-                <span class="fr telClass_1">工作</span>
+                <span class="fr telClass_1" id="sub_type">工作</span>
            </p>
            <p>电话号码
-                <input type="text" name="" placeholder="输入手机号" class="fr">
+                <input type="text" id="phone" placeholder="输入手机号" class="fr">
            </p>
        </div>
        <div class="main_no3 ">
@@ -115,11 +115,51 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
-    var type = 1, sub_type = 1;
+    var type = 1, sub_type = 1, url;
     apiready = function(){
         moduleInit();
         modilyType();
+        
+        if (api.pageParam.contactId) {
+            remarkEditContactIndex();
+            url = '/remark_user/editContact'
+        } else {
+            url = '/remark_user/addContact'
+        }
     };
+    // 请求编辑电话信息;
+    function remarkEditContactIndex() {
+        api.ajax({
+            url: apiSite + '/remark_user/editContactIndex',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                   token: $api.getStorage('userToken'),
+                   remark_user_id: api.pageParam.userId,
+                   contact_id: api.pageParam.contactId
+                }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                console.log(JSON.stringify(ret))
+                $api.val($api.byId('phone'), ret.data.info.phone);
+                $api.text($api.byId('sub_type'), ret.data.info.sub_type == 1 ? '工作' : '生活');
+                if (ret.data.info.type == 1) {
+                    // 移动
+                    
+                } else {
+                    // 固定
+                    $api.removeCls($api.dom('.selClass1'), 'select');
+                    $api.addCls($api.dom('.selClass2'), 'select');
+                }
+                sub_type = ret.data.info.sub_type;
+                type = ret.data.info.type;
+            } else {
+                console.log(JSON.stringify(err))
+            }
+        })
+    }
     // 电话类型回调
     function modilyType(){
         api.addEventListener({
@@ -169,25 +209,38 @@
     // // 添加电话完成
     function addTel() {
         var tel = $api.val($api.dom('input'));
+        var obj = {};
+        if (api.pageParam.contactId) {
+            obj = {
+                token: $api.getStorage('userToken'),
+                remark_user_id: api.pageParam.userId, 
+                contact_id: api.pageParam.contactId, 
+                phone: tel,
+                type: type,
+                sub_type: sub_type
+            }
+        } else {
+            obj = {
+                token: $api.getStorage('userToken'),
+                remark_user_id: api.pageParam.userId, 
+                phone: tel,
+                type: type,
+                sub_type: sub_type
+            }
+        }
         if (checkPhone(tel)) {
             api.ajax({
-                url: apiSite + '/remark_user/addContact',
+                url: apiSite + url,
                 method: 'post',
                 headers: apiHeader,
                 data: {
-                    values: { 
-                        token: $api.getStorage('userToken'),
-                        remark_user_id: api.pageParam.userId, 
-                        phone: tel,
-                        type: type,
-                        sub_type: sub_type
-                    }
+                    values: obj
                 }
             }, function(ret, err) {
                 if (ret) {
                     if (ret.code == 200) {
                         insertData();
-                        api.closeWin();
+                        
                     } else {
                         alert(ret.msg)
                     }
@@ -222,6 +275,7 @@
             }
         }, function(ret, err) {
             if(ret) {
+                console.log('278::::'+JSON.stringify(ret))
                 var sql = 'INSERT OR REPLACE INTO tb_remarks_contact(list_id,user_id,contact_id,phone,type,sub_type, is_default) VALUES'
                 for (var i = 0; i < ret.data.list.length; i++) {
                     sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].contact_id  +'",'+api.pageParam.userId+','+ret.data.list[i].contact_id+',"'+ret.data.list[i].phone+'",'+ret.data.list[i].type+','+ret.data.list[i].sub_type+','+ret.data.list[i].is_default+'),'
@@ -235,6 +289,7 @@
                         api.sendEvent({
                             name: 'addRemarkContact'
                         });
+                        api.closeWin();
                     }else{
                         alert(JSON.stringify( err ) );
                     }
