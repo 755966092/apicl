@@ -403,13 +403,10 @@
         var SQLName = 'db_'+$api.getStorage('userToken');
         var SQL = 'INSERT OR REPLACE INTO addressList(user_id,nickname,head_img_url,current_company,current_position,current_degree, titleSize,title,img,flag,litter,type, sex, remark_nickname, remark_real_name, remark_head_img_url, remark_sex, remark_birthday, remark_hometown, remark_current_company, remark_current_position, remark_current_degree, remark_current_contact) VALUES '
         for (var i = 0; i < data1.length; i++) {
-SQL += '('+data1[i].user_id+',"'+ data1[i].nickname +'","'+ data1[i].head_img_url +'","'+ data1[i].current_company +'","'+ data1[i].current_position+'","'+data1[i].current_degree+'","'+ data1[i].titleSize +'","'+ data1[i].title +'","'+ data1[i].img+'","'+ data1[i].flag +'","'+ data1[i].litter +'","'+ type +'","'+ data1[i].sex +'","'+ data1[i].remark_nickname+'","'+ data1[i].remark_real_name+'","'+ data1[i].remark_head_img_url+'","'+ data1[i].remark_sex+'","'+ data1[i].remark_birthday+'","'+ data1[i].remark_hometown+'","'+ data1[i].remark_current_company+'","'+ data1[i].remark_current_position+'","'+ data1[i].remark_current_degree+'","'+ data1[i].remark_current_contact +'"),';
-if (data1[i].user_id == 18986) {
-    console.log(JSON.stringify(data1[i]))
-}
+            SQL += '('+data1[i].user_id+',"'+ data1[i].nickname +'","'+ data1[i].head_img_url +'","'+ (data1[i].current_company || "") +'","'+ (data1[i].current_position || "") +'","'+ (data1[i].current_degree || "") +'","'+ data1[i].titleSize +'","'+ data1[i].title +'","'+ data1[i].img+'","'+ data1[i].flag +'","'+ data1[i].litter +'","'+ type +'","'+ (data1[i].sex || 1) +'","'+ (data1[i].remark_nickname || "") +'","'+ (data1[i].remark_real_name || "") +'","'+ (data1[i].remark_head_img_url || "") +'","'+ (data1[i].remark_sex || "") +'","'+ (data1[i].remark_birthday || "") +'","'+ (data1[i].remark_hometown || "") +'","'+ (data1[i].remark_current_company || "") +'","'+ (data1[i].remark_current_position || "") +'","'+ (data1[i].remark_current_degree || "") +'","'+ (data1[i].remark_current_contact || "") +'"),';
         }
         console.log(SQL)
-         db.executeSql({
+        db.executeSql({
              name: SQLName,
              sql: 'DROP TABLE addressList'    
          }, function(ret, err){        

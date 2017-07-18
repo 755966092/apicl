@@ -1,30 +1,30 @@
-通讯录数据库::::: {
+663::::::::::: {
 	"data": [{
-		"user_id": "18617",
-		"nickname": "北京-石晓晓",
+		"user_id": "18986",
+		"nickname": "爸爸",
 		"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
 		"current_position": "",
 		"current_company": "",
-		"current_degree": "null",
+		"current_degree": "",
 		"current_contact": "",
 		"titleSize": "15",
-		"title": "北京-石晓晓",
+		"title": "爸爸",
 		"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
 		"flag": "B",
-		"litter": "BJ-SXX",
+		"litter": "BB",
 		"type": "3",
-		"sex": "null",
-		"remark_nickname": "北京-石晓晓",
-		"remark_real_name": "备注",
-		"remark_head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-		"remark_sex": "2",
-		"remark_birthday": "null",
-		"remark_hometown": "null",
-		"remark_current_company": "null",
-		"remark_current_position": "null",
-		"remark_current_degree": "null",
-		"remark_current_contact": "null"
+		"sex": "1",
+		"remark_nickname": "",
+		"remark_real_name": "",
+		"remark_head_img_url": "",
+		"remark_sex": "",
+		"remark_birthday": "",
+		"remark_hometown": "",
+		"remark_current_company": "",
+		"remark_current_position": "",
+		"remark_current_degree": "",
+		"remark_current_contact": ""
 	}],
 	"status": true
 }
-at txl_addFellow_details_frame.html: 121
+at txl_memberInfo_Frame.html: 519

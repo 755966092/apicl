@@ -82,7 +82,7 @@
        <div class="headImg flex-def flex-cCenter flex-zBetween" ontouchstart="openHeadPage()">
            <span class="text">头像</span>
            <div class="flex-def flex-cCenter">
-               <img src="../../image/tx_1.jpg">
+               <img id="headImg" src="../../image/tx_1.jpg">
                 <span class="icon"></span>
            </div>
        </div>
@@ -109,7 +109,16 @@
     apiready = function(){
         moduleInit();
         initPage();
-        requireData();
+        api.addEventListener({
+                    name: 'changeHead'
+                }, function(ret, err) {
+                    if (ret) {
+                        console.log('监听到事件:::'+JSON.stringify(ret))
+                        $api.attr($api.byId('headImg'), 'src', ret.value.selDate);
+                    } else {
+                        alert(JSON.stringify(err));
+                    }
+                });        
     };
     // 初始化页面
     function initPage() {
@@ -143,11 +152,12 @@
     }
     // 打开选择头像页面
     function openHeadPage() {
+        var imgUrl = $api.attr($api.byId('headImg'), 'src');
         api.openWin({
             name: 'txl_addFellow_detailsHead_win',
             url: './txl_addFellow_detailsHead_win.html',
             pageParam: {
-                name: api.pageParam.paramHeadImg
+                name: imgUrl
             }
         });
     }
@@ -207,7 +217,7 @@
                                     var letter =  PinyinHelper.getShortPinyin(retWeb.data.info.nickname).toUpperCase();
                                     db.executeSql({
                                         name: 'db_'+$api.getStorage('userToken'),
-                                        sql: 'UPDATE addressList SET nickname = "'+ retWeb.data.info.nickname +'",head_img_url = "'+ retWeb.data.info.head_img_url +'", title = "'+ retWeb.data.info.nickname +'", sex = "'+ retWeb.data.info.sex  +'" WHERE user_id = ' + api.pageParam.userId
+                                        sql: 'UPDATE addressList SET remark_nickname = "'+ retWeb.data.info.nickname +'",remark_head_img_url = "'+ retWeb.data.info.head_img_url +'", title = "'+ retWeb.data.info.nickname +'", remark_sex = "'+ retWeb.data.info.sex  +'" WHERE user_id = ' + api.pageParam.userId
                                     }, function(ret, err){        
                                         if( ret.status ){
                                             console.log('688:' + JSON.stringify( ret ) );
