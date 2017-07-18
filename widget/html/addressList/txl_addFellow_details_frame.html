@@ -110,15 +110,15 @@
         moduleInit();
         initPage();
         api.addEventListener({
-                    name: 'changeHead'
-                }, function(ret, err) {
-                    if (ret) {
-                        console.log('监听到事件:::'+JSON.stringify(ret))
-                        $api.attr($api.byId('headImg'), 'src', ret.value.selDate);
-                    } else {
-                        alert(JSON.stringify(err));
-                    }
-                });        
+            name: 'changeHead'
+        }, function(ret, err) {
+            if (ret) {
+                console.log('监听到事件:::'+JSON.stringify(ret))
+                $api.attr($api.byId('headImg'), 'src', ret.value.selDate);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });        
     };
     // 初始化页面
     function initPage() {
@@ -176,7 +176,7 @@
         } else {
             console.log(head_img_url+'--'+real_name+'--'+nickname)
             api.ajax({
-                url: apiSite + '/api/remark_user/editBasicInfo',
+                url: apiSite + '/remark_user/editBasicInfo',
                 method: 'post',
                 headers: apiHeader,
                 data: {
@@ -195,7 +195,7 @@
                     
                     alert(JSON.stringify(ret));
                     api.ajax({
-                        url: apiSite + '/api/remark_user/fullInfo',
+                        url: apiSite + '/remark_user/fullInfo',
                         method: 'post',
                         headers: apiHeader,
                         data: {
@@ -214,10 +214,12 @@
                                 if( ret.status ){
                                     console.log( '通讯录数据库:::::'+JSON.stringify( ret ) );
                                     // 备注后的昵称姓名, 转换为拼音
-                                    var letter =  PinyinHelper.getShortPinyin(retWeb.data.info.nickname).toUpperCase();
+                                    var litter =  PinyinHelper.getShortPinyin(retWeb.data.info.nickname).toUpperCase();
+                                    console.log('字幕字幕字幕字幕字幕字幕字幕:::::::'+litter)
+                                    console.log('字幕字幕字幕字幕字幕字幕字幕:::::::'+litter[0])
                                     db.executeSql({
                                         name: 'db_'+$api.getStorage('userToken'),
-                                        sql: 'UPDATE addressList SET remark_nickname = "'+ retWeb.data.info.nickname +'",remark_head_img_url = "'+ retWeb.data.info.head_img_url +'", title = "'+ retWeb.data.info.nickname +'", remark_sex = "'+ retWeb.data.info.sex  +'" WHERE user_id = ' + api.pageParam.userId
+                                        sql: 'UPDATE addressList SET remark_nickname = "'+ retWeb.data.info.nickname +'",remark_head_img_url = "'+ retWeb.data.info.head_img_url +'", title = "'+ retWeb.data.info.nickname+'", flag = "'+ litter[0]+'", litter = "'+ litter +'", remark_sex = "'+ retWeb.data.info.sex  +'" WHERE user_id = ' + api.pageParam.userId
                                     }, function(ret, err){        
                                         if( ret.status ){
                                             console.log('688:' + JSON.stringify( ret ) );
@@ -226,59 +228,21 @@
                                                 frameName: 'frame1',
                                                 script: 'query();'
                                             });
-                                            // 缓存生日和家乡
-                                            var sql = 'INSERT OR REPLACE INTO tb_remarks_user_info(remark_user_id, nickname, real_name, sex, head_img_url)  VALUES (' + api.pageParam.userId+',"'+ retWeb.data.info.nickname+'","'+ retWeb.data.info.real_name+'","'+ retWeb.data.info.sex+'","'+ retWeb.data.info.head_img_url + '")'
                                             db.selectSql({
                                                 name: 'db_'+$api.getStorage('userToken'),
-                                                sql: 'SELECT * FROM tb_remarks_user_info where remark_user_id=' + api.pageParam.userId
-                                            }, function(ret1, err1){        
-                                                if( ret1.status ){
-                                                    if (ret1.data.length !== 0) {
-                                                        console.log(JSON.stringify(ret1))
-                                                        console.log('有数据,更新')
-                                                        // 有数据 更新
-                                                        db.executeSql({
-                                                            name: 'db_'+$api.getStorage('userToken'),
-                                                            sql: 'UPDATE tb_remarks_user_info SET nickname = "'+ retWeb.data.info.nickname +'",head_img_url = "'+ retWeb.data.info.head_img_url +'", real_name = "'+ retWeb.data.info.real_name +'", sex = "'+ retWeb.data.info.sex +'" WHERE remark_user_id = ' + api.pageParam.userId
-                                                        }, function(ret, err){        
-                                                            if( ret.status ){
-                                                                console.log('688:' + JSON.stringify( ret ) );
-                                                                api.sendEvent({
-                                                                    name: 'editUserInfo'
-                                                                });
-                                                                api.closeWin();
-                                                            }else{
-                                                                alert('690:' + JSON.stringify( err ) );
-                                                            }
-                                                        });
-                                                    } else {
-                                                        console.log('没有数据,插入')
-                                                        // 没数据 插入新数据
-                                                        db.executeSql({
-                                                            name: 'db_'+$api.getStorage('userToken'),
-                                                            sql: sql  
-                                                        }, function(ret, err){        
-                                                            if( ret.status ){
-                                                               console.log( '684:::'+JSON.stringify( ret ) );
-                                                               db.selectSql({
-                                                                   name: 'db_'+$api.getStorage('userToken'),
-                                                                   sql: 'SELECT * FROM tb_remarks_user_info'
-                                                               }, function(ret, err){        
-                                                                   if( ret.status ){
-                                                                       console.log('209:'+ JSON.stringify( ret ) );
-                                                                   }else{
-                                                                       alert( JSON.stringify( err ) );
-                                                                   }
-                                                               });
-                                                            }else{
-                                                               alert( JSON.stringify( err ) );
-                                                           }
-                                                        });
-                                                    }
+                                                sql: 'SELECT * FROM addressList WHERE user_id = ' + api.pageParam.userId
+                                            }, function(ret, err){        
+                                                if( ret.status ){
+                                                    console.log('236:::::::::'+ JSON.stringify( ret ) );
                                                 }else{
-                                                    alert( JSON.stringify( err1 ) );
+                                                    alert( JSON.stringify( err ) );
                                                 }
                                             });
+                                            api.sendEvent({
+                                                name: 'editUserInfo'
+                                            });
+                                            api.closeWin();
+                                            
                                         }else{
                                             alert('690:' + JSON.stringify( err ) );
                                         }
@@ -306,7 +270,7 @@
     }
     function requireData() {
         api.ajax({
-            url: apiSite + '/api/remark_user/detail',
+            url: apiSite + '/remark_user/detail',
             method: 'post',
             headers: apiHeader,
             data: {

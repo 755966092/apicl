@@ -1,220 +1,4 @@
 未处理的数据222: [{
-	"user_id": "18647",
-	"nickname": "北京—大叔",
-	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"current_position": "",
-	"current_company": "",
-	"current_degree": "",
-	"current_contact": "",
-	"titleSize": "15",
-	"title": "啊",
-	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"flag": "A",
-	"litter": "A",
-	"type": "3",
-	"sex": "1",
-	"remark_nickname": "啊",
-	"remark_real_name": "",
-	"remark_head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"remark_sex": "2",
-	"remark_birthday": "",
-	"remark_hometown": "",
-	"remark_current_company": "",
-	"remark_current_position": "",
-	"remark_current_degree": "",
-	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "A"
-}, {
-	"user_id": "18656",
-	"nickname": "北京—赵振兴",
-	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"current_position": "",
-	"current_company": "",
-	"current_degree": "",
-	"current_contact": "",
-	"titleSize": "15",
-	"title": "A",
-	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"flag": "A",
-	"litter": "A",
-	"type": "3",
-	"sex": "1",
-	"remark_nickname": "A",
-	"remark_real_name": "",
-	"remark_head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"remark_sex": "2",
-	"remark_birthday": "",
-	"remark_hometown": "",
-	"remark_current_company": "",
-	"remark_current_position": "",
-	"remark_current_degree": "",
-	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "A"
-}, {
-	"user_id": "18657",
-	"nickname": "北京—郭志",
-	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"current_position": "",
-	"current_company": "",
-	"current_degree": "",
-	"current_contact": "",
-	"titleSize": "15",
-	"title": "AAA",
-	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"flag": "A",
-	"litter": "AAA",
-	"type": "3",
-	"sex": "1",
-	"remark_nickname": "AAA",
-	"remark_real_name": "",
-	"remark_head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"remark_sex": "2",
-	"remark_birthday": "",
-	"remark_hometown": "",
-	"remark_current_company": "",
-	"remark_current_position": "",
-	"remark_current_degree": "",
-	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "A"
-}, {
-	"user_id": "18644",
-	"nickname": "北京—王慧敏",
-	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"current_position": "",
-	"current_company": "",
-	"current_degree": "",
-	"current_contact": "",
-	"titleSize": "15",
-	"title": "aaaaa",
-	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"flag": "A",
-	"litter": "AAAAA",
-	"type": "3",
-	"sex": "1",
-	"remark_nickname": "aaaaa",
-	"remark_real_name": "",
-	"remark_head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"remark_sex": "2",
-	"remark_birthday": "",
-	"remark_hometown": "",
-	"remark_current_company": "",
-	"remark_current_position": "",
-	"remark_current_degree": "",
-	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "A"
-}, {
-	"user_id": "18651",
-	"nickname": "公司—王晓雪",
-	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"current_position": "",
-	"current_company": "",
-	"current_degree": "",
-	"current_contact": "",
-	"titleSize": "15",
-	"title": "Aaa王晓雪",
-	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"flag": "A",
-	"litter": "AAAWXX",
-	"type": "3",
-	"sex": "1",
-	"remark_nickname": "Aaa王晓雪",
-	"remark_real_name": "",
-	"remark_head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"remark_sex": "2",
-	"remark_birthday": "",
-	"remark_hometown": "",
-	"remark_current_company": "",
-	"remark_current_position": "",
-	"remark_current_degree": "",
-	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "A"
-}, {
-	"user_id": "18940",
-	"nickname": "地铁站公寓",
-	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"current_position": "",
-	"current_company": "",
-	"current_degree": "",
-	"current_contact": "",
-	"titleSize": "15",
-	"title": "AA地铁站公寓",
-	"img": "http://ot0c8ontv.bkt.clouddn.com/Fku1ohQH5cR81GWj9OmJDGqC8mqs",
-	"flag": "A",
-	"litter": "AADTZGY",
-	"type": "3",
-	"sex": "1",
-	"remark_nickname": "AA地铁站公寓",
-	"remark_real_name": "",
-	"remark_head_img_url": "http://ot0c8ontv.bkt.clouddn.com/Fku1ohQH5cR81GWj9OmJDGqC8mqs",
-	"remark_sex": "2",
-	"remark_birthday": "",
-	"remark_hometown": "",
-	"remark_current_company": "",
-	"remark_current_position": "",
-	"remark_current_degree": "",
-	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "A"
-}, {
-	"user_id": "18617",
-	"nickname": "北京-石晓晓",
-	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"current_position": "",
-	"current_company": "",
-	"current_degree": "",
-	"current_contact": "",
-	"titleSize": "15",
-	"title": "A北京-石晓晓",
-	"img": "http://ot0c8ontv.bkt.clouddn.com/FgpZV3Bjkxgfwd6l6JRqv5vJVV-z",
-	"flag": "A",
-	"litter": "ABJ-SXX",
-	"type": "3",
-	"sex": "1",
-	"remark_nickname": "A北京-石晓晓",
-	"remark_real_name": "",
-	"remark_head_img_url": "http://ot0c8ontv.bkt.clouddn.com/FgpZV3Bjkxgfwd6l6JRqv5vJVV-z",
-	"remark_sex": "2",
-	"remark_birthday": "",
-	"remark_hometown": "",
-	"remark_current_company": "",
-	"remark_current_position": "",
-	"remark_current_degree": "",
-	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "A"
-}, {
-	"user_id": "18661",
-	"nickname": "北京—丹姐",
-	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"current_position": "",
-	"current_company": "",
-	"current_degree": "",
-	"current_contact": "",
-	"titleSize": "15",
-	"title": "啊火烧岛吧",
-	"img": "http://ot0c8ontv.bkt.clouddn.com/Fku1ohQH5cR81GWj9OmJDGqC8mqs",
-	"flag": "A",
-	"litter": "AHSDB",
-	"type": "3",
-	"sex": "1",
-	"remark_nickname": "啊火烧岛吧",
-	"remark_real_name": "",
-	"remark_head_img_url": "http://ot0c8ontv.bkt.clouddn.com/Fku1ohQH5cR81GWj9OmJDGqC8mqs",
-	"remark_sex": "2",
-	"remark_birthday": "",
-	"remark_hometown": "",
-	"remark_current_company": "",
-	"remark_current_position": "",
-	"remark_current_degree": "",
-	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "A"
-}, {
 	"user_id": "18659",
 	"nickname": "a杨总",
 	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
@@ -269,6 +53,33 @@
 	"placeholderImg": "widget://image/icon_defaultHead.png",
 	"initial": "B"
 }, {
+	"user_id": "18617",
+	"nickname": "北京-石晓晓",
+	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"current_position": "",
+	"current_company": "",
+	"current_degree": "",
+	"current_contact": "",
+	"titleSize": "15",
+	"title": "A北京-石晓晓",
+	"img": "http://ot0c8ontv.bkt.clouddn.com/FgpZV3Bjkxgfwd6l6JRqv5vJVV-z",
+	"flag": "A",
+	"litter": "ABJ-SXX",
+	"type": "3",
+	"sex": "1",
+	"remark_nickname": "A北京-石晓晓",
+	"remark_real_name": "",
+	"remark_head_img_url": "http://ot0c8ontv.bkt.clouddn.com/FgpZV3Bjkxgfwd6l6JRqv5vJVV-z",
+	"remark_sex": "2",
+	"remark_birthday": "",
+	"remark_hometown": "",
+	"remark_current_company": "",
+	"remark_current_position": "",
+	"remark_current_degree": "",
+	"remark_current_contact": "",
+	"placeholderImg": "widget://image/icon_defaultHead.png",
+	"initial": "A"
+}, {
 	"user_id": "18658",
 	"nickname": "北京—陈佳",
 	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
@@ -295,6 +106,163 @@
 	"remark_current_contact": "",
 	"placeholderImg": "widget://image/icon_defaultHead.png",
 	"initial": "B"
+}, {
+	"user_id": "18661",
+	"nickname": "北京—丹姐",
+	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"current_position": "",
+	"current_company": "",
+	"current_degree": "",
+	"current_contact": "",
+	"titleSize": "15",
+	"title": "啊火烧岛吧",
+	"img": "http://ot0c8ontv.bkt.clouddn.com/Fku1ohQH5cR81GWj9OmJDGqC8mqs",
+	"flag": "A",
+	"litter": "AHSDB",
+	"type": "3",
+	"sex": "1",
+	"remark_nickname": "啊火烧岛吧",
+	"remark_real_name": "",
+	"remark_head_img_url": "http://ot0c8ontv.bkt.clouddn.com/Fku1ohQH5cR81GWj9OmJDGqC8mqs",
+	"remark_sex": "2",
+	"remark_birthday": "",
+	"remark_hometown": "",
+	"remark_current_company": "",
+	"remark_current_position": "",
+	"remark_current_degree": "",
+	"remark_current_contact": "",
+	"placeholderImg": "widget://image/icon_defaultHead.png",
+	"initial": "A"
+}, {
+	"user_id": "18647",
+	"nickname": "北京—大叔",
+	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"current_position": "",
+	"current_company": "",
+	"current_degree": "",
+	"current_contact": "",
+	"titleSize": "15",
+	"title": "啊",
+	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"flag": "A",
+	"litter": "A",
+	"type": "3",
+	"sex": "1",
+	"remark_nickname": "啊",
+	"remark_real_name": "",
+	"remark_head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"remark_sex": "2",
+	"remark_birthday": "",
+	"remark_hometown": "",
+	"remark_current_company": "",
+	"remark_current_position": "",
+	"remark_current_degree": "",
+	"remark_current_contact": "",
+	"placeholderImg": "widget://image/icon_defaultHead.png"
+}, {
+	"user_id": "18657",
+	"nickname": "北京—郭志",
+	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"current_position": "",
+	"current_company": "",
+	"current_degree": "",
+	"current_contact": "",
+	"titleSize": "15",
+	"title": "AAA",
+	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"flag": "A",
+	"litter": "AAA",
+	"type": "3",
+	"sex": "1",
+	"remark_nickname": "AAA",
+	"remark_real_name": "",
+	"remark_head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"remark_sex": "2",
+	"remark_birthday": "",
+	"remark_hometown": "",
+	"remark_current_company": "",
+	"remark_current_position": "",
+	"remark_current_degree": "",
+	"remark_current_contact": "",
+	"placeholderImg": "widget://image/icon_defaultHead.png"
+}, {
+	"user_id": "18644",
+	"nickname": "北京—王慧敏",
+	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"current_position": "",
+	"current_company": "",
+	"current_degree": "",
+	"current_contact": "",
+	"titleSize": "15",
+	"title": "aaaaa",
+	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"flag": "A",
+	"litter": "AAAAA",
+	"type": "3",
+	"sex": "1",
+	"remark_nickname": "aaaaa",
+	"remark_real_name": "",
+	"remark_head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"remark_sex": "2",
+	"remark_birthday": "",
+	"remark_hometown": "",
+	"remark_current_company": "",
+	"remark_current_position": "",
+	"remark_current_degree": "",
+	"remark_current_contact": "",
+	"placeholderImg": "widget://image/icon_defaultHead.png"
+}, {
+	"user_id": "18656",
+	"nickname": "北京—赵振兴",
+	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"current_position": "",
+	"current_company": "",
+	"current_degree": "",
+	"current_contact": "",
+	"titleSize": "15",
+	"title": "A",
+	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"flag": "A",
+	"litter": "A",
+	"type": "3",
+	"sex": "1",
+	"remark_nickname": "A",
+	"remark_real_name": "",
+	"remark_head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"remark_sex": "2",
+	"remark_birthday": "",
+	"remark_hometown": "",
+	"remark_current_company": "",
+	"remark_current_position": "",
+	"remark_current_degree": "",
+	"remark_current_contact": "",
+	"placeholderImg": "widget://image/icon_defaultHead.png"
+}, {
+	"user_id": "18940",
+	"nickname": "地铁站公寓",
+	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"current_position": "",
+	"current_company": "",
+	"current_degree": "",
+	"current_contact": "",
+	"titleSize": "15",
+	"title": "AA地铁站公寓",
+	"img": "http://ot0c8ontv.bkt.clouddn.com/Fku1ohQH5cR81GWj9OmJDGqC8mqs",
+	"flag": "A",
+	"litter": "AADTZGY",
+	"type": "3",
+	"sex": "1",
+	"remark_nickname": "AA地铁站公寓",
+	"remark_real_name": "",
+	"remark_head_img_url": "http://ot0c8ontv.bkt.clouddn.com/Fku1ohQH5cR81GWj9OmJDGqC8mqs",
+	"remark_sex": "2",
+	"remark_birthday": "",
+	"remark_hometown": "",
+	"remark_current_company": "",
+	"remark_current_position": "",
+	"remark_current_degree": "",
+	"remark_current_contact": "",
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18654",
 	"nickname": "房东",
@@ -349,6 +317,33 @@
 	"remark_current_contact": "",
 	"placeholderImg": "widget://image/icon_defaultHead.png",
 	"initial": "G"
+}, {
+	"user_id": "18651",
+	"nickname": "公司—王晓雪",
+	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"current_position": "",
+	"current_company": "",
+	"current_degree": "",
+	"current_contact": "",
+	"titleSize": "15",
+	"title": "Aaa王晓雪",
+	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"flag": "A",
+	"litter": "AAAWXX",
+	"type": "3",
+	"sex": "1",
+	"remark_nickname": "Aaa王晓雪",
+	"remark_real_name": "",
+	"remark_head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"remark_sex": "2",
+	"remark_birthday": "",
+	"remark_hometown": "",
+	"remark_current_company": "",
+	"remark_current_position": "",
+	"remark_current_degree": "",
+	"remark_current_contact": "",
+	"placeholderImg": "widget://image/icon_defaultHead.png",
+	"initial": "A"
 }, {
 	"user_id": "18876",
 	"nickname": "公司—赵总",
@@ -428,35 +423,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "J"
-}, {
-	"user_id": "18602",
-	"nickname": "家人—常唯",
-	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"current_position": "",
-	"current_company": "",
-	"current_degree": "",
-	"current_contact": "",
-	"titleSize": "15",
-	"title": "家人—常唯",
-	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"flag": "J",
-	"litter": "JR—CW",
-	"type": "3",
-	"sex": "1",
-	"remark_nickname": "",
-	"remark_real_name": "",
-	"remark_head_img_url": "",
-	"remark_sex": "",
-	"remark_birthday": "",
-	"remark_hometown": "",
-	"remark_current_company": "",
-	"remark_current_position": "",
-	"remark_current_degree": "",
-	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "J"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18588",
 	"nickname": "家人—常唯",
@@ -482,21 +449,20 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "J"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
-	"user_id": "18593",
-	"nickname": "家人—大姨",
+	"user_id": "18602",
+	"nickname": "家人—常唯",
 	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
 	"current_position": "",
 	"current_company": "",
 	"current_degree": "",
 	"current_contact": "",
 	"titleSize": "15",
-	"title": "家人—大姨",
+	"title": "家人—常唯",
 	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
 	"flag": "J",
-	"litter": "JR—DY",
+	"litter": "JR—CW",
 	"type": "3",
 	"sex": "1",
 	"remark_nickname": "",
@@ -509,8 +475,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "J"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18625",
 	"nickname": "家人—大爷",
@@ -536,8 +501,33 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "J"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
+}, {
+	"user_id": "18593",
+	"nickname": "家人—大姨",
+	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"current_position": "",
+	"current_company": "",
+	"current_degree": "",
+	"current_contact": "",
+	"titleSize": "15",
+	"title": "家人—大姨",
+	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"flag": "J",
+	"litter": "JR—DY",
+	"type": "3",
+	"sex": "1",
+	"remark_nickname": "",
+	"remark_real_name": "",
+	"remark_head_img_url": "",
+	"remark_sex": "",
+	"remark_birthday": "",
+	"remark_hometown": "",
+	"remark_current_company": "",
+	"remark_current_position": "",
+	"remark_current_degree": "",
+	"remark_current_contact": "",
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18555",
 	"nickname": "家人—二舅",
@@ -563,8 +553,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "J"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18541",
 	"nickname": "家人—茹姐",
@@ -590,8 +579,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "J"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18543",
 	"nickname": "家人—叔",
@@ -617,8 +605,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "J"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18544",
 	"nickname": "家人—烁烁",
@@ -644,8 +631,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "J"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18622",
 	"nickname": "家人—杨鹏飞",
@@ -671,8 +657,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "J"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18621",
 	"nickname": "家人—阳阳",
@@ -698,8 +683,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "J"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18584",
 	"nickname": "家人—战哥",
@@ -725,8 +709,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "J"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18614",
 	"nickname": "客户—李先生",
@@ -806,8 +789,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "L"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18646",
 	"nickname": "老六—杨壮",
@@ -833,8 +815,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "L"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18650",
 	"nickname": "老四—小朱",
@@ -860,8 +841,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "L"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18626",
 	"nickname": "老五—小胖",
@@ -887,8 +867,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "L"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18613",
 	"nickname": "刘雪英",
@@ -914,8 +893,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "L"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18627",
 	"nickname": "朋友-秦萍萍",
@@ -968,62 +946,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
-}, {
-	"user_id": "18554",
-	"nickname": "朋友—超超",
-	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"current_position": "",
-	"current_company": "",
-	"current_degree": "",
-	"current_contact": "",
-	"titleSize": "15",
-	"title": "朋友—超超",
-	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"flag": "P",
-	"litter": "PY—CC",
-	"type": "3",
-	"sex": "1",
-	"remark_nickname": "",
-	"remark_real_name": "",
-	"remark_head_img_url": "",
-	"remark_sex": "",
-	"remark_birthday": "",
-	"remark_hometown": "",
-	"remark_current_company": "",
-	"remark_current_position": "",
-	"remark_current_degree": "",
-	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
-}, {
-	"user_id": "18537",
-	"nickname": "朋友—菜菜",
-	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"current_position": "",
-	"current_company": "",
-	"current_degree": "",
-	"current_contact": "",
-	"titleSize": "15",
-	"title": "朋友—菜菜",
-	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"flag": "P",
-	"litter": "PY—CC",
-	"type": "3",
-	"sex": "1",
-	"remark_nickname": "",
-	"remark_real_name": "",
-	"remark_head_img_url": "",
-	"remark_sex": "",
-	"remark_birthday": "",
-	"remark_hometown": "",
-	"remark_current_company": "",
-	"remark_current_position": "",
-	"remark_current_degree": "",
-	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18606",
 	"nickname": "朋友—超超",
@@ -1049,8 +972,59 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
+}, {
+	"user_id": "18554",
+	"nickname": "朋友—超超",
+	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"current_position": "",
+	"current_company": "",
+	"current_degree": "",
+	"current_contact": "",
+	"titleSize": "15",
+	"title": "朋友—超超",
+	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"flag": "P",
+	"litter": "PY—CC",
+	"type": "3",
+	"sex": "1",
+	"remark_nickname": "",
+	"remark_real_name": "",
+	"remark_head_img_url": "",
+	"remark_sex": "",
+	"remark_birthday": "",
+	"remark_hometown": "",
+	"remark_current_company": "",
+	"remark_current_position": "",
+	"remark_current_degree": "",
+	"remark_current_contact": "",
+	"placeholderImg": "widget://image/icon_defaultHead.png"
+}, {
+	"user_id": "18537",
+	"nickname": "朋友—菜菜",
+	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"current_position": "",
+	"current_company": "",
+	"current_degree": "",
+	"current_contact": "",
+	"titleSize": "15",
+	"title": "朋友—菜菜",
+	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"flag": "P",
+	"litter": "PY—CC",
+	"type": "3",
+	"sex": "1",
+	"remark_nickname": "",
+	"remark_real_name": "",
+	"remark_head_img_url": "",
+	"remark_sex": "",
+	"remark_birthday": "",
+	"remark_hometown": "",
+	"remark_current_company": "",
+	"remark_current_position": "",
+	"remark_current_degree": "",
+	"remark_current_contact": "",
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18604",
 	"nickname": "朋友—董永昌",
@@ -1076,8 +1050,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18597",
 	"nickname": "朋友—二哥",
@@ -1103,8 +1076,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18633",
 	"nickname": "朋友—冯海中",
@@ -1130,8 +1102,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18563",
 	"nickname": "朋友—付玉",
@@ -1157,8 +1128,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18655",
 	"nickname": "朋友—高博",
@@ -1184,8 +1154,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18600",
 	"nickname": "朋友—国成",
@@ -1211,8 +1180,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18663",
 	"nickname": "朋友—国强",
@@ -1238,8 +1206,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18639",
 	"nickname": "朋友—国英",
@@ -1265,8 +1232,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18634",
 	"nickname": "朋友—郭泽乾",
@@ -1292,8 +1258,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18578",
 	"nickname": "朋友—郝发强",
@@ -1319,8 +1284,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18616",
 	"nickname": "朋友—华杰",
@@ -1346,8 +1310,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18631",
 	"nickname": "朋友—胡玉鹏",
@@ -1373,8 +1336,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18624",
 	"nickname": "朋友—洁莹",
@@ -1400,8 +1362,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18565",
 	"nickname": "朋友—凯涛",
@@ -1427,8 +1388,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18632",
 	"nickname": "朋友—龙",
@@ -1454,8 +1414,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18556",
 	"nickname": "朋友—李炳芬",
@@ -1481,8 +1440,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18611",
 	"nickname": "朋友—李静茹",
@@ -1508,8 +1466,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18599",
 	"nickname": "朋友—李路",
@@ -1535,8 +1492,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18583",
 	"nickname": "朋友—李鹏",
@@ -1562,8 +1518,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18592",
 	"nickname": "朋友—李倩",
@@ -1589,8 +1544,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18594",
 	"nickname": "朋友—李庆生",
@@ -1616,8 +1570,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18582",
 	"nickname": "朋友—李思锐",
@@ -1643,8 +1596,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18619",
 	"nickname": "朋友—陆文秀",
@@ -1670,8 +1622,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18558",
 	"nickname": "朋友—吕晓彤",
@@ -1697,8 +1648,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18538",
 	"nickname": "朋友—李玉琨",
@@ -1724,8 +1674,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18568",
 	"nickname": "朋友—路占朋",
@@ -1751,8 +1700,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18630",
 	"nickname": "朋友—雷志远",
@@ -1778,8 +1726,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18589",
 	"nickname": "朋友—梦境",
@@ -1805,8 +1752,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18635",
 	"nickname": "朋友—目壮",
@@ -1832,8 +1778,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18598",
 	"nickname": "朋友—牛斌",
@@ -1859,8 +1804,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18664",
 	"nickname": "朋友—牛得波",
@@ -1886,8 +1830,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18539",
 	"nickname": "朋友—乔二哥",
@@ -1913,8 +1856,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18540",
 	"nickname": "朋友—邱天文",
@@ -1940,8 +1882,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18877",
 	"nickname": "朋友—乔小云",
@@ -1967,8 +1908,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18649",
 	"nickname": "朋友—屈志强",
@@ -1994,8 +1934,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18566",
 	"nickname": "朋友—赛杰",
@@ -2021,35 +1960,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
-}, {
-	"user_id": "18590",
-	"nickname": "朋友—少磊",
-	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"current_position": "",
-	"current_company": "",
-	"current_degree": "",
-	"current_contact": "",
-	"titleSize": "15",
-	"title": "朋友—少磊",
-	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"flag": "P",
-	"litter": "PY—SL",
-	"type": "3",
-	"sex": "1",
-	"remark_nickname": "",
-	"remark_real_name": "",
-	"remark_head_img_url": "",
-	"remark_sex": "",
-	"remark_birthday": "",
-	"remark_hometown": "",
-	"remark_current_company": "",
-	"remark_current_position": "",
-	"remark_current_degree": "",
-	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18545",
 	"nickname": "朋友—圣龙",
@@ -2075,8 +1986,33 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
+}, {
+	"user_id": "18590",
+	"nickname": "朋友—少磊",
+	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"current_position": "",
+	"current_company": "",
+	"current_degree": "",
+	"current_contact": "",
+	"titleSize": "15",
+	"title": "朋友—少磊",
+	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"flag": "P",
+	"litter": "PY—SL",
+	"type": "3",
+	"sex": "1",
+	"remark_nickname": "",
+	"remark_real_name": "",
+	"remark_head_img_url": "",
+	"remark_sex": "",
+	"remark_birthday": "",
+	"remark_hometown": "",
+	"remark_current_company": "",
+	"remark_current_position": "",
+	"remark_current_degree": "",
+	"remark_current_contact": "",
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18561",
 	"nickname": "朋友—沈梅月",
@@ -2102,8 +2038,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18585",
 	"nickname": "朋友—孙年鑫",
@@ -2129,8 +2064,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18643",
 	"nickname": "朋友—孙世豪",
@@ -2156,8 +2090,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18591",
 	"nickname": "朋友—森小",
@@ -2183,8 +2116,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18557",
 	"nickname": "朋友—邵月",
@@ -2210,8 +2142,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18607",
 	"nickname": "朋友—婷婷",
@@ -2237,8 +2168,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18636",
 	"nickname": "朋友—谭文丽",
@@ -2264,8 +2194,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18571",
 	"nickname": "朋友—王超",
@@ -2291,8 +2220,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18637",
 	"nickname": "朋友—吴丹",
@@ -2318,35 +2246,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
-}, {
-	"user_id": "18652",
-	"nickname": "朋友—吴东辉",
-	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"current_position": "",
-	"current_company": "",
-	"current_degree": "",
-	"current_contact": "",
-	"titleSize": "15",
-	"title": "朋友—吴东辉",
-	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"flag": "P",
-	"litter": "PY—WDH",
-	"type": "3",
-	"sex": "1",
-	"remark_nickname": "",
-	"remark_real_name": "",
-	"remark_head_img_url": "",
-	"remark_sex": "",
-	"remark_birthday": "",
-	"remark_hometown": "",
-	"remark_current_company": "",
-	"remark_current_position": "",
-	"remark_current_degree": "",
-	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18580",
 	"nickname": "朋友—吴东辉",
@@ -2372,8 +2272,33 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
+}, {
+	"user_id": "18652",
+	"nickname": "朋友—吴东辉",
+	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"current_position": "",
+	"current_company": "",
+	"current_degree": "",
+	"current_contact": "",
+	"titleSize": "15",
+	"title": "朋友—吴东辉",
+	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"flag": "P",
+	"litter": "PY—WDH",
+	"type": "3",
+	"sex": "1",
+	"remark_nickname": "",
+	"remark_real_name": "",
+	"remark_head_img_url": "",
+	"remark_sex": "",
+	"remark_birthday": "",
+	"remark_hometown": "",
+	"remark_current_company": "",
+	"remark_current_position": "",
+	"remark_current_degree": "",
+	"remark_current_contact": "",
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18562",
 	"nickname": "朋友—王飞",
@@ -2399,35 +2324,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
-}, {
-	"user_id": "18560",
-	"nickname": "朋友—王杰",
-	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"current_position": "",
-	"current_company": "",
-	"current_degree": "",
-	"current_contact": "",
-	"titleSize": "15",
-	"title": "朋友—王杰",
-	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
-	"flag": "P",
-	"litter": "PY—WJ",
-	"type": "3",
-	"sex": "1",
-	"remark_nickname": "",
-	"remark_real_name": "",
-	"remark_head_img_url": "",
-	"remark_sex": "",
-	"remark_birthday": "",
-	"remark_hometown": "",
-	"remark_current_company": "",
-	"remark_current_position": "",
-	"remark_current_degree": "",
-	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18574",
 	"nickname": "朋友—王静",
@@ -2453,8 +2350,33 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
+}, {
+	"user_id": "18560",
+	"nickname": "朋友—王杰",
+	"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"current_position": "",
+	"current_company": "",
+	"current_degree": "",
+	"current_contact": "",
+	"titleSize": "15",
+	"title": "朋友—王杰",
+	"img": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+	"flag": "P",
+	"litter": "PY—WJ",
+	"type": "3",
+	"sex": "1",
+	"remark_nickname": "",
+	"remark_real_name": "",
+	"remark_head_img_url": "",
+	"remark_sex": "",
+	"remark_birthday": "",
+	"remark_hometown": "",
+	"remark_current_company": "",
+	"remark_current_position": "",
+	"remark_current_degree": "",
+	"remark_current_contact": "",
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18570",
 	"nickname": "朋友—王美晓",
@@ -2480,8 +2402,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18579",
 	"nickname": "朋友—王秋苏",
@@ -2507,8 +2428,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18567",
 	"nickname": "朋友—王少凤",
@@ -2534,8 +2454,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18629",
 	"nickname": "朋友—王婷婷",
@@ -2561,8 +2480,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18549",
 	"nickname": "朋友—王新杰",
@@ -2588,8 +2506,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18620",
 	"nickname": "朋友—王洋",
@@ -2615,8 +2532,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18550",
 	"nickname": "朋友—徐长虹",
@@ -2642,8 +2558,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18559",
 	"nickname": "朋友—兴飞",
@@ -2669,8 +2584,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18569",
 	"nickname": "朋友—兴飞，家",
@@ -2696,8 +2610,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18573",
 	"nickname": "朋友—小华",
@@ -2723,8 +2636,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18546",
 	"nickname": "朋友—小苗",
@@ -2750,8 +2662,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18642",
 	"nickname": "朋友—徐子强",
@@ -2777,8 +2688,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18551",
 	"nickname": "朋友—于浩",
@@ -2804,8 +2714,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18542",
 	"nickname": "朋友—亚伟",
@@ -2831,8 +2740,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18605",
 	"nickname": "朋友—振华",
@@ -2858,8 +2766,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18553",
 	"nickname": "朋友—郑建鑫",
@@ -2885,8 +2792,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18662",
 	"nickname": "朋友—振鹏",
@@ -2912,8 +2818,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18575",
 	"nickname": "朋友—张守礼",
@@ -2939,8 +2844,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18552",
 	"nickname": "朋友—张婷",
@@ -2966,8 +2870,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18586",
 	"nickname": "朋友—张璇",
@@ -2993,8 +2896,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18638",
 	"nickname": "朋友—志勇",
@@ -3020,8 +2922,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18603",
 	"nickname": "朋友—张亚鹏",
@@ -3047,8 +2948,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "P"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18572",
 	"nickname": "青职—冯老师",
@@ -3101,8 +3001,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "Q"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18581",
 	"nickname": "青职—雷导员",
@@ -3128,8 +3027,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "Q"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18595",
 	"nickname": "青职—孙飞飞",
@@ -3155,8 +3053,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "Q"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18564",
 	"nickname": "青职—徐老师",
@@ -3182,8 +3079,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "Q"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "354",
 	"nickname": "宋伯文",
@@ -3236,8 +3132,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "S"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18587",
 	"nickname": "室友—秦卫",
@@ -3263,8 +3158,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "S"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18548",
 	"nickname": "室友—孙宝印",
@@ -3290,8 +3184,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "S"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18547",
 	"nickname": "室友—孙年吉",
@@ -3317,8 +3210,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "S"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18660",
 	"nickname": "室友—王宝超",
@@ -3344,8 +3236,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "S"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18645",
 	"nickname": "室友—炜佳",
@@ -3371,8 +3262,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "S"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18618",
 	"nickname": "室友—笑笑",
@@ -3398,8 +3288,7 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png",
-	"initial": "S"
+	"placeholderImg": "widget://image/icon_defaultHead.png"
 }, {
 	"user_id": "18610",
 	"nickname": "网签中心",
@@ -3425,7 +3314,8 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"placeholderImg": "widget://image/icon_defaultHead.png"
+	"placeholderImg": "widget://image/icon_defaultHead.png",
+	"initial": "W"
 }, {
 	"user_id": "18608",
 	"nickname": "网签张亚茹",
@@ -3451,5 +3341,5 @@
 	"remark_current_position": "",
 	"remark_current_degree": "",
 	"remark_current_contact": "",
-	"initial": "W"
-}] at frame1.html: 317
+	"placeholderImg": "widget://image/icon_defaultHead.png"
+}]

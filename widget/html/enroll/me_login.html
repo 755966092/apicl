@@ -191,7 +191,7 @@
         // var mobile = '17600103536';
         // var password = '123456'
         api.ajax({
-            url: apiSite + '/api/login/doLogin',
+            url: apiSite + '/login/doLogin',
             method: 'post',
             headers: apiHeader,
             data: {
@@ -288,7 +288,7 @@
                             if (ret) {
                                 // console.log('syncContacts第四步：同步完成' + JSON.stringify(ret))
                                 api.ajax({
-                                    url: apiSite + '/api/contact/sync',
+                                    url: apiSite + '/contact/sync',
                                     method: 'post',
                                     headers: apiHeader,
                                     // timeout: 10000,
@@ -335,7 +335,7 @@
     // 请求数据
     function requestData(userToken) {
         api.ajax({
-            url: apiSite + '/api/contact/index',
+            url: apiSite + '/contact/index',
             method: 'post',
             headers: apiHeader,
             data: {
@@ -405,7 +405,7 @@
         for (var i = 0; i < data1.length; i++) {
             SQL += '('+data1[i].user_id+',"'+ data1[i].nickname +'","'+ data1[i].head_img_url +'","'+ (data1[i].current_company || "") +'","'+ (data1[i].current_position || "") +'","'+ (data1[i].current_degree || "") +'","'+ data1[i].titleSize +'","'+ data1[i].title +'","'+ data1[i].img+'","'+ data1[i].flag +'","'+ data1[i].litter +'","'+ type +'","'+ (data1[i].sex || 1) +'","'+ (data1[i].remark_nickname || "") +'","'+ (data1[i].remark_real_name || "") +'","'+ (data1[i].remark_head_img_url || "") +'","'+ (data1[i].remark_sex || "") +'","'+ (data1[i].remark_birthday || "") +'","'+ (data1[i].remark_hometown || "") +'","'+ (data1[i].remark_current_company || "") +'","'+ (data1[i].remark_current_position || "") +'","'+ (data1[i].remark_current_degree || "") +'","'+ (data1[i].remark_current_contact || "") +'"),';
         }
-        console.log(SQL)
+        
         db.executeSql({
              name: SQLName,
              sql: 'DROP TABLE addressList'    

@@ -465,7 +465,7 @@
     // 获取会员信息
     function requireData(flag) {
         api.ajax({
-            url: apiSite + '/api/user/detail',
+            url: apiSite + '/user/detail',
             method: 'post',
             headers: apiHeader,
             data: {
@@ -479,11 +479,7 @@
                 if (flag) {
                     // 无本地信息, 网络获取
                     console.log('594:::::'+JSON.stringify(ret.data))
-                    paramNickname = ret.data.info.nickname;
                     paramRealName = ret.data.info.real_name;
-                    paramSex = ret.data.info.sex;
-                    paramHeadImg = ret.data.info.head_img_url;
-
                     $api.text(nickname, ret.data.info.nickname);
                     $api.attr(head_img_url, 'src', ret.data.info.head_img_url);
                     if (ret.data.info.sex == 2) {
@@ -496,6 +492,7 @@
                     $api.text(birthday, ret.data.info.birthday == '0000-00-00' ? '' : ret.data.info.birthday);
                     relationship(ret.data.relationship_level)
                 } else {
+                    paramRealName = ret.data.info.real_name;
                     // 本地数据库有信息, 只获取关系
                     relationship(ret.data.relationship_level)
                 }
@@ -536,6 +533,7 @@
                     // 职位
                     if (ret.data[0].remark_current_position) {
                         $api.text(current_position, ret.data[0].remark_current_position);
+
                     } else {
                         $api.text(current_position, ret.data[0].current_position);
                     }
@@ -572,6 +570,7 @@
                     // 昵称
                     if (ret.data[0].remark_nickname) {
                         $api.text(nickname, ret.data[0].remark_nickname);
+                        
                     } else {
                         $api.text(nickname, ret.data[0].nickname);
                     }
@@ -646,6 +645,12 @@
         });
     }
     function openInfo(ele) {
+        var nickname = $api.byId('nickname');
+        var sex = $api.byId('sex');
+        var head_img_url = $api.byId('head_img_url');
+        paramSex = $api.hasCls(sex, 'sexIcon2') ? '男' : '女';
+        paramNickname = $api.text(nickname);
+        paramHeadImg = $api.attr(head_img_url, 'src');
         var val = $api.attr(ele, 'data-val');
         api.openWin({
             name: 'txl_addFellow_' + val + '_win.html',
@@ -788,7 +793,7 @@
         }
         console.log(JSON.stringify(data))
         api.ajax({
-            url: apiSite + '/api/remark_user/editBasicInfo',
+            url: apiSite + '/remark_user/editBasicInfo',
             method: 'post',
             headers: apiHeader,
             data: {
@@ -799,7 +804,7 @@
                 if (ret.code === 200) {
                     console.log('663:' + JSON.stringify(ret))
                     api.ajax({
-                        url: apiSite + '/api/remark_user/fullInfo',
+                        url: apiSite + '/remark_user/fullInfo',
                         method: 'post',
                         headers: apiHeader,
                         data: {
