@@ -227,52 +227,62 @@
        }    
        return false;   
     }   
-    function paixv (data) {
+    
+     function paixv (data) {
         for (var i = 0; i < data.length; i++) {
-                if (f_check_uppercase(data[0].flag)) {
-                    data[0].initial = data[0].flag;
-                } else {
-                    data[0].initial = '#';
+            for (var j = 0; j < data.length; j++) {
+                if (data[i].litter < data[j].litter) {
+                    var temp = data[i];
+                    data[i] = data[j];
+                    data[j] = temp;
                 }
-                if (i>0) {
-                    if (data[i].flag !== data[i-1].flag) {
-                        if (f_check_uppercase(data[i].flag)) {
-                            data[i].initial = data[i].flag;
-                        } else {
-                            data[i].initial = '#';
-                        }
+            }
+        }
+        for (var i = 0; i < data.length; i++) {
+            data[i].placeholderImg = "widget://image/icon_defaultHead.png";
+            if (data[i].remark_head_img_url) {
+                data[i].img = data[i].remark_head_img_url;
+            } 
+            if (data[i].remark_nickname) {
+                data[i].title = data[i].remark_nickname
+            }
+            if (f_check_uppercase(data[0].flag)) {
+                data[0].initial = data[0].flag;
+            } else {
+                data[0].initial = '#';
+            }
+            if (i>0) {
+                if (data[i].flag !== data[i-1].flag) {
+                    if (f_check_uppercase(data[i].flag)) {
+                        data[i].initial = data[i].flag;
+                    } else {
+                        data[i].initial = '#';
                     }
                 }
-             }
-            // for (var i = 0; i < data.length; i++) {
-            //     if (data[i].initial == '#') {
-            //         console.log(JSON.stringify(data[i]))
-            //     }
-            // }
-            var arr = {}
-            var a;
-            for (var i = 0; i < data.length; i++) {
-                if (data[i].initial) {
-                //     if (data[i].initial == "#") {
-                //         console.log(666)
-                //         if (arr[data[i].initial]) {
-                //             arr[data[i].initial].push (data[i])
-                //             console.log(888)
-                //         } else {
-                //             arr[data[i].initial] = [];
-                //             arr[data[i].initial].push (data[i])
-                //             console.log(777)
-                //         }
-                //     } else {
-                        arr[data[i].initial] = [];
-                        a = i;
-                    // }
-                } 
-                arr[data[a].initial].push (data[i])
             }
-            // console.log(JSON.stringify(arr))
-            // console.log('处理完的数据:'+JSON.stringify(arr))
-            return arr;
+        }
+        var arr = {}
+        var a;
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].initial) {
+                if (data[i].initial == '#') {
+                    if (arr[data[i].initial]) {
+                    } else {
+                        arr[data[i].initial] = [];
+                    }
+                    a = i;
+                } else {
+                    arr[data[i].initial] = [];
+                    a = i;
+                }
+            } 
+            // if (data[a].initial ) {
+                
+            // }
+            arr[data[a].initial].push (data[i])
+        }
+        // console.log('处理完的数据:'+JSON.stringify(arr))
+        return arr;
     }
     function dakai(data1) {
         var searchHei = $api.offset($api.dom('.search')).h
@@ -328,7 +338,7 @@
                     if (ret.clickType == 0) {
                         // 获取点击联系人信息
                         // alert(JSON.stringify(data1[ret.key][ret.index]));  
-                        addFriends();
+                        addFriends(data1[ret.key][ret.index].user_id);
                     }
                     
                 } else {
@@ -337,12 +347,12 @@
             });
     }
     // 打开人脉详情
-    function addFriends() {
+    function addFriends(userId) {
         api.openWin({
             name: 'txl_memberInfo_Win',
             url: './txl_memberInfo_Win.html',
             pageParam: {
-                name: 'value'
+                userId: userId
             }
         });
     }

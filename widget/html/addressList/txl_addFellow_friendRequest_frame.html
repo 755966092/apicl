@@ -7,7 +7,9 @@
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <link rel="stylesheet" type="text/css" href="../../css/flex.css"/>
    <style type="text/css">
-        
+        .main {
+            margin-bottom: 1rem;
+        }
         .search {
             height: .791rem;
             width: 100%;
@@ -140,6 +142,7 @@
             color: #999;
         }
         .button {
+            z-index: 1000;
             width: 100%;
             position: fixed;
             bottom: 0;
@@ -187,7 +190,7 @@
         }
    </style>
 </head>
-<body onclick="closeSlide()">
+<body>
     <div class="search">
         <input type="text" onkeyup="hideSearIcon(this)" name="" placeholder="&nbsp;&nbsp;&nbsp;&nbsp;搜索">
         <span class="searchIcon"></span>
@@ -243,7 +246,7 @@
                         </div>
                         <div class="liRight">
                             {{?it[i].status==1}}
-                            <span class="accept" data-applyId="{{=it[i].apply_id}}" tapmode="hover" onclick="friendAcceptApply(this)">接收</span>
+                            <span class="accept" data-userId="{{=it[i].user_id}}" data-applyId="{{=it[i].apply_id}}" tapmode="hover" onclick="friendAcceptApply(this)">接收</span>
                             {{??}}
                             <span class="already">{{=it[i].status}}</span>
                             {{?}}
@@ -263,27 +266,12 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
     apiready = function(){
+        moduleInit();
         requireData();
-         api.ajax({
-            url: apiSite + '/contact/friend',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                   values: { 
-                       token: $api.getStorage('userToken'),
-                   }
-            }
-        }, function(ret, err) {
-            if(ret) {
-                console.log('329::::'+JSON.stringify(ret))
-            } else {
-                alert(JSON.stringify(err))
-            }
-        })
     };
-
     function requireData() {
         api.ajax({
             url: apiSite + '/friend/applyList',
@@ -297,16 +285,14 @@
             }
         }, function(ret, err) {
             if(ret) {
-                console.log(JSON.stringify(ret))
+                console.log('285::::'+JSON.stringify(ret))
                 for (var i = 0; i < ret.data.list.length; i++) {
-                   
                     switch(ret.data.list[i].status) {
                         case 2 : ret.data.list[i].status = '已通过'; break;
                         case 3 : ret.data.list[i].status = '已删除'; break;
                         case 4 : ret.data.list[i].status = '默认同意'; break;
                         case 5 : ret.data.list[i].status = '失效'; break;
                     }   
-                    
                 }
                 getData(ret.data.list)
             } else {
@@ -317,6 +303,7 @@
     // 接受好友请求
     function friendAcceptApply(ele) {
         var applyId = $api.attr(ele, 'data-applyId');
+        var userId = $api.attr(ele, 'data-userId');
         api.ajax({
             url: apiSite + '/friend/acceptApply',
             method: 'post',
@@ -329,15 +316,75 @@
             }
         }, function(ret, err) {
             if(ret) {
-                // alert(JSON.stringify(ret))
+                console.log(JSON.stringify(ret))
                 requireData();
-               
+                selectSql(userId);
             } else {
                 alert(JSON.stringify(err))
             }
         })
     }
-    
+    function selectSql(userId) {
+        api.ajax({
+            url: apiSite + '/contact/friend',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                console.log('329::::'+JSON.stringify(ret))
+                // 新添加好友插入数据库
+                var SQLName = 'db_'+$api.getStorage('userToken');
+                var SQL = 'INSERT OR REPLACE INTO addressList(user_id,nickname,head_img_url,current_company,current_position,current_degree, titleSize,title,img,flag,litter,type, sex, remark_nickname, remark_real_name, remark_head_img_url, remark_sex, remark_birthday, remark_hometown, remark_current_company, remark_current_position, remark_current_degree, remark_current_contact) VALUES '
+                console.log(userId)
+                db.executeSql({
+                    name: SQLName,
+                    sql: ' DELETE FROM addressList WHERE user_id = ' + userId
+                }, function(ret, err){        
+                    if( ret.status ){
+                        console.log('删除成功'+ JSON.stringify( ret ) );
+                    }else{
+                        alert( JSON.stringify( err ) );
+                    }
+                });
+                for (var i = 0; i < ret.data.list.length; i++) {
+                    if (ret.data.list[i].user_id == userId) {
+                        var litter;
+                        if (ret.data.list[i].remark_nickname) {
+                            litter =  PinyinHelper.getShortPinyin(ret.data.list[i].remark_nickname).toUpperCase();
+                        } else {
+                            litter =  PinyinHelper.getShortPinyin(ret.data.list[i].nickname).toUpperCase();
+                        }
+                        console.log(litter)
+                        SQL += '('+ret.data.list[i].user_id+',"'+ ret.data.list[i].nickname +'","'+ ret.data.list[i].head_img_url +'","'+ (ret.data.list[i].current_company || "") +'","'+ (ret.data.list[i].current_position || "") +'","'+ (ret.data.list[i].current_degree || "") +'","'+ 15 +'","'+ ret.data.list[i].nickname +'","'+ ret.data.list[i].head_img_url+'","'+ litter[0] +'","'+ litter +'","'+ 1 +'","'+ (ret.data.list[i].sex || 1) +'","'+ (ret.data.list[i].remark_nickname || "") +'","'+ (ret.data.list[i].remark_real_name || "") +'","'+ (ret.data.list[i].remark_head_img_url || "") +'","'+ (ret.data.list[i].remark_sex || "") +'","'+ (ret.data.list[i].remark_birthday || "") +'","'+ (ret.data.list[i].remark_hometown || "") +'","'+ (ret.data.list[i].remark_current_company || "") +'","'+ (ret.data.list[i].remark_current_position || "") +'","'+ (ret.data.list[i].remark_current_degree || "") +'","'+ (ret.data.list[i].remark_current_contact || "") +'"),';
+                    }
+                }
+                SQL = SQL.substring(0,SQL.length-1) + ';'
+                console.log(SQL)
+                db.executeSql({
+                    name: SQLName,
+                    sql: SQL
+                }, function(ret, err){        
+                    if( ret.status ){
+                        alert( JSON.stringify( ret ) );
+                        api.execScript({
+                            name: 'main',
+                            frameName: 'frame1',
+                            script: 'query();'
+                        });
+                    }else{
+                        alert( JSON.stringify( err ) );
+                    }
+                });
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
     // 左滑显示删除按钮
     var startX,startY;
      var endX,endY;

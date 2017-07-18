@@ -228,16 +228,21 @@
                                                 frameName: 'frame1',
                                                 script: 'query();'
                                             });
-                                            db.selectSql({
-                                                name: 'db_'+$api.getStorage('userToken'),
-                                                sql: 'SELECT * FROM addressList WHERE user_id = ' + api.pageParam.userId
-                                            }, function(ret, err){        
-                                                if( ret.status ){
-                                                    console.log('236:::::::::'+ JSON.stringify( ret ) );
-                                                }else{
-                                                    alert( JSON.stringify( err ) );
-                                                }
+                                            api.execScript({
+                                                name: 'listWin',
+                                                frameName: 'txl_listWin_frame',
+                                                script: 'query();'
                                             });
+                                            // db.selectSql({
+                                            //     name: 'db_'+$api.getStorage('userToken'),
+                                            //     sql: 'SELECT * FROM addressList WHERE user_id = ' + api.pageParam.userId
+                                            // }, function(ret, err){        
+                                            //     if( ret.status ){
+                                            //         console.log('236:::::::::'+ JSON.stringify( ret ) );
+                                            //     }else{
+                                            //         alert( JSON.stringify( err ) );
+                                            //     }
+                                            // });
                                             api.sendEvent({
                                                 name: 'editUserInfo'
                                             });
