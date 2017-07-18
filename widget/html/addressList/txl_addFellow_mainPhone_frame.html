@@ -76,40 +76,41 @@
         .label {
             margin-right: .2rem;
         }
+        .sel {
+            display: inline-block;
+            width: .44rem;
+            height: .84rem;
+            background: url(../../image/icon_my/icon_enter.png)no-repeat;
+            -webkit-background-size: .44rem .33rem;
+            background-size: .44rem .33rem;
+            background-position: center center;
+            float: right;
+        }
    </style>
 </head>
 <body>
-  <!--   <div class="main ">
-       <div class="move">
-           <p>移动</p>
-           <div class="item">
-               <span>工作</span>
-               <span>13260227521</span>
-               <span class="clearIcon"></span>
-           </div>
-           <div class="item">
-               <span>工作</span>
-               <span>13260227521</span>
-           </div>
-       </div>
-       <div class="move">
-           <p>移动</p>
-           <div class="item">
-               <span>工作</span>
-               <span>13260227521</span>
-           </div>
-           <div class="item">
-               <span>工作</span>
-               <span>13260227521</span>
-           </div>
-       </div>
-       <div class="addPhone">
-            <div class="addIcon"></div>
-            <div>添加电话好号码</div>
-            
-       </div>
-                            <span class="clearIcon" tapmode="hover" onclick="clearItem(this);event.stopPropagation()"></span>
-    </div> -->
+<!--
+    <div class="main ">
+           <p class="type moveTitle">移动</p>
+                    <div class="move moveFlag" data-contactId="{{=it[i].contact_id}}"  tapmode="hover" onclick="openEditPage(this)">
+                        <div class="item">
+                            <span class="label">{{=it[i].sub_type}}：</span>
+                            <input type="text" value="{{=it[i].phone}}" disabled="true">
+                            <span class="clearIcon" tapmode="hover" data-contactId="{{=it[i].contact_id}}" onclick="clearItem(this);event.stopPropagation()"></span>
+                            <span class="sel select"> </span>
+                        </div>
+                    </div>
+                    <p class="type fixedTitle">固定</p>
+                    <div class="move fixedFlag" data-contactId="{{=it[i].contact_id}}" tapmode="hover" onclick="openEditPage(this)">
+                        <div class="item" >
+                            <span class="label">{{=it[i].sub_type}}：</span>
+                            <input type="text" value="{{=it[i].phone}}" disabled="true">
+                            <span class="clearIcon" tapmode="hover" data-contactId="{{=it[i].contact_id}}" onclick="clearItem(this);event.stopPropagation()"></span>
+                            <span class="select"> </span>
+                        </div>
+                    </div>
+       </div> 
+    </div>-->
     <div class="main resultList"></div>
     <script type="text/x-dot-template" id="listT">
             {{ for (var i = 0; i < it.length; i++) { }} 
@@ -122,6 +123,11 @@
                             <span class="label">{{=it[i].sub_type}}：</span>
                             <input type="text" value="{{=it[i].phone}}" disabled="true">
                             <span class="clearIcon" tapmode="hover" data-contactId="{{=it[i].contact_id}}" onclick="clearItem(this);event.stopPropagation()"></span>
+                            {{?it[i].is_default==1}}
+                            <span class="sel select"> </span>
+                            {{??}}
+                            <span class="select"> </span>
+                            {{?}}
                         </div>
                     </div>
                 {{?}}
@@ -136,6 +142,11 @@
                             <span class="label">{{=it[i].sub_type}}：</span>
                             <input type="text" value="{{=it[i].phone}}" disabled="true">
                             <span class="clearIcon" tapmode="hover" data-contactId="{{=it[i].contact_id}}" onclick="clearItem(this);event.stopPropagation()"></span>
+                            {{?it[i].is_default==1}}
+                            <span class="sel select"> </span>
+                            {{??}}
+                            <span class="select"> </span>
+                            {{?}}
                         </div>
                     </div>
                 {{?}}
@@ -152,6 +163,7 @@
 
 <script type="text/javascript">
    var flag = 0; // 如果flag是0, 说明联系方式是用户本来的
+   var flagClick = 0; // 如果flagClick是0, 点击选择默认联系联系方式
     apiready = function(){
         moduleInit();
         monitorEvent();
@@ -160,19 +172,50 @@
     };
     // 编辑联系方式
     function openEditPage(ele) {
-        if (!flag) {
-            alert('不能编辑用户原始信息!')
-        } else {
-            var contactId = $api.attr(ele, 'data-contactId');
-            api.openWin({
-                name: 'txl_addFellow_addPhone_win',
-                url: './txl_addFellow_addPhone_win.html',
-                pageParam: {
-                    contactId: contactId,
-                    userId: api.pageParam.userId
+        var contactId = $api.attr(ele, 'data-contactId');
+        if (!flagClick) {
+            // 选择默认联系方式
+            // alert('选择')
+            for (var i = 0; i < $api.domAll('.select').length; i++) {
+                $api.removeCls($api.domAll('.select')[i], 'sel');
+            }
+            $api.addCls($api.dom(ele, '.select'), 'sel');
+            api.ajax({
+                url: apiSite + '/remark_user/setDefaultContact',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                       values: { 
+                           token: $api.getStorage('userToken'),
+                           remark_user_id: api.pageParam.userId,
+                           contact_id:contactId
+                       }
                 }
-            });
+            }, function(ret, err) {
+                if(ret) {
+                    upsateSql();
+                    alert(JSON.stringify(ret))
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
+        } else {
+            // 进入编辑页面
+            if (!flag) {
+                alert('不能编辑用户原始信息!')
+            } else {
+                
+                api.openWin({
+                    name: 'txl_addFellow_addPhone_win',
+                    url: './txl_addFellow_addPhone_win.html',
+                    pageParam: {
+                        contactId: contactId,
+                        userId: api.pageParam.userId
+                    }
+                });
+            }
         }
+        
     }
     // 监听点击保存和编辑按钮
     function monitorEvent () {
@@ -181,12 +224,15 @@
             name: 'keepPhone'
         }, function(ret, err) {
             if (ret) {
+                requireData();
                 for (var i = 0; i < clearIcon.length; i++) {
                    $api.css(clearIcon[i], 'display:none');
                 }
-                // for (var i = 0; i < ipt.length; i++) {
-                //     // $api.attr(ipt[i], 'disabled', 'true');
-                // }
+                // 保存
+                flagClick = 0;
+                for (var i = 0; i < $api.domAll('.select').length; i++) {
+                    $api.css($api.domAll('.select')[i], 'display: inline-block');
+                }
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -195,15 +241,15 @@
             name: 'editPhone'
         }, function(ret, err) {
             if (ret) {
+                // 编辑
                 clearIcon = $api.domAll('.clearIcon');
-                ipt = $api.domAll('input');
                 for (var i = 0; i < clearIcon.length; i++) {
                    $api.css(clearIcon[i], 'display:inline-block');
                 }
-                for (var i = 0; i < ipt.length; i++) {
-                    $api.removeAttr(ipt[i], 'disabled');
+                for (var i = 0; i < $api.domAll('.select').length; i++) {
+                    $api.css($api.domAll('.select')[i], 'display: none');
                 }
-
+                flagClick = 1;
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -279,12 +325,14 @@
             }, function(ret, err) {
                 if(ret) {
                     // 从本地数据库删除
+                    // 删除后更新数据库
                     db.executeSql({
                         name: 'db_'+$api.getStorage('userToken'),
                         sql: ' DELETE FROM tb_remarks_contact WHERE contact_id = ' + contact_id  
                     }, function(ret, err){        
                         if( ret.status ){
-                            requireData();
+                            upsateSql();
+                            
                         }else{
                             alert( JSON.stringify( err ) );
                         }
@@ -305,6 +353,34 @@
             }
         });
     }
+    // 更新数据库
+    function upsateSql() {
+        api.ajax({
+            url: apiSite + '/remark_user/contactList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       remark_user_id: api.pageParam.userId
+                   }
+            }
+        }, function(ret, err) {
+            for (var i = 0; i < ret.data.list.length; i++) {
+                db.executeSql({
+                    name: 'db_'+$api.getStorage('userToken'),
+                    sql: 'UPDATE tb_remarks_contact SET is_default = ' + ret.data.list[i].is_default + ' WHERE contact_id = ' + ret.data.list[i].contact_id
+                }, function(ret, err){  
+                    if( ret.status ){
+                       
+                    }else{
+                        alert(JSON.stringify( err ) );
+                    }
+                });
+            }
+            
+        })
+    }
 
     function requireData() {
         var SQLName = 'db_'+$api.getStorage('userToken');
@@ -317,7 +393,7 @@
                 if (ret.data.length != 0) {
                     flag = 1;
                     handleData(litterSort(ret.data))
-                    console.log('本地数据库')
+                    console.log('本地数据库'+JSON.stringify(ret.data))
                 } else {
                     api.ajax({
                         url: apiSite + '/remark_user/contactList',
@@ -332,7 +408,7 @@
                     }, function(ret, err) {
                         if(ret) {
                             if (ret.data.list.length != 0) {
-                                console.log('线上备注')
+                                console.log('线上备注'+JSON.stringify(ret.data.list))
                                 flag = 1;
                                 handleData(litterSort(ret.data.list))
                             } else {
@@ -348,7 +424,7 @@
                                     }
                                 }, function(ret, err) {
                                     if(ret) {
-                                        console.log('用户自己的');
+                                        console.log('用户自己的'+JSON.stringify(ret.data.list));
                                         flag = 0
                                         handleData(litterSort(ret.data.list))
                                     } else {
