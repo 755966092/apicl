@@ -2,7 +2,7 @@ var cityLevel3 = [{
   name: "北京",
   sub: [{
     name: "北京",
-    subb: [{
+    sub: [{
       name: "东城区"
     }, {
       name: "西城区"

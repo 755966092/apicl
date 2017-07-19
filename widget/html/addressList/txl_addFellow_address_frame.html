@@ -6,7 +6,6 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-       
         .wrap {
             margin-top: .2rem;
         }
@@ -93,7 +92,7 @@
                     </p>
                 </div>
                 <span  id="btnStatus"  class="right fr"></span>
-                <!-- <span   tapmode="hover"   onclick="delDz2(this)"  class="edit right fr"></span> -->
+                <!-- <span   tapmode="hover"   onclick="delAddress(this)"  class="edit right fr"></span> -->
                 <!-- <span   tapmode="hover"   onclick="openEdit(this)" class=" fr"></span> -->
            </div>
         {{ }; }}
@@ -113,12 +112,12 @@
 	    requireData();
         // 删除地址
         delDz();
-        // 箭头增加地址事件
+        // 监听增加地址事件
         addCity();
     };
-    // 箭头增加地址事件
+    // 监听增加地址事件
     function addCity()　{
-        // 箭头增加地址事件
+        // 监听增加地址事件
         api.addEventListener({
             name: 'addRemarkCity'
         }, function(ret, err) {
@@ -132,11 +131,10 @@
     // 编辑地址
     function openEdit(ele) {
         var val = $api.attr(ele, 'data-val');
-
         if ($api.hasCls($api.byId('btnStatus'), 'edit')) {
             // 删除按钮状态下删除地址
             $api.remove($api.closest($api.byId('btnStatus'), '.dzlist'));
-            delDz2(val);
+            delAddress(val);
         } else {
             // 编辑按钮状态下 进入编辑页面
             api.openWin({
@@ -145,7 +143,8 @@
                 pageParam: {
                     userToken: $api.getStorage('userToken'),
                     flag: 1,
-                    address_id: val
+                    address_id: val,
+                    userId: api.pageParam.userId
                 },
                 softInputMode:'pan'
             });
@@ -185,7 +184,7 @@
                         data: {
                             values: { 
                                 token: $api.getStorage('userToken'),
-                                user_id: api.pageParam.userId
+                                remark_user_id: api.pageParam.userId
                             }
                         }
                     }, function(ret, err) {
@@ -201,7 +200,7 @@
                                     data: {
                                         values: { 
                                             token: $api.getStorage('userToken'),
-                                            remark_user_id: api.pageParam.userId
+                                            user_id: api.pageParam.userId
                                         }
                                     }
                                 }, function(ret, err) {
@@ -226,7 +225,6 @@
 
        
     }
-
     // 删除地址
     function delDz () {
         api.addEventListener({
@@ -236,32 +234,47 @@
                 for (var i = 0; i < $api.domAll('.right').length; i++) {
                     $api.toggleCls($api.domAll('.right')[i], 'edit');
                 }
-                
             } else {
                 alert(JSON.stringify(err.msg));
             }
         });
+        
     }
     // 删除服务器地址
-    function delDz2 (id) {
-        api.ajax({
-            url: apiSite + '/user_center/deleteAddress',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
-                    address_id: id
-                }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                // getData(ret.data.list)
-                // alert(JSON.stringify(ret))
-            } else {
-                alert(JSON.stringify(err.msg));
+   // 删除服务器地址
+    function delAddress (id) {
+        var SQLName = 'db_'+$api.getStorage('userToken');
+        // 从数据库删除
+        db.executeSql({
+            name: SQLName,
+            sql: 'DELETE FROM tb_remarks_address WHERE address_id =' + id  
+        }, function(ret, err){        
+            if( ret.status ){
+                alert( '数据库删除'+JSON.stringify( ret ) );
+                api.ajax({
+                    url: apiSite + '/remark_user/deleteAddress',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                        values: { 
+                            token: $api.getStorage('userToken'),
+                            remark_user_id: api.pageParam.userId,
+                            address_id: id
+                        }
+                    }
+                }, function(ret, err) {
+                    if (ret) {
+                        // getData(ret.data.list)
+                        alert('服务器删除'+JSON.stringify(ret))
+                    } else {
+                        alert(JSON.stringify(err.msg));
+                    }
+                });
+            }else{
+                alert( JSON.stringify( err ) );
             }
         });
+        
     }
 
 

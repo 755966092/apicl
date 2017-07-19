@@ -111,7 +111,7 @@
         if (api.pageParam.flag) {
             // 1 编辑
             getCityList();
-            url = '/user_center/editAddress'
+            url = '/remark_user/editAddress'
         } else {
             // 0 新增
             url = '/remark_user/addAddress'
@@ -122,34 +122,49 @@
 
     };
     function addRess() {
+        var obj = {};
         provinces =  $api.text($api.dom('.provinces'));
         cities =  $api.text($api.dom('.cities'));
         city =  $api.text($api.dom('.city'));
         address =  $api.val($api.dom('.address'));
         zipcode =  $api.val($api.dom('.zipcode'));
+        if (api.pageParam.flag) {
+            obj = {
+                token: $api.getStorage('userToken'),
+                remark_user_id: api.pageParam.userId,
+                address_id: api.pageParam.address_id,
+                province: provinces,
+                city: cities,
+                district: city,
+                address: address,
+                zipcode: zipcode,
+                note: '住址',
+            }
+        } else {
+            obj = {
+                token: $api.getStorage('userToken'),
+                remark_user_id: api.pageParam.userId,
+                province: provinces,
+                city: cities,
+                district: city,
+                address: address,
+                zipcode: zipcode,
+                note: '住址',
+            }
+        }
         api.ajax({
             url: apiSite + url,
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
-                    token: $api.getStorage('userToken'),
-                    remark_user_id: api.pageParam.userId,
-                    province: provinces,
-                    city: cities,
-                    district: city,
-                    address: address,
-                    zipcode: zipcode,
-                    note: '住址',
-                    // address_id: api.pageParam.address_id
-                }
+                values: obj
             }
         }, function(ret, err) {
             if (ret) {
                 insertData();
                 // getData(ret.data.list)
                 
-                api.closeWin();
+                
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -173,10 +188,12 @@
                 for (var j = 0; j < cityLevel3[i].sub.length; j++) {
                     if (cityLevel3[i].sub[j].name == homeText[1]) {
                         active.push(j);
+                        console.log(JSON.stringify(cityLevel3[i].sub[j]))
                         for (var p = 0; p < cityLevel3[i].sub[j].sub.length; p++) {
-                            cityLevel3[i].sub[j].sub[p].name == homeText[2];
-                            active.push(p);
-                            break;
+                            if (cityLevel3[i].sub[j].sub[p].name == homeText[2]) {
+                                active.push(p);
+                                break;
+                            }
                         }
                     }
                 }
@@ -266,24 +283,25 @@
     // 请求地址列表
     function getCityList() {
         api.ajax({
-            url: apiSite + '/user_center/editAddressIndex',
+            url: apiSite + '/remark_user/editAddressIndex',
             method: 'post',
             headers: apiHeader,
             data: {
                 values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    token: $api.getStorage('userToken'),
+                    remark_user_id: api.pageParam.userId,
                     address_id: api.pageParam.address_id
                 }
             }
         }, function(ret, err) {
             if (ret) {
-                // alert(JSON.stringify(ret))
+                console.log(JSON.stringify(ret))
                 $api.text($api.dom('.provinces'), ret.data.info.province);
                 $api.text($api.dom('.cities'), ret.data.info.city);
                 $api.text($api.dom('.city'), ret.data.info.district);
                 $api.val($api.dom('.address'), ret.data.info.address);
                 // $api.val($api.dom('.zipcode'), ret.data.info.city);
-                $api.val($api.dom('.zipcode'), '邮编');
+                $api.val($api.dom('.zipcode'), ret.data.info.zipcode);
                 iptCom();
             } else {
                 alert(JSON.stringify(err.msg));
@@ -294,11 +312,11 @@
     var provinces, cities, city, address, zipcode;
     // 按钮变色
     function iptCom() {
-            provinces =  $api.text($api.dom('.provinces')),
-            cities =  $api.text($api.dom('.cities')),
-            city =  $api.text($api.dom('.city')),
-            address =  $api.val($api.dom('.address')),
-            zipcode =  $api.val($api.dom('.zipcode'));
+        provinces =  $api.text($api.dom('.provinces')),
+        cities =  $api.text($api.dom('.cities')),
+        city =  $api.text($api.dom('.city')),
+        address =  $api.val($api.dom('.address')),
+        zipcode =  $api.val($api.dom('.zipcode'));
         if (provinces !== '' && cities !== '' && city !== '' && address !== '' && zipcode !== '') {
             $api.css($api.dom('.btn'), 'background:  #08BB08');
             $api.removeAttr($api.dom('.btn'),'disabled');
@@ -319,38 +337,52 @@
         }, function(ret, err) {
             if(ret) {
                 console.log('334ret:'+JSON.stringify(ret.code))
-                var sql = 'INSERT OR REPLACE INTO tb_remarks_address(list_id,user_id,address_id,province,city,district, address, note) VALUES'
-                for (var i = 0; i < ret.data.list.length; i++) {
-                    sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].address_id  +'",'+api.pageParam.userId+','+ret.data.list[i].address_id+',"'+ret.data.list[i].province+'","'+ret.data.list[i].city+'","'+ret.data.list[i].district+'","'+ret.data.list[i].address+'","'+ret.data.list[i].note+'"),'
-                }
-                sql = sql.substring(0,sql.length-1);
-                db.executeSql({
-                    name: SQLName,
-                    sql: sql   
-                }, function(ret, err){  
-                    console.log('334ret:'+JSON.stringify(ret))
-                    console.log('335err:'+JSON.stringify(err))
-                    if( ret.status ){
-                        api.sendEvent({
-                            name: 'addRemarkCity'
-                        });
-                        db.selectSql({
-                            name: SQLName,
-                            sql: 'SELECT * FROM tb_remarks_address WHERE user_id=' + api.pageParam.userId
-                        }, function(ret, err){  
-                            if( ret.status ){
-                                console.log('340:'+JSON.stringify(ret))
-                            }else{
-                                alert(JSON.stringify( err ) );
-                            }
-                        });
-                    }else{
-                        alert(JSON.stringify( err ) );
+                if (api.pageParam.flag) {
+                    // 更新数据库
+                    for (var i = 0; i < ret.data.list.length; i++) {
+                        if (ret.data.list[i].address_id == api.pageParam.address_id) {
+                            db.executeSql({
+                                name: SQLName,
+                                sql: 'UPDATE tb_remarks_address SET province = "'+ ret.data.list[i].province +'",city = "'+ ret.data.list[i].city +'",district = "'+ ret.data.list[i].district +'",address="' + ret.data.list[i].address + '",note="'+ ret.data.list[i].note +'"  WHERE address_id =' + api.pageParam.address_id  
+                            }, function(ret, err){        
+                                if( ret.status ){
+                                    alert( JSON.stringify( ret ) );
+                                    api.sendEvent({
+                                        name: 'addRemarkCity'
+                                    });
+                                    api.closeWin();
+                                }else{
+                                    alert( JSON.stringify( err ) );
+                                }
+                            });
+                        }
                     }
-                });
+                } else {
+                    // 新增
+                    var sql = 'INSERT OR REPLACE INTO tb_remarks_address(list_id,user_id,address_id,province,city,district, address, note) VALUES'
+                    for (var i = 0; i < ret.data.list.length; i++) {
+                        sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].address_id  +'",'+api.pageParam.userId+','+ret.data.list[i].address_id+',"'+ret.data.list[i].province+'","'+ret.data.list[i].city+'","'+ret.data.list[i].district+'","'+ret.data.list[i].address+'","'+ret.data.list[i].note+'"),'
+                    }
+                    sql = sql.substring(0,sql.length-1);
+                    db.executeSql({
+                        name: SQLName,
+                        sql: sql   
+                    }, function(ret, err){  
+                        console.log('334ret:'+JSON.stringify(ret))
+                        console.log('335err:'+JSON.stringify(err))
+                        if( ret.status ){
+                            api.sendEvent({
+                                name: 'addRemarkCity'
+                            });
+                            api.closeWin();
+                        }else{
+                            alert(JSON.stringify( err ) );
+                        }
+                    });
+                }
+                
             } else {
                 alert(JSON.stringify(err))
-                alert(JSON.stringify(ret))
             }
         })
     }
