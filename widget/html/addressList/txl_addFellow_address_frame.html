@@ -105,7 +105,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    var zipcode;//邮编
+    var zipcode; flag=0;//邮编 flag = 0; 不能删除, 会员原始信息
     apiready = function(){
         moduleInit();
         // 请求地址列表
@@ -131,23 +131,27 @@
     // 编辑地址
     function openEdit(ele) {
         var val = $api.attr(ele, 'data-val');
-        if ($api.hasCls($api.byId('btnStatus'), 'edit')) {
-            // 删除按钮状态下删除地址
-            $api.remove($api.closest($api.byId('btnStatus'), '.dzlist'));
-            delAddress(val);
+        if (flag) {
+            if ($api.hasCls($api.byId('btnStatus'), 'edit')) {
+                // 删除按钮状态下删除地址
+                $api.remove($api.closest($api.byId('btnStatus'), '.dzlist'));
+                delAddress(val);
+            } else {
+                // 编辑按钮状态下 进入编辑页面
+                api.openWin({
+                    name: 'txl_addFellow_address_addAddress',
+                    url: './txl_addFellow_address_addAddress.html',
+                    pageParam: {
+                        userToken: $api.getStorage('userToken'),
+                        flag: 1,
+                        address_id: val,
+                        userId: api.pageParam.userId
+                    },
+                    softInputMode:'pan'
+                });
+            }
         } else {
-            // 编辑按钮状态下 进入编辑页面
-            api.openWin({
-                name: 'txl_addFellow_address_addAddress',
-                url: './txl_addFellow_address_addAddress.html',
-                pageParam: {
-                    userToken: $api.getStorage('userToken'),
-                    flag: 1,
-                    address_id: val,
-                    userId: api.pageParam.userId
-                },
-                softInputMode:'pan'
-            });
+            alert('不能操作好友原始信息!')
         }
         
     }
@@ -175,6 +179,7 @@
             if( ret.status ){
                 console.log('181:::' + JSON.stringify( ret ) );
                 if (ret.data.length != 0) {
+                    flag = 1;
                     getData(ret.data);
                 } else {
                     api.ajax({
@@ -191,6 +196,7 @@
                         if (ret) {
                             console.log(JSON.stringify(ret.data.list))
                             if (ret.data.list.length != 0) {
+                                flag = 1;
                                 getData(ret.data.list)
                             } else {
                                 api.ajax({
@@ -205,6 +211,7 @@
                                     }
                                 }, function(ret, err) {
                                     if (ret) {
+                                        flag = 0;
                                         getData(ret.data.list)
                                     } else {
                                         alert(JSON.stringify(err.msg));
@@ -250,7 +257,7 @@
             sql: 'DELETE FROM tb_remarks_address WHERE address_id =' + id  
         }, function(ret, err){        
             if( ret.status ){
-                alert( '数据库删除'+JSON.stringify( ret ) );
+                console.log( '数据库删除'+JSON.stringify( ret ) );
                 api.ajax({
                     url: apiSite + '/remark_user/deleteAddress',
                     method: 'post',
@@ -265,7 +272,10 @@
                 }, function(ret, err) {
                     if (ret) {
                         // getData(ret.data.list)
-                        alert('服务器删除'+JSON.stringify(ret))
+                        console.log('服务器删除'+JSON.stringify(ret));
+                        if ($api.domAll('.dzlist').length == 0) {
+                            requireData();
+                        }
                     } else {
                         alert(JSON.stringify(err.msg));
                     }
@@ -275,36 +285,7 @@
             }
         });
         
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // doT模版获取数据
-    function getData(data) {
-        var listTText = $api.byId('listT').text;
-        var fnListT = doT.template(listTText);
-        var html = fnListT(data);
-        var list = $api.dom('.resultList');
-        // 替换resultList所有内容
-        $api.html(list, html);
-        // alert('getData:' + JSON.stringify(data))
+        
     }
 </script>
 </html>
