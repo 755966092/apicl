@@ -91,11 +91,11 @@
                 {{?}}
 
                 {{?it[i].type == 1}}
-                    <div class="move moveFlag" data-id="{{=it[i].contact_id}}" data-sub_type="{{=it[i].sub_type}}" data-type="{{=it[i].type}}" >
+                    <div class="move moveFlag" tapmode="hover" onclick="revisePhone(this)" data-id="{{=it[i].contact_id}}" data-sub_type="{{=it[i].sub_type}}" data-type="{{=it[i].type}}" >
                         <div class="wrap">
                             <div class="item">
                                 <span class="label">{{=it[i].sub_type}}：</span>
-                                <input type="text" onchange="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].info}}" disabled="true">
+                                <input type="text" value="{{=it[i].info}}" disabled="true">
                                 <span class="clearIcon" data-id="{{=it[i].contact_id}}"  tapmode="hover" onclick="clearItem(this)"></span>
                             </div>
                         </div>
@@ -109,11 +109,11 @@
                     <p class="type fixedTitle">网站</p>
                 {{?}}
                 {{?it[i].type == 2}}
-                    <div class="move fixedFlag"  data-id="{{=it[i].contact_id}}" data-sub_type="{{=it[i].sub_type}}" data-type="{{=it[i].type}}">
+                    <div class="move fixedFlag" tapmode="hover" onclick="revisePhone(this)"   data-id="{{=it[i].contact_id}}" data-sub_type="{{=it[i].sub_type}}" data-type="{{=it[i].type}}">
                         <div class="wrap">
                             <div class="item" >
                                 <span class="label">网站：</span>
-                                <input type="text" onchange="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].info}}" disabled="true">
+                                <input type="text"  value="{{=it[i].info}}" disabled="true">
                                 <span class="clearIcon" data-id="{{=it[i].contact_id}}" tapmode="hover" onclick="clearItem(this)"></span>
                             </div>
                         </div>
@@ -132,77 +132,59 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 
 <script type="text/javascript">
-    var editArr=[];
+    var editArr=[], flag=0, editFlag = 0;// flag = 0  页面显示的是本地数据库内容
+                            // eidtFlag = 0 不可编辑
     apiready = function(){
         moduleInit();
         requireData();
         monitorEvent();
-        api.addEventListener({
-            name: 'addRemarkOtherContact'
-        }, function(ret, err) {
-            if (ret) {
-                requireData();
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
+        
     };
     function revisePhone(ele) {
-        var obj = {}
-            obj.id = parseInt($api.attr($api.closest(ele, '.move'), 'data-id')),
-            obj.sub_type = parseInt($api.attr($api.closest(ele, '.move'), 'data-sub_type') == '工作' ? 1 : 2),
-            obj.type = parseInt($api.attr($api.closest(ele, '.move'), 'data-type')),
-            obj.phone = $api.val(ele);
-          
-            var i=0;
-            do{
-                if (editArr[i].id == obj.id && obj.phone == editArr[i].phone) {
-                    break;
-                } else {
-                    editArr.push(obj)
+        if (editFlag) {
+            var type = $api.attr(ele, 'data-type');
+            var subType = $api.attr(ele, 'data-sub_type');
+            var id = $api.attr(ele, 'data-id');
+            var url,obj = {};
+            if (type == 1) {
+                // 即时通讯 
+                // sub_type 1 微信 2 QQ
+                url = 'txl_addFellow_otherContact_InstantMessaging_win.html';
+                obj = {
+                    type: 1,
+                    subType: subType,
+                    id: id
                 }
-                i++;
-            }while(i < editArr.length)
-            
+            } else {
+                // 网站
+                url = 'txl_addFellow_otherContact_website_win.html';
+                obj = {
+                    type: 2,
+                    subType: subType,
+                    id: id
+                }
+            }
+            api.openWin({
+                name: 'winName',
+                url: './' + url,
+                pageParam: {
+                    userId: api.pageParam.userId,
+                    obj: obj
+                }
+            });
+        }
     }
     // 监听点击保存和编辑按钮
     function monitorEvent () {
-        var clearIcon = $api.domAll('.clearIcon'),
-            ipt = $api.domAll('input');
         api.addEventListener({
             name: 'keepPhone'
         }, function(ret, err) {
-            
             if (ret) {
-                for (var i = 0; i < clearIcon.length; i++) {
-                   $api.css(clearIcon[i], 'display:none');
-                }
-                for (var i = 0; i < ipt.length; i++) {
-                    $api.attr(ipt[i], 'disabled', 'true');
+                editFlag = 0;
+                for (var i = 0; i < $api.domAll('.clearIcon').length; i++) {
+                   $api.css($api.domAll('.clearIcon')[i], 'display:none');
                 }
                 // 编辑电话号码
-                for (var i = 0; i < editArr.length; i++) {
-                    api.ajax({
-                        url: apiSite + '/user_center/editContact',
-                        method: 'post',
-                        headers: apiHeader,
-                        data: {
-                           values: { 
-                                token: $api.getStorage('userToken'),
-                                contact_id: editArr[i].id,
-                                sub_type: editArr[i].sub_type,
-                                type: editArr[i].type,
-                                phone: editArr[i].phone
-                           }
-                        }
-                    }, function(ret, err) {
-                        if(ret) {
-                            alert(JSON.stringify(ret))
-                        } else {
-                            alert(JSON.stringify(err.msg))
-                        }
-                    })
-                }
             } else {
                 alert('1'+JSON.stringify(err));
             }
@@ -210,16 +192,24 @@
         api.addEventListener({
             name: 'editPhone'
         }, function(ret, err) {
-            
             if (ret) {
-               for (var i = 0; i < clearIcon.length; i++) {
-                   $api.css(clearIcon[i], 'display:inline-block');
-                }
-                for (var i = 0; i < ipt.length; i++) {
-                    $api.removeAttr(ipt[i], 'disabled');
+                editFlag = 1;
+               for (var i = 0; i < $api.domAll('.clearIcon').length; i++) {
+                   $api.css($api.domAll('.clearIcon')[i], 'display:inline-block');
                 }
             } else {
                 alert('2'+JSON.stringify(err));
+            }
+        });
+        api.addEventListener({
+            name: 'addRemarkOtherContact'
+        }, function(ret, err) {
+            if (ret) {
+                editFlag = 0;
+                requireData();
+
+            } else {
+                alert(JSON.stringify(err.msg));
             }
         });
     }
@@ -227,14 +217,15 @@
      // 获取联系人列表
     function requireData() {
         var allArr;
-        
         db.selectSql({
             name: SQLName,
             sql: 'SELECT * FROM tb_remarks_other_contact WHERE user_id = ' + api.pageParam.userId
         }, function(ret, err){        
             if( ret.status ){
+                //本地备注数据库
                 console.log('234' + JSON.stringify( ret ) );
                 if (ret.data.length != 0) {
+                    flag = 0;
                     handleData(litterSort(ret.data))
                 } else {
                     api.ajax({
@@ -248,7 +239,9 @@
                             } 
                         }
                     }, function(ret, err) {
+                        // 线上备注内容
                         if (ret) {
+                            flag = 0;
                             if (ret.data.list.length != 0) {
                                 handleData(litterSort(ret.data.list))
                             } else {
@@ -263,7 +256,9 @@
                                         } 
                                     }
                                 }, function(ret, err) {
+                                    // 会员原始信息
                                     if (ret) {
+                                        flag = 1;
                                         handleData(litterSort(ret.data.list))
                                         monitorEvent();
                                     } else {
@@ -322,33 +317,53 @@
     }
 
     function clearItem(ele) {
-        var father = $api.closest(ele, '.move');
-        var id = $api.attr(ele, 'data-id');
-        $api.remove(father);
-        if ($api.domAll('.moveFlag').length == 0) {
-            $api.remove($api.dom('.moveTitle'));
-        } 
-        if ($api.domAll('.fixedFlag').length == 0) {
-             $api.remove($api.dom('.fixedTitle'));
+        if (!flag) {
+            // 本地数据哭
+            var father = $api.closest(ele, '.move');
+            var id = $api.attr(ele, 'data-id');
+            $api.remove(father);
+            if ($api.domAll('.moveFlag').length == 0) {
+                $api.remove($api.dom('.moveTitle'));
+            } 
+            if ($api.domAll('.fixedFlag').length == 0) {
+                 $api.remove($api.dom('.fixedTitle'));
+            }
+            // 删除其他联系方式
+            api.ajax({
+                url: apiSite + '/remark_user/deleteOtherContact',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       remark_user_id: api.pageParam.userId,
+                       contact_id: id
+                   }
+                }
+            }, function(ret, err) {
+                if(ret) {
+                    if (ret.code == 200) {
+                        console.log(JSON.stringify(ret));
+                        db.executeSql({
+                            name: 'db_'+$api.getStorage('userToken'),
+                            sql: ' DELETE FROM tb_remarks_other_contact WHERE contact_id = ' + id  
+                        }, function(ret, err){        
+                            if( ret.status ){
+                                console.log(JSON.stringify(ret))
+                            }else{
+                                alert( JSON.stringify( err ) );
+                            }
+                        });
+                    } else {
+                        alert(ret.msg)
+                    }
+                } else {
+                    alert(JSON.stringify(err.msg))
+                }
+            })
+        } else {
+            alert('不可删除用户原始信息!')
         }
-        // 删除电话
-        api.ajax({
-            url: apiSite + '/user_center/deleteOtherContact',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-               values: { 
-                   token: $api.getStorage('userToken'),
-                   contact_id: id
-               }
-            }
-        }, function(ret, err) {
-            if(ret) {
-                // alert(JSON.stringify(ret))
-            } else {
-                alert(JSON.stringify(err.msg))
-            }
-        })
     }
     function addPhone() {
          api.openWin({
