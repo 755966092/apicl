@@ -97,28 +97,12 @@ var url;
     };
       // 删除地址
     function delDz () {
-         api.ajax({
-            url: apiSite + '/user_center/deleteAddress',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: $api.getStorage('userToken'),
-                    address_id: api.pageParam.address_id
-                }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                // getData(ret.data.list)
-                // alert(JSON.stringify(ret))
-                api.sendEvent({
-                    name: 'addCity'
-                });
-                api.closeWin();
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
+        api.execScript({
+            name: 'txl_addFellow_address_win.html',
+            frameName: 'txl_addFellow_address_frame',
+            script: 'delAddress('+ api.pageParam.address_id+','+ 0 +');'
         });
+        api.closeWin();
     }
 </script>
 </html>

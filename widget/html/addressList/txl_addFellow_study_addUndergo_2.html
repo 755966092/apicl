@@ -6,10 +6,6 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-       
-       
-         .main_no1 {
-        }
         .main_no1 p, .main_no2 p {
              background-color: #fff;
             height: .8rem;
@@ -112,7 +108,7 @@
             <span class="winTitle"  id="title">
                 新增学习经历
             </span>
-            <span class="rightBtn bj" id="over"   tapmode="hover"   onclick="addStudy()">删除</span> 
+            <span class="rightBtn bj" id="over"   tapmode="hover"   onclick="delStudy()">删除</span> 
         </div>
     </header>
   
@@ -148,27 +144,12 @@
     }
      // 删除数据
     function delStudy () {
-        api.ajax({
-            url: apiSite + '/user_center/deleteEducation',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
-                    education_id: api.pageParam.education_id
-                }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                // getData(ret.data.list)
-                api.sendEvent({
-                    name: 'addStudy'
-                });
-                api.closeWin();
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
+        api.execScript({
+            name: 'txl_addFellow_study_win.html',
+            frameName: 'txl_addFellow_study_frame',
+            script: 'delStusy(' + api.pageParam.education_id + ',' + 0 +');'
         });
+        api.closeWin();
     }
 </script>
 </html>

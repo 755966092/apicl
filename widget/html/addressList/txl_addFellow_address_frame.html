@@ -249,7 +249,7 @@
     }
     // 删除服务器地址
    // 删除服务器地址
-    function delAddress (id) {
+    function delAddress (id,n) {
         var SQLName = 'db_'+$api.getStorage('userToken');
         // 从数据库删除
         db.executeSql({
@@ -275,6 +275,12 @@
                         console.log('服务器删除'+JSON.stringify(ret));
                         if ($api.domAll('.dzlist').length == 0) {
                             requireData();
+                        }
+                        if (!n) {
+                            requireData();
+                            api.sendEvent({
+                                name: 'editText'
+                            });
                         }
                     } else {
                         alert(JSON.stringify(err.msg));

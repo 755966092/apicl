@@ -160,13 +160,11 @@
     apiready = function(){
         moduleInit();
         if (api.pageParam.flag == 1) {
-            url = '/user_center/editEducation';
+            url = '/remark_user/editEducation';
             requireData();
-           
         } else {
             url = '/remark_user/addEducation'
         }
-        
         
         // 获取数据
         api.addEventListener({
@@ -240,18 +238,19 @@
     // 获取数据
     function requireData() {
         api.ajax({
-            url: apiSite + '/user_center/editEducationIndex',
+            url: apiSite + '/remark_user/editEducationIndex',
             method: 'post',
             headers: apiHeader,
             data: {
                 values: { 
                     token: $api.getStorage('userToken'),
+                    remark_user_id: api.pageParam.userId,
                     education_id: api.pageParam.education_id
                 }
             }
         }, function(ret, err) {
             if (ret) {
-                
+                console.log('253:::'+JSON.stringify(ret))
                 if (ret.data.info.degree == '1') {
                     ret.data.info.degree = '专科'
                 } else if (ret.data.info.degree == '2') {
@@ -266,7 +265,7 @@
                 if (ret.data.info.end_date == '0000-00-00' ){
                     ret.data.info.end_date = '至今'
                 }  else {
-
+                    $api.text($api.byId('time_2'), ret.data.info.end_date); 
                 }
                 $api.val($api.byId('school'), ret.data.info.school);    
                 $api.val($api.byId('major'), ret.data.info.major);    
@@ -275,39 +274,6 @@
                 $api.text($api.byId('time_2'), ret.data.info.end_date); 
                 $api.val($api.byId('textarea'), ret.data.info.description); 
                 $api.text($api.byId('textLength'), ret.data.info.description.length + '/300');
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
-    }
-    // 监听
-    function monitor() {
-        // 监听返回数据
-        api.addEventListener({
-            name: 'selectEdu'
-        }, function(ret, err) {
-            if (ret) {
-                $api.text($api.byId('selectEdu'), ret.value.selDate);
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
-        // 监听返回时间数据1
-        api.addEventListener({
-            name: 'selectTime_1'
-        }, function(ret, err) {
-            if (ret) {
-                $api.text($api.byId('time_1'), ret.value.selDate);
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
-        api.addEventListener({
-            name: 'selectTime_2'
-        }, function(ret, err) {
-            if (ret) {
-
-                $api.text($api.byId('time_2'), ret.value.selDate);
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -322,6 +288,7 @@
         var time_1 = $api.text($api.byId('time_1'));    
         var time_2 = $api.text($api.byId('time_2'))=='至今'?'0000-00-00':$api.text($api.byId('time_2')); 
         var textarea = $api.val($api.byId('textarea')); 
+
         if (selectEdu == '专科') {
             selectEdu = 1
         } else if (selectEdu == '本科') {
@@ -333,30 +300,43 @@
         } else if (selectEdu == '博士后') {
             selectEdu = 5
         }
-        
-         api.ajax({
+        var obj = {};
+        if (api.pageParam.flag) {
+            obj = {
+                token: $api.getStorage('userToken'),
+                remark_user_id: api.pageParam.userId,
+                education_id: api.pageParam.education_id,
+                type: 3,
+                school: school,
+                major: major,
+                degree: selectEdu,
+                description: textarea,
+                start_date: time_1,
+                end_date: time_2
+            }
+        } else {
+            obj = {
+                token: $api.getStorage('userToken'),
+                remark_user_id: api.pageParam.userId,
+                type: 3,
+                school: school,
+                major: major,
+                degree: selectEdu,
+                description: textarea,
+                start_date: time_1,
+                end_date: time_2
+            }
+        }
+        api.ajax({
             url: apiSite + url,
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
-                    token: $api.getStorage('userToken'),
-                    remark_user_id: api.pageParam.userId,
-                    education_id: api.pageParam.education_id,
-                    type: 3,
-                    school: school,
-                    major: major,
-                    degree: selectEdu,
-                    description: textarea,
-                    start_date: time_1,
-                    end_date: time_2
-                }
+                values: obj
             }
         }, function(ret, err) {
             if (ret) {
-             
-             insertData();
-             api.closeWin();
+                insertData();
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -365,6 +345,7 @@
     }
     function insertData() {
         var SQLName = 'db_'+$api.getStorage('userToken');
+
         api.ajax({
             url: apiSite + '/remark_user/educationList',
             method: 'post',
@@ -377,39 +358,53 @@
             }
         }, function(ret, err) {
             if(ret) {
-                console.log('334ret:'+JSON.stringify(ret))
-                var sql = 'INSERT OR REPLACE INTO tb_remarks_education(list_id,user_id,education_id,type,school,major, degree, description, start_date, end_date) VALUES '
-                for (var i = 0; i < ret.data.list.length; i++) {
-                    sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].education_id  +'",'+api.pageParam.userId+','+ret.data.list[i].education_id+','+ret.data.list[i].type+',"'+ret.data.list[i].school+'","'+ret.data.list[i].major+'",'+ret.data.list[i].degree+',"'+ret.data.list[i].description+'","'+ret.data.list[i].start_date+'","'+ret.data.list[i].end_date+'"),'
-                }
-                sql = sql.substring(0,sql.length-1);
-                db.executeSql({
-                    name: SQLName,
-                    sql: sql   
-                }, function(ret, err){  
+                if (api.pageParam.flag) {
+                    // 更新数据库
+                   for (var i = 0; i < ret.data.list.length; i++) {
+                        if (ret.data.list[i].education_id == api.pageParam.education_id) {
+                            db.executeSql({
+                                name: SQLName,
+                                sql: 'UPDATE tb_remarks_education SET type = ' + ret.data.list[i].type + ',school = "' + ret.data.list[i].school+ '",major = "' + ret.data.list[i].major+ '",degree = "' + ret.data.list[i].degree+ '",description = "' + ret.data.list[i].description+ '",start_date = "' + ret.data.list[i].start_date+ '",end_date = "' + ret.data.list[i].end_date + '" WHERE education_id =' + api.pageParam.education_id    
+                            }, function(ret, err){        
+                                if( ret.status ){
+                                    console.log( '更新成功'+JSON.stringify( ret ) );
+                                    api.sendEvent({
+                                         name: 'addRemarksStudy'
+                                    });
+                                    api.closeWin();
+                                }else{
+                                    alert( JSON.stringify( err ) );
+                                }
+                            });
+                        }
+                   }
+                } else {
+                    // 插入数据库
                     console.log('334ret:'+JSON.stringify(ret))
-                    console.log('335err:'+JSON.stringify(err))
-                    api.sendEvent({
-                         name: 'addRemarksStudy'
-                    });
-                    if( ret.status ){
-                        db.selectSql({
-                            name: SQLName,
-                            sql: 'SELECT * FROM tb_remarks_education WHERE user_id=' + api.pageParam.userId
-                        }, function(ret, err){  
-                            if( ret.status ){
-                                console.log('数据库内容:'+JSON.stringify(ret))
-                            }else{
-                                alert(JSON.stringify( err ) );
-                            }
-                        });
-                    }else{
-                        alert(JSON.stringify( err ) );
+                    var sql = 'INSERT OR REPLACE INTO tb_remarks_education(list_id,user_id,education_id,type,school,major, degree, description, start_date, end_date) VALUES '
+                    for (var i = 0; i < ret.data.list.length; i++) {
+                        sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].education_id  +'",'+api.pageParam.userId+','+ret.data.list[i].education_id+','+ret.data.list[i].type+',"'+ret.data.list[i].school+'","'+ret.data.list[i].major+'",'+ret.data.list[i].degree+',"'+ret.data.list[i].description+'","'+ret.data.list[i].start_date+'","'+ret.data.list[i].end_date+'"),'
                     }
-                });
+                    sql = sql.substring(0,sql.length-1);
+                    db.executeSql({
+                        name: SQLName,
+                        sql: sql   
+                    }, function(ret, err){  
+                        if( ret.status ){
+                            console.log('334ret:'+JSON.stringify(ret))
+                            console.log('335err:'+JSON.stringify(err))
+                            api.sendEvent({
+                                 name: 'addRemarksStudy'
+                            });
+                            api.closeWin();
+                        }else{
+                            alert(JSON.stringify( err ) );
+                        }
+                    });
+                }
+                
             } else {
                 alert(JSON.stringify(err))
-                alert(JSON.stringify(ret))
             }
         })
     }

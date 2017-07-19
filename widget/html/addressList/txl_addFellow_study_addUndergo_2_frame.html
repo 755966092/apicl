@@ -154,7 +154,7 @@
     apiready = function(){
         moduleInit();
         if (api.pageParam.flag == 1) {
-            url = '/user_center/editEducation';
+            url = '/remark_user/editEducation';
             getCityList();
         } else {
             url = '/remark_user/addEducation'
@@ -305,12 +305,13 @@
      // 获取数据
     function getCityList() {
         api.ajax({
-            url: apiSite + '/user_center/editEducationIndex',
+            url: apiSite + '/remark_user/editEducationIndex',
             method: 'post',
             headers: apiHeader,
             data: {
                 values: { 
                     token: $api.getStorage('userToken'),
+                    remark_user_id: api.pageParam.userId,
                     education_id: api.pageParam.education_id
                 }
             }
@@ -318,6 +319,8 @@
             if (ret) {
                 if (ret.data.info.end_date == '0000-00-00' ){
                      $api.text($api.byId('time_2'), '至今'); 
+                } else {
+                    $api.text($api.byId('time_2'), ret.data.info.end_date); 
                 }
                 $api.val($api.byId('school'), ret.data.info.school);    
                 $api.text($api.byId('selectKe'), ret.data.info.major);   
@@ -339,29 +342,43 @@
         var time_1 = $api.text($api.byId('time_1'));    
         var time_2 = $api.text($api.byId('time_2')); 
         var textarea = $api.val($api.byId('textarea')); 
-        alert(selectKe)
-         api.ajax({
+        var obj = {};
+        if (api.pageParam.flag) {
+            obj = {
+                token: $api.getStorage('userToken'),
+                remark_user_id: api.pageParam.userId,
+                education_id: api.pageParam.education_id,
+                type: 2,
+                school: school,
+                major: selectKe,
+                degree: '',
+                description: textarea,
+                start_date: time_1,
+                end_date: time_2
+            }
+        } else {
+            obj = {
+                token: $api.getStorage('userToken'),
+                remark_user_id: api.pageParam.userId,
+                type: 2,
+                school: school,
+                major: selectKe,
+                degree: '',
+                description: textarea,
+                start_date: time_1,
+                end_date: time_2
+            }
+        }
+        api.ajax({
             url: apiSite + url,
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
-                    token: $api.getStorage('userToken'),
-                    remark_user_id: api.pageParam.userId,
-                    education_id: api.pageParam.education_id,
-                    type: 2,
-                    school: school,
-                    major: selectKe,
-                    degree: '',
-                    description: textarea,
-                    start_date: time_1,
-                    end_date: time_2
-                }
+                values: obj
             }
         }, function(ret, err) {
             if (ret) {
                 insertData();
-                api.closeWin();
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -383,36 +400,48 @@
             }
         }, function(ret, err) {
             if(ret) {
-                console.log('334ret:'+JSON.stringify(ret))
-                var sql = 'INSERT OR REPLACE INTO tb_remarks_education(list_id,user_id,education_id,type,school,major, degree, description, start_date, end_date) VALUES '
-                for (var i = 0; i < ret.data.list.length; i++) {
-                    sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].education_id  +'",'+api.pageParam.userId+','+ret.data.list[i].education_id+','+ret.data.list[i].type+',"'+ret.data.list[i].school+'","'+ret.data.list[i].major+'",'+ret.data.list[i].degree+',"'+ret.data.list[i].description+'","'+ret.data.list[i].start_date+'","'+ret.data.list[i].end_date+'"),'
-                }
-                sql = sql.substring(0,sql.length-1);
-                db.executeSql({
-                    name: SQLName,
-                    sql: sql   
-                }, function(ret, err){  
+                if (api.pageParam.flag) {
+                    for (var i = 0; i < ret.data.list.length; i++) {
+                        if (ret.data.list[i].education_id == api.pageParam.education_id) {
+                            db.executeSql({
+                                name: SQLName,
+                                sql: 'UPDATE tb_remarks_education SET type = ' + ret.data.list[i].type + ',school = "' + ret.data.list[i].school+ '",major = "' + ret.data.list[i].major+ '",degree = "' + ret.data.list[i].degree+ '",description = "' + ret.data.list[i].description+ '",start_date = "' + ret.data.list[i].start_date+ '",end_date = "' + ret.data.list[i].end_date + '" WHERE education_id =' + api.pageParam.education_id    
+                            }, function(ret, err){        
+                                if( ret.status ){
+                                    console.log( '更新成功'+JSON.stringify( ret ) );
+                                    api.sendEvent({
+                                         name: 'addRemarksStudy'
+                                    });
+                                    api.closeWin();
+                                }else{
+                                    alert( JSON.stringify( err ) );
+                                }
+                            });
+                        }
+                   }
+                } else {
                     console.log('334ret:'+JSON.stringify(ret))
-                    console.log('335err:'+JSON.stringify(err));
-                    api.sendEvent({
-                        name: 'addRemarksStudy'
-                    });
-                    if( ret.status ){
-                        db.selectSql({
-                            name: SQLName,
-                            sql: 'SELECT * FROM tb_remarks_education WHERE user_id=' + api.pageParam.userId
-                        }, function(ret, err){  
-                            if( ret.status ){
-                                console.log('数据库内容:'+JSON.stringify(ret))
-                            }else{
-                                alert(JSON.stringify( err ) );
-                            }
-                        });
-                    }else{
-                        alert(JSON.stringify( err ) );
+                    var sql = 'INSERT OR REPLACE INTO tb_remarks_education(list_id,user_id,education_id,type,school,major, degree, description, start_date, end_date) VALUES '
+                    for (var i = 0; i < ret.data.list.length; i++) {
+                        sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].education_id  +'",'+api.pageParam.userId+','+ret.data.list[i].education_id+','+ret.data.list[i].type+',"'+ret.data.list[i].school+'","'+ret.data.list[i].major+'",'+ret.data.list[i].degree+',"'+ret.data.list[i].description+'","'+ret.data.list[i].start_date+'","'+ret.data.list[i].end_date+'"),'
                     }
-                });
+                    sql = sql.substring(0,sql.length-1);
+                    db.executeSql({
+                        name: SQLName,
+                        sql: sql   
+                    }, function(ret, err){  
+                        if( ret.status ){
+                            console.log('334ret:'+JSON.stringify(ret))
+                            console.log('335err:'+JSON.stringify(err));
+                            api.sendEvent({
+                                name: 'addRemarksStudy'
+                            });
+                            api.closeWin();
+                        }else{
+                            alert(JSON.stringify( err ) );
+                        }
+                    });
+                }
             } else {
                 alert(JSON.stringify(err))
                 alert(JSON.stringify(ret))

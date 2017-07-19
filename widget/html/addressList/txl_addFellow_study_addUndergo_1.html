@@ -151,27 +151,12 @@
     }
      // 删除数据
     function delStudy () {
-        api.ajax({
-            url: apiSite + '/user_center/deleteEducation',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
-                    education_id: api.pageParam.education_id
-                }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                // getData(ret.data.list)
-                api.sendEvent({
-                    name: 'addStudy'
-                });
-                api.closeWin();
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
+        api.execScript({
+            name: 'txl_addFellow_study_win.html',
+            frameName: 'txl_addFellow_study_frame',
+            script: 'delStusy(' + api.pageParam.education_id + ',' + 0 +');'
         });
+        api.closeWin();
     }
 </script>
 </html>
