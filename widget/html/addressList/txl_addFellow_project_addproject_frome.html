@@ -167,7 +167,7 @@
     apiready = function(){
         moduleInit();
         if (api.pageParam.flag == 1) {
-            url = '/user_center/editProject';
+            url = '/remark_user/editProject';
              // 获取数据
             getCityList();
         } else {
@@ -184,27 +184,33 @@
     // 获取数据
     function getCityList() {
         api.ajax({
-            url: apiSite + '/user_center/editProjectIndex',
+            url: apiSite + '/remark_user/editProjectIndex',
             method: 'post',
             headers: apiHeader,
             data: {
                 values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    token: $api.getStorage('userToken'),
+                    remark_user_id: api.pageParam.userId,
                     project_id: api.pageParam.project_id
                 }
             }
         }, function(ret, err) {
             if (ret) {
-                ret.data.info.end_date = ret.data.info.end_date == '0000-00-00'?'至今':ret.data.info.end_date;
-                $api.val($api.byId('company_name'), ret.data.info.name);    
-                $api.val($api.byId('company_position'), ret.data.info.role);    
-                $api.val($api.byId('url'), ret.data.info.url);   
-                $api.text($api.byId('time_1'), ret.data.info.start_date);    
-                $api.text($api.byId('time_2'), ret.data.info.end_date); 
-                $api.val($api.byId('textarea'), ret.data.info.description); 
-                $api.val($api.byId('textarea2'), ret.data.info.achievement); 
-                $api.text($api.byId('textLength'), ret.data.info.description.length + '/300');
-                $api.text($api.byId('textLength2'), ret.data.info.achievement.length + '/300');
+                console.log(JSON.stringify(ret))
+                if (ret.code == 200) {
+                    ret.data.info.end_date = ret.data.info.end_date == '0000-00-00'?'至今':ret.data.info.end_date;
+                    $api.val($api.byId('company_name'), ret.data.info.name);    
+                    $api.val($api.byId('company_position'), ret.data.info.role);    
+                    $api.val($api.byId('url'), ret.data.info.url);   
+                    $api.text($api.byId('time_1'), ret.data.info.start_date);    
+                    $api.text($api.byId('time_2'), ret.data.info.end_date); 
+                    $api.val($api.byId('textarea'), ret.data.info.description); 
+                    $api.val($api.byId('textarea2'), ret.data.info.achievement); 
+                    $api.text($api.byId('textLength'), ret.data.info.description.length + '/300');
+                    $api.text($api.byId('textLength2'), ret.data.info.achievement.length + '/300');
+                } else {
+                    alert(ret.msg)
+                }
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -241,7 +247,6 @@
             }
         }, function(ret, err) {
             if (ret.code == 200) {
-                
                 insertData();
                 api.closeWin();
             } else {

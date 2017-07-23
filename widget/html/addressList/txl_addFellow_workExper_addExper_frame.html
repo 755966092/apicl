@@ -149,26 +149,25 @@
     apiready = function(){
         moduleInit();
         if (api.pageParam.flag == 1) {
-            url = '/user_center/editWork';
+            url = '/remark_user/editWork';
             // 获取数据
             qeruireData();
         } else {
             url = '/remark_user/addWork'
             // user_id: api.pageParam.userId
         }
-        // 监听返回数据
-        monitor();
     };
 
     // 获取数据
     function qeruireData() {
         api.ajax({
-            url: apiSite + '/user_center/editWorkIndex',
+            url: apiSite + '/remark_user/editWorkIndex',
             method: 'post',
             headers: apiHeader,
             data: {
                 values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    token: $api.getStorage('userToken'),
+                    remark_user_id: api.pageParam.userId,
                     work_id: api.pageParam.work_id
                 }
             }
@@ -187,39 +186,7 @@
             }
         });
     }
-    // 监听
-    function monitor() {
-        // 监听返回数据
-        // api.addEventListener({
-        //     name: 'selectEdu'
-        // }, function(ret, err) {
-        //     if (ret) {
-        //         $api.text($api.byId('selectEdu'), ret.value.selDate);
-        //     } else {
-        //         alert(JSON.stringify(err.msg));
-        //     }
-        // });
-        // 监听返回时间数据1
-        api.addEventListener({
-            name: 'selectTime_1'
-        }, function(ret, err) {
-            if (ret) {
-                $api.text($api.byId('time_1'), ret.value.selDate);
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
-        api.addEventListener({
-            name: 'selectTime_2'
-        }, function(ret, err) {
-            if (ret) {
-
-                $api.text($api.byId('time_2'), ret.value.selDate);
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
-    }
+   
     // 提交数据
     function addStudy() {
         // 获取数据
@@ -249,8 +216,6 @@
         }, function(ret, err) {
             if (ret.code == 200) {
                 insertData();
-                
-                api.closeWin();
             } else {
                 alert(JSON.stringify(ret.msg));
             }
@@ -259,7 +224,6 @@
     }
     // 删除数据
     function delStudy () {
-        alert('删除')
         api.ajax({
             url: apiSite + '/user_center/deleteWork',
             method: 'post',
@@ -346,6 +310,7 @@
         });
     }
 
+    // 数据库操作
     function insertData() {
         var SQLName = 'db_'+$api.getStorage('userToken');
         api.ajax({
@@ -360,41 +325,61 @@
             }
         }, function(ret, err) {
             if(ret) {
-                console.log('334ret:'+JSON.stringify(ret))
-                var sql = 'INSERT OR REPLACE INTO tb_remarks_work(list_id,user_id,work_id,company_id,company_name,position, description, is_default, start_date, end_date) VALUES '
-                for (var i = 0; i < ret.data.list.length; i++) {
-                    sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].work_id  +'",'+api.pageParam.userId+','+ret.data.list[i].work_id+',"'+ret.data.list[i].company_id+'","'+ret.data.list[i].company_name+'","'+ret.data.list[i].position+'","'+ret.data.list[i].description+'",'+ret.data.list[i].is_default+',"'+ret.data.list[i].start_date+'","'+ret.data.list[i].end_date+'"),'
+                if (api.pageParam.flag) {
+                    // 更新数据库
+                    updateSql(ret);
+                } else {
+                    insertSql(ret);
                 }
-                sql = sql.substring(0,sql.length-1);
-                db.executeSql({
-                    name: SQLName,
-                    sql: sql   
-                }, function(ret, err){  
-                    console.log('334ret:'+JSON.stringify(ret))
-                    console.log('335err:'+JSON.stringify(err))
-                    if( ret.status ){
-                        api.sendEvent({
-                            name: 'addStudy'
-                        });
-                        db.selectSql({
-                            name: SQLName,
-                            sql: 'SELECT * FROM tb_remarks_work WHERE user_id=' + api.pageParam.userId
-                        }, function(ret, err){  
-                            if( ret.status ){
-                                console.log('340:'+JSON.stringify(ret))
-                            }else{
-                                alert(JSON.stringify( err ) );
-                            }
-                        });
-                    }else{
-                        alert(JSON.stringify( err ) );
-                    }
-                });
             } else {
                 alert(JSON.stringify(err))
-                alert(JSON.stringify(ret))
             }
         })
+    }
+    // 插入数据
+    function insertSql(ret) {
+        console.log('334ret:'+JSON.stringify(ret))
+        var sql = 'INSERT OR REPLACE INTO tb_remarks_work(list_id,user_id,work_id,company_id,company_name,position, description, is_default, start_date, end_date) VALUES '
+        for (var i = 0; i < ret.data.list.length; i++) {
+            sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].work_id  +'",'+api.pageParam.userId+','+ret.data.list[i].work_id+',"'+ret.data.list[i].company_id+'","'+ret.data.list[i].company_name+'","'+ret.data.list[i].position+'","'+ret.data.list[i].description+'",'+ret.data.list[i].is_default+',"'+ret.data.list[i].start_date+'","'+ret.data.list[i].end_date+'"),'
+        }
+        sql = sql.substring(0,sql.length-1);
+        db.executeSql({
+            name: SQLName,
+            sql: sql   
+        }, function(ret, err){  
+            console.log('334ret:'+JSON.stringify(ret))
+            console.log('335err:'+JSON.stringify(err))
+            if( ret.status ){
+                api.sendEvent({
+                    name: 'addStudy'
+                });
+                api.closeWin();
+            }else{
+                alert(JSON.stringify( err ) );
+            }
+        });
+    }
+    // 更新数据
+    function updateSql (ret) {
+        for (var i = 0; i < ret.data.list.length; i++) {
+            if (ret.data.list[i].work_id == api.pageParam.work_id) {
+                db.executeSql({
+                    name: SQLName,
+                    sql: 'UPDATE tb_remarks_work SET company_name = "' + ret.data.list[i].company_name + '",position = "' + ret.data.list[i].position+ '",description = "' + ret.data.list[i].description+ '",is_default = "' + ret.data.list[i].is_default+ '",start_date = "' + ret.data.list[i].start_date+ '",end_date = "' + ret.data.list[i].end_date + '" WHERE work_id =' + api.pageParam.work_id    
+                }, function(ret, err){        
+                    if( ret.status ){
+                        console.log( '更新成功'+JSON.stringify( ret ) );
+                        api.sendEvent({
+                             name: 'addStudy'
+                        });
+                        api.closeWin();
+                    }else{
+                        alert( JSON.stringify( err ) );
+                    }
+                });
+            }
+       }
     }
 </script>
 </html>

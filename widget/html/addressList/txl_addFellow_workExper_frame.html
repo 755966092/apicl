@@ -6,7 +6,6 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-       
         .wrap {
             margin-top: .2rem;
         }
@@ -121,7 +120,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    var zipcode;//邮编
+    var flag = 0; // flag= 0; 列表数据是备注数据, 可编辑
     apiready = function(){
         moduleInit();
         // 请求地址列表
@@ -158,25 +157,29 @@
     function openEdit(ele) {
         var val = $api.attr(ele, 'data-id');
         var type = $api.attr(ele, 'data-type');
-
-        if ($api.hasCls($api.byId('btnStatus'), 'edit')) {
-            // 删除按钮状态下删除地址
-            $api.remove($api.closest($api.byId('btnStatus'), '.dzlist'));
-            delDz2(val);
+        if (flag) {
+            alert('不能操作会员原始信息')
         } else {
-            // 编辑按钮状态下 进入编辑页面
-            api.openWin({
-                name: 'txl_addFellow_workExper_addExper',
-                url: './txl_addFellow_workExper_addExper.html',
-                pageParam: {
-                    user_id: api.pageParam.userId,
-                    flag: 1,
-                    work_id: val
-                },
-                softInputMode: 'pan'
-            });
-            
+            if ($api.hasCls($api.byId('btnStatus'), 'edit')) {
+                // 删除按钮状态下删除地址
+                $api.remove($api.closest($api.byId('btnStatus'), '.dzlist'));
+                deleteWorkExper(val);
+            } else {
+                // 编辑按钮状态下 进入编辑页面
+                api.openWin({
+                    name: 'txl_addFellow_workExper_addExper',
+                    url: './txl_addFellow_workExper_addExper.html',
+                    pageParam: {
+                        userId: api.pageParam.userId,
+                        flag: 1,
+                        work_id: val
+                    },
+                    softInputMode: 'pan'
+                });
+                
+            }
         }
+       
         
     }
 
@@ -204,62 +207,16 @@
             if( ret.status ){
                 console.log('205' + JSON.stringify( ret ) );
                 if (ret.data.length != 0) {
+                    flag = 0;
                     for (var i = 0; i < ret.data.length; i++) {
                         if (ret.data[i].end_date == '0000-00-00' ){
                             ret.data[i].end_date = '至今'
                         }
                     }
                     getData(ret.data);
+                    console.log('1111111111111111111')
                 } else {
-                    api.ajax({
-                        url: apiSite + '/user/workList',
-                        method: 'post',
-                        headers: apiHeader,
-                        data: {
-                            values: { 
-                                token: $api.getStorage('userToken'),
-                                user_id: api.pageParam.userId
-                            }
-                        }
-                    }, function(ret, err) {
-                        if (ret) {
-                            
-                            if (ret.data.list.length != 0) {
-                                for (var i = 0; i < ret.data.list.length; i++) {
-                                    if (ret.data.list[i].end_date == '0000-00-00' ){
-                                        ret.data.list[i].end_date = '至今'
-                                    }
-                                }
-                                getData(ret.data.list);
-                            } else {
-                                api.ajax({
-                                    url: apiSite + '/remark_user/workList',
-                                    method: 'post',
-                                    headers: apiHeader,
-                                    data: {
-                                        values: { 
-                                            token: $api.getStorage('userToken'),
-                                            remark_user_id: api.pageParam.userId
-                                        }
-                                    }
-                                }, function(ret, err) {
-                                    if (ret) {
-                                        for (var i = 0; i < ret.data.list.length; i++) {
-                                            if (ret.data.list[i].end_date == '0000-00-00' ){
-                                                ret.data.list[i].end_date = '至今'
-                                            }
-                                        }
-                                        getData(ret.data.list)
-                                    } else {
-                                        alert(JSON.stringify(err.msg));
-                                    }
-                                });
-                            }
-                            
-                        } else {
-                            alert(JSON.stringify(err.msg));
-                        }
-                    });
+                    remarkInfo();
                 }
             }else{
                 alert( JSON.stringify( err ) );
@@ -267,7 +224,67 @@
         });
         
     }
-
+    // 线上备注地址
+    function remarkInfo() {
+        api.ajax({
+            url: apiSite + '/remark_user/workList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: $api.getStorage('userToken'),
+                    remark_user_id: api.pageParam.userId
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                console.log('241::::::: '+JSON.stringify(ret))
+                if (ret.data.list.length != 0) {
+                    flag= 0;
+                    for (var i = 0; i < ret.data.list.length; i++) {
+                        if (ret.data.list[i].end_date == '0000-00-00' ){
+                            ret.data.list[i].end_date = '至今'
+                        }
+                    }
+                    getData(ret.data.list);
+                    console.log('222222222222222222')
+                } else {
+                    // 原始信息
+                    originalInfo();
+                }
+                
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
+    }
+    // 原始信息
+    function originalInfo () {
+         api.ajax({
+            url: apiSite + '/user/workList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: $api.getStorage('userToken'),
+                    user_id: api.pageParam.userId
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                flag = 1;
+                for (var i = 0; i < ret.data.list.length; i++) {
+                    if (ret.data.list[i].end_date == '0000-00-00' ){
+                        ret.data.list[i].end_date = '至今'
+                    }
+                }
+                getData(ret.data.list);
+                console.log('33333333333333333')
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
+    }
     // 删除地址
     function delDz () {
         api.addEventListener({
@@ -284,54 +301,26 @@
         });
     }
     // 删除服务器地址
-    function delDz2 (id) {
+    function deleteWorkExper (id) {
         api.ajax({
-            url: apiSite + '/user_center/deleteWork',
+            url: apiSite + '/remark_user/deleteWork',
             method: 'post',
             headers: apiHeader,
             data: {
                 values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    token: $api.getStorage('userToken'),
+                    remark_user_id: api.pageParam.userId,
                     work_id: id
                 }
             }
         }, function(ret, err) {
             if (ret) {
+                alert(JSON.stringify(ret))
                 // getData(ret.data.list)
             } else {
                 alert(JSON.stringify(err.msg));
             }
         });
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // doT模版获取数据
-    function getData(data) {
-        var listTText = $api.byId('listT').text;
-        var fnListT = doT.template(listTText);
-        var html = fnListT(data);
-        var list = $api.dom('.resultList');
-        // 替换resultList所有内容
-        $api.html(list, html);
-        // alert('getData:' + JSON.stringify(data))
     }
 </script>
 </html>

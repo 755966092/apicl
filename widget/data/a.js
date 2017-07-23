@@ -1,29 +1,38 @@
-07 - 18 19: 35: 35.074 I / app3c(2): 本地数据库[{
-	"phone": "13260227521",
-	"sub_type": "工作",
-	"is_default": 1,
-	"list_id": "18670_56",
-	"user_id": 18670,
-	"type": 1,
-	"contact_id": 56,
-	"flag": 1
-}, {
-	"phone": "13260227522",
-	"sub_type": "工作",
-	"is_default": -1,
-	"list_id": "18670_57",
-	"user_id": 18670,
-	"type": 2,
-	"contact_id": 57,
-	"flag": 2
-}]
-07 - 18 19: 37: 55.304 I / app3c(2): 本地数据库[{
-	"phone": "13260227522",
-	"sub_type": "工作",
-	"is_default": -1,
-	"list_id": "18670_57",
-	"user_id": 18670,
-	"type": 2,
-	"contact_id": 57,
-	"flag": 2
-}]
+{
+	"data": [{
+		"list_id": "18665_10",
+		"user_id": "18665",
+		"project_id": "10",
+		"name": "测试备注",
+		"url": "测试",
+		"role": "测试",
+		"description": "测试",
+		"achievement": "测试",
+		"start_date": "2017-06-24",
+		"end_date": "2017-06-30"
+	}, {
+		"list_id": "18665_7",
+		"user_id": "18665",
+		"project_id": "7",
+		"name": "备注",
+		"url": "备注",
+		"role": "备注",
+		"description": "备注",
+		"achievement": "备注",
+		"start_date": "2017-06-12",
+		"end_date": "2017-06-30"
+	}, {
+		"list_id": "18665_2",
+		"user_id": "18665",
+		"project_id": "2",
+		"name": "备注",
+		"url": "备注",
+		"role": "备注",
+		"description": "备注",
+		"achievement": "备注",
+		"start_date": "2017-06-07",
+		"end_date": "2017-06-17"
+	}],
+	"status": true
+}
+at txl_addFellow_project_frame.html: 195

@@ -84,10 +84,8 @@
     </style>
 </head>
 <body>
-    
     <div class="wrap resultList">
     </div>
-
     <script type="text/x-dot-template" id="listT">
         {{ for (var i = 0; i < it.length; i++) { }} 
             <div class="dzlist" ontouchstart="openEdit(this)" data-type='{{=it[i].type}}' data-id='{{=it[i].project_id}}' >
@@ -112,7 +110,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    var zipcode;//邮编
+    var flag = 0;
     apiready = function(){
         moduleInit();
         // 请求地址列表
@@ -121,7 +119,6 @@
         delDz();
         // 监听增加地址事件
         addCity();
-
         api.addEventListener({
             name: 'addStudy'
         }, function(ret, err) {
@@ -149,23 +146,26 @@
     function openEdit(ele) {
         var val = $api.attr(ele, 'data-id');
         // var type = $api.attr(ele, 'data-type');
-
-        if ($api.hasCls($api.byId('btnStatus'), 'edit')) {
-            // 删除按钮状态下删除地址
-            $api.remove($api.closest($api.byId('btnStatus'), '.dzlist'));
-            delDz2(val);
+        if (flag) {
+            alert('不能操作会员原始信息')
         } else {
-            // 编辑按钮状态下 进入编辑页面
-            api.openWin({
-                name: 'txl_addFellow_project_addproject',
-                url: './txl_addFellow_project_addproject.html',
-                pageParam: {
-                    userToken: api.pageParam.userToken || $api.getStorage('userToken'),
-                    flag: 1,
-                    project_id: val
-                }
-            });
-            
+            if ($api.hasCls($api.byId('btnStatus'), 'edit')) {
+                // 删除按钮状态下删除地址
+                $api.remove($api.closest($api.byId('btnStatus'), '.dzlist'));
+                deleteProject(val);
+            } else {
+                // 编辑按钮状态下 进入编辑页面
+                api.openWin({
+                    name: 'txl_addFellow_project_addproject',
+                    url: './txl_addFellow_project_addproject.html',
+                    pageParam: {
+                        flag: 1,
+                        project_id: val,
+                        userId: api.pageParam.userId
+                    }
+                });
+                
+            }
         }
         
     }
@@ -191,6 +191,7 @@
         }, function(ret, err){        
             if( ret.status ){
                 if (ret.data.length != 0) {
+                    flag = 0;
                     console.log('193:::'+ JSON.stringify( ret ) );
                     for (var i = 0; i < ret.data.length; i++) {
                         if (ret.data[i].end_date == '0000-00-00' ){
@@ -200,18 +201,19 @@
                     getData(ret.data);
                 } else {
                     api.ajax({
-                        url: apiSite + '/user/projectList',
+                        url: apiSite + '/remark_user/projectList',
                         method: 'post',
                         headers: apiHeader,
                         data: {
                             values: { 
                                 token: $api.getStorage('userToken'),
-                                user_id: api.pageParam.userId
+                                remark_user_id: api.pageParam.userId
                             }
                         }
                     }, function(ret, err) {
                         if (ret.code == 200) {
                             if (ret.data.list.length != 0) {
+                                flag = 0;
                                 for (var i = 0; i < ret.data.list.length; i++) {
                                     if (ret.data.list[i].end_date == '0000-00-00' ){
                                         ret.data.list[i].end_date = '至今'
@@ -220,17 +222,18 @@
                                 getData(ret.data.list);
                             } else {
                                 api.ajax({
-                                    url: apiSite + '/remark_user/projectList',
+                                    url: apiSite + '/user/projectList',
                                     method: 'post',
                                     headers: apiHeader,
                                     data: {
                                         values: { 
                                             token: $api.getStorage('userToken'),
-                                            remark_user_id: api.pageParam.userId
+                                            user_id: api.pageParam.userId
                                         }
                                     }
                                 }, function(ret, err) {
                                     if (ret.code == 200) {
+                                        flag = 1;
                                         for (var i = 0; i < ret.data.list.length; i++) {
                                             if (ret.data.list[i].end_date == '0000-00-00' ){
                                                 ret.data.list[i].end_date = '至今'
@@ -270,54 +273,49 @@
         });
     }
     // 删除服务器地址
-    function delDz2 (id) {
+    function deleteProject(id) {
         api.ajax({
-            url: apiSite + '/user_center/deleteProject',
+            url: apiSite + '/remark_user/deleteProject',
             method: 'post',
             headers: apiHeader,
             data: {
                 values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    token: $api.getStorage('userToken'),
+                    remark_user_id: api.pageParam.userId,
                     project_id: id
                 }
             }
         }, function(ret, err) {
             if (ret) {
+                alert(JSON.stringify(ret))
+                selSqlStudy(id);
                 // getData(ret.data.list)
             } else {
                 alert(JSON.stringify(err.msg));
             }
         });
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // doT模版获取数据
-    function getData(data) {
-        var listTText = $api.byId('listT').text;
-        var fnListT = doT.template(listTText);
-        var html = fnListT(data);
-        var list = $api.dom('.resultList');
-        // 替换resultList所有内容
-        $api.html(list, html);
-        // alert('getData:' + JSON.stringify(data))
+    // 删除本地数据库
+    function selSqlStudy(id,n) {
+        db.executeSql({
+            name: 'db_'+$api.getStorage('userToken'),
+            sql: 'DELETE FROM tb_remarks_project WHERE project_id = ' + id  
+        }, function(ret, err){        
+            if( ret.status ){
+                console.log('数据库删除成功');
+                // if ($api.domAll('.dzlist').length == 0) {
+                //     requireData();
+                // }
+                // if (!n) {
+                //     requireData();
+                //     api.sendEvent({
+                //         name: 'editText'
+                //     });
+                // }
+            }else{
+                alert( JSON.stringify( err ) );
+            }
+        });
     }
 </script>
 </html>
