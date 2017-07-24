@@ -432,6 +432,10 @@
                     for (var i = 0; i < ret.data.list.length; i++) {
                         // 解析图片json
                         ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
+                        // 处理七牛云返回的url, 加参数是返回的缩略图
+                        for (var j = 0; j < ret.data.list[i].image_json.length; j++) {
+                            ret.data.list[i].image_json[j] = ret.data.list[i].image_json[j]+'?imageView2/3/w/200/h/200/q/75|imageslim'
+                        }
                         // 处理时间显示
                         ret.data.list[i].create_time = initTime(ret.data.list[i].create_time)
                         if(ret.data.list[i].unit == 0) {

@@ -6,10 +6,6 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-       
-       
-         .main_no1 {
-        }
         .main_no1 p, .main_no2 p {
              background-color: #fff;
             height: .8rem;
@@ -150,28 +146,13 @@
     };
      // 删除数据
     function delStudy () {
-        api.ajax({
-            url: apiSite + '/user_center/deleteWork',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
-                    work_id: api.pageParam.work_id
-                }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                alert(JSON.stringify(ret))
-                // getData(ret.data.list)
-                api.sendEvent({
-                    name: 'addStudy'
-                });
-                api.closeWin();
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
+          // 删除数据
+        api.execScript({
+            name: 'txl_addFellow_workExper_win.html',
+            frameName: 'txl_addFellow_workExper_frame',
+            script: 'deleteWorkExper(' + api.pageParam.work_id + ',' + 0 +');'
         });
+        api.closeWin();
     }
 </script>
 </html>

@@ -59,30 +59,15 @@
              $api.css($api.byId('over'), 'display:inline-block');
         }
     };
-     // 删除数据
+    // 删除数据
     function delStudy () {
-        api.ajax({
-            url: apiSite + '/user_center/deleteProject',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
-                    project_id: api.pageParam.project_id
-                }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                // alert(JSON.stringify(ret))
-                // getData(ret.data.list)
-                api.sendEvent({
-                    name: 'addStudy'
-                });
-                api.closeWin();
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
+          // 删除数据
+        api.execScript({
+            name: 'txl_addFellow_project_win.html',
+            frameName: 'txl_addFellow_project_frame',
+            script: 'deleteProject(' + api.pageParam.project_id + ',' + 0 +');'
         });
+        api.closeWin();
     }
    
 </script>

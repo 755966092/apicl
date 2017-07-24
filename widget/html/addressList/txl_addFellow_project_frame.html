@@ -273,7 +273,7 @@
         });
     }
     // 删除服务器地址
-    function deleteProject(id) {
+    function deleteProject(id,n) {
         api.ajax({
             url: apiSite + '/remark_user/deleteProject',
             method: 'post',
@@ -287,8 +287,8 @@
             }
         }, function(ret, err) {
             if (ret) {
-                alert(JSON.stringify(ret))
-                selSqlStudy(id);
+                console.log(JSON.stringify(ret))
+                selSqlStudy(id,n);
                 // getData(ret.data.list)
             } else {
                 alert(JSON.stringify(err.msg));
@@ -302,16 +302,16 @@
             sql: 'DELETE FROM tb_remarks_project WHERE project_id = ' + id  
         }, function(ret, err){        
             if( ret.status ){
-                console.log('数据库删除成功');
-                // if ($api.domAll('.dzlist').length == 0) {
-                //     requireData();
-                // }
-                // if (!n) {
-                //     requireData();
-                //     api.sendEvent({
-                //         name: 'editText'
-                //     });
-                // }
+                console.log('数据库删除成功'+ $api.domAll('.dzlist').length);
+                if ($api.domAll('.dzlist').length == 0) {
+                    requireData();
+                }
+                if (!n) {
+                    requireData();
+                    api.sendEvent({
+                        name: 'editText'
+                    });
+                }
             }else{
                 alert( JSON.stringify( err ) );
             }
