@@ -257,9 +257,19 @@
         }
 
         ul li .liRight {
-            color: #999;
-            margin-right: .2rem;
+           
+        }
+        .status .iconStatus {
+            display: inline-block;
+            width: .44rem;  
+            height: .8rem;
             float: right;
+        }
+        .status .sel {
+            background: url(../../image/icon_my/icon_enter.png)no-repeat;
+            -webkit-background-size: .44rem .35rem;
+            background-size: .44rem .35rem;
+            background-position: center center;
         }
 
         ul li .liRightIcon {
@@ -380,15 +390,17 @@
                 <span class="icon"></span>
             </div>
         </li>
-        <li tapmode="hover" onclick="openInfo(this)" data-val="otherContact">
-            <!-- <div class="wrap"> -->
-            <span>其他联系方式</span>
-            <span class="icon"></span>
-            <!-- </div> -->
+        <li tapmode="hover" class="wrap1" onclick="openInfo(this)" data-val="otherContact">
+            <div class="wrap">
+                <span>其他联系方式</span>
+                <span class="icon"></span>
+            </div>
         </li>
-        <li tapmode="hover" onclick="openInfo(this)" data-val="address">
-            <span>地址</span>
-            <span class="icon"></span>
+        <li tapmode="hover" class="wrap1" onclick="openInfo(this)" data-val="address">
+           <div class="wrap">
+                <span>地址</span>
+                <span class="icon"></span>
+           </div>
         </li>
         <li tapmode="hover" onclick="openInfo(this)" data-val="label">
             <span>备注</span>
@@ -396,17 +408,38 @@
             <!-- <img class="liRight" src="../../image/tx_4.jpg"> -->
             <span class="liRightIcon" id="liRightIcon"></span>
         </li>
-        <li class="mt20" tapmode="hover" onclick="openInfo(this)" data-val="companyPage">
-            <div class="wrap">
-                <span>上海策赢网络科技 董事长</span>
-                <span class="icon"></span>
-                <span class="liRight">默认</span>
-            </div>
-        </li>
-        <li>
+    </ul>
+    <ul class="status mt20 resultList"></ul>
+        <script type="text/x-dot-template" id="listT">
+            {{ for (var i = 0; i < it.length; i++) { }} 
+                {{?it[i].type == 1}}
+                    <li tapmode="hover" data-statusId = '{{=it[i].status_id}}' data-type = '{=it[i].type}' onclick="selCurrentStatus(this)">
+                        <span>{{=it[i].name}} {{=it[i].position}}</span>
+                        {{?it[i].is_default==1}}
+                        <span class="iconStatus sel"></span>
+                        {{??}}
+                        <span class="iconStatus "></span>
+                        {{?}}
+                    </li>
+                {{??}}
+                    <li tapmode="hover" data-statusId = '{{=it[i].status_id}}' data-type = '{=it[i].type}' onclick="selCurrentStatus(this)">
+                        <span>{{=it[i].name}} {{=it[i].position}}  {{=it[i].degree}}</span>
+                        {{?it[i].is_default==1}}
+                        <span class="iconStatus sel"></span>
+                        {{??}}
+                        <span class="iconStatus "></span>
+                        {{?}}
+                    </li>
+                {{?}}
+            {{ }; }}
+        </script>
+        
+      <!--   <li>
             <span>中央财经大学 工商管理 硕士</span>
-            <span class="icon"></span>
-        </li>
+            <span class="iconStatus sel"></span>
+        </li> 
+    </ul>-->
+    <ul>
         <li class="mt20" tapmode="hover" onclick="openInfo(this)" data-val="study">
             <div class="wrap">
                 <span>学习经历</span>
@@ -445,6 +478,7 @@
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript" src="../../data/city_3.js"></script>
 <script type="text/javascript">
     var paramNickname, paramRealName, paramSex, paramHeadImg;
@@ -461,7 +495,37 @@
                 alert(JSON.stringify(err));
             }
         });
+      
     };
+    // 备注当前状态
+    function selCurrentStatus(ele) {
+        var type = $api.attr(ele, 'data-type'), status_id= $api.attr(ele, 'data-statusId');
+        for (var i = 0; i < $api.domAll('.iconStatus').length; i++) {
+            $api.removeCls($api.domAll('.iconStatus')[i], 'sel');
+        };
+        $api.addCls($api.dom(ele, '.iconStatus'), 'sel');
+
+        api.ajax({
+            url: apiSite + '/remark_user/setDefaultStatus',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       remark_user_id: api.pageParam.userId,
+                       type: type,
+                       status_id: status_id
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                alert(JSON.stringify(ret))
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+
     // 获取会员信息
     function requireData(flag) {
         api.ajax({
@@ -476,25 +540,82 @@
             }
         }, function (ret, err) {
             if (ret) {
-                if (flag) {
-                    // 无本地信息, 网络获取
-                    console.log('594:::::'+JSON.stringify(ret.data))
-                    paramRealName = ret.data.info.real_name;
-                    $api.text(nickname, ret.data.info.nickname);
-                    $api.attr(head_img_url, 'src', ret.data.info.head_img_url);
-                    if (ret.data.info.sex == 2) {
-                        $api.addCls(sex, 'sexIcon2');
+                if (ret.code == 200) {
+                    
+                    for (var i = 0; i < ret.data.status.length; i++) {
+
+                        if (ret.data.status[i].type == 2) {
+                            // 學習
+                            console.log(ret.data.status[i].degree)
+                            switch(ret.data.status[i].degree) {
+                                case '1': ret.data.status[i].degree = '专科'; break;
+                                case '2': ret.data.status[i].degree = '本科'; break;
+                                case '3': ret.data.status[i].degree = '硕士'; break;
+                                case '4': ret.data.status[i].degree = '博士'; break;
+                                case '5': ret.data.status[i].degree = '博士后'; break;
+                            }
+                        }
                     }
-                    $api.text(current_position, ret.data.status[0].position || '');
-                    $api.text(current_company, ret.data.status[0].name || '');
-                    $api.text(current_degree, ret.data.status[0].degree || '');
-                    $api.text(hometown, ret.data.info.hometown || '');
-                    $api.text(birthday, ret.data.info.birthday == '0000-00-00' ? '' : ret.data.info.birthday);
-                    relationship(ret.data.relationship_level)
-                } else {
-                    paramRealName = ret.data.info.real_name;
-                    // 本地数据库有信息, 只获取关系
-                    relationship(ret.data.relationship_level)
+                    console.log(JSON.stringify(ret.data.status))
+                    // db.selectSql({
+                    //     name: 'db_' + $api.getStorage('userToken'),
+                    //     sql: 'SELECT * FROM addressList WHERE user_id = ' + api.pageParam.userId    
+                    // }, function(ret, err){        
+                    //     if( ret.status ){
+                    //         if (ret.data.length != 0) {
+                    //             // 更新
+                    //             db.executeSql({
+                    //                 name: 'db_' + $api.getStorage('userToken'),
+                    //                 sql: 'UPDATE addressList SET current_status = "' + JSON.stringify(ret.data.status) + '" WHERE user_id = ' + api.pageParam.userId    
+                    //             }, function(ret, err){        
+                    //                 if( ret.status ){
+                    //                     alert( JSON.stringify( ret ) );
+                    //                 }else{
+                    //                     alert( JSON.stringify( err ) );
+                    //                 }
+                    //             });
+                    //         } else {
+                    //             // 插入
+                    //             db.executeSql({
+                    //                 name: 'db_' + $api.getStorage('userToken'),
+                    //                 sql: 'INSERT OR REPLACE INTO addressList(user_id,current_status) VALUES ('+ api.pageParam.userId + ',"'+ JSON.stringify(ret.data.status) +'")'  
+                    //             }, function(ret, err){        
+                    //                 if( ret.status ){
+                    //                     alert( JSON.stringify( ret ) );
+                    //                 }else{
+                    //                     alert( JSON.stringify( err ) );
+                    //                 }
+                    //             });
+                                
+                    //         }
+                    //     }else{
+                    //         alert( JSON.stringify( err ) );
+                    //     }
+                    // });
+                    
+                    
+                    getData(ret.data.status)
+                    
+                    if (flag) {
+                        // 无本地信息, 网络获取
+                        console.log('594:::::'+JSON.stringify(ret.data))
+                        paramRealName = ret.data.info.real_name;
+                        $api.text(nickname, ret.data.info.nickname);
+                        $api.attr(head_img_url, 'src', ret.data.info.head_img_url);
+                        if (ret.data.info.sex == 2) {
+                            $api.addCls(sex, 'sexIcon2');
+                        }
+                        $api.text(current_position, ret.data.status[0].position || '');
+                        $api.text(current_company, ret.data.status[0].name || '');
+                        $api.text(current_degree, ret.data.status[0].degree || '');
+                        $api.text(hometown, ret.data.info.hometown || '');
+                        $api.text(birthday, ret.data.info.birthday == '0000-00-00' ? '' : ret.data.info.birthday);
+                        relationship(ret.data.relationship_level)
+                    } else {
+                        paramRealName = ret.data.info.real_name;
+                        // 本地数据库有信息, 只获取关系
+                        relationship(ret.data.relationship_level)
+                    }
                 }
             } else {
                 alert(JSON.stringify(err))
@@ -529,7 +650,12 @@
         }, function (ret, err) {
             if (ret.status) {
                 console.log('663:::::::::::' + JSON.stringify(ret));
+                
                if (ret.data.length != 0) {
+                    // 当前状态
+                    // if (ret.data[0].current_status) {
+                    //     getData($api.strToJson(ret.data[0].current_status))
+                    // }
                     // 职位
                     if (ret.data[0].remark_current_position) {
                         $api.text(current_position, ret.data[0].remark_current_position);
@@ -593,7 +719,7 @@
                     requireData(0);
                 } else {
                     // 获取线上
-                   requireData(1);
+                    requireData(1);
                 }
             } else {
                 alert(JSON.stringify(err));
@@ -604,8 +730,12 @@
             sql: 'SELECT * FROM tb_remarks_user_info WHERE remark_user_id = ' + api.pageParam.userId
         }, function(ret, err){        
             if( ret.status ){
-                console.log('607:::'+JSON.stringify(ret.data[0].extra_image_url))
-                $api.css(liRightIcon, 'background: url('+ ret.data[0].extra_image_url +'?imageView2/3/w/200/h/200/q/75|imageslim);-webkit-background-size: .749rem auto;background-size: .749rem auto;background-position: 0 center;');
+                console.log(JSON.stringify(ret.data))
+                if (ret.data.length != 0) {
+                    if (ret.data[0].extra_image_url) {
+                        $api.css(liRightIcon, 'background: url('+ ret.data[0].extra_image_url +'?imageView2/3/w/200/h/200/q/75|imageslim);-webkit-background-size: .749rem auto;background-size: .749rem auto;background-position: 0 center;');
+                    }
+                }
             }else{
                 alert( JSON.stringify( err ) );
             }

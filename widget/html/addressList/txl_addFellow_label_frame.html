@@ -105,7 +105,6 @@
                             $api.attr($api.byId('img'), 'src', ret.data[0].extra_image_url);
                             $api.val($api.byId('text'), ret.data[0].extra_content);
                         }
-                        alert($api.attr($api.byId('img'), 'src'))
                     } else {
                         api.ajax({
                             url: apiSite + '/remark_user/fullInfo',
@@ -214,6 +213,12 @@
                             }, function(ret, err){        
                                 if( ret.status ){
                                     console.log('688:' + JSON.stringify( ret ) );
+                                    api.execScript({
+                                        name: 'txl_memberInfo_Win',
+                                        frameName: 'txl_memberInfo_Frame',
+                                        script: 'initPage();'
+                                    });
+                                    api.closeWin();
                                 }else{
                                     alert('690:' + JSON.stringify( err ) );
                                 }
@@ -227,6 +232,12 @@
                             }, function(ret, err){        
                                 if( ret.status ){
                                    console.log( '684:::'+JSON.stringify( ret ) );
+                                   api.execScript({
+                                       name: 'txl_memberInfo_Win',
+                                       frameName: 'txl_memberInfo_Frame',
+                                       script: 'initPage();'
+                                   });
+                                   api.closeWin();
                                 }else{
                                    alert( JSON.stringify( err ) );
                                }
@@ -260,7 +271,6 @@
         //             } 
         //         });
         // } else {
-            
             api.getPicture({
                 sourceType: 'library',
                 mediaValue: 'pic',
