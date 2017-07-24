@@ -482,9 +482,11 @@
 <script type="text/javascript" src="../../data/city_3.js"></script>
 <script type="text/javascript">
     var paramNickname, paramRealName, paramSex, paramHeadImg;
+    var SQLName = 'db_' + $api.getStorage('userToken');
     apiready = function () {
         moduleInit();
         initPage();
+        initStatus();
         // requireDetailData();
         api.addEventListener({
             name: 'editUserInfo'
@@ -495,6 +497,23 @@
                 alert(JSON.stringify(err));
             }
         });
+        api.ajax({
+            url: apiSite + '/remark_user/fullInfo',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       remark_user_id: api.pageParam.userId
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                console.log(JSON.stringify(ret))
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
       
     };
     // 备注当前状态
@@ -519,13 +538,36 @@
             }
         }, function(ret, err) {
             if(ret) {
-                alert(JSON.stringify(ret))
+                // alert(JSON.stringify(ret))
+                // 更新数据库
+                updataSql(status_id)
             } else {
                 alert(JSON.stringify(err))
             }
         })
     }
-
+    // 更新数据库
+    function updataSql(status_id) {
+        db.executeSql({
+            name: SQLName,
+            sql: ' UPDATE tb_remarks_status SET is_default = '+ -1
+        }, function(ret, err){        
+            if( ret.status ){
+                db.executeSql({
+                    name: SQLName,
+                    sql: ' UPDATE tb_remarks_status SET is_default = '+ 1 +' WHERE status_id = ' + status_id    
+                }, function(ret, err){        
+                    if( ret.status ){
+                        // alert( JSON.stringify( ret ) );
+                    }else{
+                        alert( JSON.stringify( err ) );
+                    }
+                });
+            }else{
+                alert( JSON.stringify( err ) );
+            }
+        });
+    }
     // 获取会员信息
     function requireData(flag) {
         api.ajax({
@@ -541,60 +583,7 @@
         }, function (ret, err) {
             if (ret) {
                 if (ret.code == 200) {
-                    
-                    for (var i = 0; i < ret.data.status.length; i++) {
-
-                        if (ret.data.status[i].type == 2) {
-                            // 學習
-                            console.log(ret.data.status[i].degree)
-                            switch(ret.data.status[i].degree) {
-                                case '1': ret.data.status[i].degree = '专科'; break;
-                                case '2': ret.data.status[i].degree = '本科'; break;
-                                case '3': ret.data.status[i].degree = '硕士'; break;
-                                case '4': ret.data.status[i].degree = '博士'; break;
-                                case '5': ret.data.status[i].degree = '博士后'; break;
-                            }
-                        }
-                    }
-                    console.log(JSON.stringify(ret.data.status))
-                    // db.selectSql({
-                    //     name: 'db_' + $api.getStorage('userToken'),
-                    //     sql: 'SELECT * FROM addressList WHERE user_id = ' + api.pageParam.userId    
-                    // }, function(ret, err){        
-                    //     if( ret.status ){
-                    //         if (ret.data.length != 0) {
-                    //             // 更新
-                    //             db.executeSql({
-                    //                 name: 'db_' + $api.getStorage('userToken'),
-                    //                 sql: 'UPDATE addressList SET current_status = "' + JSON.stringify(ret.data.status) + '" WHERE user_id = ' + api.pageParam.userId    
-                    //             }, function(ret, err){        
-                    //                 if( ret.status ){
-                    //                     alert( JSON.stringify( ret ) );
-                    //                 }else{
-                    //                     alert( JSON.stringify( err ) );
-                    //                 }
-                    //             });
-                    //         } else {
-                    //             // 插入
-                    //             db.executeSql({
-                    //                 name: 'db_' + $api.getStorage('userToken'),
-                    //                 sql: 'INSERT OR REPLACE INTO addressList(user_id,current_status) VALUES ('+ api.pageParam.userId + ',"'+ JSON.stringify(ret.data.status) +'")'  
-                    //             }, function(ret, err){        
-                    //                 if( ret.status ){
-                    //                     alert( JSON.stringify( ret ) );
-                    //                 }else{
-                    //                     alert( JSON.stringify( err ) );
-                    //                 }
-                    //             });
-                                
-                    //         }
-                    //     }else{
-                    //         alert( JSON.stringify( err ) );
-                    //     }
-                    // });
-                    
-                    
-                    getData(ret.data.status)
+                    console.log(JSON.stringify(ret))
                     
                     if (flag) {
                         // 无本地信息, 网络获取
@@ -621,6 +610,129 @@
                 alert(JSON.stringify(err))
             }
         })
+    }
+    // 当前状态
+    function initStatus() {
+        
+        db.selectSql({
+            name: SQLName,
+            sql: 'SELECT * FROM tb_remarks_status WHERE remark_user_id = ' + api.pageParam.userId       
+        }, function(ret, err){        
+            if( ret.status ){
+                console.log( '626::::' + JSON.stringify( ret ) );
+                if (ret.data.length != 0) {
+                    for (var i = 0; i < ret.data.length; i++) {
+                        if (ret.data[i].type == 2) {
+                            // 學習
+                            console.log(ret.data[i].degree)
+                            switch(ret.data[i].degree) {
+                                case '0': ret.data[i].degree = ''; break;
+                                case '1': ret.data[i].degree = '专科'; break;
+                                case '2': ret.data[i].degree = '本科'; break;
+                                case '3': ret.data[i].degree = '硕士'; break;
+                                case '4': ret.data[i].degree = '博士'; break;
+                                case '5': ret.data[i].degree = '博士后'; break;
+                            }
+                        }
+                    }
+                    alert('本地数据库内容')
+                    getData(ret.data);
+                    statusRemarks(ret.data,1)
+                } else {
+                    statusRemarks();
+                }
+            }else{
+                alert( '629'+JSON.stringify( err ) );
+                console.log( '629'+JSON.stringify( err ) );
+
+            }
+        });
+    }
+    // 当前状态 - 备注信息
+    function statusRemarks(data,argument) {
+        api.ajax({
+            url: apiSite + '/remark_user/fullInfo',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       remark_user_id: api.pageParam.userId,
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+
+                if (!argument) {
+                    if (ret.data.status.length != 0) {
+                        alert('线上备注内容')
+                        handData(ret)
+                    } else {
+                        statusUser();
+                    }
+                } else {
+                    // 对比
+                    if (data.length != ret.data.status.length) {
+                        // 更新数据库
+                        handData(ret)
+                    }
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+    // 当前状态 - 原始信息
+    function statusUser(argument) {
+          api.ajax({
+            url: apiSite + '/user/detail',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: {
+                    token: $api.getStorage('userToken'),
+                    user_id: api.pageParam.userId
+                }
+            }
+        }, function (ret, err) {
+            if (ret) {
+                if (ret.data.status.length != 0) {
+                    alert('原始信息')
+                    handData(ret)
+                }
+            }
+        })
+    }
+    function handData(ret) {
+        var sql = 'INSERT OR REPLACE INTO tb_remarks_status(remark_user_id, status_id, name, position, degree, start_date, is_default, type) VALUES ';
+        for (var i = 0; i < ret.data.status.length; i++) {
+            sql +=  '(' + api.pageParam.userId + ',' + ret.data.status[i].status_id + ',"' + ret.data.status[i].name+ '","' + ret.data.status[i].position+ '","' + ret.data.status[i].degree+ '","' + ret.data.status[i].start_date+ '",' + ret.data.status[i].is_default+ ',' + ret.data.status[i].type + '),';
+            if (ret.data.status[i].type == 2) {
+                // 學習
+                console.log(ret.data.status[i].degree)
+                switch(ret.data.status[i].degree) {
+                    case '0': ret.data.status[i].degree = ''; break;
+                    case '1': ret.data.status[i].degree = '专科'; break;
+                    case '2': ret.data.status[i].degree = '本科'; break;
+                    case '3': ret.data.status[i].degree = '硕士'; break;
+                    case '4': ret.data.status[i].degree = '博士'; break;
+                    case '5': ret.data.status[i].degree = '博士后'; break;
+                }
+            }
+        }
+        sql = sql.substring(0,sql.length-1);
+        console.log(sql)
+        db.executeSql({
+            name: 'db_' + $api.getStorage('userToken'),
+            sql: sql  
+        }, function(ret, err){        
+            if( ret.status ){
+                alert( JSON.stringify( ret ) );
+            }else{
+                alert( JSON.stringify( err ) );
+            }
+        });
+        getData(ret.data.status)
     }
     // 初始化页面
     function initPage() {

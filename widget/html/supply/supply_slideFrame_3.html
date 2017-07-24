@@ -95,17 +95,16 @@
             line-height: .79rem;
             border-top: .01rem solid #CBCBCB;
             font-size: 0;
+             
         }
         .main ul.no2 li p {
             font-size: .24rem;
-            background: url(../../image/icon_zk.png)no-repeat;
-            -webkit-background-size: .15rem .25rem;
-            background-size: .15rem .25rem;
-            background-position: 5rem center;
+           
             padding-right: .36rem;
             color: #333;
         }
-        .main ul.no2 li span{
+
+       /* .main ul.no2 li span{
             border-radius: .08rem;
             float: left;
             width: 1.78rem;
@@ -114,9 +113,7 @@
             background-color: #F4F4F4;
             text-align: center;
             line-height: .68rem;
-            /*padding: 0 .14rem ;*/
             box-sizing: border-box;
-            /*margin: .15rem .1rem;*/
             margin-top: .1rem;
             margin-bottom: .1rem;
             margin-right: .12rem;
@@ -124,7 +121,7 @@
             white-space:nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-        }
+        }*/
         .main ul.no2 li span.no {
             margin-right: 0;
         }
@@ -146,13 +143,17 @@
             color: #27B24A;
         }
         .main ul.no2 li span.selText {
+
             display: inline-block;
-            background-color: #fff;
             color: #555;
             margin: 0;
             float: right;
             font-size: .24rem;
-            margin-right: .37rem;
+            padding-right: .37rem;
+            background: #fff url(../../image/icon_zk.png)no-repeat;
+            -webkit-background-size: .15rem .25rem;
+            background-size: .15rem .25rem;
+            background-position: right center;
 
         }
         .footer {
@@ -210,14 +211,14 @@
                      </ul>  
                     <ul class="no2">
                         <p>分类</p>
-                        <li tapmode="hover" onclick="li_spanP(this);event.cancelBubble=true;" >
-                            <p>TA自产自销的<span class="selText"></span></p>
+                        <li tapmode="hover" onclick="openClassPage(this);event.cancelBubble=true;" >
+                            <p>TA自产自销的<span class="selText">asdasdasd</span><span class="zkicon"></span></p>
                         </li>
-                        <li tapmode="hover" onclick="li_spanP(this);event.cancelBubble=true;">
-                            <p>TA代理代办的<span class="selText"></span></p>
+                        <li tapmode="hover" onclick="openClassPage(this);event.cancelBubble=true;">
+                            <p>TA代理代办的<span class="selText">asdasd</span><span class="zkicon"></span></p>
                         </li>
-                        <li tapmode="hover" onclick="li_spanP(this);event.cancelBubble=true;">
-                            <p>TA公司<span class="selText"></span></p>
+                        <li tapmode="hover" onclick="openClassPage(this);event.cancelBubble=true;">
+                            <p>TA公司<span class="selText">asdasd</span><span class="zkicon"></span></p>
                         </li>
                     </ul>
                 </div>
@@ -237,6 +238,23 @@
     apiready = function(){
        fnInit();
     };
+    // 打开分类页面
+    function openClassPage(ele) {
+        api.openFrame({
+             name: 'supply_slideFrame_3_',
+             url: './supply_slideFrame_3_.html',
+             rect: {
+                 x: 0,
+                 y: 0,
+                 w: 'auto',
+                 h: 'auto'
+             },
+             pageParam: {
+                 name: 'value'
+             },
+             bounces: false
+         }); 
+    } 
 
      // 选中图标
     function li_span(ele) {

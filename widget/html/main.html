@@ -541,12 +541,12 @@ function openRemarksDb() {
             // alert( JSON.stringify( ret ) );
         }else{
             alert('473'+ JSON.stringify( err ) );
+            console.log('473'+ JSON.stringify( err ) );
         }
     });
-    // 
      // db.executeSql({
      //     name: SQLName,
-     //     sql: 'DROP TABLE tb_remarks_contact'    
+     //     sql: 'DROP TABLE tb_remarks_status'    
      // }, function(ret, err){        
      //     if( ret.status ){
      //         alert('1'+ JSON.stringify( ret ) );
@@ -554,6 +554,17 @@ function openRemarksDb() {
      //         alert( JSON.stringify( err ) );
      //     }
      // });
+    // 用户当前状态表格
+    db.executeSql({
+        name: SQLName,
+        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_status(remark_user_id int , status_id int PRIMARY KEY NOT NULL, name varchar(255), position varchar(255), degree varchar(255), start_date varchar(255), is_default int, type int)'    
+    }, function(ret, err){        
+        if( ret.status ){
+            // alert('用户当前状态表格'+ JSON.stringify( ret ) );
+        }else{
+            alert('473'+ JSON.stringify( err ) );
+        }
+    });
      // db.executeSql({
      //     name: SQLName,
      //     sql: 'DROP TABLE tb_remarks_contact1'    

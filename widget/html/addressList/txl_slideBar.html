@@ -306,7 +306,7 @@
             // 2 熟识好友
             // 3 尚未加入
             // 4 一度人脉
-            var selVal = $api.attr($api.dom('.no1 .sel'), 'data-type');
+            var selVal = $api.attr($api.dom('.no1 .sel'), 'data-type') || '';
             var spanSel = $api.domAll('.spanSel');
             // 发送事件, 刷新筛选结果
             api.sendEvent({
@@ -326,6 +326,7 @@
             $api.text($api.dom('.trade'), '');
             $api.text($api.dom('.place'), '');
             $api.text($api.dom('.custom'), '');
+            // $api.removeCls($api.dom('.sel'), 'sel');
             selectedObj = {};
             var no1 = document.getElementsByClassName('no1')[0]
             var liArr = no1.getElementsByTagName('li');
@@ -334,7 +335,7 @@
                 for(var j = 0; j < liArr[i].childNodes.length ; j++) {
                     $api.removeCls(liArr[i].childNodes[j], 'sel');
                 }
-                $api.addCls(liArr[i].childNodes[3], 'sel');
+                // $api.addCls(liArr[i].childNodes[3], 'sel');
             }  
             // for (var i = 0; i < $api.domAll('.no2List').length; i++) {
             //     $api.removeCls($api.domAll('.no2List')[i], 'sel');

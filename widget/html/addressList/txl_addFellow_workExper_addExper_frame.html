@@ -215,6 +215,13 @@
             }
         }, function(ret, err) {
             if (ret.code == 200) {
+                if (time_2 = '0000-00-00') {
+                    api.execScript({
+                        name: 'txl_memberInfo_Win',
+                        frameName: 'txl_memberInfo_Frame',
+                        script: 'initStatus();'
+                    });
+                }
                 insertData();
             } else {
                 alert(JSON.stringify(ret.msg));
