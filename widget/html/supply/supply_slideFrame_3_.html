@@ -36,7 +36,7 @@
         .main>div:first-child {
          }
         .footer {
-            height: .9rem;
+            height: .78rem;
             width: 6rem;
             font-size: 0;
             z-index: 999;
@@ -106,36 +106,53 @@
 <script type="text/javascript">
     var flag = 0,eventName,discriminate,selectedArr=[];
     var selectedObj ;
+    var val ;
     apiready = function(){
         fnInit();
         moduleInit();
         selectedObj = api.pageParam.selectedObj;
-         if (selectedObj != 1) {
-            for (var i = 0; i < selectedObj.length; i++) {
-                selectedArr.push(selectedObj[i])
+        val = api.pageParam.val;
+        if (selectedObj[val] != null) {
+            for (var i = 0; i < selectedObj[val].length; i++) {
+                selectedArr.push(selectedObj[val][i])
             }
         }
-        if (selectedObj) {
-            $api.text($api.dom('.selectedText'), selectedObj[0].str);
+        console.log('125行: '+JSON.stringify(selectedArr))
+        settingText();
+        openList(handleData(api.pageParam.val))
+        if (selectedObj[val]) {
+            $api.text($api.dom('.selectedText'), selectedObj[val][0].str);
+
         } else {
             settingText();
         }
-        openList(handleData())
     }
     // 设置文字
     function settingText () {
-        $api.text($api.dom('.selectedText'), '选择分类');
+        switch(api.pageParam.val) {
+            case 'school' :
+                eventName = 'selectschool';
+                discriminate = '请选择类别'
+                break;
+            case 'commpany' :
+                eventName = 'selectcommpany';
+                discriminate = '请选择类别'
+                break;
+            case 'trade' :
+                eventName = 'selecttrade';
+                discriminate = '请选择类别'
+                break;
+          
+        }
+        $api.text($api.dom('.selectedText'), discriminate);
     }
     // 打开列表
     function openList(data) {
-        var str='';
-        console.log(JSON.stringify(api.pageParam.selectedObj))
-        if (api.pageParam.selectedObj == 0) {
-            str = ''
+        var str;
+        if (selectedObj[val]) {
+            str= selectedObj[val][0].str ||'';
         } else {
-            // console.log('132行: '+JSON.stringify(selectedObj[0]))
-            str = selectedObj[0].str ||''; 
-            // $api.text($api.dom('.selectedText'), str); 
+            str = ''
         }
         listContact.open({
             x: -1000,
@@ -227,9 +244,38 @@
             }
         });
     }
+
+    function setting() {
+        // 设置已选条件
+        if (selectedObj[val] != null) {
+            for (var i = 0; i < selectedObj[val].length; i++) {
+                listContact.refreshItem({
+                    index: selectedObj[val][i].index,
+                    key: selectedObj[val][i].key,
+                    data: {
+                        title: selectedObj[val][i].title,
+                        titleColor: '#f00',
+                        titleSize:14            
+                    }
+                });
+            }
+        }
+    }
     // 处理数据
-    function handleData() {
-        var schoolList = ['自定义数据','自定义数据2','自定义数据3','北京理工大学','同济大学','南开大学','复旦大学','山东科技大学','青岛海洋大学','中石油大学'];
+    function handleData(val) {
+        var schoolList;
+        switch(val) {
+            case 'school' :
+            schoolList = ['#$%#%@#$@','北京大学','清华大学','北京师范大学','北京理工大学','同济大学','南开大学','复旦大学','山东科技大学','青岛海洋大学','中石油大学'];
+            break;
+            case 'commpany' :
+            schoolList = ['第一学教育科技有限公司','跨考教育','四达留学','百度公司','腾讯公司','美团公司','复旦大学','山东科技大学','青岛海洋大学','中石油大学'];
+            break;
+            case 'trade' :
+            schoolList = ['制造业','服务业','餐饮','教育','医疗','艺术','复旦大学','山东科技大学','青岛海洋大学','中石油大学'];
+            break;
+        }
+        
         var obj = {};
         for (var i = 0; i < schoolList.length; i++) {
             obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]] = [];
@@ -237,12 +283,13 @@
         for (var i = 0; i < schoolList.length; i++) {
             obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]].push({title:schoolList[i],titleSize:14});
         }
-        if (selectedObj != 1) {
-            for (var i = 0; i < selectedObj.length; i++) {
-                obj[selectedObj[i].key][selectedObj[i].index].titleColor = '#27B24A'
+
+        if (selectedObj[val] != null) {
+            for (var i = 0; i < selectedObj[val].length; i++) {
+                obj[selectedObj[val][i].key][selectedObj[val][i].index].titleColor = '#f00'
             }
         }
-        // console.log(JSON.stringify(obj))
+        console.log(JSON.stringify(obj))
         return obj
     }
     // 点击确定按钮： 1； 重置按钮 0
@@ -254,7 +301,7 @@
 
             } else {
                 api.sendEvent({
-                    name: 'selClass',
+                    name: eventName,
                     extra: {
                         schoolName: schoolName,
                         selectedArr: selectedArr
@@ -262,6 +309,7 @@
                 });
             }
             api.closeFrame();
+
         }
         else {
             flag = 0;
