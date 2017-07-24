@@ -270,9 +270,9 @@
             height: .458rem;
             -webkit-background-size: .749rem auto;
             background-size: .749rem auto;
+            background-position: 0 center;
             margin-top: .17rem;
             margin-right: .2rem;
-            background-position: 0 center;
 
         }
 
@@ -597,6 +597,17 @@
                 }
             } else {
                 alert(JSON.stringify(err));
+            }
+        });
+        db.selectSql({
+            name: SQLName,
+            sql: 'SELECT * FROM tb_remarks_user_info WHERE remark_user_id = ' + api.pageParam.userId
+        }, function(ret, err){        
+            if( ret.status ){
+                console.log('607:::'+JSON.stringify(ret.data[0].extra_image_url))
+                $api.css(liRightIcon, 'background: url('+ ret.data[0].extra_image_url +'?imageView2/3/w/200/h/200/q/75|imageslim);-webkit-background-size: .749rem auto;background-size: .749rem auto;background-position: 0 center;');
+            }else{
+                alert( JSON.stringify( err ) );
             }
         });
     }

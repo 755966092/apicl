@@ -87,118 +87,82 @@
     };
     // 请求数据
     function requireData() {
-        // api.ajax({
-        //     url: apiSite + '/remark_user/detail',
-        //     method: 'post',
-        //     headers: apiHeader,
-        //     data: {
-        //            values: { 
-        //                token: $api.getStorage('userToken'),
-        //                remark_user_id: api.pageParam.userId
-        //            }
-        //     }
-        // }, function(ret, err) {
-        //     if(ret) {
-        //         console.log('102:::'+JSON.stringify(ret))
-        //     } else {
-        //         alert(JSON.stringify(err))
-        //     }
-        // })
-        api.ajax({
-            url: apiSite + '/remark_user/fullInfo',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                   values: { 
-                       token: $api.getStorage('userToken'),
-                       remark_user_id: api.pageParam.userId
-                       
-                   }
-            }
-        }, function(retAjax, err) {
-            if(retAjax) {
-                 console.log('120:::'+JSON.stringify(retAjax))
-                 db.selectSql({
-                     name:  'db_'+$api.getStorage('userToken'),
-                     sql: 'SELECT * FROM tb_remarks_user_info WHERE remark_user_id = ' + api.pageParam.userId
-                 }, function(ret, err){        
-                     if( ret.status ){
-                         console.log( JSON.stringify( ret ) );
-                        if (ret.data.length != 0 && ret.data[0].extra_id) {
-                            if (ret.data[0].extra_content) {
-                                $api.val($api.byId('text'), ret.data[0].extra_content);
-                            }
-                            if (ret.data[0].extra_image_url) {
-                                $api.attr($api.byId('img'), 'src', ret.data[0].extra_image_url);
-                            }
-                            if (ret.data[0].extra_image_url && ret.data[0].extra_content) {
-                                $api.attr($api.byId('img'), 'src', ret.data[0].extra_image_url);
-                                $api.val($api.byId('text'), ret.data[0].extra_content);
-                            }
-                        } else {
-                            $api.val($api.byId('text'), retAjax.extra.content);
-                            $api.attr($api.byId('img'), 'src', retAjax.extra.image_url);
+        db.selectSql({
+             name:  'db_'+$api.getStorage('userToken'),
+             sql: 'SELECT * FROM tb_remarks_user_info WHERE remark_user_id = ' + api.pageParam.userId
+         }, function(ret, err){ 
+            console.log(JSON.stringify(ret))
+            if( ret.status ){
+                    console.log( JSON.stringify( ret ) );
+                    if (ret.data.length != 0 && ret.data[0].extra_id) {
+                        if (ret.data[0].extra_content) {
+                            $api.val($api.byId('text'), ret.data[0].extra_content);
                         }
-                     }else{
-                         alert( JSON.stringify( err ) );
-                     }
-                 });
+                        if (ret.data[0].extra_image_url) {
+                            $api.attr($api.byId('img'), 'src', ret.data[0].extra_image_url);
+                        }
+                        if (ret.data[0].extra_image_url && ret.data[0].extra_content) {
+                            $api.attr($api.byId('img'), 'src', ret.data[0].extra_image_url);
+                            $api.val($api.byId('text'), ret.data[0].extra_content);
+                        }
+                        alert($api.attr($api.byId('img'), 'src'))
+                    } else {
+                        api.ajax({
+                            url: apiSite + '/remark_user/fullInfo',
+                            method: 'post',
+                            headers: apiHeader,
+                            data: {
+                                   values: { 
+                                       token: $api.getStorage('userToken'),
+                                       remark_user_id: api.pageParam.userId
+                                   }
+                            }
+                        }, function(retAjax, err) {
+                            if(retAjax) {
+                                if (retAjax.code == 200) {
+                                    console.log('120:::'+JSON.stringify(retAjax))
+                                    $api.val($api.byId('text'), retAjax.extra.content);
+                                    $api.attr($api.byId('img'), 'src', retAjax.extra.image_url);
+                                }
 
-            } else {
-                alert(JSON.stringify(err))
-            }
-        })
-
-        // var textContent = $api.getStorage(api.pageParam.userId+'_txl_label_text_content');
-        // var imgContent = $api.getStorage(api.pageParam.userId+'_txl_label_img_content');
-        // if (textContent && imgContent) {
-        //     $api.val($api.byId('text'), textContent);
-        //     $api.attr($api.byId('img'), 'src', $api.getStorage(api.pageParam.userId+'_txl_label_img_content_cache'));
-        //     console.log(textContent)
-        // } else {
-        //     api.ajax({
-        //         url: apiSite + '/remark_user/editBasicInfoIndex',
-        //         method: 'post',
-        //         headers: apiHeader,
-        //         data: {
-        //                values: { 
-        //                    token: $api.getStorage('userToken'),
-        //                    remark_user_id: api.pageParam.userId
-        //                }
-        //         }
-        //     }, function(ret, err) {
-        //         if(ret) {
-        //             if (ret.code === 200) {
-        //                 console.log(JSON.stringify(ret))
-        //                 if ((textContent === ret.data.info.extra.content) && (imgContent === ret.data.info.extra.image_url)) {
-        //                 } else {
-        //                     $api.val($api.byId('text'),ret.data.info.extra.content);
-        //                     $api.setStorage(api.pageParam.userId+'_txl_label_text_content', ret.data.info.extra.content);
-        //                     api.imageCache({
-        //                         url: ret.data.info.extra.image_url
-        //                     }, function(ret, err){
-        //                         if( ret ){
-        //                             $api.attr($api.byId('img'), 'src', ret.url);
-        //                             $api.setStorage(api.pageParam.userId+'_txl_label_img_content_cache', ret.url);
-        //                             $api.setStorage(api.pageParam.userId+'_txl_label_img_content', ret.url);
-        //                         }else{
-        //                              alert( JSON.stringify( err ) );
-        //                         }
-        //                     });
-        //                 }
-        //             } else {
-        //                 alert(ret.msg)
-        //             }
-        //         } else {
-        //             alert(JSON.stringify(err))
-        //         }
-        //     })
-        // }
+                            } else {
+                                alert(JSON.stringify(err))
+                            }
+                        })
+                        
+                    }
+                
+             }else{
+                 alert( JSON.stringify( err ) );
+             }
+         });
+       
     }
+
     // 提交数据
     function submitData() {
-        var text = $api.val($api.byId('text'));
+       
         var img_url = $api.attr($api.byId('img'), 'src');
+
+        var baseUrl = 'ot0c8ontv.bkt.clouddn.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com
+        var obj = api.require('qiniuUpfile');
+        obj.upfile({
+            file: img_url,
+        }, function(ret, err) {
+            if (ret.status) {
+                if (ret.oper == "complete") {
+                    //上传成功后组装访问路径，或直接访问文档
+                    submitAjax('http://'+baseUrl +'/'+ ret.info.key)
+                } else if (ret.oper == "progress") {
+                    //上传过程中获取进度数据
+                    // console.log(ret.percent);
+                }
+            }
+        });
+       
+    }
+    function submitAjax(argument) {
+         var text = $api.val($api.byId('text'));
         api.ajax({
             url: apiSite + '/remark_user/editBasicInfo',
             method: 'post',
@@ -208,71 +172,73 @@
                         token: $api.getStorage('userToken'),
                         remark_user_id: api.pageParam.userId,
                         extra_content: text,
-                        extra_image_url: img_url
+                        extra_image_url: argument
                    }
             }
         }, function(ret, err) {
             if(ret) {
                 alert(JSON.stringify(ret));
-                api.ajax({
-                    url: apiSite + '/remark_user/fullInfo',
-                    method: 'post',
-                    headers: apiHeader,
-                    data: {
-                          values: { 
-                              token: $api.getStorage('userToken'),
-                              remark_user_id: api.pageParam.userId
-                          }
-                    }
-                }, function(ret, err) {
-                    if(ret) {
-                        var SQLName = 'db_'+$api.getStorage('userToken');
-                        var sql = 'INSERT OR REPLACE INTO tb_remarks_user_info(remark_user_id, extra_id, extra_content, extra_image_url)  VALUES (' + api.pageParam.userId+','+ ret.data.extra.extra_id+',"'+ ret.data.extra.content+'","'+ ret.data.extra.image_url + '")'
-                         db.selectSql({
-                            name: 'db_'+$api.getStorage('userToken'),
-                            sql: 'SELECT * FROM tb_remarks_user_info where remark_user_id=' + api.pageParam.userId
-                        }, function(ret1, err1){        
-                            if( ret1.status ){
-                                if (ret1.data.length !== 0) {
-                                    console.log(JSON.stringify(ret1))
-                                    console.log('有数据,更新')
-                                    // 有数据 更新
-                                    db.executeSql({
-                                        name: 'db_'+$api.getStorage('userToken'),
-                                        sql: 'UPDATE tb_remarks_user_info SET extra_id = '+ ret.data.extra.extra_id +', extra_image_url = "'+ ret.data.extra.image_url +'", extra_content = "'+ ret.data.extra.content +'" WHERE remark_user_id = ' + api.pageParam.userId
-                                    }, function(ret, err){        
-                                        if( ret.status ){
-                                            console.log('688:' + JSON.stringify( ret ) );
-                                        }else{
-                                            alert('690:' + JSON.stringify( err ) );
-                                        }
-                                    });
-                                } else {
-                                    console.log('没有数据,插入')
-                                    // 没数据 插入新数据
-                                    db.executeSql({
-                                        name: 'db_'+$api.getStorage('userToken'),
-                                        sql: sql  
-                                    }, function(ret, err){        
-                                        if( ret.status ){
-                                           console.log( '684:::'+JSON.stringify( ret ) );
-                                        }else{
-                                           alert( JSON.stringify( err ) );
-                                       }
-                                    });
-                                }
-                            }else{
-                                alert( JSON.stringify( err1 ) );
-                            }
-                        });
-                       
-                    }else{
-                        alert( JSON.stringify( err ) );
-                    }
-                });
-                        
+                requireAjax();
             } else {
                 alert(JSON.stringify(err))
+            }
+        });
+    }
+    function requireAjax(argument) {
+        api.ajax({
+            url: apiSite + '/remark_user/fullInfo',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                  values: { 
+                      token: $api.getStorage('userToken'),
+                      remark_user_id: api.pageParam.userId
+                  }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                var SQLName = 'db_'+$api.getStorage('userToken');
+                var sql = 'INSERT OR REPLACE INTO tb_remarks_user_info(remark_user_id, extra_id, extra_content, extra_image_url)  VALUES (' + api.pageParam.userId+','+ ret.data.extra.extra_id+',"'+ ret.data.extra.content+'","'+ ret.data.extra.image_url + '")'
+                 db.selectSql({
+                    name: 'db_'+$api.getStorage('userToken'),
+                    sql: 'SELECT * FROM tb_remarks_user_info where remark_user_id=' + api.pageParam.userId
+                }, function(ret1, err1){        
+                    if( ret1.status ){
+                        if (ret1.data.length !== 0) {
+                            console.log(JSON.stringify(ret1))
+                            console.log('有数据,更新')
+                            // 有数据 更新
+                            db.executeSql({
+                                name: 'db_'+$api.getStorage('userToken'),
+                                sql: 'UPDATE tb_remarks_user_info SET extra_id = '+ ret.data.extra.extra_id +', extra_image_url = "'+ ret.data.extra.image_url +'", extra_content = "'+ ret.data.extra.content +'" WHERE remark_user_id = ' + api.pageParam.userId
+                            }, function(ret, err){        
+                                if( ret.status ){
+                                    console.log('688:' + JSON.stringify( ret ) );
+                                }else{
+                                    alert('690:' + JSON.stringify( err ) );
+                                }
+                            });
+                        } else {
+                            console.log('没有数据,插入')
+                            // 没数据 插入新数据
+                            db.executeSql({
+                                name: 'db_'+$api.getStorage('userToken'),
+                                sql: sql  
+                            }, function(ret, err){        
+                                if( ret.status ){
+                                   console.log( '684:::'+JSON.stringify( ret ) );
+                                }else{
+                                   alert( JSON.stringify( err ) );
+                               }
+                            });
+                        }
+                    }else{
+                        alert( JSON.stringify( err1 ) );
+                    }
+                });
+               
+            }else{
+                alert( JSON.stringify( err ) );
             }
         });
     }
@@ -294,6 +260,7 @@
         //             } 
         //         });
         // } else {
+            
             api.getPicture({
                 sourceType: 'library',
                 mediaValue: 'pic',
