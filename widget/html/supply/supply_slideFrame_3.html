@@ -215,10 +215,68 @@
     var val, selectedObj={},str,url;
     apiready = function(){
         fnInit();
-        // 设置选中的条件
-        if (api.pageParam.selVal) {
-            $api.removeCls($api.dom('.no1 .sel'), 'sel');
-            $api.addCls($api.dom('.no1 .li_span[data-type="'+ api.pageParam.selVal +'"]'), 'sel');
+        
+        initSel()
+        // 进入筛选页面初始化页面
+        initPage();
+        listenEvent('school');
+    }
+     // 点击确定按钮： 1； 重置按钮 0
+    function enter(n) {
+        if (n) {
+            var parameter = {};
+            parameter.type = $api.attr($api.dom('.no4 .sel'), 'data-id');
+            parameter.sub_type = $api.attr($api.dom('.no5 .sel'), 'data-id');
+            parameter.category_ids = $api.text($api.dom('.school'));
+            parameter.order = $api.attr($api.dom('.no3 .sel'), 'data-order');
+            api.sendEvent({
+                name: 'searchSupply3',
+                extra: {
+                    parameter: parameter,
+                    selectedObj: selectedObj
+                }
+            });
+            api.closeFrame();
+        } else {
+            // 重置
+            $api.text($api.dom('.school'), '');
+            selectedObj = {};
+            $api.removeCls($api.dom('.no3 .sel'), 'sel');
+            $api.removeCls($api.dom('.no4 .sel'), 'sel');
+            $api.removeCls($api.dom('.no5 .sel'), 'sel');
+        }
+    }
+    // 设置选中的条件
+    function initSel() {
+        if (api.pageParam.parameter) {
+            if (api.pageParam.parameter.type) {
+                if (api.pageParam.parameter.type == 1){
+                    $api.addCls($api.domAll('.no4 li')[0], 'sel');
+                } else {
+                    $api.addCls($api.domAll('.no4 li')[1], 'sel');
+                }
+            }
+            if (api.pageParam.parameter.sub_type) {
+                if (api.pageParam.parameter.sub_type == 1){
+                    $api.addCls($api.domAll('.no5 li')[0], 'sel');
+                } else {
+                    $api.addCls($api.domAll('.no5 li')[1], 'sel');
+                }
+            }
+            if (api.pageParam.parameter.order) {
+               if (api.pageParam.parameter.order == 'distance') {
+                    $api.addCls($api.domAll('.no3 li')[1], 'sel');
+                } else if (api.pageParam.parameter.order == 'price') {
+                    $api.addCls($api.domAll('.no3 li')[2], 'sel');
+                }   else if (api.pageParam.parameter.order == 'create_time') {
+                    $api.addCls($api.domAll('.no3 li')[3], 'sel');
+                } else {
+                    $api.addCls($api.domAll('.no3 li')[0], 'sel');
+                }  
+            }
+            if (api.pageParam.parameter.category_ids) {
+                $api.text($api.dom('.school'), api.pageParam.parameter.category_ids);
+            }
         }
         if (api.pageParam.type == 1) {
             // 搜索供
@@ -234,17 +292,20 @@
                 $api.removeCls($api.domAll('.no1 li')[i], 'sel');
             }
             $api.addCls($api.byId('ask'), 'sel');
-        } else {
+        } else {}
 
+    }
+    function selType (ele) {
+        for (var i = 0; i < $api.domAll('.no4 li').length; i++) {
+            $api.removeCls($api.domAll('.no4 li')[i], 'sel');
         }
-        // 进入筛选页面初始化页面
-        initPage();
-        listenEvent('school');
-        // listenEvent('commpany');
-        // listenEvent('trade');
-        // listenEvent('place');
-        // listenEvent('custom');
-
+        $api.addCls(ele, 'sel');
+    }
+    function selSubType(ele) {
+        for (var i = 0; i < $api.domAll('.no5 li').length; i++) {
+            $api.removeCls($api.domAll('.no5 li')[i], 'sel');
+        }
+        $api.addCls(ele, 'sel');
     }
     function selClassify(ele) {
         for (var i = 0; i < $api.domAll('.no1 li').length; i++) {
@@ -291,7 +352,7 @@
             name: 'select'+ val
         }, function(ret, err) {
             if (ret) {
-                $api.text($api.dom('.'+ val +''), ret.value.schoolName);
+                $api.text($api.dom('.'+ val +''), ret.value.schoolName.replace(' ',','));
                 selectedObj[val] = ret.value.selectedArr;
                 // selectedObj[val][0].str = ret.value.schoolName;
                 str = ret.value.schoolName;
@@ -301,15 +362,7 @@
             }
         });
     }
-    // 选中类型图标
-    function li_span(ele) {
-        flag = 1;
-        var allDom = $api.not($api.closest(ele, 'li'),'p')
-        for (var i = 0; i < allDom.length; i++) {
-            $api.removeCls(allDom[i], 'sel');
-        }
-        $api.addCls(ele, 'sel');
-    }
+   
     // 选择学校/公司/行业
     function li_spanP(ele) {
         val = $api.attr(ele, 'data-val');
@@ -331,29 +384,5 @@
             bounces: false
         });
     }
-    // 点击确定按钮： 1； 重置按钮 0
-    function enter(n) {
-        if (n) {
-            var sortVal = $api.attr($api.dom('.no3 .sel'), 'data-order');
-            alert(sortVal+'---'+url)
-          
-        } else {
-            // 重置
-            $api.text($api.dom('.school'), '');
-            $api.text($api.dom('.commpany'), '');
-            $api.text($api.dom('.trade'), '');
-            selectedObj = {};
-            var no1 = document.getElementsByClassName('no1')[0]
-            var liArr = no1.getElementsByTagName('li');
-
-            for (var i = 0; i < liArr.length; i++) {
-                for(var j = 0; j < liArr[i].childNodes.length ; j++) {
-                    $api.removeCls(liArr[i].childNodes[j], 'sel');
-                }
-            }  
-        }
-    }
-
-    // 
 </script>
 </html>

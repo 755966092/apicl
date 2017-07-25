@@ -163,7 +163,7 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 
 <script type="text/javascript">
-    var data = []
+    var data = [],parameter,selectedObj;
     apiready = function(){
         getData(data);
         
@@ -171,21 +171,10 @@
             var iputText = $api.val($api.dom('input'));
             console.log('按键事件对象'+JSON.stringify(e))
             console.log('按键事件对象2'+JSON.stringify(e.key))
-            // if (!iputText) {
-                // api.closeFrame({
-                //     name: 'supply_searchSupplyFruit_frame'
-                // });
-            // } else {
+         
                 if (e.keyCode == 13) {
                     data.push(iputText);
 
-                    // if (!iputText) {
-                    //     getData(data);
-                    //     api.closeFrame({
-                    //         name: 'supply_searchSupplyFruit_frame'
-                    //     });
-
-                    // } else {
                         api.openFrame({
                             name: 'supply_searchSupplyFruit_frame',
                             url: './supply_searchSupplyFruit_frame.html',
@@ -218,6 +207,17 @@
                 
             // }
         });
+        api.addEventListener({
+            name: 'searchSupply3'
+        }, function(ret, err) {
+            if (ret) {
+                alert(JSON.stringify(ret));
+                parameter = ret.value.parameter
+                selectedObj = ret.value.selectedObj
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     };
     getData(data);
     function delIcon(ele) {
@@ -235,7 +235,9 @@
                 h: 'auto'
             },
             pageParam: {
-                type: api.pageParam.type
+                type: api.pageParam.type,
+                parameter: parameter,
+                selectedObj: selectedObj
             },
             bounces: false
         });
