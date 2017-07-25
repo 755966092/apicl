@@ -217,13 +217,13 @@
     <div class="main">  
     <div class="nav">
         <span class="search"   tapmode="hover"   onclick="searchSupply(this)"></span>
-        <span class="head act"   tapmode="hover"   onclick="switchApr(0)">
+        <span class="head act" data-id="1"   tapmode="hover"   onclick="switchApr(0)">
             <span class="titleText">供</span>
         </span>
-        <span class="head"   tapmode="hover"   onclick="switchApr(1)">
+        <span class="head"  data-id="2"  tapmode="hover"   onclick="switchApr(1)">
             <span class="titleText">求</span>
         </span>
-        <span class="head"   tapmode="hover"   onclick="switchApr(2)">
+        <span class="head" data-id="3"  tapmode="hover"   onclick="switchApr(2)">
             <span class="titleText lastTitleText">圈</span>
         </span>
         <div class="indexbar" id="indexbar"></div>
@@ -363,10 +363,16 @@
         // });
         // $api.css($api.closest(ele, '.nav'), 'display: none');
         // $api.css($api.dom('.ipt'), 'display:block');
+        // 获取当前页面显示的是供还是求
+        var currentPage = $api.attr($api.dom('.act'), 'data-id');
+        // 1 供  2 求  3 圈 
         api.openWin({
             name: 'supply_searchSupply_win',
             url: 'supply/supply_searchSupply_win.html',
-            bounces:false
+            bounces:false,
+            pageParam: {
+                type: currentPage
+            }
         });
 
     }

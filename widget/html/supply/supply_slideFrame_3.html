@@ -11,9 +11,6 @@
             width: 100%;    
             background-color: rgba(0,0,0,0.4);
         }
-
-        body {
-        }
         .warp1 {
             position: relative;
             height: 100%;
@@ -73,10 +70,12 @@
             width: 6rem;
             font-size: 0;
             z-index: 999;
-            position: absolute;
+            position: fixed;
+            box-sizing: border-box;
             bottom: 0;
         }
         .footer span {
+            box-sizing: border-box;
             height: .9rem;
             width: 3rem;    
             font-size: .34rem;
@@ -105,20 +104,26 @@
             margin-right: .25rem;
         }
         .no1,
-        .no3 {
+        .no3,
+        .no4,
+        .no5 {
             font-size: 0;
             border-bottom: .01rem solid #d9d9d9;
             padding-bottom: .26rem;
             margin-bottom: .23rem;
         }
         .no1 p,
-        .no3 p {
+        .no3 p,
+        .no4 p,
+        .no5 p {
             font-size: .26rem;
             line-height: .37rem;
             margin-bottom: .13rem;
         }
         .no1 li,
-        .no3 li {
+        .no3 li,
+        .no4 li,
+        .no5 li {
             display: inline-block;
             width: 1.78rem;
             height: .79rem;
@@ -136,7 +141,9 @@
             margin-bottom: .22rem;
         }
         .no1 .sel,
-        .no3 .sel {
+        .no3 .sel,
+        .no4 .sel,
+        .no5 .sel {
              background-color: #E6FFE6;
             color: #27B24A;
         }
@@ -153,27 +160,37 @@
                 <div>
                     <ul class="no1">
                         <p>类别</p>
-                        <li tapmode="hover" onclick="selClassify(this)"  class="sel">供</li>
-                        <li tapmode="hover" onclick="selClassify(this)" >求</li>
+                        <li tapmode="hover"  id="supply" onclick="selClassify(this)" data-type=""  class="sel">供</li>
+                        <li tapmode="hover"  id="ask" onclick="selClassify(this)" >求</li>
                     </ul>  
                     <ul class="no3">
                         <p>排序</p>
-                        <li tapmode="hover" onclick="selSort(this)"  class="sel">智能排序</li>
-                        <li tapmode="hover" onclick="selSort(this)" >距离最近</li>
-                        <li tapmode="hover" onclick="selSort(this)" >价格最低</li>
-                        <li tapmode="hover" onclick="selSort(this)" >最新发布</li>
-                    </ul>  
+                        <li tapmode="hover" data-order="" onclick="selSort(this)"  >智能排序</li>
+                        <li tapmode="hover" data-order="distance" onclick="selSort(this)" >距离最近</li>
+                        <li tapmode="hover" data-order="price" onclick="selSort(this)" >价格最低</li>
+                        <li tapmode="hover" data-order="create_time" onclick="selSort(this)" >最新发布</li>
+                    </ul> 
+                    <ul class="no4">
+                        <p>类型</p>
+                        <li tapmode="hover" onclick="selType(this)" data-id="1">我卖</li>
+                        <li tapmode="hover" onclick="selType(this)" data-id="2">我公司卖</li>
+                    </ul>
+                    <ul class="no5">
+                        <p>类别</p>
+                        <li tapmode="hover" onclick="selSubType(this)" data-id="1">自产自销</li>
+                        <li tapmode="hover" onclick="selSubType(this)" data-id="2">代理</li>
+                    </ul>
                     <h3>分类</h3>
                     <ul class="no2">
                         <li tapmode="hover" data-val="school" onclick="li_spanP(this);event.cancelBubble=true;" >
-                            <p>TA自产自销的<span class="no2Icon school"></span></p>
+                            <p>已选择<span class="no2Icon school"></span></p>
                         </li>
-                        <li tapmode="hover" data-val="commpany" onclick="li_spanP(this);event.cancelBubble=true;">
+                      <!--   <li tapmode="hover" data-val="commpany" onclick="li_spanP(this);event.cancelBubble=true;">
                             <p>TA代理的<span class="no2Icon commpany"></span></p>
                         </li>
                         <li tapmode="hover" data-val="trade" onclick="li_spanP(this);event.cancelBubble=true;">
                             <p>TA公司<span class="no2Icon trade"></span></p>
-                        </li>
+                        </li> -->
                         <!-- <li tapmode="hover" data-val="place" onclick="li_spanP(this);event.cancelBubble=true;">
                             <p>地点<span class="no2Icon place"></span></p>
                         </li>
@@ -195,7 +212,7 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
-    var val, selectedObj={},str;
+    var val, selectedObj={},str,url;
     apiready = function(){
         fnInit();
         // 设置选中的条件
@@ -203,11 +220,28 @@
             $api.removeCls($api.dom('.no1 .sel'), 'sel');
             $api.addCls($api.dom('.no1 .li_span[data-type="'+ api.pageParam.selVal +'"]'), 'sel');
         }
+        if (api.pageParam.type == 1) {
+            // 搜索供
+            url = '/supply/index';
+            for (var i = 0; i < $api.domAll('.no1 li').length; i++) {
+                $api.removeCls($api.domAll('.no1 li')[i], 'sel');
+            }
+            $api.addCls($api.byId('supply'), 'sel');
+        } else if (api.pageParam.type == 2) {
+            // 搜索求
+            url = '/demand/index';
+            for (var i = 0; i < $api.domAll('.no1 li').length; i++) {
+                $api.removeCls($api.domAll('.no1 li')[i], 'sel');
+            }
+            $api.addCls($api.byId('ask'), 'sel');
+        } else {
+
+        }
         // 进入筛选页面初始化页面
         initPage();
         listenEvent('school');
-        listenEvent('commpany');
-        listenEvent('trade');
+        // listenEvent('commpany');
+        // listenEvent('trade');
         // listenEvent('place');
         // listenEvent('custom');
 
@@ -217,6 +251,11 @@
             $api.removeCls($api.domAll('.no1 li')[i], 'sel');
         }
         $api.addCls(ele, 'sel');
+        if ($api.text(ele) === '供') {
+            url = '/supply/index';
+        } else {
+            url = '/demand/index';
+        }
     }
     function selSort(ele) {
         for (var i = 0; i < $api.domAll('.no3 li').length; i++) {
@@ -232,12 +271,12 @@
             if (selectedObj.school) {
                 $api.text($api.dom('.school'), selectedObj.school[0].str);
             }
-            if(selectedObj.commpany) {
-                $api.text($api.dom('.commpany'), selectedObj.commpany[0].str);
-            } 
-            if(selectedObj.trade) {
-                $api.text($api.dom('.trade'), selectedObj.trade[0].str);
-            }         
+            // if(selectedObj.commpany) {
+            //     $api.text($api.dom('.commpany'), selectedObj.commpany[0].str);
+            // } 
+            // if(selectedObj.trade) {
+            //     $api.text($api.dom('.trade'), selectedObj.trade[0].str);
+            // }         
             // if(selectedObj.place) {
             //     $api.text($api.dom('.place'), selectedObj.place[0].str);
             // }         
@@ -295,31 +334,14 @@
     // 点击确定按钮： 1； 重置按钮 0
     function enter(n) {
         if (n) {
-            // 1 初识好友
-            // 2 熟识好友
-            // 3 尚未加入
-            // 4 一度人脉
-            var selVal = $api.attr($api.dom('.no1 .sel'), 'data-type') || '';
-            var spanSel = $api.domAll('.spanSel');
-            // 发送事件, 刷新筛选结果
-            api.sendEvent({
-                name: 'screeningResultsType',
-                extra: {
-                    selVal: selVal,
-                    selectedObj: selectedObj
-                }
-            });
-             api.closeFrame();
-
-        }
-        else {
+            var sortVal = $api.attr($api.dom('.no3 .sel'), 'data-order');
+            alert(sortVal+'---'+url)
+          
+        } else {
             // 重置
             $api.text($api.dom('.school'), '');
             $api.text($api.dom('.commpany'), '');
             $api.text($api.dom('.trade'), '');
-            $api.text($api.dom('.place'), '');
-            $api.text($api.dom('.custom'), '');
-            // $api.removeCls($api.dom('.sel'), 'sel');
             selectedObj = {};
             var no1 = document.getElementsByClassName('no1')[0]
             var liArr = no1.getElementsByTagName('li');
@@ -328,26 +350,10 @@
                 for(var j = 0; j < liArr[i].childNodes.length ; j++) {
                     $api.removeCls(liArr[i].childNodes[j], 'sel');
                 }
-                // $api.addCls(liArr[i].childNodes[3], 'sel');
             }  
-            // for (var i = 0; i < $api.domAll('.no2List').length; i++) {
-            //     $api.removeCls($api.domAll('.no2List')[i], 'sel');
-            //     for(var j = 0; j < $api.domAll('.no2List')[i].childNodes.length ; j++) {
-
-            //         $api.removeCls($api.domAll('.no2List')[i].childNodes[j], 'hide');
-            //         $api.removeCls($api.domAll('.no2List')[i].childNodes[j], 'spanSel');
-            //     }
-            //     $api.addCls($api.domAll('.no2List')[i].childNodes[3], 'spanSel');
-            // }
-            // $api.addCls($a], 'sel');
-            // var no2Icon = $api.domAll('.no2Icon')
-            // for (var i = 0; i < no2Icon.length; i++) {
-            //     $api.removeCls(no2Icon[i], 'no2Icon2');
-            // }
-            // $api.addCls(no2Icon[0], 'no2Icon2');
-
-
         }
     }
+
+    // 
 </script>
 </html>

@@ -354,9 +354,9 @@
             </div>
             <div class="company ">
                     <span class="companyName">
-                        <span id="current_company">第一学</span> 
-                        <span id="current_position">项目经理</span> 
-                        <span id="current_degree">项目经理</span> 
+                        <span id="current_company"></span> 
+                        <span id="current_position"></span> 
+                        <span id="current_degree"></span> 
                     </span>
             </div>
             <p>加入会员后可查看对方最近一次活跃时间</p>
@@ -559,6 +559,7 @@
                 }, function(ret, err){        
                     if( ret.status ){
                         // alert( JSON.stringify( ret ) );
+                        initStatus();
                     }else{
                         alert( JSON.stringify( err ) );
                     }
@@ -634,12 +635,9 @@
                                 case '5': ret.data[i].degree = '博士后'; break;
                             }
                         }
+                        
                     }
-<<<<<<< HEAD
-                    // alert('本地数据库内容')
-=======
-                    alert('本地数据库内容')
->>>>>>> cec10ade68c7b19906a3ce109b06d1e004815852
+                    reviseText(ret.data);
                     getData(ret.data);
                     statusRemarks(ret.data,1)
                 } else {
@@ -651,6 +649,26 @@
 
             }
         });
+    }
+    // 修改昵称下面的显示
+    function reviseText(data) {
+         // 当前动态
+        var current_company = $api.byId('current_company');
+        var current_position = $api.byId('current_position');
+        var current_degree = $api.byId('current_degree');
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].is_default == 1) {
+                if (data[i].type == 2) {
+                    $api.text(current_company, data[i].name);
+                    $api.text(current_position, data[i].position);
+                    $api.text(current_degree, data[i].degree);
+                } else {
+                    $api.text(current_company, data[i].name);
+                    $api.text(current_position, data[i].position);
+                    $api.text(current_degree, '');
+                }
+            }
+        }
     }
     // 当前状态 - 备注信息
     function statusRemarks(data,argument) {
@@ -736,6 +754,7 @@
                 alert( JSON.stringify( err ) );
             }
         });
+        reviseText(ret.data.status)
         getData(ret.data.status)
     }
     // 初始化页面
@@ -746,9 +765,9 @@
         var phone = $api.byId('phone');
         var hometown = $api.byId('hometown');
         var birthday = $api.byId('birthday');
-        var current_company = $api.byId('current_company');
-        var current_position = $api.byId('current_position');
-        var current_degree = $api.byId('current_degree');
+        // var current_company = $api.byId('current_company');
+        // var current_position = $api.byId('current_position');
+        // var current_degree = $api.byId('current_degree');
         var relationship_level = $api.byId('relationship_level');
         var liRightIcon = $api.byId('liRightIcon');
         /**
@@ -772,25 +791,25 @@
                     // if (ret.data[0].current_status) {
                     //     getData($api.strToJson(ret.data[0].current_status))
                     // }
-                    // 职位
-                    if (ret.data[0].remark_current_position) {
-                        $api.text(current_position, ret.data[0].remark_current_position);
+                    // // 职位
+                    // if (ret.data[0].remark_current_position) {
+                    //     $api.text(current_position, ret.data[0].remark_current_position);
 
-                    } else {
-                        $api.text(current_position, ret.data[0].current_position);
-                    }
-                    // 公司
-                    if (ret.data[0].remark_current_company) {
-                        $api.text(current_company, ret.data[0].remark_current_company);
-                    } else {
-                        $api.text(current_company, ret.data[0].current_company);
-                    }
-                    // 学位
-                    if (ret.data[0].remark_current_degree) {
-                        $api.text(current_degree, ret.data[0].remark_current_degree);
-                    } else {
-                        $api.text(current_degree, ret.data[0].current_degree);
-                    }
+                    // } else {
+                    //     $api.text(current_position, ret.data[0].current_position);
+                    // }
+                    // // 公司
+                    // if (ret.data[0].remark_current_company) {
+                    //     $api.text(current_company, ret.data[0].remark_current_company);
+                    // } else {
+                    //     $api.text(current_company, ret.data[0].current_company);
+                    // }
+                    // // 学位
+                    // if (ret.data[0].remark_current_degree) {
+                    //     $api.text(current_degree, ret.data[0].remark_current_degree);
+                    // } else {
+                    //     $api.text(current_degree, ret.data[0].current_degree);
+                    // }
                     // 电话
                     if (ret.data[0].remark_current_contact) {
                         $api.text(phone, ret.data[0].remark_current_contact);
