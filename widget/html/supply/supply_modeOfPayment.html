@@ -199,20 +199,48 @@
             console.log('193:::'+JSON.stringify(obj));
             if (pay_method == 'balance') {
                 // 余额支付
-                api.openFrame({
-                    name: 'frameName',
-                    url: './supply_psdKeyset.html',
-                    rect: {
-                        x: 0,
-                        y: 0,
-                        w: 'auto',
-                        h: 'auto'
-                    },
-                    pageParam: {
-                        obj: obj
-                    },
-                    bounces: true
-                });
+                // 判斷是否设置支付密码
+                api.ajax({
+                    url: apiSite + '/settings/checkPayPassword',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                           values: { 
+                               token: $api.getStorage('userToken'),
+                           }
+                    }
+                }, function(ret, err) {
+                    if(ret) {
+                        if(ret.data.is_set_pay_password) {
+                            // 已设置
+                            api.openFrame({
+                                name: 'frameName',
+                                url: './supply_psdKeyset.html',
+                                rect: {
+                                    x: 0,
+                                    y: 0,
+                                    w: api.winWidth,
+                                    h: api.winHeight
+                                },
+                                pageParam: {
+                                    obj: obj,
+                                    url: url
+                                },
+                                bounces: false
+                            });
+                        } else {
+                            // 未设置, 打开设置密码界面
+                            api.openWin({
+                                name: 'me_hy_tx_setPsd_win',
+                                url: '../me/me_hy_tx_setPsd_win.html',
+                            });
+
+                        }
+                    } else {
+                        alert(JSON.stringify(err))
+                    }
+                })
+               
                 
             } else {
                 api.ajax({

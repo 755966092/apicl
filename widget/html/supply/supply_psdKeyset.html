@@ -1,34 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html onclick="api.closeFrame();">
 <head>
     <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style type="text/css">
-        .main {
-            margin-top: .36rem;
-        }
-        .title {
-            height: 2rem;
-            width: 7.5rem;
-            background-color: #fff;
-        }
-        .title p {
-            text-align: center;
-        }
-        .title .p1 {
-            color: #999;
-            font-size: .28rem;
-        }
-        .title .p2 {
-            font-size: .34rem;
-        }
-        .main2 {
-            margin-top: .36rem;
+    html {
+        background-color: rgba(0,0,0,.4);
+        position: relative;
+    }
+    body {
+        background-color: transparent;
+        position: relative;
 
-        }
-        .pwd-box{  
+    }
+    .main {
+        background-color: #fff;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+    }
+    .pwd-box{  
         width: 7.08rem;
         padding-left: 1px;  
         position: relative;  
@@ -53,10 +46,8 @@
     .fake-box {
         font-size: 0;
         text-align: center;
-
     }
     .fake-box input{  
-        background-color: #fff;
         width: 1.18rem;  
         height: 1.18rem;  
         border: none;  
@@ -69,8 +60,6 @@
     }  
       
     .pan {
-        position: fixed;
-        bottom: 0;
         width: 7.5rem;
         background-color: #fff;
         border-top: .01rem solid #B0AFAF;
@@ -106,10 +95,10 @@
         position: relative;
     }
     .wpwd {
-        text-align: center;
-        color: #999;
+        text-align: right;
+        color: #62759C;
         font-size: .24rem;
-        height: 4rem;
+        height: 2.15rem;
         padding-top: .3rem;
         padding-right: .2rem;
         box-sizing: border-box;
@@ -127,71 +116,51 @@
     </style>
 </head>
 <body>
-    
-   <div class="main">
-       <div class="title flex-def flex-zCenter flex-zTopBottom">
-            <p class="p1">请输入帐号<span>155555555</span></p>
-            <p class="p2">当前6位数字支付密码，完成身份验证</p>
-       </div>
-   </div>
-   <div class="main2">
-        <div class="pwd-box">  
-            <input type="tel" maxlength="6" class="pwd-input" readonly=""  oninput="sel(this)" id="pwd-input">  
-            <div class="fake-box flex-def flex-zCenter">  
-                <input type="password" class="mima" readonly="">  
-                <input type="password" class="mima" readonly="">  
-                <input type="password" class="mima" readonly="">  
-                <input type="password" class="mima" readonly="">  
-                <input type="password" class="mima" readonly="">  
-                <input type="password" class="mima" readonly="">  
+        <div class="main" onclick="event.stopPropagation();">
+            <h3>
+                <span class="clearBtn"></span>
+                输入密码
+            </h3>
+            <div class="pwd-box">  
+                <input type="tel" maxlength="6" class="pwd-input" readonly=""  oninput="sel(this)" id="pwd-input">  
+                <div class="fake-box flex-def flex-zCenter">  
+                    <input type="password" class="mima" readonly="">  
+                    <input type="password" class="mima" readonly="">  
+                    <input type="password" class="mima" readonly="">  
+                    <input type="password" class="mima" readonly="">  
+                    <input type="password" class="mima" readonly="">  
+                    <input type="password" class="mima" readonly="">  
+                </div>  
             </div>  
-        </div>  
-        <p class="wpwd">支付密码不能是重复、连续的数字</p>
-         <div class="pan">
-            <p>
-                <span tapmode="hover" onclick="inputNumber(this)">1</span>
-                <span tapmode="hover" onclick="inputNumber(this)">2</span>
-                <span tapmode="hover" onclick="inputNumber(this)">3</span>
-            </p>
-            <p>
-                <span tapmode="hover" onclick="inputNumber(this)">4</span>
-                <span tapmode="hover" onclick="inputNumber(this)">5</span>
-                <span tapmode="hover" onclick="inputNumber(this)">6</span>
-            </p>
-            <p>
-                <span tapmode="hover" onclick="inputNumber(this)">7</span>
-                <span tapmode="hover" onclick="inputNumber(this)">8</span>
-                <span tapmode="hover" onclick="inputNumber(this)">9</span>
-            </p>
-            <p>
-                <span class="leftBotton">0</span>
-                <span tapmode="hover" onclick="inputNumber(this)">0</span>
-                <span class="leftBotton" tapmode="hover" onclick="clearInputNumber(this)">x</span>
-            </p>
-        </div> 
-    </div>
-    
+            <p class="wpwd" tapmode="hover" onclick="openSetPsdPage()">忘记密码?</p>
+             <div class="pan">
+                <p>
+                    <span tapmode="hover" onclick="inputNumber(this);event.stopPropagation();">1</span>
+                    <span tapmode="hover" onclick="inputNumber(this);event.stopPropagation();">2</span>
+                    <span tapmode="hover" onclick="inputNumber(this);event.stopPropagation();">3</span>
+                </p>
+                <p>
+                    <span tapmode="hover" onclick="inputNumber(this);event.stopPropagation();">4</span>
+                    <span tapmode="hover" onclick="inputNumber(this);event.stopPropagation();">5</span>
+                    <span tapmode="hover" onclick="inputNumber(this);event.stopPropagation();">6</span>
+                </p>
+                <p>
+                    <span tapmode="hover" onclick="inputNumber(this);event.stopPropagation();">7</span>
+                    <span tapmode="hover" onclick="inputNumber(this);event.stopPropagation();">8</span>
+                    <span tapmode="hover" onclick="inputNumber(this);event.stopPropagation();">9</span>
+                </p>
+                <p>
+                    <span class="leftBotton">0</span>
+                    <span tapmode="hover" onclick="inputNumber(this);event.stopPropagation();">0</span>
+                    <span class="leftBotton" tapmode="hover" onclick="clearInputNumber(this);event.stopPropagation();">x</span>
+                </p>
+            </div> 
+        </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/jquery.min.js"></script>
 <script type="text/javascript">
-    apiready = function(){
-        console.log('curpsd:::'+JSON.stringify(api.pageParam))
-
-        
-        api.addEventListener({
-            name: 'setPassword'
-        }, function(ret, err) {
-            if (ret) {
-                for (var i = 0; i < $api.domAll('input').length; i++) {
-                    $api.val($api.domAll('input')[i], '');
-                }
-                number = '',n=0;
-            } else {
-                alert(JSON.stringify(err));
-            }
-        });
-    }
     function sel(ele) {
         var mimaArr = $api.dom('.fake-box');
         var pwd = $api.trimAll($api.val(ele)),len = pwd.length;
@@ -200,22 +169,8 @@
         } 
         $api.val($api.eq(mimaArr, len+1), '');
         if (len >=6 ) {
-            api.openFrame({
-                name: 'me_hy_tx_setPsd_frame',
-                url: './me_hy_tx_setPsd_frame.html',
-                rect: {
-                    x: 0,
-                    y: api.pageParam.headerH,
-                    w: 'auto',
-                    h: 'auto'
-                },
-                pageParam: {
-                    pwd: pwd,
-                    headerH: api.pageParam.headerH,
-                    flag: 'curPsd'
-                },
-                bounces: false
-            });
+            console.log(pwd)
+            submitData(pwd);
         }
     }
     var number = '',n=0;
@@ -241,6 +196,36 @@
             sel($api.byId('pwd-input'));
         }
         
+    }
+
+    // 提交
+    function submitData(psd) {
+        api.ajax({
+            url: apiSite + api.pageParam.url,
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: api.pageParam.obj
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code == 200) {
+                    // 支付成功
+                    
+                } else {
+                    alert(JSON.stringify(ret.msg))
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+    // 修改密码
+    function openSetPsdPage() {
+        api.openWin({
+            name: 'me_hy_tx_setPsd_win',
+            url: '../me/me_hy_tx_setPsd_win.html'
+        });
     }
 </script>
 </html>
