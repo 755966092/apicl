@@ -66,6 +66,10 @@
             margin-bottom: .1rem;
         }
         .titleLeft .name {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 3.5rem;
             font-size: .26rem;
             color: #333;
             font-weight: 600;
@@ -199,14 +203,14 @@
                                 <span>{{=it[i].create_time}}</span>
                                 <div class="commentIcon"></div>
                             </div>
-                            <div class="commentText">
+                           <!--  <div class="commentText">
                                 <ul>
                                     <li>
                                         <span class="comment_name">李志超:</span>
                                         <span class="comment_content">我是一条评论</span>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
             </div>
@@ -221,10 +225,21 @@
 
 <script type="text/javascript">
     var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
-     var keyword;
+    var keyword;
+    var url; 
     apiready = function(){
         moduleInit();
         // 请求数据
+        if (api.pageParam.type == 1) {
+            // 供
+            url = '/supply/index';
+        } else if (api.pageParam.type == 2) {
+            // 求
+             url = '/demand/index';
+
+        } else {
+            // 圈
+        }
         requireData(api.pageParam);
         keyword = api.pageParam.keyword;
         // 筛选后的结果
@@ -279,7 +294,16 @@
                 obj.order = ret.value.parameter.order;
                 console.log(keyword)
                 console.log('筛选'+JSON.stringify(obj))
-                alert('33333:::'+JSON.stringify(obj));
+                // alert('33333:::'+JSON.stringify(obj));
+                if (ret.value.type == 1) {
+                    // 供
+                    url = '/supply/index';
+                } else if (ret.value.type == 2) {
+                    // 求
+                     url = '/demand/index';
+                } else {
+                    // 圈
+                }
                 requireData(obj)
         })
         api.addEventListener({
@@ -346,9 +370,10 @@
                 });
             }
         }
-
+       
+        // alert(api.pageParam.type +'++++'+url)
         api.ajax({
-            url: apiSite + '/supply/index',
+            url: apiSite + url,
             method: 'post',
             headers: apiHeader,
             data: {
@@ -375,6 +400,8 @@
                     }
                     if(ret.data.list[i].unit == 0) {
                         ret.data.list[i].unit = _dataSource[_dataSource.length-1]
+                    } else if (ret.data.list[i].unit == undefined) {
+                        ret.data.list[i].unit = '未定义'
                     } else {
                         ret.data.list[i].unit = _dataSource[ret.data.list[i].unit-1]
                     }

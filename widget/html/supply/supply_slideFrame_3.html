@@ -160,8 +160,8 @@
                 <div>
                     <ul class="no1">
                         <p>类别</p>
-                        <li tapmode="hover"  id="supply" onclick="selClassify(this)" data-type=""  class="sel">供</li>
-                        <li tapmode="hover"  id="ask" onclick="selClassify(this)" >求</li>
+                        <li tapmode="hover" data-id='1' id="supply" onclick="selClassify(this)"   class="sel">供</li>
+                        <li tapmode="hover" data-id='2' id="ask" onclick="selClassify(this)" >求</li>
                     </ul>  
                     <ul class="no3">
                         <p>排序</p>
@@ -225,6 +225,7 @@
     function enter(n) {
         if (n) {
             var parameter = {};
+            var type = $api.attr($api.dom('.no1 .sel'), 'data-id');
             parameter.type = $api.attr($api.dom('.no4 .sel'), 'data-id');
             parameter.sub_type = $api.attr($api.dom('.no5 .sel'), 'data-id');
             parameter.category_ids = $api.text($api.dom('.school'));
@@ -233,7 +234,8 @@
                 name: 'searchSupply3',
                 extra: {
                     parameter: parameter,
-                    selectedObj: selectedObj
+                    selectedObj: selectedObj,
+                    type: type
                 }
             });
             api.closeFrame();
