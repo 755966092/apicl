@@ -172,10 +172,12 @@
             // console.log(JSON.stringify(obj))
             var url;
             if (api.pageParam.flag == 1) {
+                // 买家付款未支付服务
                 url = '/supply_order/buyerPayService';
                 obj = api.pageParam.obj
                 obj.pay_method = pay_method;
             } else if (api.pageParam.flag == 2) {
+                // 买家补差价操作
                 url = '/supply_order/buyerPayExtraMoney';
                 obj = api.pageParam.obj
                 obj.pay_method = pay_method;
@@ -185,6 +187,7 @@
                 obj = api.pageParam.obj
                 obj.pay_method = pay_method;
             } else {
+                // 买家购买供应操作
                 url = '/supply_order/buyerCreateOrder';
                 var obj = api.pageParam.obj;
                 obj.token = $api.getStorage('userToken');
@@ -194,50 +197,69 @@
                 }
             }
             console.log('193:::'+JSON.stringify(obj));
-            api.ajax({
-                url: apiSite + url,
-                method: 'post',
-                headers: apiHeader,
-                data: {
-                       values: obj
-                }
-            }, function(retAJAX, err) {
-                console.log("202"+JSON.stringify(retAJAX))
-                if(retAJAX) {
-                    if (retAJAX.code !== 200) {
-                        alert(JSON.stringify(retAJAX.msg))
-                    } else {
-                        if (api.pageParam.flag === 3) {
-                            wxPayFun(retAJAX);
-                            api.sendEvent({
-                                name: 'filterOrder'
-                            });
+            if (pay_method == 'balance') {
+                // 余额支付
+                api.openFrame({
+                    name: 'frameName',
+                    url: './supply_psdKeyset.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        obj: obj
+                    },
+                    bounces: true
+                });
+                
+            } else {
+                api.ajax({
+                    url: apiSite + url,
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                           values: obj
+                    }
+                }, function(retAJAX, err) {
+                    console.log("202"+JSON.stringify(retAJAX))
+                    if(retAJAX) {
+                        if (retAJAX.code !== 200) {
+                            alert(JSON.stringify(retAJAX.msg))
                         } else {
-                            if (pay_method === 'wechat') {
-                                // 微信支付
-                               wxPayFun(retAJAX);
-                            } else if (pay_method === 'alipay') {
-                                aliPay.payOrder({
-                                  orderInfo: retAJAX.data.config
-                                },function(ret,err) {
-                                    console.log(JSON.stringify(ret));
-                                    payFruitPage(obj)
+                            if (api.pageParam.flag === 3) {
+                                wxPayFun(retAJAX);
+                                api.sendEvent({
+                                    name: 'filterOrder'
                                 });
                             } else {
-                                api.openWin({
-                                    name: 'me_gdd',
-                                    url: '../me/me_gdd.html'
-                                });
-                                setTimeout(function(){api.closeFrame();},1000)
+                                if (pay_method === 'wechat') {
+                                    // 微信支付
+                                   wxPayFun(retAJAX);
+                                } else if (pay_method === 'alipay') {
+                                    aliPay.payOrder({
+                                      orderInfo: retAJAX.data.config
+                                    },function(ret,err) {
+                                        console.log(JSON.stringify(ret));
+                                        payFruitPage(obj)
+                                    });
+                                } else {
+                                    api.openWin({
+                                        name: 'me_gdd',
+                                        url: '../me/me_gdd.html'
+                                    });
+                                    setTimeout(function(){api.closeFrame();},1000)
+                                }
+                            
                             }
-                        
+                            // setTimeout(function(){api.closeFrame();},1000)
                         }
-                        // setTimeout(function(){api.closeFrame();},1000)
+                    } else {
+                        alert(JSON.stringify(err.msg))
                     }
-                } else {
-                    alert(JSON.stringify(err.msg))
-                }
-            })
+                })
+            }
         } else {
             api.closeFrame();
         }

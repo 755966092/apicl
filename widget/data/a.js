@@ -13,7 +13,7 @@
 			"nickname": "111",
 			"real_name": "我们的团队",
 			"sex": 2,
-			"head_img_url": "http://ot0c8ontv.bkt.clouddn.com/Fmg6Owc-tHR4CjxOvQDdM6JVuki6",
+			"head_img_url": "http://img.2017duobao.com/Fmg6Owc-tHR4CjxOvQDdM6JVuki6",
 			"current_company": "第一学",
 			"current_position": "开发",
 			"hometown": "广西-南宁",
@@ -29,7 +29,7 @@
 			"extra_id": 11,
 			"remark_user_id": 18536,
 			"content": "备注",
-			"image_url": "http://ot0c8ontv.bkt.clouddn.com/Fr95UrPxGy5cH_mvk6mOlaHSC3iV"
+			"image_url": "http://img.2017duobao.com/Fr95UrPxGy5cH_mvk6mOlaHSC3iV"
 		},
 		"status": [{
 			"status_id": 23,
