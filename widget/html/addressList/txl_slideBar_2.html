@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        html,body {
+            height: 100%;
+            width: 100%;    
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        body {
+        }
+        .warp1 {
+            position: relative;
+            height: 100%;
+             display: -webkit-box; 
+            display: flex; 
+            -webkit-box-direction: normal;
+            -webkit-box-orient: vertical;
+            flex-direction: column;
+            -webkit-box-align:  end;
+            align-items: flex-end;
+        }
+        .warp {
+            margin-left: 1.5rem;
+            width: 6rem;
+            background-color: #fff;
+        }
+        .main {
+            background-color: #fff;
+            position: relative;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        .main>div:first-child {
+            padding: .15rem .2rem;
+            padding-right: 0;
+        }
+
+        .main ul.no1 {
+            font-size: .24rem;
+            width: 100%;
+        }
+        .main ul.no1 li {
+            font-size: 0;
+            margin-bottom: .1rem;
+        }
+        .main ul.no1 li:last-child {
+            margin-bottom: 0;
+        }
+        .main ul.no1 li p {
+            font-size: .24rem;
+            color: #9b9b9b;
+        }
+        .main ul.no1 li span {
+            font-size: .24rem;
+            display: inline-block;
+            margin-top: .1rem;
+            width: 1.78rem;
+            height: .79rem;
+            background-color: #F4F4F4;
+            border-radius: .06rem;
+            text-align: center;
+            /*line-height: .79rem;*/
+            padding-top: .08rem;
+            box-sizing: border-box;
+            color: #555;
+            margin-bottom: .2rem;
+        }
+        .main ul.no1 li span:nth-child(2), 
+        .main ul.no1 li span:nth-child(3) {
+            margin-right: .12rem;
+        }
+        .main ul.no1 li span.sel {
+            /*background: url(../../image/icon_supply/icon_text4.png);*/
+            background-color: #E6FFE6;
+            background-size: .96rem .6rem;
+            color: #27B24A;
+        }
+       
+        .main ul.no1 li span.li_span4 {
+            background-size: 1.78rem .79rem;
+            width: 1.78rem;
+        }
+          .main ul.no2 {
+            font-size: .24rem;
+            /*margin-top: .37rem;*/
+
+        }
+        .main ul.no2 p {
+            line-height: .79rem;
+            color: #555;
+            /*border-bottom: .01rem solid #cbcbcb;*/
+        }
+        .main ul.no2 li {
+            /*height: .84rem;*/
+            line-height: .79rem;
+            border-top: .01rem solid #d9d9d9;
+            font-size: 0;
+            padding-right: .36rem;
+        }
+        .main ul.no2 li p {
+            font-size: .28rem;
+            color: #333;
+            background: url(../../image/icon_zk.png)no-repeat;
+            -webkit-background-size: .15rem .25rem;
+            background-size: .15rem .25rem;
+            background-position: right center;
+        }
+        
+        .footer {
+            height: .78rem;
+            width: 6rem;
+            font-size: 0;
+            z-index: 999;
+            position: absolute;
+            bottom: 0;
+        }
+        .footer span {
+            height: .9rem;
+            width: 3rem;    
+            font-size: .34rem;
+            text-align: center;
+            line-height: .9rem;
+            float: left;
+            background-color: #F8F8F8;
+        }
+        .footer span:last-child {
+            background-color: #27B24A;
+            color: #fff;
+        }
+        
+        header.header {
+            opacity: 0;
+        }
+        .no2Icon {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            text-align: right;
+            width: 3rem;
+            color: #999999;
+            float: right;
+            font-size: .24rem;
+            margin-right: .25rem;
+        }
+    </style>
+</head>
+<body   tapmode="hover" class=""   onclick="api.closeFrame()">
+   
+    <div class="warp1 flex-def flex-zBetween">
+         <!-- <header  class="header clearfix">
+            <div class="head">
+                <span class="callback"   tapmode="hover"   onclick="api.closeWin()">返回</span>
+                <span class="winTitle">
+                    找供求
+                </span>
+            </div>
+        </header> -->
+         <header class="header">
+        <div class="head"></div>
+    </header>
+        <div class="warp flex-item"   tapmode="hover"   onclick="api.closeFrame()">
+            <div class="main"   tapmode="hover"   onclick="event.cancelBubble=true;">
+                <div>
+                    <ul class="no1">
+                        <li>
+                         
+                             <p>类型</p>
+                            <span  class="fl"  tapmode="hover" data-type='2'   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 sel">
+                               我在用户
+                            </span>
+                             
+                            <span   tapmode="hover"  data-type='1'   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 ">
+                                尚未加入<br>（有通讯录）
+                            </span>
+                        </li>
+                     </ul>  
+                    <!--<ul class="no2">
+                        <li tapmode="hover" data-val="school" onclick="li_spanP(this);event.cancelBubble=true;" >
+                            <p>学校<span class="no2Icon school"></span></p>
+                        </li>
+                        <li tapmode="hover" data-val="commpany" onclick="li_spanP(this);event.cancelBubble=true;">
+                            <p>公司<span class="no2Icon commpany"></span></p>
+                        </li>
+                        <li tapmode="hover" data-val="trade" onclick="li_spanP(this);event.cancelBubble=true;">
+                            <p>行业<span class="no2Icon trade"></span></p>
+                        </li>
+                        <li tapmode="hover" data-val="place" onclick="li_spanP(this);event.cancelBubble=true;">
+                            <p>地点<span class="no2Icon place"></span></p>
+                        </li>
+                        <li tapmode="hover" data-val="custom" onclick="li_spanP(this);event.cancelBubble=true;">
+                            <p>自定义<span class="no2Icon custom"></span></p>
+                        </li>
+                    </ul>-->
+                </div>
+            </div> 
+            <div class="footer">
+                <span   tapmode="hover"   onclick="enter(0);event.stopPropagation();">重置</span>
+                <span   tapmode="hover"   onclick="enter(1);event.stopPropagation();">确定</span>
+            </div>
+        </div>
+        
+    </div>
+    
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+    var val, selectedObj={},str;
+    apiready = function(){
+        fnInit();
+        // 设置选中的条件
+        if (api.pageParam.selVal) {
+            $api.removeCls($api.dom('.no1 .sel'), 'sel');
+            $api.addCls($api.dom('.no1 .li_span[data-type="'+ api.pageParam.selVal +'"]'), 'sel');
+        }
+        // 进入筛选页面初始化页面
+        initPage();
+        listenEvent('school');
+        listenEvent('commpany');
+        listenEvent('trade');
+        listenEvent('place');
+        listenEvent('custom');
+
+    }
+    // 进入筛选页面初始化页面
+    function initPage() {
+        // 进入筛选页面初始化页面
+        if (api.pageParam.selectedObj) {
+            selectedObj = api.pageParam.selectedObj
+            if (selectedObj.school) {
+                $api.text($api.dom('.school'), selectedObj.school[0].str);
+            }
+            if(selectedObj.commpany) {
+                $api.text($api.dom('.commpany'), selectedObj.commpany[0].str);
+            } 
+            if(selectedObj.trade) {
+                $api.text($api.dom('.trade'), selectedObj.trade[0].str);
+            }         
+            if(selectedObj.place) {
+                $api.text($api.dom('.place'), selectedObj.place[0].str);
+            }         
+            if(selectedObj.custom) {
+                $api.text($api.dom('.custom'), selectedObj.custom[0].str);
+            }         
+        }
+    }
+    // 监听事件
+    function listenEvent(val) {
+        api.addEventListener({
+            name: 'select'+ val
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.dom('.'+ val +''), ret.value.schoolName);
+                selectedObj[val] = ret.value.selectedArr;
+                // selectedObj[val][0].str = ret.value.schoolName;
+                str = ret.value.schoolName;
+                console.log('第一页面:'+JSON.stringify(selectedObj))
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    // 选中类型图标
+    function li_span(ele) {
+        flag = 1;
+        var allDom = $api.not($api.closest(ele, 'li'),'p')
+        for (var i = 0; i < allDom.length; i++) {
+            $api.removeCls(allDom[i], 'sel');
+        }
+        $api.addCls(ele, 'sel');
+    }
+    // 选择学校/公司/行业
+    function li_spanP(ele) {
+        val = $api.attr(ele, 'data-val');
+        api.openFrame({
+            name: 'txl_slideBar_selectItem',
+            url: './txl_slideBar_selectItem.html',
+            rect: {
+                x: 0,
+                y: 0,
+                w: 'auto',
+                h: 'auto'
+            },
+            slidBackEnabled: false,
+            pageParam: {
+                val: val,
+                selectedObj:　selectedObj,
+                str: str
+            },
+            bounces: false
+        });
+    }
+    // 点击确定按钮： 1； 重置按钮 0
+    function enter(n) {
+        if (n) {
+            // 1 初识好友
+            // 2 熟识好友
+            // 3 尚未加入
+            // 4 一度人脉
+            var selVal = $api.attr($api.dom('.no1 .sel'), 'data-type') || '';
+            var spanSel = $api.domAll('.spanSel');
+            // 发送事件, 刷新筛选结果
+            api.sendEvent({
+                name: 'screeningResultsType',
+                extra: {
+                    selVal: selVal,
+                    selectedObj: selectedObj
+                }
+            });
+             api.closeFrame();
+
+        }
+        else {
+            // 重置
+            $api.text($api.dom('.school'), '');
+            $api.text($api.dom('.commpany'), '');
+            $api.text($api.dom('.trade'), '');
+            $api.text($api.dom('.place'), '');
+            $api.text($api.dom('.custom'), '');
+            // $api.removeCls($api.dom('.sel'), 'sel');
+            selectedObj = {};
+            var no1 = document.getElementsByClassName('no1')[0]
+            var liArr = no1.getElementsByTagName('li');
+
+            for (var i = 0; i < liArr.length; i++) {
+                for(var j = 0; j < liArr[i].childNodes.length ; j++) {
+                    $api.removeCls(liArr[i].childNodes[j], 'sel');
+                }
+                // $api.addCls(liArr[i].childNodes[3], 'sel');
+            }  
+            // for (var i = 0; i < $api.domAll('.no2List').length; i++) {
+            //     $api.removeCls($api.domAll('.no2List')[i], 'sel');
+            //     for(var j = 0; j < $api.domAll('.no2List')[i].childNodes.length ; j++) {
+
+            //         $api.removeCls($api.domAll('.no2List')[i].childNodes[j], 'hide');
+            //         $api.removeCls($api.domAll('.no2List')[i].childNodes[j], 'spanSel');
+            //     }
+            //     $api.addCls($api.domAll('.no2List')[i].childNodes[3], 'spanSel');
+            // }
+            // $api.addCls($a], 'sel');
+            // var no2Icon = $api.domAll('.no2Icon')
+            // for (var i = 0; i < no2Icon.length; i++) {
+            //     $api.removeCls(no2Icon[i], 'no2Icon2');
+            // }
+            // $api.addCls(no2Icon[0], 'no2Icon2');
+
+
+        }
+    }
+</script>
+</html>
