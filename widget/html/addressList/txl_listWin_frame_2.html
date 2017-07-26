@@ -187,42 +187,59 @@
     // 
     // 查询数据库
     function query(condition) {
-        // 查询条件 condition
-        var SQLName = 'db_'+$api.getStorage('userToken');
-        var SQLsentence;
-        if (condition) {
-            SQLsentence = 'SELECT * FROM addressList WHERE type = ' + condition; 
-        } else {
-            SQLsentence = 'SELECT * FROM addressList';
-        }
-        // 查询数据库
-        db.selectSql({
-            name: SQLName,
-            sql: SQLsentence
-        }, function(ret, err) {
-            if (ret.status) {
-                dakai(paixv(ret.data))
-                console.log('查询数据库'+JSON.stringify(ret))
-                for (var i = 0; i < $api.domAll('p').length; i++) {
-                    $api.css($api.domAll('p')[i], 'display:none');
-                }
-                if (ret.data == '' && condition===0) {
-                    console.log(1111 + condition)
-                    $api.css($api.dom('p.no4'), 'display:block');
-                } else if(ret.data == '' && condition===1) {
-                    console.log(2222 + condition)
-                    $api.css($api.dom('p.no1'), 'display:block');
-                }else if(ret.data == '' && condition===2) {
-                    console.log(333 + condition)
-                    $api.css($api.dom('p.no2'), 'display:block');
-                }else if(ret.data == '' && condition===3) {
-                    console.log(444 + condition)
-                    $api.css($api.dom('p.no3'), 'display:block');
-                }
-            } else {
-                console.log(JSON.stringify(err));
+        api.ajax({
+            url: apiSite + '/contact/levelTwo',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                   }
             }
-        });
+        }, function(ret, err) {
+            if(ret) {
+                console.log(JSON.stringify(ret))
+                dakai(paixv(ret.data.list))
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+        // 查询条件 condition
+        // var SQLName = 'db_'+$api.getStorage('userToken');
+        // var SQLsentence;
+        // if (condition) {
+        //     SQLsentence = 'SELECT * FROM addressList WHERE type = ' + condition; 
+        // } else {
+        //     SQLsentence = 'SELECT * FROM addressList';
+        // }
+        // // 查询数据库
+        // db.selectSql({
+        //     name: SQLName,
+        //     sql: SQLsentence
+        // }, function(ret, err) {
+        //     if (ret.status) {
+        //         dakai(paixv(ret.data))
+        //         console.log('查询数据库'+JSON.stringify(ret))
+        //         for (var i = 0; i < $api.domAll('p').length; i++) {
+        //             $api.css($api.domAll('p')[i], 'display:none');
+        //         }
+        //         if (ret.data == '' && condition===0) {
+        //             console.log(1111 + condition)
+        //             $api.css($api.dom('p.no4'), 'display:block');
+        //         } else if(ret.data == '' && condition===1) {
+        //             console.log(2222 + condition)
+        //             $api.css($api.dom('p.no1'), 'display:block');
+        //         }else if(ret.data == '' && condition===2) {
+        //             console.log(333 + condition)
+        //             $api.css($api.dom('p.no2'), 'display:block');
+        //         }else if(ret.data == '' && condition===3) {
+        //             console.log(444 + condition)
+        //             $api.css($api.dom('p.no3'), 'display:block');
+        //         }
+        //     } else {
+        //         console.log(JSON.stringify(err));
+        //     }
+        // });
     }
     function reloadData(data) {
         listContact.reloadData({

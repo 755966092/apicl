@@ -357,10 +357,11 @@
                 }
             }, function(retFriend, err) {
                 if(retFriend) {
+                    console.log('360:::'+JSON.stringify(ret))
                     disData(ret.data.single_list.concat(retFriend.data.list), 1)
                     disData(ret.data.both_list, 2)
                     disData(ret.data.unavailable_list, 3)
-                    disData(ret.data.list, 4)
+                    disData(ret.data.friend_list, 4)
                 } else {
                     alert(JSON.stringify(err))
                 }
@@ -377,7 +378,7 @@
     function disData (data, type) {
 
         // console.log('disData'+JSON.stringify(data))
-        if (data != '') {
+        if (data != '' ) {
             for (var i = 0; i < data.length; i++) {
                 // single_list
                 // both_list
@@ -447,7 +448,7 @@
 
         SQL = SQL.substring(0,SQL.length-1) + ';'
         db.executeSql({
-                     name: SQLName,
+            name: SQLName,
             sql: 'CREATE TABLE IF NOT EXISTS addressList(user_id int, nickname varchar(255), head_img_url varchar(255), current_position varchar(255), current_company varchar(255), current_degree varchar(255), current_contact varchar(255), titleSize int, title varchar(255), img varchar(255), flag varchar(255), litter varchar(255), type int, sex varchat(10), remark_nickname varchar(255),  remark_real_name varchar(255) , remark_head_img_url varchar(255) , remark_sex varchar(255) , remark_birthday varchar(255) , remark_hometown varchar(255) , remark_current_company varchar(255) , remark_current_position varchar(255) , remark_current_degree varchar(255), remark_current_contact varchar(255), current_status varchar(255))'
         }, function(ret, err) {
             // ;CREATE UNIQUE INDEX user_id_idx on addressList (user_id);

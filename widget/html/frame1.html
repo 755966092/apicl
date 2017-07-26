@@ -131,8 +131,14 @@
                 <span class="searchText">搜索</span>
             </div>
        </div>
-        <div class="main_no1"   tapmode="hover"   onclick="onceConnected()">
+        <div class="main_no1"   tapmode="hover"   onclick="onceConnected(1)">
             一度人脉
+        </div>
+        <div class="main_no1"   tapmode="hover"   onclick="onceConnected(2)">
+            二度人脉
+        </div>
+        <div class="main_no1"   tapmode="hover"   onclick="onceConnected(3)">
+            三度人脉
         </div>
         <div class="main_no2"   tapmode="hover"   onclick="contactFriend()">
             初识好友（无通讯录）
@@ -160,10 +166,18 @@
         });
     }
     // 打开一度人脉
-    function onceConnected() {
+    function onceConnected(n) {
+        var url;
+        if (n == 1) {
+            url = 'txl_listWin'
+        } else if (n == 2) {
+            url = 'txl_listWin_2'
+        } else {
+            url = 'txl_listWin_3'
+        }
         api.openWin({
             name: 'listWin',
-            url: './addressList/txl_listWin.html',
+            url: './addressList/'+ url +'.html',
             pageParam: {
                 userToken: api.pageParam.userToken,
                 headerH: headerH
@@ -185,7 +199,8 @@
     }
 
     function dakai(data1) {
-        var hei = $api.offset($api.dom('.main_no1')).h * 2 + $api.offset($api.dom('.wrap')).h; 
+        // var hei = $api.offset($api.dom('.main_no1')).h * 2 + $api.offset($api.dom('.wrap')).h; 
+        var hei = $api.offset($api.dom('.main_no1')).h * 4 + $api.offset($api.dom('.wrap')).h; 
          listContact.open({
             x: -1000,
             y: -1000,

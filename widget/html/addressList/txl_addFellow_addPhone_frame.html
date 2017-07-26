@@ -276,9 +276,26 @@
         }, function(ret, err) {
             if(ret) {
                 console.log('278::::'+JSON.stringify(ret))
+                // 插入到个人信息表
+                
+                // 插入到备注电话表
                 var sql = 'INSERT OR REPLACE INTO tb_remarks_contact(list_id,user_id,contact_id,phone,type,sub_type, is_default) VALUES'
                 for (var i = 0; i < ret.data.list.length; i++) {
                     sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].contact_id  +'",'+api.pageParam.userId+','+ret.data.list[i].contact_id+',"'+ret.data.list[i].phone+'",'+ret.data.list[i].type+','+ret.data.list[i].sub_type+','+ret.data.list[i].is_default+'),'
+                    if (ret.data.list[i].is_default == 1) {
+                        db.executeSql({
+                            name: SQLName,
+                            sql: 'UPDATE addressList set remark_current_contact = ' + ret.data.list[i].phone+' WHERE user_id = ' + api.pageParam.userId
+                        },function(ret,err){
+                            if (ret.status) {
+                                api.sendEvent({
+                                    name: 'editUserInfo'
+                                });
+                            }else {
+                                api.alert({msg:err.msg});
+                            }
+                        });
+                    }
                 }
                 sql = sql.substring(0,sql.length-1);
                 db.executeSql({

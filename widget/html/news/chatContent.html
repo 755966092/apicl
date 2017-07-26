@@ -6,7 +6,10 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-       
+        .newsTime {
+            font-size: .2rem;
+            text-align: center;
+        }
         .main {
             margin: .3rem .3rem;
             padding-bottom: 1.6rem;
@@ -229,7 +232,7 @@ var  mainH, _main, scrollH;
             $api.css($api.dom('.promptText'), 'margin-top: .9rem');
         }
 
-
+        
 
         targetRongId = api.pageParam.targetRongId
         nickname = api.pageParam.nickname;
@@ -241,8 +244,9 @@ var  mainH, _main, scrollH;
         api.addEventListener({
             name: 'sendMsg'
         }, function(ret, err) {
+            console.log('244:::'+JSON.stringify(ret))
             // 发送消息后, 添加消息内容到页面
-            addSendMsg(ret.value.msg, headImg);
+            addSendMsg(ret.value.msg, headImg,0);
             // 聊天列表获取
             var news = historicalNews();
             api.execScript({
@@ -255,8 +259,9 @@ var  mainH, _main, scrollH;
         api.addEventListener({
             name: 'receiveMsg'
         }, function(ret, err) {
+            console.log('258:::' + JSON.stringify(ret))
             if (ret.value.targetId == targetRongId) {
-                 addReceMsg(ret.value.msg, youHeadImg);
+                 addReceMsg(ret.value.msg, youHeadImg,0);
             }
             // 收到消息后, 添加消息内容到页面
            
@@ -321,6 +326,9 @@ var  mainH, _main, scrollH;
             api.openWin({
                 name: 'txl_memberInfo_Win',
                 url: '../addressList/txl_memberInfo_Win.html',
+                pageParam: {
+                    userId: 0
+                }
             });    
         } else {
             api.openWin({
@@ -430,15 +438,17 @@ var  mainH, _main, scrollH;
                 emotionBtn: {
                     normalImg: 'widget://image/chatPage/face1.png'
                 },
-                extrasBtn: {
-                    normalImg: 'widget://image/chatPage/add1.png'
-                },
+                // 加号按钮
+                // extrasBtn: {
+                //     normalImg: 'widget://image/chatPage/add1.png'
+                // },
                 keyboardBtn: {
                     normalImg: 'widget://image/chatPage/key1.png'
                 },
-                speechBtn: {
-                    normalImg: 'widget://image/chatPage/cam1.png'
-                },
+                // 录音按钮
+                // speechBtn: {
+                //     normalImg: 'widget://image/chatPage/cam1.png'
+                // },
                 recordBtn: {
                     normalBg: '#c4c4c4',
                     activeBg: '#999999',
@@ -556,10 +566,11 @@ var  mainH, _main, scrollH;
         }, function(ret, err) {
             for (var i = ret.result.length-1; i >= 0 ; i--) {
                 if (ret.result[i].messageDirection == 'RECEIVE') {
+                    console.log('559:::::'+JSON.stringify(ret))
                     // 消息方向：SEND(发送) 或者 RECEIVE(接受)
-                    addReceMsg(ret.result[i].content.text, youHeadImg,ret.result[i].messageId)
+                    addReceMsg(ret.result[i], youHeadImg,1)
                 } else {
-                    addSendMsg(ret.result[i].content.text, headImg,ret.result[i].messageId);
+                    addSendMsg(ret.result[i], headImg,1);
 
                 }
                 
@@ -573,13 +584,29 @@ var  mainH, _main, scrollH;
     }
     
     // 接收消息后新建消息
-    function addReceMsg(msg, youHeadImg, msgId) {
-        $api.append($api.dom('.main'),'<div data-msgId="'+ msgId +'" class="other clearfix"><img tapmode="hover" onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ youHeadImg +'"><p data-msgId="'+ msgId +'" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg +'"> '+ transText(msg) +'</p></div>');
+    function addReceMsg(msg, youHeadImg, n) {
+        // 当天显示时间
+        // 不是当天显示年月日 时分秒
+        
+        if (n == 1) {
+            // 历史消息
+            $api.append($api.dom('.main'),'<p class="newsTime">'+ new Date(msg.sentTime).toLocaleTimeString() +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode="hover" onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ youHeadImg +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg.content.text +'"> '+ transText(msg.content.text) +'</p></div>');
+        } else {
+            // 当前发送的消息
+            $api.append($api.dom('.main'),'<p class="newsTime">'+ new Date().toLocaleTimeString() +'</p><div data-msgId="" class="other clearfix"><img tapmode="hover" onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ youHeadImg +'"><p data-msgId="" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg +'"> '+ transText(msg) +'</p></div>');
+        }
             slideBut();
     }
     // 发送消息后新建消息
-    function addSendMsg(msg, headImg, msgId) {
-        $api.append($api.dom('.main'),'<div data-msgId="'+ msgId +'" class="oneself clearfix"><img tapmode="hover" data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msgId +'" ontouchend="gtouchend()" data-newsText= "'+ msg +'" > ' + transText(msg) + ' </p></div>');
+    function addSendMsg(msg, headImg, n) {
+        if (n == 1) {
+            // 历史消息
+            $api.append($api.dom('.main'),'<p class="newsTime">'+ new Date(msg.sentTime).toLocaleTimeString() +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode="hover" data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" data-newsText= "'+ msg.content.text +'" > ' + transText(msg.content.text) + ' </p></div>');
+        } else {
+            // 当前发送的消息
+            $api.append($api.dom('.main'),'<p class="newsTime">'+ new Date().toLocaleTimeString() +'</p><div data-msgId="" class="oneself clearfix"><img tapmode="hover" data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="" ontouchend="gtouchend()" data-newsText= "'+ msg +'" > ' + transText(msg) + ' </p></div>');
+            
+        }
             slideBut();
     }
     // 查看历史记录 往上面添加消息
