@@ -346,7 +346,7 @@
                     <span class="spanno2 _unit" id="unit">选填</span>
                 </div>
             </li>
-            <li class="border100">
+           <!--  <li class="border100">
                 <div class="wrap">
                     <span>适用范围</span>
                     <input type="text" name="" placeholder="选填">
@@ -365,7 +365,7 @@
                     <span>定向投递</span>
                     <span class="spanno2"></span>
                 </div>
-            </li>
+            </li> -->
         </ul>        
     </div>
     <div class="btn" tapmode="hover" onclick="addSupply()">发布</div>
@@ -540,9 +540,8 @@
                     if (retUpfile.status) {
                         if (retUpfile.oper == "complete") {
                             //上传成功后组装访问路径，或直接访问文档
-                            imgArr.push('http://'+baseUrl +'/'+ retUpfile.info.key);
-                            console.log(imgArr)
-                            duibi($api.domAll('.imgpage').length,imgArr)
+                            imgArr.push('http://'+ baseUrl +'/'+ retUpfile.info.key);
+                            duibi($api.domAll('.imgpage').length,imgArr.length)
                         } else if (retUpfile.oper == "progress") {
                             //上传过程中获取进度数据
                             // console.log(retUpfile.percent);
@@ -589,7 +588,7 @@
                             duibi($api.domAll('.imgpage').length,imgArr)
                         } else if (ret.oper == "progress") {
                             //上传过程中获取进度数据
-                            // console.log(ret.percent);
+                            console.log(ret.percent);
                         }
                     }
                 });
@@ -601,122 +600,121 @@
     }
     var releaseFlag = 0;
     function duibi(a,b) {
-        if (a == b.length) {
-            // addSupply(b)
+        if (a == b) {
             // console.log(b)
             releaseFlag = 1;
         } 
     }
     // 添加供应
     function addSupply() {
-        console.log('addsupply')
+        // console.log('addsupply')
         // 获取页面内容
-        if (releaseFlag) {
+        if (releaseFlag == 1) {
             var token = $api.getStorage('userToken'),            //string  用户Token
-            title = $api.val($api.byId('title')),           //string  标题
-            sub_type = $api.text($api.byId('sub_type')) == '自产自销' ? 1 : 2,            //int 类别ID（1-自产自销，2-代理）
-            category_id = 1,         //int 分类ID
-            price = $api.val($api.byId('price')),           //float   价格
-            unit = _dataSource.indexOf($api.text($api.byId('unit')))+1,            //string  单位
-            form = $api.text($api.byId('form')) == '线上' ? 1 : 2,            //int 形式（1-线上，2-线下）
-            description = $api.val($api.byId('description'));        //string  详细内容
-            image_json = imgArr,          //string  图片（格式：["abc.jpg","ddd.jpg"]）
-            company_id = 1;      // 公司ID（类型为2-我公司卖时必传）
-            // alert('标题 : '+ title +'---类别ID : '+sub_type+'---分类ID : '+category_id+'---价格 : '+price+'----形式'+form+'---内容: '+description +"---省份"+ province + "---地区" +city+ "---地址" +address+ "---纬度" +latitude+'---纬度: '+longitude)
-            var category = $api.text($api.byId('category_id'));
-            for (var i = 0; i < categoryArr.length; i++) {
-                if (categoryArr[i] === category) {
-                        category_id = i+1;
-                    break;
-                }
-            }
-            var url,obj;
-            if (api.pageParam.supply_id) {
-                // 编辑供应
-                url = '/supply/edit';
-                obj = {
-                    token: token,
-                    title: title,
-                    supply_id: supply_id,
-                    type: type,
-                    sub_type: sub_type,
-                    category_id: category_id,
-                    province: province,
-                    city: city,
-                    address: address,
-                    latitude: latitude,
-                    longitude: longitude,
-                    price: price,
-                    unit: unit,
-                    form: form,
-                    description: description,
-                    image_json: image_json,
-                    company_id:1
-                }
-                console.log(JSON.stringify(obj))
-            } else {
-                // 发布新供应
-                url = '/supply/add';
-                obj = {
-                    token: token,
-                    title: title,
-                    type: type,
-                    sub_type: sub_type,
-                    category_id: category_id,
-                    province: province,
-                    city: city,
-                    address: address,
-                    latitude: latitude,
-                    longitude: longitude,
-                    price: price,
-                    unit: unit,
-                    form: form,
-                    description: description,
-                    image_json: image_json,
-                    company_id:1
-                }
-            }
-            api.ajax({
-                url: apiSite + url,
-                method: 'post',
-                headers: apiHeader,
-                data: {
-                   values: obj
-                }
-            }, function(ret, err) {
-                alert(JSON.stringify(ret))
-                if(ret) {
-                    if (ret.code == 200) {
-                        console.log(JSON.stringify(ret))
-                        if (api.pageParam.supply_id) {
-                            // 编辑应用返回我发布的页面
-                            api.sendEvent({
-                                name: 'editSupplyAfter',
-                                 extra: {
-                                        flag: api.pageParam.flag,
-                                        compaby_name: api.pageParam.compaby_name,
-                                        supply_id: api.pageParam.supply_id
-                                }
-                            });
-                            api.closeWin();
-                        } else {
-                            // 发布新供应返回供应列表
-                            api.sendEvent({
-                                name: 'editSupplyAfter'
-                            });
-                            api.closeWin();
-                        }
-                    } else {
-                        alert(ret.msg)
+                title = $api.val($api.byId('title')),           //string  标题
+                sub_type = $api.text($api.byId('sub_type')) == '自产自销' ? 1 : 2,            //int 类别ID（1-自产自销，2-代理）
+                category_id = 1,         //int 分类ID
+                price = $api.val($api.byId('price')),           //float   价格
+                unit = _dataSource.indexOf($api.text($api.byId('unit')))+1,            //string  单位
+                form = $api.text($api.byId('form')) == '线上' ? 1 : 2,            //int 形式（1-线上，2-线下）
+                description = $api.val($api.byId('description'));        //string  详细内容
+                image_json = imgArr,          //string  图片（格式：["abc.jpg","ddd.jpg"]）
+                company_id = 1;      // 公司ID（类型为2-我公司卖时必传）
+                // alert('标题 : '+ title +'---类别ID : '+sub_type+'---分类ID : '+category_id+'---价格 : '+price+'----形式'+form+'---内容: '+description +"---省份"+ province + "---地区" +city+ "---地址" +address+ "---纬度" +latitude+'---纬度: '+longitude)
+                var category = $api.text($api.byId('category_id'));
+                for (var i = 0; i < categoryArr.length; i++) {
+                    if (categoryArr[i] === category) {
+                            category_id = i+1;
+                        break;
                     }
-                    
-                } else {
-                    alert(JSON.stringify(err.msg))
                 }
-            })
+                var url,obj;
+                if (api.pageParam.supply_id) {
+                    // 编辑供应
+                    url = '/supply/edit';
+                    obj = {
+                        token: token,
+                        title: title,
+                        supply_id: supply_id,
+                        type: type,
+                        sub_type: sub_type,
+                        category_id: category_id,
+                        province: province,
+                        city: city,
+                        address: address,
+                        latitude: latitude,
+                        longitude: longitude,
+                        price: price,
+                        unit: unit,
+                        form: form,
+                        description: description,
+                        image_json: image_json,
+                        company_id:1
+                    }
+                    console.log(JSON.stringify(obj))
+                } else {
+                    // 发布新供应
+                    url = '/supply/add';
+                    obj = {
+                        token: token,
+                        title: title,
+                        type: type,
+                        sub_type: sub_type,
+                        category_id: category_id,
+                        province: province,
+                        city: city,
+                        address: address,
+                        latitude: latitude,
+                        longitude: longitude,
+                        price: price,
+                        unit: unit,
+                        form: form,
+                        description: description,
+                        image_json: image_json,
+                        company_id:1
+                    }
+                }
+                api.ajax({
+                    url: apiSite + url,
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                       values: obj
+                    }
+                }, function(ret, err) {
+                    alert(JSON.stringify(ret))
+                    if(ret) {
+                        if (ret.code == 200) {
+                            console.log(JSON.stringify(ret))
+                            if (api.pageParam.supply_id) {
+                                // 编辑应用返回我发布的页面
+                                api.sendEvent({
+                                    name: 'editSupplyAfter',
+                                     extra: {
+                                            flag: api.pageParam.flag,
+                                            compaby_name: api.pageParam.compaby_name,
+                                            supply_id: api.pageParam.supply_id
+                                    }
+                                });
+                                api.closeWin();
+                            } else {
+                                // 发布新供应返回供应列表
+                                api.sendEvent({
+                                    name: 'editSupplyAfter'
+                                });
+                                api.closeWin();
+                            }
+                        } else {
+                            alert(ret.msg)
+                        }
+                        
+                    } else {
+                        alert(JSON.stringify(err.msg))
+                    }
+                })
         } else {
             addSupply();
-        }   
+        }
     }
 
 
@@ -1014,10 +1012,10 @@
     }
     // 根据经纬度获取地址
     function getCoords(lon,lat) {
-        console.log('getCoords')
+        console.log(lon + 'getCoords'+lat)
         bMap.getNameFromCoords({
-            lon: lon,
-            lat: lat
+            lon: 116.384767,
+            lat: 116.384767
         }, function(ret, err) {
             console.log(JSON.stringify(ret))
             console.log(JSON.stringify(err))
@@ -1031,8 +1029,6 @@
                 // ret.district // 地区
                 // ret.city // 省份
                 // ret.address // 地址
-
-
             }
         });
     }
