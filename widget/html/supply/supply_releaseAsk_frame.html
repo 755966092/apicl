@@ -285,7 +285,7 @@
              <li class="mt37">
                 <div class="wrap">
                     <span>截至时间</span>
-                    <span ontouchstart="openTime(this)" class="spanno2" id="endTime">选填</span>
+                    <span ontouchstart="openTime(this)" class="spanno2" id="endTime">必填</span>
                 </div>
             </li> 
 
@@ -318,13 +318,13 @@
             <li class="mt37"  tapmode="hover" >
                 <div class="wrap">
                     <span>赏金</span>
-                    <input type="number" name="" placeholder="选填" id="reward">
+                    <input type="number" name="" placeholder="必填" id="reward">
                 </div>
             </li>
             <li class='border100'  tapmode="hover"   onclick="selectType(this)" data-val="_format">
                 <div class="wrap">
                     <span>形式</span>
-                    <span class="spanno2 _format" id="form">选填</span>
+                    <span class="spanno2 _format" id="form">必填</span>
                 </div>
             </li>
 
@@ -362,10 +362,13 @@
                     img: [],
                     video: []
                   },
-                  categoryArr = ['全部','教育','摄影','摄影','医疗'],
-                  imgArr = [];
+                  categoryArr = [],
+                  imgArr = [],
+                  classify_dataSource,
+                  classify_dataSource2=[];
     apiready = function(){
         moduleInit();
+        classify()
         console.log('369:::'+JSON.stringify(api.pageParam))
         if (api.pageParam.demand_id) {
             requireData();
@@ -391,6 +394,7 @@
             reward = $api.byId('reward'),
             _type = $api.byId('_type'),
             form = $api.byId('form'),
+            endTime = $api.byId('endTime'),
             category_id = $api.byId('category_id'),
             position = $api.byId('position');
         $api.val(titleIpt, data.info.title);
@@ -400,6 +404,7 @@
         var unitText = data.info.unit > 0 ? _dataSource[data.info.unit-1] : '未定义';
         var _categoryId =  categoryArr[data.info.category_id-1]
         $api.text(position, data.info.address);
+        $api.text(endTime, data.info.end_date);
         // $api.text(unit, unitText);
         $api.text(category_id, _categoryId);
         data.info.type == 1 ? $api.text(_type, '我求') : $api.text(_type, '我公司求');
@@ -409,7 +414,8 @@
 
         }
         data.info.form == 1 ? $api.text(form, '线上') : $api.text(form, '线下')
-
+        base64Data.img = eval(data.info.image_json); 
+        getData(base64Data)
         // 编辑供应返回的相关信息
         address = data.info.address;
         latitude = data.info.latitude;
@@ -480,13 +486,20 @@
                         return item
                     }
                 })
+                imgArr = imgArr.filter(function (item, index) {
+                    if (index != ret.value.imgId-1) {
+                        return item
+                    }
+                })
             } else {
                 alert(JSON.stringify(err.msg));
             }
         });
     }
     // 打开相册
+    var openImgFlag = 0;
     function openImg() {
+        openImgFlag = 1;
         api.getPicture({
             sourceType: 'album',
             encodingType: 'png',
@@ -531,7 +544,7 @@
             bounces: false,
             pageParam: {
                 data: data,
-                count:  base64Data.length,
+                count:  base64Data.img.length,
                 n: n+1
             }
         });
@@ -574,6 +587,9 @@
 
     // 添加供应
     function addSupply() {
+        if (openImgFlag == 0) {
+            releaseFlag = 1;
+        }   
         // 获取页面内容
         if (releaseFlag == 1) {
             var token = $api.getStorage('userToken'),            //string  用户Token
@@ -586,23 +602,23 @@
                 image_json = imgArr,          //string  图片（格式：["abc.jpg","ddd.jpg"]）
                 company_id = 1;      // 我公司卖ID（类型为2-我我公司卖卖时必传）
                 end_date = $api.text($api.byId('endTime'));
-                alert('标题 : '+ title +'---截至时间ID : '+end_date+'---分类ID : '+category_id+'---价格 : '+reward+'----形式'+form+'---内容: '+description +"---省份"+ province + "---地区" +city+ "---地址" +address+ "---纬度" +latitude+'---纬度: '+longitude)
-                var category = $api.text($api.byId('category_id'));
-                for (var i = 0; i < categoryArr.length; i++) {
-                    if (categoryArr[i] === category) {
-                            category_id = i+1;
-                        break;
-                    }
-                }
+                // alert('标题 : '+ title +'---截至时间ID : '+end_date+'---分类ID : '+category_id+'---价格 : '+reward+'----形式'+form+'---内容: '+description +"---省份"+ province + "---地区" +city+ "---地址" +address+ "---纬度" +latitude+'---纬度: '+longitude)
+                // var category = $api.text($api.byId('category_id'));
+                // for (var i = 0; i < categoryArr.length; i++) {
+                //     if (categoryArr[i] === category) {
+                //             category_id = i+1;
+                //         break;
+                //     }
+                // }
 
                 var url,obj;
                 if (api.pageParam.demand_id) {
                     // 编辑供应
-                    url = '/supply/edit';
+                    url = '/demand/edit';
                     obj = {
                         token: token,
                         title: title,
-                        demand_id: demand_id,
+                        demand_id: api.pageParam.demand_id,
                         type: type,
                         category_id: category_id,
                         province: province,
@@ -653,10 +669,11 @@
                                 api.sendEvent({
                                     name: 'editSupplyAfter',
                                      extra: {
+                                        flag: api.pageParam.flag,
+                                        compaby_name: api.pageParam.compaby_name,
                                         demand_id: api.pageParam.demand_id
                                     }
                                 });
-                               
                             } else {
                                 // 发布新供应返回供应列表
                                 api.sendEvent({
@@ -751,27 +768,29 @@
             _dataSource2 = ['线上','线下'];
             flag = 2;
         }else if (_data == '_classify') {
-            _dataSource = [
-                {
-                    name:'全部'
-                },
-                {
-                    name:'教育'
-                },
-                {
-                    name: '摄影'
-                },
-                {
-                    name: '医疗'
-                }
-            ]
-            _dataSource2 = ['全部','教育','摄影','医疗'];
+            // _dataSource = [
+            //     {
+            //         name:'全部'
+            //     },
+            //     {
+            //         name:'教育'
+            //     },
+            //     {
+            //         name: '摄影'
+            //     },
+            //     {
+            //         name: '医疗'
+            //     }
+            // ]
+            // _dataSource2 = ['全部','教育','摄影','医疗'];
+            _dataSource = classify_dataSource;
+            _dataSource2 = classify_dataSource2;
             flag = 3;
         }
         
         var active = [];
         if (_dataSource2.indexOf(person) == -1) {
-            active = [1]
+            active = [0]
         } else {
             active.push(_dataSource2.indexOf(person))
         }
@@ -862,7 +881,30 @@
         //     bounces: false
         // });
     }
+    function classify() {
+        api.ajax({
+            url: apiSite + '/category/index',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       type: 2
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                classify_dataSource = ret.data.list;
+                classify_dataSource = ret.data.list;
+                for (var i = 0; i < ret.data.list.length; i++) {
+                    classify_dataSource2.push(ret.data.list[i].name)
+                    categoryArr.push(ret.data.list[i].name)
 
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
 
     // 获取位置
     function getPos() {
@@ -922,7 +964,7 @@
     // 编辑供应的数据
     function requireData() {
         api.ajax({
-            url: apiSite + '/supply/editIndex',
+            url: apiSite + '/demand/editIndex',
             method: 'post',
             headers: apiHeader,
             data: {
@@ -933,7 +975,9 @@
             }
         }, function(ret, err) {
             if(ret) {
+                releaseFlag = 1;
                 console.log(JSON.stringify(ret))
+                imgArr = eval(ret.data.info.image_json)
                 editSupply(ret.data)
             } else {
                 alert(JSON.stringify(err.msg))

@@ -386,10 +386,13 @@
                     video: []
                   },
                   imgArr=[],
-                  categoryArr = ['全部','教育','摄影','摄影','医疗'];
+                  categoryArr = [],
+                  classify_dataSource,
+                  classify_dataSource2 = [];
     apiready = function(){
         
         moduleInit();
+        classify();
         if (api.pageParam.supply_id) {
             releaseFlag = 1;
             requireData();
@@ -519,7 +522,9 @@
         });
     }
     // 打开相册
+    var openImgFlag = 0;
     function openImg() {
+        openImgFlag = 1;
         api.getPicture({
             sourceType: 'album',
             encodingType: 'png',
@@ -570,9 +575,7 @@
             }
         });
     }
-    function pushImg(fileurl) {
-        
-    }
+    
     function selImg() {
         console.log('selimg')
         var imgArr = [];
@@ -610,13 +613,16 @@
     }
     // 添加供应
     function addSupply() {
+        if (openImgFlag == 0) {
+            releaseFlag = 1;
+        }
         // console.log('addsupply')
         // 获取页面内容
         if (releaseFlag == 1) {
             var token = $api.getStorage('userToken'),            //string  用户Token
                 title = $api.val($api.byId('title')),           //string  标题
                 sub_type = $api.text($api.byId('sub_type')) == '自产自销' ? 1 : 2,            //int 类别ID（1-自产自销，2-代理）
-                category_id = 1,         //int 分类ID
+                category_id = $api.attr($api.byId('category_id'), 'data-id'),         //int 分类ID
                 price = $api.val($api.byId('price')),           //float   价格
                 unit = _dataSource.indexOf($api.text($api.byId('unit')))+1,            //string  单位
                 form = $api.text($api.byId('form')) == '线上' ? 1 : 2,            //int 形式（1-线上，2-线下）
@@ -624,13 +630,13 @@
                 image_json = imgArr,          //string  图片（格式：["abc.jpg","ddd.jpg"]）
                 company_id = 1;      // 公司ID（类型为2-我公司卖时必传）
                 // alert('标题 : '+ title +'---类别ID : '+sub_type+'---分类ID : '+category_id+'---价格 : '+price+'----形式'+form+'---内容: '+description +"---省份"+ province + "---地区" +city+ "---地址" +address+ "---纬度" +latitude+'---纬度: '+longitude)
-                var category = $api.text($api.byId('category_id'));
-                for (var i = 0; i < categoryArr.length; i++) {
-                    if (categoryArr[i] === category) {
-                            category_id = i+1;
-                        break;
-                    }
-                }
+                // var category = $api.text($api.byId('category_id'));
+                // for (var i = 0; i < categoryArr.length; i++) {
+                //     if (categoryArr[i] === category) {
+                //             category_id = i+1;
+                //         break;
+                //     }
+                // }
                 var url,obj;
                 if (api.pageParam.supply_id) {
                     // 编辑供应
@@ -766,6 +772,28 @@
            }
         });
     }
+    function classify() {
+        api.ajax({
+            url: apiSite + '/category/index',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       type: 1
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                classify_dataSource = ret.data.list;
+                for (var i = 0; i < ret.data.list.length; i++) {
+                    classify_dataSource2.push(ret.data.list[i].name)
+                    categoryArr.push(ret.data.list[i].name)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
     // 选择类型  公司 | 个人
     function selectType(ele) {
         var person =  $api.text(ele.getElementsByClassName('spanno2')[0]);
@@ -805,18 +833,8 @@
             _dataSource2 = ['线上','线下']
             flag = 2;
         }else if (_data == '_classify') {
-            _dataSource = [
-                {
-                    name: '全部'
-                },{
-                    name: '教育'
-                },{
-                    name: '摄影'
-                },{
-                    name: '医疗'
-                }
-            ];
-            _dataSource2 = ['全部','教育','摄影','医疗']
+            _dataSource = classify_dataSource
+            _dataSource2 = classify_dataSource2 
             flag = 3;
         } else if (_data == '_unit') {
             _dataSource = [
@@ -886,7 +904,7 @@
         }
         var active = [];
         if (_dataSource2.indexOf(person) == -1) {
-            active = [1]
+            active = [0]
         } else {
             active.push(_dataSource2.indexOf(person))
         }
@@ -938,7 +956,12 @@
         }, function(ret, err) {
             if (ret) {
                 if (ret.eventType == 'ok') {
+                    console.log(JSON.stringify(ret))
                     $api.text($api.dom('.'+ _data +''), ret.level1);
+                    // 选择分类
+                    if (ret.selectedInfo[0].category_id) {
+                        $api.attr($api.dom('._classify'), 'data-id', ret.selectedInfo[0].category_id);
+                    }
                     if (_dataSource2[1]  == '公司') {
                         if (ret.level1 == '公司') {
                             type = 2;

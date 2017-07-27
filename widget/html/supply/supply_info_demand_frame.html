@@ -483,7 +483,17 @@
     var transmitData; 
     apiready = function(){
         // 初始化页面
-        initialise(api.pageParam.flag, api.pageParam.compaby_name, api.pageParam.demand_id)
+        initialise(api.pageParam.flag, api.pageParam.compaby_name, api.pageParam.demand_id);
+        api.addEventListener({
+            name: 'editSupplyAfter'
+        }, function(ret, err) {
+            if (ret) {
+                initialise(ret.value.flag, ret.value.compaby_name, ret.value.demand_id);
+                alert(JSON.stringify(ret));
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     };
     // 编辑供应
     function editSupply() {
@@ -491,6 +501,8 @@
             name: 'supply_releaseAsk_win',
             url: './supply_releaseAsk_win.html',
             pageParam: {
+                flag: api.pageParam.flag, 
+                compaby_name: api.pageParam.compaby_name,
                 demand_id: api.pageParam.demand_id
             }
         });
