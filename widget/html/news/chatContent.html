@@ -9,6 +9,7 @@
         .newsTime {
             font-size: .2rem;
             text-align: center;
+            color: #999;
         }
         .main {
             margin: .3rem .3rem;
@@ -590,7 +591,10 @@ var  mainH, _main, scrollH;
         
         if (n == 1) {
             // 历史消息
-            $api.append($api.dom('.main'),'<p class="newsTime">'+ new Date(msg.sentTime).toLocaleTimeString() +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode="hover" onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ youHeadImg +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg.content.text +'"> '+ transText(msg.content.text) +'</p></div>');
+            // // 当天显示时间
+            // 不是当天显示年月日 时分秒
+            var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
+            $api.append($api.dom('.main'),'<p class="newsTime">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode="hover" onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ youHeadImg +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg.content.text +'"> '+ transText(msg.content.text) +'</p></div>');
         } else {
             // 当前发送的消息
             $api.append($api.dom('.main'),'<p class="newsTime">'+ new Date().toLocaleTimeString() +'</p><div data-msgId="" class="other clearfix"><img tapmode="hover" onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ youHeadImg +'"><p data-msgId="" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg +'"> '+ transText(msg) +'</p></div>');
@@ -601,7 +605,8 @@ var  mainH, _main, scrollH;
     function addSendMsg(msg, headImg, n) {
         if (n == 1) {
             // 历史消息
-            $api.append($api.dom('.main'),'<p class="newsTime">'+ new Date(msg.sentTime).toLocaleTimeString() +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode="hover" data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" data-newsText= "'+ msg.content.text +'" > ' + transText(msg.content.text) + ' </p></div>');
+            var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
+            $api.append($api.dom('.main'),'<p class="newsTime">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode="hover" data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" data-newsText= "'+ msg.content.text +'" > ' + transText(msg.content.text) + ' </p></div>');
         } else {
             // 当前发送的消息
             $api.append($api.dom('.main'),'<p class="newsTime">'+ new Date().toLocaleTimeString() +'</p><div data-msgId="" class="oneself clearfix"><img tapmode="hover" data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="" ontouchend="gtouchend()" data-newsText= "'+ msg +'" > ' + transText(msg) + ' </p></div>');
