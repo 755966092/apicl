@@ -164,19 +164,19 @@
             <div class="main"   tapmode="hover"   onclick="event.cancelBubble=true;">
                 <div>
                     <ul class="no1">
-                        <li>
+                        <li class="no11">
                              <p>类型</p>
-                             <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 sel" data-type="type_1">个人</span>
+                             <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 " data-type="type_1">个人</span>
                              <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4" data-type="type_2">公司</span>
                         </li>
-                        <li>
+                        <li class="no22">
                              <p>类别</p>
-                             <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 sel" data-type="sub_type_1">自产自销</span>
+                             <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 " data-type="sub_type_1">自产自销</span>
                              <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4" data-type="sub_type_2">代理</span>
                         </li>
-                        <li>
+                        <li class="no33">
                              <p>排序</p>
-                             <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 sel" data-type="all">全部</span>
+                             <span   tapmode="hover"   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 " data-type="all">全部</span>
                              <span   tapmode="hover" data-type="distance"  onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4">距离最近</span>
                              <span   tapmode="hover"  data-type="price" onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4">价格最低</span>
                              <span   tapmode="hover"  data-type="create_time" onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4">最新发布</span>
@@ -200,13 +200,19 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
-    var selectedObj=0,parameter,str,flag;
+    var selectedObj=0,parameter,str,flag,categoryData;
     apiready = function(){
         fnInit();
         api.addEventListener({
             name: 'selClass'
         }, function(ret, err) {
             if (ret) {
+                var id = '';
+                for (var i = 0; i < ret.value.selectedArr.length; i++) {
+                   id += ret.value.obj[ret.value.selectedArr[i].key][ret.value.selectedArr[i].index].category_id+','
+                }
+                id = id.substring(0,id.length-1);
+                $api.attr($api.dom('.no2Icon'), 'data-category',id);
                 $api.text($api.dom('.no2Icon'), ret.value.schoolName);
                 selectedObj = ret.value.selectedArr;
                 // selectedObj[val][0].str = ret.value.schoolName;
@@ -216,17 +222,54 @@
                 alert(JSON.stringify(err));
             }
         });
-        initPage();
+        ajaxClass();
+       
     }
-    
+    function ajaxClass() {
+        api.ajax({
+            url: apiSite + '/category/index',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       type: api.pageParam.type,
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                categoryData = ret.data.list;
+                 initPage(ret.data.list);
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
     // 进入筛选页面初始化页面
-    function initPage() {
+    function initPage(categoryData) {
         // 进入筛选页面初始化页面
         selectedObj = api.pageParam.selectedObj;
         if (api.pageParam.selectedObj!=0) {
             $api.text($api.dom('.selText'), api.pageParam.selectedObj[0].str);
-                
+            var id = '';
+            for (var i = 0; i < api.pageParam.selectedObj.length; i++) {
+                // console.log('循环参数')
+                for (var j = 0; j < categoryData.length; j++) {
+                    // console.log('循环数据')
+                    // console.log('循环数据1' + JSON.stringify(api.pageParam.selectedObj[i].title))
+                    // console.log('循环数据2' + JSON.stringify(categoryData[j].name))
+                    if (api.pageParam.selectedObj[i].title == categoryData[j].name) {
+                        id += categoryData[j].category_id +',';
+                    }
+                }
+            }
+            id = id.substring(0,id.length-1);
+            console.log(id)
+            $api.attr($api.dom('.no2Icon'), 'data-category',id);
+                   
+           
         }
+
+        console.log('赛选:::'+JSON.stringify(selectedObj))
         parameter = api.pageParam.parameter
         if (api.pageParam.parameter != 0) {
             for (var i = 0; i < $api.domAll('span[data-type]').length; i++) {
@@ -235,16 +278,20 @@
             if (parameter.type == 1) {
                 // 1 个人
                 $api.addCls($api.dom('span[data-type="type_1"]'), 'sel');
-            } else {
+            } else if (parameter.type == 1) {
                 // 2 公司
                 $api.addCls($api.dom('span[data-type="type_2"]'), 'sel');
+            } else {
+
             }
             if (parameter.sub_type == 1) {
                 // 1 自产自销
                 $api.addCls($api.dom('span[data-type="sub_type_1"]'), 'sel');
-            } else {
+            } else if (parameter.sub_type == 1) {
                 // 2 代理
                 $api.addCls($api.dom('span[data-type="sub_type_2"]'), 'sel');
+            } else {
+
             }
             if (parameter.order == 'distance') {
                 // 距离
@@ -255,9 +302,11 @@
             } else if (parameter.order == 'create_time') {
                 // 时间
                 $api.addCls($api.dom('span[data-type="create_time"]'), 'sel');
-            } else {
+            } else if (parameter.order == '全部'){
                 // 排序
                 $api.addCls($api.dom('span[data-type="all"]'), 'sel');
+            } else {
+
             }
         }
 
@@ -295,16 +344,23 @@
             var sel = $api.domAll('.no1 .sel');
             var spanSel = $api.domAll('.spanSel');
             var parameter = {
-                type: 1,
+                type: '',
                 order: '',
-                sub_type: 1
+                sub_type: '',
+                order: ''
             }
             // sel[0] = 类型个人 | 公司
             // sel[1] = 类别自产自销 | 代理
             // sel[2] = 排序智能排序 | 距离 | 价格 | 最新发布
-            parameter.type = ($api.text(sel[0]) == '个人') ? 1 : 2;
-            parameter.sub_type = ($api.text(sel[1]) == '自产自销') ? 1 : 2;
+            if ($api.dom('.no11 .sel')) {
+                parameter.type = ($api.text($api.dom('.no11 .sel')) == '个人') ? 1 : 2;
+            }
+            if ($api.dom('.no22 .sel')) {
+                parameter.sub_type = ($api.text($api.dom('.no22 .sel')) == '自产自销') ? 1 : 2;
+            }
+            parameter.order = $api.text($api.dom('.no33 .sel'));
 
+            parameter.category_ids = $api.attr($api.dom('.no2Icon'),'data-category');
             var order = $api.text(sel[2])
             switch (order) {
                 case '智能排序': parameter.order = '';
@@ -330,6 +386,7 @@
         }
         else {
             $api.text($api.dom('.selText'), '请选择分类');
+            $api.attr($api.dom('.selText'), 'data-category', '');
             selectedObj = 0
             var no1 = document.getElementsByClassName('no1')[0]
             var liArr = no1.getElementsByTagName('li');
@@ -337,7 +394,7 @@
                 for(var j = 0; j < liArr[i].childNodes.length ; j++) {
                     $api.removeCls(liArr[i].childNodes[j], 'sel');
                 }
-                $api.addCls(liArr[i].childNodes[3], 'sel');
+                // $api.addCls(liArr[i].childNodes[3], 'sel');
             }  
             for (var i = 0; i < $api.domAll('.no2List').length; i++) {
                 $api.removeCls($api.domAll('.no2List')[i], 'sel');
@@ -346,7 +403,7 @@
                     $api.removeCls($api.domAll('.no2List')[i].childNodes[j], 'hide');
                     $api.removeCls($api.domAll('.no2List')[i].childNodes[j], 'spanSel');
                 }
-                $api.addCls($api.domAll('.no2List')[i].childNodes[3], 'spanSel');
+                // $api.addCls($api.domAll('.no2List')[i].childNodes[3], 'spanSel');
             }
             // $api.addCls($api.domAll('.no2List')[0], 'sel');
             // var no2Icon = $api.domAll('.no2Icon')

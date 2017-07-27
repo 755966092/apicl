@@ -108,7 +108,7 @@
 <script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
     var flag = 0,eventName,discriminate,selectedArr=[];
-    var selectedObj ;
+    var selectedObj ,objData;
     apiready = function(){
         fnInit();
         moduleInit();
@@ -123,7 +123,7 @@
         } else {
             settingText();
         }
-        openList(handleData())
+        requireCategory()
     }
     // 设置文字
     function settingText () {
@@ -230,21 +230,44 @@
             }
         });
     }
+     function requireCategory() {
+        api.ajax({
+            url: apiSite + '/category/index',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       type: api.pageParam.type
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                handleData(ret)
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
     // 处理数据
-    function handleData() {
-        var schoolList = ['自定义数据','自定义数据2','自定义数据3','北京理工大学','同济大学','南开大学','复旦大学','山东科技大学','青岛海洋大学','中石油大学'];
+    function handleData(ret) {
+        var schoolList = [];
+        for (var i = 0; i < ret.data.list.length; i++) {
+            schoolList.push(ret.data.list[i].name)
+        }
         var obj = {};
         for (var i = 0; i < schoolList.length; i++) {
             obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]] = [];
         }
         for (var i = 0; i < schoolList.length; i++) {
-            obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]].push({title:schoolList[i],titleSize:14});
+            obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]].push({category_id:ret.data.list[i].category_id,title:schoolList[i],titleSize:14});
         }
         if (selectedObj != 1) {
             for (var i = 0; i < selectedObj.length; i++) {
                 obj[selectedObj[i].key][selectedObj[i].index].titleColor = '#27B24A'
             }
         }
+        objData = obj;
+        openList(obj)
         // console.log(JSON.stringify(obj))
         return obj
     }
@@ -260,7 +283,8 @@
                     name: 'selClass',
                     extra: {
                         schoolName: schoolName,
-                        selectedArr: selectedArr
+                        selectedArr: selectedArr,
+                        obj: objData
                     }
                 });
             }
