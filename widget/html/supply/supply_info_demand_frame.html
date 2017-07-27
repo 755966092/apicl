@@ -16,7 +16,7 @@
         }
         .img img {
             width: 7.5rem;
-            height: 7.5rem;
+            height: 4.36rem;
         }
         .title {
             height: 1rem;
@@ -342,11 +342,11 @@
     <script type="text/x-dot-template" id="listT">
         <div class="main flex-def flex-zTopBottom">
             <div class="img">
-                {{?it.info.image_json[0]!='0'}}
+                <!-- {{?it.info.image_json[0]!='0'}}
                     <img src="{{=it.info.image_json[0]}}?imageView2/1/w/200/h/200/q/75|imageslim">
                 {{??it.info.image_json[0]=='0'}}
-                    <img src="../../image/tx_4.jpg">
-                {{?}}
+                {{?}} -->
+                <img id="imgHeight" src="../../image/tx_4.jpg">
             </div>
             <div class="title flex-def flex-zLeftRight flex-cCenter">
                 <img src="{{=it.info.head_img_url}}" alt="">
@@ -567,6 +567,11 @@
         }, function(ret, err) {
             // 解析图片json
             ret.data.info.image_json = eval(ret.data.info.image_json);
+            var lbt = [];
+            for (var i = 0; i < ret.data.info.image_json.length; i++) {
+                lbt.push(ret.data.info.image_json[i] + '?imageView2/1/w/200/h/125/format/jpg/q/75|imageslim')
+                ret.data.info.image_json[i] = ret.data.info.image_json[i] + '?imageMogr2/auto-orient/thumbnail/200x/blur/1x0/quality/75|imageslim'
+            }
              // 处理时间显示
             ret.data.info.create_time = initTime(ret.data.info.create_time)       
             if (ret.data.info.unit > 0) {
@@ -580,9 +585,55 @@
             ret.data.info.status = statusArr[ret.data.info.status-1]
             console.log(JSON.stringify(ret))
             getData(ret.data);
+            swiper(lbt)
             // ret.data
             transmitData = ret.data.info;
         })
+    }
+
+    function swiper(argument) {
+        var hei = $api.offset($api.byId('imgHeight')).h;
+        console.log(JSON.stringify(hei))
+        console.log('589:::' + argument)
+         var UIScrollPicture = api.require('UIScrollPicture');
+        UIScrollPicture.open({
+            rect: {
+                x: 0,
+                y: 0,
+                w: api.winWidth,
+                h: hei
+            },
+            data: {
+                paths: argument
+                // captions: ['apicloud', 'apicloud', 'apicloud', 'apicloud']
+            },
+            styles: {
+                caption: {
+                    height: 35,
+                    color: '#E0FFFF',
+                    size: 13,
+                    bgColor: '#696969',
+                    position: 'bottom'
+                },
+                indicator: {
+                    align: 'center',
+                    color: 'rbga(88,88,88,0.5)',
+                    activeColor: '#fff'
+                }
+            },
+            placeholderImg: 'widget://image/tx_1.jpg',
+            contentMode: 'scaleToFill',
+            interval: 3,
+            loop: true,
+            fixedOn: api.frameName,
+            fixed: false
+        }, function(ret, err) {
+            if (ret) {
+                alert(JSON.stringify(ret));
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     }
     function immediateOrder() {
        

@@ -84,8 +84,11 @@
     }
     .leftBotton {
         background-color: #D5D8DB;
-        color: #D5D8DB;
+        color: #000;
     }
+    .leftBotton1 {
+         color: #D5D8DB;
+    } 
     h3 {
         font-size: .34rem;
         text-align: center;
@@ -150,7 +153,7 @@
                     <span tapmode="hover" onclick="inputNumber(this);event.stopPropagation();">9</span>
                 </p>
                 <p>
-                    <span class="leftBotton">0</span>
+                    <span class="leftBotton leftBotton1">0</span>
                     <span tapmode="hover" onclick="inputNumber(this);event.stopPropagation();">0</span>
                     <span class="leftBotton" tapmode="hover" onclick="clearInputNumber(this);event.stopPropagation();">x</span>
                 </p>
@@ -200,18 +203,35 @@
 
     // 提交
     function submitData(psd) {
+        var obj = api.pageParam.obj;
+        obj.pay_password = psd
         api.ajax({
             url: apiSite + api.pageParam.url,
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: api.pageParam.obj
+                   values: obj
             }
         }, function(ret, err) {
             if(ret) {
                 if (ret.code == 200) {
                     // 支付成功
-                    
+                    // 跳转到支付成功页面
+                    api.openWin({
+                         name: 'winName',
+                         url: './supply_payResult_win.html',
+                         pageParam: {
+                            obj: api.pageParam.obj,
+                            price: api.pageParam.price,
+                            form: api.pageParam.form,
+                            flag: api.pageParam.flag,
+                            paramPhone: api.pageParam.paramPhone
+                         }
+                     }); 
+                    api.closeFrame({
+                        name: 'supply_modeOfPayment'
+                    });
+                    api.closeFrame();
                 } else {
                     alert(JSON.stringify(ret.msg))
                 }

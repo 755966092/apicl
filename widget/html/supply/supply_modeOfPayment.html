@@ -192,6 +192,7 @@
                 var obj = api.pageParam.obj;
                 obj.token = $api.getStorage('userToken');
                 obj.pay_method = pay_method;
+                obj.pay_password = '';
                 if (obj.service_time.length < 18) {
                     obj.service_time = obj.service_time+':00'
                 }
@@ -224,7 +225,11 @@
                                 },
                                 pageParam: {
                                     obj: obj,
-                                    url: url
+                                    url: url,
+                                    price: api.pageParam.price,
+                                    form: api.pageParam.form,
+                                    flag: 1,
+                                    paramPhone: api.pageParam.paramPhone
                                 },
                                 bounces: false
                             });

@@ -75,7 +75,7 @@
     };
     function requestData() {
       api.ajax({
-          url: apiSite + '/user_center/accountDetail',
+          url: apiSite + '/finance_center/accountDetail',
           method: 'post',
           headers: apiHeader,
           data: {
@@ -88,6 +88,7 @@
           for (var i = 0; i < ret.data.list.length; i++) {
             ret.data.list[i].type = type[ret.data.list[i].type-1]
           }
+          console.log(JSON.stringify(ret))
           getData(ret.data.list)
         } else {
           alert(JSON.stringify(err.msg))
