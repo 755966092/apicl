@@ -161,7 +161,7 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 
 <script type="text/javascript">
-    var data = [],parameter,selectedObj;
+    var data = [],parameter,selectedObj,type;
     apiready = function(){
         getData(data);
         
@@ -212,6 +212,7 @@
             if (ret) {
                 // alert(JSON.stringify(ret));
                 parameter = ret.value.parameter
+                type = ret.value.type
                 selectedObj = ret.value.selectedObj
             } else {
                 alert(JSON.stringify(err));
@@ -236,7 +237,8 @@
             pageParam: {
                 type: api.pageParam.type,
                 parameter: parameter,
-                selectedObj: selectedObj
+                selectedObj: selectedObj,
+                type: type
             },
             bounces: false
         });

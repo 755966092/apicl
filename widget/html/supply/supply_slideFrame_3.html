@@ -221,6 +221,7 @@
         initPage();
         listenEvent('school');
     }
+    
      // 点击确定按钮： 1； 重置按钮 0
     function enter(n) {
         if (n) {
@@ -228,7 +229,7 @@
             var type = $api.attr($api.dom('.no1 .sel'), 'data-id');
             parameter.type = $api.attr($api.dom('.no4 .sel'), 'data-id');
             parameter.sub_type = $api.attr($api.dom('.no5 .sel'), 'data-id');
-            parameter.category_ids = $api.text($api.dom('.school'));
+            parameter.category_ids = $api.attr($api.dom('.school'),'data-category');
             parameter.order = $api.attr($api.dom('.no3 .sel'), 'data-order');
             api.sendEvent({
                 name: 'searchSupply3',
@@ -242,6 +243,7 @@
         } else {
             // 重置
             $api.text($api.dom('.school'), '');
+            $api.attr($api.dom('.school'), 'data-category', '');
             selectedObj = {};
             $api.removeCls($api.dom('.no3 .sel'), 'sel');
             $api.removeCls($api.dom('.no4 .sel'), 'sel');
@@ -250,6 +252,7 @@
     }
     // 设置选中的条件
     function initSel() {
+        console.log('设置选中的条件::'+JSON.stringify(api.pageParam))
         if (api.pageParam.parameter) {
             if (api.pageParam.parameter.type) {
                 if (api.pageParam.parameter.type == 1){
@@ -354,11 +357,17 @@
             name: 'select'+ val
         }, function(ret, err) {
             if (ret) {
-                $api.text($api.dom('.'+ val +''), ret.value.schoolName.replace(' ',','));
+                var id = '';
+                for (var i = 0; i < ret.value.selectedArr.length; i++) {
+                   id += ret.value.obj[ret.value.selectedArr[i].key][ret.value.selectedArr[i].index].category_id+','
+                }
+                id = id.substring(0,id.length-1);
+                $api.text($api.dom('.'+ val +''), ret.value.schoolName);
+                $api.attr($api.dom('.'+ val +''), 'data-category',id);
                 selectedObj[val] = ret.value.selectedArr;
                 // selectedObj[val][0].str = ret.value.schoolName;
                 str = ret.value.schoolName;
-                console.log('第一页面:'+JSON.stringify(selectedObj))
+                console.log('第一页面:'+JSON.stringify(ret.value))
             } else {
                 alert(JSON.stringify(err));
             }
@@ -381,7 +390,8 @@
             pageParam: {
                 val: val,
                 selectedObj:　selectedObj,
-                str: str
+                str: str,
+                type: api.pageParam.type,
             },
             bounces: false
         });
