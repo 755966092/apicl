@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html> 
 <head>
     <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
@@ -331,7 +331,7 @@
 
           
 
-
+<!-- 
             <li class="mt37"   tapmode="hover"   onclick="remindWho()">
                 <div class="wrap">
                     <span>提醒谁看</span>
@@ -343,10 +343,10 @@
                     <span>定向投递</span>
                     <span class="spanno2"></span>
                 </div>
-            </li>
+            </li> -->
         </ul>        
     </div>
-    <div class="btn" tapmode="hover" onclick="selImg()">发布</div>
+    <div class="btn" tapmode="hover" onclick="addSupply()">发布</div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -362,9 +362,11 @@
                     img: [],
                     video: []
                   },
-                  categoryArr = ['全部','教育','摄影','摄影','医疗'];
+                  categoryArr = ['全部','教育','摄影','摄影','医疗'],
+                  imgArr = [];
     apiready = function(){
         moduleInit();
+        console.log('369:::'+JSON.stringify(api.pageParam))
         if (api.pageParam.demand_id) {
             requireData();
         } else {
@@ -499,6 +501,22 @@
             if (ret) {
                 base64Data.img.push(ret.base64Data);
                 getData(base64Data);
+                var baseUrl = 'img.2017duobao.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com
+                var obj = api.require('qiniuUpfile');
+                obj.upfile({
+                    file: ret.data,
+                }, function(retUpfile, err) {
+                    if (retUpfile.status) {
+                        if (retUpfile.oper == "complete") {
+                            //上传成功后组装访问路径，或直接访问文档
+                            imgArr.push('http://'+ baseUrl +'/'+ retUpfile.info.key);
+                            duibi($api.domAll('.imgpage').length,imgArr.length)
+                        } else if (retUpfile.oper == "progress") {
+                            //上传过程中获取进度数据
+                            // console.log(retUpfile.percent);
+                        }
+                    }
+                });
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -518,8 +536,15 @@
             }
         });
     }
-     function selImg() {
-        var imgArr = [];
+    var releaseFlag = 0;
+    function duibi(a,b) {
+        if (a == b) {
+            // console.log(b)
+            releaseFlag = 1;
+        } 
+    }
+    function selImg() {
+        
         var baseUrl = 'img.2017duobao.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com
         var obj = api.require('qiniuUpfile');
         for (var i = 0; i < $api.domAll('.imgpage').length; i++) {
@@ -545,108 +570,108 @@
             }
         };
     }
-    function duibi(a,b) {
-        if (a == b.length) {
-            addSupply(b)
-            console.log(b)
-        } 
-    }
+   
 
     // 添加供应
-    function addSupply(imgUrlArr) {
+    function addSupply() {
         // 获取页面内容
-        var token = $api.getStorage('userToken'),            //string  用户Token
-            title = $api.val($api.byId('title')),           //string  标题
-            category_id = 1,         //int 分类ID
-            reward = $api.val($api.byId('reward')),           //float   价格
-            // unit = _dataSource.indexOf($api.text($api.byId('unit')))+1,            //string  单位
-            form = $api.text($api.byId('form')) == '线上' ? 1 : 2,            //int 形式（1-线上，2-线下）
-            description = $api.val($api.byId('description'));        //string  详细内容
-            image_json = imgUrlArr,          //string  图片（格式：["abc.jpg","ddd.jpg"]）
-            company_id = 1;      // 我公司卖ID（类型为2-我我公司卖卖时必传）
-            end_date = $api.text($api.byId('endTime'));
-            alert('标题 : '+ title +'---截至时间ID : '+end_date+'---分类ID : '+category_id+'---价格 : '+reward+'----形式'+form+'---内容: '+description +"---省份"+ province + "---地区" +city+ "---地址" +address+ "---纬度" +latitude+'---纬度: '+longitude)
-            var category = $api.text($api.byId('category_id'));
-            for (var i = 0; i < categoryArr.length; i++) {
-                if (categoryArr[i] === category) {
-                        category_id = i+1;
-                    break;
+        if (releaseFlag == 1) {
+            var token = $api.getStorage('userToken'),            //string  用户Token
+                title = $api.val($api.byId('title')),           //string  标题
+                category_id = 1,         //int 分类ID
+                reward = $api.val($api.byId('reward')),           //float   价格
+                // unit = _dataSource.indexOf($api.text($api.byId('unit')))+1,            //string  单位
+                form = $api.text($api.byId('form')) == '线上' ? 1 : 2,            //int 形式（1-线上，2-线下）
+                description = $api.val($api.byId('description'));        //string  详细内容
+                image_json = imgArr,          //string  图片（格式：["abc.jpg","ddd.jpg"]）
+                company_id = 1;      // 我公司卖ID（类型为2-我我公司卖卖时必传）
+                end_date = $api.text($api.byId('endTime'));
+                alert('标题 : '+ title +'---截至时间ID : '+end_date+'---分类ID : '+category_id+'---价格 : '+reward+'----形式'+form+'---内容: '+description +"---省份"+ province + "---地区" +city+ "---地址" +address+ "---纬度" +latitude+'---纬度: '+longitude)
+                var category = $api.text($api.byId('category_id'));
+                for (var i = 0; i < categoryArr.length; i++) {
+                    if (categoryArr[i] === category) {
+                            category_id = i+1;
+                        break;
+                    }
                 }
-            }
 
-            var url,obj;
-            if (api.pageParam.demand_id) {
-                // 编辑供应
-                url = '/supply/edit';
-                obj = {
-                    token: token,
-                    title: title,
-                    demand_id: demand_id,
-                    type: type,
-                    category_id: category_id,
-                    province: province,
-                    city: city,
-                    address: address,
-                    latitude: latitude,
-                    longitude: longitude,
-                    reward: reward,
-                    form: form,
-                    description: description,
-                    image_json: imgUrlArr,
-                    end_date:end_date,
-                    company_id:1
-                }
-            } else {
-                // 发布新供应
-                url = '/demand/add';
-                obj = {
-                    token: token,
-                    title: title,
-                    type: type,
-                    category_id: category_id,
-                    province: province,
-                    city: city,
-                    address: address,
-                    latitude: latitude,
-                    longitude: longitude,
-                    reward: reward,
-                    form: form,
-                    description: description,
-                    image_json: imgUrlArr,
-                    end_date:end_date,
-                    company_id:1
-                }
-            }
-                api.ajax({
-                    url: apiSite + url,
-                    method: 'post',
-                    headers: apiHeader,
-                    data: {
-                       values: obj
+                var url,obj;
+                if (api.pageParam.demand_id) {
+                    // 编辑供应
+                    url = '/supply/edit';
+                    obj = {
+                        token: token,
+                        title: title,
+                        demand_id: demand_id,
+                        type: type,
+                        category_id: category_id,
+                        province: province,
+                        city: city,
+                        address: address,
+                        latitude: latitude,
+                        longitude: longitude,
+                        reward: reward,
+                        form: form,
+                        description: description,
+                        image_json: imgArr,
+                        end_date:end_date,
+                        company_id:1
                     }
-                }, function(ret, err) {
-                    if(ret) {
-                        alert(JSON.stringify(ret))
-                        if (api.pageParam.demand_id) {
-                            // 编辑应用返回我发布的页面
-                            api.sendEvent({
-                                name: 'editSupplyAfter',
-                                 extra: {
-                                    demand_id: api.pageParam.demand_id
-                                }
-                            });
-                           
-                        } else {
-                            // 发布新供应返回供应列表
-                            api.sendEvent({
-                                name: 'editSupplyAfter'
-                            });
+                } else {
+                    // 发布新供应
+                    url = '/demand/add';
+                    obj = {
+                        token: token,
+                        title: title,
+                        type: type,
+                        category_id: category_id,
+                        province: province,
+                        city: city,
+                        address: address,
+                        latitude: latitude,
+                        longitude: longitude,
+                        reward: reward,
+                        form: form,
+                        description: description,
+                        image_json: imgArr,
+                        end_date:end_date,
+                        company_id:1
+                    }
+                }
+                    api.ajax({
+                        url: apiSite + url,
+                        method: 'post',
+                        headers: apiHeader,
+                        data: {
+                           values: obj
                         }
-                        api.closeWin();
-                    } else {
-                        alert(JSON.stringify(err.msg))
-                    }
-                })
+                    }, function(ret, err) {
+                        if(ret) {
+                            alert(JSON.stringify(ret))
+                            if (api.pageParam.demand_id) {
+                                // 编辑应用返回我发布的页面
+                                api.sendEvent({
+                                    name: 'editSupplyAfter',
+                                     extra: {
+                                        demand_id: api.pageParam.demand_id
+                                    }
+                                });
+                               
+                            } else {
+                                // 发布新供应返回供应列表
+                                api.sendEvent({
+                                    name: 'editSupplyAfter'
+                                });
+                            }
+                            api.closeWin();
+                        } else {
+                            alert(JSON.stringify(err.msg))
+                        }
+                    })
+        } else {
+            addSupply
+        }
+      
             
     }
 
