@@ -4,38 +4,35 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<style type="text/css">
-		div {
-			width: 50px;
-			height: 50px;
-			border: 1px solid #000;
+		.a {
+			height: 5000px;
 		}
-		.no1 {
+		.module-layer {
+			position: fixed;
+			top: 0;
+			height: 80px;
+			width: 100%;
 			background-color: #f00;
-		}
-		.no2 {
-			background-color: #0f0;
-		}
-		.no3 {
-			background-color: #00f;
+			opacity: 0;
 		}
 	</style>
 </head>
-<body>
-	<div class="no1 " class="no2"></div>
-	<script type="text/javascript">
-
-		console.log(new Date().toLocaleString())
-		console.log(new Date().toLocaleDateString())
-		console.log(new Date().toLocaleTimeString())
-		console.log(new Date().toGMTString())
-
-		
-		// function getLocalTime(nS) { 
-		// return new Date(parseInt(nS) * 1000).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " "); 
-		// } 
-		// alert(getLocalTime());
-		var a = 1501048596874;
-		console.log(new Date(1501048596874).toLocaleString()) 
-	</script>
+<body  >
+	<header class="module-layer">  
+	   
+	</header>  
+	<div class="a"></div>
 </body>
+<script type="text/javascript" src="../script/jquery.min.js"></script>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript">
+	window.onscroll = function() {
+		console.log(document.body.scrollTop)
+        $api.css($api.dom('header'), 'opacity:' + document.body.scrollTop/500 + '');
+    }
+    // function gtouchmove(){   
+    // 	$api.css($api.dom('header'), 'opacity:' + document.body.scrollTop/500 + '');
+    // };   
+ 
+</script>
 </html>

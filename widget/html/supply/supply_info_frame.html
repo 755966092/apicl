@@ -6,6 +6,7 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/swiper.min.css"/>
     <style type="text/css">
         
         .main {
@@ -336,21 +337,57 @@
             top: .55rem;                
             left: .3rem;        
          }  
+          header.header {
+            background-color: rgba(58,57,62,0);
+            position: fixed;
+            width: 7.5rem;
+            top: 0;
+            left: 0;
+            z-index: 999;
+         }
+         header .head {
+            background-color: rgba(58,57,62,0)
+         }
+         .swiper-wrapper img {
+            height: 4.36rem;
+         }
+         header .rightBtn {
+            line-height: .5rem;
+            color: #fff;
+            font-size: .65rem;
+         }
     </style>
 </head>     
 <body>
-    <div id="cloaswin" onclick="api.closeWin();"></div>
+    <!-- <div id="cloaswin" onclick="api.closeWin();"></div> -->
+    <header  class="header">
+        <div class="head">
+            <span class="callback"   tapmode="hover"   onclick="api.closeWin()">返回</span>
+            <span class="winTitle">
+                信息详情
+            </span>
+            <div class="rightBtn">...</div>
+        </div>
+    </header>
     <div class="loading" ></div>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <!-- <img src="http://imgsrc.baidu.com/imgad/pic/item/83025aafa40f4bfb281dbe70094f78f0f63618c0.jpg" class="swiper-slide blue-slide">
+            <img src="http://imgsrc.baidu.com/imgad/pic/item/5366d0160924ab18cb0aad123ffae6cd7b890bf2.jpg" class="swiper-slide red-slide">
+            <img src="http://img.taopic.com/uploads/allimg/140826/267848-140R60T34860.jpg" class="swiper-slide orange-slide"> -->
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
     <div class="resultList"></div>
     <script type="text/x-dot-template" id="listT">
         <div class="main flex-def flex-zTopBottom">
-            <div class="img">
+            <!-- <div class="img">
                 {{?it.info.image_json[0]!='0'}}
                     <img src="{{=it.info.image_json[0]}}?imageView2/1/w/200/h/200/q/75|imageslim">
                 {{??it.info.image_json[0]=='0'}}
                     <img src="../../image/tx_4.jpg">
                 {{?}}
-            </div>
+            </div> -->
             <div class="title flex-def flex-zLeftRight flex-cCenter">
                 <img src="{{=it.info.head_img_url}}" alt="">
                 <div class="titleRight">
@@ -478,11 +515,15 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/jquery.min.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript" src="../../script/swiper.min.js"></script>
 <script type="text/javascript">
     var transmitData,_dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
     apiready = function(){
+        fnInit();
         // 初始化页面
-        
+        window.onscroll = function() {
+            $api.css($api.dom('header.header'), 'background-color: rgba(58,57,62,' + document.body.scrollTop/200 + ')');
+        }
         initialise(api.pageParam.flag, api.pageParam.compaby_name, api.pageParam.supply_id);
         api.addEventListener({
             name: 'editSupplyAfter'
@@ -579,7 +620,17 @@
             }
         }, function(ret, err) {
             // 解析图片json
-            ret.data.info.image_json = eval(ret.data.info.image_json); 
+            ret.data.info.image_json = eval(ret.data.info.image_json);
+            var eleHtml='';
+            for (var i = 0; i < ret.data.info.image_json.length; i++) {
+                eleHtml += '<img src="'+ ret.data.info.image_json[i] +'?imageView2/1/w/750/h/436/format/jpg/q/100|imageslim" class="swiper-slide blue-slide">'
+                ret.data.info.image_json[i] = ret.data.info.image_json[i] + '?imageMogr2/auto-orient/thumbnail/710x/blur/1x0/quality/100|imageslim'
+            }
+
+             $api.html($api.dom('.swiper-wrapper'), eleHtml);
+             if (ret.data.info.image_json.length > 1) {
+                swiperFun();
+             }
             // 处理时间显示
             ret.data.info.create_time = initTime(ret.data.info.create_time)   
             if (ret.data.info.unit > 0) {
@@ -593,6 +644,15 @@
             // ret.data
             transmitData = ret.data.info;
         })
+    }
+    function swiperFun() {
+        var mySwiper = new Swiper('.swiper-container',{
+            loop: true,
+            autoplay: 3000,
+            pagination : '.swiper-pagination',
+            observer: true,  //修改swiper自己或子元素时，自动初始化swiper
+            observeParents: true,    //修改swiper的父元素时，自动初始化swiper
+        });
     }
     function immediateOrder(ele) {
         // 下单
