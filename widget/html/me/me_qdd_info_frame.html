@@ -389,6 +389,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
+    var enterUrl;
     apiready = function(){
         moduleInit();
         requireData();
@@ -486,6 +487,9 @@
                                 // key 即是要显示的按钮
                                 ret.data.button_info[key].key = key;
                                 ret.data.button_info.buttonArr.push(ret.data.button_info[key])
+                                if (key == 'finish' || key == 'confirm_finish') {
+                                     enterUrl = ret.data.button_info[key].url;
+                                }
                                 break;
                                 // console.log(key1 +':::'+ret.data.button_info[key][key1])
                             }
@@ -496,7 +500,7 @@
                             case 'cancel_order': ret.data.button_info.buttonArr[i].key = '取消订单'; break;
                             case 'confirm_help': ret.data.button_info.buttonArr[i].key = '确认帮助'; break;
                             case 'refuse_help': ret.data.button_info.buttonArr[i].key = '拒绝帮助'; break;
-                            case 'finish': ret.data.button_info.buttonArr[i].key = '完成订单'; break;
+                            case 'finish': ret.data.button_info.buttonArr[i].key = '完成订单';   break;
                             case 'delete': ret.data.button_info.buttonArr[i].key = '删除订单'; break;
                             case 'confirm_finish': ret.data.button_info.buttonArr[i].key = '确认完成'; break;
                             case 'comment': ret.data.button_info.buttonArr[i].key = '评价'; break;
@@ -659,7 +663,7 @@
                 },
                 bounces: false
             });
-        }else if (flagText === '确认帮助') {
+        } else if (flagText === '确认帮助') {
             api.openFrame({
                 name: 'supply_modeOfPayment',
                 url: '../supply/supply_modeOfPayment.html',
@@ -676,6 +680,10 @@
                 },
                 bounces: false
             });
+        } else if (flagText === '完成订单') {
+
+            ajaxOperate(param ,url)
+
         } else {
             ajaxOperate(param ,url)
         }
@@ -689,9 +697,10 @@
         });
     }
     function completeOrder(ele) {
+        console.log(enterUrl)
         var id = $api.attr(ele, 'data-id');
         api.ajax({
-            url: apiSite + '/supply_order/hostConfirmFinishService',
+            url: apiSite + enterUrl,
             method: 'post',
             headers: apiHeader,
             data: {

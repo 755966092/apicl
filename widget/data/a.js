@@ -1,106 +1,49 @@
-{
-	"identity": "buyer",
-	"status_info": {
-		"icon": "",
-		"text": "订单关闭",
-		"description": "订单超时，已取消，钱款将自动退回"
-	},
-	"seller_info": {
-		"user_id": 296,
-		"nickname": "袁壮",
-		"head_img_url": "http://ot0c8ontv.bkt.clouddn.com/FsSPJ_hOnHSM7UYzNar-kgEGeo6H",
-		"rongcloud_user_id": "497b966fc6d3430b39726a1e6cba7816"
-	},
-	"supply_info": {
-		"supply_id": 13,
-		"image": [],
-		"title": "测试",
+397::: {
+	"list": [{
+		"demand_id": 7,
+		"title": "测试求助",
+		"type": 1,
+		"reward": "1.00",
+		"create_time": "2017-07-27 11:26:45",
+		"description": "求助",
+		"company_name": "",
+		"image_json": "[\"http:\\/\\/img.2017duobao.com\\/Fu7-GF__HpfwdtTY2u412c1DoyiD\",\"http:\\/\\/img.2017duobao.com\\/FoZLhQ1UwNUmfz3bjwZQ4Wfe7mdP\"]",
+		"latitude": "40.0007780",
+		"longitude": "116.3359650",
+		"nickname": "袁壮2",
+		"sex": 1,
+		"head_img_url": "http://ot0c8ontv.bkt.clouddn.com/Fmg6Owc-tHR4CjxOvQDdM6JVuki6",
+		"distance": null
+	}, {
+		"demand_id": 6,
+		"title": "测试求助22",
+		"type": 1,
+		"reward": "1.00",
+		"create_time": "2017-07-27 09:29:35",
 		"description": "测试",
-		"price": "0.01",
-		"unit": "幅",
-		"form": 1
-	},
-	"order_info": {
-		"order_id": 58,
-		"gen_order_id": "201707281543536986718998",
-		"amount": 1,
-		"money": "0.01",
-		"extra_money": "5.00",
-		"discount_money": "0.00",
-	"total_money": 5.01,
-		"refund_money": "0.00",
-		"create_time": "2017-07-28 15:43:53",
-		"service_time": "2017-07-29 00:00:00",
-		"reason": "超时未接单"
-	},
-	"button_info": {
-		"pay": {
-			"is_show": false,
-			"url": "/supply_order/buyerPayService"
-		},
-		"confirm_service": {
-			"is_show": false,
-			"url": "/supply_order/sellerConfirmService"
-		},
-		"refuse_service": {
-			"is_show": false,
-			"url": "/supply_order/sellerRefuseService"
-		},
-		"extend": {
-			"is_show": false,
-			"url": "/supply_order/buyerExtendService"
-		},
-		"extra": {
-			"is_show": false,
-			"url": "/supply_order/buyerPayExtraMoney"
-		},
-		"discount": {
-			"is_show": false,
-			"url": "/supply_order/sellerDiscountService"
-		},
-		"finish": {
-			"is_show": false,
-			"url": ""
-		},
-		"confirm_finish": {
-			"is_show": false,
-			"url": "/supply_order/buyerConfirmFinishService"
-		},
-		"cancel": {
-			"is_show": false,
-			"url": ""
-		},
-		"confirm_cancel": {
-			"is_show": false,
-			"url": "/supply_order/sellerConfirmCancelService"
-		},
-		"refuse_cancel": {
-			"is_show": false,
-			"url": "/supply_order/sellerRefuseCancelService"
-		},
-		"again": {
-			"is_show": false,
-			"url": "/supply_order/buyerCreateOrder"
-		},
-		"comment": {
-			"is_show": false,
-			"url": ""
-		},
-		"delete": {
-			"is_show": true,
-			"url": "/supply_order/buyerDeleteOrder",
-			"key": "删除订单"
-		},
-		"refund": {
-			"is_show": false,
-			"url": "/supply_order/sellerRefundService"
-		},
-		"buttonArr": [{
-			"is_show": true,
-			"url": "/supply_order/buyerDeleteOrder",
-			"key": "删除订单"
-		}]
-	},
-	"reason_list": []
+		"company_name": "",
+		"image_json": "[\"http:\\/\\/img.2017duobao.com\\/FoZLhQ1UwNUmfz3bjwZQ4Wfe7mdP\",\"http:\\/\\/img.2017duobao.com\\/Fu7-GF__HpfwdtTY2u412c1DoyiD\"]",
+		"latitude": "40.0007910",
+		"longitude": "116.3359760",
+		"nickname": "袁壮2",
+		"sex": 1,
+		"head_img_url": "http://ot0c8ontv.bkt.clouddn.com/Fmg6Owc-tHR4CjxOvQDdM6JVuki6",
+		"distance": null
+	}, {
+		"demand_id": 1,
+		"title": "孩子平时学习成绩好，想上北京的学校，求指导",
+		"type": 2,
+		"reward": "599.00",
+		"create_time": "2017-07-10 11:10:17",
+		"description": "希望能获得自主招生专家的意见，必有重谢",
+		"company_name": "中国自助招生网",
+		"image_json": "[]",
+		"latitude": "40.0007957",
+		"longitude": "116.3360833",
+		"nickname": "李彤亮",
+		"sex": 2,
+		"head_img_url": "https://wozai.tonyliangli.cn/uploads/images/default_head_img.png",
+		"distance": null
+	}]
 }
-at me_gdd_info_frame.html: 519
+at supply_publish_2.html: 397
