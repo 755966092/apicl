@@ -8,6 +8,11 @@
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <link rel="stylesheet" type="text/css" href="../../css/swiper.min.css"/>
     <style type="text/css">
+        img.default {
+            width: 7.5rem;
+            height: 4.36rem;
+        }
+
         .main {
             margin-bottom: 1.2rem;
         }
@@ -621,8 +626,12 @@
                 eleHtml += '<img src="'+ ret.data.info.image_json[i] +'?imageView2/1/w/750/h/436/format/jpg/q/100|imageslim" class="swiper-slide blue-slide">'
                 ret.data.info.image_json[i] = ret.data.info.image_json[i] + '?imageMogr2/auto-orient/thumbnail/710x/blur/1x0/quality/100|imageslim'
             }
-            750
-             $api.html($api.dom('.swiper-wrapper'), eleHtml);
+            
+            if (eleHtml) {
+                $api.html($api.dom('.swiper-wrapper'), eleHtml);
+            } else {
+                 $api.html($api.dom('.swiper-wrapper'), '<img class="default" src="../../image/noimage.jpg">');
+            }
              if (ret.data.info.image_json.length > 1) {
                 swiperFun();
              }

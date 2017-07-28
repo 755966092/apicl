@@ -266,7 +266,10 @@
     function openEditName() {
         api.openWin({
             name: 'supply_editName',
-            url: './supply_editName.html'
+            url: './supply_editName.html',
+            pageParam: {
+                name: $api.text($api.byId('real_name'))
+            }
         });
     }
     // 选择电话
@@ -299,7 +302,27 @@
         if (real_name != '') {
             $api.text($api.byId('real_name'), real_name);
         } else {
-            $api.text($api.byId('real_name'), '未设置真实姓名');
+            api.ajax({
+                url: apiSite + '/user_center/editBasicInfoIndex',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                       values: { 
+                           token: $api.getStorage('userToken'),
+                       }
+                }
+            }, function(ret, err) {
+                if(ret) {
+                    alert(JSON.stringify(ret))
+                    if (ret.data.info.real_name) {
+                        $api.text($api.byId('real_name'), ret.data.info.real_name);
+                    } else {
+                        $api.text($api.byId('real_name'), '未设置真实姓名');
+                    }
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
         }
         // 设置赏金
         $api.text($api.byId('price'), api.pageParam.transmitData.reward);

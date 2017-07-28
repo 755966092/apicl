@@ -344,9 +344,9 @@
         computeTatol();
         // 初始化页面
         // 判断是否是新用户
-        if ($api.getStorage('userAddress') != '') {
-            initPage();
-        }
+        // if ($api.getStorage('userAddress') != '') {
+        initPage();
+        // }
         // 线上服务不要地址
         if (api.pageParam.transmitData.form === 1) {
             $api.css($api.byId('addressWrap'), 'display:none');
@@ -355,7 +355,9 @@
                 name: 'callbackAddress'
             }, function(ret, err) {
                 if (ret) {
-                    $api.text($api.byId('address'), ret.value.callbackAddress);
+                    $api.attr($api.byId('address'), 'data-id', ret.value.addressId);
+                    $api.text($api.byId('address'), ret.value.province +' '+ ret.value.city+ ' ' + ret.value.district+ ' ' +ret.value.callbackAddress);
+                    console.log('360:::'+$api.attr($api.byId('address'), 'data-id'))
                 } else {
                     alert(JSON.stringify(err));
                 }
@@ -382,9 +384,13 @@
     };
     // 编辑姓名
     function openEditName() {
+
         api.openWin({
             name: 'supply_editName',
-            url: './supply_editName.html'
+            url: './supply_editName.html',
+            pageParam: {
+                name: $api.text($api.byId('real_name'))
+            }
         });
     }
     // 选择电话
@@ -395,9 +401,14 @@
                 url: './supply_getStroagePhone.html'
             });
         } else {
+            console.log('403:::'+$api.attr($api.byId('address'), 'data-id'))
+            var id = $api.attr($api.byId('address'), 'data-id');
             api.openWin({
                 name: 'supply_getStroageAddress',
-                url: './supply_getStroageAddress.html'
+                url: './supply_getStroageAddress.html',
+                pageParam: {
+                    id: id
+                }
             });
         }
     }
@@ -418,38 +429,89 @@
          // console.log(contact_id)
          var address_id = $api.attr($api.byId('address'), 'data-id');        //
          // console.log(address_id)
-         var obj = {
-            supply_id: supply_id,
-            amount: amount,
-            service_time: service_time,
-            name: name,
-            contact_id: contact_id,
-            address_id: address_id
+         if (api.pageParam.transmitData.form === 1) {
+            // 线上 服务时间
+            if (service_time == '请选择交易时间') {
+                alert('请选择交易时间')
+                
+            } else {
+                var obj = {
+                    supply_id: supply_id,
+                    amount: amount,
+                    service_time: service_time,
+                    name: name,
+                    contact_id: contact_id,
+                    address_id: address_id
+                }
+
+                console.log("429:::"+JSON.stringify(obj))
+                api.openFrame({
+                    name: 'supply_modeOfPayment',
+                    url: './supply_modeOfPayment.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        obj: obj,
+                        price: price,
+                        form: api.pageParam.transmitData.form,
+                        paramPhone: paramPhone
+                    },
+                    bounces: false
+                });
+            }
+         } else {
+            // 线下  姓名  联系方式  地址
+            if (service_time == '请选择交易时间') {
+                alert('请选择交易时间')
+            } else if (name == '未设置真实姓名') {
+                alert('请设置真实姓名')
+            } else if (contact_id == null) {
+                alert('请选择联系方式')
+            } else if (address_id == null) {
+                alert('请选择地址')
+            } else {
+                var obj = {
+                    supply_id: supply_id,
+                    amount: amount,
+                    service_time: service_time,
+                    name: name,
+                    contact_id: contact_id,
+                    address_id: address_id
+                }
+
+                console.log("429:::"+JSON.stringify(obj))
+                api.openFrame({
+                    name: 'supply_modeOfPayment',
+                    url: './supply_modeOfPayment.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    pageParam: {
+                        obj: obj,
+                        price: price,
+                        form: api.pageParam.transmitData.form,
+                        paramPhone: paramPhone
+                    },
+                    bounces: false
+                });
+            }
          }
-         console.log("429:::"+JSON.stringify(obj))
-        api.openFrame({
-            name: 'supply_modeOfPayment',
-            url: './supply_modeOfPayment.html',
-            rect: {
-                x: 0,
-                y: 0,
-                w: 'auto',
-                h: 'auto'
-            },
-            pageParam: {
-                obj: obj,
-                price: price,
-                form: api.pageParam.transmitData.form,
-                paramPhone: paramPhone
-            },
-            bounces: false
-        });
+         
+         
     }
     // 初始化页面
     function initPage() {
         var userPhone = $api.getStorage('userPhone') || '';
         var userAddress = $api.getStorage('userAddress') || '';
         var real_name = $api.getStorage('real_name') || '';
+
         console.log(JSON.stringify(userAddress))
         if (userAddress != '') {
             $api.text($api.byId('address'), userAddress[0].province +' '+userAddress[0].city +' '+userAddress[0].district +' '+userAddress[0].district);
@@ -461,7 +523,28 @@
         if (real_name != '') {
             $api.text($api.byId('real_name'), real_name);
         } else {
-            $api.text($api.byId('real_name'), '未设置真实姓名');
+            api.ajax({
+                url: apiSite + '/user_center/editBasicInfoIndex',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                       values: { 
+                           token: $api.getStorage('userToken'),
+                       }
+                }
+            }, function(ret, err) {
+                if(ret) {
+                    alert(JSON.stringify(ret))
+                    if (ret.data.info.real_name) {
+                        $api.text($api.byId('real_name'), ret.data.info.real_name);
+                    } else {
+                        $api.text($api.byId('real_name'), '未设置真实姓名');
+                    }
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
+
         }
         // 设置电话
         if (userPhone != '') {

@@ -6,7 +6,6 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-       
         .wrap {
             margin-top: .2rem;
         }
@@ -62,18 +61,24 @@
             background-position: 0 center;
         }
         .btn {
-            width: 6rem;
             height: .8rem;
-            border-radius: .1rem;
-            color: #fff;
-            line-height: .8rem;
-            text-align: center;
-            margin: 0 auto;
-            margin-top: .5rem;
-            margin-bottom: .3rem;
-            background: #08BB08;
-            font-size: .3rem;
-
+            width: 7.5rem;
+            background-color: #fff;
+            font-size: 0;
+        }
+        .btn span {
+            color: #27B24A;
+            font-size: .34rem;
+        }
+        .btn .icon {
+            margin-right: .1rem;
+            display: inline-block;
+            width: .4rem;
+            height: .8rem;
+            background: url(../../image/icon_my/icon_add.png)no-repeat;
+            -webkit-background-size: .4rem .4rem;
+            background-size: .4rem .4rem;
+            background-position: center center;
         }
     </style>
 </head>
@@ -81,9 +86,9 @@
     
     <div class="wrap resultList">
     </div>
-     <script type="text/x-dot-template" id="listT">
+    <script type="text/x-dot-template" id="listT">
         {{ for (var i = 0; i < it.length; i++) { }} 
-            <div class="dzlist" ontouchstart="selAddress(this)" data-val="{{=it[i].address_id}}"  >
+            <div class="dzlist" ontouchstart="selAddress(this)"   >
                 <div class="left fl">
                     <h3>{{=it[i].note}}</h3>
                     <p>
@@ -94,17 +99,17 @@
                     </p>
                 </div>
                 {{?i==0}}
-                <span data-address='{{=it[i].address}}' class="right icon fr"></span>
+                <span data-address='{{=it[i].address}}' data-province="{{=it[i].province}}" data-city="{{=it[i].city}}" data-district="{{=it[i].district}}" data-id="{{=it[i].address_id}}" class="right icon fr"></span>
                 {{??}}
-                <span data-address='{{=it[i].address}}' class="fr icon"></span>
+                <span data-address='{{=it[i].address}}' data-province="{{=it[i].province}}" data-city="{{=it[i].city}}" data-district="{{=it[i].district}}" data-id="{{=it[i].address_id}}" class="fr icon"></span>
                 {{?}}
            </div>
         {{ }; }}
-     </script>
-     <div class="btn" ontouchstart="callbackAddress()">
-       确认
-   </div>
-   
+    </script>
+    <div class="btn flex-def flex-cCenter flex-zCenter" ontouchstart="callbackAddress()">
+        <span class="icon"></span>
+        <span>添加新号码</span>
+    </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -113,35 +118,75 @@
     apiready = function(){
         // 请求地址列表
         getCityList();
+        api.addEventListener({
+            name: 'addCity'
+        }, function(ret, err) {
+            if (ret) {
+                requireAddress();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     };
     // 请求地址列表
     function getCityList() {
         var userAddress = $api.getStorage('userAddress');
         if (userAddress != null) {
             getData(userAddress);
-            console.log(JSON.stringify(userAddress))
-        } else {
-            api.ajax({
-                url: apiSite + '/user_center/addressList',
-                method: 'post',
-                headers: apiHeader,
-                data: {
-                    values: { 
-                        token: api.pageParam.userToken || $api.getStorage('userToken')
+            console.log (api.pageParam.id)
+            if (api.pageParam.id) {
+                $api.removeCls($api.dom('.right'), 'right');
+                for (var i = 0; i < $api.domAll('.icon').length; i++) {
+                    console.log($api.attr($api.domAll('.icon')[i], 'data-id'))
+                    if ($api.attr($api.domAll('.icon')[i], 'data-id') == api.pageParam.id) {
+                        $api.addCls($api.domAll('.icon')[i], 'right');
                     }
                 }
-            }, function(ret, err) {
-                if (ret) {
-                    getData(ret.data.list)
+            }
+            console.log(JSON.stringify(userAddress))
+            requireAddress();
+        } else {
+            requireAddress();
+        }
+        
+    }
+    function requireAddress() {
+        api.ajax({
+            url: apiSite + '/user_center/addressList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: api.pageParam.userToken || $api.getStorage('userToken')
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.data.list == $api.getStorage('userAddress')) {
+                    // 无变化
+                    
+                } else {
+                    // 重新渲染页面
+                    getData(ret.data.list);
+                    console.log (api.pageParam.id)
+                    if (api.pageParam.id) {
+                        $api.removeCls($api.dom('.right'), 'right');
+                        for (var i = 0; i < $api.domAll('.icon').length; i++) {
+                            console.log($api.attr($api.domAll('.icon')[i], 'data-id'))
+                            if ($api.attr($api.domAll('.icon')[i], 'data-id') == api.pageParam.id) {
+                                $api.addCls($api.domAll('.icon')[i], 'right');
+                            }
+                        }
+                    }
                     if (ret.data.list) {
                         $api.setStorage('userAddress', ret.data.list);
                     }
-                } else {
-                    alert(JSON.stringify(err.msg));
                 }
-            });
-        }
-        
+               
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
     }
      // {
      //     "comment_count": 0,
@@ -171,17 +216,31 @@
         // var iconAll = $api.domAll('.icon');
         $api.removeCls($api.dom('.right'), 'right');
         $api.addCls($api.dom(ele, '.icon'), 'right');
-    }
-  
-    function callbackAddress() {
-
+        var  province = $api.attr($api.dom('.right'), 'data-province');
+        var  city = $api.attr($api.dom('.right'), 'data-city');
+        var  district = $api.attr($api.dom('.right'), 'data-district');
+        var  address =  $api.attr($api.dom('.right'), 'data-address');
+        var  addressId = $api.attr($api.dom('.right'), 'data-id');
+        console.log (province+'-'+city+'-'+district+'-'+address+'-'+addressId)
         api.sendEvent({
             name: 'callbackAddress',
             extra: {
-                callbackAddress: $api.attr($api.dom('.right'), 'data-address')
+                callbackAddress: address,
+                province: province,
+                city: city,
+                district: district,
+                addressId: addressId
             }
         });
         api.closeWin();
+    }
+  
+    function callbackAddress() {
+       api.openWin({
+           name: 'winName',
+           url: '../me/me_info/me_info_zz_addAddress.html',
+           
+       });
     }
 </script>
 </html>

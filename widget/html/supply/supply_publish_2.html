@@ -160,12 +160,12 @@
     </style>
 </head>
 <body>
-    <div class="title1">
+    <!-- <div class="title1">
         <p class="results"   tapmode="hover"   onclick="viewResults(this)">
             <span></span>
            当筛选结果有变动时通知我
         </p>
-    </div>
+    </div> -->
     <div class="main resultList"></div>
     <script type="text/x-dot-template" id="listT">
             {{ for (var i = 0; i < it.length; i++) { }} 
@@ -228,7 +228,7 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 
 <script type="text/javascript">
-    var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
+    var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"],parameter;
     apiready = function(){
         moduleInit();
         api.execScript({
@@ -304,7 +304,8 @@
         }, function(ret, err) {
            
            if (ret.value.flag) {
-            $api.css($api.dom('.title1'), 'display:block');
+            // $api.css($api.dom('.title1'), 'display:block');
+            parameter = ret.value.parameter
            }
            requireData(ret.value.condition)
            selfAdaption();
@@ -349,6 +350,7 @@
     
     // 请求数据
     function requireData (data) {
+        console.log('参数:::'+JSON.stringify(data))
         var data = data || {};
         var latitude,longitude;
         if (data !== {}) {
@@ -392,7 +394,7 @@
              // 停止下拉刷新
                 api.refreshHeaderLoadDone()
             if(ret) {
-               
+                console.log('397:::'+JSON.stringify(ret.data))
                 if (supplyCache === ret.data.list) {
 
                 } else {
