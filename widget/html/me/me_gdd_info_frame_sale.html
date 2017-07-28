@@ -116,6 +116,9 @@
                 }, function(ret, err) {
                     if(ret) {
                         if (ret.code === 200) {
+                            api.sendEvent({
+                                name: 'saleMoney'
+                            });
                             setTimeout(function(){api.closeFrame();},500)
                         } else {
                             alert(ret.msg)

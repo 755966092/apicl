@@ -622,6 +622,7 @@
                }
             }
         }, function(ret, err) {
+            console.log(JSON.stringify(ret))
             // 解析图片json
             ret.data.info.image_json = eval(ret.data.info.image_json);
             var eleHtml='';
@@ -632,7 +633,7 @@
             if (eleHtml) {
                 $api.html($api.dom('.swiper-wrapper'), eleHtml);
             } else {
-                 $api.html($api.dom('.swiper-wrapper'), '<img class="default" src="../../image/icon_defaultHead.png">');
+                 $api.html($api.dom('.swiper-wrapper'), '<img class="default" src="../../image/noimage.jpg">');
             }
              if (ret.data.info.image_json.length > 1) {
                 swiperFun();

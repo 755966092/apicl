@@ -262,20 +262,47 @@
                             alert(JSON.stringify(retAJAX.msg))
                         } else {
                             if (api.pageParam.flag === 3) {
-                                wxPayFun(retAJAX);
-                                api.sendEvent({
-                                    name: 'filterOrder'
-                                });
-                            } else {
                                 if (pay_method === 'wechat') {
                                     // 微信支付
                                    wxPayFun(retAJAX);
+
                                 } else if (pay_method === 'alipay') {
                                     aliPay.payOrder({
                                       orderInfo: retAJAX.data.config
                                     },function(ret,err) {
-                                        console.log(JSON.stringify(ret));
-                                        payFruitPage(obj)
+                                       alert(JSON.stringify(ret));
+                                        payFruitPage(obj,ret)
+                                        if(ret.status) {
+                                            api.sendEvent({
+                                                name: 'saleMoney'
+                                            });
+                                            api.sendEvent({
+                                                name: 'filterOrder'
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    api.openWin({
+                                        name: 'me_gdd',
+                                        url: '../me/me_gdd.html'
+                                    });
+                                    setTimeout(function(){api.closeFrame();},1000)
+                                }
+                                
+                            } else {
+                                if (pay_method === 'wechat') {
+                                    // 微信支付
+                                   wxPayFun(retAJAX);
+
+                                } else if (pay_method === 'alipay') {
+                                    aliPay.payOrder({
+                                      orderInfo: retAJAX.data.config
+                                    },function(ret,err) {
+                                       alert(JSON.stringify(ret));
+                                        payFruitPage(obj,ret)
+                                        api.sendEvent({
+                                            name: 'saleMoney'
+                                        });
                                     });
                                 } else {
                                     api.openWin({
@@ -310,24 +337,32 @@
         }, function(ret, err) {
             if (ret.status) {
                 //支付成功
-              payFruitPage(obj)
+              payFruitPage(obj);
+              api.sendEvent({
+                    name: 'saleMoney'
+                });
+              api.sendEvent({
+                    name: 'filterOrder'
+                });
             } else {
                 alert(err.code);
             }
         })
     }
-    function payFruitPage(obj) {
-         api.openWin({
-            name: 'supply_payResult_win',
-            url: './supply_payResult_win.html',
-            pageParam: {
-                obj: obj,
-                price: api.pageParam.price,
-                form: api.pageParam.form,
-                flag: 1,
-                paramPhone: api.pageParam.paramPhone
-            }
-        });
+    function payFruitPage(obj,ret) {
+        if (ret.status) {
+             api.openWin({
+                name: 'supply_payResult_win',
+                url: './supply_payResult_win.html',
+                pageParam: {
+                    obj: obj,
+                    price: api.pageParam.price,
+                    form: api.pageParam.form,
+                    flag: 1,
+                    paramPhone: api.pageParam.paramPhone
+                }
+            });
+        }
     }
 </script>
 </html>

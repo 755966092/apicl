@@ -114,14 +114,14 @@
         /*margin-left: .45rem;*/
         position: absolute;
         left: .45rem;
-        background-color: #f00;
+        /*background-color: #f00;*/
     }
     </style>
 </head>
 <body>
         <div class="main" onclick="event.stopPropagation();">
             <h3>
-                <span class="clearBtn"></span>
+                <span class="clearBtn" onclick="api.closeFrame()" tapmode="hover">x</span>
                 输入密码
             </h3>
             <div class="pwd-box">  
@@ -215,6 +215,9 @@
         }, function(ret, err) {
             if(ret) {
                 if (ret.code == 200) {
+                    api.sendEvent({
+                        name: 'saleMoney'
+                    });
                     // 支付成功
                     // 跳转到支付成功页面
                     api.openWin({

@@ -171,14 +171,15 @@
                 background-position: .3rem center;
             }
              ul li:nth-child(5) {
-                background: #fff url(../../image/icon_supply/icon_03.png)no-repeat;
-                background-size: .34rem .29rem;
-                background-position: .3rem center;
-            }
-            ul li:nth-child(6) {
                 background: #fff url(../../image/icon_supply/icon_04.png)no-repeat;
                 background-size: .32rem .34rem;
                 background-position: .3rem center;
+            }
+            ul li:nth-child(6) {
+                background: #fff url(../../image/icon_supply/icon_03.png)no-repeat;
+                background-size: .34rem .29rem;
+                background-position: .3rem center;
+                
             }
             ul li:nth-child(7) {
                 background: #fff url(../../image/icon_supply/icon_05.png)no-repeat;
@@ -355,6 +356,7 @@
     var type = 1, province,            //string  省份
                   city,            //string  城市
                   address,         //string  地址
+                    district,
                   latitude,            //string  纬度
                   longitude,           //string  经度; 
                   supply_id,
@@ -421,6 +423,7 @@
         latitude = data.info.latitude;
         longitude = data.info.longitude;
         province = data.info.province;
+        district = data.info.district;
         city = data.info.city;
         supply_id = data.info.supply_id;
 
@@ -624,6 +627,7 @@
                         province: province,
                         city: city,
                         address: address,
+                        district: district,
                         latitude: latitude,
                         longitude: longitude,
                         reward: reward,
@@ -644,6 +648,7 @@
                         province: province,
                         city: city,
                         address: address,
+                        district: district,
                         latitude: latitude,
                         longitude: longitude,
                         reward: reward,
@@ -686,7 +691,7 @@
                         }
                     })
         } else {
-            addSupply
+            addSupply()
         }
       
             
@@ -949,6 +954,8 @@
                 province = ret.city;
                 city = ret.district;
                 address = ret.address;
+                district = ret.district;
+
                 // alert(JSON.stringify(ret))
                 // alert('地区'+ret.district + '省份'+ret.city +'地址'+ret.address )
                 $api.text($api.byId('position'), address);

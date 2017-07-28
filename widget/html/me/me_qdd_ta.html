@@ -6,6 +6,25 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style type="text/css">
+        .noOrider {
+            text-align: center;
+            font-size: .28rem;
+            color: #999;
+            line-height: .8rem;
+            display: none;
+        }
+        .loading {
+            width: .8rem;
+            height: .8rem;
+            background: url(../../image/loading_more.gif)no-repeat;
+            background-size: .8rem .8rem;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            margin: auto;
+         }
         .main_no1 {
             font-size: 0;  
             height: .7rem; 
@@ -185,6 +204,8 @@
     
 </head>
 <body>
+<p class="noOrider">暂无订单</p>
+<div class="loading"></div>
 <div class="main resultList">
 </div>
 <script type="text/x-dot-template" id="listT">
@@ -299,53 +320,58 @@
                 if(ret.code == 200) {
                     console.log('ta:'+JSON.stringify(ret))
                     // 停止下拉刷新
-                    api.refreshHeaderLoadDone()
-                    for (var i = 0; i < ret.data.list.length; i++) {
-                        ret.data.list[i].image_json = eval(ret.data.list[i].image_json)
-                        // 处理按钮
-                        ret.data.list[i].button.buttonArr=[];
-                        for(key in ret.data.list[i].button) {
-                            for(key1 in ret.data.list[i].button[key]) {
-                                if (ret.data.list[i].button[key].is_show == true){
-                                    console.log(key)
-                                    // key 即是要显示的按钮
-                                    ret.data.list[i].button[key].key = key;
-                                    ret.data.list[i].button.buttonArr.push(ret.data.list[i].button[key])
-                                    break;
-                                    // console.log(key1 +':::'+ret.data.list[i].button[key][key1])
+                    api.refreshHeaderLoadDone();
+                      $api.css($api.dom('.loading'), 'display:none'); 
+                    if (ret.data.list.length == 0) {
+                        $api.css($api.dom('.noOrider'), 'display: block');
+                    } else {
+                        for (var i = 0; i < ret.data.list.length; i++) {
+                            ret.data.list[i].image_json = eval(ret.data.list[i].image_json)
+                            // 处理按钮
+                            ret.data.list[i].button.buttonArr=[];
+                            for(key in ret.data.list[i].button) {
+                                for(key1 in ret.data.list[i].button[key]) {
+                                    if (ret.data.list[i].button[key].is_show == true){
+                                        console.log(key)
+                                        // key 即是要显示的按钮
+                                        ret.data.list[i].button[key].key = key;
+                                        ret.data.list[i].button.buttonArr.push(ret.data.list[i].button[key])
+                                        break;
+                                        // console.log(key1 +':::'+ret.data.list[i].button[key][key1])
+                                    }
+                                }
+                            } 
+                            for (var j = 0; j < ret.data.list[i].button.buttonArr.length; j++) {
+                                switch(ret.data.list[i].button.buttonArr[j].key){
+                                    case 'cancel_order': ret.data.list[i].button.buttonArr[j].key = '取消订单'; break;
+                                    case 'confirm_help': ret.data.list[i].button.buttonArr[j].key = '确认帮助'; break;
+                                    case 'refuse_help': ret.data.list[i].button.buttonArr[j].key = '拒绝帮助'; break;
+                                    case 'finish': ret.data.list[i].button.buttonArr[j].key = '完成订单'; break;
+                                    case 'delete': ret.data.list[i].button.buttonArr[j].key = '删除订单'; break;
+                                    case 'confirm_finish': ret.data.list[i].button.buttonArr[j].key = '确认完成'; break;
+                                    case 'comment': ret.data.list[i].button.buttonArr[j].key = '评价'; break;
+                                    case 'cancel': ret.data.list[i].button.buttonArr[j].key = '取消订单'; break;
+
+                                    // 卖家页面
+                                    // case 'confirm_service': ret.data.list[i].button.buttonArr[j].key = '确认接单'; break;
+                                    // case 'refuse_cancel': ret.data.list[i].button.buttonArr[j].key = '拒绝接单'; break;
+                                    // case 'extend': ret.data.list[i].button.buttonArr[j].key = '延迟服务'; break;
+                                    // case 'discount': ret.data.list[i].button.buttonArr[j].key = '优惠'; break;
+                                    // case 'confirm_cancel': ret.data.list[i].button.buttonArr[j].key = '同意取消'; break;
+                                    // case 'refuse_cancel': ret.data.list[i].button.buttonArr[j].key = '拒绝取消'; break;
+                                    // case 'refund': ret.data.list[i].button.buttonArr[j].key = '退款'; break;
                                 }
                             }
-                        } 
-                        for (var j = 0; j < ret.data.list[i].button.buttonArr.length; j++) {
-                            switch(ret.data.list[i].button.buttonArr[j].key){
-                                case 'cancel_order': ret.data.list[i].button.buttonArr[j].key = '取消订单'; break;
-                                case 'confirm_help': ret.data.list[i].button.buttonArr[j].key = '确认帮助'; break;
-                                case 'refuse_help': ret.data.list[i].button.buttonArr[j].key = '拒绝帮助'; break;
-                                case 'finish': ret.data.list[i].button.buttonArr[j].key = '完成订单'; break;
-                                case 'delete': ret.data.list[i].button.buttonArr[j].key = '删除订单'; break;
-                                case 'confirm_finish': ret.data.list[i].button.buttonArr[j].key = '确认完成'; break;
-                                case 'comment': ret.data.list[i].button.buttonArr[j].key = '评价'; break;
-                                case 'cancel': ret.data.list[i].button.buttonArr[j].key = '取消订单'; break;
-
-                                // 卖家页面
-                                // case 'confirm_service': ret.data.list[i].button.buttonArr[j].key = '确认接单'; break;
-                                // case 'refuse_cancel': ret.data.list[i].button.buttonArr[j].key = '拒绝接单'; break;
-                                // case 'extend': ret.data.list[i].button.buttonArr[j].key = '延迟服务'; break;
-                                // case 'discount': ret.data.list[i].button.buttonArr[j].key = '优惠'; break;
-                                // case 'confirm_cancel': ret.data.list[i].button.buttonArr[j].key = '同意取消'; break;
-                                // case 'refuse_cancel': ret.data.list[i].button.buttonArr[j].key = '拒绝取消'; break;
-                                // case 'refund': ret.data.list[i].button.buttonArr[j].key = '退款'; break;
-                            }
                         }
-                    }
-                    if (getData(ret.data.list)) {
-                        if (api.systemType === 'ios') {
-                            for (var i = 0; i < $api.domAll('.btn').length; i++) {
-                                $api.css($api.domAll('.btn')[i], 'line-height:.54rem');
-                            }
-                            for (var i = 0; i < $api.domAll('.label').length; i++) {
-                                
-                                 $api.css($api.domAll('.label')[i], 'line-height:.24rem');
+                        if (getData(ret.data.list)) {
+                            if (api.systemType === 'ios') {
+                                for (var i = 0; i < $api.domAll('.btn').length; i++) {
+                                    $api.css($api.domAll('.btn')[i], 'line-height:.54rem');
+                                }
+                                for (var i = 0; i < $api.domAll('.label').length; i++) {
+                                    
+                                     $api.css($api.domAll('.label')[i], 'line-height:.24rem');
+                                }
                             }
                         }
                     }
@@ -465,7 +491,77 @@
                     type: 'demand'
                 }
             });
-        }  else if (flagText === '完成订单') {
+        } else if (flagText === '拒绝取消') {
+
+           var reasonList = JSON.parse($api.attr(ele, 'data-reasonList'));
+            var datas = []
+            for(key in reasonList) {
+                datas.push({
+                    name:reasonList[key],
+                    id:key
+                })
+            }
+            var UIActionSelector = api.require('UIActionSelector');
+            UIActionSelector.open({
+                datas: datas,
+                actives: [1],
+                layout: {
+                    row: 7,
+                    col: 1,
+                    height: 30,
+                    size: 16,
+                    sizeActive: 18,
+                    rowSpacing: 5,
+                    colSpacing: 5,
+                    maskBg: 'rgba(0,0,0,0.5)',
+                    bg: '#fff',
+                    color: '#888',
+                    colorSelected: '#000'
+                },
+                animation: true,
+                cancel: {
+                    text: '取消',
+                    size: 12,
+                    w: 90,
+                    h: 35,
+                    bg: '#eee',
+                    // bgActive: '#ccc',
+                    color: '#000',
+                    // colorActive: '#fff'
+                },
+                ok: {
+                    text: '确定',
+                    size: 12,
+                    w: 90,
+                    h: 35,
+                    bg: '#eee',
+                    // bgActive: '#ccc',
+                    color: '#000',
+                    // colorActive: '#fff'
+                },
+                title: {
+                    text: '请选择退款原因',
+                    size: 20,
+                    h: 35,
+                    bg: '#eee',
+                    color: '#000'
+                },
+                fixedOn: api.frameName
+            }, function(ret, err) {
+                if (ret) {
+                    if (ret.eventType == 'ok') {
+                        obj = {
+                            token: $api.getStorage('userToken'),
+                            order_id: id,
+                            reason:  ret.level1
+                        }
+                        ajaxOperate(obj, url)
+                    }
+                } else {
+                    alert(JSON.stringify(err.msg));
+                }
+            });
+        } else if (flagText === '完成订单') {
             obj = {
                 token: token,
                 order_id: id,

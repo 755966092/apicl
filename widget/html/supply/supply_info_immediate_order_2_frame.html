@@ -234,7 +234,7 @@
     <div class="main clearfix">
             <div class="resultList"></div>
             <script type="text/x-dot-template" id="listT">
-                <div class="choose clearfix flex-def flex-zLeftRight flex-cCenter">
+                <div class="choose clearfix flex-def flex-zLeftRight flex-cCenter" data-id="{{=it.user_id}}" tapmode="hover" onclick="openUserInfoPage(this)">
                     <img src="{{=it.head_img_url}}">
                     <div class="issuerInfo flex-item flex-def flex-zLeftRight flex-cCenter flex-zBetween">
                         <div>
@@ -263,11 +263,7 @@
                                 <span class="_type">{{=it.type}}</span>
                                 <span class="title">{{=it.title}}</span>
                             </div>
-                            <p class="flex-def">{{=it.city}} - 
-                            {{?it.form == 1}}
-                                <span>线上</span>
-                            {{??}}
-                                <span>线下</span>
+                            <p class="flex-def">{{=it.city}} - {{=it.district}} - {{?it.form == 1}}<span> 线上</span>{{??}}<span> 线下</span>
                             {{?}}
                             </p>
                         </div>
@@ -341,6 +337,7 @@
     var price=0;
     apiready = function(){
         getData(api.pageParam.transmitData)
+        console.log(JSON.stringify(api.pageParam.transmitData))
         computeTatol();
         // 初始化页面
         // 判断是否是新用户
@@ -382,6 +379,16 @@
             }
         });
     };
+    // 进入个人详情页面
+    function openUserInfoPage(ele) {
+        api.openWin({
+            name: 'txl_memberInfo_Win',
+            url: '../addressList/txl_memberInfo_Win.html',
+            pageParam: {
+                userId: $api.attr(ele, 'data-id')
+            }
+        });
+    }
     // 编辑姓名
     function openEditName() {
 

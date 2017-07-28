@@ -113,7 +113,7 @@
         </div>
         <textarea placeholder="感觉怎么样,来说一说吧" maxlength="90" oninput ="changeText(this)"></textarea>
         <p class="wordCount"><span id="wordCount">0</span>/90</p>
-        <div class="imgArr resultList">
+        <div class="imgArr resultList"></div> 
             <!-- <img src="../../image/icon_supply/icon_addMedia_1.png"> -->
             <script type="text/x-dot-template" id="listT">
             {{ for (var i = 0; i < it.img.length; i++) { }} 
@@ -121,7 +121,7 @@
             {{ }; }}
                 <img  src="../../image/icon_supply/icon_addMedia_1.png" class="addImg" onclick="openImg()" tapmode="hover">
             </script>
-        </div>  
+         
     </div>
     <p class="anonymous flex-def flex-cCenter" onclick="selColor()">
         <i class="flag"></i>
@@ -133,7 +133,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    var base64Data = {img:[]};
+    var base64Data = {img:[]},imgArr=[];
     apiready = function(){
         fnInit();
         moduleInit();
@@ -143,53 +143,60 @@
     }
     // 发表评价
     function publishComment() {
-        var url;
-        if (api.pageParam.type === 'demand') {
-            // 求助订单
-
-            if (api.pageParam.flag===1) {
-                // ta 帮助者
-                url = '/demand_order/helperCommentHelp'
-            } else {
-                // 求助者
-                url = '/demand_order/hostCommentHelp'
-            }
+        
+        if (imgArr.length != base64Data.img.length) {
+            // 图片未上传完
+            publishComment();
         } else {
-            // 供求订单
-            if (api.pageParam.flag===1) {
-                // ta 买家评论
-                url = '/supply_order/buyerCommentService'
-            } else {
-                url = '/supply_order/sellerCommentService'
-            }
-        }
-        var param = {}
-        param = api.pageParam.obj;
-        param.content = $api.val($api.dom('textarea'));
-        param.point = $api.domAll('.sel').length;
-        param.is_anon = $api.hasCls($api.dom('.flag'), 'selColor') ? 1 : -1;
-        param.image_json = [];
-        api.ajax({
-            url: apiSite + url,
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                   values: param
-            }
-        }, function(ret, err) {
-            if(ret) {
-                if (ret.code === 200) {
-                    api.sendEvent({
-                        name: 'filterOrder'
-                    });
-                    setTimeout(function(){api.closeWin();},500)
+            var url;
+            if (api.pageParam.type === 'demand') {
+                // 求助订单
+
+                if (api.pageParam.flag===1) {
+                    // ta 帮助者
+                    url = '/demand_order/helperCommentHelp'
                 } else {
-                    alert(ret.msg)
+                    // 求助者
+                    url = '/demand_order/hostCommentHelp'
                 }
             } else {
-                alert(JSON.stringify(err))
+                // 供求订单
+                if (api.pageParam.flag===1) {
+                    // ta 买家评论
+                    url = '/supply_order/buyerCommentService'
+                } else {
+                    url = '/supply_order/sellerCommentService'
+                }
             }
-        })
+            var param = {}
+            param = api.pageParam.obj;
+            param.content = $api.val($api.dom('textarea'));
+            param.point = $api.domAll('.sel').length;
+            param.is_anon = $api.hasCls($api.dom('.flag'), 'selColor') ? 1 : -1;
+            param.image_json = imgArr;
+            api.ajax({
+                url: apiSite + url,
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                       values: param
+                }
+            }, function(ret, err) {
+                if(ret) {
+                    if (ret.code === 200) {
+                        api.sendEvent({
+                            name: 'filterOrder'
+                        });
+                        setTimeout(function(){api.closeWin();},500)
+                    } else {
+                        alert(ret.msg)
+                    }
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
+        }
+       
     }
     // 评分星星
     function selScore(ele) {
@@ -245,6 +252,11 @@
                         return item
                     }
                 })
+                imgArr = imgArr.filter(function(item, index) {
+                    if (index != ret.value.imgId-1) {
+                        return item
+                    }
+                })
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -256,7 +268,7 @@
             sourceType: 'album',
             encodingType: 'png',
             mediaValue: 'pic',
-            destinationType: 'base64',
+            destinationType: 'url',
             allowEdit: false,
             quality: 70,
             // targetWidth: 100,
@@ -264,10 +276,30 @@
             saveToPhotoAlbum: false
         }, function(ret, err) {
             if (ret) {
-                base64Data.img.push(ret.base64Data);
-                getData(base64Data);
+                if (ret.data) {
+                    base64Data.img.push(ret.data);
+                    getData(base64Data);
+                    pushImg(ret);
+                }
             } else {
                 alert(JSON.stringify(err.msg));
+            }
+        });
+    }
+    function pushImg(ret) {
+        var baseUrl = 'img.2017duobao.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com
+        var obj = api.require('qiniuUpfile');
+        obj.upfile({
+            file: ret.data,
+        }, function(retUpfile, err) {
+            if (retUpfile.status) {
+                if (retUpfile.oper == "complete") {
+                    //上传成功后组装访问路径，或直接访问文档
+                    imgArr.push('http://'+ baseUrl +'/'+ retUpfile.info.key);
+                } else if (retUpfile.oper == "progress") {
+                    //上传过程中获取进度数据
+                    // console.log(retUpfile.percent);
+                }
             }
         });
     }
@@ -280,7 +312,7 @@
             bounces: false,
             pageParam: {
                 data: data,
-                count:  base64Data.length,
+                count:  base64Data.img.length,
                 n: n+1
             }
         });

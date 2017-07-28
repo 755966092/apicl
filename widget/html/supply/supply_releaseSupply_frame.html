@@ -377,6 +377,7 @@
     var type = 1, province,            //string  省份
                   city,            //string  城市
                   address,         //string  地址
+                  district,
                   latitude,            //string  纬度
                   longitude,           //string  经度; 
                   supply_id,
@@ -451,6 +452,7 @@
         longitude = data.info.longitude;
         province = data.info.province;
         city = data.info.city;
+         province = data.info.province;
         supply_id = data.info.supply_id;
 
     }
@@ -650,6 +652,7 @@
                         category_id: category_id,
                         province: province,
                         city: city,
+                        district: district,
                         address: address,
                         latitude: latitude,
                         longitude: longitude,
@@ -671,6 +674,7 @@
                         sub_type: sub_type,
                         category_id: category_id,
                         province: province,
+                        district: district,
                         city: city,
                         address: address,
                         latitude: latitude,
@@ -1046,8 +1050,10 @@
             console.log(JSON.stringify(ret))
             console.log(JSON.stringify(err))
             if (ret.status) {
-                province = ret.city;
-                city = ret.district;
+                console.log(JSON.stringify(ret))
+                province = ret.province;
+                city = ret.city;
+                district = ret.district;
                 address = ret.address;
                 console.log(JSON.stringify(ret))
                 // alert('地区'+ret.district + '省份'+ret.city +'地址'+ret.address )

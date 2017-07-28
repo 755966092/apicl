@@ -289,7 +289,7 @@
                         <!-- <p class="position">上海策赢网络科技 董事长</p> -->
                     </div>
                     <div class="right flex-def flex-cCenter">
-                        <span ontouchstart="callTpl()" class="icon_tel"></span>
+                        <!-- <span ontouchstart="callTpl()" class="icon_tel"></span> -->
                         <!-- 卖家电话字段 -->
                        
                         <span ontouchstart="openChatPage(this)" class="icon_chat" data-rong_id='{{=it.buyer_info.rongcloud_user_id}}'></span>
@@ -304,15 +304,15 @@
                         <!-- <p class="position">上海策赢网络科技 董事长</p> -->
                     </div>
                     <div class="right flex-def flex-cCenter">
-                        <span ontouchstart="callTpl()" class="icon_tel"></span>
+                        <!-- <span ontouchstart="callTpl()" class="icon_tel"></span> -->
                         <!-- 卖家电话字段 -->
                         <span ontouchstart="openChatPage(this)" class="icon_chat" data-rong_id='{{=it.seller_info.rongcloud_user_id}}'></span>
                     </div>
                 </div>
                 {{?}}
             </div>
-            <div class="orderInfo">
-                <div class="top flex-def">
+            <div class="orderInfo" >
+                <div class="top flex-def" tapmode onclick="openSupplyInfoPage(this)" data-id="{{=it.supply_info.supply_id}}">
                     <img src="{{=it.supply_info.image[0]}}">
                     <div class="text flex-item">
                         <div class="title flex-def flex-zBetween">
@@ -345,15 +345,14 @@
                 </div>            
             </div>
             <div class="orderTime">
-                <p>订单编号：
-                    <span class="code" id="code">{{=it.order_info.gen_order_id}}</span>
+                <p>订单编号：<span class="code" id="code">{{=it.order_info.gen_order_id}}</span>
                     <span class="label fr" ontouchstart="copyString()"   id="copy">复制</span>
                 </p>
                 <p>下单时间：<span class="code">{{=it.order_info.create_time}}</span></p>
-                <p>取消原因：<span class="code">{{=it.order_info.reason}}</span></p>
+                <p>取消原因：<span class="code">{{=it.order_info.reason==null?'':it.order_info.reason}}</span></p>
             </div>
             <div class="remark">
-                备注：<span>{{=it.order_info.reason}}</span>
+                备注：<span>{{=it.order_info.reason==null?"":it.order_info.reason}}</span>
             </div>
             {{?it.button_info.finish.is_show || it.button_info.confirm_finish.is_show}} 
                 <div class="appraise" data-id='{{=it.order_info.order_id}}' ontouchstart="completeOrder(this)">完成</div>
@@ -376,8 +375,54 @@
     var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
     apiready = function(){
         moduleInit();
-        requestData();
+        requireData();
+        api.addEventListener({
+            name: 'saleMoney'
+        }, function(ret, err) {
+            if (ret) {
+                requireData();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+        api.setCustomRefreshHeaderInfo({
+            bgColor: '#EFEFF4',
+            image: {
+                pull: [
+                    'widget://image/loading/1.png',
+                    'widget://image/loading/2.png',
+                    'widget://image/loading/3.png',
+                    'widget://image/loading/4.png',
+                    'widget://image/loading/5.png',
+                  
+                   
+                ],
+                load: [
+                    'widget://image/loading/1.png',
+                    'widget://image/loading/2.png',
+                    'widget://image/loading/3.png',
+                    'widget://image/loading/4.png',
+                    'widget://image/loading/5.png',
+                  
+                   
+                ]
+            }
+        }, function(ret, err) {
+            //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
+            requireData();
+        });
     };
+    // 进入供应详情
+    function openSupplyInfoPage(ele) {
+
+        api.openWin({
+            name: 'winName',
+            url: '../supply/supply_info.html',
+            pageParam: {
+                supply_id: $api.attr(ele, 'data-id')
+            }
+        });
+    }
     // 聊天
     function openChatPage(ele) {
         var rong_id = $api.attr(ele, 'data-rong_id');
@@ -415,7 +460,7 @@
         });
     }
     // 获取数据
-    function requestData() {
+    function requireData() {
         api.ajax({
             url: apiSite + '/supply_order/detail',
             method: 'post',
@@ -430,6 +475,8 @@
         }, function(ret, err) {
             if(ret) {
                     console.log('获取的数据:'+JSON.stringify(ret))
+                    // 停止下拉刷新
+                    api.refreshHeaderLoadDone();
                 if (ret.code === 200){
                     if (ret.data.identity === 'buyer') {
                         flag = 1
@@ -497,7 +544,7 @@
                             case 'refund': ret.data.button_info.buttonArr[i].key = '退款'; break;
                         }
                     }
-
+                    console.log(JSON.stringify(ret.data))
                     if (getData(ret.data)) {
                         if (api.systemType === 'ios') {
                             for (var i = 0; i < $api.domAll('.btn').length; i++) {
@@ -566,7 +613,27 @@
             });
         } else if (flagText === '延迟服务'){
             ajaxOperate(param, url)
-            requestData();
+            requireData();
+        } else if (flagText === '付款'){
+           api.openFrame({
+                name: 'supply_modeOfPayment',
+                url: '../supply/supply_modeOfPayment.html',
+                bounces: false,
+                rect: {
+                    x: 0,
+                    y: 0,
+                    w: 'auto',
+                    h: 'auto'
+                },
+                pageParam: {
+                    obj: {
+                        token: $api.getStorage('userToken'),
+                        order_id: id,
+                    },
+                    price: $api.text($api.dom('.totalNumber')),
+                    flag: 1
+                }
+            });
         } else if (flagText === '取消订单'){
             var reasonList = JSON.parse($api.attr(ele, 'data-reasonList'));
             var datas = []
@@ -708,7 +775,7 @@
         }, function(ret, err) {
             if(ret) {
                 if (ret.code == 200) {
-                    requestData();
+                    requireData();
                 } else {
                     alert(ret.msg)
                 }
@@ -731,7 +798,7 @@
                 if (ret.code !== 200) {
                     alert(JSON.stringify(ret.msg))
                 } else {
-                    requestData();
+                    requireData();
                 }
             } else {
                 alert(JSON.stringify(err))
