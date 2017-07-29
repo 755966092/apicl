@@ -183,16 +183,6 @@
     function submit(ele) {
         var val = $api.attr($api.dom('.select1'), 'data-val');
 
-        // alert(val)
-        // if (val == 'alipay') {
-           
-        //     alert(val)
-        // } else if (val == 'wechat') {
-        //     alert(wechat)
-        // } else {
-        //     alert(val)
-        // }
-            // alert(val)
 
         if (val === 'balance') {
             // 余额支付
@@ -244,7 +234,6 @@
         })
     }
     function wxPayFun(retAJAX) {
-        console.log(JSON.stringify(retAJAX))
          wxPay.payOrder({
             apiKey: retAJAX.data.config.appid,
             orderId: retAJAX.data.config.prepayid,
@@ -256,9 +245,14 @@
         }, function(ret, err) {
             if (ret.status) {
                 //支付成功
-                alert(JSON.stringify(ret))
+                api.execScript({
+                    name: 'winName_hy',
+                    script: 'requestData();'
+                });
+                // 支付成功
+                api.closeWin();
             } else {
-                alert(err.code);
+                alert(ret.msg)
             }
         })
     }
@@ -266,8 +260,16 @@
         aliPay.payOrder({
           orderInfo: retAJAX.data.config
         },function(ret,err) {
-           alert(JSON.stringify(ret));
-            
+            if (ret.status) {
+                api.execScript({
+                    name: 'winName_hy',
+                    script: 'requestData();'
+                });
+                // 支付成功
+                api.closeWin();
+            } else {
+                alert(ret.msg)
+            }
         });
     }
 </script>
