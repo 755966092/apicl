@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
@@ -30,6 +30,14 @@
              -webkit-background-size: .56rem .59rem;
              background-size: .56rem .59rem;
              margin-right: .22rem;
+         }
+         .state .icon3 {
+            width: .56rem;
+            height: .597rem;
+            background: url(../../image/icon_my/icon_wwc.png)no-repeat;
+            -webkit-background-size: .56rem .59rem;
+            background-size: .56rem .59rem;
+            margin-right: .22rem;
          }
          .state h3 {
              font-size: .34rem;
@@ -160,7 +168,10 @@
             font-size: .24rem;
             color: #555;
          }.orderInfo .top .text .count{
-            font-size: .28rem;
+            margin-left: .1rem;
+            float: right;
+            text-align: right;
+            font-size: .24rem;
             color: #999;
          }.orderInfo .top .info{
             margin-top: .1rem;
@@ -233,7 +244,7 @@
             margin-top: .75rem;
         }
         .hull {
-            display: none;
+            /*display: none;*/
         }
        
     </style>
@@ -244,9 +255,10 @@
         </div>
         <script type="text/x-dot-template" id="listT">
             <div class="state flex-def flex-cCenter">
-
-                {{?it.status_info.text == '交易成功'}}
+                {{?it.status_info.icon == 'FINISH'}}
                     <div class="icon2"></div>
+                {{??it.status_info.icon == 'QUESTION'}}
+                    <div class="icon3"></div>
                 {{??}}
                     <div class="icon"></div>
                 {{?}}
@@ -324,8 +336,48 @@
                         </div>
                         <div class="info flex-def flex-zBetween">
                             <p class="infoText">{{=it.supply_info.description}}</p>
-                            <p class="count">x{{=it.order_info.amount}}</p>                   
+                            <div>
+                                  <!-- 优惠.折扣 -->
+                                {{?it.order_info.extra_money=='0.00' && it.order_info.discount_money=='0.00' && it.order_info.refund_money=='0.00'}}
+                                {{??it.order_info.extra_money=='0.00'}}
+                                <!-- 不显示补差价 -->
+                                    {{?it.order_info.discount_money=='0.00'}}
+                                    <p class="count">退款:{{=it.order_info.refund_money}}</p>   
+                                    {{??it.order_info.discount_money=='0.00'}}
+                                    <p class="count">优惠:{{=it.order_info.discount_money}}</p>   
+                                    {{??}}
+                                    <p class="count">退款:{{=it.order_info.refund_money}}</p>   
+                                    <p class="count">优惠:{{=it.order_info.discount_money}}</p>   
+                                    {{?}}
+                                    
+                                {{??it.order_info.discount_money=='0.00'}}
+                                <!-- 不现实优惠 -->
+                                    {{?it.order_info.extra_money=='0.00'}}
+                                        <p class="count">退款:{{=it.order_info.refund_money}}</p>   
+                                    {{??it.order_info.refund_money=='0.00'}}
+                                        <p class="count">补差价:{{=it.order_info.extra_money}}</p>   
+                                    {{??}}
+                                        <p class="count">补差价:{{=it.order_info.extra_money}}</p>   
+                                        <p class="count">退款:{{=it.order_info.refund_money}}</p>   
+                                    {{?}}
+                                {{??it.order_info.refund_money=='0.00'}}
+                                <!-- 不现实退款 -->
+                                    {{?it.order_info.extra_money=='0.00'}}
+                                        <p class="count">优惠:{{=it.order_info.discount_money}}</p>   
+                                    {{??it.order_info.discount_money=='0.00'}}
+                                        <p class="count">补差价:{{=it.order_info.extra_money}}</p>   
+                                    {{??}}
+                                    <p class="count">补差价:{{=it.order_info.extra_money}}</p>   
+                                    <p class="count">优惠:{{=it.order_info.discount_money}}</p>   
+                                    {{?}}
+                                {{??}}
+                                    <p class="count">退款:{{=it.order_info.refund_money}}</p>   
+                                    <p class="count">补差价:{{=it.order_info.extra_money}}</p>   
+                                    <p class="count">优惠:{{=it.order_info.discount_money}}</p>   
+                                {{?}}
+                            </div>
                         </div>
+                            <p class="count">x{{=it.order_info.amount}}</p>                   
                     </div>
                 </div>
                 <div class="bottom">
@@ -352,7 +404,7 @@
                 <p>取消原因：<span class="code">{{=it.order_info.reason==null?'':it.order_info.reason}}</span></p>
             </div>
             <div class="remark">
-                备注：<span>{{=it.order_info.reason==null?"":it.order_info.reason}}</span>
+                备注：<span>{{=it.order_info.note==null?"":it.order_info.note}}</span>
             </div>
             {{?it.button_info.finish.is_show || it.button_info.confirm_finish.is_show}} 
                 <div class="appraise" data-id='{{=it.order_info.order_id}}' ontouchstart="completeOrder(this)">完成</div>
@@ -394,8 +446,6 @@
                     'widget://image/loading/3.png',
                     'widget://image/loading/4.png',
                     'widget://image/loading/5.png',
-                  
-                   
                 ],
                 load: [
                     'widget://image/loading/1.png',
@@ -468,7 +518,6 @@
             data: {
                    values: { 
                         token: $api.getStorage('userToken'),
-                        // token: 'b678d8a0-f0d8-c67e-50b0-4d839ea864d7',
                         order_id: api.pageParam.order_id
                    }
             }

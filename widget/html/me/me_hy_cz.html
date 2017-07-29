@@ -85,21 +85,28 @@
         </div>
     </header>
     <div class="main">  
-        <div class="listContent select" data-time="san"   tapmode="hover"   onclick="select(this)">
+        <div class="listContent select" data-time="month" id="month"   tapmode="hover"   onclick="select(this)">
+            <div class="wrap">
+                <span class="jl_left fl">一个月</span>  
+                <span class="icon fr"></span>
+                <span class="jl_right fr">￥20</span>
+            </div>
+        </div>
+        <div class="listContent" data-time="san" id="san"   tapmode="hover"   onclick="select(this)">
             <div class="wrap">
                 <span class="jl_left fl">三个月</span>  
                 <span class="icon fr"></span>
                 <span class="jl_right fr">￥20</span>
             </div>
         </div>
-         <div class="listContent" data-time="ban"   tapmode="hover"   onclick="select(this)">
+         <div class="listContent" data-time="ban" id="ban"  tapmode="hover"   onclick="select(this)">
             <div class="wrap">
                 <span class="jl_left fl">半年</span>  
                 <span class="icon fr"></span>
                 <span class="jl_right fr">￥40</span>
             </div>
         </div>
-         <div class="listContent" data-time="yi"   tapmode="hover"   onclick="select(this)">
+         <div class="listContent" data-time="yi" id="yi"  tapmode="hover"   onclick="select(this)">
             <div class="wrap">
                 <span class="jl_left fl">一年</span>  
                 <span class="icon fr"></span>
@@ -114,7 +121,34 @@
 <script type="text/javascript">
     apiready = function(){
         fnInit();
+        requireData();
     };
+    function requireData() {
+        api.ajax({
+            url: apiSite + '/finance_center/purchaseVipIndex',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                // alert(JSON.stringify(ret));
+                $api.text($api.dom('#month .jl_right'), '￥'+ret.data.info[1]);
+                $api.attr($api.dom('#month'), 'data-price', ret.data.info[1]);
+                $api.text($api.dom('#san .jl_right'), '￥'+ret.data.info[3]);
+                $api.attr($api.dom('#san'), 'data-price', ret.data.info[3]);
+                $api.text($api.dom('#ban .jl_right'), '￥'+ret.data.info[6]);
+                $api.attr($api.dom('#ban'), 'data-price', ret.data.info[6]);
+                $api.text($api.dom('#yi .jl_right'), '￥'+ret.data.info[12]);
+                $api.attr($api.dom('#yi'), 'data-price', ret.data.info[12]);
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
    function select(ele) {
         var val = $api.attr(ele, 'data-time');
         var domA = document.getElementsByClassName('main')[0].children;
@@ -136,20 +170,20 @@
         }
    }
    function enter () {
-        var dom = $api.domAll('.listContent'),money,type;
+        var dom = $api.domAll('.listContent'),type,month;
+        var money = $api.attr($api.dom('.select'), 'data-price');
         for (var i = 0; i < dom.length; i++) {
             if ($api.hasCls(dom[i], 'select')) {
                 var time = $api.attr(dom[i],'data-time');
                  // 提交time
                  if (time === 'san') {
-                    money = 20;
-                    type = "三个月"
+                    type = "三个月",month = 3;
                  } else if (time === 'ban') {
-                    money = 40;
-                    type = "半年"
+                    type = "半年",month = 6;
+                 } else if (time === 'month') {
+                    type = "一个月",month = 1;
                  } else {
-                    money = 80
-                    type = "一年"
+                    type = "一年",month = 12
                  }
                  api.openFrame({
                      name: 'czZffs',
@@ -162,7 +196,8 @@
                      },
                      pageParam: {
                          money: money,
-                         type: type
+                         type: type,
+                         month: month
                      },
                      bounces: false
                  });

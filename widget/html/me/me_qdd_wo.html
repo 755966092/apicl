@@ -97,6 +97,10 @@
             background-size: .15rem .25rem;
             background-position: 0 center;
         }
+        .main_no1 span.status {
+            font-size: .24rem;
+            color: #F68F23;
+        }
 
         .main_no2  {
             box-sizing: border-box;
@@ -265,7 +269,8 @@
                         {{?}}
                         
                     </div>
-                    <i></i>
+                    <!-- <i></i> -->
+                    <span class="status">{{=it[i].status}}</span>
                 </div>
             </div>
             <div class="list"  >
@@ -370,6 +375,27 @@
                     } else {
                         for (var i = 0; i < ret.data.list.length; i++) {
                             ret.data.list[i].image_json = eval(ret.data.list[i].image_json)
+
+                            // 处理显示状态
+                            switch (ret.data.list[i].status) {
+                                case 1: ret.data.list[i].status = '代付款'; break;
+                                case 2: ret.data.list[i].status = '已取消'; break;
+                                case 3: ret.data.list[i].status = '待完成'; break;
+                                case 4: ret.data.list[i].status = '待完成'; break;
+                                case 5: ret.data.list[i].status = '已取消'; break;
+                                case 6: ret.data.list[i].status = '待完成'; break;
+                                case 7: ret.data.list[i].status = '已完成'; break;
+                                case 8: ret.data.list[i].status = '已完成'; break;
+                                case 9: ret.data.list[i].status = '待完成'; break;
+                                case 10: ret.data.list[i].status = '已取消'; break;
+                                case 11: ret.data.list[i].status = '待完成'; break;
+                                case 12: ret.data.list[i].status = '已取消'; break;
+                                case 13: ret.data.list[i].status = '已取消'; break;
+                                case 14: ret.data.list[i].status = '已取消'; break;
+                                case 15: ret.data.list[i].status = '已完成'; break;
+                                case 16: ret.data.list[i].status = '已取消'; break;
+                            }
+
                             // 处理按钮
                             ret.data.list[i].button.buttonArr=[];
                             for(key in ret.data.list[i].button) {

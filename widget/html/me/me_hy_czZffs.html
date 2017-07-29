@@ -24,8 +24,6 @@
             left: 0;
             right: 0; 
             margin: auto;
-
-
         }
        
         .zf, .title {
@@ -75,7 +73,7 @@
             background-position: 0 center;
         }
         /* 支付图标 */
-        .zfb, .wx {
+        .zfb, .wx, .banlan {
             margin-right: .2rem;
             margin-left: .8rem; 
             display: inline-block;
@@ -88,6 +86,12 @@
         }
         .wx {
              background: url(../../image/icon_member/icon_wx.png)no-repeat;
+            -webkit-background-size: .58rem .58rem;
+            background-size: .58rem .58rem;
+            background-position: 0 center;
+        } 
+        .banlan {
+             background: url(../../image/icon_member/icon_ye.png)no-repeat;
             -webkit-background-size: .58rem .58rem;
             background-size: .58rem .58rem;
             background-position: 0 center;
@@ -141,7 +145,7 @@
         </p>
         <p class="zf"   tapmode="hover"   onclick="selType(this)" >
             <!-- <input class="fl" type="radio" name="zf"> -->
-            <span class="wx fl"></span>
+            <span class="banlan fl"></span>
            <span class="text fl">余额支付</span>
             <span data-val='balance' class="icon  fr"></span>
         </p>
@@ -157,6 +161,7 @@
 <script type="text/javascript">
     var money,type;
     apiready = function(){
+        moduleInit();
         money = api.pageParam.money;
         type = api.pageParam.type;
         $api.text($api.dom('.money'), money);
@@ -177,14 +182,35 @@
    }
     function submit(ele) {
         var val = $api.attr($api.dom('.select1'), 'data-val');
-        alert(val)
-        if (val == 'alipay') {
-            alert(val)
-        } else if (val == 'wechat') {
-            alert(wechat)
-        } else {
-            alert(val)
-        }
+
+        // alert(val)
+        // if (val == 'alipay') {
+           
+        //     alert(val)
+        // } else if (val == 'wechat') {
+        //     alert(wechat)
+        // } else {
+        //     alert(val)
+        // }
+
+        api.ajax({
+            url: apiSite + '/finance_center/purchaseVip',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       month:  api.pageParam.month,
+                       pay_method: val   
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                alert(JSON.stringify(ret))
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
         
     }
 </script>
