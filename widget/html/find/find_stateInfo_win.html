@@ -21,6 +21,7 @@
             <span class="winTitle">
                 详情
             </span>
+            <span class="rightBtn" tapmode onclick="clearCollect()"></span>
         </div>
     </header>
     
@@ -30,6 +31,20 @@
 <script type="text/javascript">
     apiready = function(){
         fnInit();
+        api.addEventListener({
+            name: 'collectBtn'
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.value.is_collect) {
+                    // 已收藏
+                    $api.text($api.dom('.rightBtn'), '取消收藏');
+                } else {
+                    // 未收藏
+                }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
         api.openFrame({
             name: 'find_stateInfo_frame',
             url: './find_stateInfo_frame.html',
@@ -46,5 +61,27 @@
         });
         
     };
+    function clearCollect() {
+        api.ajax({
+            url: apiSite + '/circle_topic/cancelCollect',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       topic_id: api.pageParam.topic_id
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                 $api.text($api.dom('.rightBtn'), '');
+                api.sendEvent({
+                    name: 'clearCollect'
+                });
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
 </script>
 </html>

@@ -425,6 +425,17 @@
         moduleInit();
        
         requestData();
+        api.addEventListener({
+            name: 'clearCollect'
+        }, function(ret, err) {
+            if (ret) {
+                requestData();
+                UIChatBox.close();
+                console.log('取消收藏')
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     };
     // 关闭遮罩
     function closeSelect() {
@@ -445,6 +456,12 @@
         }, function(ret, err) {
             if(ret) {
                 // alert(JSON.stringify(ret))
+                api.sendEvent({
+                    name: 'collectBtn',
+                    extra: {
+                        is_collect: ret.data.is_collect
+                    }
+                });
                 if (!ret.data.is_collect) {
                      $api.css($api.dom('footer'), ' display: -webkit-box; display: flex;');
                 } else {
@@ -497,6 +514,7 @@
             }, function(ret, err) { 
                 if(ret) {
                     // 收藏成功
+                    
                     requestData();
                 } else {
                     alert(JSON.stringify(err.msg))

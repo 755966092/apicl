@@ -182,6 +182,9 @@
             height: 1.6rem;
             margin-bottom: .1rem;
         }
+        #is_circle {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -224,7 +227,7 @@
                 <img class="fl imgpage" tapmode onclick="openImgPage(this)" data-id = '{{=i}}' src="{{=it[i]}}">
             {{ }; }}
                 <img  src="../../image/icon_supply/icon_addMedia_1.png" class="addImg" onclick="openImg()" tapmode>
-                <img  src="../../image/icon_supply/icon_addMedia_2.png">
+                <!-- <img  src="../../image/icon_supply/icon_addMedia_2.png"> -->
         </script>
         <p class="position"></p>
     </div>
@@ -244,14 +247,18 @@
                 </span>
                 
             </li>
-            <li class="mt20"   tapmode   onclick="remindWho()">
+            <li class="mt20" id="is_circle" class="is_circle"   tapmode   onclick="remindWho()">
+                <span>选择圈子</span>
+                <span class="spanno2"></span>
+            </li>
+            <!-- <li class="mt20"   tapmode   onclick="remindWho()">
                 <span>提醒谁看</span>
                 <span class="spanno2"></span>
             </li>
             <li >
                 <span>定向投递</span>
                 <span class="spanno2"></span>
-            </li>
+            </li> -->
         </ul>        
     </div>
     <div class="btn" ontouchstart="addTopic()">发布</div>
@@ -262,6 +269,11 @@
 <script type="text/javascript">
 var base64Data = [], role = ['关系人','知情人','甲方','总包单位','分包单位','设计院','销售'],province='',city='',district='',latitude='',longitude='';
     apiready = function(){
+        console.log(api.pageParam.circle_id)
+        if(api.pageParam.circle_id == undefined) {
+            // 无圈子id
+            $api.css($api.byId('is_circle'), 'display: block');
+        }
         moduleInit();
         getPos();
         getData(base64Data);
