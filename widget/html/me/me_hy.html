@@ -6,9 +6,7 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-        body, html{
-            background-color: #EDECF3;
-        }
+     
         header.header {
             background-color: #7ABF38;
         }
@@ -112,12 +110,24 @@
             <span class="rightBtn"   tapmode="hover"   onclick="openShadow()"></span> 
         </div>
     </header>
-    <div class="main">
-        <p class="bill"   tapmode="hover"   onclick="login(this)" data-val="wdzd">我的账单</p>
+
+    <div class="main resultList">
+        <!-- <p class="bill"   tapmode="hover"   onclick="login(this)" data-val="wdzd">我的账单</p>
         <h3 id="available_assets">0.00</h3>
         <p class="remainder">余额（元）</p>
-        <p class="time">会员有效期至<span>2017</span>年<span>12</span>月<span>1</span>日</p>
+        <p class="time">会员有效期至<span>2017</span>年<span>12</span>月<span>1</span>日</p> -->
     </div>
+    <script type="text/x-dot-template" id="listT">
+        <p class="bill"   tapmode="hover"   onclick="login(this)" data-val="wdzd">我的账单</p>
+        <h3 id="available_assets">{{=it.available_assets}}</h3>
+        <p class="remainder">余额（元）</p>
+        <!-- <p class="time">会员有效期至<span>2017</span>年<span>12</span>月<span>1</span>日</p> -->
+        {{?it.is_vip === 1}}
+        <p class="time">会员有效期至{{=it.vip_end_time}}</p>
+        {{??}}
+
+        {{?}}
+    </script>
     <ul>
         <li   tapmode="hover"   onclick="login(this)" data-val="cz">
             <div class="wrap">
@@ -142,6 +152,7 @@
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
     apiready = function(){
         api.setStatusBarStyle({
@@ -175,7 +186,9 @@
             }
         }, function(ret, err) {
             if(ret) {
-                $api.text($api.byId('available_assets'), ret.data.available_assets  );
+                console.log(JSON.stringify(ret))
+                getData(ret.data);
+                // $api.text($api.byId('available_assets'), ret.data.available_assets  );
             } else {
                 alert(JSON.stringify(err.msg))
             }

@@ -192,26 +192,83 @@
         // } else {
         //     alert(val)
         // }
+            // alert(val)
 
+        if (val === 'balance') {
+            // 余额支付
+            api.openFrame({
+                name: 'me_hy_czZffs_2',
+                url: './me_hy_czZffs_2.html',
+                rect: {
+                    x: 0,
+                    y: 0,
+                    w: 'auto',
+                    h: 'auto'
+                },
+                pageParam: {
+                    month:  api.pageParam.month,
+                    pay_method: val
+                },
+                bounces: false
+            });
+        } else {
+            // 微信 支付宝支付
+            payMoney(val);
+        }
+        
+        
+    }
+    function payMoney(val) {
         api.ajax({
             url: apiSite + '/finance_center/purchaseVip',
             method: 'post',
             headers: apiHeader,
             data: {
                    values: { 
-                       token: $api.getStorage('userToken'),
-                       month:  api.pageParam.month,
-                       pay_method: val   
+                        token: $api.getStorage('userToken'),
+                        month:  api.pageParam.month,
+                        pay_method: val
                    }
             }
         }, function(ret, err) {
             if(ret) {
                 alert(JSON.stringify(ret))
+                if (val === 'wxchat') {
+                    wxPayFun(ret)
+                } else if (val === 'alipay') {
+                    alipayFun(ret)
+                }
             } else {
                 alert(JSON.stringify(err))
             }
         })
-        
+    }
+    function wxPayFun(retAJAX) {
+        console.log(JSON.stringify(retAJAX))
+         wxPay.payOrder({
+            apiKey: retAJAX.data.config.appid,
+            orderId: retAJAX.data.config.prepayid,
+            mchId: retAJAX.data.config.partnerid,
+            nonceStr: retAJAX.data.config.noncestr,
+            timeStamp: retAJAX.data.config.timestamp,
+            package: retAJAX.data.config.package,
+            sign: retAJAX.data.config.sign
+        }, function(ret, err) {
+            if (ret.status) {
+                //支付成功
+                alert(JSON.stringify(ret))
+            } else {
+                alert(err.code);
+            }
+        })
+    }
+    function alipayFun(retAJAX) {
+        aliPay.payOrder({
+          orderInfo: retAJAX.data.config
+        },function(ret,err) {
+           alert(JSON.stringify(ret));
+            
+        });
     }
 </script>
 </html>
