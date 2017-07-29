@@ -16,18 +16,75 @@
             font-size: .65rem;
             line-height: .7rem;
             font-weight: 200;
+        }
+        .searchWrap {
+            padding: .2rem .3rem;
+        }
+        .search {    
+            height: .5rem;
+            line-height: .5rem;
+            background-color: #fff;
+            /*margin: .2rem .3rem;*/
+            box-sizing: border-box;
+            /*padding: .2rem .3rem;*/
+            text-align: center;
+            font-size: 0;
+            color: #96969B;
 
         }
+        .search .searchIcon {
+            display: inline-block;
+            width: .26rem;
+            height: .5rem;
+            background: url(../../image/icon_supply/icon_search.png)no-repeat;
+            -webkit-background-size: .25rem .26rem;
+            background-size: .25rem .26rem;
+            background-position: 0 center;
+            vertical-align: top;
+        }
+        .search .searchText {
+            font-size: .24rem;
+        }
+
+        .nav {
+            height: .8rem;
+            width: 7.5rem;
+            font-size: 0;
+            background-color: #fff;
+            position: relative;
+            border-bottom: .01rem solid #d9d9d9;
+        }
+        .nav span:first-child {
+            border-right: .01rem solid #d9d9d9;
+        }
+        .nav span {
+            height: .5rem;
+            line-height: .5rem;
+            box-sizing: border-box;
+            display: inline-block;
+            width: 50%;
+            text-align: center;
+            font-size: .24rem;
+        }
+        .act{
+            color: #27B24A;
+        }
+        .indexbar {
+            background: url('../../image/tabLine.png') no-repeat center bottom;
+            background-size: 63px auto;
+            color: #27B24A;
+            width: 25%;
+            left: .85rem;
+            bottom: 0;
+            position: absolute;
+            height: 2px;
+        }
+
+
 
     </style>
 </head>
 <body>
-   
-   <!--<header>
-        <span   tapmode   onclick="api.closeWin()">返回</span>
-        <span>我在圈</span>
-         <span   tapmode   onclick="openPhoto()"></span> 
-    </header>-->
      <header  class="header">
         <div class="head">
             <span class="callback"   tapmode   onclick="api.closeWin()">
@@ -39,31 +96,130 @@
             <span class="rightBtn"   tapmode   onclick="openShadow()">+</span> 
         </div>
     </header>
-   
+
+
+    
+
+
+    <div class="searchWrap">
+        <div class="search"   tapmode   onclick="open1()">
+            <span class="searchIcon"></span>
+            <span class="searchText">搜索</span>
+        </div>
+    </div>
+    <div class="nav flex-def flex-cCenter">
+        <span class="head act" tapmode   onclick="switchApr(0)">我的</span>
+        <span class="head" tapmode   onclick="switchApr(1)">全部</span>
+        <div class="indexbar" id="indexbar"></div>
+    </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
         fnInit();
-        api.openFrame({
-            name: 'find_frame',
-            url: './find_frame.html',
-            bounces: true,
-            rect: {
-                x: 0,
-                y: headerH, 
-                w: 'auto',
-                h: 'auto'
-            }
-        });
+
+        requestData();
     }; 
     function openShadow() {
-        
-        api.sendEvent({
-            name: 'showShadow'
+        api.openFrame({
+            name: 'find_win_shadow',
+            url: './find_win_shadow.html',
+            rect: {
+                x: 0,
+                y: 0,
+                w: api.winWidth,
+                h: api.winHeight
+            },
+            pageParam: {
+                name: 'value'
+            },
+            bounces: true
         });
-        
+    }
+    function requestData() {
+        api.ajax({
+            url: apiSite + '/circle/index',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+               values: { 
+                    token: $api.getStorage('userToken')
+               }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if(ret.code === 200) {
+                    openAprGroup(ret.data);
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err.msg))
+            }
+        })
+    }
+      // 打开frame组
+    function openAprGroup (data){
+        var h = headerH + $api.offset($api.dom('.searchWrap')).h + $api.offset($api.dom('.nav')).h
+        api.openFrameGroup({
+            name: 'supply_publish',
+            rect: {
+                 x: 0, 
+                 y: h, 
+                 w: 'auto',
+                 h: 'auto'
+            },
+            scrollEnabled: true,
+            index: 0,
+            frames: [{
+                name: 'publishGroup1', 
+                url: './find_circleMy_frame.html',
+                pageParam: {
+                    data:data
+                }
+            },{
+                name: 'find_circleOther_frame', 
+                url: './find_circleOther_frame.html',
+                pageParam: {
+                    data:data
+                }
+            }]
+        }, function(ret, err) {
+            if (ret) {
+                switchAprIndex(ret.index)
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
+    }
+
+     // 显示的页面
+    function switchApr(index){
+        api.setFrameGroupIndex ({
+            name: 'supply_publish',
+            index: index,
+            scroll: true
+        });
+        switchAprIndex(index);
+    }
+
+    // 标题下面竖线
+    function sliderbarCallback(id, num) {
+        var width = parseInt(api.frameWidth / 2);
+        var move = num * width;
+        $api.css($api.byId(id),
+                "-webkit-transform:translate(" + move + "px,0);-webkit-transition: 300ms;"
+        );
+    }
+    // 切换头部的标题颜色
+    function switchAprIndex(index){
+        sliderbarCallback('indexbar',index)
+        var aprItems = $api.domAll('.head');
+        for (var i = 0; i < aprItems.length; i++) {
+            $api.removeCls(aprItems[i], 'act');
+        }
+        $api.addCls(aprItems[index+1], 'act');
     }
 </script>
 </html>
