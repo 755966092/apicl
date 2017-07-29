@@ -191,15 +191,15 @@
             <ul>
                 <li class="border-b active" id="title">
                     我在
-                    <!-- <span id="addFellow"   tapmode="hover"   onclick="addFellow()"></span> -->
+                    <!-- <span id="addFellow"   tapmode   onclick="addFellow()"></span> -->
                     <span class="rightBtn"   ontouchstart="addFellow()">+</span> 
                 </li>
                 <li class="border-b">通讯录
-                    <span class="addF" tapmode="hover" onclick="addF()"></span>
+                    <span class="addF" tapmode onclick="addF()"></span>
                 </li>
                 <li class="border-b supply">
                     供求
-                    <span class="rightBtn"   tapmode="hover"   onclick="addPublish()">+</span> 
+                    <span class="rightBtn"   tapmode   onclick="addPublish()">+</span> 
                 </li>
                 <li class="border-b">发现</li>
                 <li class="border-b">我</li>
@@ -248,12 +248,12 @@ apiready = function() {
     api.addEventListener({
         name: 'searchSupply'
     }, function(ret, err) {
-        $api.html($api.dom('.supply'), '找供求<span   tapmode="hover"   onclick="addPublish()"></span>');
+        $api.html($api.dom('.supply'), '找供求<span   tapmode   onclick="addPublish()"></span>');
     });
     api.addEventListener({
         name: 'clearSearchSupply'
     }, function(ret, err) {
-        $api.html($api.dom('.supply'), '供求<span   tapmode="hover"   onclick="addPublish()"></span>');
+        $api.html($api.dom('.supply'), '供求<span   tapmode   onclick="addPublish()"></span>');
     });
 
     getTotalCount();
@@ -363,7 +363,7 @@ function getTotalCount() {
     rong.getTotalUnreadCount(function(ret, err) {
         console.log('295:::'+JSON.stringify(ret))
         if (ret.result == 0 || ret.result) {
-            $api.html($api.byId('title'), '首页<span class="rightBtn"   tapmode="hover"   onclick="addFellow()">+</span> ');
+            $api.html($api.byId('title'), '首页<span class="rightBtn"   tapmode   onclick="addFellow()">+</span> ');
                 $api.css($api.byId('newsCount'), 'display: none');
             api.setAppIconBadge({
                 badge: ret.result
@@ -374,7 +374,7 @@ function getTotalCount() {
                 badge: ret.result
                 // 清除角标
             });
-                $api.html($api.byId('title'), '首页(' +ret.result+ ')<span class="rightBtn"   tapmode="hover"   onclick="addFellow()">+</span> ');
+                $api.html($api.byId('title'), '首页(' +ret.result+ ')<span class="rightBtn"   tapmode   onclick="addFellow()">+</span> ');
                 $api.css($api.byId('newsCount'), 'display: inline-block');
                 $api.html($api.byId('newsCount'), ret.result);
         }

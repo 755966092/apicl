@@ -181,7 +181,7 @@
     </style>
 </head>
 <body >
-    <!-- <div class="search clearfix"   tapmode="hover"   onclick="open1();event.stopPropagation();">
+    <!-- <div class="search clearfix"   tapmode   onclick="open1();event.stopPropagation();">
         <span class="searchIcon"></span>
         <span class="searchText" >搜索</span>
     </div> -->
@@ -226,7 +226,7 @@
          <div class="resultList"></div>
          <script type="text/x-dot-template" id="listT">
             {{ for (var i = 0; i < it.length; i++) { }} 
-                <div class="list"   tapmode="hover" data-id='{{=it[i].topic_id}}' onclick="openStateInfo(this)">
+                <div class="list"   tapmode data-id='{{=it[i].topic_id}}' onclick="openStateInfo(this)">
                     <div class="img">
                         <img src="{{=it[i].head_img_url}}" alt="">
                     </div>
@@ -246,20 +246,20 @@
                         {{?}}
                         <div class="stateTime" onclick="event.stopPropagation();">
                             <span class="timeInfo">{{=it[i].create_time}}</span>
-                            <span class="discussIcon" tapmode="hover" onclick='commentBtn(this)' data-id='{{=it[i].topic_id}}'></span>
+                            <span class="discussIcon" tapmode onclick='commentBtn(this)' data-id='{{=it[i].topic_id}}'></span>
                         </div>
                         {{?it[i].comment_list.length!=0}}
                         <div class="discussInfo claerfix" onclick="event.stopPropagation();">
                                 {{ for (var j = 0; j < it[i].comment_list.length; j++) { }} 
                                     {{?it[i].comment_list[j].root==2}}
-                                        <div data-usrId='{{=it[i].comment_list[j].comment_id}}' data-id='{{=it[i].topic_id}}' tapmode="hover" onclick='addComment(this);event.stopPropagation();'>
+                                        <div data-usrId='{{=it[i].comment_list[j].comment_id}}' data-id='{{=it[i].topic_id}}' tapmode onclick='addComment(this);event.stopPropagation();'>
                                             <span class="discussName">{{=it[i].comment_list[j].nickname}}</span>
                                             <span class="text1">回复{{=it[i].comment_list.length}}</span>
                                             <span class="discussName">{{=it[i].comment_list[j].comment_nickname}}：</span>
                                             <span class="discussContent">{{=it[i].comment_list[j].content}}</span>
                                         </div>
                                     {{??}}
-                                        <div data-usrId='{{=it[i].comment_list[j].comment_id}}' data-id='{{=it[i].topic_id}}' tapmode="hover" onclick='addComment(this);event.stopPropagation();'>
+                                        <div data-usrId='{{=it[i].comment_list[j].comment_id}}' data-id='{{=it[i].topic_id}}' tapmode onclick='addComment(this);event.stopPropagation();'>
                                             <span class="discussName">{{=it[i].comment_list[j].nickname}}：</span>
                                             <span class="discussContent">{{=it[i].comment_list[j].content}}</span>
                                         </div>
@@ -352,7 +352,39 @@
     function commentBtn(ele) {
         var topic_id = $api.attr(ele, 'data-id');
         // alert(id)
-        openInputBox(topic_id, 1)
+        api.ajax({
+            url: apiSite + '/circle_topic/detail',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       topic_id: topic_id
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                console.log(JSON.stringify(ret))
+                if(ret.code == 200) {
+                    if (ret.data.is_collect) {
+                        openInputBox(topic_id, 1)
+                    } else {
+                        alert('先收藏主题才可以评论')
+                        api.openWin({
+                            name: 'find_stateInfo_win',
+                            url: './find_stateInfo_win.html',
+                            bounces: false,
+                            pageParam: {topic_id : topic_id}
+                        });
+                    }
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+        
         // 圈子主题ID api.pageParam.circle_id
         // 评价内容 
         // 评论级别（1-主题，2-用户） 1
@@ -364,8 +396,41 @@
     function addComment(ele) {
         var comment_customer_id = $api.attr(ele, 'data-usrId');
         var topic_id = $api.attr(ele, 'data-id');
+        api.ajax({
+            url: apiSite + '/circle_topic/detail',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       topic_id: topic_id
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                console.log(JSON.stringify(ret))
+                if(ret.code == 200) {
+                    if (ret.data.is_collect) {
+                        openInputBox(topic_id, 2, comment_customer_id)
+                    } else {
+                        api.toast({
+                            msg: '先收藏主题才可以评论'
+                        });
+                        api.openWin({
+                            name: 'find_stateInfo_win',
+                            url: './find_stateInfo_win.html',
+                            bounces: false,
+                            pageParam: {topic_id : topic_id}
+                        });
+                    }
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
         // alert(comment_customer_id   )
-        openInputBox(topic_id, 2, comment_customer_id)
     }
     function openInputBox(topic_id, rootCount, comment_customer_id) {
         var obj = {};

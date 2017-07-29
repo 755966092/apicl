@@ -171,7 +171,7 @@
         </div>
     </div>
     <div class="searchWrap">
-        <div class="search"   tapmode="hover"   onclick="open1()">
+        <div class="search"   tapmode   onclick="open1()">
             <span class="searchIcon"></span>
             <span class="searchText" >搜索</span>
         </div>
@@ -180,7 +180,7 @@
        <div class="resultList">
             <!-- <div class="user">
                     <p class="category">我的</p>
-                        <div class="wrap" data-flag='1' data-name='{{=it.user_list[i].title}}' data-id='{{=it.user_list[i].circle_id}}' tapmode="hover"   onclick="openCircleInfo(this)">
+                        <div class="wrap" data-flag='1' data-name='{{=it.user_list[i].title}}' data-id='{{=it.user_list[i].circle_id}}' tapmode   onclick="openCircleInfo(this)">
                             <div class=" list flex-def flex-cCenter">
                                 <img src="{{=it.user_list[i].image_url}}">
                                 <div>
@@ -205,7 +205,7 @@
                <div class="user">
                     <p class="category">我的</p>
                     {{ for (var i = 0; i < it.user_list.length; i++) { }} 
-                        <div class="wrap" data-flag='1' data-name='{{=it.user_list[i].title}}' data-id='{{=it.user_list[i].circle_id}}' tapmode="hover"   onclick="openCircleInfo(this)">
+                        <div class="wrap" data-flag='1' data-name='{{=it.user_list[i].title}}' data-id='{{=it.user_list[i].circle_id}}' tapmode   onclick="openCircleInfo(this)">
                             <div class=" list flex-def flex-cCenter">
                                 <img src="{{=it.user_list[i].image_url}}">
                                 <div>
@@ -229,7 +229,7 @@
                 <div class="other">
                     <p class="category">其他</p>
                     {{ for (var i = 0; i < it.other_list.length; i++) { }} 
-                        <div class="wrap" data-flag='0' data-id='{{=it.other_list[i].circle_id}}' tapmode="hover" data-name='{{=it.other_list[i].title}}'   onclick="openCircleInfo(this)">
+                        <div class="wrap" data-flag='0' data-id='{{=it.other_list[i].circle_id}}' tapmode data-name='{{=it.other_list[i].title}}'   onclick="openCircleInfo(this)">
                             <div class=" list flex-def flex-cCenter">
                            
                                 <img src="{{=it.other_list[i].image_url}}">
@@ -274,7 +274,10 @@
    function openPublish(n) {
         if (n) {
             // 1  发布项目
-            alert(n)
+            api.openWin({
+                name: 'find_publishPro_win',
+                url: './find_publishPro_win.html'
+            });
         } else {
             // 0   创建圈子
             api.openWin({

@@ -403,16 +403,16 @@
             <span class="text" id='role' >选择角色</span>
             <span class="icon"></span>
         </div>
-        <div class="collect">
+        <div class="collect" tapmode onclick="openShadow()">
             <span class="icon"></span>
-            <span class="text" tapmode="hover" onclick="openShadow()">收藏</span>
+            <span class="text">收藏</span>
         </div>
     </footer>
     <div class="shadow dn flex-def flex-cCenter flex-zCenter">
         <div class="warring">
             <h3>您还没有选择项目角色</h3>
             <p>请先选择项目角色后才能收藏</p>
-            <div class="btn">去选角色</div>
+            <div class="btn" tapmode onclick="closeSelect()">去选角色</div>
         </div>
     </div>
 </body>
@@ -426,6 +426,10 @@
        
         requestData();
     };
+    // 关闭遮罩
+    function closeSelect() {
+        $api.addCls($api.dom('.shadow'), 'dn');
+    }
     // 获取数据
     function requestData() {
         api.ajax({

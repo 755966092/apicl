@@ -6,13 +6,9 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-        body,html{
-            background-color: #F5F5F5;
-        }
         .circleHead {
             width: 2.55rem;
             height: 2.55rem;
-           
         }
         .img {
             margin-top: .52rem;
@@ -167,6 +163,16 @@
             color: #1AAD19;
             border: .01rem solid #1AAD19;
         }
+        input.reason {
+            display: inline-block;
+            width: 7.5rem;
+            padding: 0 .36rem;
+            outline: none;
+            margin-top: .2rem;
+            height: .8rem;
+            background-color: #fff;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 <body>
@@ -174,32 +180,33 @@
         <div class="flex-def flex-cCenter flex-zCenter flex-zTopBottom">
             <div class="img">
                 <img id="image_url" class="circleHead" src="../../image/icon_defaultHead.png">
-                <span tapmode="hover" onclick="openCamera()"></span>
+                <span tapmode onclick="openCamera()"></span>
             </div>
             <input id="title" class="circleName" type="text" placeholder="圈子名称">
-            <p class="warning">选择所属类型（必选）</p>
-            <div class="classify">
-                <span tapmode="hover" onclick="selBelongType(this)" class="item selType">经济</span>
-                <span tapmode="hover" onclick="selBelongType(this)" class="item">医疗</span>
-                <span tapmode="hover" onclick="selBelongType(this)" class="item">教育</span>
-                <span tapmode="hover" onclick="selBelongType(this)" class="item">文艺</span>
-                <span tapmode="hover" onclick="selBelongType(this)" class="item">生活</span>
-                <span tapmode="hover" onclick="selBelongType(this)" class="item">娱乐</span>
-                <span tapmode="hover" onclick="selBelongType(this)" class="item">健康</span>
-                <span tapmode="hover" onclick="selBelongType(this)" class="item">时尚</span>
-            </div>
+            <!-- <p class="warning">选择所属类型（必选）</p> -->
+           <!--  <div class="classify">
+                <span tapmode onclick="selBelongType(this)" class="item selType">经济</span>
+                <span tapmode onclick="selBelongType(this)" class="item">医疗</span>
+                <span tapmode onclick="selBelongType(this)" class="item">教育</span>
+                <span tapmode onclick="selBelongType(this)" class="item">文艺</span>
+                <span tapmode onclick="selBelongType(this)" class="item">生活</span>
+                <span tapmode onclick="selBelongType(this)" class="item">娱乐</span>
+                <span tapmode onclick="selBelongType(this)" class="item">健康</span>
+                <span tapmode onclick="selBelongType(this)" class="item">时尚</span>
+            </div> -->
             <div class="addGroup">
                 <div class="addGroupType" id="type">
-                    <p onclick ="selType(this,0)" class="flex-def flex-cCenter"><span class="sel">付费</span></p>
-                    <p onclick ="selType(this,1)" class="flex-def flex-cCenter flex-zEnd"><span>免费</span></p>
+                    <p tapmode onclick ="selType(this,0)" class="flex-def flex-cCenter"><span class="sel">付费</span></p>
+                    <p tapmode onclick ="selType(this,1)" class="flex-def flex-cCenter flex-zEnd"><span>免费</span></p>
                 </div>
                 <input id="price" type="number" step="0.10" placeholder="0.00" name="">
             </div>   
             <textarea id="description" placeholder="圈子介绍"></textarea> 
-            <div class="remind">
+            <input type="text" id="reason" class="reason" placeholder="申请理由" name="">
+           <!--  <div class="remind">
                 <span>提醒谁看</span>
                 <span class="jt"></span>
-            </div>
+            </div> -->
             <div class="btn" ontouchstart="foundCircle()">确认创建</div>
         </div>
         
@@ -208,7 +215,6 @@
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
-<script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
     
     apiready = function(){
@@ -242,97 +248,111 @@
         // description     // string  简介
         // type        //    int 类型（1-免费，2-付费）
         // price       //   float   价格（付费时必传）
-        // apply_reason        //
+        // apply_reason        // 理由
         var title = $api.val($api.byId('title'));
         var description = $api.val($api.byId('description'));
         var image_url = $api.attr($api.byId('image_url'), 'src');
         var price = $api.val($api.byId('price'));
+        var apply_reason = $api.val($api.byId('reason'));
         var type = $api.text($api.dom('.sel')) == '免费' ? 1 : 2;
-        var obj = {
-            title: title,
-            description: description,
-            image_url: image_url,
-            price: price,
-            type: type
-        }
-        api.ajax({
-            url: apiSite + '/circle/add',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                   values: { 
-                        token: $api.getStorage('userToken'),
-                        title: title,
-                        description: description,
-                        image_url: image_url,
-                        price: price,
-                        type: type,
-                        apply_reason: '测试'
-                   }
-            }
-        }, function(ret, err) {
-                console.log('274:::'+JSON.stringify(ret))
-                console.log("275:::"+JSON.stringify(err))
-            if(ret) {
-                api.closeWin();
-                if (api.pageParam.flag == 'frame4Open') {
-                    api.sendEvent({
-                        name: 'frame4Open',
-                    });
-                    api.closeWin();
-                }
+        if (title == '') {
+            alert('标题不能为空')
+        } else if (description == '') {
+            alert('介绍不能为空')
+        } else if (image_url == '') {
+            alert('头像不能为空')
+        } else if (apply_reason == '') {
+            alert('申请理由不能为空')
+        } else {
+            if (type == 2 && price == '') {
+                alert('收费圈子加入圈子费用不能为空')
             } else {
-                alert(JSON.stringify(err.msg))
+                var obj = {
+                    title: title,
+                    description: description,
+                    image_url: image_url,
+                    price: price,
+                    type: type
+                }
+                api.ajax({
+                    url: apiSite + '/circle/add',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                           values: { 
+                                token: $api.getStorage('userToken'),
+                                title: title,
+                                description: description,
+                                image_url: image_url,
+                                price: price,
+                                type: type,
+                                apply_reason: apply_reason
+                           }
+                    }
+                }, function(ret, err) {
+                    if(ret) {
+                        if(ret.code == 200) {
+                            api.toast({
+                                msg: '创建成功'
+                            });
+                            api.closeWin();
+                            if (api.pageParam.flag == 'frame4Open') {
+                                api.sendEvent({
+                                    name: 'frame4Open',
+                                });
+                                api.closeWin();
+                            }
+                        } else {
+                            alert(ret.msg)
+                        }
+                    } else {
+                        alert(JSON.stringify(err.msg))
+                    }
+                })
+                console.log(JSON.stringify(obj))
             }
-        })
-        console.log(JSON.stringify(obj))
+        } 
+        
     }
 
     function openCamera() {
-         var val = $api.attr(str, 'data-str')
-        // if (val === 'camear') {
-        //      api.getPicture({
-        //             sourceType: 'camera',
-        //             mediaValue: 'pic',
-        //             encodingType: 'jpg',
-        //             destinationType: 'url',
-        //             quality: 80,
-        //             targetWidth: 750,
-        //             targetHeight: 750,
-        //             saveToPhotoAlbum: true // 拍照后是否保存照片到相册
-        //         }, function(ret, err) {
-        //             if (ret.data) {
-        //                 $api.attr($api.dom('img'),'src', ret.data);
-        //             } 
-        //         });
-        // } else {
-            api.getPicture({
-                sourceType: 'library',
-                mediaValue: 'pic',
-                encodingType: 'jpg',
-                destinationType: 'url',
-                quality: 80,
-                targetWidth: 750,
-                targetHeight: 750
-            }, function(ret, err) {
-                if (ret) {
-                    if (ret.data) {
-                        $api.attr($api.dom('img'),'src', ret.data);
-                        console.log('tx2页面：'+ret.data)
-                        // api.sendEvent({
-                        //     name: 'headUrl',
-                        //     extra: {
-                        //         headUrl: ret.data, 
-                        //     }
-                        // });
-                    } 
-                    
-                } else {
-                    alert(JSON.stringify(err.msg));
-                }
-            });
-        }
+        api.getPicture({
+            sourceType: 'library',
+            mediaValue: 'pic',
+            encodingType: 'jpg',
+            destinationType: 'url',
+            quality: 80,
+            targetWidth: 750,
+            targetHeight: 750
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.data) {
+                    $api.attr($api.dom('img'),'src', ret.data);
+                    pushImg(ret.data)
+                } 
+                
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
     }
-    
+    function pushImg(imgUrl) {
+        var baseUrl = 'img.2017duobao.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com
+        var obj = api.require('qiniuUpfile');
+        obj.upfile({
+            file: imgUrl,
+        }, function(retUpfile, err) {
+            if (retUpfile.status) {
+                if (retUpfile.oper == "complete") {
+                    //上传成功后组装访问路径，或直接访问文档
+                    $api.attr($api.dom('img'),'src', 'http://'+ baseUrl +'/'+ retUpfile.info.key);
+
+                } else if (retUpfile.oper == "progress") {
+                    //上传过程中获取进度数据
+                    // console.log(retUpfile.percent);
+                }
+            }
+        });
+    }
 </script>
 </html>
