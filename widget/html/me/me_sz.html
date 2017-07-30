@@ -65,12 +65,12 @@
             <li class="bb" ontouchstart="openPage(this)" data-val='codeSafe'>
                 <div class="text">帐号与安全</div>
             </li>
-            <li class="mt30" onclick="openImg()">
+           <!--  <li class="mt30" onclick="openImg()">
                 <div class="text">隐私</div>
-            </li>
-            <li class="bb" onclick="openImg2()">
+            </li> -->
+           <!--  <li class="bb" onclick="openImg2()">
                 <div class="text">通用</div>
-            </li>
+            </li> -->
             <li class="mt30" ontouchstart="openPage(this)" data-val="helpAndFeedback">
                 <div class="text">帮助与反馈</div>
             </li>
@@ -115,6 +115,22 @@ function openPage1() {
     });
 }
 function login() {
+    api.ajax({
+        url: apiSite + '/settings/logout',
+        method: 'post',
+        headers: apiHeader,
+        data: {
+               values: { 
+                   token: $api.getStorage('userToken'),
+               }
+        }
+    }, function(ret, err) {
+        if(ret) {
+            alert(JSON.stringify(ret))
+        } else {
+            alert(JSON.stringify(err))
+        }
+    })
     var tableArr = ['addressList','tb_remarks_contact','tb_remarks_other_contact','tb_remarks_address','tb_remarks_education','tb_remarks_work','tb_remarks_project','tb_remarks_user_info','tb_remarks_status']
     for (var i = 0;i < tableArr.length; i++) {
         db.executeSql({

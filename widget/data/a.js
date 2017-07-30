@@ -1,53 +1,661 @@
-{
+列表页 {
 	"code": 200,
 	"msg": "",
-	"time": 1501378171,
+	"time": 1501402838,
 	"data": {
-	"user_list": [{
-			"circle_id": 5,
-			"title": "测试圈子1",
-			"description": "测试圈子1",
-			"image_url": "http://img0.imgtn.bdimg.com/it/u=646551672,3473801352&fm=26&gp=0.jpg",
-			"member_count": 9,
-			"topic_count": 0
+		"list": [{
+			"order_id": 56,
+			"supply_id": 17,
+			"title": "测试优惠2",
+			"description": "测试优惠",
+			"image_json": "[\"http:\\/\\/img.2017duobao.com\\/FoE4W19tb-r6gsCSqT7XwulP6Hq0\",\"http:\\/\\/img.2017duobao.com\\/Fss_Lze328ky0RNe28VQn3ov_BSB\"]",
+			"type": 1,
+			"price": "2.00",
+			"unit": 1,
+			"status": 14,
+			"amount": 1,
+			"total_money": "2.00",
+			"nickname": "111",
+			"head_img_url": "http://ot0c8ontv.bkt.clouddn.com/Fmg6Owc-tHR4CjxOvQDdM6JVuki6",
+			"current_company": "第一学",
+			"current_position": "开发",
+			"current_degree": "",
+			"button": {
+				"pay": {
+					"is_show": false,
+					"url": "/supply_order/buyerPay"
+				},
+				"confirm_service": {
+					"is_show": false,
+					"url": "/supply_order/sellerConfirmService"
+				},
+				"refuse_service": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefuseService"
+				},
+				"extend": {
+					"is_show": false,
+					"url": "/supply_order/buyerExtendService"
+				},
+				"extra": {
+					"is_show": false,
+					"url": "/supply_order/buyerPayExtraMoney"
+				},
+				"discount": {
+					"is_show": false,
+					"url": "/supply_order/sellerDiscountService"
+				},
+				"finish": {
+					"is_show": false,
+					"url": ""
+				},
+				"confirm_finish": {
+					"is_show": false,
+					"url": "/supply_order/buyerConfirmFinishService"
+				},
+				"cancel": {
+					"is_show": false,
+					"url": ""
+				},
+				"confirm_cancel": {
+					"is_show": false,
+					"url": "/supply_order/sellerConfirmCancelService"
+				},
+				"refuse_cancel": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefuseCancelService"
+				},
+				"again": {
+					"is_show": false,
+					"url": "/supply_order/buyerCreateOrder"
+				},
+				"comment": {
+					"is_show": false,
+					"url": ""
+				},
+				"delete": {
+					"is_show": true,
+					"url": "/supply_order/buyerDeleteOrder"
+				},
+				"refund": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefundService"
+				}
+			},
+			"reason_list": []
 		}, {
-			"circle_id": 12,
-			"title": "测试微信支付",
-			"description": "支付",
-			"image_url": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1496926338823&di=28180f83aec11ebc9bdc69c88f59201b&imgtype=0&src=http%3A%2F%2Fwww.ld12.com%2Fupimg358%2Fallimg%2Fc140921%2F14112C1C3IP-4R5S.jpg",
-			"member_count": 5,
-			"topic_count": 0
+			"order_id": 55,
+			"supply_id": 17,
+			"title": "测试优惠2",
+			"description": "测试优惠",
+			"image_json": "[\"http:\\/\\/img.2017duobao.com\\/FoE4W19tb-r6gsCSqT7XwulP6Hq0\",\"http:\\/\\/img.2017duobao.com\\/Fss_Lze328ky0RNe28VQn3ov_BSB\"]",
+			"type": 1,
+			"price": "2.00",
+			"unit": 1,
+			"status": 14,
+			"amount": 1,
+			"total_money": "1.00",
+			"nickname": "111",
+			"head_img_url": "http://ot0c8ontv.bkt.clouddn.com/Fmg6Owc-tHR4CjxOvQDdM6JVuki6",
+			"current_company": "第一学",
+			"current_position": "开发",
+			"current_degree": "",
+			"button": {
+				"pay": {
+					"is_show": false,
+					"url": "/supply_order/buyerPay"
+				},
+				"confirm_service": {
+					"is_show": false,
+					"url": "/supply_order/sellerConfirmService"
+				},
+				"refuse_service": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefuseService"
+				},
+				"extend": {
+					"is_show": false,
+					"url": "/supply_order/buyerExtendService"
+				},
+				"extra": {
+					"is_show": false,
+					"url": "/supply_order/buyerPayExtraMoney"
+				},
+				"discount": {
+					"is_show": false,
+					"url": "/supply_order/sellerDiscountService"
+				},
+				"finish": {
+					"is_show": false,
+					"url": ""
+				},
+				"confirm_finish": {
+					"is_show": false,
+					"url": "/supply_order/buyerConfirmFinishService"
+				},
+				"cancel": {
+					"is_show": false,
+					"url": ""
+				},
+				"confirm_cancel": {
+					"is_show": false,
+					"url": "/supply_order/sellerConfirmCancelService"
+				},
+				"refuse_cancel": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefuseCancelService"
+				},
+				"again": {
+					"is_show": false,
+					"url": "/supply_order/buyerCreateOrder"
+				},
+				"comment": {
+					"is_show": false,
+					"url": ""
+				},
+				"delete": {
+					"is_show": true,
+					"url": "/supply_order/buyerDeleteOrder"
+				},
+				"refund": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefundService"
+				}
+			},
+			"reason_list": []
 		}, {
-			"circle_id": 13,
-			"title": "测试微信支付",
-			"description": "支付",
-			"image_url": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1496926338823&di=28180f83aec11ebc9bdc69c88f59201b&imgtype=0&src=http%3A%2F%2Fwww.ld12.com%2Fupimg358%2Fallimg%2Fc140921%2F14112C1C3IP-4R5S.jpg",
-			"member_count": 3,
-			"topic_count": 0
+			"order_id": 54,
+			"supply_id": 17,
+			"title": "测试优惠2",
+			"description": "测试优惠",
+			"image_json": "[\"http:\\/\\/img.2017duobao.com\\/FoE4W19tb-r6gsCSqT7XwulP6Hq0\",\"http:\\/\\/img.2017duobao.com\\/Fss_Lze328ky0RNe28VQn3ov_BSB\"]",
+			"type": 1,
+			"price": "2.00",
+			"unit": 1,
+			"status": 14,
+			"amount": 1,
+			"total_money": "1.00",
+			"nickname": "111",
+			"head_img_url": "http://ot0c8ontv.bkt.clouddn.com/Fmg6Owc-tHR4CjxOvQDdM6JVuki6",
+			"current_company": "第一学",
+			"current_position": "开发",
+			"current_degree": "",
+			"button": {
+				"pay": {
+					"is_show": false,
+					"url": "/supply_order/buyerPay"
+				},
+				"confirm_service": {
+					"is_show": false,
+					"url": "/supply_order/sellerConfirmService"
+				},
+				"refuse_service": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefuseService"
+				},
+				"extend": {
+					"is_show": false,
+					"url": "/supply_order/buyerExtendService"
+				},
+				"extra": {
+					"is_show": false,
+					"url": "/supply_order/buyerPayExtraMoney"
+				},
+				"discount": {
+					"is_show": false,
+					"url": "/supply_order/sellerDiscountService"
+				},
+				"finish": {
+					"is_show": false,
+					"url": ""
+				},
+				"confirm_finish": {
+					"is_show": false,
+					"url": "/supply_order/buyerConfirmFinishService"
+				},
+				"cancel": {
+					"is_show": false,
+					"url": ""
+				},
+				"confirm_cancel": {
+					"is_show": false,
+					"url": "/supply_order/sellerConfirmCancelService"
+				},
+				"refuse_cancel": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefuseCancelService"
+				},
+				"again": {
+					"is_show": false,
+					"url": "/supply_order/buyerCreateOrder"
+				},
+				"comment": {
+					"is_show": false,
+					"url": ""
+				},
+				"delete": {
+					"is_show": true,
+					"url": "/supply_order/buyerDeleteOrder"
+				},
+				"refund": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefundService"
+				}
+			},
+			"reason_list": []
 		}, {
-			"circle_id": 14,
-			"title": "测试微信支付",
+			"order_id": 53,
+			"supply_id": 16,
+			"title": "测试优惠",
 			"description": "测试",
-			"image_url": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1496926338823&di=28180f83aec11ebc9bdc69c88f59201b&imgtype=0&src=http%3A%2F%2Fwww.ld12.com%2Fupimg358%2Fallimg%2Fc140921%2F14112C1C3IP-4R5S.jpg",
-			"member_count": 3,
-			"topic_count": 0
-		}],
-		
-		"other_list": [{
-			"circle_id": 2,
-			"title": "测试圈子1",
-			"description": "测试圈子1",
-			"image_url": "http://img0.imgtn.bdimg.com/it/u=646551672,3473801352&fm=26&gp=0.jpg",
-			"member_count": 5,
-			"topic_count": 0
+			"image_json": "[\"http:\\/\\/img.2017duobao.com\\/FlQnJjmU6RijJ26TqitL6EyTnYc5\",\"http:\\/\\/img.2017duobao.com\\/FlLDxsOObTa71kkMA-J_sP6Sf6yq\"]",
+			"type": 1,
+			"price": "1.00",
+			"unit": 1,
+			"status": 14,
+			"amount": 1,
+			"total_money": "1.00",
+			"nickname": "111",
+			"head_img_url": "http://ot0c8ontv.bkt.clouddn.com/Fmg6Owc-tHR4CjxOvQDdM6JVuki6",
+			"current_company": "第一学",
+			"current_position": "开发",
+			"current_degree": "",
+			"button": {
+				"pay": {
+					"is_show": false,
+					"url": "/supply_order/buyerPay"
+				},
+				"confirm_service": {
+					"is_show": false,
+					"url": "/supply_order/sellerConfirmService"
+				},
+				"refuse_service": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefuseService"
+				},
+				"extend": {
+					"is_show": false,
+					"url": "/supply_order/buyerExtendService"
+				},
+				"extra": {
+					"is_show": false,
+					"url": "/supply_order/buyerPayExtraMoney"
+				},
+				"discount": {
+					"is_show": false,
+					"url": "/supply_order/sellerDiscountService"
+				},
+				"finish": {
+					"is_show": false,
+					"url": ""
+				},
+				"confirm_finish": {
+					"is_show": false,
+					"url": "/supply_order/buyerConfirmFinishService"
+				},
+				"cancel": {
+					"is_show": false,
+					"url": ""
+				},
+				"confirm_cancel": {
+					"is_show": false,
+					"url": "/supply_order/sellerConfirmCancelService"
+				},
+				"refuse_cancel": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefuseCancelService"
+				},
+				"again": {
+					"is_show": false,
+					"url": "/supply_order/buyerCreateOrder"
+				},
+				"comment": {
+					"is_show": false,
+					"url": ""
+				},
+				"delete": {
+					"is_show": true,
+					"url": "/supply_order/buyerDeleteOrder"
+				},
+				"refund": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefundService"
+				}
+			},
+			"reason_list": []
 		}, {
-			"circle_id": 3,
-			"title": "测试圈子2",
-			"description": "测试圈子2",
-			"image_url": "http://img5.duitang.com/uploads/item/201508/31/20150831220841_escLY.thumb.224_0.jpeg",
-			"member_count": 1,
-			"topic_count": 0
+			"order_id": 52,
+			"supply_id": 16,
+			"title": "测试优惠",
+			"description": "测试",
+			"image_json": "[\"http:\\/\\/img.2017duobao.com\\/FlQnJjmU6RijJ26TqitL6EyTnYc5\",\"http:\\/\\/img.2017duobao.com\\/FlLDxsOObTa71kkMA-J_sP6Sf6yq\"]",
+			"type": 1,
+			"price": "1.00",
+			"unit": 1,
+			"status": 13,
+			"amount": 1,
+			"total_money": "1.00",
+			"nickname": "111",
+			"head_img_url": "http://ot0c8ontv.bkt.clouddn.com/Fmg6Owc-tHR4CjxOvQDdM6JVuki6",
+			"current_company": "第一学",
+			"current_position": "开发",
+			"current_degree": "",
+			"button": {
+				"pay": {
+					"is_show": false,
+					"url": "/supply_order/buyerPay"
+				},
+				"confirm_service": {
+					"is_show": false,
+					"url": "/supply_order/sellerConfirmService"
+				},
+				"refuse_service": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefuseService"
+				},
+				"extend": {
+					"is_show": false,
+					"url": "/supply_order/buyerExtendService"
+				},
+				"extra": {
+					"is_show": false,
+					"url": "/supply_order/buyerPayExtraMoney"
+				},
+				"discount": {
+					"is_show": false,
+					"url": "/supply_order/sellerDiscountService"
+				},
+				"finish": {
+					"is_show": false,
+					"url": ""
+				},
+				"confirm_finish": {
+					"is_show": false,
+					"url": "/supply_order/buyerConfirmFinishService"
+				},
+				"cancel": {
+					"is_show": false,
+					"url": ""
+				},
+				"confirm_cancel": {
+					"is_show": false,
+					"url": "/supply_order/sellerConfirmCancelService"
+				},
+				"refuse_cancel": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefuseCancelService"
+				},
+				"again": {
+					"is_show": false,
+					"url": "/supply_order/buyerCreateOrder"
+				},
+				"comment": {
+					"is_show": false,
+					"url": ""
+				},
+				"delete": {
+					"is_show": true,
+					"url": "/supply_order/buyerDeleteOrder"
+				},
+				"refund": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefundService"
+				}
+			},
+			"reason_list": []
+		}, {
+			"order_id": 51,
+			"supply_id": 15,
+			"title": "测试",
+			"description": "测试",
+			"image_json": "[]",
+			"type": 1,
+			"price": "0.01",
+			"unit": 1,
+			"status": 4,
+			"amount": 1,
+			"total_money": "0.01",
+			"nickname": "111",
+			"head_img_url": "http://ot0c8ontv.bkt.clouddn.com/Fmg6Owc-tHR4CjxOvQDdM6JVuki6",
+			"current_company": "第一学",
+			"current_position": "开发",
+			"current_degree": "",
+			"button": {
+				"pay": {
+					"is_show": false,
+					"url": "/supply_order/buyerPay"
+				},
+				"confirm_service": {
+					"is_show": false,
+					"url": "/supply_order/sellerConfirmService"
+				},
+				"refuse_service": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefuseService"
+				},
+				"extend": {
+					"is_show": false,
+					"url": "/supply_order/buyerExtendService"
+				},
+				"extra": {
+					"is_show": false,
+					"url": "/supply_order/buyerPayExtraMoney"
+				},
+				"discount": {
+					"is_show": false,
+					"url": "/supply_order/sellerDiscountService"
+				},
+				"finish": {
+					"is_show": true,
+					"url": "/supply_order/buyerFinishService"
+				},
+				"confirm_finish": {
+					"is_show": false,
+					"url": "/supply_order/buyerConfirmFinishService"
+				},
+				"cancel": {
+					"is_show": true,
+					"url": "/supply_order/buyerCancelService"
+				},
+				"confirm_cancel": {
+					"is_show": false,
+					"url": "/supply_order/sellerConfirmCancelService"
+				},
+				"refuse_cancel": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefuseCancelService"
+				},
+				"again": {
+					"is_show": false,
+					"url": "/supply_order/buyerCreateOrder"
+				},
+				"comment": {
+					"is_show": false,
+					"url": ""
+				},
+				"delete": {
+					"is_show": false,
+					"url": ""
+				},
+				"refund": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefundService"
+				}
+			},
+			"reason_list": {
+				"1": "服务者有事无法完成服务",
+				"2": "突然不想购买了",
+				"3": "有更好的服务"
+			}
+		}, {
+			"order_id": 50,
+			"supply_id": 15,
+			"title": "测试",
+			"description": "测试",
+			"image_json": "[]",
+			"type": 1,
+			"price": "0.01",
+			"unit": 1,
+			"status": 7,
+			"amount": 1,
+			"total_money": "0.01",
+			"nickname": "111",
+			"head_img_url": "http://ot0c8ontv.bkt.clouddn.com/Fmg6Owc-tHR4CjxOvQDdM6JVuki6",
+			"current_company": "第一学",
+			"current_position": "开发",
+			"current_degree": "",
+			"button": {
+				"pay": {
+					"is_show": false,
+					"url": "/supply_order/buyerPay"
+				},
+				"confirm_service": {
+					"is_show": false,
+					"url": "/supply_order/sellerConfirmService"
+				},
+				"refuse_service": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefuseService"
+				},
+				"extend": {
+					"is_show": false,
+					"url": "/supply_order/buyerExtendService"
+				},
+				"extra": {
+					"is_show": false,
+					"url": "/supply_order/buyerPayExtraMoney"
+				},
+				"discount": {
+					"is_show": false,
+					"url": "/supply_order/sellerDiscountService"
+				},
+				"finish": {
+					"is_show": false,
+					"url": ""
+				},
+				"confirm_finish": {
+					"is_show": false,
+					"url": "/supply_order/buyerConfirmFinishService"
+				},
+				"cancel": {
+					"is_show": false,
+					"url": ""
+				},
+				"confirm_cancel": {
+					"is_show": false,
+					"url": "/supply_order/sellerConfirmCancelService"
+				},
+				"refuse_cancel": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefuseCancelService"
+				},
+				"again": {
+					"is_show": true,
+					"url": "/supply_order/buyerCreateOrder"
+				},
+				"comment": {
+					"is_show": true,
+					"url": "/supply_order/buyerCommentService"
+				},
+				"delete": {
+					"is_show": true,
+					"url": "/supply_order/buyerDeleteOrder"
+				},
+				"refund": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefundService"
+				}
+			},
+			"reason_list": {
+				"1": "服务者有事无法完成服务",
+				"2": "突然不想购买了",
+				"3": "有更好的服务"
+			}
+		}, {
+			"order_id": 49,
+			"supply_id": 15,
+			"title": "测试",
+			"description": "测试",
+			"image_json": "[]",
+			"type": 1,
+			"price": "0.01",
+			"unit": 1,
+			"status": 8,
+			"amount": 1,
+			"total_money": "0.01",
+			"nickname": "111",
+			"head_img_url": "http://ot0c8ontv.bkt.clouddn.com/Fmg6Owc-tHR4CjxOvQDdM6JVuki6",
+			"current_company": "第一学",
+			"current_position": "开发",
+			"current_degree": "",
+			"button": {
+				"pay": {
+					"is_show": false,
+					"url": "/supply_order/buyerPay"
+				},
+				"confirm_service": {
+					"is_show": false,
+					"url": "/supply_order/sellerConfirmService"
+				},
+				"refuse_service": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefuseService"
+				},
+				"extend": {
+					"is_show": false,
+					"url": "/supply_order/buyerExtendService"
+				},
+				"extra": {
+					"is_show": false,
+					"url": "/supply_order/buyerPayExtraMoney"
+				},
+				"discount": {
+					"is_show": false,
+					"url": "/supply_order/sellerDiscountService"
+				},
+				"finish": {
+					"is_show": false,
+					"url": ""
+				},
+				"confirm_finish": {
+					"is_show": false,
+					"url": "/supply_order/buyerConfirmFinishService"
+				},
+				"cancel": {
+					"is_show": false,
+					"url": ""
+				},
+				"confirm_cancel": {
+					"is_show": false,
+					"url": "/supply_order/sellerConfirmCancelService"
+				},
+				"refuse_cancel": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefuseCancelService"
+				},
+				"again": {
+					"is_show": true,
+					"url": "/supply_order/buyerCreateOrder"
+				},
+				"comment": {
+					"is_show": true,
+					"url": "/supply_order/buyerCommentService"
+				},
+				"delete": {
+					"is_show": true,
+					"url": "/supply_order/buyerDeleteOrder"
+				},
+				"refund": {
+					"is_show": false,
+					"url": "/supply_order/sellerRefundService"
+				}
+			},
+			"reason_list": {
+				"1": "服务者有事无法完成服务",
+				"2": "突然不想购买了",
+				"3": "有更好的服务"
+			}
 		}]
 	}
 }
-at find_publishpro_frame_selCircle.html: 32
+at me_gdd_ta.html: 328

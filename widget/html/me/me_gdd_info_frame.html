@@ -293,7 +293,7 @@
             
              <div class="userInfo flex-def flex-cCenter">
                 {{?it.buyer_info}}
-                <img id="userHead_img" src="{{=it.buyer_info.head_img_url}}">
+                <img id="userHead_img" data-id="{{=it.buyer_info.user_id}}" tapmode onclick="openUserInfoPage(this)" src="{{=it.buyer_info.head_img_url}}">
                 <div class="text flex-def flex-zBetween flex-item">
                     <div class="left">
                         <p class="userName">{{=it.buyer_info.nickname}}</p>
@@ -308,7 +308,7 @@
                     </div>
                 </div>
                 {{??}}
-                <img src="{{=it.seller_info.head_img_url}}">
+                <img src="{{=it.seller_info.head_img_url}}" data-id="{{=it.seller_info.user_id}}" tapmode onclick="openUserInfoPage(this)">
                 <div class="text flex-def flex-zBetween flex-item">
                     <div class="left">
                         <p class="userName">{{=it.seller_info.nickname}}</p>
@@ -462,6 +462,16 @@
             requireData();
         });
     };
+    // 进入用户详情
+    function openUserInfoPage(ele) {
+        api.openWin({
+            name: 'txl_memberInfo_Win',
+            url: '../addressList/txl_memberInfo_Win.html',
+            pageParam: {
+                userId: $api.attr(ele, 'data-id')
+            }
+        });
+    }
     // 进入供应详情
     function openSupplyInfoPage(ele) {
 

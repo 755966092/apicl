@@ -377,7 +377,7 @@
     </div>-->
     <ul class="mt20">
         <li tapmode onclick="openInfo(this)" data-val="friendContact">
-            <span id="relationship_level">熟识好友，点击查看您与他的交集</span>
+            <span id="relationship_level"></span>
             <span class="icon"></span>
         </li>
         <li class="mt20" tapmode onclick="openInfo(this)" data-val="mainPhone">
@@ -574,6 +574,15 @@
     }
     // 获取会员信息
     function requireData(flag) {
+        var current_company = $api.byId('current_company');
+        var current_position = $api.byId('current_position');
+        var current_degree = $api.byId('current_degree');
+        var phone = $api.byId('phone');
+        var hometown = $api.byId('hometown');
+        var birthday = $api.byId('birthday');
+        var nickname = $api.byId('nickname');
+        var sex = $api.byId('sex');
+        var head_img_url = $api.byId('head_img_url');
         api.ajax({
             url: apiSite + '/user/detail',
             method: 'post',
@@ -591,6 +600,7 @@
                     targetRongId = ret.data.info.rongcloud_user_id;
                     if (flag) {
                         // 无本地信息, 网络获取
+                        relationship(ret.data.relationship_level,ret.data.info.status)
                         console.log('594:::::'+JSON.stringify(ret.data))
                         paramRealName = ret.data.info.real_name;
                         $api.text(nickname, ret.data.info.nickname);
@@ -598,16 +608,19 @@
                         if (ret.data.info.sex == 2) {
                             $api.addCls(sex, 'sexIcon2');
                         }
-                        $api.text(current_position, ret.data.status[0].position || '');
-                        $api.text(current_company, ret.data.status[0].name || '');
-                        $api.text(current_degree, ret.data.status[0].degree || '');
+                        $api.text(current_position, ret.data.info.current_position || '');
+                        $api.text(current_company, ret.data.info.current_company || '');
+                        $api.text(current_degree, ret.data.info.current_degree || '');
                         $api.text(hometown, ret.data.info.hometown || '');
+                        if(ret.data.contact){
+                            $api.text(phone, ret.data.contact.phone || '');
+                            $api.attr(phone, 'data-id', ret.data.contact.contact_id || '');
+                        }
                         $api.text(birthday, ret.data.info.birthday == '0000-00-00' ? '' : ret.data.info.birthday);
-                        relationship(ret.data.relationship_level)
                     } else {
                         paramRealName = ret.data.info.real_name;
                         // 本地数据库有信息, 只获取关系
-                        relationship(ret.data.relationship_level)
+                        relationship(ret.data.relationship_level,ret.data.info.status)
                     }
                 }
             } else {
@@ -792,31 +805,7 @@
         }, function (ret, err) {
             if (ret.status) {
                 console.log('663:::::::::::' + JSON.stringify(ret));
-                
                if (ret.data.length != 0) {
-                    // 当前状态
-                    // if (ret.data[0].current_status) {
-                    //     getData($api.strToJson(ret.data[0].current_status))
-                    // }
-                    // // 职位
-                    // if (ret.data[0].remark_current_position) {
-                    //     $api.text(current_position, ret.data[0].remark_current_position);
-
-                    // } else {
-                    //     $api.text(current_position, ret.data[0].current_position);
-                    // }
-                    // // 公司
-                    // if (ret.data[0].remark_current_company) {
-                    //     $api.text(current_company, ret.data[0].remark_current_company);
-                    // } else {
-                    //     $api.text(current_company, ret.data[0].current_company);
-                    // }
-                    // // 学位
-                    // if (ret.data[0].remark_current_degree) {
-                    //     $api.text(current_degree, ret.data[0].remark_current_degree);
-                    // } else {
-                    //     $api.text(current_degree, ret.data[0].current_degree);
-                    // }
                     // 电话
                     if (ret.data[0].remark_current_contact) {
                         $api.text(phone, ret.data[0].remark_current_contact);
@@ -887,7 +876,8 @@
             }
         });
     }
-    function relationship(relationship_levelType) {
+    function relationship(relationship_levelType,status) {
+        console.log(relationship_levelType)
         var btn = $api.byId('btn');
         switch (relationship_levelType) {
             case 1:
@@ -895,33 +885,42 @@
                 $api.css(btn, 'display: none');
                 break;
             case 2:
-                $api.text(relationship_level, '一度人脉双向，点击查看您与他的交集');
+                $api.text(relationship_level, '熟识好友，点击查看您与他的交集');
                 break;
             case 3:
-                $api.text(relationship_level, '一度人脉单向，点击查看您与他的交集');
+                $api.text(relationship_level, '相识好友' + compareRelation(status) + '，点击查看您与他的交集');
+                // 1 相识
+                // -1 一度人脉未加入
                 break;
             case 4:
-                $api.text(relationship_level, '平台好友，点击查看您与他的交集');
+                $api.text(relationship_level, '初始好友，点击查看您与他的交集');
                 break;
             case 5:
-                $api.text(relationship_level, '二度人脉，点击查看您与他的交集');
+                $api.text(relationship_level, '二度人脉' + compareRelation(status) + '，点击查看您与他的交集');
                 break;
             case 6:
-                $api.text(relationship_level, '三度人脉，点击查看您与他的交集');
+                $api.text(relationship_level, '三度人脉' + compareRelation(status) + '，点击查看您与他的交集');
                 break;
             case 7:
-                $api.text(relationship_level, '四度人脉，点击查看您与他的交集');
+                $api.text(relationship_level, '四度人脉' + compareRelation(status) + '，点击查看您与他的交集');
                 break;
             case 8:
-                $api.text(relationship_level, '五度人脉，点击查看您与他的交集');
+                $api.text(relationship_level, '五度人脉' + compareRelation(status) + '，点击查看您与他的交集');
                 break;
             case 9:
-                $api.text(relationship_level, '六度人脉，点击查看您与他的交集');
+                $api.text(relationship_level, '六度人脉' + compareRelation(status) + '，点击查看您与他的交集');
                 break;
             case 10:
                 $api.text(relationship_level, '无任何关系');
                 $api.text(btn, '加为好友');
                 break;
+        }
+    }
+    function compareRelation(status) {
+        if(status == 1) {
+            return ''
+        } else {
+            return '未加入'
         }
     }
     function addFriends(ele) {

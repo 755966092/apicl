@@ -291,7 +291,7 @@
             
              <div class="userInfo flex-def flex-cCenter">
                 {{?it.host_info}}
-                <img src="{{=it.host_info.head_img_url}}">
+                <img src="{{=it.host_info.head_img_url}}" data-id="{{=it.host_info.user_id}}" tapmode onclick="openUserInfoPage(this)">
                 <div class="text flex-def flex-zBetween flex-item">
                     <div class="left">
                         <p class="userName">{{=it.host_info.nickname}}</p>
@@ -309,7 +309,7 @@
                     </div>
                 </div>
                 {{??}}
-                <img src="{{=it.helper_info.head_img_url}}">
+                <img src="{{=it.helper_info.head_img_url}}" data-id="{{=it.helper_info.user_id}}" tapmode onclick="openUserInfoPage(this)">
                 <div class="text flex-def flex-zBetween flex-item">
                     <div class="left">
                         <p class="userName">{{=it.helper_info.nickname}}</p>
@@ -401,6 +401,16 @@
             requireData();
         });
     };
+     // 进入用户详情
+    function openUserInfoPage(ele) {
+        api.openWin({
+            name: 'txl_memberInfo_Win',
+            url: '../addressList/txl_memberInfo_Win.html',
+            pageParam: {
+                userId: $api.attr(ele, 'data-id')
+            }
+        });
+    }
     // 评价
     function commentSupply() {
         var obj = {

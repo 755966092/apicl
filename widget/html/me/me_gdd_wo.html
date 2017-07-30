@@ -336,6 +336,7 @@
             name: 'filterOrder'
         }, function(ret, err) {
             if (ret) {
+                console.log(JSON.stringify(ret.value))
                 requireData(ret.value.type, ret.value.status, ret.value.sub_type);
             } else {
                 alert(JSON.stringify(err.msg));
@@ -345,6 +346,7 @@
             name: 'saleMoney'
         }, function(ret, err) {
             if (ret) {
+
                 requireData();
             } else {
                 alert(JSON.stringify(err));
@@ -381,7 +383,9 @@
                     $api.css($api.dom('.loading'), 'display:none'); 
                     if (ret.data.list.length == 0) {
                         $api.css($api.dom('.noOrider'), 'display: block');
+                        getData(ret.data.list)
                     } else {
+                        $api.css($api.dom('.noOrider'), 'display: none');
                         for (var i = 0; i < ret.data.list.length; i++) {
                             if ( ret.data.list[i].unit > 0) {
                                 ret.data.list[i].unit = _dataSource[ ret.data.list[i].unit-1]

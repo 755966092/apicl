@@ -58,6 +58,18 @@
             margin-top: .5rem;
             display: none;
         }
+        .loading {
+            width: .8rem;
+            height: .8rem;
+            background: url(../../image/loading_more.gif)no-repeat;
+            background-size: .8rem .8rem;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            margin: auto;
+         }
    </style>
 </head>
 <body>
@@ -66,6 +78,7 @@
         <span class="searchIcon"></span>
         <span class="sxIcon"  tapmode onclick="openSlideBar()"></span>
     </div>
+    <div class="loading" ></div>
     <p data-type='1' class="no1">暂无初识好友</p>
     <p data-type='2' class="no2">暂无熟识好友</p>
     <p data-type='3' class="no3">暂无尚未加入好友</p>
@@ -80,9 +93,14 @@
     apiready = function(){
         moduleInit();
         // requestData()
-        query();
+        // query();
         // 监听筛选条件
         addFilter();
+        if(api.pageParam.flag) {
+            query(parseInt(api.pageParam.flag));
+        } else {
+            query()
+        }
     };
     // 获取焦点事件
     function getFocus() {
@@ -202,7 +220,8 @@
         }, function(ret, err) {
             if (ret.status) {
                 dakai(paixv(ret.data))
-                console.log('查询数据库'+JSON.stringify(ret))
+                // console.log(condition)
+                // console.log('查询数据库'+JSON.stringify(ret))
                 for (var i = 0; i < $api.domAll('p').length; i++) {
                     $api.css($api.domAll('p')[i], 'display:none');
                 }
@@ -348,6 +367,7 @@
                 fixedOn: api.frameName
             }, function(ret, err) {
                 if (ret) {
+                    $api.css($api.dom('.loading'), 'display:none');
                     // if (ret){
                     //     alert(JSON.stringify(ret))
                     // }

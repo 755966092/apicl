@@ -289,13 +289,23 @@ apiready = function() {
              var title = ret.title;
              var content = ret.content;
              var extra = ret.extra;
-             console.log('292'+JSON.stringify(ret))
+             // alert('292'+JSON.stringify(ret))
              if (ret.extra.type == 1) {
                 api.openWin({
-                    name: 'winName',
+                    name: 'txl_addFellow_friendRequest_win',
                     url: './addressList/txl_addFellow_friendRequest_win.html',
                 });
+             }else if (ret.extra.type === 2) {
+                // 供应订单 订单id reference_id
+                api.openWin({
+                    name: 'winName',
+                    url: './me/me_gdd.html',
+                    pageParam: {
+                        order_id: ret.extra.reference_id
+                    }
+                });
              }
+
         }
     );
     // 监听安卓
