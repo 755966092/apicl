@@ -263,7 +263,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-var base64Data = [], role = ['关系人','知情人','甲方','总包单位','分包单位','设计院','销售'],province='',city='',district='',latitude='',longitude='';
+var base64Data = [], role = ['关系人','知情人','甲方','总包单位','分包单位','设计院','销售'],province='',city='',district='',latitude='',longitude='',imgArr=[];
     apiready = function(){
         console.log(api.pageParam.circle_id)
         if(api.pageParam.circle_id == undefined) {
@@ -325,7 +325,8 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
             start_time: start_time,          //string  开始时间
             end_time: end_time,            //string  结束时间
             latitude: latitude,            //string  纬度
-            longitude: longitude,    
+            longitude: longitude,   
+            image_json: base64Data 
         }
         console.log(JSON.stringify(obj))
         api.ajax({
@@ -346,8 +347,7 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
                         end_time: end_time,            //string  结束时间
                         latitude: latitude,            //string  纬度
                         longitude: longitude,           //string  经度
-                        // image_json: ,      //
-                       
+                        image_json: base64Data,      //
                    }
             }
         }, function(ret, err) {
@@ -453,7 +453,10 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
         });
     }
     // 打开时间选择器
-    function openTime(ele) {                                                                                                                                     for (var i = 0; i < $api.domAll('input').length; i++) {             $api.domAll('input')[i].blur()         }
+    function openTime(ele) {                                                                                                                                
+        for (var i = 0; i < $api.domAll('input').length; i++) {            
+          $api.domAll('input')[i].blur()         
+        }
         var data = $api.attr(ele, 'data-val');
         var text;
         if (data == 'start') {
@@ -479,11 +482,32 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
             title: text
         }, function(ret, err) {
             if (ret) {
-                alert(JSON.stringify(ret))
                 if (ret.minute < 10) {
                     ret.minute = '0' + ret.minute
                 }
-                $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day+' '+ret.hour+':'+ret.minute);
+                var dateYear = new Date().getFullYear(),
+                        dateMonth = new Date().getMonth()+1,
+                        dateDay = new Date().getDate();
+                 if (data == 'start') {
+                        var endTime = $api.text($api.byId('endTime')).split('-')
+                        if (ret.year > endTime[0] || ((ret.year == endTime[0]) && (ret.month > endTime[1])) || (((ret.year == endTime[0]) && (ret.month == endTime[1])) && ret.day > endTime[2])) {
+                        api.toast({
+                            msg: '结束时间不能早于开始时间'
+                        });
+                    } else {
+                        $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day);
+                    }
+                } else {
+                    //结束时间
+                    var startTime = $api.text($api.byId('startTime')).split('-')
+                    if (ret.year < startTime[0] || ((ret.year == startTime[0]) && (ret.month < startTime[1])) || (((ret.year == startTime[0]) && (ret.month == startTime[1])) && ret.day < startTime[2])) {
+                        api.toast({
+                            msg: '结束时间不能早于开始时间'
+                        });
+                    } else {
+                        $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day);
+                    }
+                }
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -551,6 +575,11 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
                     if (index != ret.value.imgId-1) {
                         return item
                     }
+                }) 
+                imgArr = imgArr.filter(function(item, index) {
+                    if (index != ret.value.imgId-1) {
+                        return item
+                    }
                 })
             } else {
                 alert(JSON.stringify(err.msg));
@@ -559,12 +588,11 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
     }
     // 打开相册
     function openImg() {
-
         api.getPicture({
             sourceType: 'album',
             encodingType: 'png',
             mediaValue: 'pic',
-            destinationType: 'base64',
+            destinationType: 'url',
             allowEdit: false,
             quality: 70,
             // targetWidth: 100,
@@ -572,12 +600,37 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
             saveToPhotoAlbum: false
         }, function(ret, err) {
             if (ret) {
-                base64Data.push(ret.base64Data);
+                base64Data.push(ret.data);
                 getData(base64Data);
+                pushImg(ret);
             } else {
                 alert(JSON.stringify(err.msg));
             }
         });
+    }
+    function pushImg(ret) {
+        var baseUrl = 'img.2017duobao.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com
+        var obj = api.require('qiniuUpfile');
+        obj.upfile({
+            file: ret.data,
+        }, function(ret, err) {
+            if (ret.status) {
+                if (ret.oper == "complete") {
+                    //上传成功后组装访问路径，或直接访问文档
+                    imgArr.push('http://'+baseUrl +'/'+ ret.info.key)
+                    // base64Data.push('http://'+baseUrl +'/'+ ret.info.key);
+                    base64Data.replace(ret.data, 'http://'+baseUrl +'/'+ ret.info.key) 
+                    getData(base64Data);
+                } else if (ret.oper == "progress") {
+                    //上传过程中获取进度数据
+                    // console.log(ret.percent);
+                }
+            }
+        });
+    }
+    // 更换图片地址
+    function changeImgUrl(url) {
+        
     }
     function openImgPage(ele) {
        var data = $api.attr(ele, 'src'),
