@@ -1,7 +1,3 @@
-
-
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -247,9 +243,9 @@
                 </span>
                 
             </li>
-            <li class="mt20" id="is_circle" class="is_circle"   tapmode   onclick="remindWho()">
+            <li class="mt20" id="is_circle" class="is_circle"   tapmode   onclick="selCircle()">
                 <span>选择圈子</span>
-                <span class="spanno2"></span>
+                <span class="spanno2" id="circleName"></span>
             </li>
             <!-- <li class="mt20"   tapmode   onclick="remindWho()">
                 <span>提醒谁看</span>
@@ -278,11 +274,32 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
         getPos();
         getData(base64Data);
         // 删除图片
-        delImg()
+        delImg();
+        api.addEventListener({
+            name: 'selCircle'
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.byId('circleName'), ret.value.circleName);
+                $api.attr($api.byId('circleName'), 'data-circleId', ret.value.circleId);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     };
+    // 选择圈子
+    function selCircle(ele) {
+        var circleId = $api.attr($api.byId('circleName'), 'data-circleId');
+        console.log(circleId)
+        api.openWin({
+            name: 'find_publishpro_win_selCircle',
+            url: './find_publishpro_win_selCircle.html',
+            pageParam: {
+                circleId: circleId
+            },
+        });
+    }
     // 添加圈子主题
     function addTopic() {
-
         // 获取身份
         var roleId = 0;
         for (var i = 0; i < role.length; i++) {
@@ -296,9 +313,9 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
         var content = $api.val($api.byId('content'));
         var start_time = $api.text($api.byId('startTime'));
         var end_time = $api.text($api.byId('endTime'));
-
+        var circleId = $api.attr($api.byId('circleName'), 'data-circleId');
         var obj = {
-            circle_id: api.pageParam.circle_id,           //int 圈子ID
+            circle_id: api.pageParam.circle_id || circleId,           //int 圈子ID
             role: roleId,            //int 角色（1-关系人，2-知情人，3-甲方，4-总包单位，5-分包单位，6-设计院，7-销售）
             title: title,           //string  标题
             content: content,         //string  详细内容
@@ -318,7 +335,7 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
             data: {
                    values: { 
                         token: $api.getStorage('userToken'),
-                        circle_id: api.pageParam.circle_id,           //int 圈子ID
+                        circle_id: api.pageParam.circle_id || circleId,           //int 圈子ID
                         role: roleId,            //int 角色（1-关系人，2-知情人，3-甲方，4-总包单位，5-分包单位，6-设计院，7-销售）
                         title: title,           //string  标题
                         content: content,         //string  详细内容
