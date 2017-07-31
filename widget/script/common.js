@@ -79,7 +79,12 @@ function fnInit() {
 
 //接口地址
 var baseUrl = 'img.iinnet.com';
-var apiSite = 'https://wozai.tonyliangli.cn/api';
+
+// 测试环境
+// var apiSite = 'https://wozai.tonyliangli.cn/api';
+
+// 正式环境
+var apiSite = 'https://api.iinnet.com';
 
 var apiHeader = {
     "api.version": "1",

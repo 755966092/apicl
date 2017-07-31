@@ -68,6 +68,9 @@
             height: 1rem;
             line-height: 1rem;
             padding-left: .35rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
 
@@ -373,6 +376,7 @@
         classify()
         console.log('369:::'+JSON.stringify(api.pageParam))
         if (api.pageParam.demand_id) {
+            $api.text($api.dom('.btn'), '确定');
             requireData();
         } else {
             // 获取位置
@@ -388,7 +392,28 @@
         getData(base64Data);
         // 删除图片
         delImg();
+    // 监听选择修改地址
+        monitorSelAddress()
     };
+    // 监听选择修改地址
+    function monitorSelAddress() {
+        api.addEventListener({
+            name: 'selAddress'
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.byId('position'), ret.value.address);
+                console.log(JSON.stringify(ret))
+                province = ret.value.province;
+                city = ret.value.city;
+                address = ret.value.address;
+                district = ret.value.district;
+                latitude = ret.value.lat;
+                longitude = ret.value.lon;
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
     // 编辑供应
     function editSupply(data) {
         var titleIpt = $api.byId('title'),

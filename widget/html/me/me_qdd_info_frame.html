@@ -291,7 +291,7 @@
             
              <div class="userInfo flex-def flex-cCenter">
                 {{?it.host_info}}
-                <img src="{{=it.host_info.head_img_url}}" data-id="{{=it.host_info.user_id}}" tapmode onclick="openUserInfoPage(this)">
+                <img class="userHead_img" src="{{=it.host_info.head_img_url}}" data-id="{{=it.host_info.user_id}}" tapmode onclick="openUserInfoPage(this)">
                 <div class="text flex-def flex-zBetween flex-item">
                     <div class="left">
                         <p class="userName">{{=it.host_info.nickname}}</p>
@@ -309,7 +309,7 @@
                     </div>
                 </div>
                 {{??}}
-                <img src="{{=it.helper_info.head_img_url}}" data-id="{{=it.helper_info.user_id}}" tapmode onclick="openUserInfoPage(this)">
+                <img class="userHead_img" src="{{=it.helper_info.head_img_url}}" data-id="{{=it.helper_info.user_id}}" tapmode onclick="openUserInfoPage(this)">
                 <div class="text flex-def flex-zBetween flex-item">
                     <div class="left">
                         <p class="userName">{{=it.helper_info.nickname}}</p>
@@ -431,7 +431,7 @@
         var rong_id = $api.attr(ele, 'data-rong_id');
         var userName = $api.text($api.dom('.userName'));
         // 头像 昵称 供应名字 价格 单位
-        var userHeadImg = $api.attr($api.byId('userHead_img'), 'src');
+        var userHeadImg = $api.attr($api.dom('.userHead_img'), 'src');
         var supplyName = $api.text($api.dom('.supplyName'));
         var priceUint = $api.text($api.dom('.price'));
 
@@ -439,11 +439,13 @@
             name: 'winName',
             url: '../news/chatPage.html',
             pageParam: {
+                type:'help',
                 targetRongId: rong_id,
                 nickname: userName,
                 userHeadImg: userHeadImg,
                 supplyName: supplyName,
-                priceUint: priceUint
+                priceUint: priceUint,
+                order_id: api.pageParam.order_id
             }
         });
     }

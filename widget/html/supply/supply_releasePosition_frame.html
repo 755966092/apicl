@@ -8,28 +8,40 @@
     <style type="text/css">
         input {
             display: block;
-            margin: 0 auto;
+            margin: .3rem auto;
             height: .8rem;
             width: 7rem;
             text-align: center;
-            border: .01rem solid #000;
+            border: .01rem solid #d9d9d9;
         }
         li {
-            font-size: .28rem;
             color: #000;
+            font-size: 0;
             padding-left: .3rem;
             padding-top: .1rem;
             padding-bottom: .1rem;
+            border-bottom: .01rem solid #d9d9d9;
+        }
+        p {
+            font-size: .3rem;
+        }
+        .pAddress {
+            color: #999;
+            font-size: .24rem;
         }
     </style>
 </head>
 <body>
-   <input type="text" oninput="sea2(this)">
+   <input type="text" placeholder="请输入关键字搜索" onkeyup="sea2(this)">
    <ul class="resultList" >
+    
    </ul>
     <script type="text/x-dot-template" id="listT">
         {{ for (var i = 0; i < it.length; i++) { }} 
-            <li ontouchstart="function_name(this)"  >{{=it[i]}}</li>
+            <li data-lon = "{{=it[i].lon}}" data-lat = "{{=it[i].lat}}" tapmode onclick = "function_name(this)"  >
+                <p class="pName">{{=it[i].name}}</p>
+                <p class="pAddress">{{=it[i].address}}</p>
+            </li>
         {{ }; }}
     </script>
 </body>
@@ -37,6 +49,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
+    var city,district,province;
     apiready = function(){
         moduleInit();
         getPos();
@@ -63,12 +76,11 @@
         bMap.getLocation({
             accuracy: '1km',
             autoStop: true,
-            filter: 1
         }, function(ret, err) {
             if (ret.status) {
                 getCoords(ret.lon, ret.lat)
             } else {
-                alert(err.code);
+                alert('71'+JSON.stringify(err));
             }
         });
     }
@@ -83,62 +95,55 @@
                 // city = ret.district;
                 // address = ret.address;
                 // console.log(JSON.stringify(ret))
-                // alert('地区'+ret.district + '省份'+ret.city +'地址'+ret.address )
-                // ret.district // 地区
-                // ret.city // 省份
+                // ret.district // 县区
+                // ret.province // 省份
+                // ret.city // 城市
                 // ret.address // 地址
                 // getData(ret.poiList)
-
-
+                console.log(JSON.stringify(ret))
+                city = ret.city; // 城市
+                district = ret.district // 县区
+                province = ret.province // 省份
             }
         });
-    }
-    function sea() {
-        $api.addEvt($api.dom('input'), 'keyup', function(event) {
-            if (event.keyCode == 13) {
-                bMap.autocomplete({
-                    keyword: $api.val($api.dom('input')),
-                    // city: '北京'
-                }, function(ret) {
-                    if (ret.status) {
-                        console.log(JSON.stringify(ret))
-                        getData(ret.results)
-                    } else {
-                        alert(JSON.stringify(err));
-                    }
-                });
-            }
-        });
-        // var val = $api.val(ele);
-        // console.log(val)
-        
     }
     function sea2(ele) {
-        bMap.autocomplete({
-            keyword: $api.val(ele),
-            // city: '北京'
-        }, function(ret) {
-            if (ret.status) {
-                console.log(JSON.stringify(ret))
-                getData(ret.results)
-            } else {
-                alert(JSON.stringify(err));
-            }
-        });
+        console.log(JSON.stringify(event.keyCode))
+        if (event.keyCode === 13) {
+            bMap.searchInCity({
+                city: city,
+                keyword: $api.val($api.dom('input')),
+                pageIndex: 0,
+                pageCapacity: 20
+            }, function(ret, err) {
+                if (ret.status) {
+                    console.log(JSON.stringify(ret));
+                    getData(ret.results)
+                } else {
+                    alert(JSON.stringify(err));
+                }
+            });
+        }
     }
     function function_name(ele) {
-        var val = $api.text(ele);
-        bMap.getCoordsFromName({
-            city: '中国',
-            address: val
-        }, function(ret, err) {
-            if (ret.status) {
-                alert(JSON.stringify(ret));
-            } else {
-                alert(JSON.stringify(err))
+        var lon = $api.attr(ele, 'data-lon');        
+        var lat = $api.attr(ele, 'data-lat');     
+        var address = $api.text($api.dom(ele, '.pAddress'));  
+        var name = $api.text($api.dom(ele, '.pName'));  
+        // alert(address+name)
+        api.sendEvent({
+            name: 'selAddress',
+            extra: {
+                lon: lon,
+                lat: lat,
+                address: address,
+                name: name,
+                city: city,
+                district: district,
+                province: province,
             }
-
         });
+        api.closeWin();
     }
 </script>
 </html>

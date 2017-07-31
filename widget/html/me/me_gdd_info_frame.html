@@ -293,7 +293,7 @@
             
              <div class="userInfo flex-def flex-cCenter">
                 {{?it.buyer_info}}
-                <img id="userHead_img" data-id="{{=it.buyer_info.user_id}}" tapmode onclick="openUserInfoPage(this)" src="{{=it.buyer_info.head_img_url}}">
+                <img class="userHead_img" data-id="{{=it.buyer_info.user_id}}" tapmode onclick="openUserInfoPage(this)" src="{{=it.buyer_info.head_img_url}}">
                 <div class="text flex-def flex-zBetween flex-item">
                     <div class="left">
                         <p class="userName">{{=it.buyer_info.nickname}}</p>
@@ -301,14 +301,14 @@
                         <!-- <p class="position">上海策赢网络科技 董事长</p> -->
                     </div>
                     <div class="right flex-def flex-cCenter">
-                        <!-- <span ontouchstart="callTpl()" class="icon_tel"></span> -->
+                        <!-- <span tapmode onclick="callTpl()" class="icon_tel"></span> -->
                         <!-- 卖家电话字段 -->
                        
-                        <span ontouchstart="openChatPage(this)" class="icon_chat" data-rong_id='{{=it.buyer_info.rongcloud_user_id}}'></span>
+                        <span tapmode onclick="openChatPage(this)" class="icon_chat" data-rong_id='{{=it.buyer_info.rongcloud_user_id}}'></span>
                     </div>
                 </div>
                 {{??}}
-                <img src="{{=it.seller_info.head_img_url}}" data-id="{{=it.seller_info.user_id}}" tapmode onclick="openUserInfoPage(this)">
+                <img class="userHead_img" src="{{=it.seller_info.head_img_url}}" data-id="{{=it.seller_info.user_id}}" tapmode onclick="openUserInfoPage(this)">
                 <div class="text flex-def flex-zBetween flex-item">
                     <div class="left">
                         <p class="userName">{{=it.seller_info.nickname}}</p>
@@ -316,9 +316,9 @@
                         <!-- <p class="position">上海策赢网络科技 董事长</p> -->
                     </div>
                     <div class="right flex-def flex-cCenter">
-                        <!-- <span ontouchstart="callTpl()" class="icon_tel"></span> -->
+                        <!-- <span tapmode onclick="callTpl()" class="icon_tel"></span> -->
                         <!-- 卖家电话字段 -->
-                        <span ontouchstart="openChatPage(this)" class="icon_chat" data-rong_id='{{=it.seller_info.rongcloud_user_id}}'></span>
+                        <span tapmode onclick="openChatPage(this)" class="icon_chat" data-rong_id='{{=it.seller_info.rongcloud_user_id}}'></span>
                     </div>
                 </div>
                 {{?}}
@@ -389,7 +389,7 @@
                             {{for(var i = 0; i < it.button_info.buttonArr.length; i++){ }}
                                 {{?it.button_info.buttonArr[i].key === '确认完成' || it.button_info.buttonArr[i].key === '完成' || it.button_info.buttonArr[i].key === '评价订单'}}
                                 {{??}}
-                                <span data-reasonList='{{=JSON.stringify(it.reason_list)}}' data-supplyId='{{=it.supply_info.supply_id}}' data-id='{{=it.order_info.order_id}}' ontouchstart="oriderOperate(this)" class="btn" data-url='{{=it.button_info.buttonArr[i].url}}'>{{=it.button_info.buttonArr[i].key}}</span>
+                                <span data-reasonList='{{=JSON.stringify(it.reason_list)}}' data-supplyId='{{=it.supply_info.supply_id}}' data-id='{{=it.order_info.order_id}}' tapmode onclick="oriderOperate(this)" class="btn" data-url='{{=it.button_info.buttonArr[i].url}}'>{{=it.button_info.buttonArr[i].key}}</span>
                                 {{?}}
                             {{ }; }}
                         </div>
@@ -398,7 +398,7 @@
             </div>
             <div class="orderTime">
                 <p>订单编号：<span class="code" id="code">{{=it.order_info.gen_order_id}}</span>
-                    <span class="label fr" ontouchstart="copyString()"   id="copy">复制</span>
+                    <span class="label fr" tapmode onclick="copyString()"   id="copy">复制</span>
                 </p>
                 <p>下单时间：<span class="code">{{=it.order_info.create_time}}</span></p>
                 <p>取消原因：<span class="code">{{=it.order_info.reason==null?'':it.order_info.reason}}</span></p>
@@ -407,7 +407,7 @@
                 备注：<span>{{=it.order_info.note==null?"":it.order_info.note}}</span>
             </div>
             {{?it.button_info.finish.is_show || it.button_info.confirm_finish.is_show}} 
-                <div class="appraise" data-id='{{=it.order_info.order_id}}' ontouchstart="completeOrder(this)">完成</div>
+                <div class="appraise" data-id='{{=it.order_info.order_id}}' tapmode onclick="completeOrder(this)">完成</div>
             
 
             {{??it.button_info.comment.is_show}}
@@ -488,19 +488,21 @@
         var rong_id = $api.attr(ele, 'data-rong_id');
         var userName = $api.text($api.dom('.userName'));
         // 头像 昵称 供应名字 价格 单位
-        var userHeadImg = $api.attr($api.byId('userHead_img'), 'src');
+        var userHeadImg = $api.attr($api.dom('.userHead_img'), 'src');
         var supplyName = $api.text($api.dom('.supplyName'));
         var priceUint = $api.text($api.dom('.price'));
-
+        console.log(userHeadImg)
         api.openWin({
             name: 'winName',
             url: '../news/chatPage.html',
             pageParam: {
+                type:'supply',
                 targetRongId: rong_id,
                 nickname: userName,
                 userHeadImg: userHeadImg,
                 supplyName: supplyName,
-                priceUint: priceUint
+                priceUint: priceUint,
+                order_id: api.pageParam.order_id
             }
         });
     }

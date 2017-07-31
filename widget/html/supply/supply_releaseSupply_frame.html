@@ -70,6 +70,9 @@
             height: 1rem;
             line-height: 1rem;
             padding-left: .35rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
 
@@ -306,7 +309,7 @@
                     <span id="_type" class="spanno2 _type"></span>
                 </div>
             </li>
-            <li class="companyName">
+            <li class="companyName" tapmode onclick="openCompany()">
                 <div class="wrap">
                     <span>公司</span>
                     <span id="company_name" class="spanno2"></span>
@@ -395,6 +398,7 @@
         moduleInit();
         classify();
         if (api.pageParam.supply_id) {
+            $api.text($api.dom('.btn'), '确定');
             releaseFlag = 1;
             requireData();
 
@@ -413,7 +417,35 @@
         getData(base64Data);
         // 删除图片
         delImg();
+        // 监听选择修改地址
+        monitorSelAddress()
     };
+    // 打开公司页面
+    function openCompany() {
+        api.openWin({
+            name: 'supply_releaseCompany',
+            url: './supply_releaseCompany.html'
+        });
+    }
+    // 监听选择修改地址
+    function monitorSelAddress() {
+        api.addEventListener({
+            name: 'selAddress'
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.byId('position'), ret.value.address);
+                console.log(JSON.stringify(ret))
+                province = ret.value.province;
+                city = ret.value.city;
+                address = ret.value.address;
+                district = ret.value.district;
+                latitude = ret.value.lat;
+                longitude = ret.value.lon;
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
     // 编辑供应
     function editSupply(data) {
         var titleIpt = $api.byId('title'),
@@ -452,7 +484,7 @@
         longitude = data.info.longitude;
         province = data.info.province;
         city = data.info.city;
-         province = data.info.province;
+        district = data.info.district;
         supply_id = data.info.supply_id;
 
     }
@@ -695,7 +727,6 @@
                        values: obj
                     }
                 }, function(ret, err) {
-                    alert(JSON.stringify(ret))
                     if(ret) {
                         if (ret.code == 200) {
                             console.log(JSON.stringify(ret))

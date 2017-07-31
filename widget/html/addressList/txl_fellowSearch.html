@@ -217,22 +217,22 @@ var hisDataArr=[],n=1;
                 }
             }, function(ret, err) {
                     console.log('网络查询:::'+JSON.stringify(ret))
-                    db.selectSql({
-                        name: 'db_' + $api.getStorage('userToken'),
-                        sql: 'SELECT * FROM addressList WHERE (nickname LIKE "%'+val+'%") or (remark_nickname LIKE "%'+val+'%") or (remark_current_contact LIKE "%'+val+'%")'     
-                    },function(retSql,err){
-                        if (retSql.status) {
-                            console.log('本地查询:::'+JSON.stringify(retSql))
+                    // db.selectSql({
+                    //     name: 'db_' + $api.getStorage('userToken'),
+                    //     sql: 'SELECT * FROM addressList WHERE (nickname LIKE "%'+val+'%") or (remark_nickname LIKE "%'+val+'%") or (remark_current_contact LIKE "%'+val+'%")'     
+                    // },function(retSql,err){
+                    //     if (retSql.status) {
+                            // console.log('本地查询:::'+JSON.stringify(retSql))
                             // 打开页面事件只执行一次
-                            openPage(ret.data.list.concat(retSql.data));
+                            openPage(ret.data.list);
                             api.sendEvent({
                                 name: 'addf',
                                 extra: {val: ret.data.list.concat(retSql.data)}
                             });    
-                        }else {
-                            api.alert({msg:err.msg});
-                        }
-                    });
+                    //     }else {
+                    //         api.alert({msg:err.msg});
+                    //     }
+                    // });
 
                 
                
@@ -246,7 +246,7 @@ var hisDataArr=[],n=1;
     }
 
     function openPage(list) {
-        
+        console.log(JSON.stringify(list))
         var heig = headerH + $api.offset($api.dom('.main')).h + 20;
          n = 0;
          api.openFrame({

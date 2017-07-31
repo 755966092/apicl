@@ -8,7 +8,7 @@
     <style type="text/css">
         li {
             font-size: 0rem;
-            height: .8rem;
+            
             line-height: .8rem;
             padding-left: .36rem;
             background-color: #fff;
@@ -16,6 +16,7 @@
             box-sizing: border-box;
         }
         li .wrap {
+            height: .8rem;
             font-size: .28rem;
             padding-right: .36rem;
             border-bottom: .01rem solid #d9d9d9;
@@ -31,25 +32,40 @@
 </head>
 <body>
     <div class="main">  
-        <ul>
-            <li>
-                <div class="wrap">
-                    第一学教育科技
-                </div>
-            </li>
-            <li>
-                <div class="wrap">
-                    第一学教育科技
-                </div>
-            </li>
-        </ul>
+        <ul class="resultList"></ul>
+        <script type="text/x-dot-template" id="listT">
+            {{ for (var i = 0; i < it.length; i++) { }} 
+                <li>
+                    <div class="wrap">
+                        {{=it[i].company_name}}
+                    </div>
+                </li>
+            {{}}}
+        </script>
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
     apiready = function(){
-        fnInit();
+        api.ajax({
+            url: apiSite + '/user_center/workList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                console.log(JSON.stringify(ret))
+                getData(ret.data.list)
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
     };
 </script>
 </html>

@@ -180,8 +180,8 @@
     </style>
 </head>
 <body id="body" ontouchstart="closeDiv1();">
-    <div class="supply_info hide flex-def flex-cCenter">
-        <img  src="../../image/noimage.jpg">
+    <div class="supply_info hide flex-def flex-cCenter" tapmode onclick="openSupplyPage(this)">
+        <img id="userImgUrl"  src="../../image/noimage.jpg">
         <div class="flex-item flex-def">
             <div class="div flex-item">
                 <span id="userName">userName</span>(
@@ -224,6 +224,7 @@ var  mainH, _main, scrollH;
     apiready = function(){
         moduleInit();
         if (api.pageParam.supplyName) {
+            console.log(JSON.stringify(api.pageParam))
             $api.removeCls($api.dom('.supply_info'), 'hide');
             $api.text($api.byId('userName'), api.pageParam.nickname);
             $api.text($api.byId('supplyName'), api.pageParam.supplyName);
@@ -284,6 +285,22 @@ var  mainH, _main, scrollH;
         });
 
     };
+    // 打开订单详情
+    function openSupplyPage(ele) {
+        var url;
+        if (api.pageParam.type == 'supply') {
+            url = '../me/me_gdd_info.html'
+        } else {
+            url = '../me/me_qdd_info.html'
+        }
+        api.openWin({
+            name: 'winName'+url,
+            url: url,
+            pageParam: {
+                order_id: api.pageParam.order_id
+            }
+        });
+    }
     function closeDiv1() {
         $api.css($api.dom('.shadow'), 'display:none');
     }

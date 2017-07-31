@@ -219,7 +219,22 @@
             }
         }, function(ret, err) {
             if(ret) {
-                alert(JSON.stringify(ret))
+                console.log(JSON.stringify(ret))
+                // alert(JSON.stringify(ret))
+                if (ret.code == 200) {
+                    api.openWin({
+                        name: 'me_hy_tx_cg',
+                        url: './me_hy_tx_cg.html',
+                        pageParam: {
+                            alipay: api.pageParam.alipay,
+                            realName: api.pageParam.realName,
+                            money: api.pageParam.money
+                        },
+                    });
+                   
+                    
+                    api.closeFrame();
+                }
             } else {
                 alert(JSON.stringify(err))
             }
