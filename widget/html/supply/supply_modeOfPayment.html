@@ -165,6 +165,7 @@
     }
   
     function submit(ele) {
+        var obj;
         var text = $api.text(ele)
         if (text === '确定') {
             var pay_method = $api.attr($api.dom('.select1'), 'data-val');
@@ -270,7 +271,6 @@
                                     aliPay.payOrder({
                                       orderInfo: retAJAX.data.config
                                     },function(ret,err) {
-                                       alert(JSON.stringify(ret));
                                         payFruitPage(obj,ret)
                                         if(ret.status) {
                                             api.sendEvent({
@@ -292,13 +292,12 @@
                             } else {
                                 if (pay_method === 'wechat') {
                                     // 微信支付
-                                   wxPayFun(retAJAX);
+                                   wxPayFun(obj,retAJAX);
 
                                 } else if (pay_method === 'alipay') {
                                     aliPay.payOrder({
                                       orderInfo: retAJAX.data.config
                                     },function(ret,err) {
-                                       alert(JSON.stringify(ret));
                                         payFruitPage(obj,ret)
                                         api.sendEvent({
                                             name: 'saleMoney'
@@ -325,8 +324,7 @@
         }
         
     }
-    function wxPayFun(retAJAX) {
-        console.log(JSON.stringify(retAJAX))
+    function wxPayFun(obj,retAJAX) {
          wxPay.payOrder({
             apiKey: retAJAX.data.config.appid,
             orderId: retAJAX.data.config.prepayid,
@@ -336,34 +334,48 @@
             package: retAJAX.data.config.package,
             sign: retAJAX.data.config.sign
         }, function(ret, err) {
-            if (ret.status) {
-                //支付成功
-              payFruitPage(obj,ret);
-              api.sendEvent({
-                    name: 'saleMoney'
-                });
-              api.sendEvent({
-                    name: 'filterOrder'
-                });
+            if (ret) {
+                if (ret.status) {
+                    //支付成功
+                  payFruitPage(obj,ret);
+                  api.sendEvent({
+                        name: 'saleMoney'
+                    });
+                  api.sendEvent({
+                        name: 'filterOrder'
+                    });
+                } else {
+                    alert(JSON.stringify(ret));
+                }
             } else {
-                alert(err.code);
+                alert(JSON.stringify(err))
             }
         })
     }
     function payFruitPage(obj,ret) {
-        if (ret.status) {
-             api.openWin({
-                name: 'supply_payResult_win',
-                url: './supply_payResult_win.html',
-                pageParam: {
-                    obj: obj,
-                    price: api.pageParam.price,
-                    form: api.pageParam.form,
-                    flag: 1,
-                    paramPhone: api.pageParam.paramPhone
-                }
-            });
+        
+        if (ret) {
+            if (ret.status) {
+                api.openWin({
+                    name: 'supply_payResult_win',
+                    url: './supply_payResult_win.html',
+                    pageParam: {
+                        obj: obj,
+                        price: api.pageParam.price,
+                        form: api.pageParam.form,
+                        flag: 1,
+                        paramPhone: api.pageParam.paramPhone
+                    }
+                });
+                api.closeFrame();
+            } else {
+                alert(JSON.stringify(ret))
+            }
+        } else {
+            alert(JSON.stringify(err))
         }
     }
+
+    
 </script>
 </html>

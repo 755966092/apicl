@@ -36,11 +36,97 @@
             font-size: .3rem;
             color: #555;
         }
+        .selItem .selType .item {
+            background: #1AAD19;
+            color: #fff!important;
+        }
+        .selItem .selType .count {
+            color: #fff;
+        }
         .m44 {
             margin: 0 .44rem;
         }
         .pl15 {
             padding: 0 .3rem;
+        }
+        ul {
+            margin-top: .2rem;
+            height: 3.57rem;
+            padding-left: .35rem;
+            background-color: #fff;
+            border-bottom: .01rem solid #d9d9d9;
+        }
+        ul li {
+            padding-right: .35rem;
+            border-bottom: .01rem solid #d9d9d9;
+            height: .85rem;
+            background: url(../../image/icon_member/icon_zfb.png)no-repeat;
+            -webkit-background-size: .36rem .36rem;
+            background-size: .36rem .36rem;
+            background-position: 0 center;
+            font-size: 0;
+            padding-left: .7rem;
+            line-height: .85rem;
+        }
+        ul li:nth-child(3) {
+            background: url(../../image/icon_member/icon_wx.png)no-repeat;
+            -webkit-background-size: .36rem .36rem;
+            background-size: .36rem .36rem;
+            background-position: 0 center;
+        }
+        ul li:last-child {
+            background: url(../../image/icon_member/icon_ye.png)no-repeat;
+            -webkit-background-size: .36rem .36rem;
+            background-size: .36rem .36rem;
+            background-position: 0 center;
+            border-bottom: 0;
+        }
+        ul li .text {
+            font-size: .3rem;
+            color: #333;
+        }
+        ul li .icon {
+            float: right;
+            display: inline-block;
+            width: .33rem;
+            height: .85rem;
+            background: url(../../image/icon_member/icon_cz01.png)no-repeat;
+            -webkit-background-size: .33rem .33rem;
+            background-size: .33rem .33rem;
+            background-position: 0 center;
+        }
+        ul li.sel .icon {
+            background: url(../../image/icon_member/icon_cz02.png)no-repeat;
+            -webkit-background-size: .33rem .33rem;
+            background-size: .33rem .33rem;
+            background-position: 0 center;
+        }
+        .btn {
+            width: 6.785rem;
+            height: .841rem;
+            border-radius: .06rem;
+            background-color: #1AAD19;
+            border: .01rem solid #189c17;
+            margin: 0 auto;
+            line-height: .841rem;
+            text-align: center;
+            font-size: .34rem;
+            color: #fff;
+            margin-top: 2.47rem;
+            margin-bottom: .2rem;
+        }
+        .warn {
+
+            margin-top: .2rem;
+        }
+        .warnItem {
+            color: #999;
+            font-size: .24rem;
+            text-align: center;
+            line-height: .33rem;
+        }
+        .warn span {
+            color: #38B638;
         }
     </style>
 </head>
@@ -57,19 +143,19 @@
         <div class="selItem">
             <p class="title">充值金额</p>
             <div class="pl15 flex-def ">
-                <div class="itemList">
-                    <span class="item flex-def flex-zTopBottom flex-zCenter flex-cCenter">
+                <div class="itemList selType" tapmode onclick="selType(this)">
+                    <span class="item  flex-def flex-zTopBottom flex-zCenter flex-cCenter">
                         <span class="price">￥20</span>
                         <span class="count">三个月</span>
                     </span>
                 </div>
-                <div class="itemList m44">
+                <div class="itemList m44" tapmode onclick="selType(this)">
                     <span class="item flex-def flex-zTopBottom flex-zCenter flex-cCenter">
                         <span class="price">￥40</span>
                         <span class="count">半年</span>
                     </span>
                 </div>
-                <div class="itemList">
+                <div class="itemList" tapmode onclick="selType(this)">
                     <span class="item flex-def flex-zTopBottom flex-zCenter flex-cCenter">
                         <span class="price">￥80</span>
                         <span class="count">一年</span>
@@ -78,14 +164,293 @@
             </div>
         </div>
         <div class="payType">
-            <p class="title">支付方式</p>
             <ul>
-                <li>
-                    
+                <p class="title">支付方式</p>
+                <li id="three" class="sel" tapmode data-val = "alipay" onclick="select(this)">
+                    <span class="text">支付宝支付</span>
+                    <span class="icon"></span>
+                </li>
+                <li id="half" tapmode data-val = "wechat" onclick="select(this)">
+                    <span class="text">微信支付</span>
+                    <span class="icon"></span>
+                </li>
+                <li id="one" tapmode data-val = "balance" onclick="select(this)">
+                    <span class="text">余额支付</span>
+                    <span class="icon"></span>
                 </li>
             </ul>
         </div>
+        <div class="btn">确认支付</div>
+        <div class="warn">
+            <p class="warnItem">点击充值，即表示已阅读并同意 <span>充值协议</span></p>
+            <p class="warnItem">我在不会以任何形式要求您输入银行账户和密码</p>
+        </div>
+
     </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        fnInit();
+        requireData();
+    };
+    function selType(ele) {
+        $api.removeCls($api.dom('.selItem .selType'), 'selType');
+        $api.addCls(ele, 'selType');
+    }
+    function requireData() {
+        api.ajax({
+            url: apiSite + '/finance_center/purchaseVipIndex',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                // alert(JSON.stringify(ret));
+                // $api.text($api.dom('#month .jl_right'), '￥'+ret.data.info[1]);
+                // $api.attr($api.dom('#month'), 'data-price', ret.data.info[1]);
+
+                $api.text($api.dom('#three .text'), '￥'+ret.data.info[3]);
+                $api.attr($api.byId('three'), 'data-price', ret.data.info[3]);
+                $api.attr($api.byId('three'), 'data-count', 3);
+
+                $api.text($api.dom('#half .text'), '￥'+ret.data.info[6]);
+                $api.attr($api.byId('half'), 'data-price', ret.data.info[6]);
+                $api.attr($api.byId('half'), 'data-count', 6);
+
+                $api.text($api.dom('#one .text'), '￥'+ret.data.info[12]);
+                $api.attr($api.byId('one'), 'data-price', ret.data.info[12]);
+                $api.attr($api.byId('one'), 'data-count', 12);
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+   function select(ele) {
+        $api.removeCls($api.dom('.sel'), 'sel');
+        $api.addCls(ele, 'sel');
+   }
+   function submit(ele) {
+        var val = $api.attr($api.dom('.sel'), 'data-val');
+        var month = $api.attr($api.dom('.selType'), 'data-count');
+
+        if (val === 'balance') {
+            // 余额支付
+            api.openFrame({
+                name: 'me_hy_czZffs_2',
+                url: './me_hy_czZffs_2.html',
+                rect: {
+                    x: 0,
+                    y: 0,
+                    w: 'auto',
+                    h: 'auto'
+                },
+                pageParam: {
+                    month: month,
+                    pay_method: val
+                },
+                bounces: false
+            });
+        } else {
+            // 微信 支付宝支付
+            payMoney(val,month);
+        }
+        
+        
+    }
+    function payMoney(val,month) {
+        api.ajax({
+            url: apiSite + '/finance_center/purchaseVip',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                        token: $api.getStorage('userToken'),
+                        month: month,
+                        pay_method: val
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                // alert(JSON.stringify(ret))
+                console.log(val)
+                if (val === 'wechat') {
+                    wxPayFun(ret)
+                } else if (val === 'alipay') {
+                    alipayFun(ret)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+    function wxPayFun(retAJAX) {
+        wxPay.payOrder({
+            apiKey: retAJAX.data.config.appid,
+            orderId: retAJAX.data.config.prepayid,
+            mchId: retAJAX.data.config.partnerid,
+            nonceStr: retAJAX.data.config.noncestr,
+            timeStamp: retAJAX.data.config.timestamp,
+            package: retAJAX.data.config.package,
+            sign: retAJAX.data.config.sign
+        }, function(ret, err) {
+            if (ret.status) {
+                //支付成功
+                api.execScript({
+                    name: 'winName_hy',
+                    script: 'requestData();'
+                });
+                // 支付成功
+                api.closeWin();
+            } else {
+                alert(ret.msg)
+            }
+        })
+    }
+    function alipayFun(retAJAX) {
+        aliPay.payOrder({
+          orderInfo: retAJAX.data.config
+        },function(ret,err) {
+            if (ret.status) {
+                api.execScript({
+                    name: 'winName_hy',
+                    script: 'requestData();'
+                });
+                // 支付成功
+                api.closeWin();
+            } else {
+                alert(ret.msg)
+            }
+        });
+    }
+</script>
+</html>
+
+
+
+
+<!-- ------------------------------------------------------- -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        .main .listContent {
+            height: 1.16rem;    
+            box-sizing: border-box;
+            background-color: #fff;
+            padding-left: .35rem; 
+        }
+        .listContent .wrap {
+            border-bottom: .01rem solid #E0E0E0;
+            padding-right: .35rem;
+        }
+        .listContent:last-child {
+            border-bottom: .01rem solid #E0E0E0;
+        }
+      /*  .listContent:last-child .wrap {
+            border-bottom: 0;
+        }
+        /* 左边提现 */
+        .main .listContent .jl_left {
+            font-size: .3rem;
+            line-height: 1.16rem;   
+        }
+
+        /* 右边钱数 */
+        .main .listContent .jl_right {
+            line-height: 1.16rem;
+            font-size: .42rem;
+            text-align: right;  
+            height: 1.16rem;    
+            box-sizing: border-box;
+        }
+        .icon {
+            background: url(../../image/icon_member/icon_cz01.png)no-repeat;
+            background-position: 0 center;
+            background-size: .43rem .43rem;
+            display: inline-block;
+            width: .43rem;
+            height: 1.16rem;
+            margin-left: .1rem;
+        }
+        button {
+            width: 6.3rem;
+            height: .8rem;
+            line-height: .8rem; 
+            background-color: #08BB08;
+            text-align: center; 
+            color: #fff;
+            font-size: .34rem;    
+            position: absolute; 
+            border-radius: .1rem;
+            left: 0;    
+            right: 0;   
+            margin: auto;
+            margin-top: .8rem;  
+            outline: none  
+        }
+
+
+        /* 选择后的样式 */
+        .select {
+            color: #08BB08;
+        }
+        .select .icon {
+            background: url(../../image/icon_member/icon_cz02.png)no-repeat;
+            background-position: 0 center;
+            background-size: .43rem .43rem;
+        }
+    </style>
+</head>
+<body>
+     <header  class="header">
+        <div class="head">
+            <span class="callback"   tapmode   onclick="api.closeWin()">返回</span>
+            <span class="winTitle">
+                充值
+            </span>
+        </div>
+    </header>
+    <div class="main">  
+        <div class="listContent select" data-time="month" id="month"   tapmode   onclick="select(this)">
+            <div class="wrap">
+                <span class="jl_left fl">一个月</span>  
+                <span class="icon fr"></span>
+                <span class="jl_right fr">￥20</span>
+            </div>
+        </div>
+        <div class="listContent" data-time="san" id="san"   tapmode   onclick="select(this)">
+            <div class="wrap">
+                <span class="jl_left fl">三个月</span>  
+                <span class="icon fr"></span>
+                <span class="jl_right fr">￥20</span>
+            </div>
+        </div>
+         <div class="listContent" data-time="ban" id="ban"  tapmode   onclick="select(this)">
+            <div class="wrap">
+                <span class="jl_left fl">半年</span>  
+                <span class="icon fr"></span>
+                <span class="jl_right fr">￥40</span>
+            </div>
+        </div>
+         <div class="listContent" data-time="yi" id="yi"  tapmode   onclick="select(this)">
+            <div class="wrap">
+                <span class="jl_left fl">一年</span>  
+                <span class="icon fr"></span>
+                <span class="jl_right fr">￥80</span>
+            </div>
+        </div>
+    </div>
+    <button   tapmode   onclick="enter()">确认支付</button>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -177,3 +542,4 @@
    }
 </script>
 </html>
+
