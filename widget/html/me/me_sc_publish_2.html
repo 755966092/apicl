@@ -64,9 +64,10 @@
             color: #0076FF;
             border: .01rem solid #0076FF;
             text-align: center;
-            line-height: .3rem;
+            /*line-height: .3rem;*/
             padding: 0 .05rem;
             margin-right: .1rem;
+            border-radius: .06rem;
         }
         .item {
             background-color: #fff;
@@ -125,11 +126,21 @@
                 <div class="item">
                     <div class="user flex-cCenter flex-def">
                         <div class="img">
+                            {{?it[i].head_img_url}}
                             <img src="{{=it[i].head_img_url}}">
+                            {{??}}
+                            <img src="../../image/noimage.jpg">
+                            {{?}}
                         </div>
                         <div class="text flex-def flex-cCenter">
                             <h3>{{=it[i].nickname}}</h3>
-                            <p>{{=it[i].current_company}} {{=it[i].current_position}}</p>
+                            {{?it[i].current_company == null}}
+                               
+                            {{??it[i].current_position == null}}
+                                <p>{{=it[i].current_company}}</p>
+                            {{??}}
+                                <p>{{=it[i].current_company}} {{=it[i].current_position}}</p>
+                            {{?}}
                         </div>
                     </div>
                     <div class="info flex-cCenter flex-def">

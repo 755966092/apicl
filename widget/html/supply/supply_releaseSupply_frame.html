@@ -445,6 +445,18 @@
                 alert(JSON.stringify(err));
             }
         });
+        // 监听选择公司
+        api.addEventListener({
+            name: 'selCompany'
+        }, function(ret, err) {
+            if (ret) {
+                console.log(JSON.stringify(ret))
+                $api.text($api.byId('company_name'), ret.value.company_name);
+                $api.attr($api.byId('company_name'), 'data-id', ret.value.company_id);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     }
     // 编辑供应
     function editSupply(data) {
@@ -662,7 +674,7 @@
                 form = $api.text($api.byId('form')) == '线上' ? 1 : 2,            //int 形式（1-线上，2-线下）
                 description = $api.val($api.byId('description'));        //string  详细内容
                 image_json = imgArr,          //string  图片（格式：["abc.jpg","ddd.jpg"]）
-                company_id = 1;      // 公司ID（类型为2-我公司卖时必传）
+                company_id = $api.attr($api.byId('company_name'), 'data-id');      // 公司ID（类型为2-我公司卖时必传）
                 // alert('标题 : '+ title +'---类别ID : '+sub_type+'---分类ID : '+category_id+'---价格 : '+price+'----形式'+form+'---内容: '+description +"---省份"+ province + "---地区" +city+ "---地址" +address+ "---纬度" +latitude+'---纬度: '+longitude)
                 // var category = $api.text($api.byId('category_id'));
                 // for (var i = 0; i < categoryArr.length; i++) {
@@ -693,7 +705,7 @@
                         form: form,
                         description: description,
                         image_json: image_json,
-                        company_id:1
+                        company_id:company_id
                     }
                     console.log(JSON.stringify(obj))
                 } else {
@@ -716,7 +728,7 @@
                         form: form,
                         description: description,
                         image_json: image_json,
-                        company_id:1
+                        company_id:company_id
                     }
                 }
                 api.ajax({

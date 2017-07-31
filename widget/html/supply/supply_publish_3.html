@@ -7,11 +7,11 @@
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
         .no_data {
-             background-color: #EDECF3; 
-             text-align: center;
-             color: #999;  
-             font-size: .3rem;
-             margin-top: .5rem;
+         background-color: #EDECF3; 
+         text-align: center;
+         color: #999;  
+         font-size: .3rem;
+         margin-top: .5rem;
         }
          .item {
             background-color: #fff;
@@ -22,6 +22,21 @@
         .main {
             /*padding: 0 .3rem;*/
             background-color: #fff;
+        }
+        .label {
+            line-height: .24rem;
+            text-align: center;
+            border-radius: .04rem;
+            width: .41rem;
+            height: .24rem;
+            /*background: url(../../image/icon_supply/icon_gs2.png)no-repeat;*/
+            /*-webkit-background-size: .41rem .24rem;*/
+            /*background-size: .41rem .24rem;*/
+            /*padding-right: .1rem;*/
+            font-size: .16rem;
+            color: #576c96;
+            border: .01rem solid #576c96;
+            margin-right: .1rem;
         }
         .commentIcon {
             display: inline-block;
@@ -106,11 +121,18 @@
 
         }
         .info .comIcon {
+            line-height: .24rem;
+            text-align: center;
+            border-radius: .04rem;
             width: .41rem;
             height: .24rem;
-            background: url(../../image/icon_supply/icon_gs2.png)no-repeat;
-            -webkit-background-size: .41rem .24rem;
-            background-size: .41rem .24rem;
+            /*background: url(../../image/icon_supply/icon_gs2.png)no-repeat;*/
+            /*-webkit-background-size: .41rem .24rem;*/
+            /*background-size: .41rem .24rem;*/
+            /*padding-right: .1rem;*/
+            font-size: .16rem;
+            color: #576c96;
+            border: .01rem solid #576c96;
             margin-right: .1rem;
         }
 
@@ -139,8 +161,9 @@
             
         }
         .title1 {
-            margin-top: .2rem;
+            /*margin-top: .2rem;*/
             padding: 0 .3rem;
+            border-bottom: .01rem solid #ddd;
             background-color: #fff;
             display: none;
         }
@@ -155,75 +178,93 @@
             background-size: .24rem .24rem;
             margin-left: .06rem;
         }
+
         .comment_name {
             color: #576B95;
+        }
+        .bbottomLoading {
+            text-align: center; 
+            font-size: .24rem;
+            color: #999;
+            line-height: .8rem;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="title1">
+   <!--  <div class="title1">
         <p class="results"   tapmode   onclick="viewResults(this)">
             <span></span>
            当筛选结果有变动时通知我
         </p>
-    </div>
-    
+    </div> -->
     <div class="main resultList"></div>
     <script type="text/x-dot-template" id="listT">
-        {{?it.length === 0}}
-        <p class="no_data">暂无数据</p>
-        {{??}}
-            {{ for (var i = 0; i < it.length; i++) { }} 
-                <div class="item flex-def">
-                    <div class="headImg">
-                    <img src="../../image/tx_5.jpg">
-                </div>
-                <div class="content flex-def flex-zTopBottom flex-item">
-                    <div class="title flex-def flex-zBetween">
-                        <div class="titleLeft flex-def flex-zLeftRight flex-cCenter">
-                            <h3 class="name">{{=it[i].nickname}}</h3>
-                            <span class="sexIcon"></span>
-                            <span class="zmfIcon"></span>
-                            <!-- <span class="zmfText">700分</span> -->
+            {{?it.length === 0}}
+            <p class="no_data">暂无数据</p>
+            {{??}}
+                {{ for (var i = 0; i < it.length; i++) { }} 
+                    <div class="item flex-def" data-id="{{=it[i].supply_id}}" data-company="{{=it[i].company_name}}"   tapmode   onclick="info(this)">
+                        <div class="headImg">
+                            <img src="{{=it[i].head_img_url}}">
                         </div>
-                        <div class="titleRight">
-                            1000元/单
+                        <div class="content flex-def flex-zTopBottom flex-item">
+                            <div class="title flex-def flex-zBetween">
+                                <div class="titleLeft flex-def flex-zLeftRight flex-cCenter">
+                                    {{?it[i].type==1}}
+                                    <span class="label">个人</span>
+                                    {{??}}
+                                    {{?}}
+                                    <h3 class="name">{{=it[i].title}}</h3>
+                                    <!-- <h3 class="name">{{=it[i].nickname}}</h3> -->
+                                    <!-- <span class="sexIcon"></span> -->
+                                    <!-- <span class="zmfIcon"></span> -->
+                                    <!-- <span class="zmfText">700分</span> -->
+                                </div>
+                                <div class="titleRight">
+                                    {{=it[i].price}}元/{{=it[i].unit}}
+                                </div>
+                            </div>
+                            {{?it[i].company_name}}
+                                <div class="info">
+                                    <p class="commanyName flex-def flex-cCenter">
+                                        {{?{{=it[i].type}}==1}}
+                                        <span class="comIcon">个人</span>
+                                        {{??}}
+                                        <span class="comIcon">公司</span>
+                                        {{?}}
+                                        <span>{{=it[i].company_name}}</span>
+                                    </p>
+                                </div>
+                            {{?}}
+                            <div class="content_text">
+                                <p class="text">{{=it[i].description}}</p>
+                                {{?it[i].image_json!=null}}
+                                    {{ for (var j = 0; j < it[i].image_json.length; j++) { }} 
+                                        <img class="content_img" src="{{=it[i].image_json[j]}}">
+                                    {{ } }}
+                               {{?}}
+                            </div>
+                            <div class="comment">
+                                <div class="time">
+                                    <span>{{=it[i].create_time}}</span>
+                                    <div class="commentIcon"></div>
+                                </div>
+                                <!-- <div class="commentText">
+                                    <ul>
+                                        <li>
+                                            <span class="comment_name">李志超:</span>
+                                            <span class="comment_content">我是一条评论</span>
+                                        </li>
+                                    </ul>
+                                </div> -->
+                            </div>
                         </div>
                     </div>
-                    {{?it[i].company_name}}
-                        <div class="info">
-                            <p class="commanyName flex-def flex-cCenter">
-                                <span class="comIcon"></span>
-                                <span>{{=it[i].company_name}}</span>
-                            </p>
-                        </div>
-                    {{?}}
-                    <div class="content_text">
-                        <p class="text">{{=it[i].description}}</p>
-                        {{ for (var j = 0; j < it[i].image_json.length; j++) { }} 
-                            <img class="content_img" src="{{=it[i].image_json[j]}}">
-                        {{ } }}
-                       
-                    </div>
-                    <div class="comment">
-                        <div class="time">
-                            <span>{{=it[i].create_time}}</span>
-                            <div class="commentIcon"></div>
-                        </div>
-                       <!--  <div class="commentText">
-                            <ul>
-                                <li>
-                                    <span class="comment_name">李志超:</span>
-                                    <span class="comment_content">我是一条评论</span>
-                                </li>
-                            </ul>
-                        </div> -->
-                    </div>
-                </div>
-            </div>
-            {{ }; }}
-        {{?}}
+                {{ }; }}
+            {{?}}
     </script>
+    <p class="bbottomLoading">正在加载...</p>
    
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -231,79 +272,89 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 
 <script type="text/javascript">
-    
+    var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
+    var dataList = [], page_num = 1, dataListFlag = [],selectedObj;
     apiready = function(){
+        moduleInit();
         // 请求数据
         requireData();
         // 筛选后的结果
-        bySelect()
-    };
-
-     // 处理时间显示
-    function initTime(time) {
-        var timeRep = time;
-        time=time.replace(/-/g,':').replace(' ',':');
-        time=time.split(':');
-        var nowTime = new Date();
-        var pageTime = new Date(time[0],(time[1]-1),time[2],time[3],time[4],time[5]);
-        if ((pageTime.getDate() != nowTime.getDate()) || (pageTime.getFullYear() != nowTime.getFullYear()) || ((pageTime.getMonth()+1) != (nowTime.getMonth()+1))) {
-            // 不是今天
-            return timeRep;
-        } else {
-            // 今天
-            if (nowTime.getHours() != pageTime.getHours()) {
-                return nowTime.getHours() - pageTime.getHours()+ '小时之前'
+        bySelect();
+        // 下拉刷新
+        api.setCustomRefreshHeaderInfo({
+            bgColor: '#EFEFF4',
+        }, function(ret, err) {
+            page_num = 1;
+            $api.text($api.dom('.bbottomLoading'), '正在加载...');
+            //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
+            requireData();
+        });
+        api.addEventListener({
+            name: 'editSupplyAfter'
+        }, function(ret, err) {
+            if (ret) {
+                requireData();
+                
             } else {
-                return nowTime.getMinutes() - pageTime.getMinutes() + '分钟之前'
+                alert(JSON.stringify(err));
             }
-        }
+        });
+         // 上啦加载
+        scrollBotton()
+
+    };
+    // 滚动到底部触发的事件
+    function scrollBotton() {
+        // 滚动到底部触发的事件
+        api.addEventListener({
+            name:'scrolltobottom',
+            extra:{
+                threshold:0            //设置距离底部多少距离时触发，默认值为0，数字类型
+            }
+        }, function(ret, err){        
+            // alert('已滚动到底部');
+            if ($api.text($api.dom('.bbottomLoading')) == '暂无更多供求') {
+
+            } else {
+                $api.css($api.dom('.bbottomLoading'), 'display: block');
+                page_num++;
+                requireData2();
+            }
+            
+        });
     }
-    selfAdaption();
+
+    
     // 根据上传图片的多少自适应图片的大小
     function selfAdaption() {
         var listContent = $api.domAll('.item');
 
         for (var i = 0; i < listContent.length; i++) {
             var imgArr = listContent[i].getElementsByClassName('content_img');
-            var imgCount = imgArr.length
+            var imgCount = imgArr.length;
             if (imgCount == 1) {
-                    $api.css(listContent[i].getElementsByClassName('content_img')[0], 'width:3.26rem;height:2.86rem;margin-top:.1rem');
+             $api.css(listContent[i].getElementsByClassName('content_img')[0], 'width:3.26rem;height:2.86rem;margin-top:.1rem'); 
 
             }  else {
                 for (var j = 0; j < imgCount; j++) {
-                    $api.css(listContent[i].getElementsByClassName('content_img')[j], 'height:1.56rem');
+                    $api.css(listContent[i].getElementsByClassName('content_img')[j], 'width:1.56rem;height:1.56rem');
                 }
             }
         }
     }
-    
-
-     // doT模版获取数据
-    function getData(data) {
-        
-        var listTText = $api.byId('listT').text;
-        
-        var fnListT = doT.template(listTText);
-        
-        var html = fnListT(data);
-        
-        var list = $api.dom('.resultList');
-        
-        // 替换resultList所有内容
-        $api.html(list, html);
-        // alert('getData:' + JSON.stringify(data))
-    }
-
     // 筛选后结果
+    
     function bySelect() {
         api.addEventListener({
            name: 'screeningResults'
         }, function(ret, err) {
-           $api.css($api.dom('.title1'), 'display:block');
-           getData(data);
-           selfAdaption();
+           if (ret.value.flag) {
+            // $api.css($api.dom('.title1'), 'display:block');
+            parameter = ret.value.parameter
+           }
+           requireData(ret.value.condition)
+           // selfAdaption();
         })
-
         api.addEventListener({
            name: 'addPublish'
         }, function(ret, err) {
@@ -322,7 +373,6 @@
     }
     // 筛选后页面变化
     function viewResults(ele) {
-       
         $api.css($api.dom('.results'), 'background: #fff url(../../image/icon_zk.png)no-repeat;background-position: right center;-webkit-background-size: .15rem .25rem;background-size: .15rem .25rem;');
         // $api.css(ele, 'b');
         // getData(data2);
@@ -340,54 +390,176 @@
         }
          $api.html(ele, '查看订阅的筛选结果');
     }
-
+    
     // 请求数据
-    function requireData () {
+    function requireData (data) {
+        console.log('参数:::'+JSON.stringify(data))
+        var data = data || {};
+        var latitude,longitude;
+        if (data !== {}) {
+            if (data.order == 'distance') {
+                bMap.getLocation({
+                    accuracy: '100m',
+                    autoStop: true,
+                    filter: 1
+                }, function(ret, err) {
+                    if (ret.status) {
+                        data.latitude = ret.lat;
+                        data.longitude = ret.lon;
+                    } else {
+                        alert(err.code);
+                    }
+                });
+            }
+        }
+        // 缓存字段  supply_publish_1
+        var supplyCache = $api.getStorage('supply_publish_1');
+        if (supplyCache) {
+            getData(supplyCache);
+            selfAdaption();
+        }
         api.ajax({
             url: apiSite + '/supply/index',
             method: 'post',
             headers: apiHeader,
             data: {
                values: { 
-                   token: $api.getStorage('userToken')
+                    token: $api.getStorage('userToken'),
+                    // keyword: '',
+                    type: data.type || '', 
+                    sub_type: data.sub_type || '',
+                    category_ids: data.category_ids || '',     
+                    order: data.order || '',
+                    latitude: data.latitude || '',      
+                    longitude: data.longitude || '',
+                    page_num: page_num     
                }
             }
         }, function(ret, err) {
             if(ret) {
-                for (var i = 0; i < ret.data.list.length; i++) {
-                    // 解析图片json
-                    ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
+                // console.log(ret.data.list[0].create_time)
+                // 停止下拉刷新
+                api.refreshHeaderLoadDone()
+                if (supplyCache === ret.data.list) {
 
-                   ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
-                    // 处理时间
-                    ret.data.list[i].create_time = initTime(ret.data.list[i].create_time)
-                   
-                    
+                } else {
+                    for (var i = 0; i < ret.data.list.length; i++) {
+                        // 解析图片json
+                        ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
+                        // 处理七牛云返回的url, 加参数是返回的缩略图
+                        for (var j = 0; j < ret.data.list[i].image_json.length; j++) {
+                            ret.data.list[i].image_json[j] = ret.data.list[i].image_json[j]+'?imageView2/1/w/200/h/200/q/75|imageslim'
+                        }
+                        // 处理时间显示
+                        ret.data.list[i].create_time = initTime(ret.data.list[i].create_time)
+                        if(ret.data.list[i].unit == 0) {
+                            ret.data.list[i].unit = _dataSource[_dataSource.length-1]
+                        } else {
+                            ret.data.list[i].unit = _dataSource[ret.data.list[i].unit-1]
+                        }
+                        ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
+                        
+                    }
+                    $api.setStorage('supply_publish_1', ret.data.list);
+                    dataList = ret.data.list;
+                    console.log('447:::'+JSON.stringify(ret.data.list))
+                    getData(ret.data.list);
+                    selfAdaption();
                 }
-                getData(ret.data.list);
-                selfAdaption();
+                
             } else {
                 alert(JSON.stringify(err.msg))
             }
         })
     }
     
+    function requireData2 (data) {
+        console.log(page_num)
+        var data = data || {};
+        var latitude,longitude;
+        if (data !== {}) {
+            if (data.order == 'distance') {
+                bMap.getLocation({
+                    accuracy: '100m',
+                    autoStop: true,
+                    filter: 1
+                }, function(ret, err) {
+                    if (ret.status) {
+                        data.latitude = ret.lat;
+                        data.longitude = ret.lon;
+                    } else {
+                        alert(err.code);
+                    }
+                });
+            }
+        }
+        api.ajax({
+            url: apiSite + '/supply/index',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+               values: { 
+                    token: $api.getStorage('userToken'),
+                    // keyword: '',
+                    type: data.type || '', 
+                    sub_type: data.sub_type || '',
+                    // category_ids: '',     
+                    order: data.order || '',
+                    latitude: data.latitude || '',      
+                    longitude: data.longitude || '',
+                    page_num: page_num     
+               }
+            }
+        }, function(ret, err) {
+            console.log(page_num)
+           
+            if(ret) {
+                if (ret.data.list) {
+                    $api.text($api.dom('.bbottomLoading'), '暂无更多供求');
+                } else {
+                    $api.css($api.dom('.bbottomLoading'), 'display: none');
+                }
+                for (var i = 0; i < ret.data.list.length; i++) {
+                    // 解析图片json
+                    ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
+
+                    if(ret.data.list[i].unit == 0) {
+                        ret.data.list[i].unit = _dataSource[_dataSource.length-1]
+                    } else {
+                        ret.data.list[i].unit = _dataSource[ret.data.list[i].unit-1]
+                    }
+                    ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
+                }
+                for (var i = 0; i < ret.data.list.length; i++) {
+                    dataList.push(ret.data.list[i])
+                }
+                getData(dataList);
+                selfAdaption();
+            } else {
+                alert(JSON.stringify(err.msg))
+            }
+        })
+    }
     // 进入详情
     function info(ele) {
         var flag = 0;
-        var compaby_name = $api.attr(ele, 'data-company')
-        if (compaby_name != 'null') {
+
+        
+        var compaby_name = $api.attr(ele, 'data-company'),
+            supply_id = $api.attr(ele, 'data-id');
+        if (compaby_name != '') {
             flag = 1;
         } 
+        // alert(flag +'---'+ compaby_name)
         api.openWin({
             name: 'supply_info',
             url: './supply_info.html',
             pageParam: {
                 flag: flag,
-                compaby_name: compaby_name
+                compaby_name: compaby_name,
+                supply_id: supply_id
             }
         });
-        
     }
 
 </script>
