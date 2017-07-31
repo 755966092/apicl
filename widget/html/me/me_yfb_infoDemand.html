@@ -502,14 +502,10 @@
         } else {
             // 暂停按钮
             if ($api.text(ele) === '暂停') {
-                $api.html(ele, '<i class="sus"></i>开启');
                 url = '/supply/pause'
             } else {
-                $api.html(ele, '<i class="sus"></i>暂停');
                 url = '/supply/show'
             }
-            
-
         }
         api.ajax({
             url: apiSite + url,
@@ -522,15 +518,24 @@
                    }
             }
         }, function(ret, err) {
-            if(ret.code==200) {
+            if (ret) {
+                if(ret.code==200) {
+                    if ($api.text(ele) === '暂停') {
+                        $api.html(ele, '<i class="sus"></i>开启');
+                    } else {
+                        $api.html(ele, '<i class="sus"></i>暂停');
+                    }
                     api.sendEvent({
                         name: 'editSupplyAfter'
                     });
-                if (url === '/supply/delete') {
-                    setTimeout(function() {api.closeWin();},500)
+                    if (url === '/supply/delete') {
+                        setTimeout(function() {api.closeWin();},500)
+                    }
+                } else {
+                    alert(JSON.stringify(ret.msg))
                 }
             } else {
-                alert(JSON.stringify(err.msg))
+                alert(JSON.stringify(err))
             }
         })
     }

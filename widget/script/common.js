@@ -78,7 +78,7 @@ function fnInit() {
 
 
 //接口地址
-
+var baseUrl = 'img.iinnet.com';
 var apiSite = 'https://wozai.tonyliangli.cn/api';
 
 var apiHeader = {

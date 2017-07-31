@@ -256,7 +256,7 @@
     {{ for (var i = 0; i < it.length; i++) { }} 
         <div class="warp" onclick="event.stopPropagation();">
             <div class="main_no1 flex-def flex-cCenter">
-                <img src="{{=it[i].head_img_url}}">
+                <img src="{{=it[i].head_img_url}}" data-id="{{=it[i].user_id}}" onclick="openUserId(this)">
                 <div class="flex-item flex-def flex-cCenter flex-zBetween">
                     <div>
                         <span>{{=it[i].nickname}}</span>
@@ -348,6 +348,16 @@
             requireData();
         });
     };
+    // 进入会员主页
+    function openUserId(ele) {
+        api.openWin({
+            name: 'winName',
+            url: '../addressList/txl_memberInfo_Win.html',
+            pageParam: {
+                userId: $api.attr(ele, 'data-id')
+            }
+        });
+    }
     // 获取数据
     function requireData(type, status, sub_type) {
         api.ajax({
