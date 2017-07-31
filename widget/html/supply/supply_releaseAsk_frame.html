@@ -413,6 +413,18 @@
                 alert(JSON.stringify(err));
             }
         });
+         // 监听选择公司
+        api.addEventListener({
+            name: 'selCompany'
+        }, function(ret, err) {
+            if (ret) {
+                console.log(JSON.stringify(ret))
+                $api.text($api.byId('company_name'), ret.value.company_name);
+                $api.attr($api.byId('company_name'), 'data-id', ret.value.company_id);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     }
     // 编辑供应
     function editSupply(data) {
