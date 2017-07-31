@@ -330,34 +330,46 @@
             package: retAJAX.data.config.package,
             sign: retAJAX.data.config.sign
         }, function(ret, err) {
-            if (ret.status) {
-                //支付成功
-                api.execScript({
-                    name: 'winName_hy',
-                    script: 'requestData();'
-                });
-                // 支付成功
-                api.closeWin();
+            if (ret) {
+                if (ret.status) {
+                    //支付成功
+                    api.execScript({
+                        name: 'winName_hy',
+                        script: 'requestData();'
+                    });
+                    // 支付成功
+                    api.closeWin();
+                } else {
+                    // 支付失败
+                    api.toast({
+                        msg: ret.statusMessage || '取消支付'
+                    });
+                }
             } else {
-                // 支付失败
-                alert(JSON.stringify(ret))
+                alert(JSON.stringify(err))
             }
         })
     }
     function alipayFun(retAJAX) {
         aliPay.payOrder({
-          orderInfo: retAJAX.data.config
+            orderInfo: retAJAX.data.config
         },function(ret,err) {
-            if (ret.status) {
-                api.execScript({
-                    name: 'winName_hy',
-                    script: 'requestData();'
-                });
-                // 支付成功
-                api.closeWin();
+            if (ret) {
+                if (ret.status) {
+                    api.execScript({
+                        name: 'winName_hy',
+                        script: 'requestData();'
+                    });
+                    // 支付成功
+                    api.closeWin();
+                } else {
+                    // 支付失败
+                    api.toast({
+                        msg: ret.statusMessage || '取消支付'
+                    });
+                }
             } else {
-                // 支付失败
-                alert(JSON.stringify(ret))
+                alert(JSON.stringify(err))
             }
         });
     }

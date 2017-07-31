@@ -299,7 +299,7 @@
                     <span id="_type" class="spanno2 _type"></span>
                 </div>
             </li>
-            <li class="companyName">
+            <li class="companyName" tapmode onclick="openCompany()">
                 <div class="wrap">
                     <span>公司</span>
                     <span id="company_name" class="spanno2"></span>
@@ -424,6 +424,13 @@
             } else {
                 alert(JSON.stringify(err));
             }
+        });
+    }
+    // 打开公司页面
+    function openCompany() {
+        api.openWin({
+            name: 'supply_releaseCompany',
+            url: './supply_releaseCompany.html'
         });
     }
     // 编辑供应
@@ -640,7 +647,7 @@
                 form = $api.text($api.byId('form')) == '线上' ? 1 : 2,            //int 形式（1-线上，2-线下）
                 description = $api.val($api.byId('description'));        //string  详细内容
                 image_json = imgArr,          //string  图片（格式：["abc.jpg","ddd.jpg"]）
-                company_id = 1;      // 我公司卖ID（类型为2-我我公司卖卖时必传）
+                company_id =  $api.attr($api.byId('company_name'), 'data-id') || '';      // 我公司卖ID（类型为2-我我公司卖卖时必传）
                 end_date = $api.text($api.byId('endTime'));
                 // alert('标题 : '+ title +'---截至时间ID : '+end_date+'---分类ID : '+category_id+'---价格 : '+reward+'----形式'+form+'---内容: '+description +"---省份"+ province + "---地区" +city+ "---地址" +address+ "---纬度" +latitude+'---纬度: '+longitude)
                 // var category = $api.text($api.byId('category_id'));
@@ -672,7 +679,7 @@
                         description: description,
                         image_json: imgArr,
                         end_date:end_date,
-                        company_id:1
+                        company_id:company_id
                     }
                 } else {
                     // 发布新供应
@@ -693,7 +700,7 @@
                         description: description,
                         image_json: imgArr,
                         end_date:end_date,
-                        company_id:1
+                        company_id:company_id
                     }
                 }
                     api.ajax({
