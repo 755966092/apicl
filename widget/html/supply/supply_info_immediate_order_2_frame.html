@@ -283,17 +283,17 @@
                     <div class="wrap">
                         交易时间
                         <i></i>
-                        <span class="fr" id="serverTime" ontouchstart="openTime(this)">请选择交易时间</span>
+                        <span class="fr" id="serverTime" tapmode onclick="openTime(this)">请选择交易时间</span>
                     </div>
                 </div>
-                <div class="tel serveTime" ontouchstart='openPhonePage(1)'>
+                <div class="tel serveTime" tapmode onclick='openPhonePage(1)'>
                     <div class="wrap">
                         联系电话
                         <i></i>
                         <span class="fr" id="defaultPhone"></span>
                     </div>
                 </div>
-                <div class="tel serveTime" id="addressWrap" ontouchstart='openPhonePage(0)'>
+                <div class="tel serveTime" id="addressWrap" tapmode onclick='openPhonePage(0)'>
                     <div class="wrap">
                         地址
                         <i></i>
@@ -327,7 +327,7 @@
                 </span>
             </span>
             
-            <span class="enter" ontouchstart="enterPay()">确认支付</span>
+            <span class="enter" tapmode onclick="enterPay()">确认支付</span>
     </footer>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -364,7 +364,9 @@
             name: 'callbackPhone'
         }, function(ret, err) {
             if (ret) {
+                console.log(JSON.stringify(ret))
                 $api.text($api.byId('defaultPhone'), ret.value.phone);
+                $api.attr($api.byId('defaultPhone'), ret.value.id);
             } else {
                 alert(JSON.stringify(err));
             }
@@ -544,7 +546,7 @@
                 }
             }, function(ret, err) {
                 if(ret) {
-                    alert(JSON.stringify(ret))
+                    // alert(JSON.stringify(ret))
                     if (ret.data.info.real_name) {
                         $api.text($api.byId('real_name'), ret.data.info.real_name);
                     } else {

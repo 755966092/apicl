@@ -189,7 +189,7 @@
             {{ for (var i = 0; i < it.length; i++) { }} 
                 <div class="item flex-def" data-id="{{=it[i].demand_id}}" data-company="{{=it[i].company_name}}"   tapmode   onclick="info(this)">
                     <div class="headImg">
-                        <img src="{{=it[i].head_img_url}}">
+                        <img src="{{=it[i].head_img_url}}" tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation();">
                     </div>
                     <div class="content flex-def flex-zTopBottom flex-item">
                         <div class="title flex-def flex-zBetween">
@@ -227,7 +227,8 @@
                         <div class="comment">
                             <div class="time">
                                 <span>{{=it[i].create_time}}</span>
-                                <div class="commentIcon"></div>
+                                <!-- 评论图标 -->
+                                <!-- <div class="commentIcon"></div> -->
                             </div>
                            <!--  <div class="commentText">
                                 <ul>
@@ -279,6 +280,17 @@
             }
         });
     };
+    // 用户详情页面
+    function openUserInfoPage(ele){
+        var userId = $api.attr(ele, 'data-id');
+        api.openWin({
+            name: 'winName',
+            url: '../addressList/txl_memberInfo_Win.html',
+            pageParam: {
+                userId: userId
+            }
+        });
+    }
 
      // 处理时间显示
     function initTime(time) {

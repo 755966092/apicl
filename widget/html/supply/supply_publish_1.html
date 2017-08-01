@@ -206,7 +206,7 @@
                 {{ for (var i = 0; i < it.length; i++) { }} 
                     <div class="item flex-def" data-id="{{=it[i].supply_id}}" data-company="{{=it[i].company_name}}"   tapmode   onclick="info(this)">
                         <div class="headImg">
-                            <img src="{{=it[i].head_img_url}}">
+                            <img src="{{=it[i].head_img_url}}" tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation();">
                         </div>
                         <div class="content flex-def flex-zTopBottom flex-item">
                             <div class="title flex-def flex-zBetween">
@@ -248,7 +248,8 @@
                             <div class="comment">
                                 <div class="time">
                                     <span>{{=it[i].create_time}}</span>
-                                    <div class="commentIcon"></div>
+                                    <!-- 评论图标 -->
+                                    <!-- <div class="commentIcon"></div> -->
                                 </div>
                                 <!-- <div class="commentText">
                                     <ul>
@@ -303,6 +304,17 @@
         scrollBotton()
 
     };
+    // 用户详情页面
+    function openUserInfoPage(ele){
+        var userId = $api.attr(ele, 'data-id');
+        api.openWin({
+            name: 'winName',
+            url: '../addressList/txl_memberInfo_Win.html',
+            pageParam: {
+                userId: userId
+            }
+        });
+    }
     // 滚动到底部触发的事件
     function scrollBotton() {
         // 滚动到底部触发的事件
@@ -437,6 +449,7 @@
             }
         }, function(ret, err) {
             if(ret) {
+                console.log('请求数据:::'+JSON.stringify(ret))
                 // console.log(ret.data.list[0].create_time)
                 // 停止下拉刷新
                 api.refreshHeaderLoadDone()
@@ -512,7 +525,7 @@
             }
         }, function(ret, err) {
             console.log(page_num)
-           
+            console.log(JSON.stringify(ret))
             if(ret) {
                 if (ret.data.list) {
                     $api.text($api.dom('.bbottomLoading'), '暂无更多供求');

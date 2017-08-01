@@ -62,13 +62,9 @@
             border-radius: .04rem;
             width: .41rem;
             height: .24rem;
-            /*background: url(../../image/icon_supply/icon_gs2.png)no-repeat;*/
-            /*-webkit-background-size: .41rem .24rem;*/
-            /*background-size: .41rem .24rem;*/
-            /*padding-right: .1rem;*/
             font-size: .16rem;
             color: #576c96;
-            border: .01rem solid #576c96;
+            border: .02rem solid #576c96;
             margin-right: .1rem;
         }
 
@@ -94,6 +90,9 @@
         }
         .price .priceText {
             color: #D0011B;
+            font-size: .34rem;
+        }
+        .price .priceText .price1{
             font-size: .34rem;
         }
         .price .time {
@@ -372,27 +371,22 @@
             <div class="rightBtn">...</div>
         </div>
     </header>
-    <div class="loading" ></div>
+    <!-- <div class="loading" ></div> -->
     <div class="swiper-container">
         <div class="swiper-wrapper">
             <!-- <img src="http://imgsrc.baidu.com/imgad/pic/item/83025aafa40f4bfb281dbe70094f78f0f63618c0.jpg" class="swiper-slide blue-slide">
             <img src="http://imgsrc.baidu.com/imgad/pic/item/5366d0160924ab18cb0aad123ffae6cd7b890bf2.jpg" class="swiper-slide red-slide">
             <img src="http://img.taopic.com/uploads/allimg/140826/267848-140R60T34860.jpg" class="swiper-slide orange-slide"> -->
         </div>
-        <div class="swiper-pagination"></div>
+        <div class="swiper-pagination">
+            
+        </div>
     </div>
     <div class="resultList"></div>
     <script type="text/x-dot-template" id="listT">
         <div class="main flex-def flex-zTopBottom">
-            <!-- <div class="img">
-                {{?it.info.image_json[0]!='0'}}
-                    <img src="{{=it.info.image_json[0]}}?imageView2/1/w/200/h/200/q/75|imageslim">
-                {{??it.info.image_json[0]=='0'}}
-                    <img src="../../image/tx_4.jpg">
-                {{?}}
-            </div> -->
             <div class="title flex-def flex-zLeftRight flex-cCenter">
-                <img src="{{=it.info.head_img_url}}" alt="">
+                <img src="{{=it.info.head_img_url}}" id="headImg" tapmode onclick="openUserInfoPage(this)" data-id="{{=it.info.user_id}}">
                 <div class="titleRight">
                     <h3>{{=it.info.nickname}}</h3>
                     {{?it.info.current_company==null&&it.info.current_position!=null}}
@@ -409,13 +403,14 @@
                 <div class="top flex-def flex-zBetween">
                     <div class="titleName flex-def flex-zLeftRight flex-cCenter">
                         <span class="typeIcon">{{=it.info.type}}</span>
-                        <p>{{=it.info.title}}</p>
+                        <p class="supplyName">{{=it.info.title}}</p>
                     </div>
-                    <div class="shareIcon"></div>
+                    <!-- 分享按钮 -->
+                    <!-- <div class="shareIcon"></div> -->
                 </div>
                 <div class="price flex-def flex-zBetween flex-zLeftRight">
                     <div class="priceText">
-                        ￥{{=it.info.price}}/{{=it.info.unit}}
+                        ￥<span class="price1">{{=it.info.price}}/{{=it.info.unit}}</span>
                     </div>
                     <div class="time">
                         {{=it.info.create_time}}
@@ -499,9 +494,9 @@
         </div>
         {{?!it.is_self_add}}
         <footer>    
-            <span><i></i>聊天</span>
+            <span tapmode onclick="openChatPage(this)" data-rongId="{{=it.info.rongcloud_user_id}}"><i></i>聊天</span>
             {{?it.is_collect}}
-                <span id="collect" ontouchstart="supplyCollect(this)"><i></i>取消收藏</span>
+                <span id="collect" ontouchstart="supplyCollect(this)"><i class="cancelCollect"></i>取消收藏</span>
             {{??}}
                 <span id="collect" ontouchstart="supplyCollect(this)"><i></i>收藏</span>
             {{?}}
@@ -538,6 +533,39 @@
             }
         });
     };
+    // 打开聊天页面
+    function openChatPage(ele) {
+        var rong_id = $api.attr(ele, 'data-rongId');
+        var userName = $api.text($api.dom('h3'));
+        // 头像 昵称 供应名字 价格 单位
+        var userHeadImg = $api.attr($api.byId('headImg'), 'src');
+        var supplyName = $api.text($api.dom('.supplyName'));
+        var priceUint = $api.text($api.dom('.price')); 
+        api.openWin({
+            name: 'chatPage',
+            url: '../news/chatPage.html',
+             pageParam: {
+                type:'supplyInfo',
+                targetRongId: rong_id,
+                nickname: userName,
+                userHeadImg: userHeadImg,
+                supplyName: supplyName,
+                priceUint: priceUint,
+                order_id: api.pageParam.order_id
+            }
+        });
+    }
+    // 打开用户详情
+    function openUserInfoPage(ele) {
+        var userId = $api.attr(ele, 'data-id');
+        api.openWin({
+            name: 'winName',
+            url: '../addressList/txl_memberInfo_Win.html',
+            pageParam: {
+                userId: userId
+            }
+        });
+    }
     // 打开评论页面
     function openCommentPage(ele) {
         var avg = $api.attr(ele, 'data-avg');

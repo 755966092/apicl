@@ -165,9 +165,11 @@
             // $api.addEvt($api.byId('main_no3'), 'click', function(){
             //     delStudy();
             // });
-            getCityList();
         } else {
             url = '/user_center/addEducation'
+        }
+        if (api.pageParam.education_id) {
+            getCityList();
         }
         
         api.addEventListener({
@@ -346,7 +348,7 @@
         var school = $api.val($api.byId('school'));    
         var selectKe = $api.text($api.byId('selectKe'));    
         var time_1 = $api.text($api.byId('time_1'));    
-        var time_2 = $api.text($api.byId('time_2')); 
+        var time_2 = $api.text($api.byId('time_2')) == '至今' ? '0000-00-00' : $api.text($api.byId('time_2')); 
         var textarea = $api.val($api.byId('textarea')); 
         
          api.ajax({

@@ -174,13 +174,16 @@ var url, provinces, cities,  address, zipcode;
             city =  $api.text($api.dom('.city')),
             address =  $api.val($api.dom('.address')),
             zipcode =  $api.val($api.dom('.zipcode'));
-        if (provinces !== '' && cities !== '' && city !== '' && address !== '' && zipcode !== '') {
+        if (provinces !== '' && cities !== '' && city !== '' && address !== '' ) {
             $api.css($api.dom('.btn'), 'background:  #08BB08');
             $api.removeAttr($api.dom('.btn'),'disabled');
         }
     }
     // 打开选择器
     function selectList(ele) {
+        for (var i = 0; i < $api.domAll('input').length; i++) {
+            $api.domAll('input')[i].blur();
+        }
         var provinces = $api.text($api.dom('.provinces')),
             cities = $api.text($api.dom('.cities')),
             city = $api.text($api.dom('.city'));
@@ -263,6 +266,9 @@ var url, provinces, cities,  address, zipcode;
                     $api.text($api.dom('.provinces'), ret.level1);
                     $api.text($api.dom('.cities'), ret.level2);
                     $api.text($api.dom('.city'), ret.level3);
+                    for (var i = 0; i < $api.domAll('.text').length; i++) {
+                        $api.css($api.domAll('.text')[i], 'color: #000');
+                    }
                     // 判断按钮变色
                     iptCom();
                 }

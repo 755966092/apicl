@@ -163,7 +163,9 @@
         }
         // fnInit();
         // monitor();
-        getCityList();
+        if(api.pageParam.education_id) {
+            getCityList();
+        }
         api.addEventListener({
             name: 'editStudy'
         }, function(ret, err) {
@@ -274,7 +276,7 @@
         // 获取数据
         var school = $api.val($api.byId('school'));    
         var time_1 = $api.text($api.byId('time_1'));    
-        var time_2 = $api.text($api.byId('time_2')); 
+        var time_2 = $api.text($api.byId('time_2')) == '至今' ? '0000-00-00' : $api.text($api.byId('time_2')); 
         var textarea = $api.val($api.byId('textarea')); 
         api.ajax({
             url: apiSite + url,
@@ -282,7 +284,7 @@
             headers: apiHeader,
             data: {
                 values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    token: $api.getStorage('userToken'),
                     education_id: api.pageParam.education_id,
                     type: 1,
                     school: school,

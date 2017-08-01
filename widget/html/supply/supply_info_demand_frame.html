@@ -391,7 +391,7 @@
                 <img id="imgHeight" src="../../image/tx_4.jpg">
             </div> -->
             <div class="title flex-def flex-zLeftRight flex-cCenter">
-                <img src="{{=it.info.head_img_url}}" alt="">
+                <img src="{{=it.info.head_img_url}}" tapmode onclick="openUserInfoPage(this)" data-id="{{=it.info.user_id}}">
                 <div class="titleRight">
                     <h3>{{=it.info.nickname}}</h3>
                     {{?it.info.current_company==null&&it.info.current_position!=null}}
@@ -410,7 +410,8 @@
                         <span class="typeIcon">{{=it.info.type}}</span>
                         <p>{{=it.info.title}}</p>
                     </div>
-                    <div class="shareIcon"></div>
+                    <!-- 分享按钮 -->
+                    <!-- <div class="shareIcon"></div> -->
                 </div>
                 <div class="price flex-def flex-zBetween flex-zLeftRight">
                     <div class="priceText">
@@ -493,7 +494,7 @@
                 
                 {{?it.info.comment_count==0}}
                 {{??}}
-                    <div class="btn flex-def flex-cCenter">
+                    <div data-avg="{{=it.info.avg_point}}" class="btn flex-def flex-cCenter" tapmode onclick="openCommentPage(this)">
                         <div>查看全部</div>
                     </div>
                 {{?}}
@@ -504,7 +505,7 @@
         <footer>    
             <span><i></i>聊天</span>
             {{?it.is_collect}}
-                <span id="collect" ontouchstart="supplyCollect(this)"><i></i>取消收藏</span>
+                <span id="collect" ontouchstart="supplyCollect(this)"><i class="cancelCollect"></i>取消收藏</span>
             {{??}}
                 <span id="collect" ontouchstart="supplyCollect(this)"><i></i>收藏</span>
             {{?}}
@@ -543,6 +544,17 @@
             }
         });
     };
+    // 打开用户详情
+    function openUserInfoPage(ele) {
+        var userId = $api.attr(ele, 'data-id');
+        api.openWin({
+            name: 'winName',
+            url: '../addressList/txl_memberInfo_Win.html',
+            pageParam: {
+                userId: userId
+            }
+        });
+    }
     // 编辑供应
     function editSupply() {
         api.openWin({
@@ -552,6 +564,18 @@
                 flag: api.pageParam.flag, 
                 compaby_name: api.pageParam.compaby_name,
                 demand_id: api.pageParam.demand_id
+            }
+        });
+    }
+    // 打开评论页面
+    function openCommentPage(ele) {
+        var avg = $api.attr(ele, 'data-avg');
+        api.openWin({
+            name: 'supply_commentPage_win',
+            url: './supply_commentPage_win.html',
+            pageParam: {
+                supply_id: api.pageParam.supply_id,
+                avg: avg
             }
         });
     }

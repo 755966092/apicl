@@ -140,6 +140,7 @@
         
 
         .btn {
+            display: none;
             width: 6.32rem;
             height: .83rem;
             margin: 0 auto;
@@ -399,6 +400,7 @@
         classify();
         if (api.pageParam.supply_id) {
             $api.text($api.dom('.btn'), '确定');
+            $api.css($api.dom('.btn'), 'display: block');
             releaseFlag = 1;
             requireData();
 
@@ -495,6 +497,7 @@
                 $api.text(position, data.info.address);
                 $api.text(unit, unitText);
                 $api.text(category_id, _categoryId);
+                $api.attr(category_id, 'data-id',data.info.category_id);
                 data.info.type == 1 ? $api.text(_type, '个人') : $api.text(_type, '公司');
                 if (data.info.type == 2) {
                     $api.css($api.dom('.companyName'), 'display:block');
@@ -866,6 +869,7 @@
     }
     // 选择类型  公司 | 个人
     function selectType(ele) {
+        for (var i = 0; i < $api.domAll('input').length; i++) {$api.domAll('input')[i].blur()}
         var person =  $api.text(ele.getElementsByClassName('spanno2')[0]);
         var _data = $api.attr(ele, 'data-val');
         var flag;

@@ -117,6 +117,9 @@
             border: .02rem solid #E3E3E3;
         }
         .supply_info {
+            position: fixed;color: top: 0;left: 0;
+            z-index: 999;
+            margin-bottom: .2rem;
             width: 7.5rem;
             position: fixed;
             top: 0;
@@ -288,18 +291,22 @@ var  mainH, _main, scrollH;
     // 打开订单详情
     function openSupplyPage(ele) {
         var url;
-        if (api.pageParam.type == 'supply') {
-            url = '../me/me_gdd_info.html'
+        if (api.pageParam.type == 'supplyInfo') {
+            api.closeWin();
         } else {
-            url = '../me/me_qdd_info.html'
-        }
-        api.openWin({
-            name: 'winName'+url,
-            url: url,
-            pageParam: {
-                order_id: api.pageParam.order_id
+            if (api.pageParam.type == 'supply') {
+                url = '../me/me_gdd_info.html'
+            } else {
+                url = '../me/me_qdd_info.html'
             }
-        });
+            api.openWin({
+                name: 'winName'+url,
+                url: url,
+                pageParam: {
+                    order_id: api.pageParam.order_id
+                }
+            });
+        }
     }
     function closeDiv1() {
         $api.css($api.dom('.shadow'), 'display:none');
