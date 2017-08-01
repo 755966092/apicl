@@ -1,40 +1,71 @@
 {
 	"code": 200,
 	"msg": "",
-	"time": 1501556952,
+	"time": 1501578132,
 	"data": {
 		"info": {
-			"supply_id": 8,
-			"create_time": "2017-08-01 11:04:23",
-			"title": "苹果发布",
-			"type": 1,
-			"sub_type": 2,
-			"price": "0.01",
-			"unit": 0,
-			"form": 1,
-			"province": "北京市",
-			"city": "北京市",
-			"district": "海淀区",
-			"category_id": 1,
-			"category_name": "家政",
-			"description": "测试",
-			"image_json": "[]",
-			"status": 1,
-			"sold_count": 0,
-			"comment_count": 0,
-			"avg_point": 0,
-			"rongcloud_user_id": "f1991ea142feba7dd1874bfb62660394",
-			"user_id": 363,
-			"nickname": "测试3",
-			"head_img_url": "http://img.iinnet.com/Fmg6Owc-tHR4CjxOvQDdM6JVuki6",
+			"user_id": 489,
+			"nickname": "李",
+			"real_name": "",
+			"sex": 1,
+			"head_img_url": "http://img.iinnet.com/system/default-head-img.png",
+			"hometown": null,
+			"birthday": null,
 			"current_company": null,
 			"current_position": null,
-			"company_id": null,
-			"company_name": null
+			"current_degree": null
 		},
-		"last_comment": null,
-		"is_collect": false,
-		"is_self_add": false
+		"extra": {
+			"extra_id": 12,
+			"remark_user_id": 131,
+			"content": null,
+			"image_url": null
+		},
+		"status": [{
+			"status_id": 8,
+			"user_id": 489,
+			"remark_user_id": 131,
+			"name": "学习",
+			"position": "理科",
+			"degree": "0",
+			"start_date": "2017-07-01",
+			"is_default": 1,
+			"type": 2
+		}, {
+			"status_id": 8,
+			"user_id": 489,
+			"remark_user_id": 131,
+			"name": "测试公司",
+			"position": "测试公司",
+			"degree": "",
+			"start_date": "2017-07-01",
+			"is_default": -1,
+			"type": 1
+		}],
+		"contact_list": [],
+		"other_contact_list": [],
+		"address_list": [],
+		"work_list": [{
+			"work_id": 8,
+			"company_id": 0,
+			"company_name": "测试公司",
+			"position": "测试公司",
+			"description": "测试",
+			"start_date": "2017-07-01",
+			"end_date": "0000-00-00",
+			"is_default": -1
+		}],
+		"education_list": [{
+		"education_id": 8,
+			"type": 2,
+			"school": "学习",
+			"major": "理科",
+			"degree": 0,
+			"description": "测试",
+			"start_date": "2017-07-01",
+			"end_date": "0000-00-00"
+		}],
+		"projectList": []
 	}
 }
-at supply_info_frame.html: 637
+at txl_addFellow_study_frame.html: 493

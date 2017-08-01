@@ -75,6 +75,9 @@
             padding-left: 0;
             padding-right: .36rem;
         }
+        .loading {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -86,6 +89,7 @@
             </span>
         </div>
     </header> -->
+    <div class="loading"></div>
     <div class="main clearfix">
        <div class="main_no1">
            <div class="wrap">
@@ -100,11 +104,11 @@
            </p>
        </div>
        <div class="main_no2">
-           <p class="telClass"   tapmode   onclick="selTel()">类别
+           <p class="telClass"  tapmode onclick="selTel()">类别
                 <span class="fr telClass_1" id="sub_type">工作</span>
            </p>
            <p>电话号码
-                <input type="text" id="phone" placeholder="输入手机号" class="fr">
+                <input type="text" id="phone" placeholder="输入号码" class="fr">
            </p>
        </div>
        <div class="main_no3 ">
@@ -178,22 +182,84 @@
         });
     }
     // 选择电话类别  生活 || 工作
-    function selTel() {
-            var val = $api.text($api.dom('.telClass_1'));
-            api.openFrame({
-                name: 'txl_addFellow_addPhone_tel',
-                url: './txl_addFellow_addPhone_tel.html',
-                rect: {
-                    x: 0,
-                    y: 0,
-                    w: 'auto',
-                    h: api.winHeight
-                },
-                pageParam: {
-                    val:val
-                },
-                bounces: false
-            });
+    function selTel(ele) {
+        var text = $api.text($api.byId('sub_type'));
+        var data = ['生活','工作']
+        var selArr = []
+        for (var i = 0; i < data.length; i++) {
+            if (data[i] == text) {
+                selArr.push(i)
+                break;
+            }
+        }
+        
+        var fontsize = 16,rowLength = 5, enterSize = 14;
+        if (api.systemType === 'ios') {
+            fontsize = 20;
+            rowLength = 7;
+            enterSize = 16;
+        }
+        UIActionSelector.open({
+            datas: [
+                {
+                    name:'生活'
+                },{
+                    name:'工作'
+                }
+            ],
+            actives: selArr,
+            layout: {
+                row: rowLength,
+                col: 1,
+                height: 26,
+                size: fontsize,
+                sizeActive: fontsize+2,
+                rowSpacing: 5,
+                colSpacing: 5,
+                maskBg: 'rgba(0,0,0,0.5)',
+                bg: '#fff',
+                color: '#888',
+                colorSelected: '#000'
+            },
+            animation: true,
+            cancel: {
+                text: '取消',
+                size: enterSize,
+                w: 90,
+                h: 40,
+                bg: '#eee',
+                color: '#000',
+            },
+            ok: {
+                text: '确定',
+                size: enterSize,
+                w: 90,
+                h: 40,
+                bg: '#eee',
+                color: '#000',
+            },
+            title: {
+                text: '请选择号码类别',
+                size: 20,
+                h: 44,
+                bg: '#eee',
+                color: '#000'
+            },
+            fixedOn: api.frameName
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.eventType == 'ok') {
+                    if (ret.level1 == '工作') {
+                        sub_type = 1;
+                    } else {
+                        sub_type = 2;
+                    }
+                    $api.text($api.byId('sub_type'),ret.level1);
+                }
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
     }
 
 
@@ -208,6 +274,7 @@
 
     // // 添加电话完成
     function addTel() {
+        $api.css($api.dom('.loading'), 'display: block');
         var tel = $api.val($api.dom('input'));
         var obj = {};
         if (api.pageParam.contactId) {
@@ -239,6 +306,7 @@
             }, function(ret, err) {
                 if (ret) {
                     if (ret.code == 200) {
+                        $api.css($api.dom('.loading'), 'display: none');
                         insertData();
                         
                     } else {

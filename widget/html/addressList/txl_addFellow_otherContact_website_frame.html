@@ -7,7 +7,9 @@
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
        
-        
+        .loading {
+            display: none;
+        }
         .main_no1 {
            margin-top: .6rem;
         }
@@ -72,6 +74,7 @@
     </style>
 </head>
 <body>
+<div class="loading"></div>
     <!--  <header  class="header">
         <div class="head">
             <span class="callback"   tapmode   onclick="api.closeWin()">返回</span>
@@ -130,6 +133,7 @@
     }
     // 添加电话完成
     function addTel() {
+        $api.css($api.dom('.loading'), 'display: block');
         var tel = $api.val($api.dom('input')),obj;
         if (api.pageParam.obj) {
             obj = {
@@ -158,7 +162,7 @@
             }
         }, function(ret, err) {
             if (ret) {
-                alert(JSON.stringify(ret));
+                $api.css($api.dom('.loading'), 'display: none');
                 insertData();
                 api.closeWin();
             }

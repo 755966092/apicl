@@ -77,6 +77,9 @@
         .btm p {
             border: 0;
         }
+        .loading {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -89,6 +92,7 @@
        
         </div>
     </header> -->
+    <div class="loading"></div>
     <div class="main clearfix">
        <div class="main_no1">
            <div class="wrap">
@@ -172,6 +176,7 @@
 
     // 添加电话完成
     function addTel() {
+        $api.css($api.dom('.loading'), 'display: block');
         var tel = $api.val($api.dom('input'));
         val = $api.attr($api.dom('.select'),'data-val') == 'QQ' ? 2 : 1;
         var obj = {};
@@ -202,7 +207,8 @@
             }
         }, function(ret, err) {
             if (ret) {
-                alert(JSON.stringify(ret))
+                $api.css($api.dom('.loading'), 'display: none');
+                // alert(JSON.stringify(ret))
                 insertData();
             }
             api.closeWin();

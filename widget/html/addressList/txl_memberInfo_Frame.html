@@ -272,7 +272,7 @@
         ul li .liRightIcon {
             float: right;
             display: inline-block;
-            background: url(../../image/tx_4.jpg);
+            /*background: url(../../image/tx_4.jpg);*/
             width: .749rem;
             height: .458rem;
             -webkit-background-size: .749rem auto;
@@ -356,7 +356,7 @@
                     <span id="current_degree"></span> 
                 </span>
             </div>
-            <p>加入会员后可查看对方最近一次活跃时间</p>
+            <!-- <p>加入会员后可查看对方最近一次活跃时间</p> -->
         </div>
     </div>
     <!--<div class="business">
@@ -376,9 +376,10 @@
         </div>
     </div>-->
     <ul class="mt20">
-        <li tapmode onclick="openInfo(this)" data-val="friendContact">
+        <!-- <li tapmode onclick="openInfo(this)" data-val="friendContact"> -->
+        <li  data-val="friendContact">
             <span id="relationship_level"></span>
-            <span class="icon"></span>
+            <!-- <span class="icon"></span> -->
         </li>
         <li class="mt20" tapmode onclick="openInfo(this)" data-val="mainPhone">
             <div class="wrap">
@@ -408,27 +409,30 @@
     </ul>
     <ul class="status mt20 resultList"></ul>
         <script type="text/x-dot-template" id="listT">
-            {{ for (var i = 0; i < it.length; i++) { }} 
-                {{?it[i].type == 1}}
-                    <li tapmode data-statusId = '{{=it[i].status_id}}' data-type = '{=it[i].type}' onclick="selCurrentStatus(this)">
-                        <span>{{=it[i].name}} {{=it[i].position}}</span>
-                        {{?it[i].is_default==1}}
-                        <span class="iconStatus sel"></span>
-                        {{??}}
-                        <span class="iconStatus "></span>
-                        {{?}}
-                    </li>
-                {{??}}
-                    <li tapmode data-statusId = '{{=it[i].status_id}}' data-type = '{=it[i].type}' onclick="selCurrentStatus(this)">
-                        <span>{{=it[i].name}} {{=it[i].position}}  {{=it[i].degree}}</span>
-                        {{?it[i].is_default==1}}
-                        <span class="iconStatus sel"></span>
-                        {{??}}
-                        <span class="iconStatus "></span>
-                        {{?}}
-                    </li>
-                {{?}}
-            {{ }; }}
+            {{?it}}
+                {{ for (var i = 0; i < it.length; i++) { }} 
+                    {{?it[i].type == 1}}
+                        <li tapmode data-statusId = '{{=it[i].status_id}}' data-type = '{=it[i].type}' onclick="selCurrentStatus(this)">
+                            <span>{{=it[i].name}} {{=it[i].position}}</span>
+                            {{?it[i].is_default==1}}
+                            <span class="iconStatus sel"></span>
+                            {{??}}
+                            <span class="iconStatus "></span>
+                            {{?}}
+                        </li>
+                    {{??}}
+                        <li tapmode data-statusId = '{{=it[i].status_id}}' data-type = '{=it[i].type}' onclick="selCurrentStatus(this)">
+                            <span>{{=it[i].name}} {{=it[i].position}}  {{=it[i].degree}}</span>
+                            {{?it[i].is_default==1}}
+                            <span class="iconStatus sel"></span>
+                            {{??}}
+                            <span class="iconStatus "></span>
+                            {{?}}
+                        </li>
+                    {{?}}
+                {{ }; }}
+            {{??}}
+            {{?}}
         </script>
         
       <!--   <li>
@@ -480,7 +484,7 @@
     var SQLName = 'db_' + $api.getStorage('userToken');
     var targetRongId;
     apiready = function () {
-        console.log('484:::'+JSON.stringify(api.pageParam))
+        // console.log('484:::'+JSON.stringify(api.pageParam))
         if(api.pageParam.userId == 0) {
             api.ajax({
                 url: apiSite + '/user/detail',
@@ -493,7 +497,7 @@
                 }
             }, function(ret, err) {
                 if(ret) {
-                    console.log('499:::'+JSON.stringify(ret))
+                    // console.log('499:::'+JSON.stringify(ret))
                     api.pageParam.userId = ret.data.info.user_id;
                     moduleInit();
                     initPage();
@@ -514,6 +518,7 @@
             name: 'editUserInfo'
         }, function (ret, err) {
             if (ret) {
+                // console.log('监听到事件')
                 initPage();
             } else {
                 alert(JSON.stringify(err));
@@ -542,6 +547,7 @@
         }, function(ret, err) {
             if(ret) {
                 // alert(JSON.stringify(ret))
+                console.log('修改当前状态成功')
                 // 更新数据库
                 updataSql(status_id)
             } else {
@@ -562,6 +568,7 @@
                 }, function(ret, err){        
                     if( ret.status ){
                         // alert( JSON.stringify( ret ) );
+                        console.log('更新成功')
                         initStatus();
                     }else{
                         alert( JSON.stringify( err ) );
@@ -596,12 +603,12 @@
         }, function (ret, err) {
             if (ret) {
                 if (ret.code == 200) {
-                    console.log(JSON.stringify(ret))
+                    // console.log(JSON.stringify(ret))
                     targetRongId = ret.data.info.rongcloud_user_id;
                     if (flag) {
                         // 无本地信息, 网络获取
                         relationship(ret.data.relationship_level,ret.data.info.status)
-                        console.log('594:::::'+JSON.stringify(ret.data))
+                        // console.log('594:::::'+JSON.stringify(ret.data))
                         paramRealName = ret.data.info.real_name;
                         $api.text(nickname, ret.data.info.nickname);
                         $api.attr(head_img_url, 'src', ret.data.info.head_img_url);
@@ -612,9 +619,13 @@
                         $api.text(current_company, ret.data.info.current_company || '');
                         $api.text(current_degree, ret.data.info.current_degree || '');
                         $api.text(hometown, ret.data.info.hometown || '');
-                        if(ret.data.contact){
+                        if(ret.data.contact.length != 0){
+                            // console.log(1)
                             $api.text(phone, ret.data.contact.phone || '');
                             $api.attr(phone, 'data-id', ret.data.contact.contact_id || '');
+                        } else {
+                            // console.log(2)
+                            requireContact();
                         }
                         $api.text(birthday, ret.data.info.birthday == '0000-00-00' ? '' : ret.data.info.birthday);
                     } else {
@@ -628,6 +639,33 @@
             }
         })
     }
+    // 电话
+    function requireContact() {
+        var phone = $api.byId('phone');
+        api.ajax({
+            url: apiSite + '/user/contactList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       user_id: api.pageParam.userId
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                // console.log('用户自己的'+JSON.stringify(ret.data.list));
+                for (var i = 0; i < ret.data.list.length; i++) {
+                    if (ret.data.list[i].is_default == 1) {
+                        $api.text(phone, ret.data.list[i].phone || '');
+                        $api.attr(phone, 'data-id', ret.data.list[i].contact_id || '');
+                    } 
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        });
+    }
     // 当前状态
     function initStatus() {
         db.selectSql({
@@ -637,11 +675,11 @@
             if( ret.status ){
                 console.log( '626::::' + JSON.stringify( ret ) );
                 if (ret.data.length != 0) {
-                    console.log('本地数据库')
+                    // console.log('本地数据库')
                     for (var i = 0; i < ret.data.length; i++) {
                         if (ret.data[i].type == 2) {
                             // 學習
-                            console.log(ret.data[i].degree)
+                            // console.log(ret.data[i].degree)
                             switch(ret.data[i].degree) {
                                 case '0': ret.data[i].degree = ''; break;
                                 case '1': ret.data[i].degree = '专科'; break;
@@ -653,15 +691,18 @@
                         }
                         
                     }
+                    console.log('本地数据库tb_remarks_status内容')
                     reviseText(ret.data);
-                    getData(ret.data);
+                    // console.log(JSON.stringify(ret.data))
                     statusRemarks(ret.data,1)
+                    getData(ret.data);
                 } else {
+                    console.log('获取网络信息')
                     statusRemarks();
                 }
             }else{
                 alert( '629'+JSON.stringify( err ) );
-                console.log( '629'+JSON.stringify( err ) );
+                // console.log( '629'+JSON.stringify( err ) );
 
             }
         });
@@ -672,18 +713,24 @@
         var current_company = $api.byId('current_company');
         var current_position = $api.byId('current_position');
         var current_degree = $api.byId('current_degree');
-        for (var i = 0; i < data.length; i++) {
-            if (data[i].is_default == 1) {
-                if (data[i].type == 2) {
-                    $api.text(current_company, data[i].name);
-                    $api.text(current_position, data[i].position);
-                    $api.text(current_degree, data[i].degree);
-                } else {
-                    $api.text(current_company, data[i].name);
-                    $api.text(current_position, data[i].position);
-                    $api.text(current_degree, '');
+        if (data) {
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].is_default == 1) {
+                    if (data[i].type == 2) {
+                        $api.text(current_company, data[i].name);
+                        $api.text(current_position, data[i].position);
+                        $api.text(current_degree, data[i].degree);
+                    } else {
+                        $api.text(current_company, data[i].name);
+                        $api.text(current_position, data[i].position);
+                        $api.text(current_degree, '');
+                    }
                 }
             }
+        } else {
+            $api.text(current_company, '');
+            $api.text(current_position, '');
+            $api.text(current_degree, '');
         }
     }
     // 当前状态 - 备注信息
@@ -700,16 +747,21 @@
             }
         }, function(ret, err) {
             if(ret) {
-
+                console.log('741::::'+JSON.stringify(ret))
                 if (!argument) {
+                    console.log(111)
                     if (ret.data.status.length != 0) {
+
                         console.log('网络备注')
                         handData(ret)
                     } else {
+                        console.log(222)
                         statusUser();
                     }
                 } else {
                     // 对比
+                    console.log('data.length:::'+data.length)
+                    console.log('ret.data.status.length:::'+ret.data.status.length)
                     if (data.length != ret.data.status.length) {
                         // 更新数据库
                         console.log('更新数据库')
@@ -737,20 +789,21 @@
             if (ret) {
                 if (ret.data.status.length != 0) {
                     console.log('原始信息')
-                    handData(ret)
                 }
+                    handData(ret)
             }
         })
     }
+
     function handData(ret) {
-        console.log('707:::'+JSON.stringify(ret))
+        // console.log('707:::'+JSON.stringify(ret))
         if (ret.data.status != '') {
             var sql = 'INSERT OR REPLACE INTO tb_remarks_status(remark_user_id, status_id, name, position, degree, start_date, is_default, type) VALUES ';
             for (var i = 0; i < ret.data.status.length; i++) {
                 sql +=  '(' + api.pageParam.userId + ',' + ret.data.status[i].status_id + ',"' + ret.data.status[i].name+ '","' + ret.data.status[i].position+ '","' + ret.data.status[i].degree+ '","' + ret.data.status[i].start_date+ '",' + ret.data.status[i].is_default+ ',' + ret.data.status[i].type + '),';
                 if (ret.data.status[i].type == 2) {
                     // 學習
-                    console.log(ret.data.status[i].degree)
+                    // console.log(ret.data.status[i].degree)
                     switch(ret.data.status[i].degree) {
                         case '0': ret.data.status[i].degree = ''; break;
                         case '1': ret.data.status[i].degree = '专科'; break;
@@ -762,23 +815,27 @@
                 }
             }
             sql = sql.substring(0,sql.length-1);
-            console.log(sql)
+            // console.log(sql)
             db.executeSql({
                 name: 'db_' + $api.getStorage('userToken'),
                 sql: sql  
-            }, function(ret, err){        
-                if( ret.status ){
-                    alert( JSON.stringify( ret ) );
+            }, function(retSql, errSql){        
+                if( retSql.status ){
+                    alert('插入数据成功')
+                    reviseText(ret.data.status)
+                    getData(ret.data.status)
                 }else{
-                    alert( JSON.stringify( err ) );
+                    alert( JSON.stringify( errSql ) );
                 }
             });
-            reviseText(ret.data.status)
-            getData(ret.data.status)
+        } else {
+            reviseText()
+            getData()
         }
     }
     // 初始化页面
     function initPage() {
+        // console.log('重新请求数据')
         var nickname = $api.byId('nickname');
         var sex = $api.byId('sex');
         var head_img_url = $api.byId('head_img_url');
@@ -804,7 +861,7 @@
             sql: 'SELECT * FROM addressList WHERE user_id = ' + api.pageParam.userId
         }, function (ret, err) {
             if (ret.status) {
-                console.log('663:::::::::::' + JSON.stringify(ret));
+                // console.log('663:::::::::::' + JSON.stringify(ret));
                if (ret.data.length != 0) {
                     // 电话
                     if (ret.data[0].remark_current_contact) {
@@ -865,7 +922,7 @@
             sql: 'SELECT * FROM tb_remarks_user_info WHERE remark_user_id = ' + api.pageParam.userId
         }, function(ret, err){        
             if( ret.status ){
-                console.log(JSON.stringify(ret.data))
+                // console.log('902'+JSON.stringify(ret.data))
                 if (ret.data.length != 0) {
                     if (ret.data[0].extra_image_url) {
                         $api.css(liRightIcon, 'background: url('+ ret.data[0].extra_image_url +'?imageView2/3/w/200/h/200/q/75|imageslim);-webkit-background-size: .749rem auto;background-size: .749rem auto;background-position: 0 center;');
@@ -877,7 +934,7 @@
         });
     }
     function relationship(relationship_levelType,status) {
-        console.log(relationship_levelType)
+        // console.log(relationship_levelType)
         var btn = $api.byId('btn');
         switch (relationship_levelType) {
             case 1:
@@ -885,30 +942,35 @@
                 $api.css(btn, 'display: none');
                 break;
             case 2:
-                $api.text(relationship_level, '熟识好友，点击查看您与他的交集');
+                $api.text(relationship_level, '一度人脉熟识好友');
                 break;
             case 3:
-                $api.text(relationship_level, '相识好友' + compareRelation(status) + '，点击查看您与他的交集');
+                if(status == 1) {
+                    $api.text(relationship_level, '一度人脉相识好友');
+                } else {
+                    $api.css($api.byId('btn'), 'display: none');
+                    $api.text(relationship_level, '一度人脉尚未加入');
+                }
                 // 1 相识
-                // -1 一度人脉未加入
+                // -1 一度人脉尚未加入
                 break;
             case 4:
-                $api.text(relationship_level, '初始好友，点击查看您与他的交集');
+                $api.text(relationship_level, '一度人脉初识好友');
                 break;
             case 5:
-                $api.text(relationship_level, '二度人脉' + compareRelation(status) + '，点击查看您与他的交集');
+                $api.text(relationship_level, '二度人脉' + compareRelation(status));
                 break;
             case 6:
-                $api.text(relationship_level, '三度人脉' + compareRelation(status) + '，点击查看您与他的交集');
+                $api.text(relationship_level, '三度人脉' + compareRelation(status));
                 break;
             case 7:
-                $api.text(relationship_level, '四度人脉' + compareRelation(status) + '，点击查看您与他的交集');
+                $api.text(relationship_level, '四度人脉' + compareRelation(status));
                 break;
             case 8:
-                $api.text(relationship_level, '五度人脉' + compareRelation(status) + '，点击查看您与他的交集');
+                $api.text(relationship_level, '五度人脉' + compareRelation(status));
                 break;
             case 9:
-                $api.text(relationship_level, '六度人脉' + compareRelation(status) + '，点击查看您与他的交集');
+                $api.text(relationship_level, '六度人脉' + compareRelation(status));
                 break;
             case 10:
                 $api.text(relationship_level, '无任何关系');
@@ -920,7 +982,8 @@
         if(status == 1) {
             return ''
         } else {
-            return '未加入'
+            return '尚未加入'
+            $api.css($api.byId('btn'), 'display: none');
         }
     }
     function addFriends(ele) {
@@ -1060,7 +1123,7 @@
             date = current[0];
             date1 = current[1];
             date2 = current[2];
-            console.log(current)
+            // console.log(current)
         } else {
             date = new Date().getFullYear();
             date1 = new Date().getMonth();
@@ -1094,7 +1157,7 @@
                 birthday: data
             }
         }
-        console.log(JSON.stringify(data))
+        // console.log(JSON.stringify(data))
         api.ajax({
             url: apiSite + '/remark_user/editBasicInfo',
             method: 'post',
@@ -1105,7 +1168,7 @@
         }, function (ret, err) {
             if (ret) {
                 if (ret.code === 200) {
-                    console.log('663:' + JSON.stringify(ret))
+                    // console.log('663:' + JSON.stringify(ret))
                     api.ajax({
                         url: apiSite + '/remark_user/fullInfo',
                         method: 'post',
@@ -1125,27 +1188,27 @@
                             }, function (retSql, err1) {
                                 if (retSql.status) {
                                     if (retSql.data.length !== 0) {
-                                        console.log('有数据,更新')
+                                        // console.log('有数据,更新')
                                         // 有数据 更新
                                         db.executeSql({
                                             name: 'db_' + $api.getStorage('userToken'),
                                             sql: 'UPDATE addressList SET remark_birthday = "' + ret.data.info.birthday + '", remark_hometown = "' + ret.data.info.hometown + '" WHERE user_id = ' + api.pageParam.userId
                                         }, function (ret, err) {
                                             if (ret.status) {
-                                                console.log('688:' + JSON.stringify(ret));
+                                                // console.log('688:' + JSON.stringify(ret));
                                             } else {
                                                 alert('690:' + JSON.stringify(err));
                                             }
                                         });
                                     } else {
-                                        console.log('没有数据,插入')
+                                        // console.log('没有数据,插入')
                                         // 没数据 插入新数据
                                         db.executeSql({
                                             name: 'db_' + $api.getStorage('userToken'),
                                             sql: SQL
                                         }, function (ret, err) {
                                             if (ret.status) {
-                                                console.log('684:::' + JSON.stringify(ret));
+                                                // console.log('684:::' + JSON.stringify(ret));
                                             } else {
                                                 alert(JSON.stringify(err));
                                             }

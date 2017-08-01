@@ -6,8 +6,9 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-       
-       
+        .loading {
+            display: none;
+        }
         ul {
             margin-top: .2rem;
             font-size: .28rem;
@@ -62,6 +63,7 @@
     </style>
 </head>
 <body>
+    <div class="loading"></div>
     <div class="main">
         <ul>
             <li>
@@ -122,6 +124,7 @@
 
     };
     function addRess() {
+        $api.css($api.dom('.loading'), 'display: block');
         var obj = {};
         provinces =  $api.text($api.dom('.provinces'));
         cities =  $api.text($api.dom('.cities'));
@@ -161,7 +164,12 @@
             }
         }, function(ret, err) {
             if (ret) {
-                insertData();
+                if (ret.code == 200) {
+                    $api.css($api.dom('.loading'), 'display: none');
+                    insertData();
+                } else {
+                    alert(ret.msg)
+                }
                 // getData(ret.data.list)
                 
                 

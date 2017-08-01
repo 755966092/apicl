@@ -7,6 +7,19 @@
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <link rel="stylesheet" type="text/css" href="../../css/flex.css"/>
    <style type="text/css">
+        .loading {
+            display: none;
+            width: .8rem;
+            height: .8rem;
+            background: url(../../image/loading_more.gif)no-repeat;
+            background-size: .8rem .8rem;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            margin: auto;
+         }
         .main {
              font-size: 0;
         }
@@ -44,7 +57,7 @@
             color: #fff;
             width: .44rem;
             height: .44rem;
-            line-height: .46rem;
+            line-height: .44rem;
             border-radius: .22rem;
             background-color: #f00;
             position: absolute;
@@ -65,14 +78,18 @@
         <textarea name="" id="text" cols="30" rows="10"></textarea>
         <div class="img" tapmode onclick="openImg()">
             <span class="delBtn" onclick="delImg();event.stopPropagation();" tapmode >x</span>
-            <img id="img" src="http://imgsrc.baidu.com/image/c0%3Dshijue%2C0%2C0%2C245%2C40/sign=18f55e5a72f0f736ccf34442623cd96c/9f2f070828381f305ab5e58ca3014c086e06f063.jpg">
+            <img id="img" src="../../image/iocn_addressList/icon_default.png">
         </div>
     </div>
+    <div class="loading"></div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
+        if ($api.attr($api.byId('img'), 'src') == '../../image/iocn_addressList/icon_default.png') {
+            $api.css($api.dom('.delBtn'), 'display:none');
+        }
         moduleInit(); 
         api.addEventListener({
             name: 'submitData'
@@ -95,15 +112,17 @@
             if( ret.status ){
                     console.log( JSON.stringify( ret ) );
                     if (ret.data.length != 0 && ret.data[0].extra_id) {
-                        if (ret.data[0].extra_content) {
-                            $api.val($api.byId('text'), ret.data[0].extra_content);
+                        if (ret.data[0].extra_content != null) {
+                            $api.val($api.byId('text'), ret.data[0].extra_content != null ? ret.data[0].extra_content : '');
                         }
-                        if (ret.data[0].extra_image_url) {
+                        if (ret.data[0].extra_image_url != 'null') {
                             $api.attr($api.byId('img'), 'src', ret.data[0].extra_image_url);
+                             $api.css($api.dom('.delBtn'), 'display:block');
                         }
-                        if (ret.data[0].extra_image_url && ret.data[0].extra_content) {
+                        if (ret.data[0].extra_image_url!= 'null' && ret.data[0].extra_content) {
                             $api.attr($api.byId('img'), 'src', ret.data[0].extra_image_url);
-                            $api.val($api.byId('text'), ret.data[0].extra_content);
+                             $api.val($api.byId('text'), ret.data[0].extra_content != null ? ret.data[0].extra_content : '');
+                             $api.css($api.dom('.delBtn'), 'display:block');
                         }
                     } else {
                         api.ajax({
@@ -140,27 +159,45 @@
 
     // 提交数据
     function submitData() {
-       
+         $api.css($api.dom('.loading'), 'display: block');
+        var text = $api.val($api.byId('text'));
         var img_url = $api.attr($api.byId('img'), 'src');
-
-       //  var baseUrl = 'img.iinnet.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com
-        var obj = api.require('qiniuUpfile');
-        obj.upfile({
-            file: img_url,
-        }, function(ret, err) {
-            if (ret.status) {
-                if (ret.oper == "complete") {
-                    //上传成功后组装访问路径，或直接访问文档
-                    submitAjax('http://'+baseUrl +'/'+ ret.info.key)
-                } else if (ret.oper == "progress") {
-                    //上传过程中获取进度数据
-                    // console.log(ret.percent);
-                }
+        if ($api.attr($api.byId('img'), 'src') == '../../image/iocn_addressList/icon_default.png') {
+            submitAjax('null',text)
+        } else {
+           //  var baseUrl = 'img.iinnet.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com
+           
+            var obj = api.require('qiniuUpfile');
+            if (img_url[0] != 'h') {
+                // 本地路径
+                obj.upfile({
+                    file: img_url,
+                }, function(ret, err) {
+                    if (ret) {
+                        if (ret.status) {
+                            if (ret.oper == "complete") {
+                                //上传成功后组装访问路径，或直接访问文档
+                                submitAjax('http://'+baseUrl +'/'+ ret.info.key,text);
+                               
+                            } else if (ret.oper == "progress") {
+                                //上传过程中获取进度数据
+                                // console.log(ret.percent);
+                            }
+                        } else {
+                            alert(JSON.stringify(ret))
+                        }
+                    } else {
+                        alert(JSON.stringify(err))
+                    }
+                });
+            } else {
+                // 网络路径
+                submitAjax(img_url,text)
             }
-        });
+        }
     }
-    function submitAjax(argument) {
-         var text = $api.val($api.byId('text'));
+    function submitAjax(argument,text) {
+        console.log(argument+'+++'+text)
         api.ajax({
             url: apiSite + '/remark_user/editBasicInfo',
             method: 'post',
@@ -175,7 +212,7 @@
             }
         }, function(ret, err) {
             if(ret) {
-                alert(JSON.stringify(ret));
+                $api.css($api.dom('.loading'), 'display: none');
                 requireAjax();
             } else {
                 alert(JSON.stringify(err))
@@ -236,6 +273,9 @@
                                        frameName: 'txl_memberInfo_Frame',
                                        script: 'initPage();'
                                    });
+                                   api.sendEvent({
+                                       name: 'editUserInfo'
+                                   });
                                    api.closeWin();
                                 }else{
                                    alert( JSON.stringify( err ) );
@@ -282,18 +322,24 @@
                 if (ret) {
                     if (ret.data) {
                         $api.attr($api.dom('img'),'src', ret.data);
-                        alert('tx2页面：'+ret.data)
+                        if ($api.attr($api.byId('img'), 'src') == '../../image/iocn_addressList/icon_default.png') {
+                            $api.css($api.dom('.delBtn'), 'display:none');
+                        } else {
+                            $api.css($api.dom('.delBtn'), 'display:block');
+
+                        }
                     } 
                     
                 } else {
-                    alert(JSON.stringify(err.msg));
+                    // alert(JSON.stringify(err.msg));
                 }
             });
         // }
     }
     // 删除图片
     function delImg() {
-        alert('删除图片')
+        $api.attr($api.dom('img'),'src', '../../image/iocn_addressList/icon_default.png');
+        $api.css($api.dom('.delBtn'), 'display:none');
     }
 </script>
 </html>

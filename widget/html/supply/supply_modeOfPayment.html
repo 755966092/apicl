@@ -271,14 +271,25 @@
                                     aliPay.payOrder({
                                       orderInfo: retAJAX.data.config
                                     },function(ret,err) {
-                                        payFruitPage(obj,ret)
-                                        if(ret.status) {
+                                       if (ret) {
+                                            if (ret.status) {
+                                                console.log('成功::'+JSON.stringify(ret))
+                                                //支付成功
+                                            payFruitPage(obj,ret);
                                             api.sendEvent({
-                                                name: 'saleMoney'
-                                            });
-                                            api.sendEvent({
-                                                name: 'filterOrder'
-                                            });
+                                                    name: 'saleMoney'
+                                                });
+                                              api.sendEvent({
+                                                    name: 'filterOrder'
+                                                });
+                                            } else {
+                                                console.log('失败'+JSON.stringify(ret))
+                                                api.toast({
+                                                    msg: ret.statusMessage || '取消支付'
+                                                });
+                                            }
+                                        } else {
+                                            console.log(JSON.stringify(err))
                                         }
                                     });
                                 } else {
@@ -298,10 +309,26 @@
                                     aliPay.payOrder({
                                       orderInfo: retAJAX.data.config
                                     },function(ret,err) {
-                                        payFruitPage(obj,ret)
-                                        api.sendEvent({
-                                            name: 'saleMoney'
-                                        });
+                                        if (ret) {
+                                            if (ret.status) {
+                                            console.log('成功::'+JSON.stringify(ret))
+                                                //支付成功
+                                            payFruitPage(obj,ret);
+                                            api.sendEvent({
+                                                    name: 'saleMoney'
+                                                });
+                                              api.sendEvent({
+                                                    name: 'filterOrder'
+                                                });
+                                            } else {
+                                                console.log('失败'+JSON.stringify(ret))
+                                                api.toast({
+                                                    msg: ret.statusMessage || '取消支付'
+                                                });
+                                            }
+                                        } else {
+                                            console.log(JSON.stringify(err))
+                                        }
                                     });
                                 } else {
                                     api.openWin({
@@ -355,29 +382,18 @@
         })
     }
     function payFruitPage(obj,ret) {
-        
-        if (ret) {
-            if (ret.status) {
-                api.openWin({
-                    name: 'supply_payResult_win',
-                    url: './supply_payResult_win.html',
-                    pageParam: {
-                        obj: obj,
-                        price: api.pageParam.price,
-                        form: api.pageParam.form,
-                        flag: 1,
-                        paramPhone: api.pageParam.paramPhone
-                    }
-                });
-                api.closeFrame();
-            } else {
-                api.toast({
-                    msg: ret.statusMessage || '取消支付'
-                });
+        api.openWin({
+            name: 'supply_payResult_win',
+            url: './supply_payResult_win.html',
+            pageParam: {
+                obj: obj,
+                price: api.pageParam.price,
+                form: api.pageParam.form,
+                flag: 1,
+                paramPhone: api.pageParam.paramPhone
             }
-        } else {
-            alert(JSON.stringify(err))
-        }
+        });
+        api.closeFrame();
     }
 
     

@@ -184,6 +184,12 @@
     }
     function openSelect2() {
         var UIActionSelector = api.require('UIActionSelector');
+        var fontsize = 16,rowLength = 5, enterSize = 14;
+        if (api.systemType === 'ios') {
+            fontsize = 20;
+            rowLength = 7;
+            enterSize = 16;
+        }
             UIActionSelector.open({
                 datas: [
                     {
@@ -196,11 +202,11 @@
                 ],
                  actives: [1],
                 layout: {
-                    row: 7,
+                    row: rowLength,
                     col: 1,
                     height: 26,
-                    size: 20,
-                    sizeActive: 24,
+                    size: fontsize,
+                    sizeActive: fontsize+2,
                     rowSpacing: 5,
                     colSpacing: 5,
                     maskBg: 'rgba(0,0,0,0.5)',
@@ -211,9 +217,9 @@
                 animation: true,
                 cancel: {
                     text: '取消',
-                    size: 16,
+                    size: enterSize,
                     w: 90,
-                    h: 35,
+                    h: 40,
                     bg: '#eee',
                     // bgActive: '#ccc',
                     color: '#000',
@@ -221,9 +227,9 @@
                 },
                 ok: {
                     text: '确定',
-                    size: 16,
+                    size: enterSize,
                     w: 90,
-                    h: 35,
+                    h: 40,
                     bg: '#eee',
                     // bgActive: '#ccc',
                     color: '#000',

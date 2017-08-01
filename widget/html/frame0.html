@@ -7,6 +7,13 @@
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <style>
+        .noNews {
+            margin-top: .2rem;
+            text-align: center;
+            color: #999;
+            font-size: .3rem;
+            line-height: .5rem;
+        }
         html,body {
                 background: #EFEFF4;
                 box-sizing: border-box;
@@ -209,30 +216,34 @@
 
         <ul class="resultList"></ul>
         <script type="text/x-dot-template" id="listT">
-            {{ for (var i = 0; i < it.length; i++) { }} 
-                <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" ontouchstart=";event.stopPropagation();"   tapmode   onclick="openChat(this)">
-                    <div class="warp" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove(this)" ontouchend="gtouchend(this)">
-                        <div class="headImg">
-                             <img class="fl" src="{{=it[i].url}}">
-                             {{?it[i].unreadMessageCount == 0 }}
-                             {{??}}
-                             <span class="select">{{=it[i].unreadMessageCount}}</span>
-                             {{?}}
+            {{?it.length!=0}}
+                {{ for (var i = 0; i < it.length; i++) { }} 
+                    <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" ontouchstart=";event.stopPropagation();"   tapmode   onclick="openChat(this)">
+                        <div class="warp" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove(this)" ontouchend="gtouchend(this)">
+                            <div class="headImg">
+                                 <img class="fl" src="{{=it[i].url}}">
+                                 {{?it[i].unreadMessageCount == 0 }}
+                                 {{??}}
+                                 <span class="select">{{=it[i].unreadMessageCount}}</span>
+                                 {{?}}
+                            </div>
+                            <div class="contentRight">
+                               <div class="name">
+                                    <h3>{{=it[i].nickname}}</h3>
+                                    <span class="time">{{=it[i].time.hour}}:{{=it[i].time.minute}}</span>
+                               </div>
+                                <p>{{=it[i].latestMessage.text}}</p>
+                            </div>
                         </div>
-                        <div class="contentRight">
-                           <div class="name">
-                                <h3>{{=it[i].nickname}}</h3>
-                                <span class="time">{{=it[i].time.hour}}:{{=it[i].time.minute}}</span>
-                           </div>
-                            <p>{{=it[i].latestMessage.text}}</p>
-                        </div>
-                    </div>
-                    <span class="slide">
-                        <span class="stamp" data-targetId="{{=it[i].targetId}}" tapmode onclick="delNesItem(this,1);event.stopPropagation()">标为已读</span>
-                        <span class="del" data-targetId="{{=it[i].targetId}}" tapmode onclick="delNesItem(this,0);event.stopPropagation()">删除</span>
-                    </span>
-                </li>
+                        <span class="slide">
+                            <span class="stamp" data-targetId="{{=it[i].targetId}}" tapmode onclick="delNesItem(this,1);event.stopPropagation()">标为已读</span>
+                            <span class="del" data-targetId="{{=it[i].targetId}}" tapmode onclick="delNesItem(this,0);event.stopPropagation()">删除</span>
+                        </span>
+                    </li>
                 {{ }; }}
+            {{??}}
+                <p class="noNews">暂无消息</p>
+            {{?}}
                 
         </script>
         <!-- <ul>

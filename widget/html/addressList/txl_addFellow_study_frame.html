@@ -6,6 +6,30 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
+        
+        .addPhone {
+            height: .797rem;
+            margin-top: .2rem;
+            background-color: #fff;
+            font-size: 0;
+            display: -webkit-box; 
+            display: flex;
+            -webkit-box-align:  center;
+            align-items: center;
+            -webkit-box-pack: center;
+            justify-content: center
+        }
+        .addPhone div {
+            font-size: .3rem;
+            color: #27B24A;
+        }
+        .addIcon {
+            width: .4rem;
+            height: .4rem;
+            background: url(../../image/icon_my/icon_add.png)no-repeat;
+            background-size: .4rem .4rem;
+            margin-right: .1rem;
+        }
         .wrap {
             margin-top: .2rem;
         }
@@ -76,8 +100,8 @@
         }
     </style>
 </head>
-<body>
-    
+<body>  
+    <div class="loading"></div>
     <div class="wrap resultList">
         <!-- <div class="dzlist">
             <div class="clearfix kuo">
@@ -112,15 +136,17 @@
             </div>
         {{ }; }}
     </script>
-    <div class="main_no3 ">
-        <p   tapmode   onclick="openSelect2()">添加教育经历</p>
-    </div>
+    
+     <div class="addPhone" tapmode onclick="openSelect2()">
+        <div class="addIcon"></div>
+        <div>备注学习经历</div>
+   </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    var flag;//邮编
+    var flag;
     apiready = function(){
         moduleInit();
         // 请求学习列表
@@ -151,6 +177,7 @@
             alert('不能操作用户原始信息')
         } else {
             if ($api.hasCls($api.byId('btnStatus'), 'edit')) {
+                $api.css($api.dom('.loading'), 'display: block');
                 // 删除按钮状态下删除学习
                 $api.remove($api.closest($api.byId('btnStatus'), '.dzlist'));
                 delStusy(val);
@@ -197,68 +224,74 @@
     }
     function openSelect2() {
         var UIActionSelector = api.require('UIActionSelector');
-            UIActionSelector.open({
-                datas: [
-                    {
-                        name:'大学'
-                    },{
-                        name:'中学'
-                    },{
-                        name:'小学'
-                    }
-                ],
-                actives: [1],
-                layout: {
-                    row: 7,
-                    col: 1,
-                    height: 26,
-                    size: 20,
-                    sizeActive: 24,
-                    rowSpacing: 5,
-                    colSpacing: 5,
-                    maskBg: 'rgba(0,0,0,0.5)',
-                    bg: '#fff',
-                    color: '#888',
-                    colorSelected: '#000'
-                },
-                animation: true,
-                cancel: {
-                    text: '取消',
-                    size: 16,
-                    w: 90,
-                    h: 35,
-                    bg: '#eee',
-                    // bgActive: '#ccc',
-                    color: '#000',
-                    // colorActive: '#fff'
-                },
-                ok: {
-                    text: '确定',
-                    size: 16,
-                    w: 90,
-                    h: 35,
-                    bg: '#eee',
-                    // bgActive: '#ccc',
-                    color: '#000',
-                    // colorActive: '#fff'
-                },
-                title: {
-                    text: '请选择',
-                    size: 20,
-                    h: 44,
-                    bg: '#eee',
-                    color: '#000'
-                },
-                fixedOn: api.frameName
-            }, function(ret, err) {
-                if (ret) {
-                    if (ret.eventType == 'ok') {
-                        enter(ret.level1)
-                    }
-                } else {
-                    alert(JSON.stringify(err.msg));
+         var fontsize = 16,rowLength = 5, enterSize = 14;
+        if (api.systemType === 'ios') {
+            fontsize = 20;
+            rowLength = 7;
+            enterSize = 16;
+        }
+        UIActionSelector.open({
+            datas: [
+                {
+                    name:'大学'
+                },{
+                    name:'中学'
+                },{
+                    name:'小学'
                 }
-            });
+            ],
+            actives: [1],
+            layout: {
+                row:rowLength,
+                col: 1,
+                height: 26,
+                size: fontsize,
+                sizeActive: fontsize+2,
+                rowSpacing: 5,
+                colSpacing: 5,
+                maskBg: 'rgba(0,0,0,0.5)',
+                bg: '#fff',
+                color: '#888',
+                colorSelected: '#000'
+            },
+            animation: true,
+            cancel: {
+                text: '取消',
+                size: enterSize,
+                w: 90,
+                h: 40,
+                bg: '#eee',
+                // bgActive: '#ccc',
+                color: '#000',
+                // colorActive: '#fff'
+            },
+            ok: {
+                text: '确定',
+                size: enterSize,
+                w: 90,
+                h: 40,
+                bg: '#eee',
+                // bgActive: '#ccc',
+                color: '#000',
+                // colorActive: '#fff'
+            },
+            title: {
+                text: '请选择',
+                size: 20,
+                h: 44,
+                bg: '#eee',
+                color: '#000'
+            },
+            fixedOn: api.frameName
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.eventType == 'ok') {
+                    enter(ret.level1)
+                }
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
     }
     function enter (selDate) {
 
@@ -302,13 +335,14 @@
    
     }
     
-    // 请求列表
+    // 请求列表 10076078
     function requireData() {
         db.selectSql({
             name: SQLName,
             sql: 'SELECT * FROM tb_remarks_education WHERE user_id=' + api.pageParam.userId 
         }, function(ret, err){        
             if( ret.status ){
+                $api.css($api.dom('.loading'), 'display: none');
                 if (ret.data.length != 0) {
                     flag = 0;
                     console.log('317:::' + JSON.stringify( ret ) );
@@ -435,6 +469,24 @@
             }
         });
     }
+    // 删除状态表
+    function delStatusTable(id) {
+        db.executeSql({
+            name: 'db_'+$api.getStorage('userToken'),
+            sql: 'DELETE FROM tb_remarks_status WHERE status_id = ' + id +' AND type = 2'    
+        }, function(ret, err){        
+            if( ret.status ){
+                console.log( JSON.stringify( ret ) );
+                api.execScript({
+                    name: 'txl_memberInfo_Win',
+                    frameName: 'txl_memberInfo_Frame',
+                    script: 'initStatus();'
+                });
+            }else{
+                alert( JSON.stringify( err ) );
+            }
+        });
+    }
     // 删除学习
     function delDz () {
         api.addEventListener({
@@ -465,9 +517,14 @@
             }
         }, function(ret, err) {
             if (ret) {
-                // 删除数据库数据
-                console.log('服务器删除成功')
-                selSqlStudy(id,n);
+                if (ret.code == 200) {
+                    // 删除数据库数据
+                    console.log('服务器删除成功')
+                    selSqlStudy(id,n);
+                    delStatusTable(id)
+                } else {
+                    alert(ret.msg)
+                }
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -479,6 +536,7 @@
             sql: 'DELETE FROM tb_remarks_education WHERE education_id = ' + id  
         }, function(ret, err){        
             if( ret.status ){
+                $api.css($api.dom('.loading'), 'display: none');
                 console.log('数据库删除成功');
                 if ($api.domAll('.dzlist').length == 0) {
                     requireData();
@@ -489,6 +547,9 @@
                         name: 'editText'
                     });
                 }
+                api.sendEvent({
+                    name: 'editUserInfo'
+                });
             }else{
                 alert( JSON.stringify( err ) );
             }

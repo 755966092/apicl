@@ -186,7 +186,7 @@
         var SQLName = 'db_'+$api.getStorage('userToken');
         var SQLsentence;
         if (condition) {
-            SQLsentence = 'SELECT * FROM addressList WHERE title LIKE "%'+ condition +'%" '; 
+            SQLsentence = 'SELECT * FROM addressList WHERE title LIKE "%'+ condition +'%" OR remark_current_contact LIKE "%'+ condition +'%" OR remark_nickname LIKE "%'+ condition +'%"'; 
         } else {
             SQLsentence = 'SELECT * FROM addressList';
         }
@@ -196,6 +196,7 @@
             sql: SQLsentence
         }, function(ret, err) {
             if (ret.status) {
+                console.log(JSON.stringify(ret))
                 // listContact.close();
                 reloadData(paixv(ret.data))
             } else {

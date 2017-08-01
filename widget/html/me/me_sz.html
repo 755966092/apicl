@@ -135,7 +135,7 @@ function login() {
     for (var i = 0;i < tableArr.length; i++) {
         db.executeSql({
             name: 'db_'+$api.getStorage('userToken'),
-            sql: 'DROP TABLE '+tableArr[i]   
+            sql: 'DROP TABLE IF EXISTS '+tableArr[i]   
         },function(ret,err){
             if (ret.status) {
                    console.log('执行成功'+i)

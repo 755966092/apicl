@@ -126,9 +126,9 @@
         }
         .liRight .accept {
             display: inline-block;
-            width: .852rem;
-            height: .54rem;
-            background-color: #08B508;
+            width: .82rem;
+            height: .52rem;
+            background-color: #50A838;
             color: #fff;
             font-size: .24rem;
             text-align: center;
@@ -191,10 +191,10 @@
    </style>
 </head>
 <body>
-    <div class="search">
+    <!-- <div class="search">
         <input type="text" onkeyup="hideSearIcon(this)" name="" placeholder="&nbsp;&nbsp;&nbsp;&nbsp;搜索">
         <span class="searchIcon"></span>
-    </div>
+    </div> -->
     <div class="main">
        <ul class="resultList">
            <!--  <li >
@@ -236,17 +236,17 @@
         <script type="text/x-dot-template" id="listT">
            {{ for (var i = 0; i < it.length; i++) { }} 
                 <li >
-                   <div class="warp" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove(this)" ontouchend="gtouchend(this)">
+                   <div class="warp" data-id="{{=it[i].user_id}}" tapmode onclick="openUseRInfoPage(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove(this)" ontouchend="gtouchend(this)">
                         <div class="liLeft">
                             <img src="{{=it[i].head_img_url}}">
                         </div>
                         <div class="liConter">
                             <h3>{{=it[i].nickname}}</h3>
-                            <p>个人介绍</p>
+                            <!-- <p>个人介绍</p> -->
                         </div>
                         <div class="liRight">
                             {{?it[i].status==1}}
-                            <span class="accept" data-userId="{{=it[i].user_id}}" data-applyId="{{=it[i].apply_id}}" tapmode onclick="friendAcceptApply(this)">接收</span>
+                            <span class="accept" data-userId="{{=it[i].user_id}}" data-applyId="{{=it[i].apply_id}}" tapmode onclick="friendAcceptApply(this)">接受</span>
                             {{??}}
                             <span class="already">{{=it[i].status}}</span>
                             {{?}}
@@ -259,9 +259,9 @@
            {{};}}
        </script>
     </div>
-    <div class="button">
+   <!--  <div class="button">
         全部接收
-    </div>
+    </div> -->
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -272,6 +272,17 @@
         moduleInit();
         requireData();
     };
+    // 进入好友信息
+    function openUseRInfoPage(ele) {
+        var id = $api.attr(ele, 'data-id');
+        api.openWin({
+            name: 'winName',
+            url: './txl_memberInfo_Win.html',
+            pageParam: {
+                userId: id
+            }
+        });
+    }
     function requireData() {
         api.ajax({
             url: apiSite + '/friend/applyList',
@@ -370,7 +381,6 @@
                     sql: SQL
                 }, function(ret, err){        
                     if( ret.status ){
-                        alert( JSON.stringify( ret ) );
                         api.execScript({
                             name: 'main',
                             frameName: 'frame1',

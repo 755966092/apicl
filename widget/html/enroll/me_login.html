@@ -302,7 +302,7 @@
                                     // 同步通讯录成功
                                     // 请求同步的数据，存到本地数据库
                                     // console.log('上传通讯录数据'+JSON.stringify(ret.contacts))
-                                    // console.log('上传结果'+JSON.stringify(ret1))
+                                    console.log('上传结果')
                                     if (ret1.code == 200) {
                                         requestData(userToken);
                                     }
@@ -325,7 +325,7 @@
             name: 'db_'+userToken
         }, function(ret, err) {
             if (ret.status) {
-                // alert('打开成功');
+                alert('打开成功');
                 // console.log("打开数据库成功")
             } else {
                 alert('新建库错误:'+JSON.stringify(err));
@@ -344,7 +344,7 @@
                }
             }
        }, function(ret, err) {
-            // console.log('上传完请求:'+JSON.stringify(ret))
+            console.log('上传完请求:'+JSON.stringify(ret))
             
             api.ajax({
                 url: apiSite + '/contact/friend',
@@ -357,7 +357,7 @@
                 }
             }, function(retFriend, err) {
                 if(retFriend) {
-                    console.log('360:::'+JSON.stringify(ret))
+                    console.log('360:::')
                     disData(ret.data.single_list.concat(retFriend.data.list), 1)
                     disData(ret.data.both_list, 2)
                     disData(ret.data.unavailable_list, 3)
@@ -453,7 +453,7 @@
         }, function(ret, err) {
             // ;CREATE UNIQUE INDEX user_id_idx on addressList (user_id);
             if (ret.status) {
-                 // console.log('新建表格'+JSON.stringify(ret));
+                 console.log('新建表格');
                  db.executeSql({
                      name: SQLName,
                      sql: 'CREATE UNIQUE INDEX IF NOT EXISTS user_id_idx ON addressList (user_id)'    
@@ -465,7 +465,7 @@
                             sql: SQL   
                         }, function(ret, err){        
                             if( ret.status ){
-                                // console.log( '插入数据'+JSON.stringify( ret ) );
+                                console.log( '插入数据'+JSON.stringify( ret ) );
                                 
                             }else{
                                 alert( '插入数据:' + JSON.stringify( err ) );
