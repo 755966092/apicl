@@ -409,11 +409,29 @@
             }
        }, function(ret, err) {
             console.log('请求数据2222222'+JSON.stringify(ret))
-
+            api.ajax({
+                url: apiSite + '/contact/friend',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                       values: { 
+                           token: $api.getStorage('userToken'),
+                       }
+                }
+            }, function(retFriend, err) {
+                if(retFriend) {
+                    if (retFriend.code == 200) {
+                        disData(ret.data.friend_list.concat(retFriend.data.list), 4)
+                    } else {
+                        alert(retFriend.msg)                        
+                    }
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
             disData(ret.data.single_list, 1)
             disData(ret.data.both_list, 2)
             disData(ret.data.unavailable_list, 3)
-            disData(ret.data.friend_list, 4)
        })
            
     }

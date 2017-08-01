@@ -6,7 +6,25 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-        
+        body {
+            position: relative;
+        }
+        .loading {
+            display: none;
+            /*background: rgba(0,0,0,0.3) url(../../image/loading_more.gif)no-repeat;
+            width: 7.5rem;
+            height: 12.54rem;
+            background: url(../image/loading_more.gif)no-repeat;
+            -webkit-background-size: .8rem .8rem;
+            background-size: .8rem .8rem;
+            background-position: center center;
+            position: absolute;
+            top: 0;*/
+           /* bottom: 0;
+            right: 0;
+            left: 0;
+            margin: auto;*/
+        }
         .contentText {
             background-color: #fff;
             font-size: .3rem;
@@ -169,7 +187,7 @@
                 background: #fff url(../../image/icon_supply/icon_11.png)no-repeat;
                 background-size: .31rem .31rem;
                 background-position: .3rem center;
-                display: none;
+                /*display: none;*/
             }
             ul li:nth-child(4) {
                 background: #fff url(../../image/icon_supply/icon_02.png)no-repeat;
@@ -255,6 +273,7 @@
     </style>
 </head>
 <body>
+    <div class="loading"></div>
     <div class="contentText clearfix">
         <div class="title">
             <span class="smallTitle">#我提供#</span>
@@ -373,6 +392,7 @@
         </ul>        
     </div>
     <div class="btn" tapmode onclick="addSupply()">发布</div>
+    
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -395,7 +415,6 @@
                   classify_dataSource,
                   classify_dataSource2 = [];
     apiready = function(){
-        
         moduleInit();
         classify();
         if (api.pageParam.supply_id) {
@@ -493,11 +512,16 @@
                 $api.val(price, data.info.price);
 
                 var unitText = data.info.unit > 0 ? _dataSource[data.info.unit-1] : '未定义';
-                var _categoryId =  categoryArr[data.info.category_id-1]
+                for (var i = 0; i < ret.data.list.length; i++) {
+                    if (ret.data.list[i].category_id == data.info.category_id) {
+                        var _categoryId =  ret.data.list[i].name;
+                    }
+                }
                 $api.text(position, data.info.address);
                 $api.text(unit, unitText);
                 $api.text(category_id, _categoryId);
                 $api.attr(category_id, 'data-id',data.info.category_id);
+
                 data.info.type == 1 ? $api.text(_type, '个人') : $api.text(_type, '公司');
                 if (data.info.type == 2) {
                     $api.css($api.dom('.companyName'), 'display:block');
@@ -610,6 +634,7 @@
                  
                 base64Data.img.push(ret.data);
                 getData(base64Data);
+                $api.css($api.dom('.loading'), 'display: block');
                //  var baseUrl = 'img.iinnet.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com
                 var obj = api.require('qiniuUpfile');
                 obj.upfile({
@@ -619,7 +644,8 @@
                         if (retUpfile.oper == "complete") {
                             //上传成功后组装访问路径，或直接访问文档
                             imgArr.push('http://'+ baseUrl +'/'+ retUpfile.info.key);
-                            duibi($api.domAll('.imgpage').length,imgArr.length)
+                            $api.css($api.dom('.loading'), 'display: none');
+                            // duibi($api.domAll('.imgpage').length,imgArr.length)
                         } else if (retUpfile.oper == "progress") {
                             //上传过程中获取进度数据
                             // console.log(retUpfile.percent);
@@ -627,7 +653,7 @@
                     }
                 });
             } else {
-                alert(JSON.stringify(err.msg));
+                // alert(JSON.stringify(err.msg));
             }
         });
     }
@@ -683,12 +709,12 @@
     }
     // 添加供应
     function addSupply() {
-        if (openImgFlag == 0) {
-            releaseFlag = 1;
-        }
-        // console.log('addsupply')
-        // 获取页面内容
-        if (releaseFlag == 1) {
+        // if (openImgFlag == 0) {
+        //     releaseFlag = 1;
+        // }
+        // // console.log('addsupply')
+        // // 获取页面内容
+        // if (releaseFlag == 1) {
             var token = $api.getStorage('userToken'),            //string  用户Token
                 title = $api.val($api.byId('title')),           //string  标题
                 sub_type = $api.text($api.byId('sub_type')) == '自产自销' ? 1 : 2,            //int 类别ID（1-自产自销，2-代理）
@@ -792,9 +818,9 @@
                         alert(JSON.stringify(err.msg))
                     }
                 })
-        } else {
-            addSupply();
-        }
+        // } else {
+        //     addSupply();
+        // }
     }
 
 

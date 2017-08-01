@@ -475,6 +475,7 @@
                 });
             }
          } else {
+            console.log('478:::'+contact_id)
             // 线下  姓名  联系方式  地址
             if (service_time == '请选择交易时间') {
                 alert('请选择交易时间')
@@ -520,57 +521,87 @@
     }
     // 初始化页面
     function initPage() {
-        var userPhone = $api.getStorage('userPhone') || '';
-        var userAddress = $api.getStorage('userAddress') || '';
-        var real_name = $api.getStorage('real_name') || '';
-
-        console.log(JSON.stringify(userAddress))
-        if (userAddress != '') {
-            $api.text($api.byId('address'), userAddress[0].province +' '+userAddress[0].city +' '+userAddress[0].district +' '+userAddress[0].district);
-            $api.attr($api.byId('address'), 'data-id', userAddress[0].address_id);
-        } else {
-             $api.text($api.byId('address'), '未设置默认地址')
-        }
-        // 设置真实姓名
-        if (real_name != '') {
-            $api.text($api.byId('real_name'), real_name);
-        } else {
-            api.ajax({
-                url: apiSite + '/user_center/editBasicInfoIndex',
-                method: 'post',
-                headers: apiHeader,
-                data: {
-                       values: { 
-                           token: $api.getStorage('userToken'),
-                       }
-                }
-            }, function(ret, err) {
-                if(ret) {
-                    // alert(JSON.stringify(ret))
-                    if (ret.data.info.real_name) {
-                        $api.text($api.byId('real_name'), ret.data.info.real_name);
+        api.ajax({
+            url: apiSite + '/user_center/addressList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code == 200) {
+                    if (ret.data.list.length != 0) {
+                        console.log(JSON.stringify(ret))
+                                $api.text($api.byId('address'),ret.data.list[0].city +' '+ret.data.list[0].district +' '+ret.data.list[0].address);
+                                $api.attr($api.byId('address'), 'data-id', ret.data.list[0].address_id);
                     } else {
-                        $api.text($api.byId('real_name'), '未设置真实姓名');
+                        $api.text($api.byId('address'), '未设置默认地址')
                     }
                 } else {
-                    alert(JSON.stringify(err))
+                    alert(ret.msg)
                 }
-            })
-
-        }
-        // 设置电话
-        if (userPhone != '') {
-            for (var i = 0; i < userPhone.length; i++) {
-                if (userPhone[i].is_default) {
-                    $api.attr($api.byId('defaultPhone'), 'data-id', userPhone[i].contact_id);
-                    userPhone = userPhone[i].phone;
-                    $api.text($api.byId('defaultPhone'), userPhone);
-                    break;
-                }
+            } else {
+                alert(JSON.stringify(err))
             }
-        } else {
-            $api.text($api.byId('defaultPhone'), '未设置默认联系方式');
-        }
+        })
+
+        api.ajax({
+            url: apiSite + '/user_center/editBasicInfoIndex',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.data.info.real_name) {
+                    $api.text($api.byId('real_name'), ret.data.info.real_name);
+                } else {
+                    $api.text($api.byId('real_name'), '未设置真实姓名');
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+        // 设置真实姓名
+       
+        // 设置电话
+        api.ajax({
+            url: apiSite + '/user_center/contactList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code == 200) {
+                    if (ret.data.list.length != 0) {
+                        for (var i = 0; i < ret.data.list.length; i++) {
+                            if (ret.data.list[i].is_default == 1) {
+                                $api.attr($api.byId('defaultPhone'), 'data-id', ret.data.list[i].contact_id);
+                                $api.text($api.byId('defaultPhone'), ret.data.list[i].phone);
+                                break;
+                            }
+                        }
+                    } else {
+                        $api.text($api.byId('defaultPhone'), '未设置默认联系方式');
+                    }
+                } else {
+                    alert(ret.msg)
+                }
+
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
        // 打开时间选择器
     }
     // 选择时间

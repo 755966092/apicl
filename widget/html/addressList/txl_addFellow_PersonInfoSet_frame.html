@@ -166,7 +166,39 @@
     function changeState (ele) {
         $api.toggleCls(ele, 'sel');
     }
-    
+    function delectFell() {
+        api.ajax({
+            url: apiSite + '/friend/removeFriend',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       user_id: api.pageParam.userId
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code == 200) {
+                    api.execScript({
+                        name: 'txl_memberInfo_Win',
+                        frameName: 'txl_memberInfo_Frame',
+                        script: 'initStatus();'
+                    });
+                    api.execScript({
+                        name: 'txl_memberInfo_Win',
+                        frameName: 'txl_memberInfo_Frame',
+                        script: 'initPage();'
+                    });
+                    api.closeWin();
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
    
 </script>
 </html>

@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
         body{
-            background-color: rgba(20,20,20,0.5);
+            background-color: rgba(0,0,0,0.5);
         }
     </style>
 </head>
@@ -20,34 +20,67 @@
     apiready = function(){
     	var headerH = api.pageParam.headerH;
         var FNScanner = api.require('FNScanner');
+    	
+    	api.addEventListener({
+		    name:'viewappear'
+		}, function(ret, err){        
+		   openPage();
+		});
+    	api.addEventListener({
+		    name: 'keyback'
+		}, function(ret, err) {
+		    FNScanner.closeView();
+    	    api.closeWin();
+		});
+    	api.addEventListener({
+    	    name: 'closeView'
+    	}, function(ret, err) {
+    	    if (ret) {
+    	    	FNScanner.closeView();
+    	        api.closeWin();
+
+    	    } else {
+    	        alert(JSON.stringify(err));
+    	    }
+    	});
 	    FNScanner.openView({
 	    	rect: {
 	    		x: 0,
-	    		y: headerH
+	    		y: headerH,
+	    		
 	    	},
 		    autorotation: true
 		}, function(ret, err) {
 		    if (ret) {
-		        alert(JSON.stringify(ret));
+		    	
+		    	if (ret.eventType == 'show') {
+		    		openPage();
+		    	}
+				if (ret.eventType == 'success') {
+		    		openUserPage(ret.content.split('-')[1])
+				}
 		    } else {
 		        alert(JSON.stringify(err.msg));
 		    }
 		});
-		api.addEventListener({
-		    name: 'openPhotos'
-		}, function(ret, err) {
-		    if (ret) {
-		        alert('监听');
-		    } else {
-		        alert(JSON.stringify(err.msg));
-		    }
-		});
-		api.openFrame({
+
+    };
+    function openUserPage(id) {
+    	api.openWin({
+    	    name: 'winName',
+    	    url: '../addressList/txl_memberInfo_Win.html',
+    	    pageParam: {
+    	        userId: id
+    	    }
+    	});
+    }
+    function openPage() {
+    	api.openFrame({
 		    name: 'frameName',
 		    url: './erweimaShade.html',
 		    rect: {
 		        x: 0,
-		        y: headerH,
+		        y: api.pageParam.headerH,
 		        // w: api.frameWidth,
 		        w: api.frameWidth,
 		        h: api.frameHeight
@@ -57,7 +90,6 @@
 		    },
 		    bounces: false
 		});
-		
-    };
+    }
 </script>
 </html>

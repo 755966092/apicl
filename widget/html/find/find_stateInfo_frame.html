@@ -423,7 +423,15 @@
     var role = ['关系人','知情人','甲方','总包单位','分包单位','设计院','销售']
     apiready = function(){
         moduleInit();
-       
+       api.addEventListener({
+           name: 'circleTopicComment'
+       }, function(ret, err) {
+           if (ret) {
+               requestData();
+           } else {
+               alert(JSON.stringify(err));
+           }
+       });
         requestData();
         api.addEventListener({
             name: 'clearCollect'

@@ -54,8 +54,8 @@
         }
         p {
             text-align: center;
-            font-size: .34rem;
-            color: #555;
+            font-size: .3rem;
+            color: #999;
             margin-top: .5rem;
             display: none;
         }
@@ -80,10 +80,11 @@
         <!-- <span class="sxIcon"  tapmode onclick="openSlideBar()"></span> -->
     </div>
     <div class="loading" ></div>
-    <p data-type='1' class="no1">暂无初识好友</p>
+    <p data-type='1' class="no1">暂无相识好友</p>
     <p data-type='2' class="no2">暂无熟识好友</p>
-    <p data-type='3' class="no3">暂无尚未加入好友</p>
-    <p data-type='4' class="no4">暂无好友</p>
+    <p data-type='3' class="no3">暂无尚未加入</p>
+    <p data-type='4' class="no4">暂无初识好友</p>
+    <p data-type='5' class="no5">暂无一度人脉</p>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -96,6 +97,8 @@
         // requestData()
         // query();
         // 监听筛选条件
+        // 
+        
         addFilter();
         if(api.pageParam.flag) {
             query(parseInt(api.pageParam.flag));
@@ -182,21 +185,37 @@
 
     }
     function searchSQL(condition) {
+        console.log(condition)
         // 查询条件 condition
         var SQLName = 'db_'+$api.getStorage('userToken');
-        var SQLsentence;
-        if (condition) {
-            SQLsentence = 'SELECT * FROM addressList WHERE title LIKE "%'+ condition +'%" OR remark_current_contact LIKE "%'+ condition +'%" OR remark_nickname LIKE "%'+ condition +'%"'; 
+        var SQLsentence; 
+
+        if (api.pageParam.flag) {
+            // 有参数
+            if (condition) {
+                // 有关键字
+                SQLsentence = 'SELECT * FROM addressList WHERE type = '+ api.pageParam.flag +' AND  (title LIKE "%'+ condition +'%" OR remark_current_contact LIKE "%'+ condition +'%" OR remark_nickname LIKE "%'+ condition +'%")'; 
+            } else {
+                // 无关键字
+                SQLsentence = 'SELECT * FROM addressList WHERE type = '+ api.pageParam.flag ;
+            }
         } else {
-            SQLsentence = 'SELECT * FROM addressList';
+            // 无参数
+            if (condition) {
+                // 有关键字
+                SQLsentence = 'SELECT * FROM addressList WHERE title LIKE "%'+ condition +'%" OR remark_current_contact LIKE "%'+ condition +'%" OR remark_nickname LIKE "%'+ condition +'%"'; 
+            } else {
+                // 无关键字
+                SQLsentence = 'SELECT * FROM addressList';
+            }
         }
+
         // 查询数据库
         db.selectSql({
             name: SQLName,
             sql: SQLsentence
         }, function(ret, err) {
             if (ret.status) {
-                console.log(JSON.stringify(ret))
                 // listContact.close();
                 reloadData(paixv(ret.data))
             } else {
@@ -208,6 +227,7 @@
     // 查询数据库
     function query(condition) {
         // 查询条件 condition
+        console.log(condition)
         var SQLName = 'db_'+$api.getStorage('userToken');
         var SQLsentence;
         if (condition) {
@@ -221,24 +241,31 @@
             sql: SQLsentence
         }, function(ret, err) {
             if (ret.status) {
-                dakai(paixv(ret.data))
+                $api.css($api.dom('.loading'), 'display:none');
+                
                 // console.log(condition)
-                console.log('查询数据库'+JSON.stringify(ret))
+                // console.log('查询数据库'+JSON.stringify(ret))
+
                 for (var i = 0; i < $api.domAll('p').length; i++) {
                     $api.css($api.domAll('p')[i], 'display:none');
                 }
-                if (ret.data == '' && condition===0) {
-                    console.log(1111 + condition)
+
+                if (ret.data.length == 0 && condition === 4) {
+                    console.log(1111 +'--'+ condition)
                     $api.css($api.dom('p.no4'), 'display:block');
-                } else if(ret.data == '' && condition===1) {
-                    console.log(2222 + condition)
+                } else if(ret.data.length == 0 && condition===1) {
+                    console.log(2222 +'--'+ condition)
                     $api.css($api.dom('p.no1'), 'display:block');
-                }else if(ret.data == '' && condition===2) {
-                    console.log(333 + condition)
+                }else if(ret.data.length == 0 && condition===2) {
+                    console.log(333 +'--'+ condition)
                     $api.css($api.dom('p.no2'), 'display:block');
-                }else if(ret.data == '' && condition===3) {
-                    console.log(444 + condition)
+                }else if(ret.data.length == 0 && condition===3) {
+                    console.log(444 +'--'+ condition)
                     $api.css($api.dom('p.no3'), 'display:block');
+                } else if(ret.data.length == 0){
+                    $api.css($api.dom('p.no5'), 'display:block');
+                } else {
+                    dakai(paixv(ret.data))
                 }
             } else {
                 console.log(JSON.stringify(err));
@@ -321,6 +348,21 @@
         return arr;
     }
     function dakai(data1) {
+        var dataArr = [];
+        for(key in data1) {
+            // console.log(data1[key])
+            dataArr = dataArr.concat(data1[key]);
+        }
+        // console.log(JSON.stringify(dataArr))
+        var rightObj;
+        if (api.pageParam.flag) {
+            rightObj = [];
+        } else {
+            rightObj = [{
+                    color: '#20AC19',
+                    title: '呼叫'
+                }]
+        }
         var searchHei = $api.offset($api.dom('.search')).h
         listContact.open({
             x: -1000,
@@ -341,13 +383,7 @@
                 // 分割线颜色
                 borderColor: '#d9d9d9',
                 // 左滑按钮
-                // rightBtn: [{
-                //     color: '#000',
-                //     title: '备注'
-                // },{
-                //     color: '#000',
-                //     title: '删除'
-                // }],
+                rightBtn: rightObj,
                 imgHeight: 32,
                 groupTitle: {
                     color: '#999',       
@@ -369,15 +405,25 @@
                 fixedOn: api.frameName
             }, function(ret, err) {
                 if (ret) {
-                    $api.css($api.dom('.loading'), 'display:none');
                     // if (ret){
                     //     alert(JSON.stringify(ret))
                     // }
                     if (ret.clickType == 0) {
                         // 获取点击联系人信息
                         // alert(JSON.stringify(data1[ret.key][ret.index]));  
+                        console.log(JSON.stringify(ret))
                         addFriends(data1[ret.key][ret.index].user_id);
                     }
+                    if (ret.clickType == 1) {
+                        // 获取点击联系人信息
+                        console.log(JSON.stringify(ret))
+                        console.log(JSON.stringify(dataArr[ret.index]))
+                        api.call({
+                            type: 'tel_prompt',
+                            number: dataArr[ret.index].remark_current_contact
+                        });
+                    }
+
                     
                 } else {
                     // alert(JSON.stringify(err.msg));  

@@ -6,6 +6,13 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
+        .no_data {
+         background-color: #EDECF3; 
+         text-align: center;
+         color: #999;  
+         font-size: .3rem;
+         margin-top: .5rem;
+        }
         .label {
             line-height: .24rem;
             text-align: center;
@@ -186,62 +193,66 @@
     </div> -->
     <div class="main resultList"></div>
     <script type="text/x-dot-template" id="listT">
-            {{ for (var i = 0; i < it.length; i++) { }} 
-                <div class="item flex-def" data-id="{{=it[i].demand_id}}" data-company="{{=it[i].company_name}}"   tapmode   onclick="info(this)">
-                    <div class="headImg">
-                        <img src="{{=it[i].head_img_url}}" tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation();">
-                    </div>
-                    <div class="content flex-def flex-zTopBottom flex-item">
-                        <div class="title flex-def flex-zBetween">
-                            <div class="titleLeft flex-def flex-zLeftRight flex-cCenter">
-                            {{?it[i].type==1}}
-                            <span class="label">个人</span>
-                            {{??}}
+            {{?it.length === 0}}
+                <p class="no_data">暂无数据</p>
+            {{??}}
+                {{ for (var i = 0; i < it.length; i++) { }} 
+                    <div class="item flex-def" data-id="{{=it[i].demand_id}}" data-company="{{=it[i].company_name}}"   tapmode   onclick="info(this)">
+                        <div class="headImg">
+                            <img src="{{=it[i].head_img_url}}" tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation();">
+                        </div>
+                        <div class="content flex-def flex-zTopBottom flex-item">
+                            <div class="title flex-def flex-zBetween">
+                                <div class="titleLeft flex-def flex-zLeftRight flex-cCenter">
+                                {{?it[i].type==1}}
+                                <span class="label">个人</span>
+                                {{??}}
+                                {{?}}
+                                    <h3 class="name">{{=it[i].title}}</h3>
+                                    <!-- <h3 class="name">{{=it[i].nickname}}</h3> -->
+                                    <!-- <span class="sexIcon"></span> -->
+                                    <!-- <span class="zmfIcon"></span> -->
+                                    <!-- <span class="zmfText">700分</span> -->
+                                </div>
+                                <div class="titleRight">
+                                    {{=it[i].reward}}元<!-- /{{=it[i].unit}} -->
+                                </div>
+                            </div>
+                            {{?it[i].company_name}}
+                                <div class="info">
+                                    <p class="commanyName flex-def flex-cCenter">
+                                        <span class="comIcon">公司</span>
+                                        <span>{{=it[i].company_name}}</span>
+                                    </p>
+                                </div>
                             {{?}}
-                                <h3 class="name">{{=it[i].title}}</h3>
-                                <!-- <h3 class="name">{{=it[i].nickname}}</h3> -->
-                                <!-- <span class="sexIcon"></span> -->
-                                <!-- <span class="zmfIcon"></span> -->
-                                <!-- <span class="zmfText">700分</span> -->
+                            <div class="content_text">
+                                <p class="text">{{=it[i].description}}</p>
+                                {{?it[i].image_json!=null}}
+                                    {{ for (var j = 0; j < it[i].image_json.length; j++) { }} 
+                                        <img class="content_img" src="{{=it[i].image_json[j]}}">
+                                    {{ } }}
+                               {{?}}
                             </div>
-                            <div class="titleRight">
-                                {{=it[i].reward}}元<!-- /{{=it[i].unit}} -->
+                            <div class="comment">
+                                <div class="time">
+                                    <span>{{=it[i].create_time}}</span>
+                                    <!-- 评论图标 -->
+                                    <!-- <div class="commentIcon"></div> -->
+                                </div>
+                               <!--  <div class="commentText">
+                                    <ul>
+                                        <li>
+                                            <span class="comment_name">李志超:</span>
+                                            <span class="comment_content">我是一条评论</span>
+                                        </li>
+                                    </ul>
+                                </div> -->
                             </div>
                         </div>
-                        {{?it[i].company_name}}
-                            <div class="info">
-                                <p class="commanyName flex-def flex-cCenter">
-                                    <span class="comIcon">公司</span>
-                                    <span>{{=it[i].company_name}}</span>
-                                </p>
-                            </div>
-                        {{?}}
-                        <div class="content_text">
-                            <p class="text">{{=it[i].description}}</p>
-                            {{?it[i].image_json!=null}}
-                                {{ for (var j = 0; j < it[i].image_json.length; j++) { }} 
-                                    <img class="content_img" src="{{=it[i].image_json[j]}}">
-                                {{ } }}
-                           {{?}}
-                        </div>
-                        <div class="comment">
-                            <div class="time">
-                                <span>{{=it[i].create_time}}</span>
-                                <!-- 评论图标 -->
-                                <!-- <div class="commentIcon"></div> -->
-                            </div>
-                           <!--  <div class="commentText">
-                                <ul>
-                                    <li>
-                                        <span class="comment_name">李志超:</span>
-                                        <span class="comment_content">我是一条评论</span>
-                                    </li>
-                                </ul>
-                            </div> -->
-                        </div>
-                    </div>
-            </div>
-            {{ }; }}
+                </div>
+                {{ }; }}
+            {{?}}
     </script>
   
    

@@ -412,7 +412,7 @@
             {{?it}}
                 {{ for (var i = 0; i < it.length; i++) { }} 
                     {{?it[i].type == 1}}
-                        <li tapmode data-statusId = '{{=it[i].status_id}}' data-type = '{=it[i].type}' onclick="selCurrentStatus(this)">
+                        <li tapmode data-statusId = '{{=it[i].status_id}}' data-type = '{{=it[i].type}}' onclick="selCurrentStatus(this)">
                             <span>{{=it[i].name}} {{=it[i].position}}</span>
                             {{?it[i].is_default==1}}
                             <span class="iconStatus sel"></span>
@@ -421,7 +421,7 @@
                             {{?}}
                         </li>
                     {{??}}
-                        <li tapmode data-statusId = '{{=it[i].status_id}}' data-type = '{=it[i].type}' onclick="selCurrentStatus(this)">
+                        <li tapmode data-statusId = '{{=it[i].status_id}}' data-type = '{{=it[i].type}}' onclick="selCurrentStatus(this)">
                             <span>{{=it[i].name}} {{=it[i].position}}  {{=it[i].degree}}</span>
                             {{?it[i].is_default==1}}
                             <span class="iconStatus sel"></span>
@@ -528,6 +528,7 @@
     // 备注当前状态
     function selCurrentStatus(ele) {
         var type = $api.attr(ele, 'data-type'), status_id= $api.attr(ele, 'data-statusId');
+        console.log(type+'---'+status_id+'---'+api.pageParam.userId)
         for (var i = 0; i < $api.domAll('.iconStatus').length; i++) {
             $api.removeCls($api.domAll('.iconStatus')[i], 'sel');
         };
@@ -546,10 +547,14 @@
             }
         }, function(ret, err) {
             if(ret) {
-                // alert(JSON.stringify(ret))
-                console.log('修改当前状态成功')
-                // 更新数据库
-                updataSql(status_id)
+                if (ret.code == 200) {
+                    // alert(JSON.stringify(ret))
+                    console.log('修改当前状态成功')
+                    // 更新数据库
+                    updataSql(status_id)
+                } else {
+                    alert(ret.msg)
+                }
             } else {
                 alert(JSON.stringify(err))
             }
@@ -955,7 +960,7 @@
                 // -1 一度人脉尚未加入
                 break;
             case 4:
-                $api.text(relationship_level, '一度人脉初识好友');
+                $api.text(relationship_level, '初识好友');
                 break;
             case 5:
                 $api.text(relationship_level, '二度人脉' + compareRelation(status));

@@ -285,7 +285,15 @@
     apiready = function(){
         moduleInit();
         requestData();
-
+        api.addEventListener({
+           name: 'circleTopicComment'
+        }, function(ret, err) {
+           if (ret) {
+               requestData();
+           } else {
+               alert(JSON.stringify(err));
+           }
+       });
         // 下拉刷新
         // 下拉刷新
         api.setCustomRefreshHeaderInfo({
@@ -299,7 +307,8 @@
             name: 'scrolltobottom'
         }, function(ret, err) {
             if (isMenber) {
-                alert('下拉加载')
+                // alert('下拉加载')
+                requestData();
             } else {
                 // 不是圈子成员
                 api.openFrame({

@@ -136,7 +136,7 @@
             <p class="title">提现金额</p>
             <div class="inputDiv flex-def ">
                 <span class="jl_left">￥</span>  
-                <input  type="number" class="flex-item"  placeholder="提现金额">
+                <input id="money"  type="tel" class="flex-item"  placeholder="提现金额">
             </div>
         </div>
 
@@ -180,17 +180,7 @@
        // 情况input的placeholder属性
        // $api.attr($api.dom('input'), 'placeholder', '');
    }
-   function enter () {
-        // 获取用户输入的金额
-        var val = $api.val($api.dom('input'));
-        api.openFrame({
-            name: 'txEnter',
-            url: './me_hy_txEnter.html',
-            pageParam: {
-                money: val
-            }
-        });
-   }
+   
    function requireData() {
        api.ajax({
            url: apiSite + '/finance_center/withdrawIndex',
@@ -220,16 +210,28 @@
    }
    // 按钮
    function enter() {
-       var money = $api.val($api.dom('input'));
-       var type = $api.attr($api.dom('.sel'), 'data-type');
-       api.openWin({
-           name: 'me_hy_tx_info_win',
-           url: './me_hy_tx_info_win.html',
-           pageParam: {
-               money: money,
-               type: type
-           }
-       });
+       var money = $api.val($api.byId('money'));
+       // var type = $api.attr($api.dom('.sel'), 'data-type');
+       console.log(money)
+       var money2 = money
+       var count = 0;
+       for (var i = 0; i < money2.length; i++) {
+         if (money2[i] == '.') {
+          count++;
+         }
+       }
+       if (count>1 || money <0) {
+        alert('输入金额不正确')
+       } else {
+         api.openWin({
+             name: 'me_hy_tx_info_win',
+             url: './me_hy_tx_info_win.html',
+             pageParam: {
+                 money: money,
+                 type: type
+             }
+         });
+       }
    }
 </script>
 </html>

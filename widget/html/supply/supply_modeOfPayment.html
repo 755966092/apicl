@@ -272,20 +272,29 @@
                                       orderInfo: retAJAX.data.config
                                     },function(ret,err) {
                                        if (ret) {
-                                            if (ret.status) {
-                                                console.log('成功::'+JSON.stringify(ret))
-                                                //支付成功
-                                            payFruitPage(obj,ret);
-                                            api.sendEvent({
+                                        console.log(JSON.stringify(ret))
+                                            if (ret.code == 9000) {
+                                                api.openWin({
+                                                    name: 'supply_payResult_win',
+                                                    url: './supply_payResult_win.html',
+                                                    pageParam: {
+                                                        obj: obj,
+                                                        price: api.pageParam.price,
+                                                        form: api.pageParam.form,
+                                                        flag: 1,
+                                                        paramPhone: api.pageParam.paramPhone
+                                                    }
+                                                });
+                                                api.sendEvent({
                                                     name: 'saleMoney'
                                                 });
-                                              api.sendEvent({
+                                                api.sendEvent({
                                                     name: 'filterOrder'
                                                 });
+                                                api.closeWin();
                                             } else {
-                                                console.log('失败'+JSON.stringify(ret))
                                                 api.toast({
-                                                    msg: ret.statusMessage || '取消支付'
+                                                    msg: '已取消支付'
                                                 });
                                             }
                                         } else {
@@ -310,22 +319,31 @@
                                       orderInfo: retAJAX.data.config
                                     },function(ret,err) {
                                         if (ret) {
-                                            if (ret.status) {
                                             console.log('成功::'+JSON.stringify(ret))
                                                 //支付成功
-                                            payFruitPage(obj,ret);
-                                            api.sendEvent({
+                                            if (ret.code == 9000) {
+                                                api.openWin({
+                                                    name: 'supply_payResult_win',
+                                                    url: './supply_payResult_win.html',
+                                                    pageParam: {
+                                                        obj: obj,
+                                                        price: api.pageParam.price,
+                                                        form: api.pageParam.form,
+                                                        flag: 1,
+                                                        paramPhone: api.pageParam.paramPhone
+                                                    }
+                                                });
+                                                api.sendEvent({
                                                     name: 'saleMoney'
                                                 });
-                                              api.sendEvent({
+                                                api.sendEvent({
                                                     name: 'filterOrder'
                                                 });
+                                                api.closeWin();
                                             } else {
-                                                console.log('失败'+JSON.stringify(ret))
-                                                api.toast({
-                                                    msg: ret.statusMessage || '取消支付'
-                                                });
+                                                // alert(JSON.stringify(ret))
                                             }
+                                            
                                         } else {
                                             console.log(JSON.stringify(err))
                                         }
@@ -364,17 +382,28 @@
             if (ret) {
                 if (ret.status) {
                     //支付成功
-                  payFruitPage(obj,ret);
+                    api.openWin({
+                        name: 'supply_payResult_win',
+                        url: './supply_payResult_win.html',
+                        pageParam: {
+                            obj: obj,
+                            price: api.pageParam.price,
+                            form: api.pageParam.form,
+                            flag: 1,
+                            paramPhone: api.pageParam.paramPhone
+                        }
+                    });
                   api.sendEvent({
                         name: 'saleMoney'
                     });
                   api.sendEvent({
                         name: 'filterOrder'
                     });
+                    api.closeWin();
                 } else {
-                    api.toast({
-                        msg: ret.statusMessage || '取消支付'
-                    });
+                    // api.toast({
+                    //     msg: ret.statusMessage || '取消支付'
+                    // });
                 }
             } else {
                 alert(JSON.stringify(err))
@@ -382,18 +411,7 @@
         })
     }
     function payFruitPage(obj,ret) {
-        api.openWin({
-            name: 'supply_payResult_win',
-            url: './supply_payResult_win.html',
-            pageParam: {
-                obj: obj,
-                price: api.pageParam.price,
-                form: api.pageParam.form,
-                flag: 1,
-                paramPhone: api.pageParam.paramPhone
-            }
-        });
-        api.closeFrame();
+        
     }
 
     

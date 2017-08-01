@@ -1,71 +1,35 @@
 {
-	"code": 200,
-	"msg": "",
-	"time": 1501578132,
-	"data": {
-		"info": {
-			"user_id": 489,
-			"nickname": "李",
-			"real_name": "",
-			"sex": 1,
-			"head_img_url": "http://img.iinnet.com/system/default-head-img.png",
-			"hometown": null,
-			"birthday": null,
-			"current_company": null,
-			"current_position": null,
-			"current_degree": null
-		},
-		"extra": {
-			"extra_id": 12,
-			"remark_user_id": 131,
-			"content": null,
-			"image_url": null
-		},
-		"status": [{
-			"status_id": 8,
-			"user_id": 489,
-			"remark_user_id": 131,
-			"name": "学习",
-			"position": "理科",
-			"degree": "0",
-			"start_date": "2017-07-01",
-			"is_default": 1,
-			"type": 2
-		}, {
-			"status_id": 8,
-			"user_id": 489,
-			"remark_user_id": 131,
-			"name": "测试公司",
-			"position": "测试公司",
-			"degree": "",
-			"start_date": "2017-07-01",
-			"is_default": -1,
-			"type": 1
-		}],
-		"contact_list": [],
-		"other_contact_list": [],
-		"address_list": [],
-		"work_list": [{
-			"work_id": 8,
-			"company_id": 0,
-			"company_name": "测试公司",
-			"position": "测试公司",
-			"description": "测试",
-			"start_date": "2017-07-01",
-			"end_date": "0000-00-00",
-			"is_default": -1
-		}],
-		"education_list": [{
-		"education_id": 8,
-			"type": 2,
-			"school": "学习",
-			"major": "理科",
-			"degree": 0,
-			"description": "测试",
-			"start_date": "2017-07-01",
-			"end_date": "0000-00-00"
-		}],
-		"projectList": []
-	}
+	"info": {
+		"supply_id": 3,
+		"create_time": "2017-08-01 23:56:20",
+		"title": "测试",
+		"type": "个人",
+		"sub_type": 1,
+		"price": "0.01",
+		"unit": "未定义",
+		"form": 2,
+		"province": "北京市",
+		"city": "北京市",
+		"district": "海淀区",
+		"category_id": 1,
+		"category_name": "家政",
+		"description": "测试",
+		"image_json": ["http://img.iinnet.com/FucNqYc_W0tjX6WQ9vEovYMpWdaG"],
+		"status": "开启",
+		"sold_count": 0,
+		"comment_count": 0,
+		"avg_point": 0,
+		"rongcloud_user_id": "6e016ad7e5b565b150a9296efa64837e",
+		"user_id": 489,
+		"nickname": "测试5",
+		"head_img_url": "http://img.iinnet.com/FlcBdkCI44Zg6yc5TJk9zb7K-N1x",
+		"current_company": null,
+		"current_position": null,
+		"company_id": null,
+		"company_name": null
+	},
+	"last_comment": null,
+	"is_collect": false,
+	"is_self_add": true
 }
-at txl_addFellow_study_frame.html: 493
+at me_yfb_infoSupply.html: 510

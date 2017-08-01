@@ -96,8 +96,15 @@
            <li   tapmode   onclick="addFriends(this)" data-userId="{{=it[i].user_id}}" data-nickname = '{{=it[i].nickname}}' data-rongId='{{=it[i].rongcloud_user_id}}'>
                 <img src="{{=it[i].head_img_url}}">
                 <div>
+                    {{?it[i].remark_nickname}}
+                    <h3>{{=it[i].remark_nickname}}</h3>
+                    {{??}}
                     <h3>{{=it[i].nickname}}</h3>
+                    {{?}}
+                    {{?it[i].current_position != null}}
                     <p>{{=it[i].current_position}}</p>
+                    {{??}}
+                    {{?}}
                 </div>
             </li>
         {{ }; }}

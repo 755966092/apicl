@@ -108,8 +108,8 @@
             border: 0;
         }
         .nav .head {
-            width: 2.15rem;
-
+            /*width: 2.15rem;*/
+            width: 50%;
         }
         .nav .search {
             width: 1rem;
@@ -126,7 +126,7 @@
             background-size: 63px auto;
             color: #27B24A;
             width: 25%;
-            left: 1.15rem;
+            left: .95rem;
             bottom: 0;
             position: absolute;
             height: 2px;
@@ -153,16 +153,16 @@
     </header>
     <div class="main">  
         <div class="nav ">
-            <span class="search"></span>
+            <!-- <span class="search"></span> -->
             <span class="head act"   tapmode   onclick="switchApr(0)">
                 <span class="titleText">供</span>
             </span>
             <span class="head"   tapmode   onclick="switchApr(1)">
                 <span class="titleText">求</span>
             </span>
-            <span class="head"   tapmode   onclick="switchApr(2)">
+            <!-- <span class="head"   tapmode   onclick="switchApr(2)">
                 <span class="titleText">圈</span>
-            </span>
+            </span> -->
             <div class="indexbar" id="indexbar"></div>
         </div>
             
@@ -206,13 +206,15 @@
                 pageParam: {
                     headerH: headerH
                 }
-            },{
-                name: 'scGroup3', 
-                url: './me_sc_publish_3.html',
-                pageParam: {
-                    headerH: headerH
-                }
-            }]
+            }
+            // ,{
+            //     name: 'scGroup3', 
+            //     url: './me_sc_publish_3.html',
+            //     pageParam: {
+            //         headerH: headerH
+            //     }
+            // }
+            ]
         }, function(ret, err) {
             if (ret) {
                 switchAprIndex(ret.index)
@@ -234,7 +236,8 @@
         }
        // 标题下面竖线
     function sliderbarCallback(id, num) {
-        var width = parseInt((api.frameWidth - $api.offset($api.dom('.search')).w) / 3);
+        // var width = parseInt((api.frameWidth - $api.offset($api.dom('.search')).w) / 2);
+        var width = parseInt(api.frameWidth / 2);
         var move = num * width;
 
         $api.css($api.byId(id),

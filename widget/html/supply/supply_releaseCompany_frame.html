@@ -49,7 +49,16 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
     apiready = function(){
-        requireData()
+        requireData();
+        api.addEventListener({
+            name: 'addStudy'
+        }, function(ret, err) {
+            if (ret) {
+                requireData();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     };
 
     function selCompany(ele) {

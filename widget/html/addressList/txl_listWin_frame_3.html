@@ -54,8 +54,8 @@
         }
         p {
             text-align: center;
-            font-size: .34rem;
-            color: #555;
+            font-size: .3rem;
+            color: #999;
             margin-top: .5rem;
             display: none;
         }
@@ -89,11 +89,11 @@
     </style>
 </head>
 <body>
-    <div class="search">
+   <!-- <div class="search">
         <input type="text" onblur="loseFocus()" onfocus="getFocus()" onkeyup="hideSearIcon(this)" name="" placeholder="搜索">
         <span class="searchIcon"></span>
-        <!-- <span class="sxIcon"  tapmode onclick="openSlideBar()"></span> -->
-    </div>
+         <span class="sxIcon"  tapmode onclick="openSlideBar()"></span> 
+    </div>-->
     <div class="loading" ></div>
     <div class="main">
         <ul class="resultList"></ul>
@@ -110,10 +110,9 @@
             {{ }; }}
         </script>
     </div>
-    <p data-type='1' class="no1">暂无初识好友</p>
-    <p data-type='2' class="no2">暂无熟识好友</p>
-    <p data-type='3' class="no3">暂无尚未加入好友</p>
-    <p data-type='4' class="no4">暂无好友</p>
+    <p data-type='1' class="no1">暂无我在用户</p>
+    <p data-type='2' class="no2">暂无尚未加入</p>
+    <p data-type='3' class="no3">暂无三度人脉</p>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -155,13 +154,13 @@
         var url;
         if(classify === 1) {
             url = '/contact/levelThreeAvailable';
-            getData($api.getStorage('levelThreeRelation_1'));
+            // getData($api.getStorage('levelThreeRelation_1'));
         } else if (classify === 2) {
             url = '/contact/levelThreeUnavailable'
-            getData($api.getStorage('levelThreeRelation_2'));
+            // getData($api.getStorage('levelThreeRelation_2'));
         } else {
             url = '/contact/levelThree'
-            getData($api.getStorage('levelThreeRelation_3'));
+            // getData($api.getStorage('levelThreeRelation_3'));
         }
         api.ajax({
             url: apiSite + url,
@@ -176,6 +175,7 @@
             }
         }, function(ret, err) {
             if(ret) {
+                $api.css($api.dom('.loading'), 'display:none');
                 if(ret.code == 200) {
                     pageNum++;
                     dataArr =  dataArr.concat(ret.data.list);
@@ -186,8 +186,14 @@
                     } else {
                         $api.setStorage('levelThreeRelation_3', dataArr);
                     }
+                    if (ret.data.list.length == 0 && classify===1) {
+                        $api.css($api.dom('p.no1'), 'display:block');
+                    } else if(ret.data.list.length == 0 && classify===2) {
+                        $api.css($api.dom('p.no2'), 'display:block');
+                    } else if (ret.data.list.length == 0){
+                        $api.css($api.dom('p.no3'), 'display:block');
+                    }
                     getData(dataArr);
-                    $api.css($api.dom('.loading'), 'display:none');
                 } else {
                     alert(ret.msg)
                 }

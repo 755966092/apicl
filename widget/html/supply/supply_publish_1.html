@@ -274,7 +274,7 @@
 
 <script type="text/javascript">
     var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
-    var dataList = [], page_num = 1, dataListFlag = [],selectedObj;
+    var dataList = [], page_num = 1, dataListFlag = [],selectedObj,condition,parameter,flag;
     apiready = function(){
         moduleInit();
         // 请求数据
@@ -288,14 +288,17 @@
             page_num = 1;
             $api.text($api.dom('.bbottomLoading'), '正在加载...');
             //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
-            requireData();
+             if (flag) {
+                requireData(condition);
+            } else {
+                requireData();
+            }
         });
         api.addEventListener({
             name: 'editSupplyAfter'
         }, function(ret, err) {
             if (ret) {
-                requireData();
-                
+                    requireData();
             } else {
                 alert(JSON.stringify(err));
             }
@@ -364,6 +367,10 @@
             // $api.css($api.dom('.title1'), 'display:block');
             parameter = ret.value.parameter
            }
+           if (ret.value.condition) {
+            flag = 1
+           }
+           condition = ret.value.condition;
            requireData(ret.value.condition)
            // selfAdaption();
         })
@@ -449,7 +456,6 @@
             }
         }, function(ret, err) {
             if(ret) {
-                console.log('请求数据:::'+JSON.stringify(ret))
                 // console.log(ret.data.list[0].create_time)
                 // 停止下拉刷新
                 api.refreshHeaderLoadDone()
@@ -477,6 +483,9 @@
                     dataList = ret.data.list;
                     console.log('447:::'+JSON.stringify(ret.data.list))
                     getData(ret.data.list);
+                    if (ret.data.list.length < 15) {
+                        $api.css($api.dom('.bbottomLoading'), 'display: none');
+                    }
                     selfAdaption();
                 }
                 
@@ -524,30 +533,33 @@
                }
             }
         }, function(ret, err) {
-            console.log(page_num)
-            console.log(JSON.stringify(ret))
             if(ret) {
-                if (ret.data.list) {
-                    $api.text($api.dom('.bbottomLoading'), '暂无更多供求');
-                } else {
-                    $api.css($api.dom('.bbottomLoading'), 'display: none');
-                }
-                for (var i = 0; i < ret.data.list.length; i++) {
-                    // 解析图片json
-                    ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
+                if (ret.data.list.length < 15) {
+                        $api.css($api.dom('.bbottomLoading'), 'display: none');
+                    }else {
+                        if (ret.data.list) {
+                            $api.text($api.dom('.bbottomLoading'), '暂无更多供求');
+                        } else {
+                            $api.css($api.dom('.bbottomLoading'), 'display: none');
+                        }
+                        for (var i = 0; i < ret.data.list.length; i++) {
+                            // 解析图片json
+                            ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
 
-                    if(ret.data.list[i].unit == 0) {
-                        ret.data.list[i].unit = _dataSource[_dataSource.length-1]
-                    } else {
-                        ret.data.list[i].unit = _dataSource[ret.data.list[i].unit-1]
+                            if(ret.data.list[i].unit == 0) {
+                                ret.data.list[i].unit = _dataSource[_dataSource.length-1]
+                            } else {
+                                ret.data.list[i].unit = _dataSource[ret.data.list[i].unit-1]
+                            }
+                            ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
+                        }
+                        for (var i = 0; i < ret.data.list.length; i++) {
+                            dataList.push(ret.data.list[i])
+                        }
+                        getData(dataList);
+                        selfAdaption();
                     }
-                    ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
-                }
-                for (var i = 0; i < ret.data.list.length; i++) {
-                    dataList.push(ret.data.list[i])
-                }
-                getData(dataList);
-                selfAdaption();
+               
             } else {
                 alert(JSON.stringify(err.msg))
             }

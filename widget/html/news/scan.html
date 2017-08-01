@@ -14,11 +14,11 @@
    
     <header  class="header">
         <div class="head">
-            <span class="callback"   tapmode   onclick="api.closeWin()">返回</span>
+            <span class="callback"   tapmode   onclick="closePage()">返回</span>
             <span class="winTitle" id="title">
-                扫一扫加好友
+                扫一扫
             </span>
-            <span class="rightBtn"   tapmode   onclick="openPhoto()">相册</span> 
+            <!-- <span class="rightBtn"   tapmode   onclick="openPhoto()">相册</span>  -->
         </div>
     </header>
 </body>
@@ -44,6 +44,11 @@
         });
 
     };
+    function closePage() {
+        api.sendEvent({
+            name: 'closeView'
+        });
+    }
 
     // 发送打开相册事件
     function openPhoto() {

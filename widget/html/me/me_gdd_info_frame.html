@@ -425,6 +425,7 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
     var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
+    var priceFlag=0,statusFlag;
     apiready = function(){
         moduleInit();
         requireData();
@@ -548,7 +549,12 @@
                     $api.css($api.dom('.hull'), 'display:block');
                     // alert(JSON.stringify(ret))
                     // 处理订单单位
-                    ret.data.supply_info.unit = _dataSource[ret.data.supply_info.unit];
+                    if (ret.data.supply_info.unit) {
+                        ret.data.supply_info.unit = _dataSource[ret.data.supply_info.unit];
+                    } else {
+                        ret.data.supply_info.unit = '未定义';
+
+                    }
                     // 要显示的按钮
                     // .button_info
                     //      .pay
@@ -605,6 +611,8 @@
                             case 'refund': ret.data.button_info.buttonArr[i].key = '退款'; break;
                         }
                     }
+                    priceFlag = ret.data.supply_info.price;
+                    statusFlag = ret.data.order_info.status;
                     console.log(JSON.stringify(ret.data))
                     if (getData(ret.data)) {
                         if (api.systemType === 'ios') {
@@ -762,53 +770,160 @@
                     }
                 });
         } else if (flagText === '补差价') {
-            api.openFrame({
-                name: 'me_gdd_info_frame_sale',
-                url: './me_gdd_info_frame_sale.html',
-                rect: {
-                    x: 0,
-                    y: 0,
-                    w: api.winWidth,
-                    h: api.winHeight
-                },
-                pageParam: {
-                    param: param,
-                    flag: 'priceDifference'
-                },
-                bounces: false
+            api.prompt({
+                title: '补差价',
+                // msg: 'message',
+                text: '请输入差价',
+                buttons: ['确定', '取消']
+            }, function(ret, err) {
+                if (ret) {
+                    // alert(JSON.stringify(ret));
+                    param.money = parseFloat(ret.text);
+
+                    if (ret.buttonIndex == 1) {
+                        // alert(ret.text);
+                        if (statusFlag == 1) {  
+                            // 付款前补差价
+                            param.money = param.money + parseFloat(priceFlag);
+                        } else {
+                            // 付款后补差价
+                        }
+                        api.openFrame({
+                                name: 'supply_modeOfPayment',
+                                url: '../supply/supply_modeOfPayment.html',
+                                bounces: false,
+                                rect: {
+                                    x: 0,
+                                    y: 0,
+                                    w: 'auto',
+                                    h: 'auto'
+                                },
+                                pageParam: {
+                                    obj: param,
+                                    price: parseFloat(ret.text)+parseFloat(priceFlag),
+                                    flag: 2
+                                }
+                            });
+                    }
+                } else {
+                    alert(JSON.stringify(err));
+                }
             });
+            // api.openFrame({
+            //     name: 'me_gdd_info_frame_sale',
+            //     url: './me_gdd_info_frame_sale.html',
+            //     rect: {
+            //         x: 0,
+            //         y: 0,
+            //         w: api.winWidth,
+            //         h: api.winHeight
+            //     },
+            //     pageParam: {
+            //         param: param,
+            //         flag: 'priceDifference'
+            //     },
+            //     bounces: false
+            // });
         } else if (flagText === '退款') {
             var tatol = $api.text($api.dom('.totalNumber'));
-            api.openFrame({
-                name: 'me_gdd_info_frame_refund',
-                url: './me_gdd_info_frame_refund.html',
-                rect: {
-                    x: 0,
-                    y: 0,
-                    w: api.winWidth,
-                    h: api.winHeight
-                },
-                pageParam: {
-                    tatol: tatol,
-                    param: param
-                },
-                bounces: false
+            // api.openFrame({
+            //     name: 'me_gdd_info_frame_refund',
+            //     url: './me_gdd_info_frame_refund.html',
+            //     rect: {
+            //         x: 0,
+            //         y: 0,
+            //         w: api.winWidth,
+            //         h: api.winHeight
+            //     },
+            //     pageParam: {
+            //         tatol: tatol,
+            //         param: param
+            //     },
+            //     bounces: false
+            // });
+            api.prompt({
+                title: '退款',
+                // msg: 'message',
+                text: '请输入退款金额',
+                buttons: ['确定', '取消']
+            }, function(ret, err) {
+                if (ret) {
+                    if(buttonIndex == 1) {
+                        param.money = ret.text
+                        api.ajax({
+                            url: apiSite + '/supply_order/sellerRefundService',
+                            method: 'post',
+                            headers: apiHeader,
+                            data: {
+                                   values: param
+                            }
+                        }, function(ret, err) {
+                            if(ret) {
+                                // alert(JSON.stringify(ret))
+                                if (ret.code === 200) {
+                                } else {
+                                    alert(ret.msg)
+                                }
+                            } else {
+                                alert(JSON.stringify(err))
+                            }
+                        })
+                    }
+                } else {
+                    alert(JSON.stringify(err));
+                }
             });
         }else if (flagText === '优惠') {
-            api.openFrame({
-                name: 'me_gdd_info_frame_sale',
-                url: './me_gdd_info_frame_sale.html',
-                rect: {
-                    x: 0,
-                    y: 0,
-                    w: api.winWidth,
-                    h: api.winHeight
-                },
-                pageParam: {
-                    param: param
-                },
-                bounces: false
+            // api.openFrame({
+            //     name: 'me_gdd_info_frame_sale',
+            //     url: './me_gdd_info_frame_sale.html',
+            //     rect: {
+            //         x: 0,
+            //         y: 0,
+            //         w: api.winWidth,
+            //         h: api.winHeight
+            //     },
+            //     pageParam: {
+            //         param: param
+            //     },
+            //     bounces: false
+            // });
+            api.prompt({
+                title: '优惠',
+                // msg: 'message',
+                text: '请输入优惠价',
+                buttons: ['确定', '取消']
+            }, function(ret, err) {
+                if (ret) {
+                    if (ret.buttonIndex == 1) {
+                        param.money = ret.text;
+                        api.ajax({
+                            url: apiSite + '/supply_order/sellerDiscountService',
+                            method: 'post',
+                            headers: apiHeader,
+                            data: {
+                                   values: param
+                            }
+                        }, function(ret, err) {
+                            if(ret) {
+                                if (ret.code === 200) {
+                                    api.sendEvent({
+                                        name: 'saleMoney'
+                                    });
+                                    setTimeout(function(){api.closeFrame();},500)
+                                } else {
+                                    alert(ret.msg)
+                                }
+                            } else {
+                                alert(JSON.stringify(err))
+                            }
+                        })
+                    }
+                } else {
+                    alert(JSON.stringify(err));
+                }
             });
+
         } else {
             ajaxOperate(param ,url)
         }

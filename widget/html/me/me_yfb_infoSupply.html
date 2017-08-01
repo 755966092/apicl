@@ -329,7 +329,7 @@
     <script type="text/x-dot-template" id="listT">
         <div class="main flex-def flex-zTopBottom">
             <div class="img">
-                {{?it.info.image_json==null}}
+                {{?it.info.image_json!=null}}
                     <img src="{{=it.info.image_json[0]}}">
                 {{??}}
                     <img src="../../image/noimage.jpg">
@@ -506,7 +506,8 @@
                 ret.data.info.type = ret.data.info.type === 1 ? "个人" : "公司";
                 ret.data.info.status = ret.data.info.status === 1 ? '暂停' : (ret.data.info.status = ret.data.info.status === 2 ? '开启' : '已删除');
 
-                $api.css($api.dom('.loading'), 'display:none');     
+                $api.css($api.dom('.loading'), 'display:none');
+                console.log(JSON.stringify(ret.data))     
                 getData(ret.data);
             } else {
                 alert(ret.msg)
@@ -520,12 +521,12 @@
             url = '/supply/delete'
         } else {
             // 暂停按钮
-            if ($api.text(ele) === '暂停') {
+            if ($api.trimAll($api.text(ele)) == '暂停') {
                 // $api.html(ele, '<i class="sus"></i>开启');
                 url = '/supply/pause'
             } else {
-                // $api.html(ele, '<i class="sus"></i>暂停');
                 url = '/supply/show'
+                // $api.html(ele, '<i class="sus"></i>暂停');
             }
         }
         api.ajax({

@@ -224,7 +224,7 @@
             <span class="titleText lastTitleText">圈</span>
         </span>
         <div class="indexbar" id="indexbar"></div>
-        <span class="search"   tapmode   onclick="openSlid()"></span>
+        <span class="search" id="slide"   tapmode   onclick="openSlid()"></span>
     </div>
     <div class="ipt">
          <input type="text" name="" class="inputText" onblur="hideIpt()" onkeyup="showClear(this)">
@@ -306,6 +306,8 @@
 
     // 显示的页面
      function switchApr(index){
+
+        
             api.setFrameGroupIndex ({
                 name: 'supply_publish',
                 index: index,
@@ -316,6 +318,12 @@
 
     // 标题下面竖线
     function sliderbarCallback(id, num) {
+        if (num == 2) {
+            $api.css($api.byId('slide'), 'display: none');
+        } else {
+            $api.css($api.byId('slide'), 'display: inline-block');
+
+        }
         var width = parseInt((api.frameWidth - $api.offset($api.dom('.search')).w*2) / 3);
         var move = num * width;
 

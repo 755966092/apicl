@@ -329,7 +329,7 @@
     <script type="text/x-dot-template" id="listT">
         <div class="main flex-def flex-zTopBottom">
             <div class="img">
-                {{?it.info.image_json==null}}
+                {{?it.info.image_json!=null}}
                     <img src="{{=it.info.image_json[0]}}">
                 {{??}}
                     <img src="../../image/noimage.jpg">
@@ -487,7 +487,8 @@
                 ret.data.info.type = ret.data.info.type === 1 ? "个人" : "公司";
                 var statusArr=["求助中","帮助中","已结束","已失效","已删除"]
                 ret.data.info.status = statusArr[ret.data.info.status-1]
-                $api.css($api.dom('.loading'), 'display:none');     
+                $api.css($api.dom('.loading'), 'display:none');  
+                console.log(JSON.stringify(ret))   
                 getData(ret.data);
             } else {
                 alert(ret.msg)

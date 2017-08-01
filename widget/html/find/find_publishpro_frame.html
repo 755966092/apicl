@@ -188,7 +188,7 @@
     <div class="contentText clearfix">
         
         <div class="title">
-            <span class="smallTitle">#我提供#</span>
+            <!-- <span class="smallTitle">#我提供#</span> -->
             <input id="title" type="text" placeholder="输入您发布的标题" name="">
         </div>
         <textarea id="content" placeholder="描述一下您发布的内容" rows="5"></textarea>
@@ -353,9 +353,9 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
         }, function(ret, err) {
             if(ret) {
                 if (ret.code != 200) {
-                    alert(JSON.stringify(ret))
+                    // alert(JSON.stringify(ret))
                 } else {
-                    alert(JSON.stringify(ret))
+                    // alert(JSON.stringify(ret))
                     api.execScript({
                         name: 'find_dynamicState_win',
                         frameName: 'find_dynamicState_frame',
@@ -435,7 +435,7 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
                 fixedOn: api.frameName
             }, function(ret, err) {
                 if (ret) {
-                    alert(JSON.stringify(ret))
+                    // alert(JSON.stringify(ret))
                     if (ret.eventType == 'ok') {
                         
                         $api.text($api.dom('._status'), ret.level1);
@@ -602,6 +602,7 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
             if (ret) {
                 base64Data.push(ret.data);
                 getData(base64Data);
+                $api.css($api.dom('.loading'), 'display: block');
                 pushImg(ret);
             } else {
                 alert(JSON.stringify(err.msg));
@@ -619,7 +620,8 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
                     //上传成功后组装访问路径，或直接访问文档
                     imgArr.push('http://'+baseUrl +'/'+ ret.info.key)
                     // base64Data.push('http://'+baseUrl +'/'+ ret.info.key);
-                    base64Data.replace(ret.data, 'http://'+baseUrl +'/'+ ret.info.key) 
+                    base64Data.replace(ret.data, 'http://'+baseUrl +'/'+ ret.info.key)
+                    $api.css($api.dom('.loading'), 'display: block');
                     getData(base64Data);
                 } else if (ret.oper == "progress") {
                     //上传过程中获取进度数据

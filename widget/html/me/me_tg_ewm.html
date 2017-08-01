@@ -141,18 +141,18 @@
                         $api.addCls($api.byId('icon'), 'icon2');
                     }
                     $api.setStorage('InviteInfo', ret.data);
-                    createQrcode(ret.data.info.invitation_code)
+                    createQrcode(ret.data.info.invitation_code, ret.data.info.user_id)
                 }
             } else {
                 alert(JSON.stringify(err.msg))
             }
         })
     }
-    function createQrcode(str) {
+    function createQrcode(str, id) {
          // 生成二维码
         var scanner = api.require('scanner');
         scanner.encode({
-            string: str,
+            string: str+'-'+ id,
             save: {
                 imgPath: 'fs://',
                 imgName: 'album1.png',

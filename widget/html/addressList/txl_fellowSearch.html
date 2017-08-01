@@ -101,10 +101,10 @@
         <span class="clearIcon"   tapmode   onclick="clearText()"></span>
     </div>
     <div class="fellow">
-        <div class="hisSear">
+       <!--  <div class="hisSear">
             <span class="hisSearTitle">历史搜索</span>
             <span class="hisSearIcon"   tapmode   onclick="deletHis()"></span>
-        </div>
+        </div> -->
        
         <ul class="resultList"></ul>
         <script type="text/x-dot-template" id="listT">
@@ -114,7 +114,8 @@
                 {{ }; }}
         </script>
         <p class="textContent">
-            不管您是想找到曾经的发小或是同桌，还是某个项目的关系人，我们都可以帮助您。在上面的搜索栏输入您想找人的信息，如姓名、公司、行业等，您输入的信息越多，我们找到的信息就会越精准。
+            不管您是想找到曾经的发小或是同桌，还是某个项目的关系人，我们都可以帮助您。在上面的搜索栏输入您想找人的信息，如姓名、手机号码。
+            <!-- 不管您是想找到曾经的发小或是同桌，还是某个项目的关系人，我们都可以帮助您。在上面的搜索栏输入您想找人的信息，如姓名、公司、行业等，您输入的信息越多，我们找到的信息就会越精准。 -->
         </p>
     </div>
 </body>
@@ -159,16 +160,23 @@ var hisDataArr=[],n=1;
         });
     }
     $api.addEvt($api.dom('input'), 'keyup', function(e) {
-
-        if (e.keyCode == 13) {
-            searchFellow();
+        if (api.pageParam.type == 'web') {
+            if (e.keyCode == 13) {
+                searchFellow();
+            }
+        } else if (api.pageParam.type == 'mix') {
+            searchFellowMix();
+        } else {
+            searchFellow();         
         }
+
         keyUp($api.dom('input'))
     });
 
     function deletHis() {
          hisDataArr = [];
-         getData(hisDataArr);
+         // 历时搜索
+         // getData(hisDataArr);
     }
     function clearText() {
         $api.val($api.byId('ipt'), '');
@@ -197,15 +205,9 @@ var hisDataArr=[],n=1;
         var val = $api.val($api.dom('input'));
         hisDataArr.push(val);
         // // 输入框为空的关闭搜索结果页面
-        // if (val == '') {
-        //     $api.css($api.dom('.clearIcon'), 'display:none');
-        //     api.closeFrame({
-        //         name: 'fellowSearchFruit'
-        //     });
-        //     getData(hisDataArr);
-        // } else {
-            
-             api.ajax({
+        if (api.pageParam.type == 'web') {
+            // 网络数据
+            api.ajax({
                 url: apiSite + '/user/search',
                 method: 'post',
                 headers: apiHeader,
@@ -216,32 +218,103 @@ var hisDataArr=[],n=1;
                     }
                 }
             }, function(ret, err) {
-                    console.log('网络查询:::'+JSON.stringify(ret))
-                    // db.selectSql({
-                    //     name: 'db_' + $api.getStorage('userToken'),
-                    //     sql: 'SELECT * FROM addressList WHERE (nickname LIKE "%'+val+'%") or (remark_nickname LIKE "%'+val+'%") or (remark_current_contact LIKE "%'+val+'%")'     
-                    // },function(retSql,err){
-                    //     if (retSql.status) {
-                            // console.log('本地查询:::'+JSON.stringify(retSql))
-                            // 打开页面事件只执行一次
-                            openPage(ret.data.list);
-                            api.sendEvent({
-                                name: 'addf',
-                                extra: {val: ret.data.list.concat(retSql.data)}
-                            });    
-                    //     }else {
-                    //         api.alert({msg:err.msg});
-                    //     }
-                    // });
+                if (ret) {
+                    if(ret.code == 200) {
+                        openPage(ret.data.list);
+                        api.sendEvent({
+                            name: 'addf',
+                            extra: {val: ret.data.list}
+                        }); 
+                    } else {
+                        alert(ret.msg)
+                    }
+                } else {
+                    alert(JSON.stringify(err))
+                }
+                    
             })
-        // }
-        
-           
-        // 搜索, 显示搜索界面
-        
-        
+        } else {
+            // 本地数据
+            sqlSearch(val)
+        }
     }
-
+    function searchFellowMix() {
+        var val = $api.val($api.dom('input'));
+        hisDataArr.push(val);
+        // // 输入框为空的关闭搜索结果页面
+            // 网络数据
+            api.ajax({
+                url: apiSite + '/user/search',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: { 
+                        token: $api.getStorage('userToken'),
+                        keyword: val
+                    }
+                }
+            }, function(ret, err) {
+                if (ret) {
+                    if(ret.code == 200) {
+                        // 本地数据
+                        db.selectSql({
+                            name: 'db_' + $api.getStorage('userToken'),
+                            sql: 'SELECT * FROM addressList WHERE (nickname LIKE "%'+val+'%") or (remark_nickname LIKE "%'+val+'%") or (remark_current_contact LIKE "%'+val+'%")'     
+                        },function(retSql,err){
+                            if (retSql.status) {
+                                // 打开页面事件只执行一次
+                                if (retSql.data.length != 0) {
+                                    openPage(retSql.data.concat(ret.data.list));
+                                    api.sendEvent({
+                                        name: 'addf',
+                                        extra: {val: retSql.data.concat(ret.data.list)}
+                                    });  
+                                } else {
+                                    openPage(ret.data.list);
+                                    api.sendEvent({
+                                        name: 'addf',
+                                        extra: {val: ret.data.list}
+                                    });
+                                }
+                            }else {
+                                api.alert({msg:err.msg});
+                            }
+                        });
+                    } else {
+                        alert(ret.msg)
+                    }
+                } else {
+                    alert(JSON.stringify(err))
+                }
+                    
+            })
+            
+    }
+    // w本地查询
+    function sqlSearch(val) {
+        db.selectSql({
+            name: 'db_' + $api.getStorage('userToken'),
+            sql: 'SELECT * FROM addressList WHERE (nickname LIKE "%'+val+'%") or (remark_nickname LIKE "%'+val+'%") or (remark_current_contact LIKE "%'+val+'%")'     
+        },function(retSql,err){
+            if (retSql.status) {
+                // console.log('本地查询:::'+JSON.stringify(retSql))
+                // 打开页面事件只执行一次
+                if (retSql.data.length != 0) {
+                    openPage(retSql.data);
+                    api.sendEvent({
+                        name: 'addf',
+                        extra: {val: retSql.data}
+                    });  
+                } else {
+                    api.toast({
+                        msg: '暂无信息'
+                    });
+                }
+            }else {
+                api.alert({msg:err.msg});
+            }
+        });
+    }
     function openPage(list) {
         console.log(JSON.stringify(list))
         var heig = headerH + $api.offset($api.dom('.main')).h + 20;

@@ -124,19 +124,19 @@
             <span class="filter" tapmode onclick="openFilter()"></span>
         </div>
     </div>
-    <div class="hisSearch clearfix">
+    <!-- <div class="hisSearch clearfix">
         <div class="title clearfix">
             <span>历史搜索</span>
             <span class="delIcon"   tapmode   onclick="clearHis()"></span>
            
         </div>
         <div class="hisSearchContent clearfix resultList">
-           <!--  <span class="hisSearchItem">公司</span>
+            <span class="hisSearchItem">公司</span>
             <span class="hisSearchItem">个人</span>
             <span class="hisSearchItem">互联网</span>
             <span class="hisSearchItem">互联网</span>
             <span class="hisSearchItem">互联网</span>
-            <span class="hisSearchItem">互联网互联网</span> -->
+            <span class="hisSearchItem">互联网互联网</span>
         </div>
         <script type="text/x-dot-template" id="listT">
             {{ for (var i = 0; i < it.length; i++) { }} 
@@ -154,7 +154,7 @@
                 <li>儿童摄影</li>
             </ul>
         </div>
-    </div>
+    </div> -->
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -163,14 +163,12 @@
 <script type="text/javascript">
     var data = [],parameter,selectedObj,type;
     apiready = function(){
-        getData(data);
+        // getData(data);
         
         $api.addEvt($api.dom('input'), 'keyup', function(e) {
             var iputText = $api.val($api.dom('input'));
-            console.log('按键事件对象'+JSON.stringify(e))
-            console.log('按键事件对象2'+JSON.stringify(e.key))
          
-                if (e.keyCode == 13) {
+                // if (e.keyCode == 13) {
                     data.push(iputText);
 
                         api.openFrame({
@@ -196,7 +194,7 @@
                         });
                     // }
                     
-                }
+                // }
                 if (iputText == '') {
                     api.closeFrame({
                         name: 'supply_searchSupplyFruit_frame'
@@ -219,7 +217,7 @@
             }
         });
     };
-    getData(data);
+    // getData(data);
     function delIcon(ele) {
         
     }
@@ -244,7 +242,7 @@
     }
     function clearHis() {
         data = []
-        getData(data);
+        // getData(data);
     }
 </script>
 </html>

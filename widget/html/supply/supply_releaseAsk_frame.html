@@ -6,6 +6,9 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
+        .loading {
+            display: none;
+        }
         .contentText {
             background-color: #fff;
             font-size: .3rem;
@@ -245,6 +248,7 @@
     </style>
 </head>
 <body>
+    <div class="loading"></div>
     <div class="contentText clearfix">
         <div class="title">
             <span class="smallTitle">#我需要#</span>
@@ -561,6 +565,7 @@
             if (ret) {
                 base64Data.img.push(ret.base64Data);
                 getData(base64Data);
+                $api.css($api.dom('.loading'), 'display: block');
                //  var baseUrl = 'img.iinnet.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com
                 var obj = api.require('qiniuUpfile');
                 obj.upfile({
@@ -570,7 +575,8 @@
                         if (retUpfile.oper == "complete") {
                             //上传成功后组装访问路径，或直接访问文档
                             imgArr.push('http://'+ baseUrl +'/'+ retUpfile.info.key);
-                            duibi($api.domAll('.imgpage').length,imgArr.length)
+                            $api.css($api.dom('.loading'), 'display: none');
+                            // duibi($api.domAll('.imgpage').length,imgArr.length)
                         } else if (retUpfile.oper == "progress") {
                             //上传过程中获取进度数据
                             // console.log(retUpfile.percent);
@@ -634,11 +640,11 @@
 
     // 添加供应
     function addSupply() {
-        if (openImgFlag == 0) {
-            releaseFlag = 1;
-        }   
+        // if (openImgFlag == 0) {
+        //     releaseFlag = 1;
+        // }   
         // 获取页面内容
-        if (releaseFlag == 1) {
+        // if (releaseFlag == 1) {
             var token = $api.getStorage('userToken'),            //string  用户Token
                 title = $api.val($api.byId('title')),           //string  标题
                 category_id = 1,         //int 分类ID
@@ -734,9 +740,9 @@
                             alert(JSON.stringify(err.msg))
                         }
                     })
-        } else {
-            addSupply()
-        }
+        // } else {
+        //     addSupply()
+        // }
       
             
     }
