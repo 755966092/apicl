@@ -384,9 +384,14 @@ function getTotalCount() {
                 badge: ret.result
                 // 清除角标
             });
+            if(ret.result > 0) {
                 $api.html($api.byId('title'), '首页(' +ret.result+ ')<span class="rightBtn"   tapmode   onclick="addFellow()">+</span> ');
                 $api.css($api.byId('newsCount'), 'display: inline-block');
                 $api.html($api.byId('newsCount'), ret.result);
+            } else {
+                $api.css($api.byId('newsCount'), 'display: none');
+
+            }
         }
     })
 }

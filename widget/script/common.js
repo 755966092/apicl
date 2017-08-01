@@ -39,16 +39,14 @@ function exitApp() {
                 },
                 silent: true
             });
-            // rong.disconnect({
-            //     isReceivePush: false
-            // }, function(ret, err) {
-            //     // if ('success' == ret.status) {
-            //     //     api.toast({
-            //     //         // msg: '断开连接成功!'
-            //     //     });
-            //     // }
-            // });
-            // 
+            rong.disconnect({
+                isReceivePush: false
+            }, function(ret, err) {
+                if ('success' == ret.status) {
+
+                }
+            });
+
             db.closeDatabase({
                 name: 'test'
             }, function(ret, err) {
@@ -76,9 +74,9 @@ function fnInit() {
 }
 
 
-
-//接口地址
+// 七牛
 var baseUrl = 'img.iinnet.com';
+//接口地址
 
 // 测试环境
 // var apiSite = 'https://wozai.tonyliangli.cn/api';
