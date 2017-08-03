@@ -213,7 +213,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
-    var tel,headImg;
+    var tel,headImg = '';
     apiready = function(){
         fnInit();
         moduleInit();
@@ -246,17 +246,14 @@
         var inviteCode = $api.val($api.byId('inviteCode'));
         // alert(tel + '--' + nickName + '--' + psd + '--' + inviteCode)
         if (nickName === '') {
-            console.log(5.1)
             api.toast({
                 msg: '请输入昵称'
             });
         } else if (psd === '') {
-            console.log(5.2)
             api.toast({
                 msg: '请输入密码'
             });
         } else {
-            console.log(5.3)
             // 注册
             // alert(tel + '--' + nickName + '--' + psd + '--' + inviteCode)
             api.ajax({
@@ -273,93 +270,85 @@
                     }
                 }
             }, function(ret, err) {
-                console.log(5.3)
                 if (ret) {
                     if (ret.code == 200) {
                         console.log(JSON.stringify(ret))
-                    // alert('错误信息:'+JSON.stringify(err))
-                    // alert('正确信息:'+JSON.stringify(ret))
-                    // // 注册完成
-                    // api.toast({
-                    //     msg: '注册成功'
-                    // });
-                    // alert(JSON.stringify(ret))
-                    // 融云帐号
-                    var rongUserId =  ret.data.rongcloud_user_id,
-                    // 融云token
-                        rongToken =  ret.data.rongclound_token,
-                    // 平台token
-                        userToken = ret.data.token;
-                        $api.setStorage('rongUserId', rongUserId);
-                        $api.setStorage('rongToken', rongToken);
-                        $api.setStorage('userToken', userToken);
-                        api.confirm({
-                            title: '查找你的我在朋友',
-                            msg: '我在将上传手机通讯录至我在服务器以匹配及推荐朋友。（上传通讯录仅用于匹配朋友，不会保存任何资料，亦不会作它用）',
-                            buttons:['不允许', '好']
-                        },function(ret,err){
-                             // 打开数据库， 新建表格
-                            openDb(userToken);
-                            if(ret.buttonIndex == 1){
-                                api.openWin({
-                                    name: 'login_enroll4',
-                                    url: './login_enroll4.html',
-                                    pageParam: {
-                                        userToken: userToken,
-                                        rongToken: rongToken
-                                    }
-                                });
-                            } else {
-                                 setTimeout(function(){
-                                     contacts.queryByPage({
-                                        pageIndex: 0
-                                    }, function(ret, err) {
-                                        if (ret) {
-                                            api.ajax({
-                                                url: apiSite + '/contact/sync',
-                                                method: 'post',
-                                                headers: apiHeader,
-                                                data: {
-                                                    values: { 
-                                                        token: userToken,
-                                                        contact_json:ret
-                                                    }
-                                                }
-                                            }, function(ret, err) {
-                                                // 同步通讯录成功
-                                                if(ret) {
-                                                    // 请求同步的数据，存到本地数据库
-                                                    if(ret.code == 200) {
-                                                        console.log('同步通讯录成功')
-                                                        requestData();
-                                                    } else {
-                                                        alert(ret.msg)
-                                                    }
-                                                } else {
-                                                    alert(JSON.stringify(err.msg))
-                                                }
-                                            })
-                                        } else {
-                                            alert(JSON.stringify(err.msg));
+                        // 融云帐号
+                        var rongUserId =  ret.data.rongcloud_user_id,
+                        // 融云token
+                            rongToken =  ret.data.rongclound_token,
+                        // 平台token
+                            userToken = ret.data.token;
+                            $api.setStorage('rongUserId', rongUserId);
+                            $api.setStorage('rongToken', rongToken);
+                            $api.setStorage('userToken', userToken);
+                            api.confirm({
+                                title: '查找你的我在朋友',
+                                msg: '我在将上传手机通讯录至我在服务器以匹配及推荐朋友。（上传通讯录仅用于匹配朋友，不会保存任何资料，亦不会作它用）',
+                                buttons:['不允许', '好']
+                            },function(ret,err){
+                                 // 打开数据库， 新建表格
+                                openDb(userToken);
+                                if(ret.buttonIndex == 1){
+                                    api.openWin({
+                                        name: 'login_enroll4',
+                                        url: './login_enroll4.html',
+                                        pageParam: {
+                                            userToken: userToken,
+                                            rongToken: rongToken
                                         }
                                     });
-                                 },100)
-                                 api.openWin({
-                                    name: 'main',
-                                    url: '../main.html',
-                                    slidBackEnabled: false,
-                                    pageParam: {
-                                        userToken: userToken,
-                                        rongToken: rongToken
-                                    }
-                                 });
-                            }
-                            
-                        });
-                        rongyun(rongToken);
-                } else {
-                    alert(ret.msg)
-                }
+                                } else {
+                                     setTimeout(function(){
+                                         contacts.queryByPage({
+                                            pageIndex: 0
+                                        }, function(ret, err) {
+                                            if (ret) {
+                                                api.ajax({
+                                                    url: apiSite + '/contact/sync',
+                                                    method: 'post',
+                                                    headers: apiHeader,
+                                                    data: {
+                                                        values: { 
+                                                            token: userToken,
+                                                            contact_json:ret
+                                                        }
+                                                    }
+                                                }, function(ret, err) {
+                                                    // 同步通讯录成功
+                                                    if(ret) {
+                                                        // 请求同步的数据，存到本地数据库
+                                                        if(ret.code == 200) {
+                                                            console.log('同步通讯录成功')
+                                                            requestData();
+                                                        } else {
+                                                            alert(ret.msg)
+                                                        }
+                                                    } else {
+                                                        alert(JSON.stringify(err.msg))
+                                                    }
+                                                })
+                                            } else {
+                                                alert(JSON.stringify(err.msg));
+                                            }
+                                        });
+                                     },100)
+                                     api.openWin({
+                                        name: 'main',
+                                        url: '../main.html',
+                                        slidBackEnabled: false,
+                                        pageParam: {
+                                            userToken: userToken,
+                                            rongToken: rongToken
+                                        }
+                                     });
+                                }
+                                
+                            });
+                            rongyun(rongToken);
+                    } else {
+                        alert(ret.msg)
+                    }
                 } else {
                     alert(JSON.stringify(err))
                     console.log(JSON.stringify(err))
