@@ -186,11 +186,15 @@ justify-content: space-between;
                 }
             }, function(ret, err) {
                 if(ret) {
+                    api.sendEvent({
+                        name: 'circleTopicComment'
+                    });
                     api.execScript({
                         frameName: 'find_frame',
                         script: 'requestData();'
                     });
-                    alert(JSON.stringify(ret))
+                    api.closeWin();
+                    // alert(JSON.stringify(ret))
                 } else {
                     alert(JSON.stringify(err.msg))
                 }

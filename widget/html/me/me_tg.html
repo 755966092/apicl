@@ -6,90 +6,166 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-      
-        .main ul li {
-            height: .82rem;
-            line-height: .82rem;
-            padding: 0 .3rem 0 .3rem;
-            font-size: .28rem;
-            border-bottom: .01rem solid #EDEDED;
-            background: #fff;
+        body,html{
+            background-color: #000;
             position: relative;
-            
+            height: 100%;
         }
-        .main ul li .icon_zk {
-            display: inline-block;
-            /*width: .15rem;*/
-            padding-right: .15rem;
-            height: .8rem;
-            background: url(../../image/icon_member/icon_zk.png)no-repeat;
-            -webkit-background-size: .15rem .25rem;
-            background-size: .15rem .25rem;
-            background-position: 0 .3rem;
-            float: right;
-            /*margin-right: .2rem;*/
-        }
-        .main ul li span:nth-child(3) {
-            margin-right: .2rem;
-            color: #439421;
-        }
-        .main p {
-            font-size: .32rem;
-            padding: .2rem .38rem;
+        
+        .main {
+            width: 5.3rem;
+            height: 7.337rem;
             background-color: #fff;
+            position: absolute;
+            top: 0;bottom: 0;left: 0;right: 0;margin: auto;
+            box-sizing: border-box;
+            padding: .37rem  0;
         }
-        .main .liLast {
+        .main .title {
+            padding: 0 .36rem;
+        }
+        .headImg {
+            margin-right: .2rem;
+        }
+        .headImg img {
+            width: 1.2rem;
+            height: 1.2rem;
+            border-radius: .1rem;
+            border: .01rem solid #BEBEC1;
+        }
+        .titleText {
+            font-size: 0;
+        }
+        .titleText span {
+            font-size: .3rem;
+        }
+        .titleText .icon{
+            width: .24rem;
+            height: .24rem;
+            background: url(../../image/icon_supply/icon_person.png)no-repeat;
+            -webkit-background-size: .24rem .24rem ;
+            background-size: .24rem .24rem ;
+            margin-left: .2rem;
+        }
+        .titleText .icon2 {
+             background: url(../../image/icon_my/icon_my02.png)no-repeat;
+            -webkit-background-size: .24rem .24rem ;
+            background-size: .24rem .24rem ;
+        }
+        .code {
+            font-size: .24rem;
+            color: #999;
             margin-top: .2rem;
-            color: #439421;
-            font-size: .34rem;
-            background: #fff url(../../image/icon_member/icon_bz.png)no-repeat;
-            -webkit-background-size: .44rem .44rem;
-            background-size: .44rem .44rem;
-            padding-left: .5rem;
+        }
+        .code .info {
+            font-size: .24rem;
+        }
+        .QRCode img{
+            /*margin-top: .6rem;*/
+            width: 5.3rem;
+            height: 5.3rem;
         }
     </style>
 </head>
 <body>
-    <header  class="header">
+     <header  class="header">
         <div class="head">
             <span class="callback"   tapmode   onclick="api.closeWin()">返回</span>
             <span class="winTitle">
-                推广
+                我的推广二维码
             </span>
-            
         </div>
     </header>
-    <div class="main">  
-    <ul>
-            <li   tapmode   onclick="login(this)" data-val="ewm"><span>我的推广二维码</span><span class="icon_zk"></span></li>
-           <!--  <li   tapmode   onclick="login(this)" data-val="sr">
-                <span>我的收入</span>
-                <span class="fr icon_zk"></span>
-                <span class="fr">$20.50</span>
-            </li> -->
-
-           <!--  <li class="liLast">如何获得收入？</li>
-            <p>如何获得收入？如何获得收入？如何获得收入？如何获得收入？如何获得收入？如何获得收入？如何获得收入？如何获得收入？如何获得收入？如何获得收入？如何获得收入？如何获得收入？如何获得收入？如何获得收入？如何获得收入？</p> -->
-       </ul>
+    <div class="main flex-def flex-zTopBottom">  
+       <div class="title flex-def ">
+           <div class="headImg">
+               <img id="head_img_url" src="../../image/tx_4.jpg">
+           </div>
+           <div class="titleText">
+               <p class="namw flex-def flex-cCenter">
+                   <span id="nickname">Alexi</span>
+                   <span id="icon" class="icon"></span>
+               </p>
+               <p class="code">邀请码：<span class="info" id="invitation_code">45EEFW5G54</span></p>
+           </div>
+        </div>
+        <div class="QRCode flex-def flex-zCenter ">
+            <img id="ewm" src="../../image/tx_1.jpg">
+        </div>
     </div>
+
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
         fnInit();
+       
+        var InviteInfo = $api.getStorage('InviteInfo');
+        if (InviteInfo) {
+            // 有缓存
+            console.log('使用缓存')
+            $api.text($api.byId('invitation_code'), InviteInfo.info.invitation_code);
+            $api.attr($api.byId('head_img_url'), 'src', InviteInfo.info.head_img_url);
+            $api.text($api.byId('nickname'), InviteInfo.info.nickname);
+            createQrcode(InviteInfo.info.invitation_code)
+            requestData(InviteInfo);
+        } else {
+            // 没有缓存
+            requestData();
+            console.log('网路获取')
+        }
+
+       
     };
-   function login (ele) {
-        var val = $api.attr(ele, 'data-val');
-        api.openWin({
-            name: val + 'Win',
-            url: './me_tg_' + val + '.html',
-            pageParam: {
-                name: 'value'
-            },
-            bounces: false
+    function requestData(cacheData) {
+        api.ajax({
+            url: apiSite + '/user_center/inviteInfo',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (cacheData == ret.data) {
+                    // 网络数据没有更新
+                } else {
+                    // 网络数据有更新
+                    $api.text($api.byId('invitation_code'), ret.data.info.invitation_code);
+                    $api.attr($api.byId('head_img_url'), 'src', ret.data.info.head_img_url);
+                    $api.text($api.byId('nickname'), ret.data.info.nickname);
+                    if (ret.data.info.sex == 2) {
+                        $api.addCls($api.byId('icon'), 'icon2');
+                    }
+                    $api.setStorage('InviteInfo', ret.data);
+                    createQrcode(ret.data.info.invitation_code, ret.data.info.user_id)
+                }
+            } else {
+                alert(JSON.stringify(err.msg))
+            }
+        })
+    }
+    function createQrcode(str, id) {
+         // 生成二维码
+        var scanner = api.require('scanner');
+        scanner.encode({
+            string: str+'-'+ id,
+            save: {
+                imgPath: 'fs://',
+                imgName: 'album1.png',
+                size: 390
+            }
+        }, function(ret, err) {
+            if (ret.status) {
+                // alert(JSON.stringify(ret))
+                $api.attr($api.byId('ewm'), 'src', ret.savePath);
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
         });
-   }
-   
+    } 
 </script>
 </html>

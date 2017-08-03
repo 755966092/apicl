@@ -187,6 +187,7 @@
                 url = '/demand_order/hostConfirmHelp';
                 obj = api.pageParam.obj
                 obj.pay_method = pay_method;
+
             } else {
                 // 买家购买供应操作
                 url = '/supply_order/buyerCreateOrder';
@@ -246,8 +247,6 @@
                         alert(JSON.stringify(err))
                     }
                 })
-               
-                
             } else {
                 api.ajax({
                     url: apiSite + url,
@@ -257,16 +256,16 @@
                            values: obj
                     }
                 }, function(retAJAX, err) {
-                    console.log("202"+JSON.stringify(retAJAX))
                     if(retAJAX) {
                         if (retAJAX.code !== 200) {
                             alert(JSON.stringify(retAJAX.msg))
                         } else {
                             if (api.pageParam.flag === 3) {
+                                // 接收帮助付款
                                 if (pay_method === 'wechat') {
                                     // 微信支付
-                                   wxPayFun(retAJAX);
-
+                                   
+                                   wxPayFun(obj,retAJAX,'receiveHelp');
                                 } else if (pay_method === 'alipay') {
                                     aliPay.payOrder({
                                       orderInfo: retAJAX.data.config
@@ -282,6 +281,7 @@
                                                         price: api.pageParam.price,
                                                         form: api.pageParam.form,
                                                         flag: 1,
+                                                        flagType:'receiveHelp',
                                                         paramPhone: api.pageParam.paramPhone
                                                     }
                                                 });
@@ -293,8 +293,13 @@
                                                 });
                                                 api.closeWin();
                                             } else {
-                                                api.toast({
-                                                    msg: '已取消支付'
+                                                api.openWin({
+                                                    name: 'supply_payResult_win',
+                                                    url: './supply_payResult_win.html',
+                                                    pageParam: {
+                                                        obj: obj,
+                                                        flag: 0,
+                                                    }
                                                 });
                                             }
                                         } else {
@@ -312,7 +317,7 @@
                             } else {
                                 if (pay_method === 'wechat') {
                                     // 微信支付
-                                   wxPayFun(obj,retAJAX);
+                                   wxPayFun(obj,retAJAX,'receiveHelp');
 
                                 } else if (pay_method === 'alipay') {
                                     aliPay.payOrder({
@@ -330,6 +335,7 @@
                                                         price: api.pageParam.price,
                                                         form: api.pageParam.form,
                                                         flag: 1,
+                                                        flagType:'receiveHelp',
                                                         paramPhone: api.pageParam.paramPhone
                                                     }
                                                 });
@@ -369,7 +375,7 @@
         }
         
     }
-    function wxPayFun(obj,retAJAX) {
+    function wxPayFun(obj,retAJAX, flagType) {
          wxPay.payOrder({
             apiKey: retAJAX.data.config.appid,
             orderId: retAJAX.data.config.prepayid,
@@ -390,6 +396,7 @@
                             price: api.pageParam.price,
                             form: api.pageParam.form,
                             flag: 1,
+                            flagType: flagType,
                             paramPhone: api.pageParam.paramPhone
                         }
                     });

@@ -98,9 +98,9 @@
         </div>
         <h3>实付款：<span>¥ </span> <span id="price">30.00</span></h3>
         <p class="content"><span class="contentLabel">求助者：</span><span id="serverPerson" class="contentContent">方小姐</span></p>
-        <p class="content"><span class="contentLabel">手机号码：</span><span id="phone" class="contentContent">155 5555 5555</span></p>
+        <!-- <p class="content"><span class="contentLabel">手机号码：</span><span id="phone" class="contentContent">155 5555 5555</span></p> -->
         <p class="content"><span class="contentLabel">服务方式：</span><span id="serverType" class="contentContent">线下（北京市朝阳区）</span></p>
-        <p class="content"><span class="contentLabel">服务时间：</span><span id="serverTime" class="contentContent">2017年08月21日</span></p>
+        <!-- <p class="content"><span class="contentLabel">服务时间：</span><span id="serverTime" class="contentContent">2017年08月21日</span></p> -->
         <div class="btn" ontouchstart="openOriderInfo()">查看订单</div>
     </div>
     <div class="main2">
@@ -123,24 +123,68 @@
     apiready = function(){
         moduleInit();
         console.log(JSON.stringify(api.pageParam))
+        $api.text($api.byId('price'), api.pageParam.price);
+        $api.text($api.byId('serverTime'), api.pageParam.obj.service_time);
+        $api.text($api.byId('serverPerson'), api.pageParam.obj.name);
+        // $api.text($api.byId('phone'), api.pageParam.paramPhone);
+        if (api.pageParam.form == 1) {
+            $api.text($api.byId('serverType'), '线上');
+        } else {
+            $api.text($api.byId('serverType'), '线下');
+        }
+        initPage();
+        
+        // 1 线上 2 线下
+    }
+    function initPage() {
         if (api.pageParam.flag) {
             // 支付成功
-            $api.text($api.byId('price'), api.pageParam.price);
-            $api.text($api.byId('serverTime'), api.pageParam.obj.service_time);
-            $api.text($api.byId('serverPerson'), api.pageParam.obj.name);
-            $api.text($api.byId('phone'), api.pageParam.paramPhone);
-            if (api.pageParam.form == 1) {
-                $api.text($api.byId('serverType'), '线上');
-            } else {
-                $api.text($api.byId('serverType'), '线下+地址');
+            // 
+            if (api.pageParam.flagType == 'receiveHelp') {
+                api.ajax({
+                    url: apiSite + '/demand_order/detail',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                           values: { 
+                               token: $api.getStorage('userToken'),
+                               order_id: api.pageParam.obj.order_id
+                           }
+                    }
+                }, function(ret, err) {
+                    if(ret) {
+                        console.log(JSON.stringify(ret))
+                        $api.text($api.byId('price'), ret.data.order_info.money);
+                        $api.text($api.byId('serverTime'), ret.data.order_info.service_time);
+                        // $api.text($api.byId('serverPerson'), ret.data.helper_info.nickname);
+                        // $api.text($api.byId('phone'), ret.data.order_info.paramPhone);
+                        if (ret.data.demand_info.form == 1) {
+                            $api.text($api.byId('serverType'), '线上');
+                        } else {
+                            $api.text($api.byId('serverType'), '线下');
+                        }
+                    } else {
+                        alert(JSON.stringify(err))
+                    }
+                })
             }
+           
         } else {
             // 支付失败
             $api.css($api.dom('.main'), 'display: none');
             $api.css($api.dom('.main2'), 'display: block');
         }
-        
-        // 1 线上 2 线下
+    }
+    function initText(ret) {
+        $api.text($api.byId('price'), ret.data.order_info.money);
+        $api.text($api.byId('serverTime'), ret.data.order_info.service_time);
+        $api.text($api.byId('serverPerson'), ret.data.helper_info.nickname);
+        // $api.text($api.byId('phone'), ret.data.order_info.paramPhone);
+        if (ret.demand_info.form == 1) {
+            $api.text($api.byId('serverType'), '线上');
+        } else {
+            $api.text($api.byId('serverType'), '线下');
+        }
     }
     // 打开订单详情
     function openOriderInfo() {

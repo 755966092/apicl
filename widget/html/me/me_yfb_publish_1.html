@@ -6,6 +6,13 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
+        .no_data {
+           text-align: center;
+            font-size: .28rem;
+            color: #999;
+            line-height: .8rem;
+            /*display: none;*/
+        }
         .label {
             font-size: .2rem;
             color: #0076FF;
@@ -66,35 +73,39 @@
        
     </ul>
     <script type="text/x-dot-template" id="listT">
-        {{ for (var i = 0; i < it.length; i++) { }} 
-            <li class="listContent flex-def flex-cCenter" data-id="{{=it[i].supply_id}}" tapmode onclick="info(this)">
-                <!-- <img class="img " src="{{=it[i].image_json[0]}}"> -->
-                {{?it[i].image_json[0]==null}}
-                <img class="img " src="../../image/noimage.jpg">
-                {{??}}
-                <img class="img " src="{{=it[i].image_json[0]}}">
-                {{?}}
-                <div class="text flex-item">
-                    <div class="title">
-                        <div class="flex-def flex-cCenter flex-zBetween">
-                            <div class="flex-def flex-cCenter">
-                                {{?it[i].type==1}}
-                                    <span class="label">个人</span>
-                                {{??}}
-                                    <span class="label">公司</span>
-                                {{?}}
-                                <h3 class="">{{=it[i].title}}</h3>
+        {{?it.length > 0}}
+            {{ for (var i = 0; i < it.length; i++) { }} 
+                <li class="listContent flex-def flex-cCenter" data-id="{{=it[i].supply_id}}" tapmode onclick="info(this)">
+                    <!-- <img class="img " src="{{=it[i].image_json[0]}}"> -->
+                    {{?it[i].image_json[0]==null}}
+                    <img class="img " src="../../image/noimage.jpg">
+                    {{??}}
+                    <img class="img " src="{{=it[i].image_json[0]}}">
+                    {{?}}
+                    <div class="text flex-item">
+                        <div class="title">
+                            <div class="flex-def flex-cCenter flex-zBetween">
+                                <div class="flex-def flex-cCenter">
+                                    {{?it[i].type==1}}
+                                        <span class="label">个人</span>
+                                    {{??}}
+                                        <span class="label">公司</span>
+                                    {{?}}
+                                    <h3 class="">{{=it[i].title}}</h3>
+                                </div>
+                                <span class="money">{{=it[i].price}}元/{{=it[i].unit}}</span>
                             </div>
-                            <span class="money">{{=it[i].price}}元/{{=it[i].unit}}</span>
-                        </div>
-                        <div class="flex-def flex-cCenter flex-zBetween"">
-                            <p>{{=it[i].description}}</p>
-                         <span class="time">{{=it[i].status}}</span>
+                            <div class="flex-def flex-cCenter flex-zBetween"">
+                                <p>{{=it[i].description}}</p>
+                             <span class="time">{{=it[i].status}}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </li>
-        {{ }; }}
+                </li>
+            {{ }; }}
+        {{??}}
+            <p class="no_data">暂无数据</p>
+        {{?}}
     </script>
     </div>
    

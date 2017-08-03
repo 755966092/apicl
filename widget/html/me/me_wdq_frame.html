@@ -248,7 +248,7 @@
             {{?}}
             <div class="complete">
                 {{ for (var i = 0; i < it.available_list.length; i++) { }} 
-                <div class="item">
+                <div class="item" tapmode onclick="openCircleInfo(this)" data-name="{{=it.available_list[i].title}}" data-id="{{=it.available_list[i].circle_id}}">
                     <div class="wrap flex-def flex-cCenter">
                         <div class="itemLeft">
                             <img src="{{=it.available_list[i].image_url}}">
@@ -288,13 +288,25 @@
         // 监听创建圈子事件
         foundCircle();
     };
-
+    // 进入圈子详情
+    function openCircleInfo(ele) {
+        api.openWin({
+            name: 'winName',
+            url: '../find/find_dynamicState_win.html',
+            pageParam: {
+                circle_id: $api.attr(ele, 'data-id'),
+                circle_name: $api.attr(ele, 'data-name'),
+                flag: 1
+            }
+        });
+    }
     // 监听创建圈子事件
     function foundCircle() {
         api.addEventListener({
             name: 'frame4Open'
         }, function(ret, err) {
             if (ret) {
+                console.log('监听到信息')
                 requireData()
             } else {
                 alert(JSON.stringify(err.msg));
@@ -314,11 +326,13 @@
             }
         }, function(ret, err) {
             if(ret) {
+                console.log(JSON.stringify(ret))
                 if (ret.data.verify_waiting_list == '' && ret.data.verify_fail_list == '' && ret.data.available_list == '') {
                      $api.css($api.dom('.main'), 'display:none');
                      $api.css($api.dom('.loading'), 'display:none');
                      $api.removeCls($api.dom('.nomain'), 'hide');
                 } else {
+                    $api.addCls($api.dom('.nomain'), 'hide');
                     $api.css($api.dom('.loading'), 'display:none');
                     getData(ret.data)
                 }

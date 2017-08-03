@@ -120,7 +120,21 @@
                     console.log(JSON.stringify(ret));
                     getData(ret.results)
                 } else {
-                    alert(JSON.stringify(err));
+                    if(err.code == 1) {
+                        alert('检索词有岐义')
+                    } else if (err.code == 2) {
+                        alert('检索地址有岐义')
+                    }else if (err.code == 3) {
+                        alert('没有找到检索结果')
+                    }else if (err.code == 4) {
+                        alert('key错误')
+                    }else if (err.code == 5) {
+                        alert('网络连接错误')
+                    }else if (err.code == 6) {
+                        alert('网络连接超时')
+                    }else if (err.code == 7) {
+                        alert('还未完成鉴权，请在鉴权通过后重试')
+                    }
                 }
             });
         // }

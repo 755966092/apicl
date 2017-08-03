@@ -191,6 +191,7 @@ function receiveMsg() {
         // alert(JSON.stringify(ret.result.connectionStatus))
         if (ret.result.connectionStatus === 'KICKED') {
             alert('你以被顶下线');
+
         }
     });
     rong.setOnReceiveMessageListener(function(ret, err) {

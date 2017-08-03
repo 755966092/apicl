@@ -73,7 +73,7 @@
             font-size: .28rem;
             color: #B1A9AB;
             height: .8rem;  
-            background: url(../../image/icon_zk.png)no-repeat;
+            /*background: url(../../image/icon_zk.png)no-repeat;*/
             background-size: .15rem .25rem;
             background-position: right  center;
                 
@@ -173,9 +173,11 @@
     };
     
     // 打开时间选择器
-    function openTime(ele) {                                                                                                                                     
+    function openTime(ele) {                                                                                                                                    
         for (var i = 0; i < $api.domAll('input').length; i++) {
             $api.domAll('input')[i].blur()
+        }for (var i = 0; i < $api.domAll('textarea').length; i++) {
+            $api.domAll('textarea')[i].blur()
         }
         var data = $api.attr(ele, 'data-val');
         var text;
@@ -303,33 +305,41 @@
                 end_date: time_2
             }
         }
-        api.ajax({
-            url: apiSite + url,
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: obj
-            }
-        }, function(ret, err) {
-            if (ret) {
-                console.log('添加成功')
-                if(ret.code == 200) {
-                    if (time_2 = '0000-00-00') {
-                        api.execScript({
-                            name: 'txl_memberInfo_Win',
-                            frameName: 'txl_memberInfo_Frame',
-                            script: 'initStatus();'
-                        });
-                    }
-                    $api.css($api.dom('.loading'), 'display: none');
-                    insertData();
-                } else {
-                    alert(ret.msg)
+        if(time_2 == '请选择' || time_1 == '请选择') {
+            alert('请填写时间');
+            $api.css($api.dom('.loading'), 'display: none');
+        } else {
+            api.ajax({
+                url: apiSite + url,
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: obj
                 }
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        }); 
+            }, function(ret, err) {
+                if (ret) {
+                    console.log('添加成功')
+                    if(ret.code == 200) {
+                        if (time_2 = '0000-00-00') {
+                            api.execScript({
+                                name: 'txl_memberInfo_Win',
+                                frameName: 'txl_memberInfo_Frame',
+                                script: 'initStatus();'
+                            });
+                        }
+                        $api.css($api.dom('.loading'), 'display: none');
+                        insertData();
+                    } else {
+                        $api.css($api.dom('.loading'), 'display: none');
+                        alert(ret.msg)
+                    }
+                } else {
+                    $api.css($api.dom('.loading'), 'display: none');
+                    
+                    alert(JSON.stringify(err.msg));
+                }
+            }); 
+        }
            
     }
 

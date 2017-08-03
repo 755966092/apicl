@@ -6,6 +6,9 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
+        .loading {
+            display: none;
+        }
         body,html {
             background-color: #EDECF3;
         }
@@ -91,7 +94,7 @@
             margin-right: .2rem;
             display: inline-block;
             height: .8rem;
-            background: url(../../image/icon_zk.png)no-repeat;
+            /*background: url(../../image/icon_zk.png)no-repeat;*/
             -webkit-background-size: .15rem .25rem;
             background-size: .15rem .25rem;
             background-position: right center;
@@ -157,7 +160,7 @@
             background-position: .3rem center;
         }
         .time {
-            font-size: .24rem;
+            font-size: .28rem;
             color: #9b9b9b;
         }  
 
@@ -184,7 +187,7 @@
     </style>
 </head>
 <body>
-    
+    <div class="loading"></div>
     <div class="contentText clearfix">
         
         <div class="title">
@@ -225,7 +228,7 @@
                 <img  src="../../image/icon_supply/icon_addMedia_1.png" class="addImg" onclick="openImg()" tapmode>
                 <!-- <img  src="../../image/icon_supply/icon_addMedia_2.png"> -->
         </script>
-        <p class="position"></p>
+        <p class="position" id="position" tapmode   onclick="openPosition()" ></p>
     </div>
     <div class="classify clearfix">
         <div class="status" tapmode='hover' ontouchstart="selRole()" data-val='_status' >
@@ -265,16 +268,19 @@
 <script type="text/javascript">
 var base64Data = [], role = ['关系人','知情人','甲方','总包单位','分包单位','设计院','销售'],province='',city='',district='',latitude='',longitude='',imgArr=[];
     apiready = function(){
-        console.log(api.pageParam.circle_id)
+        moduleInit();
+        getPos();
         if(api.pageParam.circle_id == undefined) {
             // 无圈子id
             $api.css($api.byId('is_circle'), 'display: block');
         }
-        moduleInit();
-        getPos();
         getData(base64Data);
         // 删除图片
         delImg();
+        monitorSel();
+    };
+    // 监听事件
+    function monitorSel() {
         api.addEventListener({
             name: 'selCircle'
         }, function(ret, err) {
@@ -285,7 +291,30 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
                 alert(JSON.stringify(err));
             }
         });
-    };
+        api.addEventListener({
+            name: 'selAddress'
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.byId('position'), ret.value.address);
+                console.log(JSON.stringify(ret))
+                province = ret.value.province;
+                city = ret.value.city;
+                address = ret.value.address;
+                district = ret.value.district;
+                latitude = ret.value.lat;
+                longitude = ret.value.lon;
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    // 选择地址
+    function openPosition() {
+        api.openWin({
+            name: 'supply_releasePosition_win',
+            url: '../supply/supply_releasePosition_win.html'
+        });
+    }
     // 选择圈子
     function selCircle(ele) {
         var circleId = $api.attr($api.byId('circleName'), 'data-circleId');
@@ -326,9 +355,8 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
             end_time: end_time,            //string  结束时间
             latitude: latitude,            //string  纬度
             longitude: longitude,   
-            image_json: base64Data 
+            image_json: imgArr 
         }
-        console.log(JSON.stringify(obj))
         api.ajax({
             url: apiSite + '/circle_topic/add',
             method: 'post',
@@ -336,7 +364,7 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
             data: {
                    values: { 
                         token: $api.getStorage('userToken'),
-                        circle_id: api.pageParam.circle_id || circleId,           //int 圈子ID
+                        circle_id: api.pageParam.circle_id || circleId,             //int 圈子ID
                         role: roleId,            //int 角色（1-关系人，2-知情人，3-甲方，4-总包单位，5-分包单位，6-设计院，7-销售）
                         title: title,           //string  标题
                         content: content,         //string  详细内容
@@ -347,13 +375,13 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
                         end_time: end_time,            //string  结束时间
                         latitude: latitude,            //string  纬度
                         longitude: longitude,           //string  经度
-                        image_json: base64Data,      //
+                        image_json: imgArr,      //
                    }
             }
         }, function(ret, err) {
             if(ret) {
                 if (ret.code != 200) {
-                    // alert(JSON.stringify(ret))
+                    alert(JSON.stringify(ret.msg))
                 } else {
                     // alert(JSON.stringify(ret))
                     api.execScript({
@@ -517,7 +545,9 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
     // 获取位置
     function getPos() {
         if (api.systemType == 'ios') {
+                console.log(111111111111111111)
             bMap.initMapSDK(function(ret,err) {
+                console.log(222222222222222)
                 if (ret.status) {
                    getLocation();
                 } else {
@@ -531,12 +561,14 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
     }
     // 获取经纬度
     function getLocation() {
+        console.log(333333333333)
         bMap.getLocation({
             accuracy: '100m',
             autoStop: true,
             filter: 1
         }, function(ret, err) {
             if (ret.status) {
+                console.log('540540540'+JSON.stringify(ret))
                 getCoords(ret.lon, ret.lat)
             } else {
                 alert(err);
@@ -550,6 +582,7 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
             lat: lat
         }, function(ret, err) {
             if (ret.status) {
+                console.log(ret.address)
                 $api.text($api.dom('.position'), ret.address);
                 province = ret.province//省 ret.province
                 city = ret.city//市 ret.city
@@ -620,12 +653,12 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
                     //上传成功后组装访问路径，或直接访问文档
                     imgArr.push('http://'+baseUrl +'/'+ ret.info.key)
                     // base64Data.push('http://'+baseUrl +'/'+ ret.info.key);
-                    base64Data.replace(ret.data, 'http://'+baseUrl +'/'+ ret.info.key)
-                    $api.css($api.dom('.loading'), 'display: block');
-                    getData(base64Data);
+                    // base64Data.replace(ret.data, 'http://'+baseUrl +'/'+ ret.info.key)
+                    $api.css($api.dom('.loading'), 'display: none');
+                    // getData(base64Data);
                 } else if (ret.oper == "progress") {
                     //上传过程中获取进度数据
-                    // console.log(ret.percent);
+                    console.log(ret.percent);
                 }
             }
         });

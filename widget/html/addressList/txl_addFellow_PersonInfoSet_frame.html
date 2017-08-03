@@ -161,6 +161,7 @@
 <script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
     apiready = function(){
+        console.log(JSON.stringify(api.pageParam))
     };
 
     function changeState (ele) {
@@ -174,7 +175,7 @@
             data: {
                    values: { 
                        token: $api.getStorage('userToken'),
-                       user_id: api.pageParam.userId
+                       user_id: api.pageParam.user_id
                    }
             }
         }, function(ret, err) {
@@ -199,7 +200,18 @@
             }
         })
     }
-   
+    function updateSql() {
+        db.executeSql({
+            name: 'db_'+$api.getStorage('userToken'),
+            sql: 'DELETE FROM addressList WHERE user_id = ' + api.pageParam.user_id    
+        }, function(ret, err){        
+            if( ret.status ){
+                alert( JSON.stringify( ret ) );
+            }else{
+                alert( JSON.stringify( err ) );
+            }
+        });
+    }
 </script>
 </html>
 

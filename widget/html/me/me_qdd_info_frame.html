@@ -458,7 +458,6 @@
             data: {
                    values: { 
                         token: $api.getStorage('userToken'),
-                        // token: 'b678d8a0-f0d8-c67e-50b0-4d839ea864d7',
                         order_id: api.pageParam.order_id
                    }
             }
@@ -568,6 +567,7 @@
     }
     // 操作按钮
     function oriderOperate(ele) {
+       
         var url = $api.attr(ele, 'data-url');
         var orderId = $api.attr(ele, 'data-orderId');
         var demandId = $api.attr(ele, 'data-demandId');
@@ -652,6 +652,7 @@
                                 order_id: orderId,
                                 reason: ret.selectedInfo[0].id
                             }
+
                             ajaxOperate(obj, url)
                         }
                     } else {
@@ -748,6 +749,9 @@
                     alert(JSON.stringify(ret.msg))
                 } else {
                     requireData();
+                    api.sendEvent({
+                        name: 'filterOrder'
+                    });
                 }
             } else {
                 alert(JSON.stringify(err))

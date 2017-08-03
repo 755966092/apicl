@@ -219,7 +219,7 @@
             <span class="winTitle">
                 圈子信息
             </span>
-            <span class="rightBtn"   tapmode   onclick="openPhoto()"></span>
+            <!-- <span class="rightBtn"   tapmode   onclick="openPhoto()"></span> -->
         </div>
     </header>
 
@@ -251,14 +251,20 @@
             </div>
             <script type="text/x-dot-template" id="listT">
                 <div class="member">
-                    {{ for (var i = 0; i < 5; i++) { }} 
+                    {{ for (var i = 0; i < it.length; i++) { }} 
+                        {{?i < 5}}
                         <div class="memberInfo" data-id="{{=it[i].user_id}}" tapmode onclick="openUserInfo(this)">
                             <img src="{{=it[i].head_img_url}}" alt="">
+                            {{?it[i].note}}
+                            <p class="memberName">{{=it[i].note}}</p>
+                            {{??}}
                             <p class="memberName">{{=it[i].nickname}}</p>
+                            {{?}}
                         </div>
+                        {{?}}
                     {{ }; }}
                 </div>
-                <p tapmode onclick="openmoreUserInfo()" class="viewMore">查看更多圈联系人</p>
+                <!-- <p tapmode onclick="openmoreUserInfo()" class="viewMore">查看更多圈联系人</p> -->
                 </script>
             <div class="btn" tapmode onclick="quitCircle()">
                 退出圈子
@@ -312,6 +318,7 @@
         }, function(ret, err) {
             if(ret) {
                 if (ret.code == 200) {
+                    console.log(JSON.stringify(ret))
                     requestData()
                 } else {
                     alert(ret.msg)
@@ -366,25 +373,29 @@
         }, function(ret, err) {
             console.log(JSON.stringify(ret))
             if(ret) {
-                if (ret.data.is_member) {
-                    $api.css($api.dom('.notJoin'), 'display:none');
-                    $api.css($api.dom('.haveJoin'), 'display:block');
+                if(ret.code == 200) {
+                    if (ret.data.is_member) {
+                        $api.css($api.dom('.notJoin'), 'display:none');
+                        $api.css($api.dom('.haveJoin'), 'display:block');
+                    } else {
+                        $api.css($api.dom('.haveJoin'), 'display:none');
+                        $api.css($api.dom('.notJoin'), 'display:block');
+                    }
+                    $api.text($api.byId('circle_name'), ret.data.info.title);
+                    $api.text($api.byId('description'), ret.data.info.description);
+                    $api.text($api.byId('member_count'), '成员：'+ret.data.info.member_count);
+                    $api.text($api.byId('topic_count'), '发布：'+ret.data.info.topic_count);
+                    $api.text($api.byId('note'), ret.data.note);
+                    $api.attr($api.dom('.imgHead'), 'src', ret.data.info.image_url);
+                    $api.attr($api.dom('.imgBg'), 'src', ret.data.info.image_url);
+                    console.log("342:::"+JSON.stringify(ret))
+                    // for (var i = 0; i < ret.data.member_list.length; i++) {
+                    //     ret.data.member_list[i].head_img_url = eval(ret.data.member_list[i].head_img_url)
+                    // }
+                    getData(ret.data.member_list)
                 } else {
-                    $api.css($api.dom('.haveJoin'), 'display:none');
-                    $api.css($api.dom('.notJoin'), 'display:block');
+                    alert(JSON.stringify(ret.msg))
                 }
-                $api.text($api.byId('circle_name'), ret.data.info.title);
-                $api.text($api.byId('description'), ret.data.info.description);
-                $api.text($api.byId('member_count'), '成员：'+ret.data.info.member_count);
-                $api.text($api.byId('topic_count'), '发布：'+ret.data.info.topic_count);
-                $api.text($api.byId('note'), ret.data.note);
-                $api.attr($api.dom('.imgHead'), 'src', ret.data.info.image_url);
-                $api.attr($api.dom('.imgBg'), 'src', ret.data.info.image_url);
-                console.log("342:::"+JSON.stringify(ret))
-                // for (var i = 0; i < ret.data.member_list.length; i++) {
-                //     ret.data.member_list[i].head_img_url = eval(ret.data.member_list[i].head_img_url)
-                // }
-                getData(ret.data.member_list)
             } else {
                 alert(JSON.stringify(err.msg))
             }

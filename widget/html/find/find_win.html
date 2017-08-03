@@ -118,7 +118,15 @@
 <script type="text/javascript">
     apiready = function(){
         fnInit();
-        requestData();
+        openAprGroup();
+        // requestData();
+        // // 下拉刷新
+        // api.setCustomRefreshHeaderInfo({
+        //     bgColor: '#EFEFF4',
+        // }, function(ret, err) {
+        //     //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
+        //      requestData();
+        // });
     }; 
     function openShadow() {
         api.openFrame({
@@ -136,28 +144,29 @@
             bounces: false
         });
     }
-    function requestData() {
-        api.ajax({
-            url: apiSite + '/circle/index',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-               values: { 
-                    token: $api.getStorage('userToken')
-               }
-            }
-        }, function(ret, err) {
-            if(ret) {
-                if(ret.code === 200) {
-                    openAprGroup(ret.data);
-                } else {
-                    alert(ret.msg)
-                }
-            } else {
-                alert(JSON.stringify(err.msg))
-            }
-        })
-    }
+    // function requestData() {
+    //     api.ajax({
+    //         url: apiSite + '/circle/index',
+    //         method: 'post',
+    //         headers: apiHeader,
+    //         data: {
+    //            values: { 
+    //                 token: $api.getStorage('userToken')
+    //            }
+    //         }
+    //     }, function(ret, err) {
+    //         api.refreshHeaderLoadDone()
+    //         if(ret) {
+    //             if(ret.code === 200) {
+    //                 openAprGroup(ret.data);
+    //             } else {
+    //                 alert(ret.msg)
+    //             }
+    //         } else {
+    //             alert(JSON.stringify(err.msg))
+    //         }
+    //     })
+    // }
       // 打开frame组
     function openAprGroup (data){
         var h = headerH +  $api.offset($api.dom('.nav')).h
@@ -165,7 +174,7 @@
             name: 'supply_publish',
             rect: {
                  x: 0, 
-                 y: h, 
+                 y: h+1, 
                  w: 'auto',
                  h: 'auto'
             },
@@ -174,15 +183,11 @@
             frames: [{
                 name: 'publishGroup1', 
                 url: './find_circleMy_frame.html',
-                pageParam: {
-                    data:data
-                }
+                
             },{
                 name: 'find_circleOther_frame', 
                 url: './find_circleOther_frame.html',
-                pageParam: {
-                    data:data
-                }
+                
             }]
         }, function(ret, err) {
             if (ret) {

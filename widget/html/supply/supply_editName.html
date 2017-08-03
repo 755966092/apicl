@@ -43,7 +43,7 @@
         </div>
     </header>
     <div class="main"> 
-        <input type="text" name=""> 
+        <input type="text"  name=""> 
         <div class="btn" ontouchend="enter()">确定</div>
     </div>
 </body>
@@ -52,7 +52,11 @@
 <script type="text/javascript">
     apiready = function(){
         fnInit();
-        $api.val($api.dom('input'), api.pageParam.name);
+        if (api.pageParam.name == '未设置真实姓名') {
+            $api.attr($api.dom('input'), 'placeholder', '填写真实姓名');
+        } else {
+            $api.val($api.dom('input'), api.pageParam.name);
+        }
     };
     function enter() {
         var name = $api.val($api.dom('input'));

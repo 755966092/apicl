@@ -350,6 +350,7 @@
             }, function(ret, err) {
                 if (ret) {
                     $api.setStorage('UserCenter', ret.data);
+                    console.log(JSON.stringify(ret))
                     userName = ret.data.info.nickname,
                     headImg = ret.data.info.head_img_url,
                     sex = ret.data.info.sex,
@@ -452,15 +453,15 @@
            }
        }, function(ret, err) {
             if(ret) {
-                for (var i = 0; i < data.length; i++) {
-                    data[i].url = ret.data.list[data[i].targetId].head_img_url
-                    data[i].nickname = ret.data.list[data[i].targetId].nickname
-                }
-                // 网络数据有更新 刷新数据 从新缓存数据
-                if (cacheFieldName !== data) {
-                    $api.setStorage('chatMessage', data);
-                    getData(data);
-                } 
+                    for (var i = 0; i < data.length; i++) {
+                        data[i].url = ret.data.list[data[i].targetId].head_img_url
+                        data[i].nickname = ret.data.list[data[i].targetId].nickname
+                    }
+                    // 网络数据有更新 刷新数据 从新缓存数据
+                    if (cacheFieldName !== data) {
+                        $api.setStorage('chatMessage', data);
+                        getData(data);
+                    } 
                 
            } else {
                alert(JSON.stringify(err.msg))

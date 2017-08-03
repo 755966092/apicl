@@ -367,7 +367,7 @@
             <span class="winTitle">
                 信息详情
             </span>
-            <div class="rightBtn">...</div>
+            <!-- <div class="rightBtn">...</div> -->
         </div>
     </header>
     
@@ -390,8 +390,8 @@
                 {{?}}
                 <img id="imgHeight" src="../../image/tx_4.jpg">
             </div> -->
-            <div class="title flex-def flex-zLeftRight flex-cCenter">
-                <img src="{{=it.info.head_img_url}}" tapmode onclick="openUserInfoPage(this)" data-id="{{=it.info.user_id}}">
+            <div class="title flex-def flex-zLeftRight flex-cCenter" tapmode onclick="openUserInfoPage(this)" data-id="{{=it.info.user_id}}">
+                <img src="{{=it.info.head_img_url}}" >
                 <div class="titleRight">
                     <h3>{{=it.info.nickname}}</h3>
                     {{?it.info.current_company==null&&it.info.current_position!=null}}
@@ -468,7 +468,7 @@
                     {{??}}
                     <span class="commentCount">评论（{{=it.info.comment_count}}）</span>
                     {{?}}
-                    <span class="commentIcon"></span>
+                    <!-- <span class="commentIcon"></span> -->
                 </div>
                 {{?it.last_comment!=null}}
                     <div class="commentContent">
@@ -492,12 +492,12 @@
                     </div>
                 {{?}}
                 
-                {{?it.info.comment_count==0}}
+                <!-- {{?it.info.comment_count==0}}
                 {{??}}
                     <div data-avg="{{=it.info.avg_point}}" class="btn flex-def flex-cCenter" tapmode onclick="openCommentPage(this)">
                         <div>查看全部</div>
                     </div>
-                {{?}}
+                {{?}} -->
             </div>
           
         </div>
@@ -644,21 +644,25 @@
             }
         }, function(ret, err) {
             // 解析图片json
-            ret.data.info.image_json = eval(ret.data.info.image_json);
-            var eleHtml='';
-            for (var i = 0; i < ret.data.info.image_json.length; i++) {
-                eleHtml += '<img src="'+ ret.data.info.image_json[i] +'?imageView2/1/w/750/h/436/format/jpg/q/100|imageslim" class="swiper-slide blue-slide">'
-                ret.data.info.image_json[i] = ret.data.info.image_json[i] + '?imageMogr2/auto-orient/thumbnail/710x/blur/1x0/quality/100|imageslim'
+            console.log(JSON.stringify(ret))
+            console.log(JSON.stringify(api.pageParam))
+            if (ret.data.info.image_json) {
+                ret.data.info.image_json = eval(ret.data.info.image_json);
+                var eleHtml='';
+                for (var i = 0; i < ret.data.info.image_json.length; i++) {
+                    eleHtml += '<img src="'+ ret.data.info.image_json[i] +'?imageView2/1/w/750/h/436/format/jpg/q/100|imageslim" class="swiper-slide blue-slide">'
+                    ret.data.info.image_json[i] = ret.data.info.image_json[i] + '?imageMogr2/auto-orient/thumbnail/710x/blur/1x0/quality/100|imageslim'
+                }
+                
+                if (eleHtml) {
+                    $api.html($api.dom('.swiper-wrapper'), eleHtml);
+                } else {
+                     $api.html($api.dom('.swiper-wrapper'), '<img class="default" src="../../image/noimage.jpg">');
+                }
+                 if (ret.data.info.image_json.length > 1) {
+                    swiperFun();
+                 }
             }
-            
-            if (eleHtml) {
-                $api.html($api.dom('.swiper-wrapper'), eleHtml);
-            } else {
-                 $api.html($api.dom('.swiper-wrapper'), '<img class="default" src="../../image/noimage.jpg">');
-            }
-             if (ret.data.info.image_json.length > 1) {
-                swiperFun();
-             }
              // 处理时间显示
             ret.data.info.create_time = initTime(ret.data.info.create_time)       
             if (ret.data.info.unit > 0) {

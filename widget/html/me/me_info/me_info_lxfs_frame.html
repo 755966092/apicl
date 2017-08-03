@@ -73,22 +73,6 @@
         .label {
             margin-right: .2rem;
         }
-        .icon {
-            width: .78rem;
-            height: .8rem;
-             float: right;
-            margin-right: .36rem;
-        }
-        .selIcon .icon {
-            width: .78rem;
-            height: .8rem;
-            background: url(../../../image/icon_my/icon_enter.png)no-repeat;
-            -webkit-background-size: .5rem .35rem;
-            background-size: .5rem .35rem;
-            background-position: center center;
-            float: right;
-            margin-right: .36rem;
-        }
    </style>
 </head>
 <body>
@@ -100,12 +84,11 @@
                 {{?}}
 
                 {{?it[i].type == 1}}
-                    <div tapmode onclick="setDefaultContact(this)" class="move moveFlag {{=it[i].is_default == 1 ? 'selIcon' : ''}}" data-id="{{=it[i].contact_id}}" data-sub_type="{{=it[i].sub_type}}" data-type="{{=it[i].type}}" >
+                    <div class="move moveFlag" data-id="{{=it[i].contact_id}}" data-sub_type="{{=it[i].sub_type}}" data-type="{{=it[i].type}}" >
                         <div class="item">
                             <span class="label">{{=it[i].sub_type}}：</span>
                             <input type="text" onchange="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].phone}}" disabled="true">
                             <span class="clearIcon" data-id="{{=it[i].contact_id}}"  tapmode onclick="clearItem(this)"></span>
-                        <span class="icon "></span>
                         </div>
                     </div>
                 {{?}}
@@ -114,21 +97,20 @@
                     <p class="type fixedTitle">固定</p>
                 {{?}}
                 {{?it[i].type == 2}}
-                    <div  tapmode onclick="setDefaultContact(this)" class="move fixedFlag {{=it[i].is_default == 1 ? 'selIcon' : ''}}"  data-id="{{=it[i].contact_id}}" data-sub_type="{{=it[i].sub_type}}" data-type="{{=it[i].type}}">
+                    <div class="move fixedFlag"  data-id="{{=it[i].contact_id}}" data-sub_type="{{=it[i].sub_type}}" data-type="{{=it[i].type}}">
                         <div class="item" >
                             <span class="label">{{=it[i].sub_type}}：</span>
                             <input type="text" onchange="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].phone}}" disabled="true">
                             <span class="clearIcon" data-id="{{=it[i].contact_id}}" tapmode onclick="clearItem(this)"></span>
-                        <span class="icon "></span>
                         </div>
                     </div>
                 {{?}}
             {{ }; }} 
    </script>
-    <!-- <div class="addPhone" tapmode onclick="addPhone()">
+    <div class="addPhone" tapmode onclick="addPhone()">
         <div class="addIcon"></div>
-        <div>添加电话号码</div>
-   </div> -->
+        <div>添加联系方式</div>
+   </div>
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
@@ -148,30 +130,6 @@
             }
         });
     };
-    // 设置默认联系方式
-    function setDefaultContact(ele) {
-        var contactId = $api.attr(ele, 'data-id');
-        
-        api.ajax({
-            url: apiSite + '/user_center/setDefaultContact',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                   values: { 
-                       token: $api.getStorage('userToken'),
-                       contact_id: contactId
-                   }
-            }
-        }, function(ret, err) {
-            if(ret) {
-                // alert(JSON.stringify(ret))
-                $api.removeCls($api.dom('.selIcon'), 'selIcon');
-                $api.addCls(ele, 'selIcon');
-            } else {
-                alert(JSON.stringify(err))
-            }
-        })
-    }
     function revisePhone(ele) {
         var obj = {}
             obj.id = parseInt($api.attr($api.closest(ele, '.move'), 'data-id')),
@@ -264,6 +222,7 @@
             }
         }, function(ret, err) {
             if (ret) {
+                console.log('225:::::'+JSON.stringify(ret))
                 handleData(litterSort(ret.data.list))
                 // getData(ret.data.list);
                 // alert(JSON.stringify(ret.data))

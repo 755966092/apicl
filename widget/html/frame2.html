@@ -213,7 +213,7 @@
      
     <div class="main">  
     <div class="nav">
-        <span class="search"   tapmode   onclick="searchSupply(this)"></span>
+        <span class="search"  id="search"  tapmode   onclick="searchSupply(this)"></span>
         <span class="head act" data-id="1"   tapmode   onclick="switchApr(0)">
             <span class="titleText">供</span>
         </span>
@@ -319,9 +319,11 @@
     // 标题下面竖线
     function sliderbarCallback(id, num) {
         if (num == 2) {
-            $api.css($api.byId('slide'), 'display: none');
+            $api.css($api.byId('slide'), 'opacity: 0');
+            $api.css($api.byId('search'), 'opacity: 0');
         } else {
-            $api.css($api.byId('slide'), 'display: inline-block');
+            $api.css($api.byId('slide'), 'opacity: 1');
+            $api.css($api.byId('search'), 'opacity: 1');
 
         }
         var width = parseInt((api.frameWidth - $api.offset($api.dom('.search')).w*2) / 3);

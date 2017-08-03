@@ -301,9 +301,6 @@
                 headers: apiHeader,
             }, function(ret, err) {
                 if(ret) {
-                    console.log(api.appVersion)
-                    console.log(ret.data.current_version)
-                    console.log(ret.data.current_version >= api.appVersion)
                     if (ret.data.current_version >= api.appVersion) {
                         $api.css($api.byId('vipList'), 'display: block');
                     } 
@@ -340,7 +337,6 @@
                 }
             }, function(ret, err) {
                 if (ret) {
-                    console.log(JSON.stringify(ret))
                     if ( $api.getStorage('UserCenter') != ret.data) {
                         $api.setStorage('UserCenter', ret.data);
                         userName = ret.data.info.nickname,
@@ -355,7 +351,6 @@
                         $api.setStorage('userName', userName); 
                         $api.setStorage('userSex', sex); 
                         if (currentCompany != 'null') {
-                            console.log(currentCompany)
                             $api.setStorage('currentCompany', currentCompany); 
                         }
                         if (currentPosition != 'null') {
@@ -406,7 +401,6 @@
             // 设置用户头像
             $api.attr(head, 'src', headImg);
             // 设置当前状态
-            console.log(currentCompany)
             if (currentCompany != null && currentPosition == null) {
                 $api.text(personalInfo, currentCompany);
             } else if (currentPosition != null && currentCompany == null) {

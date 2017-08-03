@@ -72,7 +72,7 @@
             font-size: .28rem;
             color: #B1A9AB;
             height: .8rem;  
-            background: url(../../image/icon_zk.png)no-repeat;
+            /*background: url(../../image/icon_zk.png)no-repeat;*/
             background-size: .15rem .25rem;
             background-position: right  center;
                 
@@ -184,6 +184,7 @@
       // 打开时间选择器
     function openTime(ele) {
         for (var i = 0; i < $api.domAll('input').length; i++) {$api.domAll('input')[i].blur()}
+        for (var i = 0; i < $api.domAll('textarea').length; i++) {$api.domAll('textarea')[i].blur()}
         var data = $api.attr(ele, 'data-val');
         var text;
         if (data == 'startTime') {
@@ -253,7 +254,6 @@
             }
         }, function(ret, err) {
             if (ret) {
-                console.log('253:::'+JSON.stringify(ret))
                 if (ret.data.info.degree == '1') {
                     ret.data.info.degree = '专科'
                 } else if (ret.data.info.degree == '2') {
@@ -331,32 +331,40 @@
                 end_date: time_2
             }
         }
-        api.ajax({
-            url: apiSite + url,
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: obj
-            }
-        }, function(ret, err) {
-            if (ret) {
-                if(ret.code == 200) {
-                    if (time_2 = '0000-00-00') {
-                        api.execScript({
-                            name: 'txl_memberInfo_Win',
-                            frameName: 'txl_memberInfo_Frame',
-                            script: 'initStatus();'
-                        });
-                    }
-                    $api.css($api.dom('.loading'), 'display: none');
-                    insertData();
-                } else {
-                    alert(ret.msg)
+        if (time_1 == '请选择' || time_2 == '请选择') {
+            alert('请填写时间');
+            $api.css($api.dom('.loading'), 'display: none');
+        } else {
+            api.ajax({
+                url: apiSite + url,
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: obj
                 }
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        }); 
+            }, function(ret, err) {
+                if (ret) {
+                    if(ret.code == 200) {
+                        if (time_2 = '0000-00-00') {
+                            api.execScript({
+                                name: 'txl_memberInfo_Win',
+                                frameName: 'txl_memberInfo_Frame',
+                                script: 'initStatus();'
+                            });
+                        }
+                        $api.css($api.dom('.loading'), 'display: none');
+                        insertData();
+                    } else {
+                        alert(ret.msg)
+                        $api.css($api.dom('.loading'), 'display: none');
+                        
+                    }
+                } else {
+                    $api.css($api.dom('.loading'), 'display: none');
+                    alert(JSON.stringify(err.msg));
+                }
+            }); 
+        }
            
     }
     function insertData() {
@@ -473,7 +481,8 @@
 
     }
     function openSelect2(ele) {
-        for (var i = 0; i < $api.domAll('input').length; i++) {$api.domAll('input')[i].blur()}
+         for (var i = 0; i < $api.domAll('input').length; i++) {$api.domAll('input')[i].blur()}
+        for (var i = 0; i < $api.domAll('textarea').length; i++) {$api.domAll('textarea')[i].blur()}
         var text = $api.text(ele);
         var data = ['专科','本科','硕士','博士','博士后'];
         var selArr = []

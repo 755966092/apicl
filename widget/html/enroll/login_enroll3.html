@@ -7,6 +7,9 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
+        .loading  {
+            display: none;
+        }
        header.header {
             background-color: #EDECF3;
             
@@ -171,10 +174,11 @@
             </span>
         </div>
     </header>
+    <div class="loading"></div>
     <div class="main">
         <h3>请完善个人资料，方便朋友认出你。</h3>
-        <div class="headImg">
-            <img src="../../image/icon_login/icon_defaultHead.png" alt="">
+        <div class="headImg" tapmode onclick="openImg()">
+            <img id="headImg" src="../../image/icon_login/icon_defaultHead.png" alt="">
         </div>
         <div class="info">
             <div class="area tel">
@@ -209,7 +213,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
-    var tel;
+    var tel,headImg;
     apiready = function(){
         fnInit();
         moduleInit();
@@ -237,13 +241,9 @@
 
     // 点击下一步后
     function nextStep() {
-        console.log(1)
         var nickName = $api.val($api.byId('nickName'));
-        console.log(2)
         var psd = $api.val($api.byId('psd'));
-        console.log(3)
         var inviteCode = $api.val($api.byId('inviteCode'));
-        console.log(4)
         // alert(tel + '--' + nickName + '--' + psd + '--' + inviteCode)
         if (nickName === '') {
             console.log(5.1)
@@ -268,7 +268,8 @@
                         mobile: tel,
                         password: psd,
                         nickname: nickName,
-                        invitation_code: inviteCode
+                        invitation_code: inviteCode,
+                        head_img_url: headImg
                     }
                 }
             }, function(ret, err) {
@@ -367,11 +368,44 @@
         }
 
     }
-
+    function openImg() {
+        api.getPicture({
+            sourceType: 'album',
+            encodingType: 'png',
+            mediaValue: 'pic',
+            destinationType: 'url',
+            allowEdit: false,
+            quality: 70,
+            saveToPhotoAlbum: false
+        }, function(ret, err) {
+            if (ret) {
+                $api.css($api.dom('.loading'), 'display: block');
+                $api.attr($api.byId('headImg'), 'src', ret.data);
+                var obj = api.require('qiniuUpfile');
+                obj.upfile({
+                    file: ret.data,
+                }, function(retUpfile, err) {
+                    if (retUpfile.status) {
+                        if (retUpfile.oper == "complete") {
+                            //上传成功后组装访问路径，或直接访问文档
+                            $api.css($api.dom('.loading'), 'display: none');
+                            headImg = 'http://'+ baseUrl +'/'+ retUpfile.info.key;
+                            // duibi($api.domAll('.imgpage').length,imgArr.length)
+                        } else if (retUpfile.oper == "progress") {
+                            //上传过程中获取进度数据
+                            console.log(retUpfile.percent);
+                        }
+                    }
+                });
+            } else {
+                // alert(JSON.stringify(err.msg));
+            }
+        });
+    }
     // 打开数据库
     function openDb(userToken) {
         // alert('打开数据库'+userToken)
-         // 打开数据库
+        // 打开数据库
         db.openDatabase({
             name: 'db_'+userToken
         }, function(ret, err) {

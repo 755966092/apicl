@@ -159,9 +159,39 @@
 <script type="text/javascript">
     
     apiready = function(){
-        getData(api.pageParam.data)
+        requestData();
+        // 下拉刷新
+        api.setCustomRefreshHeaderInfo({
+            bgColor: '#EFEFF4',
+        }, function(ret, err) {
+            //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
+             requestData();
+        });
+
     };
-  
+    function requestData() {
+         api.ajax({
+            url: apiSite + '/circle/index',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+               values: { 
+                    token: $api.getStorage('userToken')
+               }
+            }
+        }, function(ret, err) {
+            api.refreshHeaderLoadDone()
+            if(ret) {
+                if(ret.code === 200) {
+                    getData(ret.data)
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err.msg))
+            }
+        })
+    }
     // 打开动态详情
     function openCircleInfo(ele) {
         var id = $api.attr(ele, 'data-id');

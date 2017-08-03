@@ -171,7 +171,6 @@
         if ((head_img_url == api.pageParam.paramHeadImg) && (real_name === api.pageParam.paramRealName) && (nickname === api.pageParam.paramNickname) && (sex == api.pageParam.paramSex)) {
             // 没修改不提交
         } else {
-            console.log(head_img_url+'--'+real_name+'--'+nickname+'---'+sex)
             api.ajax({
                 url: apiSite + '/remark_user/editBasicInfo',
                 method: 'post',
@@ -190,7 +189,6 @@
             if(ret) {
                 if(ret.code == 200) {
                     
-                    alert(JSON.stringify(ret));
                     api.ajax({
                         url: apiSite + '/remark_user/fullInfo',
                         method: 'post',
@@ -220,11 +218,11 @@
                                     }, function(ret, err){        
                                         if( ret.status ){
                                             console.log('688:' + JSON.stringify( ret ) );
-                                            api.execScript({
-                                                name: 'main',
-                                                frameName: 'frame1',
-                                                script: 'query();'
-                                            });
+                                            // api.execScript({
+                                            //     name: 'main',
+                                            //     frameName: 'frame1',
+                                            //     script: 'query();'
+                                            // });
                                             api.execScript({
                                                 name: 'listWin',
                                                 frameName: 'txl_listWin_frame',

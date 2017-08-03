@@ -218,7 +218,7 @@
 <script type="text/javascript">
     
     apiready = function(){
-        
+       
     };
     function selBelongType(ele) {
         var dom = $api.domAll('.selType');
@@ -259,7 +259,7 @@
             alert('标题不能为空')
         } else if (description == '') {
             alert('介绍不能为空')
-        } else if (image_url == '') {
+        } else if (image_url == '../../image/icon_defaultHead.png') {
             alert('头像不能为空')
         } else if (apply_reason == '') {
             alert('申请理由不能为空')
@@ -292,16 +292,15 @@
                 }, function(ret, err) {
                     if(ret) {
                         if(ret.code == 200) {
+                            api.sendEvent({
+                                name: 'frame4Open',
+                            });
+                            api.sendEvent({
+                                name: 'circleTopicComment'
+                            });
                             api.toast({
                                 msg: '创建成功'
                             });
-                            
-                            if (api.pageParam.flag == 'frame4Open') {
-                                api.sendEvent({
-                                    name: 'frame4Open',
-                                });
-                                api.closeWin();
-                            }
                             api.closeWin();
                         } else {
                             alert(ret.msg)

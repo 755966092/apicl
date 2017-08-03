@@ -12,7 +12,7 @@
         header {
             background-color: #3A393E;
         }
-                
+
         header ul li {
             color: #fff;
             height: .8rem;
@@ -23,12 +23,12 @@
             font-size: .34rem;
             font-weight: 700;
         }
-        
+
         header ul li.active {
             display: block;
         }
-        
-       
+
+
         header ul li span.rightBtn {
             font-size: .65rem;
              line-height: .7rem;
@@ -50,14 +50,14 @@
             display: block;
             z-index: 1000;
         }
-        
+
         .addWin p {
             padding-left: .3rem;
             height: .82rem;
             line-height: .8rem;
             font-size: .28rem;
         }
-        
+
         .addWin p:nth-child(1) {
             background: url(../image/icon_add.png)no-repeat;
             background-position: .15rem .22rem;
@@ -65,78 +65,78 @@
             background-size: .41rem .41rem;
             border-bottom: .01rem solid #959498;
         }
-        
+
         .addWin p:nth-child(2) {
             background: url(../image/icon_sao.png)no-repeat;
             background-position: .15rem .22rem;
             -webkit-background-size: .41rem .41rem;
             background-size: .41rem .41rem;
         }
-        
+
         #footer {
             /*background-color: rgba(242,242,242,0.2);      */
             background-color: #F5F5F7;
             position: fixed;
             bottom: 0;
-            width: 7.5rem;      
+            width: 7.5rem;
             border-top: .6px solid #9D9DA1;
-            height: .88rem;      
-        }       
+            height: .88rem;
+        }
         #footer ul {
             /*background-color: rgba(242,242,242,0.2);          */
         }
         #footer ul li {
 
-            padding-top: .64rem; 
-            padding-bottom: .1rem;  
+            padding-top: .64rem;
+            padding-bottom: .1rem;
             background: url() no-repeat center .15rem;
             background-size: auto .4rem;
             text-align: center;
-            position: relative; 
-            color: #999;    
-            font-size: .18rem;                     
-        }   
-        
+            position: relative;
+            color: #999;
+            font-size: .18rem;
+        }
+
         #footer ul li.active {
             color: #0ABB07;
         }
-        
+
         #footer ul li:nth-child(1) {
             background-image: url(../image/icon_footer/bottombtn0101.png);
         }
-        
+
         #footer ul li:nth-child(2) {
             background-image: url(../image/icon_footer/bottombtn0201.png);
         }
-        
+
         #footer ul li:nth-child(3) {
             background-image: url(../image/icon_footer/bottombtn0301.png);
         }
-        
+
         #footer ul li:nth-child(4) {
             background-image: url(../image/icon_footer/bottombtn0401.png);
         }
-        
+
         #footer ul li:nth-child(5) {
             background-image: url(../image/icon_footer/bottombtn0501.png);
         }
-        
+
         #footer ul li:nth-child(1).active {
             background-image: url(../image/icon_footer/bottombtn0102.png);
         }
-        
+
         #footer ul li:nth-child(2).active {
             background-image: url(../image/icon_footer/bottombtn0202.png);
         }
-        
+
         #footer ul li:nth-child(3).active {
             background-image: url(../image/icon_footer/bottombtn0302.png);
         }
-        
+
         #footer ul li:nth-child(4).active {
             background-image: url(../image/icon_footer/bottombtn0402.png);
         }
-        
+
         #footer ul li:nth-child(5).active {
             background-image: url(../image/icon_footer/bottombtn0502.png);
         }
@@ -153,7 +153,7 @@
         }
         .show {
             display: block;
-        } 
+        }
         #newsCount {
             display: inline-block;
             position: absolute;
@@ -192,14 +192,14 @@
                 <li class="border-b active" id="title">
                     我在
                     <!-- <span id="addFellow"   tapmode   onclick="addFellow()"></span> -->
-                    <span class="rightBtn"   ontouchstart="addFellow()">+</span> 
+                    <span class="rightBtn"   ontouchstart="addFellow()">+</span>
                 </li>
                 <li class="border-b">通讯录
                     <span class="addF" tapmode onclick="addF()"></span>
                 </li>
                 <li class="border-b supply">
                     供求
-                    <span class="rightBtn"   tapmode   onclick="addPublish()">+</span> 
+                    <span class="rightBtn"   tapmode   onclick="addPublish()">+</span>
                 </li>
                 <li class="border-b">发现</li>
                 <li class="border-b">我</li>
@@ -224,7 +224,7 @@
 <script type="text/javascript" src="../script/common.js"></script>
 <script type="text/javascript" src="../script/pinyin4js.js"></script>
 <script type="text/javascript">
-var userToken, rongToken,footerH;  
+var userToken, rongToken,footerH;
 apiready = function() {
     footerH = $api.offset($api.byId('footer')).h;
     fnInit();
@@ -276,7 +276,7 @@ apiready = function() {
     ajpush.init(function(ret) {
         if (ret && ret.status){
             console.log('300:::'+JSON.stringify(ret))
-            
+
             //success
         }
     });
@@ -343,7 +343,7 @@ apiready = function() {
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                        registration_id: registrationId,
                        version: appVersion
@@ -356,6 +356,7 @@ apiready = function() {
             }
         })
     });
+   
 }
 
 // 通讯录添加好友
@@ -412,7 +413,7 @@ function funIniGroup() {
                     footerH: footerH
                 },
                 bounces: false
-            }) 
+            })
         } else {
             frames.push({
                 name: 'frame' + i,
@@ -506,25 +507,25 @@ function openRemarksDb() {
     // 备注电话
     db.executeSql({
         name: SQLName,
-        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_contact(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, contact_id int, phone varchar(255), type int, sub_type int, is_default int)'    
-    }, function(ret, err){        
+        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_contact(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, contact_id int, phone varchar(255), type int, sub_type int, is_default int)'
+    }, function(ret, err){
        // alert('1main_ret:'+JSON.stringify(ret))
         console.log('表1')
     });
-    
+
     // 备注其他联系方式
     db.executeSql({
         name: SQLName,
-        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_other_contact(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, contact_id int, info varchar(255), type int, sub_type int)'    
-    }, function(ret, err){        
+        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_other_contact(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, contact_id int, info varchar(255), type int, sub_type int)'
+    }, function(ret, err){
        // alert('2main_ret:'+JSON.stringify(ret))
        console.log('表2')
     });
     // 备注地址
     db.executeSql({
         name: SQLName,
-        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_address(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, address_id int, province varchar(255), city varchar(255), district varchar(255), address varchar(255), note varchar(255))'    
-    }, function(ret, err){        
+        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_address(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, address_id int, province varchar(255), city varchar(255), district varchar(255), address varchar(255), note varchar(255))'
+    }, function(ret, err){
         console.log('表3')
        // alert('3main_ret:'+JSON.stringify(ret))
     });
@@ -532,32 +533,32 @@ function openRemarksDb() {
     // 备注学习经历
     db.executeSql({
         name: SQLName,
-        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_education(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, education_id int, type int, school varchar(255), major varchar(255), degree varchar(255), description varchar(255),start_date varchar(255),end_date varchar(255))'    
-    }, function(ret, err){   
-    console.log('表4')     
+        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_education(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, education_id int, type int, school varchar(255), major varchar(255), degree varchar(255), description varchar(255),start_date varchar(255),end_date varchar(255))'
+    }, function(ret, err){
+    console.log('表4')
        // alert('4main_ret:'+JSON.stringify(ret))
     });
     // 备注工作经历
     db.executeSql({
         name: SQLName,
-        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_work(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, work_id int, company_id int, company_name varchar(255), position varchar(255), description varchar(255), is_default int,start_date varchar(255),end_date varchar(255))'    
-    }, function(ret, err){  
-        console.log('表5')      
+        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_work(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, work_id int, company_id int, company_name varchar(255), position varchar(255), description varchar(255), is_default int,start_date varchar(255),end_date varchar(255))'
+    }, function(ret, err){
+        console.log('表5')
        // alert('5main_ret:'+JSON.stringify(ret))
     });
     // 备注项目经历
     db.executeSql({
         name: SQLName,
-        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_project(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, project_id int, name varchar(255), url varchar(255), role varchar(255), description varchar(255), achievement varchar(255),start_date varchar(255),end_date varchar(255))'    
-    }, function(ret, err){ 
-        console.log('表6')       
+        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_project(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, project_id int, name varchar(255), url varchar(255), role varchar(255), description varchar(255), achievement varchar(255),start_date varchar(255),end_date varchar(255))'
+    }, function(ret, err){
+        console.log('表6')
        // alert('6main_ret:'+JSON.stringify(ret))
     });
     // 个人信息表
     db.executeSql({
         name: SQLName,
-        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_user_info(remark_user_id int PRIMARY KEY NOT NULL, current_position varchar(255), current_degree varchar(255), current_company varchar(255), nickname varchar(255), real_name varchar(255), birthday varchar(255), hometown varchar(255), sex int, head_img_url varchar(255), extra_id int, extra_content varchar(255), extra_image_url varchar(255))'    
-    }, function(ret, err){        
+        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_user_info(remark_user_id int PRIMARY KEY NOT NULL, current_position varchar(255), current_degree varchar(255), current_company varchar(255), nickname varchar(255), real_name varchar(255), birthday varchar(255), hometown varchar(255), sex int, head_img_url varchar(255), extra_id int, extra_content varchar(255), extra_image_url varchar(255))'
+    }, function(ret, err){
         if( ret.status ){
             console.log('表7')
             // alert( JSON.stringify( ret ) );
@@ -568,8 +569,8 @@ function openRemarksDb() {
     });
      // db.executeSql({
      //     name: SQLName,
-     //     sql: 'DROP TABLE tb_remarks_status'    
-     // }, function(ret, err){        
+     //     sql: 'DROP TABLE tb_remarks_status'
+     // }, function(ret, err){
      //     if( ret.status ){
      //         alert('1'+ JSON.stringify( ret ) );
      //     }else{
@@ -579,8 +580,8 @@ function openRemarksDb() {
     // 用户当前状态表格
     db.executeSql({
         name: SQLName,
-        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_status(remark_user_id int , status_id int PRIMARY KEY NOT NULL, name varchar(255), position varchar(255), degree varchar(255), start_date varchar(255), is_default int, type int)'    
-    }, function(ret, err){        
+        sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_status(remark_user_id int , status_id int PRIMARY KEY NOT NULL, name varchar(255), position varchar(255), degree varchar(255), start_date varchar(255), is_default int, type int)'
+    }, function(ret, err){
         if( ret.status ){
             console.log('表8')
             // alert('用户当前状态表格'+ JSON.stringify( ret ) );
@@ -590,14 +591,14 @@ function openRemarksDb() {
     });
      // db.executeSql({
      //     name: SQLName,
-     //     sql: 'DROP TABLE tb_remarks_contact1'    
-     // }, function(ret, err){        
+     //     sql: 'DROP TABLE tb_remarks_contact1'
+     // }, function(ret, err){
      //     if( ret.status ){
      //         alert('2'+ JSON.stringify( ret ) );
      //     }else{
      //         alert( JSON.stringify( err ) );
      //     }
      // });
-}  
- 
+}
+
 </script>

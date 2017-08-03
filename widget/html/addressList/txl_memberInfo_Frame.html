@@ -252,7 +252,16 @@
             background-position: 0 center;
             float: right;
         }
-
+        .title .icon {
+            display: inline-block;
+            width: .15rem;
+            height: .8rem;
+            background: url(../../image/icon_zk.png) no-repeat;
+            -webkit-background-size: .15rem .25rem;
+            background-size: .15rem .25rem;
+            background-position: 0 center;
+            float: right;
+        }
         ul li .liRight {
            
         }
@@ -358,6 +367,7 @@
             </div>
             <!-- <p>加入会员后可查看对方最近一次活跃时间</p> -->
         </div>
+        <span class="icon"></span>
     </div>
     <!--<div class="business">
         <div class="supply">
@@ -528,7 +538,7 @@
     // 备注当前状态
     function selCurrentStatus(ele) {
         var type = $api.attr(ele, 'data-type'), status_id= $api.attr(ele, 'data-statusId');
-        console.log(type+'---'+status_id+'---'+api.pageParam.userId)
+        // console.log(type+'---'+status_id+'---'+api.pageParam.userId)
         for (var i = 0; i < $api.domAll('.iconStatus').length; i++) {
             $api.removeCls($api.domAll('.iconStatus')[i], 'sel');
         };
@@ -549,7 +559,7 @@
             if(ret) {
                 if (ret.code == 200) {
                     // alert(JSON.stringify(ret))
-                    console.log('修改当前状态成功')
+                    // console.log('修改当前状态成功')
                     // 更新数据库
                     updataSql(status_id)
                 } else {
@@ -573,7 +583,7 @@
                 }, function(ret, err){        
                     if( ret.status ){
                         // alert( JSON.stringify( ret ) );
-                        console.log('更新成功')
+                        // console.log('更新成功')
                         initStatus();
                     }else{
                         alert( JSON.stringify( err ) );
@@ -608,7 +618,7 @@
         }, function (ret, err) {
             if (ret) {
                 if (ret.code == 200) {
-                    // console.log(JSON.stringify(ret))
+                    console.log('获取线上信息:::'+JSON.stringify(ret))
                     targetRongId = ret.data.info.rongcloud_user_id;
                     if (flag) {
                         // 无本地信息, 网络获取
@@ -632,9 +642,20 @@
                             // console.log(2)
                             requireContact();
                         }
+                        //  当前状态
+                        if (ret.data.status.length > 0) {
+                            getData(ret.data.status)
+                        }
                         $api.text(birthday, ret.data.info.birthday == '0000-00-00' ? '' : ret.data.info.birthday);
                     } else {
                         paramRealName = ret.data.info.real_name;
+                        //  当前状态
+                        if (ret.data.status.length > 0) {
+                            getData(ret.data.status);
+                            $api.text(current_position, ret.data.info.current_position || '');
+                            $api.text(current_company, ret.data.info.current_company || '');
+                            $api.text(current_degree, ret.data.info.current_degree || '');
+                        }
                         // 本地数据库有信息, 只获取关系
                         relationship(ret.data.relationship_level,ret.data.info.status)
                     }
@@ -678,7 +699,7 @@
             sql: 'SELECT * FROM tb_remarks_status WHERE remark_user_id = ' + api.pageParam.userId       
         }, function(ret, err){        
             if( ret.status ){
-                console.log( '626::::' + JSON.stringify( ret ) );
+                // console.log( '626::::' + JSON.stringify( ret ) );
                 if (ret.data.length != 0) {
                     // console.log('本地数据库')
                     for (var i = 0; i < ret.data.length; i++) {
@@ -696,13 +717,13 @@
                         }
                         
                     }
-                    console.log('本地数据库tb_remarks_status内容')
+                    // console.log('本地数据库tb_remarks_status内容')
                     reviseText(ret.data);
                     // console.log(JSON.stringify(ret.data))
                     statusRemarks(ret.data,1)
                     getData(ret.data);
                 } else {
-                    console.log('获取网络信息')
+                    // console.log('获取网络信息')
                     statusRemarks();
                 }
             }else{
@@ -752,24 +773,24 @@
             }
         }, function(ret, err) {
             if(ret) {
-                console.log('741::::'+JSON.stringify(ret))
+                // console.log('741::::'+JSON.stringify(ret))
                 if (!argument) {
-                    console.log(111)
+                    // console.log(111)
                     if (ret.data.status.length != 0) {
 
-                        console.log('网络备注')
+                        // console.log('网络备注')
                         handData(ret)
                     } else {
-                        console.log(222)
+                        // console.log(222)
                         statusUser();
                     }
                 } else {
                     // 对比
-                    console.log('data.length:::'+data.length)
-                    console.log('ret.data.status.length:::'+ret.data.status.length)
+                    // console.log('data.length:::'+data.length)
+                    // console.log('ret.data.status.length:::'+ret.data.status.length)
                     if (data.length != ret.data.status.length) {
                         // 更新数据库
-                        console.log('更新数据库')
+                        // console.log('更新数据库')
                         handData(ret)
                     }
                 }
@@ -793,7 +814,7 @@
         }, function (ret, err) {
             if (ret) {
                 if (ret.data.status.length != 0) {
-                    console.log('原始信息')
+                    // console.log('原始信息')
                 }
                     handData(ret)
             }
@@ -826,7 +847,6 @@
                 sql: sql  
             }, function(retSql, errSql){        
                 if( retSql.status ){
-                    alert('插入数据成功')
                     reviseText(ret.data.status)
                     getData(ret.data.status)
                 }else{
