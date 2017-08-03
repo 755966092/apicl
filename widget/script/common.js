@@ -151,10 +151,8 @@ function rongyun(rongToken) {
             api.toast({
                 msg: err.code
             });
-
     });
     receiveMsg();
-
     rong.connect({
         // 用户1
         // token: 'aAoW4oalHGpvB6Hw89bG0XzZSHvx/Xm6zmi6cWDa3L4VyfNcz/KXDFQxtpoQ+os1nT0799sMXlXPvUAK3FnjIY94cnJzE+aT'
@@ -162,8 +160,6 @@ function rongyun(rongToken) {
         // token: 'hjjQ018gh2aPKpdyjqhX0nzZSHvx/Xm6zmi6cWDa3L4VyfNcz/KXDDNYtoRSbb1+nT0799sMXlXSm1rb7lqSfY94cnJzE+aT'
         token: rongToken
     }, function(ret, err) {
-
-
         if (ret.status == 'success') {
             historicalNews();
         }
@@ -190,7 +186,16 @@ function receiveMsg() {
     rong.setConnectionStatusListener(function(ret, err) {
         // alert(JSON.stringify(ret.result.connectionStatus))
         if (ret.result.connectionStatus === 'KICKED') {
-            alert('你以被顶下线');
+            alert('您已在另一台设备登录');
+          
+            api.openWin({
+                name: 'me_login',
+                url: 'widget://html/enroll/me_login.html'
+            });
+            api.closeWin({
+                name: 'main'
+            });
+               
 
         }
     });

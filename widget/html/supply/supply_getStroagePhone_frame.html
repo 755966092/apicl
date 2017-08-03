@@ -80,8 +80,8 @@
                         <div class="wrap">
                             <div class="item flex-def flex-cCenter">
                                 <span class="label">{{=it[i].sub_type}}：</span>
-                                <span class="flex-item" data-id="{{=it[i].contact_id}}" >{{=it[i].phone}}</span>
-                                <span data-phone='{{=it[i].phone}}' data-id="{{=it[i].contact_id}}"  class="clearIcon icon"></span>
+                                <span class="flex-item phone" data-id="{{=it[i].contact_id}}" >{{=it[i].phone}}</span>
+                                <span data-phone='{{=it[i].phone}}' data-id="{{=it[i].contact_id}}"  class=" icon"></span>
                             </div>
                         </div>
                     </div>
@@ -90,7 +90,7 @@
                         <div class="wrap">
                             <div class="item flex-def flex-cCenter">
                                 <span class="label">{{=it[i].sub_type}}：</span>
-                                <span class="flex-item" data-id="{{=it[i].contact_id}}" >{{=it[i].phone}}</span>
+                                <span class="flex-item phone" data-id="{{=it[i].contact_id}}" >{{=it[i].phone}}</span>
                                 <span data-phone='{{=it[i].phone}}' class="icon"></span>
                             </div>
                         </div>
@@ -106,7 +106,7 @@
                         <div class="wrap">
                             <div class="item flex-def flex-cCenter" >
                                 <span class="label">{{=it[i].sub_type}}：</span>
-                                <span class="flex-item" data-id="{{=it[i].contact_id}}" >{{=it[i].phone}}</span>
+                                <span  class="flex-item phone" data-id="{{=it[i].contact_id}}" >{{=it[i].phone}}</span>
                                 <span data-phone='{{=it[i].phone}}' class="icon"></span>
                             </div>
                         </div>
@@ -114,9 +114,9 @@
                 {{?}}
             {{ }; }} 
    </script>
-   <div class="btn" ontouchstart="callbackPhone()">
+   <!-- <div class="btn" ontouchstart="callbackPhone()">
        确认
-   </div>
+   </div> -->
     
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -148,11 +148,19 @@
     }
 
     function selPhone(ele) {
-        var iconAll = $api.domAll('.icon');
-        for (var i = 0; i < iconAll.length; i++) {
-            $api.removeCls(iconAll[i], 'clearIcon');
-        }
-        $api.addCls($api.dom(ele, '.icon'), 'clearIcon');
+        // var iconAll = $api.domAll('.icon');
+        // for (var i = 0; i < iconAll.length; i++) {
+        //     $api.removeCls(iconAll[i], 'clearIcon');
+        // }
+        // $api.addCls($api.dom(ele, '.icon'), 'clearIcon');
+        api.sendEvent({
+            name: 'callbackPhone',
+            extra: {
+               phone: $api.text($api.dom(ele, '.phone')),
+               id: $api.attr(ele, 'data-id')
+            }
+        });
+        api.closeWin()
     }
      // 获取联系人列表
     function lxrList() {

@@ -203,7 +203,31 @@
         }, function(ret, err) {
             if (ret) {
                 if (ret.code == 200) {
-                   
+                    // 获得极光推送
+                    ajpush.getRegistrationId(function(ret) {
+                        var registrationId = ret.id;
+                        $api.setStorage('registrationId', registrationId);
+                        var appVersion = api.appVersion;
+                        // $api.setStorage('registration_id', registrationId);
+                        // $api.setStorage('appVersion', appVersion);
+                        api.ajax({
+                            url: apiSite + '/settings/registerDevice',
+                            method: 'post',
+                            headers: apiHeader,
+                            data: {
+                                   values: {
+                                       token: $api.getStorage('userToken'),
+                                       registration_id: registrationId,
+                                       version: appVersion
+                                   }
+                            }
+                        }, function(ret, err) {
+                            if(ret) {
+                            } else {
+                                alert(JSON.stringify(err))
+                            }
+                        })
+                    });
                     // 把用户token缓存到本地
                         userToken = ret.data.token;
                         rongToken = ret.data.rongcloud_token;
