@@ -323,7 +323,7 @@
     <div class="resultList"></div>
     <script type="text/x-dot-template" id="listT">
             <div class="statePersonInfo flex-def flex-cCenter ">
-                <img class="headImg" src="{{=it.info.user_info.head_img_url}}" alt="">
+                <img class="headImg" data-id="{{=it.info.user_info.user_id}}" tapmode onclick="openUserInfoPage(this)" src="{{=it.info.user_info.head_img_url}}" alt="">
                 <div class="text flex-item">
                     <div class="name flex-def flex-zBetween">
                         <h3>{{=it.info.user_info.nickname}}</h3>
@@ -371,7 +371,7 @@
                 {{ for(var i = 0; i < it.list.length; i++){ }}
                     <div class="discussContent flex-def ">
                         <div class="img flex-def flex-cStart">
-                            <img src="../../image/tx_4.jpg">
+                            <img src="../../image/tx_4.jpg" tapmode onclick="openUserInfoPage(this)" data-id="{{=it.list[i].user_id}}">
                         </div>
                         <div class="flex-item">
                             <div class="discussTitle flex-def flex-zBetween flex-cCenter">
@@ -445,6 +445,16 @@
             }
         });
     };
+    // 用户详情页面
+    function openUserInfoPage(ele) {
+        api.openWin({
+            name: 'winName',
+            url: '../addressList/txl_memberInfo_Win.html',
+            pageParam: {
+                userId: $api.attr(ele, 'data-id')
+            }
+        });
+    }
     // 关闭遮罩
     function closeSelect() {
         $api.addCls($api.dom('.shadow'), 'dn');
@@ -463,7 +473,6 @@
             }
         }, function(ret, err) {
             if(ret) {
-                // alert(JSON.stringify(ret))
                 api.sendEvent({
                     name: 'collectBtn',
                     extra: {

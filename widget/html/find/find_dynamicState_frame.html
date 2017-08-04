@@ -198,7 +198,7 @@
                 {{ for (var i = 0; i < it.length; i++) { }} 
                     <div class="list"   tapmode data-id='{{=it[i].topic_id}}' onclick="openStateInfo(this)">
                         <div class="img">
-                            <img src="{{=it[i].head_img_url}}" alt="">
+                            <img tapmode onclick="openUserInfoPage(this);event.stopPropagation();" src="{{=it[i].head_img_url}}" data-id="{{=it[i].user_id}}">
                         </div>
                         <div class="text" >
                             <div class="title">
@@ -303,7 +303,16 @@
         });
     };
     
-   
+    // 用户详情页面
+    function openUserInfoPage(ele){
+        api.openWin({
+            name: 'winName',
+            url: '../addressList/txl_memberInfo_Win.html',
+            pageParam: {
+                userId: $api.attr(ele, 'data-id')
+            }
+        });
+    }
     function requestData() {
         api.ajax({
             url: apiSite + '/circle_topic/index',

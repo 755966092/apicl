@@ -318,25 +318,34 @@
             position: relative;
         }
 
-        .shadow {
+       /* .shadow {
             width: .56rem;
             height: .3rem;
-            /*background-color: rgba(129,129,129,0.95);*/
             background: url(../../image/icon_txl/icon_shadow.png) no-repeat;
             -webkit-background-size: .56rem .3rem;
             background-size: .56rem .3rem;
-            /*border-radius: .15rem;*/
             position: absolute;
             top: 0;
             left: 0;
 
-        }
+        }*/
 
         .nameNo1 {
             display: -webkit-box;
             display: flex;
             -webkit-box-align: center;
             align-items: center;
+        }
+        .shadow {
+            /*display: none;*/
+            background-color: #f00;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 7.5rem;
+            /*height: 12rem;*/
+            opacity: 0;
+            display: none;
         }
     </style>
 </head>
@@ -483,7 +492,7 @@
 
     <div class="btn" id="btn" tapmode onclick="addFriends(this)">发送消息</div>
 </div>
-
+<div class="shadow"></div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -494,6 +503,7 @@
     var SQLName = 'db_' + $api.getStorage('userToken');
     var targetRongId;
     apiready = function () {
+        $api.css($api.dom('.shadow'), 'height:'+$api.offset($api.dom('.main')).h+'px;');
         // console.log('484:::'+JSON.stringify(api.pageParam))
         if(api.pageParam.userId == 0) {
             api.ajax({
@@ -688,7 +698,7 @@
                     } 
                 }
             } else {
-                alert(JSON.stringify(err))
+                alert('701'+JSON.stringify(err))
             }
         });
     }
@@ -697,7 +707,7 @@
         db.selectSql({
             name: SQLName,
             sql: 'SELECT * FROM tb_remarks_status WHERE remark_user_id = ' + api.pageParam.userId       
-        }, function(ret, err){        
+        }, function(ret, err){ 
             if( ret.status ){
                 // console.log( '626::::' + JSON.stringify( ret ) );
                 if (ret.data.length != 0) {
@@ -727,7 +737,8 @@
                     statusRemarks();
                 }
             }else{
-                alert( '629'+JSON.stringify( err ) );
+                statusRemarks();
+                // alert( '629'+JSON.stringify( err ) );
                 // console.log( '629'+JSON.stringify( err ) );
 
             }
@@ -939,7 +950,7 @@
                     requireData(1);
                 }
             } else {
-                alert(JSON.stringify(err));
+                alert('953:'+JSON.stringify(err));
             }
         });
         db.selectSql({
@@ -954,10 +965,11 @@
                     }
                 }
             }else{
-                alert( JSON.stringify( err ) );
+                alert( '968:'+JSON.stringify( err ) );
             }
         });
     }
+
     function relationship(relationship_levelType,status) {
         // console.log(relationship_levelType)
         var btn = $api.byId('btn');
@@ -965,6 +977,11 @@
             case 1:
                 $api.text(relationship_level, '自己');
                 $api.css(btn, 'display: none');
+                for (var i = 0; i < $api.domAll('ul li .icon').length; i++) {
+                    $api.css($api.domAll('ul li .icon')[i], 'display: none');
+                }
+                $api.css($api.dom('.title .icon'), 'display: none');
+                $api.css($api.dom('.shadow'), 'display:block');
                 break;
             case 2:
                 $api.text(relationship_level, '一度人脉熟识好友');
@@ -1255,6 +1272,5 @@
             }
         })
     }
-
 </script>
 </html>

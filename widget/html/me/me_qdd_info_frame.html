@@ -31,6 +31,14 @@
              background-size: .56rem .59rem;
              margin-right: .22rem;
          }
+         .state .icon3 {
+            width: .56rem;
+            height: .597rem;
+            background: url(../../image/icon_my/icon_wwc.png)no-repeat;
+            -webkit-background-size: .56rem .59rem;
+            background-size: .56rem .59rem;
+            margin-right: .22rem;
+         }
          .state h3 {
              font-size: .34rem;
              line-height: .48rem;
@@ -250,8 +258,10 @@
         <script type="text/x-dot-template" id="listT">
             <div class="state flex-def flex-cCenter">
 
-                {{?it.status_info.text == '交易成功'}}
+                 {{?it.status_info.icon == 'FINISH'}}
                     <div class="icon2"></div>
+                {{??it.status_info.icon == 'QUESTION'}}
+                    <div class="icon3"></div>
                 {{??}}
                     <div class="icon"></div>
                 {{?}}
@@ -291,7 +301,7 @@
             
              <div class="userInfo flex-def flex-cCenter">
                 {{?it.host_info}}
-                <img class="userHead_img" src="{{=it.host_info.head_img_url}}" data-id="{{=it.host_info.user_id}}" tapmode onclick="openUserInfoPage(this)">
+                <img class="userHead_img" src="{{=it.host_info.head_img_url}}" data-id="{{=it.host_info.user_id}}" tapmode onclick="w (this)">
                 <div class="text flex-def flex-zBetween flex-item">
                     <div class="left">
                         <p class="userName">{{=it.host_info.nickname}}</p>
@@ -329,7 +339,7 @@
                 {{?}}
             </div>
             <div class="orderInfo">
-                <div class="top flex-def">
+                <div class="top flex-def" tapmode onclick="openSupplyInfoPage(this)" data-id="{{=it.demand_info.demand_id}}">
                     <img src="{{=it.demand_info.image[0]}}">
                     <div class="text flex-item">
                         <div class="title flex-def flex-zBetween">
@@ -401,6 +411,16 @@
             requireData();
         });
     };
+    // 进入供应详情
+    function openSupplyInfoPage(ele) {
+        api.openWin({
+            name: 'winName',
+            url: '../supply/supply_info_demand_win.html',
+            pageParam: {
+                demand_id:  $api.attr(ele, 'data-id')
+            }
+        });
+    }
      // 进入用户详情
     function openUserInfoPage(ele) {
         api.openWin({
@@ -463,6 +483,7 @@
             }
         }, function(ret, err) {
             if(ret) {
+                console.log('488:::'+JSON.stringify(ret))
                 // 停止下拉刷新
                 api.refreshHeaderLoadDone();
                 if (ret.code === 200){

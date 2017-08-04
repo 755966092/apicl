@@ -33,6 +33,7 @@
             margin-left: .2rem;
         }
         .sex {
+            box-sizing: border-box;
             width: 7.5rem;
             height: .8rem;
             font-size: .3rem;
@@ -54,6 +55,7 @@
             line-height: .6rem;
         }
         input {
+            box-sizing: border-box;
             width: 7.5rem;
             background-color: #fff;
             height: .8rem;
@@ -109,6 +111,7 @@
     apiready = function(){
         moduleInit();
         initPage();
+        console.log('参数:::'+JSON.stringify(api.pageParam))
         api.addEventListener({
             name: 'changeHead'
         }, function(ret, err) {
@@ -125,15 +128,23 @@
     function initPage() {
         db.selectSql({
             name: 'db_'+$api.getStorage('userToken'),
-            sql: 'SELECT * FROM tb_remarks_user_info where remark_user_id=' + api.pageParam.userId
+            sql: 'SELECT * FROM addressList where user_id=' + api.pageParam.userId
         }, function(ret, err){        
             if( ret.status ){
-                console.log(JSON.stringify(ret))
+                console.log('134:::'+JSON.stringify(ret))
                 if(ret.data.length != 0){
-                    console.log(1111)
-                    $api.attr($api.dom('img'), 'src', ret.data[0].head_img_url||api.pageParam.paramHeadImg);
-                    $api.val($api.dom('.realName'), ret.data[0].realName||api.pageParam.paramRealName);
-                    $api.val($api.dom('.nickName'), ret.data[0].nickname||api.pageParam.paramNickname);
+                    // 优先备注头像,其次备注头像
+                    $api.attr($api.dom('img'), 'src', ret.data[0].remark_head_img_url||ret.data[0].head_img_url);
+
+                    // 优先备注姓名
+                    if (!ret.data[0].remark_real_name && ret.data[0].real_name=='null') {
+                         $api.val($api.dom('.realName'),'')
+                    } else {
+                        $api.val($api.dom('.realName'), ret.data[0].remark_real_name|| ret.data[0].real_name);
+                    }
+
+                    // 优先备注昵称, 其次自己昵称
+                    $api.val($api.dom('.nickName'), ret.data[0].remark_nickname||ret.data[0].nickname);
                     $api.text($api.dom('.sex'), ret.data[0].sex == '' ? (api.pageParam.paramSex) :(ret.data[0].sex == 1 ? '男' : '女'));
                 } else {
                     console.log(2222)
@@ -168,6 +179,7 @@
             real_name = $api.val($api.dom('.realName')),
             nickname = $api.val($api.dom('.nickName')),
             sex = $api.text($api.dom('.sex')) == '男'? 1 : 2;
+            console.log(real_name+'---'+nickname);
         if ((head_img_url == api.pageParam.paramHeadImg) && (real_name === api.pageParam.paramRealName) && (nickname === api.pageParam.paramNickname) && (sex == api.pageParam.paramSex)) {
             // 没修改不提交
         } else {
@@ -214,7 +226,7 @@
                                     console.log('字幕字幕字幕字幕字幕字幕字幕:::::::'+litter[0])
                                     db.executeSql({ 
                                         name: 'db_'+$api.getStorage('userToken'),
-                                        sql: 'UPDATE addressList SET remark_nickname = "'+ retWeb.data.info.nickname +'",remark_head_img_url = "'+ retWeb.data.info.head_img_url +'", title = "'+ retWeb.data.info.nickname+'", flag = "'+ litter[0]+'", litter = "'+ litter +'", remark_sex = "'+ retWeb.data.info.sex  +'" WHERE user_id = ' + api.pageParam.userId
+                                        sql: 'UPDATE addressList SET remark_nickname = "'+ retWeb.data.info.nickname +'",remark_head_img_url = "'+ retWeb.data.info.head_img_url +'", title = "'+ retWeb.data.info.nickname+'", flag = "'+ litter[0]+'", litter = "'+ litter +'",remark_real_name = "'+ retWeb.data.info.real_name +'", remark_sex = "'+ retWeb.data.info.sex  +'" WHERE user_id = ' + api.pageParam.userId
                                     }, function(ret, err){        
                                         if( ret.status ){
                                             console.log('688:' + JSON.stringify( ret ) );

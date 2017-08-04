@@ -25,6 +25,7 @@
         .title input {
             height: .9rem;
             outline: none;
+            width: 5.3rem;
         }
         textarea {
             width: 100%;
@@ -152,6 +153,7 @@
             line-height: .83rem;
             margin-top: .37rem;
             margin-bottom: .3rem;
+            display: none;
         }
 
 
@@ -354,7 +356,7 @@
             </li> -->
         </ul>        
     </div>
-    <!-- <div class="btn" tapmode onclick="addSupply()">发布</div> -->
+    <div class="btn" tapmode onclick="addSupply()"></div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -381,6 +383,7 @@
         console.log('369:::'+JSON.stringify(api.pageParam))
         if (api.pageParam.demand_id) {
             $api.text($api.dom('.btn'), '确定');
+            $api.css($api.dom('.btn'), 'display: block');
             requireData();
         } else {
             // 获取位置
@@ -457,7 +460,7 @@
         $api.text(endTime, data.info.end_date);
         // $api.text(unit, unitText);
         $api.text(category_id, _categoryId);
-        data.info.type == 1 ? $api.text(_type, '我求') : $api.text(_type, '我公司求');
+        data.info.type == 1 ? $api.text(_type, '个人') : $api.text(_type, '公司');
         if (data.info.type == 2) {
             $api.css($api.dom('.companyName'), 'display:block');
             $api.text($api.byId('company_name'), data.info.company_name);
@@ -802,13 +805,13 @@
         if (_data == '_type') {
             _dataSource = [
                 {
-                    name:'我求'
+                    name:'个人'
                 },
                 {
-                    name:'我公司求'
+                    name:'公司'
                 }
             ]
-            _dataSource2 = ['我求','我公司求'];
+            _dataSource2 = ['个人','公司'];
             flag = 0;
             // var text = $api.text($api.dom('.type1'));
         }  else if (_data == '_format') {
@@ -898,8 +901,8 @@
             if (ret) {
                 if (ret.eventType == 'ok') {
                     $api.text($api.dom('.'+ _data +''), ret.level1);
-                    if (_dataSource2[1]  == '我公司求') {
-                        if (ret.level1 == '我公司求') {
+                    if (_dataSource2[1]  == '公司') {
+                        if (ret.level1 == '公司') {
                             type = 2;
                             for (var i = 0; i < $api.domAll('.companyName').length; i++) {
                                 

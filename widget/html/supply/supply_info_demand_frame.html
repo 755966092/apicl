@@ -452,7 +452,7 @@
                     <span class="line"></span>
                 </div>
                 <div class="infoData">
-                    <!--<p>{{=it.info.description}}</p>-->
+                    <p>{{=it.info.description}}</p>
                     {{?it.info.image_json.length != 0}}
                         {{for(var i=0;i< it.info.image_json.length; i++){ }}
                             <img src="{{=it.info.image_json[i]}}">
@@ -461,14 +461,14 @@
                     {{?}}
                 </div>
             </div>
-            <div class="comment">
+          <!--   <div class="comment">
                 <div class="commentTitle flex-def flex-cCenter flex-zBetween">
                     {{?!it.info.comment_count}}
                     <span class="commentCount">评论（0）</span>
                     {{??}}
                     <span class="commentCount">评论（{{=it.info.comment_count}}）</span>
                     {{?}}
-                    <!-- <span class="commentIcon"></span> -->
+                     <span class="commentIcon"></span> 
                 </div>
                 {{?it.last_comment!=null}}
                     <div class="commentContent">
@@ -492,13 +492,13 @@
                     </div>
                 {{?}}
                 
-                <!-- {{?it.info.comment_count==0}}
+              {{?it.info.comment_count==0}}
                 {{??}}
                     <div data-avg="{{=it.info.avg_point}}" class="btn flex-def flex-cCenter" tapmode onclick="openCommentPage(this)">
                         <div>查看全部</div>
                     </div>
-                {{?}} -->
-            </div>
+                {{?}} 
+            </div> -->
           
         </div>
         {{?!it.is_self_add}}
@@ -538,7 +538,6 @@
         }, function(ret, err) {
             if (ret) {
                 initialise(ret.value.flag, ret.value.compaby_name, ret.value.demand_id);
-                alert(JSON.stringify(ret));
             } else {
                 alert(JSON.stringify(err));
             }
