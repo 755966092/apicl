@@ -161,6 +161,7 @@
 <script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
     apiready = function(){
+        moduleInit();
         console.log(JSON.stringify(api.pageParam))
     };
 
@@ -181,17 +182,8 @@
         }, function(ret, err) {
             if(ret) {
                 if (ret.code == 200) {
-                    api.execScript({
-                        name: 'txl_memberInfo_Win',
-                        frameName: 'txl_memberInfo_Frame',
-                        script: 'initStatus();'
-                    });
-                    api.execScript({
-                        name: 'txl_memberInfo_Win',
-                        frameName: 'txl_memberInfo_Frame',
-                        script: 'initPage();'
-                    });
-                    api.closeWin();
+                    updateSql();
+                    
                 } else {
                     alert(ret.msg)
                 }
@@ -206,7 +198,32 @@
             sql: 'DELETE FROM addressList WHERE user_id = ' + api.pageParam.user_id    
         }, function(ret, err){        
             if( ret.status ){
-                alert( JSON.stringify( ret ) );
+                console.log('删除成功'+ JSON.stringify( ret ) );
+                // 清楚缓存
+                $api.setStorage('contactLevelOne4', '');
+                $api.setStorage('contactLevelOne', '');
+                api.execScript({
+                    name: 'txl_memberInfo_Win',
+                    frameName: 'txl_memberInfo_Frame',
+                    script: 'initStatus();'
+                });
+                api.execScript({
+                    name: 'txl_memberInfo_Win',
+                    frameName: 'txl_memberInfo_Frame',
+                    script: 'initPage();'
+                });
+                api.sendEvent({
+                    name: 'delectFriend',
+                    extra: {
+                        flag: 4, 
+                    }
+                });
+                // api.execScript({
+                //     name: 'listWin_txl_listWin',
+                //     frameName: 'txl_listWin_frame',
+                //     script: 'query(4);'
+                // });
+                api.closeWin();
             }else{
                 alert( JSON.stringify( err ) );
             }

@@ -92,7 +92,7 @@
             </li>
        </ul>
        <div class="btn" tapmode onclick="login()">安全退出</div>
-       <!-- <div class="btn" tapmode onclick="login()">清除缓存</div> -->
+       <div class="btn" tapmode onclick="openList()">打开列表</div>
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -111,6 +111,15 @@
             url: './openImg-2.html',
             pageParam: {
                 name: 'test'
+            }
+        });
+    }
+    function openList() {
+        api.openWin({
+            name: 'winName',
+            url: '../listContact.html',
+            pageParam: {
+                name: 'value'
             }
         });
     }
@@ -158,16 +167,24 @@
                 }
             });
         }
+        // 退出戎云
+        rong.disconnect({
+            isReceivePush: false
+        }, function(ret, err) {
+            if ('success' == ret.status) {
+
+            }
+        });
         $api.clearStorage();
         api.closeToWin({
             name: 'loginPage'
         });
+        api.closeFrameGroup({
+            name: 'group'
+        });
         api.openWin({
             name: 'winName',
             url: '../enroll/me_login.html'
-        });
-        api.closeFrameGroup({
-            name: 'group'
         });
         
     }

@@ -411,7 +411,7 @@
                                 case 3: ret.data.list[i].status = '待完成'; break;
                                 case 4: ret.data.list[i].status = '待完成'; break;
                                 case 5: ret.data.list[i].status = '已取消'; break;
-                                case 6: ret.data.list[i].status = '待完成'; break;
+                                case 6: ret.data.list[i].status = '已完成'; break;
                                 case 7: ret.data.list[i].status = '已完成'; break;
                                 case 8: ret.data.list[i].status = '已完成'; break;
                                 case 9: ret.data.list[i].status = '待完成'; break;
@@ -723,7 +723,7 @@
                         obj = {
                             token: $api.getStorage('userToken'),
                             order_id: id,
-                            reason:  ret.level1
+                            reason: ret.level1
                         }
                         ajaxOperate(obj, url)
                     }
@@ -733,6 +733,10 @@
             });
         } else if (flagText === '退款') {
             var tatol = $api.attr(ele, 'data-moeny');
+             obj = {
+                    token: $api.getStorage('userToken'),
+                    order_id: id,
+                }
             api.openFrame({
                 name: 'me_gdd_info_frame_refund',
                 url: './me_gdd_info_frame_refund.html',
@@ -744,7 +748,7 @@
                 },
                 pageParam: {
                     tatol: tatol,
-                    param: param
+                    param: obj
                 },
                 bounces: false
             });

@@ -628,7 +628,7 @@
         }, function (ret, err) {
             if (ret) {
                 if (ret.code == 200) {
-                    console.log('获取线上信息:::'+JSON.stringify(ret))
+                    // console.log('获取线上信息:::'+JSON.stringify(ret))
                     targetRongId = ret.data.info.rongcloud_user_id;
                     if (flag) {
                         // 无本地信息, 网络获取
@@ -690,7 +690,7 @@
             }
         }, function(ret, err) {
             if(ret) {
-                // console.log('用户自己的'+JSON.stringify(ret.data.list));
+                console.log('用户自己的'+JSON.stringify(ret.data.list));
                 for (var i = 0; i < ret.data.list.length; i++) {
                     if (ret.data.list[i].is_default == 1) {
                         $api.text(phone, ret.data.list[i].phone || '');
@@ -965,7 +965,7 @@
                     }
                 }
             }else{
-                alert( '968:'+JSON.stringify( err ) );
+                // alert( '968:'+JSON.stringify( err ) );
             }
         });
     }
@@ -1024,8 +1024,8 @@
         if(status == 1) {
             return ''
         } else {
-            return '尚未加入'
             $api.css($api.byId('btn'), 'display: none');
+            return '尚未加入'
         }
     }
     function addFriends(ele) {

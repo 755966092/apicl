@@ -90,45 +90,20 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
-    var selVal=0,selectedObj,apiPageParamFlag;
+    var selVal=0,selectedObj;
     apiready = function(){
         moduleInit();
         // requestData()
         // query();
         // 监听筛选条件
         // 
-        apiPageParamFlag = api.pageParam.flag;
+        
         addFilter();
-        if(apiPageParamFlag) {
-            var contactLevelOneStorage =  $api.getStorage('contactLevelOne'+apiPageParamFlag);
-            console.log('联系人缓存'+JSON.stringify(contactLevelOneStorage))
-            if (contactLevelOneStorage) {
-                dakai(contactLevelOneStorage)
-                query(parseInt(apiPageParamFlag));
-            } else {
-                query(parseInt(apiPageParamFlag));
-            }
+        if(api.pageParam.flag) {
+            query(parseInt(api.pageParam.flag));
         } else {
-            var contactLevelOneStorage =  $api.getStorage('contactLevelOne');
-            console.log('联系人缓存'+JSON.stringify(contactLevelOneStorage))
-            if (contactLevelOneStorage) {
-                dakai(contactLevelOneStorage)
-                query();
-            } else {
-                query();
-            }
+            query()
         }
-        api.addEventListener({
-            name: 'delectFriend'
-        }, function(ret, err) {
-            if (ret) {
-                apiPageParamFlag = ret.value.flag
-                console.log(JSON.stringify(ret));
-                query(apiPageParamFlag);
-            } else {
-                alert(JSON.stringify(err));
-            }
-        });
     };
     function contactFriend(userId) {
         api.ajax({
@@ -162,8 +137,8 @@
                 }, function(ret, err){        
                     if( ret.status ){
 
-                        if(apiPageParamFlag) {
-                            query(parseInt(apiPageParamFlag));
+                        if(api.pageParam.flag) {
+                            query(parseInt(api.pageParam.flag));
                         } else {
                             query()
                         }
@@ -260,14 +235,14 @@
         var SQLName = 'db_'+$api.getStorage('userToken');
         var SQLsentence; 
 
-        if (apiPageParamFlag) {
+        if (api.pageParam.flag) {
             // 有参数
             if (condition) {
                 // 有关键字
-                SQLsentence = 'SELECT * FROM addressList WHERE type = '+ apiPageParamFlag +' AND  (title LIKE "%'+ condition +'%" OR remark_current_contact LIKE "%'+ condition +'%" OR remark_nickname LIKE "%'+ condition +'%")'; 
+                SQLsentence = 'SELECT * FROM addressList WHERE type = '+ api.pageParam.flag +' AND  (title LIKE "%'+ condition +'%" OR remark_current_contact LIKE "%'+ condition +'%" OR remark_nickname LIKE "%'+ condition +'%")'; 
             } else {
                 // 无关键字
-                SQLsentence = 'SELECT * FROM addressList WHERE type = '+ apiPageParamFlag ;
+                SQLsentence = 'SELECT * FROM addressList WHERE type = '+ api.pageParam.flag ;
             }
         } else {
             // 无参数
@@ -305,7 +280,6 @@
         } else {
             SQLsentence = 'SELECT * FROM addressList';
         }
-        console.log('308:::'+SQLsentence)
         // 查询数据库
         db.selectSql({
             name: SQLName,
@@ -315,7 +289,7 @@
                 $api.css($api.dom('.loading'), 'display:none');
                 
                 // console.log(condition)
-                console.log('查询数据库'+JSON.stringify(ret))
+                // console.log('查询数据库'+JSON.stringify(ret))
 
                 for (var i = 0; i < $api.domAll('p').length; i++) {
                     $api.css($api.domAll('p')[i], 'display:none');
@@ -323,41 +297,20 @@
 
                 if (ret.data.length == 0 && condition === 4) {
                     console.log(1111 +'--'+ condition)
-                    listContact.close();
                     $api.css($api.dom('p.no4'), 'display:block');
                 } else if(ret.data.length == 0 && condition===1) {
-                    // console.log(2222 +'--'+ condition)
-                    listContact.close();
+                    console.log(2222 +'--'+ condition)
                     $api.css($api.dom('p.no1'), 'display:block');
                 }else if(ret.data.length == 0 && condition===2) {
-                    // console.log(333 +'--'+ condition)
-                    listContact.close();
+                    console.log(333 +'--'+ condition)
                     $api.css($api.dom('p.no2'), 'display:block');
                 }else if(ret.data.length == 0 && condition===3) {
-                    // console.log(444 +'--'+ condition)
-                    listContact.close();
+                    console.log(444 +'--'+ condition)
                     $api.css($api.dom('p.no3'), 'display:block');
                 } else if(ret.data.length == 0){
-                    listContact.close();
                     $api.css($api.dom('p.no5'), 'display:block');
                 } else {
-                    var contactLevelOne = paixv(ret.data);
-                    if (apiPageParamFlag) {
-                        if (contactLevelOne == $api.setStorage('contactLevelOne'+apiPageParamFlag)) {
-
-                        } else {
-                            console.log(JSON.stringify(contactLevelOne))
-                            $api.setStorage('contactLevelOne'+apiPageParamFlag, contactLevelOne);
-                            dakai(contactLevelOne)
-                        }
-                    } else {
-                        if (contactLevelOne == $api.setStorage('contactLevelOne', contactLevelOne)) {
-
-                        } else {
-                            $api.setStorage('contactLevelOne', contactLevelOne);
-                            dakai(contactLevelOne)
-                        }
-                    }
+                    dakai(paixv(ret.data))
                 }
             } else {
                 console.log(JSON.stringify(err));
@@ -447,7 +400,7 @@
         }
         // console.log(JSON.stringify(dataArr))
         var rightObj;
-        if (apiPageParamFlag) {
+        if (api.pageParam.flag) {
             rightObj = [];
         } else {
             rightObj = [{

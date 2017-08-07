@@ -1,5 +1,5 @@
 /**
- * Mr.Yuan was create in 2017.4 .13
+ * Mr.Yuan was create in 2017.4.13
  */
 
 //rem转换
@@ -187,7 +187,7 @@ function receiveMsg() {
         // alert(JSON.stringify(ret.result.connectionStatus))
         if (ret.result.connectionStatus === 'KICKED') {
             alert('您已在另一台设备登录');
-          
+
             api.openWin({
                 name: 'me_login',
                 url: 'widget://html/enroll/me_login.html'
@@ -195,7 +195,7 @@ function receiveMsg() {
             api.closeWin({
                 name: 'main'
             });
-               
+
 
         }
     });

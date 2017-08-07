@@ -281,14 +281,26 @@
     function onceConnected(n,flag) {
         var url;
         if (n == 1) {
-            url = 'txl_listWin'
+            // if (flag == 1) {
+            //     url = "txl_listWin_danxiang"
+            // } else if (flag == 2) {
+            //     url = "txl_listWin_shuangxiang"
+            // } else if (flag == 3) {
+            //     url = "txl_listWin_you"
+            // } else if (flag == 4) { 
+            //     url = "txl_listWin_chushi"
+            // } else {
+            //     url = 'txl_listWin'
+            // }
+                url = 'txl_listWin'
         } else if (n == 2) {
             url = 'txl_listWin_2'
         } else {
             url = 'txl_listWin_3'
         }
+        console.log(url)
         api.openWin({
-            name: 'listWin',
+            name: 'listWin_' + url,
             url: './addressList/'+ url +'.html',
             pageParam: {
                 userToken: api.pageParam.userToken,

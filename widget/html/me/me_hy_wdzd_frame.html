@@ -6,7 +6,7 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-       
+        
         .listContent {
             width: 7.5rem;
             padding-left: .35rem;
@@ -50,17 +50,22 @@
        
     </div>
       <script type="text/x-dot-template" id="listT">
-        {{ for (var i = 0; i < it.length; i++) { }} 
-          <div class="listContent">
-            <div class="wrap flex-def flex-cCenter flex-zBetween">
-                <span class="title">{{=it[i].type}}</span>
-                <div class="rightText">
-                    <p class="money">￥{{=it[i].money}}</p>
-                    <p class="time">{{=it[i].create_time}}</p>
-                </div>
+        {{?it.length > 0}}
+          {{ for (var i = 0; i < it.length; i++) { }} 
+            <div class="listContent">
+              <div class="wrap flex-def flex-cCenter flex-zBetween">
+                  <span class="title">{{=it[i].type}}</span>
+                  <div class="rightText">
+                      <p class="money">￥{{=it[i].money}}</p>
+                      <p class="time">{{=it[i].create_time}}</p>
+                  </div>
+              </div>
             </div>
-          </div>
-        {{}}}
+          {{}}}
+        {{??}}
+          <p class="no_data">暂无数据</p>
+        {{?}}
+
       </script>
 
 </body>
