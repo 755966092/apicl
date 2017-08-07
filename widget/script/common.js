@@ -134,6 +134,7 @@ function moduleInit() {
     UIListContacts = api.require('UIListContacts');
     // 现在使用
     listContact = api.require('listContact');
+    
     // 百度地图
     bMap = api.require('bMap');
     // 选择器

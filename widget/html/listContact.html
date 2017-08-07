@@ -42,10 +42,8 @@
 				-webkit-box-pack: center;
 			}
 			a.button {
-				display: -webkit-box;
-				-webkit-box-orient: vertical;
-				-webkit-box-pack: center;
-				-webkit-box-align: center;
+				display: inline-block;
+				width: 2rem;
 				height: 32px;
 				margin: 8px;
 				background-color: rgba(240,240,240,1.0);
@@ -56,14 +54,38 @@
 			a.active {
 				background-color: rgba(240,240,240,0.7);
 			}
+			img {
+				width: 4rem;
+				height: 4rem;
+			}
 		</style>
 	</head>
 	<body>
-		<a class="button" tapmode="active" onclick="open_l()">打开</a>
+		<header  class="header">
+	        <div class="head">
+	            <div class="headNo1">
+	                <span class="callback"   tapmode   onclick="api.closeWin()">
+	                返回
+	                </span>
+	                <span class="winTitle">
+	                    详细信息
+	                </span>
+	            </div>
+	            <span class="rightBtn"   tapmode   onclick="enter()"></span> 
+	        </div>
+	    </header>
+	   
+		<a class="button" tapmode="active" onclick="imgOpen()">打开</a>
+		<a class="button" tapmode="active" onclick="imgSave()">保存</a>
+		<img src="">
 	</body>
 	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/common.js"></script>
 	<script type="text/javascript">
+	var FNImageClip ;
 		apiready = function() {
+			FNImageClip = api.require('FNImageClip');
+			fnInit();
 		};
 		function open_l() {
 			var listContact = api.require('listContact');
@@ -331,6 +353,71 @@
 				} else {
 					alert(JSON.stringify(err));
 				}
+			});
+		}
+			
+		function imgOpen() {
+			api.getPicture({
+			    sourceType: 'library',
+			    mediaValue: 'pic',
+			    destinationType: 'url',
+			    quality: 75,
+			    // targetWidth: 100,
+			    // targetHeight: 100
+			}, function(ret, err) {
+			    if (ret) {
+			        alert(JSON.stringify(ret));
+			        FNImageClip.open({
+					    rect: {
+					        x: 0,
+					        y: 100,
+					        w: 750,
+					        h: 500
+					    },
+					    srcPath: ret.data,
+					    // mode: image,
+					    // 截图时是否截取高清图（与原图分辨率一致的图）
+					    // highDefinition: true,
+					    style: {
+					        mask: '#888',
+					        clip: {
+					            w: 100,
+					            h: 100,
+					            x: 50,
+					            y: 50,
+					            borderColor: '#0f0',
+					            borderWidth: 1,
+					            appearance: 'rectangle'
+					        }
+					    },
+					    fixedOn: api.frameName
+					}, function(ret, err) {
+					    if (ret) {
+					        alert(JSON.stringify(ret));
+					    } else {
+					        alert(JSON.stringify(err));
+					    }
+					});
+			    } else {
+			        alert(JSON.stringify(err));
+			    }
+			});
+			
+		}
+		function imgSave() {
+			FNImageClip.save({
+			    destPath: 'fs://imageClip/result.png',
+			    copyToAlbum: false,
+			    quality: 1
+			},function(ret, err){        
+			    if(ret) {
+			        alert(JSON.stringify(ret));
+			        $api.attr($api.dom('img'), 'src', ret.destPath);
+			        FNImageClip.close();
+			        alert($api.attr($api.dom('img'), 'src'))
+			    } else{
+			        alert(JSON.stringify(err));
+			    }
 			});
 		}
 	</script>

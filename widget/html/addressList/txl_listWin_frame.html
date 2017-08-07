@@ -311,15 +311,16 @@
             name: SQLName,
             sql: SQLsentence
         }, function(ret, err) {
+            // console.log('ret:'+JSON.stringify(ret))
+            console.log('err:'+JSON.stringify(err))
             if (ret.status) {
+                console.log(1)
+                // console.log('查询数据库'+JSON.stringify(ret))
                 $api.css($api.dom('.loading'), 'display:none');
-                
-                // console.log(condition)
-                console.log('查询数据库'+JSON.stringify(ret))
 
                 for (var i = 0; i < $api.domAll('p').length; i++) {
                     $api.css($api.domAll('p')[i], 'display:none');
-                }
+                } 
 
                 if (ret.data.length == 0 && condition === 4) {
                     console.log(1111 +'--'+ condition)
@@ -346,7 +347,7 @@
                         if (contactLevelOne == $api.setStorage('contactLevelOne'+apiPageParamFlag)) {
 
                         } else {
-                            console.log(JSON.stringify(contactLevelOne))
+                            // console.log(JSON.stringify(contactLevelOne))
                             $api.setStorage('contactLevelOne'+apiPageParamFlag, contactLevelOne);
                             dakai(contactLevelOne)
                         }
@@ -384,6 +385,7 @@
     }   
     
     function paixv (data) {
+        console.log('paixv')
         for (var i = 0; i < data.length; i++) {
             for (var j = 0; j < data.length; j++) {
                 if (data[i].litter < data[j].litter) {
@@ -436,7 +438,7 @@
             // }
             arr[data[a].initial].push (data[i])
         }
-        // console.log('处理完的数据:'+JSON.stringify(arr))
+        console.log('处理完的数据:'+JSON.stringify(arr))
         return arr;
     }
     function dakai(data1) {
