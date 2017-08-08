@@ -200,7 +200,12 @@
             }, function(ret, err) {
             if(ret) {
                 if(ret.code == 200) {
-                    
+                        api.sendEvent({
+                            name: 'editNonFriendsInfo',
+                            extra: {
+                                flag: api.pageParam.flag, 
+                            }
+                        });
                     api.ajax({
                         url: apiSite + '/remark_user/fullInfo',
                         method: 'post',
@@ -213,17 +218,13 @@
                         }
                     }, function(retWeb, err) {
                         if(retWeb) {
-                            console.log('網絡數據:::::'+JSON.stringify(retWeb))
                             db.selectSql({
                                 name: 'db_'+$api.getStorage('userToken'),
                                 sql: 'SELECT * FROM addressList where user_id=' + api.pageParam.userId
                             }, function(ret, err){        
                                 if( ret.status ){
-                                    console.log( '通讯录数据库:::::'+JSON.stringify( ret ) );
                                     // 备注后的昵称姓名, 转换为拼音
                                     var litter =  PinyinHelper.getShortPinyin(retWeb.data.info.nickname).toUpperCase();
-                                    console.log('字幕字幕字幕字幕字幕字幕字幕:::::::'+litter)
-                                    console.log('字幕字幕字幕字幕字幕字幕字幕:::::::'+litter[0])
                                     db.executeSql({ 
                                         name: 'db_'+$api.getStorage('userToken'),
                                         sql: 'UPDATE addressList SET remark_nickname = "'+ retWeb.data.info.nickname +'",remark_head_img_url = "'+ retWeb.data.info.head_img_url +'", title = "'+ retWeb.data.info.nickname+'", flag = "'+ litter[0]+'", litter = "'+ litter +'",remark_real_name = "'+ retWeb.data.info.real_name +'", remark_sex = "'+ retWeb.data.info.sex  +'" WHERE user_id = ' + api.pageParam.userId
@@ -272,7 +273,7 @@
                         }
                     })
                 } else {
-                    alert(JSON.stringify(ret.msg))
+                    alert(ret.msg)
                 }
             } else {
                 alert(JSON.stringify(err))

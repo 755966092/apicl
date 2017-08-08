@@ -136,14 +136,14 @@
             <p class="title">提现金额</p>
             <div class="inputDiv flex-def ">
                 <span class="jl_left">￥</span>  
-                <input id="money"  type="tel" class="flex-item"  placeholder="提现金额">
+                <input id="money" type="number" class="flex-item"  placeholder="提现金额">
             </div>
         </div>
 
         <div class="surplus">  
             <span class="surplusMoney">帐户余额 <span>￥</span><span class="money">--</span>,</span>
             <span class="all"   tapmode   onclick="allGet()">全部提现</span>
-            <span class="surplusMoney fr">手续费¥<span class="poundage">1.00</span></span>
+            <!-- <span class="surplusMoney fr">手续费¥<span class="poundage">1.00</span></span> -->
         </div>
         <div class="direction">
             <p class="title">提取至</p>
@@ -212,7 +212,6 @@
    function enter() {
        var money = $api.val($api.byId('money'));
        // var type = $api.attr($api.dom('.sel'), 'data-type');
-       console.log(money)
        var money2 = money
        var count = 0;
        for (var i = 0; i < money2.length; i++) {
@@ -220,7 +219,7 @@
           count++;
          }
        }
-       if (count>1 || money <0) {
+       if (count>1 || money <0 || money2=='') {
         alert('输入金额不正确')
        } else {
          api.openWin({

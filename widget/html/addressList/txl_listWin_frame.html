@@ -96,28 +96,44 @@
         // requestData()
         // query();
         // 监听筛选条件
-        // 
+        if (api.pageParam.flag == 4) {
+            requireFriend();
+        }
         apiPageParamFlag = api.pageParam.flag;
         addFilter();
         if(apiPageParamFlag) {
-            var contactLevelOneStorage =  $api.getStorage('contactLevelOne'+apiPageParamFlag);
-            console.log('联系人缓存'+JSON.stringify(contactLevelOneStorage))
-            if (contactLevelOneStorage) {
-                dakai(contactLevelOneStorage)
+            // var contactLevelOneStorage =  $api.getStorage('contactLevelOne'+apiPageParamFlag);
+            // console.log('联系人缓存'+JSON.stringify(contactLevelOneStorage))
+            // if (contactLevelOneStorage) {
+            //     dakai(contactLevelOneStorage)
+            //     query(parseInt(apiPageParamFlag));
+            // } else {
                 query(parseInt(apiPageParamFlag));
-            } else {
-                query(parseInt(apiPageParamFlag));
-            }
+            // }
         } else {
-            var contactLevelOneStorage =  $api.getStorage('contactLevelOne');
-            console.log('联系人缓存'+JSON.stringify(contactLevelOneStorage))
-            if (contactLevelOneStorage) {
-                dakai(contactLevelOneStorage)
+            // var contactLevelOneStorage =  $api.getStorage('contactLevelOne');
+            // console.log('联系人缓存'+JSON.stringify(contactLevelOneStorage))
+            // if (contactLevelOneStorage) {
+                // dakai(contactLevelOneStorage)
+                // query();
+            // } else {
                 query();
-            } else {
-                query();
-            }
+            // }
         }
+        api.addEventListener({
+            name: 'editUserInfo'
+        }, function(ret, err) {
+            if (ret) {
+                console.log('监听到事件：'+JSON.stringify(ret))
+                if(ret.value.flag) {
+                    query(ret.value.flag)
+                } else {
+                    query();
+                }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
         api.addEventListener({
             name: 'delectFriend'
         }, function(ret, err) {
@@ -130,6 +146,101 @@
             }
         });
     };
+    function requireFriend() {
+         api.ajax({
+                url: apiSite + '/contact/friend',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                       values: { 
+                           token: $api.getStorage('userToken'),
+                       }
+                }
+            }, function(retFriend, err) {
+                if(retFriend) {
+                    disData(retFriend.data.list, 4)
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
+    }
+     // 处理数据
+    function disData (data, type) {
+
+        // console.log('disData'+JSON.stringify(data))
+        if (data != '' ) {
+            for (var i = 0; i < data.length; i++) {
+                // single_list
+                // both_list
+                // friend_list
+                // 去除空格
+                data[i].nickname = $api.trimAll(data[i].nickname)
+                if (data[i].remark_nickname) {
+                    data[i].litter = PinyinHelper.getShortPinyin(data[i].remark_nickname).toUpperCase();
+                } else {
+                    data[i].litter = PinyinHelper.getShortPinyin(data[i].nickname).toUpperCase();
+                }
+                data[i].title = data[i].nickname;
+                data[i].img = data[i].head_img_url;
+                data[i].titleSize = 15;
+                if (data[i].current_position == null) {
+                    data[i].current_position = '';
+                } 
+                if (data[i].current_company == null) {
+                    data[i].current_company = '';
+                }
+            }
+            // 模块数据格式
+            litterSort(data, type)
+        }
+    }
+    // 排序
+    function litterSort(data,type) {
+        for (var i = 0; i < data.length; i++) {
+            for (var j = 0; j < data.length; j++) {
+                if (data[i].litter < data[j].litter) {
+                    var temp = data[i];
+                    data[i] = data[j];
+                    data[j] = temp;
+                }
+            }
+         }
+         sqlSyntax(data, type);
+    }
+    // 拼数据库语法字符串
+    function sqlSyntax(data1, type) {
+        for (var i = 0; i < data1.length; i++) {
+            data1[i].flag = data1[i].litter[0];
+        }
+        // console.log('数据库语法字符串:'+data1);
+        var SQLName = 'db_'+$api.getStorage('userToken');
+        var SQL = 'INSERT OR REPLACE INTO addressList(user_id,nickname,real_name,head_img_url,current_company,current_position,current_contact,current_degree, titleSize,title,img,flag,litter,type, sex, remark_nickname, remark_real_name, remark_head_img_url, remark_sex, remark_birthday, remark_hometown, remark_current_company, remark_current_position, remark_current_degree, remark_current_contact) VALUES '
+        for (var i = 0; i < data1.length; i++) {
+            SQL += '('+data1[i].user_id+',"'+ data1[i].nickname +'","'+ data1[i].real_name +'","'+ data1[i].head_img_url +'","'+ (data1[i].current_company || "") +'","'+ (data1[i].current_position || "")+'","'+ (data1[i].current_contact || "") +'","'+ (data1[i].current_degree || "") +'","'+ data1[i].titleSize +'","'+ data1[i].title +'","'+ data1[i].img+'","'+ data1[i].flag +'","'+ data1[i].litter +'","'+ type +'","'+ (data1[i].sex || 1) +'","'+ (data1[i].remark_nickname || "") +'","'+ (data1[i].remark_real_name || "") +'","'+ (data1[i].remark_head_img_url || "") +'","'+ (data1[i].remark_sex || "") +'","'+ (data1[i].remark_birthday || "") +'","'+ (data1[i].remark_hometown || "") +'","'+ (data1[i].remark_current_company || "") +'","'+ (data1[i].remark_current_position || "") +'","'+ (data1[i].remark_current_degree || "") +'","'+ (data1[i].remark_current_contact || "") +'"),';
+        }
+        SQL = SQL.substring(0,SQL.length-1) + ';'
+        db.executeSql({
+             name: SQLName,
+             sql: 'CREATE UNIQUE INDEX IF NOT EXISTS user_id_idx ON addressList (user_id)'    
+         }, function(ret, err){        
+             if( ret.status ){
+                // console.log( JSON.stringify( ret ) );
+                db.executeSql({
+                    name: SQLName,
+                    sql: SQL   
+                }, function(ret, err){        
+                    if( ret.status ){
+                        console.log( '插入数据'+JSON.stringify( ret ) );
+                        
+                    }else{
+                        alert( '插入数据:' + JSON.stringify( err ) );
+                    }
+                });
+             }else{
+                 alert( '设置唯一索引' + JSON.stringify( err ) );
+             }
+         });
+    }
     function contactFriend(userId) {
         api.ajax({
             url: apiSite + '/contact/friend',
@@ -442,10 +553,13 @@
         return arr;
     }
     function dakai(data1) {
+        console.log(JSON.stringify(data1))
         var dataArr = [];
+        var dataKeyArr = [];
         for(key in data1) {
             // console.log(data1[key])
             dataArr = dataArr.concat(data1[key]);
+            dataKeyArr.push(key)
         }
         // console.log(JSON.stringify(dataArr))
         var rightObj;
@@ -477,7 +591,10 @@
                 // 分割线颜色
                 borderColor: '#d9d9d9',
                 // 左滑按钮
-                rightBtn: rightObj,
+                rightBtn: [{
+                    color: '#20AC19',
+                    title: '呼叫'
+                }],
                 imgHeight: 32,
                 groupTitle: {
                     color: '#999',       
@@ -501,16 +618,38 @@
                 if (ret) {
                     if (ret.clickType == 0) {
                         // 获取点击联系人信息
-                        console.log('470:::'+JSON.stringify(ret))
                         addFriends(data1[ret.key][ret.index].user_id);
                     }
                     if (ret.clickType == 1) {
                         // 获取点击联系人信息
-                        console.log('475:::'+JSON.stringify(ret))
-                        api.call({
-                            type: 'tel_prompt',
-                            number: data1[ret.key][ret.index].remark_current_contact
-                        });
+                        // 安卓全局索引
+                        // ios+1
+                        if (api.systemType == 'ios') {
+                            var tel;
+                            if (dataKeyArr.indexOf(ret.key)==-1) {
+                                // 查找不到
+                                if (data1[dataKeyArr[0]][ret.index].remark_current_contact) {
+                                        tel = data1[dataKeyArr[0]][ret.index].remark_current_contact
+                                } else if (data1[dataKeyArr[0]][ret.index].current_contact){
+                                        tel = data1[dataKeyArr[0]][ret.index].current_contact
+                                }
+                            } else {
+                                if (data1[dataKeyArr[dataKeyArr.indexOf(ret.key)+1]][ret.index].remark_current_contact) {
+                                        tel = data1[dataKeyArr[dataKeyArr.indexOf(ret.key)+1]][ret.index].remark_current_contact
+                                } else if (data1[dataKeyArr[dataKeyArr.indexOf(ret.key)+1]][ret.index].current_contact) {
+                                        tel = data1[dataKeyArr[dataKeyArr.indexOf(ret.key)+1]][ret.index].current_contact
+                                }
+                            }
+                            api.call({
+                                type: 'tel_prompt',
+                                number: tel
+                            });
+                        } else {
+                            api.call({
+                                type: 'tel_prompt',
+                                number: dataArr[ret.index].remark_current_contact
+                            });
+                        }
                     }
 
                     
@@ -525,7 +664,8 @@
             name: 'txl_memberInfo_Win',
             url: './txl_memberInfo_Win.html',
             pageParam: {
-                userId: userId
+                userId: userId,
+                flag: api.pageParam.flag
             }
         });
     }

@@ -61,22 +61,8 @@
 		</style>
 	</head>
 	<body>
-		<header  class="header">
-	        <div class="head">
-	            <div class="headNo1">
-	                <span class="callback"   tapmode   onclick="api.closeWin()">
-	                返回
-	                </span>
-	                <span class="winTitle">
-	                    详细信息
-	                </span>
-	            </div>
-	            <span class="rightBtn"   tapmode   onclick="imgSave()">使用</span> 
-	        </div>
-	    </header>
-	   
 		<a class="button" tapmode="active" onclick="open_l()">打开</a>
-		<!-- <a class="button" tapmode="active" onclick="imgSave()">保存</a> -->
+		<a class="button" tapmode="active" onclick="imgSave()">保存</a>
 		<img src="">
 	</body>
 	<script type="text/javascript" src="../script/api.js"></script>
@@ -85,17 +71,14 @@
 	var FNImageClip ;
 		apiready = function() {
 			FNImageClip = api.require('FNImageClip');
-			fnInit();
-			api.openFrame({
-			    name: 'listContact_frame',
-			    url: './listContact_frame.html',
-			    rect: {
-			        x: 0,
-			        y: headerH,
-			        w: 'auto',
-			        h: 'auto'
-			    },
-			    bounces: false
+			api.addEventListener({
+			    name: 'editHeadImg'
+			}, function(ret, err) {
+			    if (ret) {
+			        imgSave();
+			    } else {
+			        alert(JSON.stringify(err));
+			    }
 			});
 		};
 		function open_l() {
@@ -107,7 +90,7 @@
 					title : '备注'
 				}],
 				data : {
-					common : [{
+					"common" : [{
 						placeholderImg : 'widget://res/img/ic/listContact.png',
 						img : 'http://img1.3lian.com/gif/more/11/201206/a5194ba8c27b17def4a7c5495aba5e32.jpg',
 						title : '标题'
@@ -346,37 +329,7 @@
 			}, function(ret, err) {
 			    if (ret) {
 			        alert(JSON.stringify(ret));
-			        FNImageClip.open({
-					    rect: {
-					        x: 0,
-					        y: 0,
-					        w: api.winWidth,
-					        h: api.winHeight
-					    },
-					    srcPath: ret.data,
-					    mode: "image",
-					    // 截图时是否截取高清图（与原图分辨率一致的图）
-					    highDefinition: true,
-					    style: {
-					        mask: 'rgba(0,0,0,0.4)',
-					        clip: {
-					            w: 200,
-					            h: 200,
-					            x: api.winWidth / 2 - 100,
-					            y: api.winHeight / 2 - 100,
-					            borderColor: '#0f0',
-					            borderWidth: 1,
-					            appearance: 'rectangle'
-					        }
-					    },
-					    fixedOn: api.frameName
-					}, function(ret, err) {
-					    if (ret) {
-					        alert(JSON.stringify(ret));
-					    } else {
-					        alert(JSON.stringify(err));
-					    }
-					});
+			        
 			    } else {
 			        alert(JSON.stringify(err));
 			    }
@@ -384,22 +337,19 @@
 			
 		}
 		function imgSave() {
-			// FNImageClip.save({
-			//     destPath: 'fs://imageClip/result.png',
-			//     copyToAlbum: false,
-			//     quality: 1
-			// },function(ret, err){        
-			//     if(ret) {
-			//         alert(JSON.stringify(ret));
-			//         $api.attr($api.dom('img'), 'src', ret.destPath);
-			//         FNImageClip.close();
-			//         alert($api.attr($api.dom('img'), 'src'))
-			//     } else{
-			//         alert(JSON.stringify(err));
-			//     }
-			// });
-			api.sendEvent({
-			    name: 'editHeadImg'
+			FNImageClip.save({
+			    destPath: 'fs://imageClip/result.png',
+			    copyToAlbum: false,
+			    quality: 1
+			},function(ret, err){        
+			    if(ret) {
+			        alert(JSON.stringify(ret));
+			        $api.attr($api.dom('img'), 'src', ret.destPath);
+			        FNImageClip.close();
+			        alert($api.attr($api.dom('img'), 'src'))
+			    } else{
+			        alert(JSON.stringify(err));
+			    }
 			});
 		}
 	</script>

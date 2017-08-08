@@ -208,11 +208,11 @@
     </div>
     <div class="shadow" >
         <p tapmode onclick="closeDiv(0);event.stopPropagation();">复制</p>
-        <p tapmode onclick="closeDiv(1);event.stopPropagation();">发送给朋友</p>
-        <p tapmode onclick="closeDiv(2);event.stopPropagation();">收藏</p>
-        <p tapmode onclick="closeDiv(3);event.stopPropagation();">翻译</p>
+        <!-- <p tapmode onclick="closeDiv(1);event.stopPropagation();">发送给朋友</p> -->
+        <!-- <p tapmode onclick="closeDiv(2);event.stopPropagation();">收藏</p> -->
+        <!-- <p tapmode onclick="closeDiv(3);event.stopPropagation();">翻译</p> -->
         <p tapmode onclick="closeDiv(4);event.stopPropagation();">删除</p>
-        <p tapmode onclick="closeDiv(5);event.stopPropagation();">更多</p>
+        <!-- <p tapmode onclick="closeDiv(5);event.stopPropagation();">更多</p> -->
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -315,9 +315,12 @@ var  mainH, _main, scrollH;
         $api.css($api.dom('.shadow'), 'display:none');
         // alert('292'+newsText)
         if (n === 4) {
-            $api.remove($api.dom('div[data-msgId="'+ msgId +'"]'));
+            var domRem = $api.dom('div[data-msgId="'+ msgId +'"]'); 
+            $api.remove(domRem);
+            // console.log(JSON.stringify($api.prev(domRem)));
+            // $api.remove($api.prev(domRem));
             var arrid = [];
-            arrid[0] = parseInt(msgId)
+            arrid[0] = parseInt(msgId);
             rong.deleteMessages({
                 messageIds: arrid
             }, function(ret, err) {

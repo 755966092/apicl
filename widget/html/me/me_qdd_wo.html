@@ -393,19 +393,14 @@
                                 case 1: ret.data.list[i].status = '待付款'; break;
                                 case 2: ret.data.list[i].status = '已取消'; break;
                                 case 3: ret.data.list[i].status = '待完成'; break;
-                                case 4: ret.data.list[i].status = '待完成'; break;
-                                case 5: ret.data.list[i].status = '已取消'; break;
+                                case 4: ret.data.list[i].status = '已取消'; break;
+                                case 5: ret.data.list[i].status = '待完成'; break;
                                 case 6: ret.data.list[i].status = '已完成'; break;
                                 case 7: ret.data.list[i].status = '已完成'; break;
-                                case 8: ret.data.list[i].status = '已完成'; break;
-                                case 9: ret.data.list[i].status = '待完成'; break;
+                                case 8: ret.data.list[i].status = '已取消'; break;
+                                case 9: ret.data.list[i].status = '已取消'; break;
                                 case 10: ret.data.list[i].status = '已取消'; break;
-                                case 11: ret.data.list[i].status = '待完成'; break;
-                                case 12: ret.data.list[i].status = '已取消'; break;
-                                case 13: ret.data.list[i].status = '已取消'; break;
-                                case 14: ret.data.list[i].status = '已取消'; break;
-                                case 15: ret.data.list[i].status = '已完成'; break;
-                                case 16: ret.data.list[i].status = '已取消'; break;
+                                case 11: ret.data.list[i].status = '已完成'; break;
                             }
 
                             // 处理按钮
@@ -582,6 +577,7 @@
                 }, function(ret, err) {
                     if (ret) {
                         if (ret.eventType == 'ok') {
+                            $api.css($api.dom('.loading'), 'display: block');
                             obj = {
                                 token: $api.getStorage('userToken'),
                                 order_id: id,
@@ -642,7 +638,7 @@
                     // colorActive: '#fff'
                 },
                 title: {
-                    text: '请选择退款原因',
+                    text: '请选择拒绝原因',
                     size: 20,
                     h: 35,
                     bg: '#eee',
@@ -652,6 +648,7 @@
             }, function(ret, err) {
                 if (ret) {
                     if (ret.eventType == 'ok') {
+                        $api.css($api.dom('.loading'), 'display: block');
                         obj = {
                             token: $api.getStorage('userToken'),
                             order_id: id,
@@ -664,6 +661,7 @@
                 }
             });
         } else if (flagText === '评价') {
+            $api.css($api.dom('.loading'), 'display: block');
             obj = {
                 token: token,
                 order_id: id,
@@ -677,13 +675,16 @@
                     type: 'demand'
                 }
             });
+            $api.css($api.dom('.loading'), 'display: none');
         } else if (flagText === '完成订单') {
+            $api.css($api.dom('.loading'), 'display: block');
             obj = {
                 token: token,
                 order_id: id
             }
             ajaxOperate(obj,url)
         } else if (flagText === '确认帮助') {
+            $api.css($api.dom('.loading'), 'display: block');
             obj = {
                 token: token,
                 order_id: id,
@@ -704,6 +705,7 @@
                 },
                 bounces: false
             });
+            $api.css($api.dom('.loading'), 'display: none');
         }  else {
             obj = {
                 token: $api.getStorage('userToken'),
@@ -725,8 +727,9 @@
         }, function(ret, err) {
             if(ret) {
                 if (ret.code !== 200) {
-                    alert(JSON.stringify(ret.msg))
+                    alert(ret.msg)
                 } else {
+                    $api.css($api.dom('.loading'), 'display: block');
                     requireData();
                 }
             } else {

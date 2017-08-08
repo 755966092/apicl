@@ -11,15 +11,17 @@
         }
         .title {
             font-size: .3rem;
-            padding-top: .2rem;
             padding-bottom: .4rem;
         }
         .selItem {
+            box-sizing: border-box;
             margin-top: .2rem;
-            height: 2.91rem;
+            /*height: 2.91rem;*/
             width: 7.5rem;
             background-color: #fff;
-            padding: 0 .35rem;
+            padding: .2rem .35rem;
+
+            
         }
         .itemList {
             display: inline-block;
@@ -45,10 +47,15 @@
             color: #fff;
         }
         .m44 {
-            margin: 0 .44rem;
+            margin: 0 .4rem;
+            margin-bottom: .4rem;
         }
         .pl15 {
             padding: 0 .3rem;
+            -moz-box-lines: multiple; /*Firefox*/
+            -webkit-box-lines: multiple; /*Safari,Opera,Chrome*/
+            box-lines: multiple;
+            flex-wrap: wrap;
         }
         ul {
             margin-top: .2rem;
@@ -143,27 +150,27 @@
     <div class="main">  
         <div class="selItem">
             <p class="title">充值金额</p>
-            <div class="pl15 flex-def ">
-                <div id="three" class="itemList selType" tapmode onclick="selType(this)">
-                    <span class="item  flex-def flex-zTopBottom flex-zCenter flex-cCenter">
-                        <span class="price">￥20</span>
-                        <span class="count">三个月</span>
-                    </span>
-                </div>
-                <div id="half" class="itemList m44" tapmode onclick="selType(this)">
-                    <span class="item flex-def flex-zTopBottom flex-zCenter flex-cCenter">
-                        <span class="price">￥40</span>
-                        <span class="count">半年</span>
-                    </span>
-                </div>
-                <div id="one"  class="itemList" tapmode onclick="selType(this)">
-                    <span class="item flex-def flex-zTopBottom flex-zCenter flex-cCenter">
-                        <span class="price">￥80</span>
-                        <span class="count">一年</span>
-                    </span>
-                </div>
-            </div>
+            <div class="pl15 flex-def resultList "></div>
         </div>
+        <script type="text/x-dot-template" id="listT">
+            {{ for (var i = 0; i < it.length; i++) { }} 
+                {{?i == 1 || i == 4}}
+                <div data-count="{{=it[i].month}}" class="itemList m44" tapmode onclick="selType(this)">
+                    <span class="item flex-def flex-zTopBottom flex-zCenter flex-cCenter">
+                        <span class="price">￥{{=it[i].price}}</span>
+                        <span class="count">{{=it[i].month}}个月</span>
+                    </span>
+                </div>
+                {{??}}
+                <div data-count="{{=it[i].month}}" class="itemList" tapmode onclick="selType(this)">
+                    <span class="item flex-def flex-zTopBottom flex-zCenter flex-cCenter">
+                        <span class="price">￥{{=it[i].price}}</span>
+                        <span class="count">{{=it[i].month}}个月</span>
+                    </span>
+                </div>
+                {{?}}
+            {{}}}
+        </script>
         <div class="payType">
             <ul>
                 <p class="title">支付方式</p>
@@ -182,15 +189,16 @@
             </ul>
         </div>
         <div class="btn" tapmode onclick="submit()">确认支付</div>
-        <div class="warn">
+        <!-- <div class="warn">
             <p class="warnItem">点击充值，即表示已阅读并同意 <span>充值协议</span></p>
             <p class="warnItem">我在不会以任何形式要求您输入银行账户和密码</p>
-        </div>
+        </div> -->
 
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
     apiready = function(){
         fnInit();
@@ -216,18 +224,19 @@
                 // alert(JSON.stringify(ret));
                 // $api.text($api.dom('#month .jl_right'), '￥'+ret.data.info[1]);
                 // $api.attr($api.dom('#month'), 'data-price', ret.data.info[1]);
+                console.log(JSON.stringify(ret))
+                getData(ret.data.info)
+                // $api.text($api.dom('#three .price'), '￥'+ret.data.info[3]);
+                // $api.attr($api.byId('three'), 'data-price', ret.data.info[3]);
+                // $api.attr($api.byId('three'), 'data-count', 3);
 
-                $api.text($api.dom('#three .price'), '￥'+ret.data.info[3]);
-                $api.attr($api.byId('three'), 'data-price', ret.data.info[3]);
-                $api.attr($api.byId('three'), 'data-count', 3);
+                // $api.text($api.dom('#half .price'), '￥'+ret.data.info[6]);
+                // $api.attr($api.byId('half'), 'data-price', ret.data.info[6]);
+                // $api.attr($api.byId('half'), 'data-count', 6);
 
-                $api.text($api.dom('#half .price'), '￥'+ret.data.info[6]);
-                $api.attr($api.byId('half'), 'data-price', ret.data.info[6]);
-                $api.attr($api.byId('half'), 'data-count', 6);
-
-                $api.text($api.dom('#one .price'), '￥'+ret.data.info[12]);
-                $api.attr($api.byId('one'), 'data-price', ret.data.info[12]);
-                $api.attr($api.byId('one'), 'data-count', 12);
+                // $api.text($api.dom('#one .price'), '￥'+ret.data.info[12]);
+                // $api.attr($api.byId('one'), 'data-price', ret.data.info[12]);
+                // $api.attr($api.byId('one'), 'data-count', 12);
             } else {
                 alert(JSON.stringify(err))
             }
@@ -243,7 +252,7 @@
         console.log(val+'----'+month)
         if (val === 'balance') {
             // 余额支付, 判断是否设置支付密码
-            isSetPayPassword();
+            isSetPayPassword(val,month);
             
         } else {
             // 微信 支付宝支付
@@ -253,7 +262,7 @@
         
     }
     // 是否设置支付密码
-    function isSetPayPassword() {
+    function isSetPayPassword(val,month) {
         api.ajax({
                 url: apiSite + '/settings/checkPayPassword',
                 method: 'post',

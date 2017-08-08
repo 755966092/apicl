@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <!-- <meta name="format-detection" content="telephone=no" /> -->
+    <meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
@@ -122,7 +122,7 @@
                     <div class="move moveFlag" data-contactId="{{=it[i].contact_id}}"  tapmode onclick="openEditPage(this)">
                         <div class="item">
                             <span class="label">{{=it[i].sub_type}}：</span>
-                           <span  >{{=it[i].phone}}</span>
+                            <span  class="phoneText">{{=it[i].phone}}</span>
                             <span class="clearIcon" tapmode data-contactId="{{=it[i].contact_id}}" onclick="clearItem(this);event.stopPropagation()"></span>
                             {{?it[i].is_default==1}}
                             <span class="sel select"> </span>
@@ -141,7 +141,7 @@
                     <div class="move fixedFlag" data-contactId="{{=it[i].contact_id}}" tapmode onclick="openEditPage(this)">
                         <div class="item" >
                             <span class="label">{{=it[i].sub_type}}：</span>
-                            <span  >{{=it[i].phone}}</span>
+                            <span class="phoneText" >{{=it[i].phone}}</span>
                             <span class="clearIcon" tapmode data-contactId="{{=it[i].contact_id}}" onclick="clearItem(this);event.stopPropagation()"></span>
                             {{?it[i].is_default==1}}
                             <span class="sel select"> </span>
@@ -194,12 +194,13 @@
                 }
             }, function(ret, err) {
                 if(ret) {
-                    
+                    console.log('设置成功')
                     db.executeSql({
                         name: 'db_'+$api.getStorage('userToken'),
-                        sql: 'UPDATE addressList SET remark_current_contact = "' + $api.val($api.dom(ele, 'input')) + '" WHERE user_id = ' + api.pageParam.userId
+                        sql: 'UPDATE addressList SET remark_current_contact = "' + $api.text($api.dom(ele, '.phoneText')) + '" WHERE user_id = ' + api.pageParam.userId
                     }, function(ret, err){        
                         if( ret.status ){
+                            console.log('ret203:::'+$api.text($api.dom(ele, '.phoneText')) )
                             // alert( JSON.stringify( ret ) );
                             api.sendEvent({
                                 name: 'editUserInfo'
@@ -348,11 +349,11 @@
                     }, function(ret, err){        
                         if( ret.status ){
                             upsateSql();
-                            
                         }else{
                             alert( JSON.stringify( err ) );
                         }
                     });
+
                 } else {
                     alert(JSON.stringify(err))
                 }
@@ -361,6 +362,7 @@
         
     }
     function addPhone() {
+        console.log(111)
         api.openWin({
             name: 'winName',
             url: './txl_addFellow_addPhone_win.html',
@@ -371,6 +373,7 @@
     }
     // 更新数据库
     function upsateSql() {
+        console.log('更新数据库')
         api.ajax({
             url: apiSite + '/remark_user/contactList',
             method: 'post',
@@ -382,17 +385,20 @@
                    }
             }
         }, function(ret, err) {
+            console.log('387:::'+JSON.stringify(ret))
             for (var i = 0; i < ret.data.list.length; i++) {
                 db.executeSql({
                     name: 'db_'+$api.getStorage('userToken'),
                     sql: 'UPDATE tb_remarks_contact SET is_default = ' + ret.data.list[i].is_default + ' WHERE contact_id = ' + ret.data.list[i].contact_id
                 }, function(ret, err){  
                     if( ret.status ){
-                       
+                       console.log('更新成功');
+
                     }else{
                         alert(JSON.stringify( err ) );
                     }
                 });
+
             }
             
         })
@@ -445,7 +451,9 @@
                                     if(ret) {
                                         console.log('用户自己的'+JSON.stringify(ret.data.list));
                                         flag = 0
-                                        handleData(litterSort(ret.data.list))
+                                        if (ret.data.list.length > 0 ){
+                                            handleData(litterSort(ret.data.list));
+                                        }
                                     } else {
                                         alert(JSON.stringify(err))
                                     }

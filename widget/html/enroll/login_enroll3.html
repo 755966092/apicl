@@ -10,7 +10,7 @@
         .loading  {
             display: none;
         }
-       header.header {
+        header.header {
             background-color: #EDECF3;
             
         }
@@ -161,6 +161,9 @@
             border: 2px dashed #02BB00;
             border-radius: 5px;
         }
+        .rightBtn {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -172,6 +175,7 @@
             <span class="winTitle">
                 
             </span>
+            <div class="rightBtn" onclick="imgSave()" tapmode>确定</div>
         </div>
     </header>
     <div class="loading"></div>
@@ -214,7 +218,9 @@
 <script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
     var tel,headImg = '';
-    apiready = function(){
+    var FNImageClip ;
+    apiready = function() {
+        FNImageClip = api.require('FNImageClip');
         fnInit();
         moduleInit();
         tel = api.pageParam.tel
@@ -244,6 +250,12 @@
         var nickName = $api.val($api.byId('nickName'));
         var psd = $api.val($api.byId('psd'));
         var inviteCode = $api.val($api.byId('inviteCode'));
+        var headImg = $api.attr($api.byId('headImg'), 'src');
+        console.log(headImg)
+        if (headImg[0] == '.') {
+            headImg = ''
+        }
+
         // alert(tel + '--' + nickName + '--' + psd + '--' + inviteCode)
         if (nickName === '') {
             api.toast({
@@ -333,15 +345,41 @@
                                             }
                                         });
                                      },100)
-                                     api.openWin({
-                                        name: 'main',
-                                        url: '../main.html',
-                                        slidBackEnabled: false,
-                                        pageParam: {
-                                            userToken: userToken,
-                                            rongToken: rongToken
-                                        }
-                                     });
+                                      // 获得极光推送
+                                    ajpush.getRegistrationId(function(ret) {
+                                        var registrationId = ret.id;
+                                        $api.setStorage('registrationId', registrationId);
+                                        var appVersion = api.appVersion;
+                                        // $api.setStorage('registration_id', registrationId);
+                                        // $api.setStorage('appVersion', appVersion);
+                                        api.ajax({
+                                            url: apiSite + '/settings/registerDevice',
+                                            method: 'post',
+                                            headers: apiHeader,
+                                            data: {
+                                                   values: {
+                                                       token: $api.getStorage('userToken'),
+                                                       registration_id: registrationId,
+                                                       version: appVersion
+                                                   }
+                                            }
+                                        }, function(ret, err) {
+                                            if(ret) {
+                                                api.openWin({
+                                                    name: 'main',
+                                                    url: '../main.html',
+                                                    slidBackEnabled: false,
+                                                    pageParam: {
+                                                        userToken: userToken,
+                                                        rongToken: rongToken
+                                                    }
+                                                 });
+                                            } else {
+                                                alert(JSON.stringify(err))
+                                            }
+                                        })
+                                    });
+                                     
                                 }
                                 
                             });
@@ -369,29 +407,100 @@
             saveToPhotoAlbum: false
         }, function(ret, err) {
             if (ret) {
-                $api.css($api.dom('.loading'), 'display: block');
-                $api.attr($api.byId('headImg'), 'src', ret.data);
-                var obj = api.require('qiniuUpfile');
-                obj.upfile({
-                    file: ret.data,
-                }, function(retUpfile, err) {
-                    if (retUpfile.status) {
-                        if (retUpfile.oper == "complete") {
-                            //上传成功后组装访问路径，或直接访问文档
-                            $api.css($api.dom('.loading'), 'display: none');
-                            headImg = 'http://'+ baseUrl +'/'+ retUpfile.info.key;
-                            // duibi($api.domAll('.imgpage').length,imgArr.length)
-                        } else if (retUpfile.oper == "progress") {
-                            //上传过程中获取进度数据
-                            console.log(retUpfile.percent);
-                        }
-                    }
-                });
+
+
+                $api.css($api.dom('header.header'), 'background-color: #3A393E');
+                $api.css($api.dom('header.header .head'), 'background-color: #3A393E');
+                $api.css($api.dom('.rightBtn'), 'display: block');
+                $api.text($api.dom('.winTitle'), '选择头像');
+                clipImage(ret)
+                // $api.css($api.dom('.loading'), 'display: block');
+                
+                // $api.attr($api.byId('headImg'), 'src', ret.data);
+                
             } else {
                 // alert(JSON.stringify(err.msg));
             }
         });
     }
+    function clipImage(ret) {
+        FNImageClip.open({
+            rect: {
+                x: 0,
+                y: headerH,
+                w: api.winWidth,
+                h: api.winHeight - headerH
+            },
+            srcPath: ret.data,
+            mode: "image",
+            // 截图时是否截取高清图（与原图分辨率一致的图）
+            highDefinition: true,
+            style: {
+                mask: 'rgba(0,0,0,0.4)',
+                clip: {
+                    w: 200,
+                    h: 200,
+                    x: api.winWidth / 2 - 100,
+                    y: api.winHeight / 2 - 100,
+                    borderColor: '#0f0',
+                    borderWidth: 1,
+                    appearance: 'rectangle'
+                }
+            },
+        }, function(ret, err) {
+            if (ret) {
+                flag = 1;
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    // function enter () {
+    //     if (flag) {
+    //         imgSave();
+    //     } else {
+    //         var url = $api.attr($api.dom('img'),'src');
+    //         pushImg(url)
+    //     }
+        
+    // }
+    function imgSave() {
+            $api.css($api.dom('.loading'), 'display: block');
+            FNImageClip.save({
+                destPath: 'fs://imageClip/result.png',
+                copyToAlbum: false,
+                quality: 1
+            },function(ret, err){        
+                if(ret) {
+
+                    FNImageClip.close();
+                    $api.css($api.dom('header.header'), 'background-color: #EDECF3');
+                    $api.css($api.dom('header.header .head'), 'background-color: #EDECF3');
+                    $api.css($api.dom('.rightBtn'), 'display: none');
+                    $api.text($api.dom('.winTitle'), '');
+                    
+                    var obj = api.require('qiniuUpfile');
+                    obj.upfile({
+                        file: ret.destPath,
+                    }, function(retUpfile, err) {
+                        if (retUpfile.status) {
+                            if (retUpfile.oper == "complete") {
+                                //上传成功后组装访问路径，或直接访问文档
+                                $api.attr($api.byId('headImg'), 'src', 'http://'+ baseUrl +'/'+ retUpfile.info.key);
+                                
+                                $api.css($api.dom('.loading'), 'display: none');
+                            } else if (retUpfile.oper == "progress") {
+                                //上传过程中获取进度数据
+                                console.log(retUpfile.percent);
+                            }
+                        }
+                    });
+                } else{
+                    alert(JSON.stringify(err));
+                }
+            });
+    }
+
     // 打开数据库
     function openDb(userToken) {
         // alert('打开数据库'+userToken)
@@ -512,9 +621,9 @@
         }
         // console.log('数据库语法字符串:'+data1);
         var SQLName = 'db_'+$api.getStorage('userToken');
-        var SQL = 'INSERT OR REPLACE INTO addressList(user_id,nickname,real_name,head_img_url,current_company,current_position,current_degree, titleSize,title,img,flag,litter,type, sex, remark_nickname, remark_real_name, remark_head_img_url, remark_sex, remark_birthday, remark_hometown, remark_current_company, remark_current_position, remark_current_degree, remark_current_contact) VALUES '
+        var SQL = 'INSERT OR REPLACE INTO addressList(user_id,nickname,real_name,head_img_url,current_company,current_position,current_contact,current_degree, titleSize,title,img,flag,litter,type, sex, remark_nickname, remark_real_name, remark_head_img_url, remark_sex, remark_birthday, remark_hometown, remark_current_company, remark_current_position, remark_current_degree, remark_current_contact) VALUES '
         for (var i = 0; i < data1.length; i++) {
-            SQL += '('+data1[i].user_id+',"'+ data1[i].nickname +'","'+ data1[i].real_name +'","'+ data1[i].head_img_url +'","'+ (data1[i].current_company || "") +'","'+ (data1[i].current_position || "") +'","'+ (data1[i].current_degree || "") +'","'+ data1[i].titleSize +'","'+ data1[i].title +'","'+ data1[i].img+'","'+ data1[i].flag +'","'+ data1[i].litter +'","'+ type +'","'+ (data1[i].sex || 1) +'","'+ (data1[i].remark_nickname || "") +'","'+ (data1[i].remark_real_name || "") +'","'+ (data1[i].remark_head_img_url || "") +'","'+ (data1[i].remark_sex || "") +'","'+ (data1[i].remark_birthday || "") +'","'+ (data1[i].remark_hometown || "") +'","'+ (data1[i].remark_current_company || "") +'","'+ (data1[i].remark_current_position || "") +'","'+ (data1[i].remark_current_degree || "") +'","'+ (data1[i].remark_current_contact || "") +'"),';
+            SQL += '('+data1[i].user_id+',"'+ data1[i].nickname +'","'+ data1[i].real_name +'","'+ data1[i].head_img_url +'","'+ (data1[i].current_company || "") +'","'+ (data1[i].current_position || "")+'","'+ (data1[i].current_contact || "") +'","'+ (data1[i].current_degree || "") +'","'+ data1[i].titleSize +'","'+ data1[i].title +'","'+ data1[i].img+'","'+ data1[i].flag +'","'+ data1[i].litter +'","'+ type +'","'+ (data1[i].sex || 1) +'","'+ (data1[i].remark_nickname || "") +'","'+ (data1[i].remark_real_name || "") +'","'+ (data1[i].remark_head_img_url || "") +'","'+ (data1[i].remark_sex || "") +'","'+ (data1[i].remark_birthday || "") +'","'+ (data1[i].remark_hometown || "") +'","'+ (data1[i].remark_current_company || "") +'","'+ (data1[i].remark_current_position || "") +'","'+ (data1[i].remark_current_degree || "") +'","'+ (data1[i].remark_current_contact || "") +'"),';
         }
         SQL = SQL.substring(0,SQL.length-1) + ';'
         // console.log(SQL)

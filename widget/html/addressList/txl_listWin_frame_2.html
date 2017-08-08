@@ -100,12 +100,16 @@
         <script type="text/x-dot-template" id="listT">
             {{ for (var i = 0; i < it.length; i++) { }} 
             <li class="flex-def flex-cCenter" tapmode onclick="addFriends(this)" data-id="{{=it[i].user_id}}">
-                <img src="{{=it[i].head_img_url}}">
-                <!-- {{?it[i].remark_nickname != null}} 
+                {{?it[i].remark_head_img_url}}
+                    <img src="{{=it[i].remark_head_img_url}}">
+                {{??}}
+                    <img src="{{=it[i].head_img_url}}">
+                {{?}}
+                {{?it[i].remark_nickname}} 
                     <span>{{=it[i].remark_nickname}}</span>
-                {{??}} -->
-                <span>{{=it[i].nickname}}</span>
-                <!-- {{?}} -->
+                {{??}}
+                    <span>{{=it[i].nickname}}</span>
+                {{?}}
             </li>
             {{ }; }}
         </script>
@@ -123,6 +127,21 @@
         moduleInit();
         requireData(api.pageParam.flag)
         scrollToBottom();
+        api.addEventListener({
+            name: 'editNonFriendsInfo'
+        }, function(ret, err) {
+            if (ret) {
+                pageNum = 1;
+                dataArr = [];
+                 if (ret.value.flag) {
+                    requireData(ret.value.flag);
+                } else　{
+                    requireData();
+                }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     };
     function scrollToBottom() {
           // 上啦加载
@@ -144,6 +163,7 @@
         } else {
             url = '/contact/levelTwo';
         }
+        console.log('158:::'+url)
         api.ajax({
             url: apiSite + url,
             method: 'post',
@@ -180,11 +200,14 @@
     // 打开人脉详情
     function addFriends(ele) {
         var userId = $api.attr(ele, 'data-id');
+        console.log('进详情:::'+api.pageParam.flag)
         api.openWin({
             name: 'txl_memberInfo_Win',
             url: './txl_memberInfo_Win.html',
             pageParam: {
-                userId: userId
+                userId: userId,
+                flag: api.pageParam.flag,
+                
             }
         });
     }

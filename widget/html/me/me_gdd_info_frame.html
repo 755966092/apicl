@@ -325,7 +325,11 @@
             </div>
             <div class="orderInfo" >
                 <div class="top flex-def" tapmode onclick="openSupplyInfoPage(this)" data-id="{{=it.supply_info.supply_id}}">
-                    <img src="{{=it.supply_info.image[0]}}">
+                    {{?it.supply_info.image[0]}}
+                        <img src="{{=it.supply_info.image[0]}}">
+                    {{??}}
+                        <img src="../../image/noimage.jpg">
+                    {{?}}
                     <div class="text flex-item">
                         <div class="title flex-def flex-zBetween">
                             <div class="flex-def flex-cCenter">
@@ -972,7 +976,7 @@
         }, function(ret, err) {
             if(ret) {
                 if (ret.code !== 200) {
-                    alert(JSON.stringify(ret.msg))
+                    alert(ret.msg)
                 } else {
                     requireData();
                     api.sendEvent({

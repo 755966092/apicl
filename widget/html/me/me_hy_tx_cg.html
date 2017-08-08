@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
@@ -54,7 +55,8 @@
 <body>
     <header  class="header">
         <div class="head">
-            <span class="callback"   tapmode   onclick="api.closeWin()">返回</span>
+            <span class="callback"   tapmode   onclick="closeWin()">返回</span>
+            <!-- <span class="callback"   tapmode   onclick="api.closeWin()">返回</span> -->
             <span class="winTitle">
                 提现
             </span>
@@ -76,10 +78,10 @@
                 <span class="leftText">提现金额</span>
                 <span class="rightText" id="amountOfMoney"></span>
             </li>
-            <li class="flex-def flex-zBetween">
+            <!-- <li class="flex-def flex-zBetween">
                 <span class="leftText">手续费</span>
                 <span class="rightText" id="poundage">￥1.00</span>
-            </li>
+            </li> -->
         </ul>
         <p>2小时内到账</p>
     </div>
@@ -90,20 +92,17 @@
 <script type="text/javascript">
     apiready = function(){
 	    fnInit();
-        console.log(JSON.stringify(api.pageParam))
         $api.text($api.byId('accountNumber'), api.pageParam.alipay);
         $api.text($api.byId('amountOfMoney'), '￥'+api.pageParam.money);
         api.execScript({
             name: 'winName_hy',
             script: 'requestData();'
         });
-        api.closeWin({
-            name: 'txEnter'
-        });
-        api.closeWin({
-            name: 'tx'
-        });
     };
-   
+    function closeWin() {
+        api.closeToWin({
+            name: 'winName_hy'
+        });
+    }
 </script>
 </html>

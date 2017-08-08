@@ -14,10 +14,12 @@
             display: none;
         }
         .loading {
-            width: .8rem;
-            height: .8rem;
+            width: 7.5rem;
+            height: 13.34rem;
             background: url(../../image/loading_more.gif)no-repeat;
+            -webkit-background-size: .8rem .8rem;
             background-size: .8rem .8rem;
+            background-position: center center;
             position: absolute;
             top: 0;
             bottom: 0;
@@ -355,10 +357,10 @@
                             switch (ret.data.list[i].status) {
                                 case 1: ret.data.list[i].status = '待付款'; break;
                                 case 2: ret.data.list[i].status = '已取消'; break;
-                                case 3: ret.data.list[i].status = '待完成'; break;
+                                case 3: ret.data.list[i].status = '待接单'; break;
                                 case 4: ret.data.list[i].status = '待完成'; break;
                                 case 5: ret.data.list[i].status = '已取消'; break;
-                                case 6: ret.data.list[i].status = '已完成'; break;
+                                case 6: ret.data.list[i].status = '待完成'; break;
                                 case 7: ret.data.list[i].status = '已完成'; break;
                                 case 8: ret.data.list[i].status = '已完成'; break;
                                 case 9: ret.data.list[i].status = '待完成'; break;
@@ -510,6 +512,7 @@
 
     // 操作按钮
     function oriderOperate(ele) {
+        
         var url = $api.attr(ele, 'data-url');
         var id = $api.attr(ele, 'data-id');
         var supplyId = $api.attr(ele, 'data-supply');
@@ -517,6 +520,7 @@
          var obj = {};
         var flagText = $api.text(ele);
         if (flagText === '再来一单') {
+            $api.css($api.dom('.loading'), 'display: block');
             api.openWin({
                 name: 'supply_info_immediate_order_2',
                 url: '../supply/supply_info_immediate_order_2.html',
@@ -524,7 +528,9 @@
                     supplyId: supplyId
                 }
             });
+            $api.css($api.dom('.loading'), 'display: none');
         } else if (flagText === '取消订单') {
+
             var reasonList = JSON.parse($api.attr(ele, 'data-reasonList'));
             var datas = []
             for(key in reasonList) {
@@ -582,6 +588,7 @@
             }, function(ret, err) {
                 if (ret) {
                     if (ret.eventType == 'ok') {
+                        $api.css($api.dom('.loading'), 'display: block');
                         console.log(JSON.stringify(ret))
                         obj = {
                             token: token,
@@ -596,6 +603,7 @@
                 }
             });
         } else if (flagText === '删除订单') {
+            $api.css($api.dom('.loading'), 'display: block');
             obj = {
                 token: token,
                 order_id: id,
@@ -650,7 +658,7 @@
                     // colorActive: '#fff'
                 },
                 title: {
-                    text: '请选择退款原因',
+                    text: '请选择拒绝原因',
                     size: 20,
                     h: 35,
                     bg: '#eee',
@@ -660,6 +668,7 @@
             }, function(ret, err) {
                 if (ret) {
                     if (ret.eventType == 'ok') {
+                        $api.css($api.dom('.loading'), 'display: block');
                         obj = {
                             token: $api.getStorage('userToken'),
                             order_id: id,
@@ -672,6 +681,7 @@
                 }
             });
         } else if (flagText === '评价订单') {
+            $api.css($api.dom('.loading'), 'display: block');
             obj = {
                 token: token,
                 order_id: id,
@@ -684,13 +694,16 @@
                     flag: 1
                 }
             });
+            $api.css($api.dom('.loading'), 'display: none');
         }  else if (flagText === '完成订单') {
+            $api.css($api.dom('.loading'), 'display: block');
             obj = {
                 token: token,
                 order_id: id,
             }
             ajaxOperate(obj,url)
         } else if (flagText === '付款') {
+            $api.css($api.dom('.loading'), 'display: block');
             api.openFrame({
                 name: 'supply_modeOfPayment',
                 url: '../supply/supply_modeOfPayment.html',
@@ -710,7 +723,9 @@
                     flag: 1
                 }
             });
+            $api.css($api.dom('.loading'), 'display: none');
         } else {
+            $api.css($api.dom('.loading'), 'display: block');
             obj = {
                 token: token,
                 order_id: id
@@ -732,7 +747,8 @@
                 console.log(JSON.stringify(err))
             if(ret) {
                 if (ret.code !== 200) {
-                    alert(JSON.stringify(ret.msg))
+                    $api.css($api.dom('.loading'), 'display: none');
+                    alert(ret.msg)
                 } else {
                     console.log(JSON.stringify(obj))
                     requireData();

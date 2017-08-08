@@ -10,9 +10,23 @@
         background-color: rgba(0,0,0,.4);
         position: relative;
     }
+    .loading {
+        display: none;
+        width: .8rem;
+        height: .8rem;
+        background: url(../../image/loading_more.gif)no-repeat;
+        background-size: .8rem .8rem;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        margin: auto;
+        z-index: 999;
+    }
     body {
-        background-color: transparent;
-        position: relative;
+        /*background-color: transparent;*/
+        /*position: relative;*/
 
     }
     .main {
@@ -119,6 +133,7 @@
     </style>
 </head>
 <body>
+    <div class="loading"></div>
     <div class="main">
         <h3>
             <span class="clearBtn" tapmode onclick="api.closeFrame()">x</span>
@@ -172,7 +187,7 @@
         } 
         $api.val($api.eq(mimaArr, len+1), '');
         if (len >=6 ) {
-            console.log(pwd)
+           $api.css($api.dom('.loading'), 'display: block');
             submitData(pwd);
         }
     }
@@ -194,14 +209,10 @@
         } else {
             number = number.substring(0,number.length-1);
             n = number.length;
-            console.log('n:--::'+n)
-            console.log(number)
             $api.val($api.byId('pwd-input'), $api.trimAll(number));
             sel($api.byId('pwd-input'));
         }
-        
     }
-
     // 提交
     function submitData(psd) {
         api.ajax({
@@ -220,9 +231,8 @@
             }
         }, function(ret, err) {
             if(ret) {
-                console.log(JSON.stringify(ret))
-                // alert(JSON.stringify(ret))
                 if (ret.code == 200) {
+                    $api.css($api.dom('.loading'), 'display: none');
                     api.openWin({
                         name: 'me_hy_tx_cg',
                         url: './me_hy_tx_cg.html',
@@ -232,9 +242,17 @@
                             money: api.pageParam.money
                         },
                     });
-                   
-                    
-                    api.closeFrame();
+                    setTimeout(function () {
+                        api.closeWin({
+                            name: 'tx'
+                        }); 
+                        api.closeWin({
+                            name: 'me_hy_tx_info_win'
+                        });
+                        api.closeFrame();
+                    },500)
+                } else {
+                    alert(ret.msg)
                 }
             } else {
                 alert(JSON.stringify(err))

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="format-detection" content="telephone=no"/>
+    <!-- <meta name="format-detection" content="telephone=no"/> -->
     <meta name="viewport"
           content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
@@ -441,7 +441,22 @@
                         </li>
                     {{??}}
                         <li tapmode data-statusId = '{{=it[i].status_id}}' data-type = '{{=it[i].type}}' onclick="selCurrentStatus(this)">
-                            <span>{{=it[i].name}} {{=it[i].position}}  {{=it[i].degree}}</span>
+                            <span>{{=it[i].name}} {{=it[i].position}}  
+                            {{?it[i].degree==0}}
+                            {{??it[i].degree==1}}
+                            专科
+                            {{??it[i].degree==2}}
+                            本科
+                            {{??it[i].degree==3}}
+                            硕士
+                            {{??it[i].degree==4}}
+                                博士
+                            {{??it[i].degree==5}}
+                               博士后
+                            {{??}}
+                                {{=it[i].degree}}
+                            {{?}}
+                            </span>
                             {{?it[i].is_default==1}}
                             <span class="iconStatus sel"></span>
                             {{??}}
@@ -499,10 +514,11 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript" src="../../data/city_3.js"></script>
 <script type="text/javascript">
-    var paramNickname, paramRealName, paramSex, paramHeadImg;
+    var paramNickname, paramRealName, paramSex, paramHeadImg,relationship_level_flag;
     var SQLName = 'db_' + $api.getStorage('userToken');
     var targetRongId;
     apiready = function () {
+        console.log('会员F:::'+api.pageParam.flag)
         $api.css($api.dom('.shadow'), 'height:'+$api.offset($api.dom('.main')).h+'px;');
         // console.log('484:::'+JSON.stringify(api.pageParam))
         if(api.pageParam.userId == 0) {
@@ -616,59 +632,133 @@
         var sex = $api.byId('sex');
         var head_img_url = $api.byId('head_img_url');
         api.ajax({
-            url: apiSite + '/user/detail',
+            // url: apiSite + '/user/detail',
+            url: apiSite + '/remark_user/fullInfo',
             method: 'post',
             headers: apiHeader,
             data: {
                 values: {
                     token: $api.getStorage('userToken'),
-                    user_id: api.pageParam.userId
+                    remark_user_id: api.pageParam.userId
                 }
             }
         }, function (ret, err) {
             if (ret) {
                 if (ret.code == 200) {
                     // console.log('获取线上信息:::'+JSON.stringify(ret))
-                    targetRongId = ret.data.info.rongcloud_user_id;
-                    if (flag) {
-                        // 无本地信息, 网络获取
-                        relationship(ret.data.relationship_level,ret.data.info.status)
-                        // console.log('594:::::'+JSON.stringify(ret.data))
-                        paramRealName = ret.data.info.real_name;
-                        $api.text(nickname, ret.data.info.nickname);
-                        $api.attr(head_img_url, 'src', ret.data.info.head_img_url);
-                        if (ret.data.info.sex == 2) {
-                            $api.addCls(sex, 'sexIcon2');
+                    api.ajax({
+                        url: apiSite + '/user/detail',
+                        method: 'post',
+                        headers: apiHeader,
+                        data: {
+                               values: { 
+                                   token: $api.getStorage('userToken'),
+                                   user_id: api.pageParam.userId
+                               }
                         }
-                        $api.text(current_position, ret.data.info.current_position || '');
-                        $api.text(current_company, ret.data.info.current_company || '');
-                        $api.text(current_degree, ret.data.info.current_degree || '');
-                        $api.text(hometown, ret.data.info.hometown || '');
-                        if(ret.data.contact.length != 0){
-                            // console.log(1)
-                            $api.text(phone, ret.data.contact.phone || '');
-                            $api.attr(phone, 'data-id', ret.data.contact.contact_id || '');
+                    }, function(retDetail, errDetail) {
+                        if(retDetail) {
+                            relationship_level_flag = retDetail.data.relationship_level;
+                            targetRongId = retDetail.data.info.rongcloud_user_id;
+                            if (flag) {
+                                // 无本地信息, 网络获取
+                                relationship(retDetail.data.relationship_level,retDetail.data.info.status)
+                                // 真实姓名
+                                if (ret.data.info.real_name) {
+                                    paramRealName = ret.data.info.real_name;
+                                } else {
+                                    paramRealName = retDetail.data.info.real_name;
+                                }
+                                // 昵称
+                                if (ret.data.info.nickname) {
+                                    $api.text(nickname, ret.data.info.nickname);
+                                } else {
+                                    $api.text(nickname, retDetail.data.info.nickname);
+                                }
+
+                                // 头像
+                                if (ret.data.info.head_img_url) {
+                                    $api.attr(head_img_url, 'src', ret.data.info.head_img_url);
+                                } else {
+                                    $api.attr(head_img_url, 'src', retDetail.data.info.head_img_url);
+                                }
+                                // 性别
+                                if (ret.data.info.sex) {
+                                    if (ret.data.info.sex == 2) {
+                                        $api.addCls(sex, 'sexIcon2');
+                                    }
+                                } else {
+                                    if (retDetail.data.info.sex == 2) {
+                                        $api.addCls(sex, 'sexIcon2');
+                                    }                                    
+                                }
+                                // 当前职位
+                                if (ret.data.info.current_position) {
+                                    $api.text(current_position, ret.data.info.current_position || '');
+                                } else {
+                                    $api.text(current_position, retDetail.data.info.current_position || '');
+                                }
+
+                                // 当前公司
+                                if (ret.data.info.current_company) {
+                                    $api.text(current_company, ret.data.info.current_company || '');
+                                } else {
+                                    $api.text(current_company, retDetail.data.info.current_company || '');
+                                }
+                                
+                                // 当前学历
+                                if (ret.data.info.current_degree) {
+                                    $api.text(current_degree, ret.data.info.current_degree || '');
+                                } else {
+                                    $api.text(current_degree, retDetail.data.info.current_degree || '');
+                                }
+                                
+                                // 家乡
+                                if (ret.data.info.hometown) {
+                                    $api.text(hometown, ret.data.info.hometown || '');
+                                } else {
+                                    $api.text(hometown, retDetail.data.info.hometown || '');
+                                }
+                                
+                                // 电话
+                                if (ret.data.info.current_contact) {
+                                    $api.text(phone, ret.data.info.current_contact);
+                                    console.log(111)
+                                } else {
+                                    console.log(222)
+                                    $api.text(phone, retDetail.data.info.current_contact);
+                                }
+
+                               //  当前状态
+                                if (ret.data.status.length > 0) {
+                                    getData(ret.data.status)
+                                } else {
+                                    getData(retDetail.data.status)
+                                }
+                                // 生日
+                                if (ret.data.info.birthday) {
+                                    $api.text(birthday, ret.data.info.birthday == '0000-00-00' ? '' : ret.data.info.birthday);
+                                } else {
+                                    $api.text(birthday, retDetail.data.info.birthday == '0000-00-00' ? '' : retDetail.data.info.birthday);
+                                }
+                            } else {
+                                paramRealName = retDetail.data.info.real_name;
+                                //  当前状态
+                                if (retDetail.data.status.length > 0) {
+                                    getData(retDetail.data.status);
+                                    $api.text(current_position, retDetail.data.info.current_position || '');
+                                    $api.text(current_company, retDetail.data.info.current_company || '');
+                                    $api.text(current_degree, retDetail.data.info.current_degree || '');
+                                }
+                                // 本地数据库有信息, 只获取关系
+                                relationship(retDetail.data.relationship_level,retDetail.data.info.status)
+                            }
                         } else {
-                            // console.log(2)
-                            requireContact();
+                            alert(JSON.stringify(errDetail))
                         }
-                        //  当前状态
-                        if (ret.data.status.length > 0) {
-                            getData(ret.data.status)
-                        }
-                        $api.text(birthday, ret.data.info.birthday == '0000-00-00' ? '' : ret.data.info.birthday);
-                    } else {
-                        paramRealName = ret.data.info.real_name;
-                        //  当前状态
-                        if (ret.data.status.length > 0) {
-                            getData(ret.data.status);
-                            $api.text(current_position, ret.data.info.current_position || '');
-                            $api.text(current_company, ret.data.info.current_company || '');
-                            $api.text(current_degree, ret.data.info.current_degree || '');
-                        }
-                        // 本地数据库有信息, 只获取关系
-                        relationship(ret.data.relationship_level,ret.data.info.status)
-                    }
+                    })
+                    
+                   
                 }
             } else {
                 alert(JSON.stringify(err))
@@ -729,9 +819,10 @@
                     }
                     // console.log('本地数据库tb_remarks_status内容')
                     reviseText(ret.data);
-                    // console.log(JSON.stringify(ret.data))
-                    statusRemarks(ret.data,1)
+                    console.log(JSON.stringify(ret.data))
                     getData(ret.data);
+                    statusRemarks(ret.data,1)
+                    console.log(111111111)
                 } else {
                     // console.log('获取网络信息')
                     statusRemarks();
@@ -786,22 +877,23 @@
             if(ret) {
                 // console.log('741::::'+JSON.stringify(ret))
                 if (!argument) {
-                    // console.log(111)
+                    console.log('!argument')
                     if (ret.data.status.length != 0) {
 
-                        // console.log('网络备注')
+                        console.log('网络备注')
                         handData(ret)
                     } else {
-                        // console.log(222)
+                        console.log('原始信息')
                         statusUser();
                     }
                 } else {
                     // 对比
+                    console.log('duibi')
                     // console.log('data.length:::'+data.length)
                     // console.log('ret.data.status.length:::'+ret.data.status.length)
                     if (data.length != ret.data.status.length) {
                         // 更新数据库
-                        // console.log('更新数据库')
+                        console.log('更新数据库')
                         handData(ret)
                     }
                 }
@@ -859,6 +951,7 @@
             }, function(retSql, errSql){        
                 if( retSql.status ){
                     reviseText(ret.data.status)
+                    console.log(2222222222222)
                     getData(ret.data.status)
                 }else{
                     alert( JSON.stringify( errSql ) );
@@ -897,8 +990,8 @@
             sql: 'SELECT * FROM addressList WHERE user_id = ' + api.pageParam.userId
         }, function (ret, err) {
             if (ret.status) {
-                // console.log('663:::::::::::' + JSON.stringify(ret));
                if (ret.data.length != 0) {
+                    console.log('数据库:::'+JSON.stringify(ret))
                     // 电话
                     if (ret.data[0].remark_current_contact) {
                         $api.text(phone, ret.data[0].remark_current_contact);
@@ -1070,6 +1163,7 @@
                 paramRealName: paramRealName,
                 paramSex: paramSex,
                 paramHeadImg: paramHeadImg,
+                flag: api.pageParam.flag
             },
             bounces: false
         });
@@ -1211,59 +1305,62 @@
             if (ret) {
                 if (ret.code === 200) {
                     // console.log('663:' + JSON.stringify(ret))
-                    api.ajax({
-                        url: apiSite + '/remark_user/fullInfo',
-                        method: 'post',
-                        headers: apiHeader,
-                        data: {
-                            values: {
-                                token: $api.getStorage('userToken'),
-                                remark_user_id: api.pageParam.userId
-                            }
-                        }
-                    }, function (ret, err) {
-                        if (ret) {
-                            var SQL = 'INSERT OR REPLACE INTO addressList(user_id, remark_birthday, remark_hometown) VALUES (' + api.pageParam.userId + ',"' + ret.data.info.birthday + '","' + ret.data.info.hometown + '")'
-                            db.selectSql({
-                                name: 'db_' + $api.getStorage('userToken'),
-                                sql: 'SELECT * FROM addressList WHERE user_id=' + api.pageParam.userId
-                            }, function (retSql, err1) {
-                                if (retSql.status) {
-                                    if (retSql.data.length !== 0) {
-                                        // console.log('有数据,更新')
-                                        // 有数据 更新
-                                        db.executeSql({
-                                            name: 'db_' + $api.getStorage('userToken'),
-                                            sql: 'UPDATE addressList SET remark_birthday = "' + ret.data.info.birthday + '", remark_hometown = "' + ret.data.info.hometown + '" WHERE user_id = ' + api.pageParam.userId
-                                        }, function (ret, err) {
-                                            if (ret.status) {
-                                                // console.log('688:' + JSON.stringify(ret));
-                                            } else {
-                                                alert('690:' + JSON.stringify(err));
-                                            }
-                                        });
-                                    } else {
-                                        // console.log('没有数据,插入')
-                                        // 没数据 插入新数据
-                                        db.executeSql({
-                                            name: 'db_' + $api.getStorage('userToken'),
-                                            sql: SQL
-                                        }, function (ret, err) {
-                                            if (ret.status) {
-                                                // console.log('684:::' + JSON.stringify(ret));
-                                            } else {
-                                                alert(JSON.stringify(err));
-                                            }
-                                        });
-                                    }
-                                } else {
-                                    alert(JSON.stringify(err))
+                    console.log(relationship_level_flag)
+                    if (relationship_level_flag == 2 || relationship_level_flag == 3 || relationship_level_flag == 4) {
+                        api.ajax({
+                            url: apiSite + '/remark_user/fullInfo',
+                            method: 'post',
+                            headers: apiHeader,
+                            data: {
+                                values: {
+                                    token: $api.getStorage('userToken'),
+                                    remark_user_id: api.pageParam.userId
                                 }
-                            })
-                        } else {
-                            alert(ret.msg)
-                        }
-                    })
+                            }
+                        }, function (ret, err) {
+                            if (ret) {
+                                var SQL = 'INSERT OR REPLACE INTO addressList(user_id, remark_birthday, remark_hometown) VALUES (' + api.pageParam.userId + ',"' + ret.data.info.birthday + '","' + ret.data.info.hometown + '")'
+                                db.selectSql({
+                                    name: 'db_' + $api.getStorage('userToken'),
+                                    sql: 'SELECT * FROM addressList WHERE user_id=' + api.pageParam.userId
+                                }, function (retSql, err1) {
+                                    if (retSql.status) {
+                                        if (retSql.data.length !== 0) {
+                                            // console.log('有数据,更新')
+                                            // 有数据 更新
+                                            db.executeSql({
+                                                name: 'db_' + $api.getStorage('userToken'),
+                                                sql: 'UPDATE addressList SET remark_birthday = "' + ret.data.info.birthday + '", remark_hometown = "' + ret.data.info.hometown + '" WHERE user_id = ' + api.pageParam.userId
+                                            }, function (ret, err) {
+                                                if (ret.status) {
+                                                    // console.log('688:' + JSON.stringify(ret));
+                                                } else {
+                                                    alert('690:' + JSON.stringify(err));
+                                                }
+                                            });
+                                        } else {
+                                            // console.log('没有数据,插入')
+                                            // 没数据 插入新数据
+                                            db.executeSql({
+                                                name: 'db_' + $api.getStorage('userToken'),
+                                                sql: SQL
+                                            }, function (ret, err) {
+                                                if (ret.status) {
+                                                    // console.log('684:::' + JSON.stringify(ret));
+                                                } else {
+                                                    alert(JSON.stringify(err));
+                                                }
+                                            });
+                                        }
+                                    } else {
+                                        alert(JSON.stringify(err))
+                                    }
+                                })
+                            } else {
+                                alert(ret.msg)
+                            }
+                        })
+                    }
                 } else {
                     alert(ret.msg)
                 }
