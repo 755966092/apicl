@@ -87,7 +87,7 @@
                     <div class="move moveFlag" data-id="{{=it[i].contact_id}}" data-sub_type="{{=it[i].sub_type}}" data-type="{{=it[i].type}}" >
                         <div class="item">
                             <span class="label">{{=it[i].sub_type}}：</span>
-                            <input type="text" onchange="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].phone}}" disabled="true">
+                            <input type="text" tapmode onclick="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].phone}}" disabled="true">
                             <span class="clearIcon" data-id="{{=it[i].contact_id}}"  tapmode onclick="clearItem(this)"></span>
                         </div>
                     </div>
@@ -100,7 +100,7 @@
                     <div class="move fixedFlag"  data-id="{{=it[i].contact_id}}" data-sub_type="{{=it[i].sub_type}}" data-type="{{=it[i].type}}">
                         <div class="item" >
                             <span class="label">{{=it[i].sub_type}}：</span>
-                            <input type="text" onchange="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].phone}}" disabled="true">
+                            <input type="text" tapmode onclick="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].phone}}" disabled="true">
                             <span class="clearIcon" data-id="{{=it[i].contact_id}}" tapmode onclick="clearItem(this)"></span>
                         </div>
                     </div>
@@ -131,22 +131,17 @@
         });
     };
     function revisePhone(ele) {
-        var obj = {}
-            obj.id = parseInt($api.attr($api.closest(ele, '.move'), 'data-id')),
-            obj.sub_type = parseInt($api.attr($api.closest(ele, '.move'), 'data-sub_type') == '工作' ? 1 : 2),
-            obj.type = parseInt($api.attr($api.closest(ele, '.move'), 'data-type')),
-            obj.phone = $api.val(ele);
-          
-            var i=0;
-            do{
-                if (editArr[i].id == obj.id && obj.phone == editArr[i].phone) {
-                    break;
-                } else {
-                    editArr.push(obj)
-                }
-                i++;
-            }while(i < editArr.length)
-            alert(JSON.stringify(obj))
+
+        console.log(11)
+        var contactId = $api.attr(ele, 'data-id');
+        api.openWin({
+            name: 'me_info_zydh_addtel',
+            url: './me_info_zydh_addtel.html',
+            pageParam: {
+                contactId: contactId
+            }
+        });
+
             
     }
     // 监听点击保存和编辑按钮
@@ -159,12 +154,12 @@
         }, function(ret, err) {
             
             if (ret) {
-                for (var i = 0; i < clearIcon.length; i++) {
-                   $api.css(clearIcon[i], 'display:none');
-                }
-                for (var i = 0; i < ipt.length; i++) {
-                    $api.attr(ipt[i], 'disabled', 'true');
-                }
+                // for (var i = 0; i < clearIcon.length; i++) {
+                //    // $api.css(clearIcon[i], 'display:none');
+                // }
+                // for (var i = 0; i < ipt.length; i++) {
+                //     $api.attr(ipt[i], 'disabled', 'true');
+                // }
                 // 编辑电话号码
                 for (var i = 0; i < editArr.length; i++) {
                     api.ajax({
@@ -200,9 +195,7 @@
                for (var i = 0; i < clearIcon.length; i++) {
                    $api.css(clearIcon[i], 'display:inline-block');
                 }
-                for (var i = 0; i < ipt.length; i++) {
-                    $api.removeAttr(ipt[i], 'disabled');
-                }
+                
             } else {
                 alert('2'+JSON.stringify(err));
             }

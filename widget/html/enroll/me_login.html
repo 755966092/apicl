@@ -309,7 +309,7 @@
                          contacts.queryByPage({
                             pageIndex: 0
                         }, function(ret, err) {
-                            if (ret) {
+                            if (ret.status) {
                                 console.log('syncContacts第四步：同步完成' + JSON.stringify(ret))
                                 api.ajax({
                                     url: apiSite + '/contact/sync',
@@ -332,7 +332,9 @@
                                     }
                                 })
                             } else {
-                                alert(JSON.stringify(err.msg));
+                                api.toast({
+                                    msg: '请在系统的设置-隐私-通讯录界面允许我在访问您的通讯录'
+                                });
                             }
                         });
                     // },100)

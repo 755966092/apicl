@@ -207,24 +207,28 @@
     function updateAddressList() {
 
         $api.css($api.dom('.loading'), 'display: block');
-        db.executeSql({
-            name: 'db_'+$api.getStorage('userToken'),
-            sql: 'DELETE FROM addressList'
-        },function(retData,err){
-            if (retData.status) {
-                contacts.queryByPage({
-                    pageIndex: 0
-                }, function(ret, err) {
-                    if (ret) {
+        contacts.queryByPage({
+            pageIndex: 0
+        }, function(ret, err) {
+            if (ret.status) {
+                db.executeSql({
+                    name: 'db_'+$api.getStorage('userToken'),
+                    sql: 'DELETE FROM addressList'
+                },function(retData,err){
+                    if (retData.status) {
                         contactUpdate(ret)
-                    } else {
-                        alert(JSON.stringify(err))
+                    }else {
+                        api.alert({msg:err.msg});
                     }
-                })
-            }else {
-                api.alert({msg:err.msg});
+                });
+            } else {
+                $api.css($api.dom('.loading'), 'display: none');
+                api.toast({
+                    msg: '请在系统的设置-隐私-通讯录界面允许我在访问您的通讯录'
+                });
             }
-        });
+        })
+        
        
                 
     }

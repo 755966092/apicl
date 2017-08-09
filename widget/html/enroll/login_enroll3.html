@@ -200,8 +200,7 @@
              <div class="area tel">
                 <div>
                     <span class="areaTitle">邀请码</span>
-                    <input  onkeyup="this.value=this.value.replace(/\D/g,'');" 
-                    onafterpaste="this.value=this.value.replace(/\D/g,'')"  type="number" id="inviteCode" placeholder="请填写邀请码（选填）" >
+                    <input type="text" id="inviteCode" placeholder="请填写邀请码（选填）" >
                 </div>
             </div>
            
@@ -315,7 +314,7 @@
                                          contacts.queryByPage({
                                             pageIndex: 0
                                         }, function(ret, err) {
-                                            if (ret) {
+                                            if (ret.status) {
                                                 api.ajax({
                                                     url: apiSite + '/contact/sync',
                                                     method: 'post',
@@ -341,7 +340,9 @@
                                                     }
                                                 })
                                             } else {
-                                                alert(JSON.stringify(err.msg));
+                                                api.toast({
+                                                    msg: '请在系统的设置-隐私-通讯录界面允许我在访问您的通讯录'
+                                                });
                                             }
                                         });
                                      },100)

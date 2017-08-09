@@ -198,6 +198,7 @@
            当筛选结果有变动时通知我
         </p>
     </div> -->
+    <div class="loading"></div>
     <div class="main resultList"></div>
     <script type="text/x-dot-template" id="listT">
             {{?it.length === 0}}
@@ -364,6 +365,8 @@
            name: 'screeningResults'
         }, function(ret, err) {
            if (ret.value.flag) {
+            $api.css($api.dom('.loading'), 'display: block');
+            console.log('监听结果::'+JSON.stringify(ret))
             // $api.css($api.dom('.title1'), 'display:block');
             parameter = ret.value.parameter
            }
@@ -425,6 +428,7 @@
                     if (ret.status) {
                         data.latitude = ret.lat;
                         data.longitude = ret.lon;
+                        fliderSupply(data)
                     } else {
                         alert(err.code);
                     }
@@ -437,6 +441,11 @@
             getData(supplyCache);
             selfAdaption();
         }
+        fliderSupply(data,supplyCache)
+        
+    }
+    function fliderSupply(data,supplyCache) {
+        console.log('448:::'+JSON.stringify(data))
         api.ajax({
             url: apiSite + '/supply/index',
             method: 'post',
@@ -456,12 +465,13 @@
             }
         }, function(ret, err) {
             if(ret) {
-                // console.log(ret.data.list[0].create_time)
+                $api.css($api.dom('.loading'), 'display: none');
+                console.log('469'+JSON.stringify(ret))
                 // 停止下拉刷新
                 api.refreshHeaderLoadDone()
-                if (supplyCache === ret.data.list) {
+                // if (supplyCache === ret.data.list) {
 
-                } else {
+                // } else {
                     for (var i = 0; i < ret.data.list.length; i++) {
                         // 解析图片json
                         ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
@@ -482,19 +492,19 @@
                     $api.setStorage('supply_publish_1', ret.data.list);
                     dataList = ret.data.list;
                     console.log('447:::'+JSON.stringify(ret.data.list))
+
                     getData(ret.data.list);
                     if (ret.data.list.length < 15) {
                         $api.css($api.dom('.bbottomLoading'), 'display: none');
                     }
                     selfAdaption();
-                }
+                // }
                 
             } else {
                 alert(JSON.stringify(err.msg))
             }
         })
     }
-    
     function requireData2 (data) {
         console.log(page_num)
         var data = data || {};

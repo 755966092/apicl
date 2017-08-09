@@ -45,7 +45,7 @@
             /*min-width: 0.1rem;*/
             max-width: 3.76rem;
             color: #000;
-            line-height: .72rem;
+            line-height: .42rem;
             margin-right: .3rem;
             box-sizing: border-box;
             padding: 0 .2rem;
@@ -226,6 +226,7 @@ var messageId,targetRongId,emotionData,userId,newsText,msgId;
 var  mainH, _main, scrollH;
     apiready = function(){
         moduleInit();
+        console.log(JSON.stringify(api.pageParam))
         if (api.pageParam.supplyName) {
             console.log(JSON.stringify(api.pageParam))
             $api.removeCls($api.dom('.supply_info'), 'hide');
@@ -288,6 +289,9 @@ var  mainH, _main, scrollH;
         });
 
     };
+    // 查询数据库
+    // 查询网络
+    
     // 打开订单详情
     function openSupplyPage(ele) {
         var url;
@@ -316,9 +320,9 @@ var  mainH, _main, scrollH;
         // alert('292'+newsText)
         if (n === 4) {
             var domRem = $api.dom('div[data-msgId="'+ msgId +'"]'); 
+            var domRemTime = $api.dom('.newsTime[data-msgId="'+ msgId +'"]'); 
+            $api.remove(domRemTime);
             $api.remove(domRem);
-            // console.log(JSON.stringify($api.prev(domRem)));
-            // $api.remove($api.prev(domRem));
             var arrid = [];
             arrid[0] = parseInt(msgId);
             rong.deleteMessages({
@@ -621,10 +625,10 @@ var  mainH, _main, scrollH;
             // // 当天显示时间
             // 不是当天显示年月日 时分秒
             var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
-            $api.append($api.dom('.main'),'<p class="newsTime">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ youHeadImg +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg.content.text +'"> '+ transText(msg.content.text) +'</p></div>');
+            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg.content.text +'"> '+ transText(msg.content.text) +'</p></div>');
         } else {
             // 当前发送的消息
-            $api.append($api.dom('.main'),'<p class="newsTime">'+ new Date().toLocaleTimeString() +'</p><div data-msgId="" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ youHeadImg +'"><p data-msgId="" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg +'"> '+ transText(msg) +'</p></div>');
+            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ new Date().toLocaleTimeString() +'</p><div data-msgId="" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg +'"> '+ transText(msg) +'</p></div>');
         }
             slideBut();
     }
@@ -633,10 +637,10 @@ var  mainH, _main, scrollH;
         if (n == 1) {
             // 历史消息
             var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
-            $api.append($api.dom('.main'),'<p class="newsTime">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" data-newsText= "'+ msg.content.text +'" > ' + transText(msg.content.text) + ' </p></div>');
+            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" data-newsText= "'+ msg.content.text +'" > ' + transText(msg.content.text) + ' </p></div>');
         } else {
             // 当前发送的消息
-            $api.append($api.dom('.main'),'<p class="newsTime">'+ new Date().toLocaleTimeString() +'</p><div data-msgId="" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="" ontouchend="gtouchend()" data-newsText= "'+ msg +'" > ' + transText(msg) + ' </p></div>');
+            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ new Date().toLocaleTimeString() +'</p><div data-msgId="" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="" ontouchend="gtouchend()" data-newsText= "'+ msg +'" > ' + transText(msg) + ' </p></div>');
             
         }
             slideBut();
@@ -646,7 +650,7 @@ var  mainH, _main, scrollH;
         $api.prepend($api.dom('.main'),'<div class="oneself clearfix"><img class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg +'"> ' + transText(msg) + ' </p></div>');
     }
     function addReceMsgTop(msg, youHeadImg) {
-        $api.prepend($api.dom('.main'),'<div class="other clearfix"><img tapmode onclick="openMemberInfo(this)" class="fl otherImg" tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" src="'+ youHeadImg +'"><p class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg +'">' + transText(msg) + '</p></div>');
+        $api.prepend($api.dom('.main'),'<div class="other clearfix"><img tapmode onclick="openMemberInfo(this)" class="fl otherImg" tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" src="'+ api.pageParam.headImg +'"><p class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg +'">' + transText(msg) + '</p></div>');
     }
 
     // 滚动到页面底部

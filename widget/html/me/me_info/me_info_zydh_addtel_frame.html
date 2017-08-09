@@ -101,7 +101,7 @@
                 <span class="fr telClass_1">工作</span>
            </p>
            <p>电话号码
-                <input type="text" name="" placeholder="输入手机号" class="fr">
+                <input type="text" name="" id="phone" placeholder="输入手机号" class="fr">
            </p>
        </div>
        <div class="main_no3" tapmode onclick="addTel()">保存</div>
@@ -113,7 +113,32 @@
     var type = 1, sub_type = 1;
     apiready = function(){
         modilyType();
+        if (api.pageParam.contactId) {
+            requireData();
+        }
     };
+    function requireData() {
+        api.ajax({
+            url: apiSite + '/user_center/editContactIndex',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       contact_id: api.pageParam.contactId
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                $api.val($api.byId('phone'), ret.data.info.phone);
+                $api.removeCls($api.dom('.select'), 'select');
+                $api.addCls($api.dom('div[data-id='+ ret.data.info.type +']'), 'select');
+                $api.text($api.dom('.telClass_1'), ret.data.info.sub_type == 1 : '工作' ? '生活');
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
     // 电话类型回调
     function modilyType(){
         api.addEventListener({

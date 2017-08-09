@@ -462,8 +462,10 @@
         $api.text(category_id, _categoryId);
         data.info.type == 1 ? $api.text(_type, '个人') : $api.text(_type, '公司');
         if (data.info.type == 2) {
+            type = 2;
             $api.css($api.dom('.companyName'), 'display:block');
             $api.text($api.byId('company_name'), data.info.company_name);
+            $api.attr($api.byId('company_name'), 'data-id', data.info.company_id);
 
         }
         data.info.form == 1 ? $api.text(form, '线上') : $api.text(form, '线下')
@@ -993,7 +995,9 @@
                 latitude = ret.lat;
                 longitude = ret.lon;
             } else {
-                alert(err.code);
+                api.toast({
+                    msg: '请在系统的设置-隐私-定位服务界面允许我在确定您的位置'
+                });
             }
         });
     }
