@@ -250,13 +250,17 @@
         var val = $api.attr($api.dom('.sel'), 'data-val');
         var month = $api.attr($api.dom('.selType'), 'data-count');
         console.log(val+'----'+month)
-        if (val === 'balance') {
-            // 余额支付, 判断是否设置支付密码
-            isSetPayPassword(val,month);
-            
+        if (month) {
+            if (val === 'balance') {
+                // 余额支付, 判断是否设置支付密码
+                isSetPayPassword(val,month);
+                
+            } else {
+                // 微信 支付宝支付
+                payMoney(val,month);
+            }
         } else {
-            // 微信 支付宝支付
-            payMoney(val,month);
+            alert('请选择充值月份')
         }
         
         

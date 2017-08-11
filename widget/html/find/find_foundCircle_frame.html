@@ -216,9 +216,17 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
-    
-    apiready = function(){
-       
+    apiready = function() {
+       moduleInit();
+       api.addEventListener({
+           name: 'saveImg'
+       }, function(ret, err) {
+           if (ret) {
+               imgSave();
+           } else {
+               alert(JSON.stringify(err));
+           }
+       });
     };
     function selBelongType(ele) {
         var dom = $api.domAll('.selType');
@@ -255,6 +263,14 @@
         var price = $api.val($api.byId('price'));
         var apply_reason = $api.val($api.byId('reason'));
         var type = $api.text($api.dom('.sel')) == '免费' ? 1 : 2;
+        var obj = {
+            token: $api.getStorage('userToken'),
+            title: title,
+            description: description,
+            image_url: image_url,
+            type: type,
+            apply_reason: apply_reason
+        }
         if (title == '') {
             alert('标题不能为空')
         } else if (description == '') {
@@ -267,27 +283,23 @@
             if (type == 2 && price == '') {
                 alert('收费圈子加入圈子费用不能为空')
             } else {
-                var obj = {
-                    title: title,
-                    description: description,
-                    image_url: image_url,
-                    price: price,
-                    type: type
+                if (type == 2) {
+                    obj.price = price;
                 }
+                // obj = {
+                //     title: title,
+                //     description: description,
+                //     image_url: image_url,
+                //     price: price,
+                //     type: type
+                // };
+                console.log(JSON.stringify(obj));
                 api.ajax({
                     url: apiSite + '/circle/add',
                     method: 'post',
                     headers: apiHeader,
                     data: {
-                           values: { 
-                                token: $api.getStorage('userToken'),
-                                title: title,
-                                description: description,
-                                image_url: image_url,
-                                price: price,
-                                type: type,
-                                apply_reason: apply_reason
-                           }
+                           values: obj
                     }
                 }, function(ret, err) {
                     if(ret) {
@@ -327,14 +339,74 @@
         }, function(ret, err) {
             if (ret) {
                 if (ret.data) {
-                    $api.attr($api.dom('img'),'src', ret.data);
-                    pushImg(ret.data)
+                    // $api.attr($api.dom('img'),'src', ret.data);
+                    // pushImg(ret.data)
+                    api.sendEvent({
+                        name: 'editCircleHead'
+                    });
+                    clipImage(ret)
                 } 
                 
             } else {
                 alert(JSON.stringify(err.msg));
             }
         });
+    }
+    function clipImage(ret) {
+        FNImageClip.open({
+            rect: {
+                x: 0,
+                y: 0,
+                w: api.frameWidth, 
+                h: api.frameHeight
+            },
+            srcPath: ret.data,
+            mode: "image",
+            // 截图时是否截取高清图（与原图分辨率一致的图）
+            highDefinition: true,
+            style: {
+                mask: 'rgba(0,0,0,0.4)',
+                clip: {
+                    w: 200,
+                    h: 200,
+                    x: api.frameWidth / 2 - 100,
+                    y: api.frameHeight / 2 - 100,
+                    borderColor: '#0f0',
+                    borderWidth: 1,
+                    appearance: 'rectangle'
+                }
+            },
+            fixedOn: api.frameName
+        }, function(ret, err) {
+            if (ret) {
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    function enter () {
+        if (flag) {
+            imgSave();
+        } else {
+            var url = $api.attr($api.dom('img'),'src');
+            pushImg(url)
+        }
+        
+    }
+    function imgSave() {
+            FNImageClip.save({
+                destPath: 'fs://imageClip/result.png',
+                copyToAlbum: false,
+                quality: 1
+            },function(ret, err){        
+                if(ret) {
+                    $api.attr($api.dom('img'), 'src', ret.destPath);
+                    pushImg(ret.destPath)
+                    FNImageClip.close();
+                } else{
+                    alert(JSON.stringify(err));
+                }
+            });
     }
     function pushImg(imgUrl) {
        //  var baseUrl = 'img.iinnet.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com

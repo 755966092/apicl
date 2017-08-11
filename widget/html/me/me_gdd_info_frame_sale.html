@@ -96,52 +96,56 @@
    }
     function enter(n) {
         if (n) {
-            // n = 1; 确定退款
-            // n = 0; 取消退款
+
             var money = $api.val($api.byId('money'));
             var param = api.pageParam.param
             param.money = money;
-            if (api.pageParam.flag =='priceDifference') {
-                api.pageParam.param.money = money;
-                api.openFrame({
-                    name: 'supply_modeOfPayment',
-                    url: '../supply/supply_modeOfPayment.html',
-                    bounces: false,
-                    rect: {
-                        x: 0,
-                        y: 0,
-                        w: 'auto',
-                        h: 'auto'
-                    },
-                    pageParam: {
-                        obj: api.pageParam.param,
-                        price: money,
-                        flag: 2
-                    }
-                });
-                api.closeFrame();
-            } else {
-                api.ajax({
-                    url: apiSite + '/supply_order/sellerDiscountService',
-                    method: 'post',
-                    headers: apiHeader,
-                    data: {
-                           values: param
-                    }
-                }, function(ret, err) {
-                    if(ret) {
-                        if (ret.code === 200) {
-                            api.sendEvent({
-                                name: 'saleMoney'
-                            });
-                            setTimeout(function(){api.closeFrame();},500)
-                        } else {
-                            alert(ret.msg)
+            console.log(money)
+            if (money > 0) {
+                if (api.pageParam.flag =='priceDifference') {
+                    api.pageParam.param.money = money;
+                    api.openFrame({
+                        name: 'supply_modeOfPayment',
+                        url: '../supply/supply_modeOfPayment.html',
+                        bounces: false,
+                        rect: {
+                            x: 0,
+                            y: 0,
+                            w: 'auto',
+                            h: 'auto'
+                        },
+                        pageParam: {
+                            obj: api.pageParam.param,
+                            price: money,
+                            flag: 2
                         }
-                    } else {
-                        alert(JSON.stringify(err))
-                    }
-                })
+                    });
+                    api.closeFrame();
+                } else {
+                    api.ajax({
+                        url: apiSite + '/supply_order/sellerDiscountService',
+                        method: 'post',
+                        headers: apiHeader,
+                        data: {
+                               values: param
+                        }
+                    }, function(ret, err) {
+                        if(ret) {
+                            if (ret.code === 200) {
+                                api.sendEvent({
+                                    name: 'saleMoney'
+                                });
+                                setTimeout(function(){api.closeFrame();},500)
+                            } else {
+                                alert(ret.msg)
+                            }
+                        } else {
+                            alert(JSON.stringify(err))
+                        }
+                    })
+                }
+            } else {
+                alert('金额不能为零')
             }
             
         } else {
@@ -150,17 +154,18 @@
     }
     function adjustPrice(n) {
         var price = $api.val($api.byId('money'));
-        if (price >= 1) { 
             if (n) {
                 // 增加
                 $api.val($api.byId('money'), ++price)
             } else {
                 // 减少
-                $api.val($api.byId('money'), --price)
+                if (price >= 1) { 
+                    $api.val($api.byId('money'), --price)
+                } else {
+                    alert('不能再低了!')
+                }
             }
-        } else {
-            alert('不能再低了!')
-        }
+        
     }
 </script>
 </html>

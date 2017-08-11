@@ -108,9 +108,12 @@ var rong,
     wxPay,
     aliPay,
     ajpush,
+    FNImageClip,
     SQLName;
 
 function moduleInit() {
+    // 图片剪切
+    FNImageClip = api.require('FNImageClip');
     // 极光推送
     ajpush = api.require('ajpush');
     // 支付宝支付
@@ -134,7 +137,7 @@ function moduleInit() {
     UIListContacts = api.require('UIListContacts');
     // 现在使用
     listContact = api.require('listContact');
-    
+
     // 百度地图
     bMap = api.require('bMap');
     // 选择器

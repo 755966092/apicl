@@ -723,26 +723,29 @@
                         }
                     }, function(ret, err) {
                         if(ret) {
-                            // alert(JSON.stringify(ret))
-                            if (api.pageParam.demand_id) {
-                                // 编辑应用返回我发布的页面
-                                api.sendEvent({
-                                    name: 'editSupplyAfter',
-                                     extra: {
-                                        flag: api.pageParam.flag,
-                                        compaby_name: api.pageParam.compaby_name,
-                                        demand_id: api.pageParam.demand_id
-                                    }
-                                });
+                            if (ret.code == 200) {
+                                if (api.pageParam.demand_id) {
+                                    // 编辑应用返回我发布的页面
+                                    api.sendEvent({
+                                        name: 'editSupplyAfter',
+                                         extra: {
+                                            flag: api.pageParam.flag,
+                                            compaby_name: api.pageParam.compaby_name,
+                                            demand_id: api.pageParam.demand_id
+                                        }
+                                    });
+                                } else {
+                                    // 发布新供应返回供应列表
+                                    api.sendEvent({
+                                        name: 'editSupplyAfter'
+                                    });
+                                }
+                                api.closeWin();
                             } else {
-                                // 发布新供应返回供应列表
-                                api.sendEvent({
-                                    name: 'editSupplyAfter'
-                                });
+                                alert(ret.msg)
                             }
-                            api.closeWin();
                         } else {
-                            alert(JSON.stringify(err.msg))
+                            alert(JSON.stringify(err))
                         }
                     })
         // } else {

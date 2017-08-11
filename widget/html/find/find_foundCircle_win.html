@@ -6,7 +6,9 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
    <style type="text/css">
-       
+        .hide {
+            display: none;
+        } 
    </style>
 </head>
 <body>
@@ -19,7 +21,7 @@
             <span class="winTitle">
                 创建圈子
             </span>
-            <!-- <span class="rightBtn"   tapmode   onclick="openPhoto()">发布</span>  -->
+            <span class="rightBtn hide"   tapmode   onclick="enter()">确定</span> 
         </div>
     </header>
     
@@ -32,6 +34,16 @@
 <script type="text/javascript">
     apiready = function(){
         fnInit();
+        api.addEventListener({
+            name: 'editCircleHead'
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.dom('.winTitle'), '选择圈子头像');
+                $api.removeCls($api.dom('.rightBtn'), 'hide');
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
         api.openFrame({
             name: 'find_foundCircle_frame',
             url: './find_foundCircle_frame.html',
@@ -42,10 +54,18 @@
                 h: 'auto'
             },
             pageParam: {
-                flag: api.pageParam.flag
+                flag: api.pageParam.flag,
+                headerH: headerH
             },
             bounces: false
         });
     };
+    function enter() {
+        $api.text($api.dom('.winTitle'), '创建圈子');
+        $api.addCls($api.dom('.rightBtn'), 'hide');
+        api.sendEvent({
+            name: 'saveImg'
+        });
+    }
 </script>
 </html>

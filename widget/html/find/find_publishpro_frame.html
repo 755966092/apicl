@@ -344,6 +344,7 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
         var end_time = $api.text($api.byId('endTime'));
         var circleId = $api.attr($api.byId('circleName'), 'data-circleId');
         var obj = {
+            token: $api.getStorage('userToken'),
             circle_id: api.pageParam.circle_id || circleId,           //int 圈子ID
             role: roleId,            //int 角色（1-关系人，2-知情人，3-甲方，4-总包单位，5-分包单位，6-设计院，7-销售）
             title: title,           //string  标题
@@ -357,45 +358,35 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
             longitude: longitude,   
             image_json: imgArr 
         }
-        api.ajax({
-            url: apiSite + '/circle_topic/add',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                   values: { 
-                        token: $api.getStorage('userToken'),
-                        circle_id: api.pageParam.circle_id || circleId,             //int 圈子ID
-                        role: roleId,            //int 角色（1-关系人，2-知情人，3-甲方，4-总包单位，5-分包单位，6-设计院，7-销售）
-                        title: title,           //string  标题
-                        content: content,         //string  详细内容
-                        province: province,            //string  省份
-                        city: city,            //string  城市
-                        address: district,         //string  地址
-                        start_time: start_time,          //string  开始时间
-                        end_time: end_time,            //string  结束时间
-                        latitude: latitude,            //string  纬度
-                        longitude: longitude,           //string  经度
-                        image_json: imgArr,      //
-                   }
-            }
-        }, function(ret, err) {
-            if(ret) {
-                if (ret.code != 200) {
-                    alert(ret.msg)
-                } else {
-                    // alert(JSON.stringify(ret))
-                    api.execScript({
-                        name: 'find_dynamicState_win',
-                        frameName: 'find_dynamicState_frame',
-                        script: 'requestData();'
-                    });
-                    api.closeWin();
+        if (start_time == '请选择' || end_time == '请选择') {
+            alert('请选择时间')
+        } else {
+            api.ajax({
+                url: apiSite + '/circle_topic/add',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                       values: obj
                 }
-            } else {
-                alert(JSON.stringify(err.msg))
+            }, function(ret, err) {
+                if(ret) {
+                    if (ret.code != 200) {
+                        alert(ret.msg)
+                    } else {
+                        // alert(JSON.stringify(ret))
+                        api.execScript({
+                            name: 'find_dynamicState_win',
+                            frameName: 'find_dynamicState_frame',
+                            script: 'requestData();'
+                        });
+                        api.closeWin();
+                    }
+                } else {
+                    alert(JSON.stringify(err.msg))
 
-            }
-        })
+                }
+            })
+        }
     }
     // 选择角色
     function selRole() {

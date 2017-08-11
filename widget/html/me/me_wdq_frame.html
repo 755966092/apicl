@@ -287,6 +287,13 @@
         requireData();
         // 监听创建圈子事件
         foundCircle();
+        // 下拉刷新
+        api.setCustomRefreshHeaderInfo({
+            bgColor: '#EFEFF4',
+        }, function(ret, err) {
+            requireData();
+        })
+
     };
     // 进入圈子详情
     function openCircleInfo(ele) {
@@ -327,6 +334,8 @@
         }, function(ret, err) {
             if(ret) {
                 console.log(JSON.stringify(ret))
+                // 停止下拉刷新
+                api.refreshHeaderLoadDone();
                 if (ret.data.verify_waiting_list == '' && ret.data.verify_fail_list == '' && ret.data.available_list == '') {
                      $api.css($api.dom('.main'), 'display:none');
                      $api.css($api.dom('.loading'), 'display:none');
