@@ -284,9 +284,10 @@
              background-color: #0ABB07;
              color: #fff;
          }
-         
+         footer span.edit {
+            background-color: #818181;
+         }
         footer i {
-
              display: inline-block;  
              width: 100%;    
              height: .55rem; 
@@ -294,13 +295,23 @@
             background-size: .39rem .38rem;
             background-position: center bottom;
          }
-         footer i.sus {
+        footer i.del_2 {
+            background: url(../../image/icon_supply/icon_del_2.png)no-repeat;
+            background-size: .39rem .38rem;
+            background-position: center bottom;
+        }
+        footer i.sus {
             background: url(../../image/icon_supply/icon_sus.png)no-repeat;
             background-size: .4rem .4rem;
             background-position: center bottom;
         }
+        footer i.sus_2 {
+            background: url(../../image/icon_supply/icon_sus_1.png)no-repeat;
+            background-size: .4rem .4rem;
+            background-position: center bottom;
+        }
          
-        
+
          #cloaswin {
             width: .44rem;  
             height: .44rem; 
@@ -324,12 +335,12 @@
 </head>     
 <body>
     <div id="cloaswin" onclick="api.closeWin();"></div>
-    <div class="loading" ></div>
+    <!-- <div class="loading" ></div> -->
     <div class="resultList"></div>
     <script type="text/x-dot-template" id="listT">
         <div class="main flex-def flex-zTopBottom">
             <div class="img">
-                {{?it.info.image_json!=null}}
+                {{?it.info.image_json[0]}}
                     <img src="{{=it.info.image_json[0]}}">
                 {{??}}
                     <img src="../../image/noimage.jpg">
@@ -443,17 +454,17 @@
             </div>
           
         </div>
-        <footer>    
-            <span ontouchstart="handleBtn(this,0)">
-                <i class="sus"></i>{{=it.info.status}}
-            </span>
-            <span ontouchstart="handleBtn(this,1)">
-                <i></i>
-                删除
-            </span>
-            <span ontouchstart="editSupply()">编辑</span>
-        </footer>
     </script>
+    <footer>    
+        <span id="editStatus" ontouchstart="demandCancel(0)">
+            <i class="sus" id="sus"></i>放弃求助
+        </span>
+        <span id="delStatus" ontouchstart="demandCancel(1)">
+            <i class="del" id="del"></i>
+            删除
+        </span>
+        <span id="edit" ontouchstart="demandCancel(2)">编辑</span>
+    </footer>
   
    
 </body>
@@ -462,10 +473,95 @@
 <script type="text/javascript" src="../../script/jquery.min.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
+    var editStatus = 1, delStatus = 1, edit = 1;
     apiready = function(){
         // 初始化页面
         initialise();
     };
+    // 放弃求助
+    function demandCancel(n) {
+        if (n == 0) {
+            // 放弃求助
+            if(editStatus) {
+                console.log('删除:' + delStatus +';编辑:' + edit +';放弃:'+editStatus)
+                api.ajax({
+                    url: apiSite + '/demand/cancel',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                           values: { 
+                               token: $api.getStorage('userToken'),
+                               demand_id: api.pageParam.demand_id
+                           }
+                    }
+                }, function(ret, err) {
+                    if(ret) {
+                        if (ret.code == 200) {
+                            api.sendEvent({
+                                name: 'editSupplyAfter'
+                            });
+                            initialise();
+                        } else {
+                            alert(ret.msg)
+                        }
+                    } else {
+                        alert(JSON.stringify(err))
+                    }
+                })
+            } else {
+                console.log('删除:' + delStatus +';编辑:' + edit +';放弃:'+editStatus)
+                alert('当前状态不能放弃求助')
+            }
+        } else if (n == 1) {
+            // 删除求助
+            if (delStatus) {
+                console.log('删除:' + delStatus +';编辑:' + edit +';放弃:'+editStatus)
+                api.ajax({
+                    url: apiSite + '/demand/delete',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                           values: { 
+                               token: $api.getStorage('userToken'),
+                               demand_id: api.pageParam.demand_id
+                           }
+                    }
+                }, function(ret, err) {
+                    if(ret) {
+                        if (ret.code == 200) {
+                            api.sendEvent({
+                                name: 'editSupplyAfter'
+                            });
+                            api.closeWin();
+                        } else {
+                            alert(ret.msg)
+                        }
+                    } else {
+                        alert(JSON.stringify(err))
+                    }
+                })
+            } else {
+                console.log('删除:' + delStatus +';编辑:' + edit +';放弃:'+editStatus)
+                alert('当前状态不能删除求助')
+            }
+        } else {
+            // 编辑求租
+            if (edit) {
+                console.log('删除:' + delStatus +';编辑:' + edit +';放弃:'+editStatus)
+                api.openWin({
+                    name: 'supply_releaseAsk_win',
+                    url: '../supply/supply_releaseAsk_win.html',
+                    pageParam: {
+                        demand_id: api.pageParam.demand_id
+                    }
+                });
+            } else {
+                console.log('删除:' + delStatus +';编辑:' + edit +';放弃:'+editStatus)
+                alert('当前状态不能编辑求助')
+            }
+        }
+    }
+
     // 初始化页面
     function  initialise() {
         // 请求数据
@@ -480,76 +576,66 @@
                }
             }
         }, function(ret, err) {
-
+            console.log(JSON.stringify(ret))
             if (ret.code == 200) {
                 // 解析图片json
                 ret.data.info.image_json = eval(ret.data.info.image_json);    
                 ret.data.info.type = ret.data.info.type === 1 ? "个人" : "公司";
                 var statusArr=["求助中","帮助中","已结束","已失效","已删除"]
-                ret.data.info.status = statusArr[ret.data.info.status-1]
+                // ret.data.info.status = statusArr[ret.data.info.status-1]
                 $api.css($api.dom('.loading'), 'display:none');  
-                console.log(JSON.stringify(ret))   
                 getData(ret.data);
+                if (ret.data.info.status == 1) {
+                    // 可放弃,可编辑, 不可删除
+                    delStatus = 0;
+                    edit = 1;
+                    editStatus = 1;
+                    if (!$api.toggleCls($api.byId('del'), 'del_2')) {
+                        $api.addCls($api.byId('del'), 'del_2');
+                    }
+
+                    if ($api.toggleCls($api.byId('edit'), 'edit')) {
+                        $api.removeCls($api.byId('edit'), 'edit');
+                    }
+                    if ($api.toggleCls($api.byId('sus'), 'sus_2')) {
+                        $api.removeCls($api.byId('sus'), 'sus_2');
+                    }
+                } else if (ret.data.info.status == 3 || ret.data.info.status == 4) {
+                    // 可删除, 不可编辑和放弃
+                    edit = 0;
+                    editStatus = 0;
+                    delStatus = 1;
+                    if ($api.toggleCls($api.byId('del'), 'del_2')) {
+                        $api.removeCls($api.byId('del'), 'del_2');
+                    }
+
+                    if (!$api.toggleCls($api.byId('edit'), 'edit')) {
+                        $api.addCls($api.byId('edit'), 'edit');
+                    }
+                    if (!$api.toggleCls($api.byId('sus'), 'sus_2')) {
+                        $api.addCls($api.byId('sus'), 'sus_2');
+                    }
+
+                } else {
+                    // b帮助中 不可以做任何操作
+                    editStatus = 0;
+                    delStatus = 0;
+                    edit = 0;
+                    if (!$api.toggleCls($api.byId('del'), 'del_2')) {
+                        $api.addCls($api.byId('del'), 'del_2');
+                    }
+                    if (!$api.toggleCls($api.byId('edit'), 'edit')) {
+                        $api.addCls($api.byId('edit'), 'edit');
+                    }
+                    if (!$api.toggleCls($api.byId('sus'), 'sus_2')) {
+                        $api.addCls($api.byId('sus'), 'sus_2');
+                    }
+                }
+
             } else {
                 alert(ret.msg)
             }
         })
     }
-    function handleBtn(ele,n) {
-        var url;
-        if (n) {
-            // 删除按钮
-            url = '/supply/delete'
-        } else {
-            // 暂停按钮
-            if ($api.text(ele) === '暂停') {
-                url = '/supply/pause'
-            } else {
-                url = '/supply/show'
-            }
-        }
-        api.ajax({
-            url: apiSite + url,
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                   values: { 
-                       token: $api.getStorage('userToken'),
-                       supply_id: api.pageParam.supply_id
-                   }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                if(ret.code==200) {
-                    if ($api.text(ele) === '暂停') {
-                        $api.html(ele, '<i class="sus"></i>开启');
-                    } else {
-                        $api.html(ele, '<i class="sus"></i>暂停');
-                    }
-                    api.sendEvent({
-                        name: 'editSupplyAfter'
-                    });
-                    if (url === '/supply/delete') {
-                        setTimeout(function() {api.closeWin();},500)
-                    }
-                } else {
-                    alert(ret.msg)
-                }
-            } else {
-                alert(JSON.stringify(err))
-            }
-        })
-    }
-
-    // 编辑供应
-    function editSupply() {
-        api.openWin({
-            name: 'supply_releaseAsk_win',
-            url: '../supply/supply_releaseAsk_win.html',
-            pageParam: {
-                demand_id: api.pageParam.demand_id
-            }
-        });
-    }
-</script>
+    </script>
 </html>

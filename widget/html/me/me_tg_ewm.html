@@ -105,6 +105,7 @@
         if (InviteInfo) {
             // 有缓存
             console.log('使用缓存')
+            console.log(InviteInfo)
             $api.text($api.byId('invitation_code'), InviteInfo.info.invitation_code);
             $api.attr($api.byId('head_img_url'), 'src', InviteInfo.info.head_img_url);
             $api.text($api.byId('nickname'), InviteInfo.info.nickname);
@@ -141,6 +142,7 @@
                         $api.addCls($api.byId('icon'), 'icon2');
                     }
                     $api.setStorage('InviteInfo', ret.data);
+                    console.log('推广数据'+JSON.stringify(ret))
                     createQrcode(ret.data.info.invitation_code, ret.data.info.user_id)
                 }
             } else {

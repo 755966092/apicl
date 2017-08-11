@@ -202,45 +202,22 @@
 
     // 提交
     function submitData(psd) {
-        var obj = api.pageParam.obj;
-        obj.pay_password = psd
         api.ajax({
-            url: apiSite + api.pageParam.url,
+            url: apiSite + '/circle/enter',
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: obj
+                   values: { 
+                        token: $api.getStorage('userToken'),
+                        circle_id:api.pageParam.circle_id,
+                        pay_method: api.pageParam.pay_method,
+                        pay_password: psd
+                   }
             }
         }, function(ret, err) {
             if(ret) {
-                console.log(JSON.stringify(ret))
                 if (ret.code == 200) {
-                    api.sendEvent({
-                        name: 'saleMoney'
-                    });
-                    api.sendEvent({
-                        name: 'filterOrder'
-                    });
-                    // 支付成功
-                    // 跳转到支付成功页面
-                    api.openWin({
-                         name: 'supply_payResult_win',
-                         url: './supply_payResult_win.html',
-                         pageParam: {
-                            obj: api.pageParam.obj,
-                            price: api.pageParam.price,
-                            form: api.pageParam.form,
-                            flag: api.pageParam.flag,
-                            supplyFlag: api.pageParam.flag,
-                            paramPhone: api.pageParam.paramPhone
-                         }
-                     }); 
-                    setTimeout(function() {
-                        api.closeFrame({
-                            name: 'supply_modeOfPayment'
-                        });
-                        api.closeFrame();
-                    },500)
+                    openCircleInfo();
                 } else {
                     alert(ret.msg)
                 }
@@ -255,6 +232,35 @@
             name: 'me_hy_tx_setPsd_win',
             url: '../me/me_hy_tx_setPsd_win.html'
         });
+    }
+    function openCircleInfo() {
+        api.sendEvent({
+            name: 'circleTopicComment'
+        }); 
+        // api.closeWin({
+        //     name: 'find_payAddCricle_win2'
+        // });
+        api.execScript({
+            name: 'find_cricleInfo_win',
+            script: 'requestData();'
+        });
+        api.execScript({
+            name: 'find_dynamicState_win',
+            frameName: 'find_dynamicState_frame',
+            script: 'requestData();'
+        });
+        api.closeToWin({
+            name: 'find_cricleInfo_win'
+        });
+        // 加入后打開圈子詳情
+        // api.openWin({
+        //     name: 'find_cricleInfo_win',
+        //     url: './find_cricleInfo_win.html',
+        //     pageParam: {
+        //         circle_id: api.pageParam.circle_id
+        //     }
+        // });
+        api.closeFrame();
     }
 </script>
 </html>

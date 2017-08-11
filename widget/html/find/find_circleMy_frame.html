@@ -141,7 +141,15 @@
             //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
              requestData();
         });
-
+        api.addEventListener({
+            name: 'circleTopicComment'
+        }, function(ret, err) {
+            if (ret) {
+                requestData();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     };
     function requestData() {
          api.ajax({

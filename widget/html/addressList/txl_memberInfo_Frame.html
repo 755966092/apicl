@@ -989,6 +989,7 @@
             name: SQLName,
             sql: 'SELECT * FROM addressList WHERE user_id = ' + api.pageParam.userId
         }, function (ret, err) {
+            console.log('992::'+JSON.stringify(ret)+api.pageParam.userId)
             if (ret.status) {
                if (ret.data.length != 0) {
                     console.log('数据库:::'+JSON.stringify(ret))
@@ -1043,7 +1044,8 @@
                     requireData(1);
                 }
             } else {
-                alert('953:'+JSON.stringify(err));
+                requireData(1);
+                console.log('953:'+JSON.stringify(err));
             }
         });
         db.selectSql({
@@ -1131,7 +1133,8 @@
                 url: '../news/chatPage.html',
                 pageParam: {
                     targetRongId: targetRongId,
-                    nickname: nickname
+                    nickname: nickname,
+                    headImg: $api.attr(head_img_url, 'src')
                 }
             });
         } else {

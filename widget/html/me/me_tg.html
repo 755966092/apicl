@@ -100,20 +100,17 @@
 <script type="text/javascript">
     apiready = function(){
         fnInit();
-       
         var InviteInfo = $api.getStorage('InviteInfo');
         if (InviteInfo) {
             // 有缓存
-            console.log('使用缓存')
             $api.text($api.byId('invitation_code'), InviteInfo.info.invitation_code);
             $api.attr($api.byId('head_img_url'), 'src', InviteInfo.info.head_img_url);
             $api.text($api.byId('nickname'), InviteInfo.info.nickname);
-            createQrcode(InviteInfo.info.invitation_code)
+            createQrcode(InviteInfo.info.invitation_code,InviteInfo.info.user_id)
             requestData(InviteInfo);
         } else {
             // 没有缓存
             requestData();
-            console.log('网路获取')
         }
 
        
@@ -130,7 +127,8 @@
             }
         }, function(ret, err) {
             if(ret) {
-                if (cacheData == ret.data) {
+
+                if ($api.jsonToStr(cacheData) == $api.jsonToStr(ret.data)) {
                     // 网络数据没有更新
                 } else {
                     // 网络数据有更新

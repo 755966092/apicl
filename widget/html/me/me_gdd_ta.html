@@ -668,11 +668,12 @@
             }, function(ret, err) {
                 if (ret) {
                     if (ret.eventType == 'ok') {
+                        
                         $api.css($api.dom('.loading'), 'display: block');
                         obj = {
                             token: $api.getStorage('userToken'),
                             order_id: id,
-                            reason:  ret.level1
+                            reason:  ret.selectedInfo[0].id
                         }
                         ajaxOperate(obj, url)
                     }

@@ -118,6 +118,16 @@
 
     apiready = function(){
         requireData();
+        api.setCustomRefreshHeaderInfo({
+            bgColor: '#C0C0C0',
+        }, function(ret, err) {
+            if (ret) {
+                requireData();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+        
         api.addEventListener({
             name: 'editSupplyAfter'
         }, function(ret, err) {
@@ -141,24 +151,29 @@
             }
         }, function(ret, err) {
             if(ret) {
+                api.refreshHeaderLoadDone();
                 console.log(JSON.stringify(ret))
-                 for (var i = 0; i < ret.data.list.length; i++) {
-                    ret.data.list[i].image_json = eval(ret.data.list[i].image_json)
-                    
-                    if ( ret.data.list[i].unit > 0) {
-                         ret.data.list[i].unit = _dataSource[ ret.data.list[i].unit-1]
-                    } else {
-                         ret.data.list[i].unit = '未定义'
+                if (ret.code == 200) {
+                    for (var i = 0; i < ret.data.list.length; i++) {
+                        ret.data.list[i].image_json = eval(ret.data.list[i].image_json)
+                        
+                        if ( ret.data.list[i].unit > 0) {
+                             ret.data.list[i].unit = _dataSource[ ret.data.list[i].unit-1]
+                        } else {
+                             ret.data.list[i].unit = '未定义'
+                        }
+                        if (ret.data.list[i].status === 1) {
+                            ret.data.list[i].status = '开启中'
+                        } else if (ret.data.list[i].status === 2) {
+                            ret.data.list[i].status = '暂停'
+                        } else {
+                            ret.data.list[i].status = '已删除'
+                        }
                     }
-                    if (ret.data.list[i].status === 1) {
-                        ret.data.list[i].status = '开启中'
-                    } else if (ret.data.list[i].status === 2) {
-                        ret.data.list[i].status = '暂停'
-                    } else {
-                        ret.data.list[i].status = '已删除'
-                    }
+                    getData(ret.data.list)
+                } else {
+                    alert(ret.msg)
                 }
-                getData(ret.data.list)
             } else {
                 alert(JSON.stringify(err.msg))
             }

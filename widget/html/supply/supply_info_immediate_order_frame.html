@@ -402,6 +402,8 @@
     function enteroOrder() {
         var phone = $api.text($api.byId('defaultPhone'));
         var id = $api.attr($api.byId('defaultPhone'), 'data-id');
+        var note = $api.val($api.byId('note'));
+        console.log(note)
         api.ajax({
             url: apiSite + '/demand_order/helperCreateOrder',
             method: 'post',
@@ -410,15 +412,20 @@
                    values: { 
                        token: $api.getStorage('userToken'),
                        demand_id: api.pageParam.transmitData.demand_id,
-                       contact_id: id
+                       contact_id: id,
+                       note: note
                    }
             }
         }, function(ret, err) {
             if(ret) {
-                api.openWin({
-                    name: 'me_qdd_ta',
-                    url: '../me/me_qdd.html'
-                });
+                if(ret.code == 200) {
+                    api.openWin({
+                        name: 'me_qdd_ta',
+                        url: '../me/me_qdd.html'
+                    });
+                } else {
+                    alert(ret.msg)
+                }
             } else {
                 alert(JSON.stringify(err))
             }

@@ -41,6 +41,15 @@
         fnInit();
         console.log(JSON.stringify(api.pageParam))
         $api.text($api.dom('.winTitle'), api.pageParam.circle_name);
+        api.addEventListener({
+           name: 'circleTopicComment'
+        }, function(ret, err) {
+           if (ret) {
+               api.pageParam.flag = 1;
+           } else {
+               alert(JSON.stringify(err));
+           }
+       });
         api.openFrame({
             name: 'find_dynamicState_frame',
             url: './find_dynamicState_frame.html',

@@ -117,7 +117,7 @@
 <script type="text/javascript">
     apiready = function(){
         // 请求地址列表
-        getCityList();
+        requireAddress();
         api.addEventListener({
             name: 'addCity'
         }, function(ret, err) {
@@ -162,10 +162,6 @@
             }
         }, function(ret, err) {
             if (ret) {
-                if (ret.data.list == $api.getStorage('userAddress')) {
-                    // 无变化
-                    
-                } else {
                     // 重新渲染页面
                     getData(ret.data.list);
                     console.log (api.pageParam.id)
@@ -181,7 +177,6 @@
                     if (ret.data.list) {
                         $api.setStorage('userAddress', ret.data.list);
                     }
-                }
                
             } else {
                 alert(JSON.stringify(err.msg));

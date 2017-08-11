@@ -162,40 +162,80 @@
         var text = $api.text(ele)
         if (text === '确定') {
             var payType = $api.attr($api.dom('.select1'), 'data-val');
-            api.ajax({
-                url: apiSite + '/circle/enter',
-                method: 'post',
-                headers: apiHeader,
-                data: {
-                       values: { 
-                            token: $api.getStorage('userToken'),
-                            circle_id:api.pageParam.circle_id,
-                            pay_method: payType
-                       }
-                }
-            }, function(ret, err) {
-                if(ret) {
-                    if (ret.code === 200) {
-                        if (payType == 'wechat') {
-                            wxPayFun(ret);
-                        } else if (payType == 'alipay') {
-                            aliPay.payOrder({
-                                orderInfo: ret.data.config
-                            },function(ret,err) {
-                                console.log('支付宝支付成功');
-                                openCircleInfo();
-                            });
-                        } else {
-                            
-                        }
-                            
-                    } else {
-                        alert(ret.msg)
+            if (payType == 'balance') {
+                // 判断是否设置支付密码
+                api.ajax({
+                    url: apiSite + '/settings/checkPayPassword',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                           values: { 
+                               token: $api.getStorage('userToken'),
+                           }
                     }
-                } else {
-                    alert(JSON.stringify(err))
-                }
-            })
+                }, function(ret, err) {
+                    if(ret) {
+                        if(ret.code == 200) {
+                            if (ret.data.is_set_pay_password) {
+                                // 已设置
+                                api.openWin({
+                                    name: 'winName',
+                                    url: './find_modeOfPayment_psdKey.html',
+                                    pageParam: {
+                                        circle_id:api.pageParam.circle_id,
+                                        pay_method:payType,
+                                    }
+                                });
+                            } else {
+                                // 未设置
+                                api.openWin({
+                                    name: 'me_hy_tx_setPsd_win',
+                                    url: '../me/me_hy_tx_setPsd_win.html',
+                                });
+                            }
+                        } else {
+                            alert(ret.msg)
+                        }
+                    } else {
+                        alert(JSON.stringify(err))
+                    }
+                })
+            } else {
+                api.ajax({
+                    url: apiSite + '/circle/enter',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                           values: { 
+                                token: $api.getStorage('userToken'),
+                                circle_id:api.pageParam.circle_id,
+                                pay_method: payType
+                           }
+                    }
+                }, function(ret, err) {
+                    if(ret) {
+                        if (ret.code === 200) {
+                            if (payType == 'wechat') {
+                                wxPayFun(ret);
+                            } else if (payType == 'alipay') {
+                                aliPay.payOrder({
+                                    orderInfo: ret.data.config
+                                },function(ret,err) {
+                                    console.log('支付宝支付成功');
+                                    openCircleInfo();
+                                });
+                            } else {
+                                
+                            }
+                                
+                        } else {
+                            alert(ret.msg)
+                        }
+                    } else {
+                        alert(JSON.stringify(err))
+                    }
+                })
+            }
             
         } else {
             api.closeFrame();
@@ -224,6 +264,9 @@
         })
     }
     function openCircleInfo() {
+        api.sendEvent({
+            name: 'circleTopicComment'
+        }); 
         api.closeWin({
             name: 'find_payAddCricle_win2'
         });
@@ -237,12 +280,15 @@
             script: 'requestData();'
         });
         // 加入后打開圈子詳情
-        api.openWin({
-            name: 'find_cricleInfo_win',
-            url: './find_cricleInfo_win.html',
-            pageParam: {
-                circle_id: api.pageParam.circle_id
-            }
+        // api.openWin({
+        //     name: 'find_cricleInfo_win',
+        //     url: './find_cricleInfo_win.html',
+        //     pageParam: {
+        //         circle_id: api.pageParam.circle_id
+        //     }
+        // });
+        api.closeToWin({
+            name: 'find_cricleInfo_win'
         });
         api.closeFrame();
     }

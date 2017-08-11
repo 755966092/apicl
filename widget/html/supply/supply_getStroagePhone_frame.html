@@ -164,27 +164,23 @@
     }
      // 获取联系人列表
     function lxrList() {
-         var userPhone = $api.getStorage('userPhone');
-         if (userPhone != null) {
-            getData(userPhone);
-         } else {
-            api.ajax({
-                url: apiSite + '/user_center/contactList',
-                method: 'post',
-                headers: apiHeader,
-                data: {
-                    values: { 
-                        token: $api.getStorage('userToken')
-                    } 
-                }
-            }, function(ret, err) {
-                if (ret) {
-                    handleData(litterSort(ret.data.list));
-                } else {
-                    alert(JSON.stringify(err));
-                }
-            });
-         }
+        api.ajax({
+            url: apiSite + '/user_center/contactList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: $api.getStorage('userToken')
+                } 
+            }
+        }, function(ret, err) {
+            if (ret) {
+                console.log(JSON.stringify(ret))
+                handleData(litterSort(ret.data.list));
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
        
     }
 
