@@ -287,6 +287,7 @@
             bgColor: '#EFEFF4',
         }, function(ret, err) {
             page_num = 1;
+            $api.css($api.dom('.loading'), 'display: none');w
             $api.text($api.dom('.bbottomLoading'), '正在加载...');
             //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
              if (flag) {
@@ -445,7 +446,6 @@
         
     }
     function fliderSupply(data,supplyCache) {
-        console.log('448:::'+JSON.stringify(data))
         api.ajax({
             url: apiSite + '/supply/index',
             method: 'post',
@@ -466,7 +466,6 @@
         }, function(ret, err) {
             if(ret) {
                 $api.css($api.dom('.loading'), 'display: none');
-                console.log('469'+JSON.stringify(ret))
                 // 停止下拉刷新
                 api.refreshHeaderLoadDone()
                 // if (supplyCache === ret.data.list) {

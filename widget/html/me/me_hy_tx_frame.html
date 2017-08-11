@@ -136,7 +136,7 @@
             <p class="title">提现金额</p>
             <div class="inputDiv flex-def ">
                 <span class="jl_left">￥</span>  
-                <input id="money" type="number" class="flex-item"  placeholder="提现金额">
+                <input id="money" type="text" class="flex-item input-number"  placeholder="提现金额">
             </div>
         </div>
 
@@ -169,8 +169,16 @@
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/cleave.js"></script>
 <script type="text/javascript">
     apiready = function(){
+      // 输入数字验证
+          var cleaveNumeral = new Cleave('.input-number', {
+              numeral: true,
+              numeralIntegerScale: 5,
+              numeralPositiveOnly: true,
+              delimiter: '' 
+          });
         requireData();
     };
     // 全部提现，把余额全部写进输入框
@@ -213,14 +221,14 @@
        var money = $api.val($api.byId('money'));
        // var type = $api.attr($api.dom('.sel'), 'data-type');
        var money2 = money
-       var count = 0;
-       for (var i = 0; i < money2.length; i++) {
-         if (money2[i] == '.') {
-          count++;
-         }
-       }
-       if (count>1 || money <0 || money2=='') {
-        alert('输入金额不正确')
+       // var count = 0;
+       // for (var i = 0; i < money2.length; i++) {
+       //   if (money2[i] == '.') {
+       //    count++;
+       //   }
+       // }
+       if (money == '' || money <= 0) {
+          alert('输入金额不正确')
        } else {
          api.openWin({
              name: 'me_hy_tx_info_win',
