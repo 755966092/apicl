@@ -130,10 +130,13 @@
             }
         }, function(ret, err) {
             if(ret) {
+                type = ret.data.info.type;
+                sub_type = ret.data.info.sub_type;
                 $api.val($api.byId('phone'), ret.data.info.phone);
                 $api.removeCls($api.dom('.select'), 'select');
-                $api.addCls($api.dom('div[data-id='+ ret.data.info.type +']'), 'select');
-                $api.text($api.dom('.telClass_1'), ret.data.info.sub_type == 1 : '工作' ? '生活');
+                $api.addCls($api.dom('p[data-val="'+ ret.data.info.type +'"] span'), 'select');
+
+                $api.text($api.dom('.telClass_1'), ret.data.info.sub_type == 1 ? '工作' : '生活');
             } else {
                 alert(JSON.stringify(err))
             }
@@ -174,8 +177,6 @@
                 bounces: false
             });
     }
-
-
     // // 选择电话类别 移动 || 固定
     function selectClass(ele) {
         type = $api.attr(ele, 'data-val');
@@ -187,14 +188,21 @@
 
     // // 添加电话完成
     function addTel() {
-        var tel = $api.val($api.dom('input'));
+        var tel = $api.val($api.dom('input')),url;
+        if (api.pageParam.contactId) {
+            url = '/user_center/editContact'
+        } else {
+            url = '/user_center/addContact';
+        }
+        console.log(tel+'--'+url)
         api.ajax({
-            url: apiSite + '/user_center/addContact',
+            url: apiSite + url,
             method: 'post',
             headers: apiHeader,
             data: {
                 values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    token: $api.getStorage('userToken'),
+                    contact_id: api.pageParam.contactId || '',
                     phone: tel,
                     type: type,
                     sub_type: sub_type

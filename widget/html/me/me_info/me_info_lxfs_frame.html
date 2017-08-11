@@ -87,7 +87,8 @@
                     <div class="move moveFlag" data-id="{{=it[i].contact_id}}" data-sub_type="{{=it[i].sub_type}}" data-type="{{=it[i].type}}" >
                         <div class="item">
                             <span class="label">{{=it[i].sub_type}}：</span>
-                            <input type="text" tapmode onclick="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].phone}}" disabled="true">
+                            <span  tapmode onclick="revisePhone(this)" data-id="{{=it[i].contact_id}}"  disabled="true">{{=it[i].phone}}</span>
+                            <!-- <input type="text" tapmode onclick="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].phone}}" disabled="true"> -->
                             <span class="clearIcon" data-id="{{=it[i].contact_id}}"  tapmode onclick="clearItem(this)"></span>
                         </div>
                     </div>
@@ -100,7 +101,8 @@
                     <div class="move fixedFlag"  data-id="{{=it[i].contact_id}}" data-sub_type="{{=it[i].sub_type}}" data-type="{{=it[i].type}}">
                         <div class="item" >
                             <span class="label">{{=it[i].sub_type}}：</span>
-                            <input type="text" tapmode onclick="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].phone}}" disabled="true">
+                            <span tapmode onclick="revisePhone(this)" data-id="{{=it[i].contact_id}}" disabled="true">{{=it[i].phone}}</span>
+                            <!-- <input type="text" tapmode onclick="revisePhone(this)" data-id="{{=it[i].contact_id}}" value="{{=it[i].phone}}" disabled="true"> -->
                             <span class="clearIcon" data-id="{{=it[i].contact_id}}" tapmode onclick="clearItem(this)"></span>
                         </div>
                     </div>
@@ -117,7 +119,7 @@
 <script type="text/javascript" src="../../../script/doT.min.js"></script>
 
 <script type="text/javascript">
-    var editArr=[];
+    var editArr=[],clickFlag = 0; // 0 的时候不能编辑 1 的时候可以编辑
     apiready = function(){
         lxrList();
         api.addEventListener({
@@ -125,22 +127,23 @@
         }, function(ret, err) {
             if (ret) {
                 lxrList();
+                clickFlag = 0;
             } else {
                 alert(JSON.stringify(err.msg));
             }
         });
     };
     function revisePhone(ele) {
-
-        console.log(11)
         var contactId = $api.attr(ele, 'data-id');
-        api.openWin({
-            name: 'me_info_zydh_addtel',
-            url: './me_info_zydh_addtel.html',
-            pageParam: {
-                contactId: contactId
-            }
-        });
+        if(clickFlag) {
+            api.openWin({
+                name: 'me_info_zydh_addtel',
+                url: './me_info_zydh_addtel.html',
+                pageParam: {
+                    contactId: contactId
+                }
+            });
+        }
 
             
     }
@@ -152,11 +155,11 @@
         api.addEventListener({
             name: 'keepPhone'
         }, function(ret, err) {
-            
             if (ret) {
-                // for (var i = 0; i < clearIcon.length; i++) {
-                //    // $api.css(clearIcon[i], 'display:none');
-                // }
+                clickFlag = 0;
+                for (var i = 0; i < clearIcon.length; i++) {
+                   $api.css(clearIcon[i], 'display:none');
+                }
                 // for (var i = 0; i < ipt.length; i++) {
                 //     $api.attr(ipt[i], 'disabled', 'true');
                 // }
@@ -192,9 +195,14 @@
         }, function(ret, err) {
             
             if (ret) {
+                clickFlag = 1;
                for (var i = 0; i < clearIcon.length; i++) {
                    $api.css(clearIcon[i], 'display:inline-block');
                 }
+                // for (var i = 0; i < ipt.length; i++) {
+                //     // $api.attr(ipt[i], 'disabled', 'true');
+                //     $api.removeAttr(ipt[i], 'disabled');
+                // }
                 
             } else {
                 alert('2'+JSON.stringify(err));
