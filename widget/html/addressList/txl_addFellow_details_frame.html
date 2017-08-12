@@ -145,7 +145,7 @@
 
                     // 优先备注昵称, 其次自己昵称
                     $api.val($api.dom('.nickName'), ret.data[0].remark_nickname||ret.data[0].nickname);
-                    $api.text($api.dom('.sex'), ret.data[0].sex == '' ? (api.pageParam.paramSex) :(ret.data[0].sex == 1 ? '男' : '女'));
+                    $api.text($api.dom('.sex'), ret.data[0].remark_sex == '' ? (api.pageParam.paramSex) :(ret.data[0].remark_sex == 1 ? '男' : '女'));
                 } else {
                     console.log(2222)
                     $api.attr($api.dom('img'), 'src', api.pageParam.paramHeadImg);
@@ -252,7 +252,7 @@
                                             //     }
                                             // });
                                             api.sendEvent({
-                                                name: 'editUserInfo'
+                                                name: 'editUserInfo',                                     extra: {                                         flag: api.pageParam.flag                                     }
                                             });
                                             api.closeWin();
                                             

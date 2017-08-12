@@ -366,7 +366,7 @@
                         <div class="btnGroup">
 
                             {{for(var i = 0; i < it.button_info.buttonArr.length; i++){ }}
-                                {{?it.button_info.buttonArr[i].key === '确认完成' || it.button_info.buttonArr[i].key === '完成' || it.button_info.buttonArr[i].key === '评价订单'}}
+                                {{?it.button_info.buttonArr[i].key === '确认完成' || it.button_info.buttonArr[i].key === '完成订单' || it.button_info.buttonArr[i].key === '评价订单'}}
                                 {{??}}
                                 <span data-reasonList='{{=JSON.stringify(it.reason_list)}}' data-demandId='{{=it.demand_info.demand_id}}' data-orderId='{{=it.order_info.order_id}}' ontouchstart="oriderOperate(this)" class="btn" data-url='{{=it.button_info.buttonArr[i].url}}'>{{=it.button_info.buttonArr[i].key}}</span>
                                 {{?}}
@@ -386,7 +386,7 @@
                 备注：<span>{{=it.order_info.note==null?'':it.order_info.note}}</span>
             </div>
             {{?it.button_info.finish.is_show || it.button_info.confirm_finish.is_show}} 
-                <div class="appraise" data-id='{{=it.order_info.order_id}}' ontouchstart="completeOrder(this)">完成</div>
+                <div class="appraise" data-url="{{=it.btnurl}}" data-id='{{=it.order_info.order_id}}' ontouchstart="completeOrder(this)">完成</div>
             
 
             {{??it.button_info.comment.is_show}}
@@ -454,6 +454,7 @@
     function openChatPage(ele) {
         var rong_id = $api.attr(ele, 'data-rong_id');
         var userName = $api.text($api.dom('.userName'));
+        var headImg = $api.attr($api.dom('.userHead_img'), 'src');
         // 头像 昵称 供应名字 价格 单位
         var userHeadImg = $api.attr($api.dom('.userHead_img'), 'src');
         var supplyName = $api.text($api.dom('.supplyName'));
@@ -466,6 +467,7 @@
                 type:'help',
                 targetRongId: rong_id,
                 nickname: userName,
+                headImg: headImg,
                 userHeadImg: userHeadImg,
                 supplyName: supplyName,
                 priceUint: priceUint,
@@ -539,8 +541,19 @@
                             case 'finish': ret.data.button_info.buttonArr[i].key = '完成订单';   break;
                             case 'delete': ret.data.button_info.buttonArr[i].key = '删除订单'; break;
                             case 'confirm_finish': ret.data.button_info.buttonArr[i].key = '确认完成'; break;
-                            case 'comment': ret.data.button_info.buttonArr[i].key = '评价'; break;
+                            case 'comment': ret.data.button_info.buttonArr[i].key = '评价订单'; break;
                             case 'cancel': ret.data.button_info.buttonArr[i].key = '取消订单'; break;
+                        }
+                    }
+                    for (var i = 0; i < ret.data.button_info.buttonArr.length; i++) {
+                        if (ret.data.button_info.buttonArr[i].key === '确认完成') {
+                            ret.data.btnurl = ret.data.button_info.buttonArr[i].url;
+                        } else if (ret.data.button_info.buttonArr[i].key === '完成订单') {
+                            ret.data.btnurl = ret.data.button_info.buttonArr[i].url;
+                        } else if (ret.data.button_info.buttonArr[i].key === '评价订单'){
+                            ret.data.btnurl = ret.data.button_info.buttonArr[i].url;
+                        } else {
+
                         }
                     }
 
@@ -603,7 +616,7 @@
 
         var flagText = $api.text(ele);
 
-        if (flagText === '评价') {
+        if (flagText === '评价订单') {
             api.openWin({
                 name: 'supply_commentPage',
                 url: '../supply/supply_commentPage.html',
@@ -737,8 +750,9 @@
     function completeOrder(ele) {
         console.log(enterUrl)
         var id = $api.attr(ele, 'data-id');
+        var url = $api.attr(ele, 'data-url');
         api.ajax({
-            url: apiSite + enterUrl,
+            url: apiSite + url,
             method: 'post',
             headers: apiHeader,
             data: {
@@ -750,6 +764,9 @@
         }, function(ret, err) {
             if(ret) {
                 if (ret.code == 200) {
+                    api.sendEvent({
+                        name: 'filterOrder'
+                    });
                     requireData();
                 } else {
                     alert(ret.msg)

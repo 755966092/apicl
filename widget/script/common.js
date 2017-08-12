@@ -51,7 +51,7 @@ function exitApp() {
                 name: 'test'
             }, function(ret, err) {
                 if (ret.status) {
-                    alert(JSON.stringify(ret));
+                    // alert(JSON.stringify(ret));
                 } else {
                     alert(JSON.stringify(err.msg));
                 }
@@ -278,7 +278,8 @@ function initTime(time) {
         if (nowTime.getHours() != pageTime.getHours()) {
             return nowTime.getHours() - pageTime.getHours() + '小时之前'
         } else {
-            // var timeText = nowTime.getMinutes() - pageTime.getMinutes()  == 0 ? '刚刚' : nowTime.getMinutes() - pageTime.getMinutes() + '分钟之前'
+            var timeText = nowTime.getMinutes() - pageTime.getMinutes() == 0 ? '刚刚' : nowTime.getMinutes() - pageTime.getMinutes() + '分钟之前'
+            console.log(timeText)
             return nowTime.getMinutes() - pageTime.getMinutes() == 0 ? '刚刚' : nowTime.getMinutes() - pageTime.getMinutes() + '分钟之前'
         }
     }

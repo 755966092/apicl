@@ -121,6 +121,7 @@
 <script type="text/javascript">
     var type = 1, sub_type = 1, url;
     apiready = function(){
+        console.log(JSON.stringify(api.pageParam))
         moduleInit();
         modilyType();
         
@@ -323,11 +324,13 @@
     function checkPhone(data){ 
         var phone = /^1[34578]\d{9}$/,
             tel = /^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/;
-        if(!(phone.test(data))&& !(phone.test(data))){ 
+        if(!(phone.test(data))&& !(tel.test(data))){ 
             $api.css($api.dom('.loading'), 'display: none');
             alert("电话号码有误，请重填");  
             return false; 
-        } 
+        } else {
+            return true
+        }
         return true;
     }
 
@@ -359,8 +362,12 @@
                         },function(ret,err){
                             if (ret.status) {
                                 api.sendEvent({
-                                    name: 'editUserInfo'
+                                    name: 'editUserInfo',
+                                    extra: {
+                                        flag: api.pageParam.flag
+                                    }
                                 });
+                                
                             }else {
                                 api.alert({msg:err.msg});
                             }

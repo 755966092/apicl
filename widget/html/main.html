@@ -199,7 +199,7 @@
                 </li>
                 <li class="border-b supply">
                     供求
-                    <span class="rightBtn"   tapmode   onclick="addPublish()">+</span>
+                    <span class="rightBtn"   tapmode   onclick="addPublish();event.stopPropagation();">+</span>
                 </li>
                 <li class="border-b">发现</li>
                 <li class="border-b">我</li>
@@ -248,12 +248,12 @@ apiready = function() {
     api.addEventListener({
         name: 'searchSupply'
     }, function(ret, err) {
-        $api.html($api.dom('.supply'), '找供求<span   tapmode   onclick="addPublish()"></span>');
+        $api.html($api.dom('.supply'), '找供求<span   tapmode   onclick="addPublish();event.stopPropagation();"></span>');
     });
     api.addEventListener({
         name: 'clearSearchSupply'
     }, function(ret, err) {
-        $api.html($api.dom('.supply'), '供求<span   tapmode   onclick="addPublish()"></span>');
+        $api.html($api.dom('.supply'), '供求<span   tapmode   onclick="addPublish();event.stopPropagation();"></span>');
     });
 
     getTotalCount();
@@ -469,6 +469,7 @@ function addFellow() {
 }
 // 点击发布按钮
 function addPublish() {
+    console.log('点到加号')
     // api.sendEvent({
     //     name: 'addPublish'
     // });

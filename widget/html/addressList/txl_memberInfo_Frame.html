@@ -1038,6 +1038,14 @@
                             $api.removeCls(sex, 'sexIcon2');
                         }
                     }
+                    // 电话
+                    if (ret.data[0].remark_current_contact) {
+                        $api.text(phone, ret.data[0].remark_current_contact);
+                    } else if (ret.data[0].current_contact) {
+                        $api.text(phone, ret.data[0].current_contact);
+                    } else {
+                        requireContact();
+                    }
                     requireData(0);
                 } else {
                     // 获取线上

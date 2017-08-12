@@ -158,7 +158,27 @@
                 }
             }, function(retFriend, err) {
                 if(retFriend) {
-                    disData(retFriend.data.list, 4)
+                     db.selectSql({
+                        name: SQLName,
+                        sql: 'SELECT * FROM addressList WHERE type = 4'
+                    }, function(retSql, errSql) {
+                        if (retSql) {
+                            if (retSql.status) {
+                                // 网上相识好友和数据库一样多 不更新数据库
+                                console.log(retSql.data.length+ '=='+ retFriend.data.list.length)
+                                if (retSql.data.length == retFriend.data.list.length) {
+                                    query(4);
+                                } else {
+                                    disData(retFriend.data.list, 4)
+                                }
+                            } else {
+                                alert(JSON.stringify(ret))
+                            }
+                        } else {
+                            alert(JSON.stringify(errSql))
+                        }
+                    })
+                    
                 } else {
                     alert(JSON.stringify(err))
                 }
@@ -166,7 +186,6 @@
     }
      // 处理数据
     function disData (data, type) {
-
         // console.log('disData'+JSON.stringify(data))
         if (data != '' ) {
             for (var i = 0; i < data.length; i++) {
@@ -219,11 +238,11 @@
             SQL += '('+data1[i].user_id+',"'+ data1[i].nickname +'","'+ data1[i].real_name +'","'+ data1[i].head_img_url +'","'+ (data1[i].current_company || "") +'","'+ (data1[i].current_position || "")+'","'+ (data1[i].current_contact || "") +'","'+ (data1[i].current_degree || "") +'","'+ data1[i].titleSize +'","'+ data1[i].title +'","'+ data1[i].img+'","'+ data1[i].flag +'","'+ data1[i].litter +'","'+ type +'","'+ (data1[i].sex || 1) +'","'+ (data1[i].remark_nickname || "") +'","'+ (data1[i].remark_real_name || "") +'","'+ (data1[i].remark_head_img_url || "") +'","'+ (data1[i].remark_sex || "") +'","'+ (data1[i].remark_birthday || "") +'","'+ (data1[i].remark_hometown || "") +'","'+ (data1[i].remark_current_company || "") +'","'+ (data1[i].remark_current_position || "") +'","'+ (data1[i].remark_current_degree || "") +'","'+ (data1[i].remark_current_contact || "") +'"),';
         }
         SQL = SQL.substring(0,SQL.length-1) + ';'
-        db.executeSql({
-             name: SQLName,
-             sql: 'CREATE UNIQUE INDEX IF NOT EXISTS user_id_idx ON addressList (user_id)'    
-         }, function(ret, err){        
-             if( ret.status ){
+        // db.executeSql({
+        //      name: SQLName,
+        //      sql: 'CREATE UNIQUE INDEX IF NOT EXISTS user_id_idx ON addressList (user_id)'    
+        //  }, function(ret, err){        
+        //      if( ret.status ){
                 // console.log( JSON.stringify( ret ) );
                 db.executeSql({
                     name: SQLName,
@@ -231,15 +250,14 @@
                 }, function(ret, err){        
                     if( ret.status ){
                         console.log( '插入数据'+JSON.stringify( ret ) );
-                        
                     }else{
                         alert( '插入数据:' + JSON.stringify( err ) );
                     }
                 });
-             }else{
-                 alert( '设置唯一索引' + JSON.stringify( err ) );
-             }
-         });
+         //     }else{
+         //         alert( '设置唯一索引' + JSON.stringify( err ) );
+         //     }
+         // });
     }
     function contactFriend(userId) {
         api.ajax({
@@ -414,7 +432,7 @@
         if (condition) {
             SQLsentence = 'SELECT * FROM addressList WHERE type = ' + condition; 
         } else {
-            SQLsentence = 'SELECT * FROM addressList';
+            SQLsentence = 'SELECT * FROM addressList WHERE type IN (1,2,3)';
         }
         console.log('308:::'+SQLsentence)
         // 查询数据库
@@ -423,7 +441,7 @@
             sql: SQLsentence
         }, function(ret, err) {
             // console.log('ret:'+JSON.stringify(ret))
-            console.log('err:'+JSON.stringify(err))
+            // console.log('err:'+JSON.stringify(err))
             if (ret.status) {
                 console.log(1)
                 // console.log('查询数据库'+JSON.stringify(ret))

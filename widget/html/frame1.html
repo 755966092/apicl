@@ -8,9 +8,9 @@
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <style>
-        body {
+        /*body {
             height: 20rem;
-        }
+        }*/
         .search {
             border-radius: .04rem;
             display: block;
@@ -219,7 +219,7 @@
        </div>
         <div class="main_no1"  >
             <p class="mainP flex-def flex-cCenter" >
-                <span class="icon" tapmode onclick="hideList(1)"></span>
+                <span class="icon" tapmode onclick="hideList(this,1)"></span>
                 <span class="flex-item" tapmode onclick="onceConnected(1)">一度人脉</span>
             </p>
             <div class="itemList itemList1"  tapmode   onclick="onceConnected(1,2)">
@@ -237,7 +237,7 @@
         </div>
         <div class="main_no1"   >
             <p class="mainP flex-def flex-cCenter" >
-                <span class="icon er" tapmode onclick="hideList(2)"></span>
+                <span class="icon er" tapmode onclick="hideList(this,2)"></span>
                 <span tapmode   onclick="onceConnected(2)" class="flex-item">二度人脉</span>
             </p>
             <div class="itemList itemList2" tapmode   onclick="onceConnected(2,1)">
@@ -250,7 +250,7 @@
         </div>
         <div class="main_no1 mt36r "   >
             <p class="mainP flex-def flex-cCenter" >
-                <span class="icon san" tapmode onclick="hideList(3)"></span>
+                <span class="icon san" tapmode onclick="hideList(this,3)"></span>
                 <span class="flex-item" tapmode  onclick="onceConnected(3)">三度人脉</span>
             </p>
             <div class="itemList itemList3" tapmode   onclick="onceConnected(3,1)">
@@ -299,13 +299,16 @@
         // query();
         // $api.css($api.dom('header'), 'opacity:' + document.body.scrollTop/500 + '');
     };    // 隐藏列表
-    function hideList(n) {
+    function hideList(ele,n) {
+        var pBorder = $api.closest(ele, 'p');
         var name = '.itemList' + n;
         var list = $api.domAll(name);
         for (var i = 0; i < list.length; i++) {
             if ($api.hasCls(list[i], 'hide')) {
                 $api.removeCls(list[i], 'hide');
+                $api.css(pBorder, 'border-bottom:.01rem solid #d9d9d9');
             } else {
+                $api.css(pBorder, 'border-bottom:0');
                 $api.addCls(list[i], 'hide');
             }
         }

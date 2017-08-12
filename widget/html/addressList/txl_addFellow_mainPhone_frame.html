@@ -166,6 +166,7 @@
    var flag = 0; // 如果flag是0, 说明联系方式是用户本来的
    var flagClick = 0; // 如果flagClick是0, 点击选择默认联系联系方式
     apiready = function(){
+        console.log(JSON.stringify(api.pageParam))
         moduleInit();
         monitorEvent();
         requireData();
@@ -203,7 +204,10 @@
                             console.log('ret203:::'+$api.text($api.dom(ele, '.phoneText')) )
                             // alert( JSON.stringify( ret ) );
                             api.sendEvent({
-                                name: 'editUserInfo'
+                                name: 'editUserInfo',
+                                extra: {
+                                    flag: api.pageParam.flag                                      
+                                }
                             });
                         }else{
                             alert( JSON.stringify( err ) );
@@ -227,7 +231,8 @@
                     url: './txl_addFellow_addPhone_win.html',
                     pageParam: {
                         contactId: contactId,
-                        userId: api.pageParam.userId
+                        userId: api.pageParam.userId,
+                        flag: api.pageParam.flag
                     }
                 });
             }
@@ -367,7 +372,8 @@
             name: 'winName',
             url: './txl_addFellow_addPhone_win.html',
             pageParam: {
-                userId: api.pageParam.userId
+                userId: api.pageParam.userId,
+                flag: api.pageParam.flag,
             }
         });
     }
@@ -398,7 +404,18 @@
                         alert(JSON.stringify( err ) );
                     }
                 });
-
+                // if(ret.data.list[i].is_default == 1) {
+                //     db.executeSql({
+                //        name: 'db_'+$api.getStorage('userToken'),
+                //        sql: 'UPDATE addressList SET remark_current_contact = ' + ret.data.list[i].phone + ' WHERE user_id = ' + api.pageParam.userId
+                //     }, function(ret, err){        
+                //        if( ret.status ){
+                //            alert('更新成功2')
+                //        }else{
+                //            alert( JSON.stringify( err ) );
+                //        }
+                //     });
+                // }
             }
             
         })

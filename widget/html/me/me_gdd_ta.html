@@ -20,7 +20,7 @@
             -webkit-background-size: .8rem .8rem;
             background-size: .8rem .8rem;
             background-position: center center;
-            position: absolute;
+            position: fixed;
             top: 0;
             bottom: 0;
             right: 0;
@@ -274,7 +274,7 @@
                     </div>
                     <p class="appraise flex-def flex-cCenter flex-zEnd" tapmode='hover' onclick="event.stopPropagation();">
                         {{for(var j = 0; j < it[i].button.buttonArr.length; j++){ }}
-                                <span data-reasonList='{{=JSON.stringify(it[i].reason_list)}}' data-moeny='{{=it[i].total_money}}' data-id='{{=it[i].order_id}}' data-supply='{{=it[i].supply_id}}'  tapmode='hover' onclick="oriderOperate(this)" class="btn" data-url='{{=it[i].button.buttonArr[j].url}}'>{{=it[i].button.buttonArr[j].key}}</span>
+                                <span data-title="{{=it[i].title}}" data-reasonList='{{=JSON.stringify(it[i].reason_list)}}' data-moeny='{{=it[i].total_money}}' data-id='{{=it[i].order_id}}' data-supply='{{=it[i].supply_id}}'  tapmode='hover' onclick="oriderOperate(this)" class="btn" data-url='{{=it[i].button.buttonArr[j].url}}'>{{=it[i].button.buttonArr[j].key}}</span>
                         {{ }; }}
                     </p>
                 </div>
@@ -516,6 +516,7 @@
         var url = $api.attr(ele, 'data-url');
         var id = $api.attr(ele, 'data-id');
         var supplyId = $api.attr(ele, 'data-supply');
+        var title = $api.attr(ele, 'data-title');
         var token = $api.getStorage('userToken');
          var obj = {};
         var flagText = $api.text(ele);
@@ -719,7 +720,9 @@
                     obj: {
                         token: token,
                         order_id: id,
+                        title: title
                     },
+                    flagType: 'supplyOrider',
                     price: $api.attr(ele, 'data-moeny'),
                     flag: 1
                 }

@@ -331,61 +331,65 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
     function addTopic() {
         // 获取身份
         var roleId = 0;
-        for (var i = 0; i < role.length; i++) {
-             if ($api.text($api.byId('role')) == role[i]) {
-                roleId = i
-                break;
-             }
-        } 
-        // 内容
-        var title = $api.val($api.byId('title'));
-        var content = $api.val($api.byId('content'));
-        var start_time = $api.text($api.byId('startTime'));
-        var end_time = $api.text($api.byId('endTime'));
-        var circleId = $api.attr($api.byId('circleName'), 'data-circleId');
-        var obj = {
-            token: $api.getStorage('userToken'),
-            circle_id: api.pageParam.circle_id || circleId,           //int 圈子ID
-            role: roleId,            //int 角色（1-关系人，2-知情人，3-甲方，4-总包单位，5-分包单位，6-设计院，7-销售）
-            title: title,           //string  标题
-            content: content,         //string  详细内容
-            province: province,            //string  省份
-            city: city,            //string  城市
-            address: district,         //string  地址
-            start_time: start_time,          //string  开始时间
-            end_time: end_time,            //string  结束时间
-            latitude: latitude,            //string  纬度
-            longitude: longitude,   
-            image_json: imgArr 
-        }
-        if (start_time == '请选择' || end_time == '请选择') {
-            alert('请选择时间')
-        } else {
-            api.ajax({
-                url: apiSite + '/circle_topic/add',
-                method: 'post',
-                headers: apiHeader,
-                data: {
-                       values: obj
-                }
-            }, function(ret, err) {
-                if(ret) {
-                    if (ret.code != 200) {
-                        alert(ret.msg)
-                    } else {
-                        // alert(JSON.stringify(ret))
-                        api.execScript({
-                            name: 'find_dynamicState_win',
-                            frameName: 'find_dynamicState_frame',
-                            script: 'requestData();'
-                        });
-                        api.closeWin();
+        if ($api.text($api.byId('role'))) {
+            for (var i = 0; i < role.length; i++) {
+                 if ($api.text($api.byId('role')) == role[i]) {
+                    roleId = i
+                    break;
+                 }
+            } 
+            // 内容
+            var title = $api.val($api.byId('title'));
+            var content = $api.val($api.byId('content'));
+            var start_time = $api.text($api.byId('startTime'));
+            var end_time = $api.text($api.byId('endTime'));
+            var circleId = $api.attr($api.byId('circleName'), 'data-circleId');
+            var obj = {
+                token: $api.getStorage('userToken'),
+                circle_id: api.pageParam.circle_id || circleId,           //int 圈子ID
+                role: roleId,            //int 角色（1-关系人，2-知情人，3-甲方，4-总包单位，5-分包单位，6-设计院，7-销售）
+                title: title,           //string  标题
+                content: content,         //string  详细内容
+                province: province,            //string  省份
+                city: city,            //string  城市
+                address: district,         //string  地址
+                start_time: start_time,          //string  开始时间
+                end_time: end_time,            //string  结束时间
+                latitude: latitude,            //string  纬度
+                longitude: longitude,   
+                image_json: imgArr 
+            }
+            if (start_time == '请选择' || end_time == '请选择') {
+                alert('请选择时间')
+            } else {
+                api.ajax({
+                    url: apiSite + '/circle_topic/add',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                           values: obj
                     }
-                } else {
-                    alert(JSON.stringify(err.msg))
+                }, function(ret, err) {
+                    if(ret) {
+                        if (ret.code != 200) {
+                            alert(ret.msg)
+                        } else {
+                            // alert(JSON.stringify(ret))
+                            api.execScript({
+                                name: 'find_dynamicState_win',
+                                frameName: 'find_dynamicState_frame',
+                                script: 'requestData();'
+                            });
+                            api.closeWin();
+                        }
+                    } else {
+                        alert(JSON.stringify(err.msg))
 
-                }
-            })
+                    }
+                })
+            }
+        } else {
+            alert('请选择身份')
         }
     }
     // 选择角色
