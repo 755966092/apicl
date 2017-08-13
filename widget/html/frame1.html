@@ -395,7 +395,7 @@
             {{?it[i].flagLetter}}
                 <p id="{{=it[i].flagLetter}}" class="groupTitle">{{=it[i].flagLetter}}</p>
             {{? }}
-            <div class="item"   tapmode   onclick="selPerson(this)" data-val='no1'>
+            <div class="item"  data-id="{{=it[i].user_id}}" tapmode   onclick="selPerson(this)" data-val='no1'>
             <!-- <div class="item"   tapmode   onclick="selPerson(this)" data-val='no1'> -->
                 <!-- <span class="sel"></span> -->
                 <img src="{{=it[i].remark_head_img_url ? it[i].remark_head_img_url : it[i].head_img_url}}">
@@ -407,7 +407,7 @@
         {{ }; }}
         </script>
     </div>
-    <div class="slidePage flex-def flex-zTopBottom flex-zCenter flex-cEnd" >
+    <div class="slidePage flex-def flex-zTopBottom flex-zCenter flex-cEnd" ontouchmove="move()">
         <!-- <a  href="#A">A</a>
         <a  href="#B">B</a>
         <a  href="#C">C</a>
@@ -545,6 +545,7 @@
             headUrl: '../image/tx_5.jpg'
         }
     ]
+    var letterArr = [];
     apiready = function() {
         moduleInit();
         query();
@@ -572,9 +573,13 @@
             }
         });
     }
+    function move() {
+        event.preventDefault();
+        
+        console.log($api.offset($api.dom('a')).h*letterArr.length)
+    }
     // 数据排序
     function sortData(data) {
-        var letterArr = [];
         for (var i = 0; i < data.length; i++) {
             for (var j = 0; j < data.length; j++) {
                 if (data[i].flag < data[j].flag) {
@@ -604,12 +609,20 @@
     }
     // 选中好友
     function selPerson(ele) {
-        var sel = ele.getElementsByClassName('sel')[0];
-        if ($api.hasCls(sel, 'pitchOn')) {
-            $api.removeCls(sel, 'pitchOn');
-        } else {
-            $api.addCls(sel, 'pitchOn');
-        }
+        // var sel = ele.getElementsByClassName('sel')[0];
+        // if ($api.hasCls(sel, 'pitchOn')) {
+        //     $api.removeCls(sel, 'pitchOn');
+        // } else {
+        //     $api.addCls(sel, 'pitchOn');
+        // }
+        var userId = $api.attr(ele, 'data-id');
+        api.openWin({
+            name: 'txl_memberInfo_Win',
+            url: './addressList/txl_memberInfo_Win.html',
+            pageParam: {
+                userId: userId
+            }
+        });
     }
 
    // 隐藏列表
