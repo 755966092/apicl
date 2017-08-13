@@ -205,11 +205,119 @@
         .hide {
             display: none;
         }
+        
+                .search {
+            height: .5rem;
+            line-height: .5rem;
+            background-color: #fff;
+            margin: .2rem 0 0 0;
+            text-align: center;
+            font-size: 0;
+        }
+        .search .searchIcon {
+            display: inline-block;
+            width: .26rem;
+            height: .5rem;
+            background: url(../image/icon_supply/icon_search.png)no-repeat;
+            -webkit-background-size: .25rem .26rem;
+            background-size: .25rem .26rem;
+            background-position: 0 center;
+            vertical-align: top;
+        }
+        .search .searchText {
+            font-size: .24rem;
+        }
 
+        
+        .list {
+            background-color: #fff;
+        }
+        .list .item {
+            font-size: 0;
+            height: 1rem;
+            box-sizing: border-box;
+            padding: 0 .3rem 0 .3rem;
+            overflow: hidden;
+            border-bottom: .01rem solid #f7f7f7;
+
+            display: -webkit-box; /* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
+            display: -moz-box; /* 老版本语法: Firefox (buggy) */
+            display: -ms-flexbox; /* 混合版本语法: IE 10 */
+            display: -webkit-flex; /* 新版本语法: Chrome 21+ */
+            display: flex; /* 新版本语法: Opera 12.1, Firefox 22+ */
+
+            -webkit-box-align: center;
+            -moz-align-items: center;
+            -webkit-align-items: center;
+            align-items: center;
+        }
+        .list .item img {
+            margin-right: .1rem;
+            margin-left: .1rem;
+            width: .64rem;
+            height: .64rem;
+        }
+        .list .item .title {
+            width: 5rem;
+        }
+        .list .item .title .name {
+            font-size: .28rem;
+            white-space:nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .list .item .title .position {
+            font-size: .24rem;
+            white-space:nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+        }
+        .sel {
+            display: inline-block;
+            width: .44rem;
+            height: .44rem;
+            background: url(../image/icon_member/icon_cz01.png)no-repeat;
+            -webkit-background-size: .44rem .44rem;
+            background-size: .44rem .44rem;
+            background-position: 0 center;
+        }
+        .pitchOn {
+            background: url(../image/icon_member/icon_cz02.png)no-repeat;
+            -webkit-background-size: .44rem .44rem;
+            background-size: .44rem .44rem;
+            background-position: 0 center;
+        }
+        .slidePage {
+            width: .6rem;
+            text-align: right;
+            /*background-color: rgba(255,0,0,.5);*/
+            position: fixed;
+            right: 0;
+            top: 0;
+            height: 100%;
+            font-size: .24rem;
+            box-sizing: border-box;
+            padding-right: .1rem;
+        }
+        .slidePage a{
+           /* text-align: right;
+            box-sizing: border-box;
+            display: block;
+            padding-right: .1rem;*/
+            width: .2rem;
+            text-align: center;
+            color: #555;
+        }
+        .groupTitle {
+            font-size: .24rem;
+            padding: .1rem .3rem;
+            background-color: #F0F0F6;
+        }
     </style>
 </head>
 
-<body ontouchmove="gtouchmove()">
+<body >
     <div id="news_wrap" class=" clearfix">
        <div class="wrap clearfix">
             <div class="search"   tapmode   onclick="openS()">
@@ -266,39 +374,245 @@
             <span class="text">人脉等级说明</span>
         </div>
     </div>
+    <div class="main">
+       <!--  <div class="search">
+            <span class="searchIcon"></span>
+            <span class="searchText">搜索</span>
+        </div> -->
+       <!--  <ul class="list clearfix">
+            <li   tapmode   onclick="selPerson(this)" data-val='no1'>
+                <span class="sel"></span>
+                <img src="../image/tx_3.jpg">
+                <div class="title">
+                    <h3 class="name">Name1</h3>
+                    <p class="position">第一学科技公司 董事长</p>
+                </div>
+            </li>
+        </ul> -->
+        <div class=" list resultList"></div>
+        <script type="text/x-dot-template" id="listT">
+        {{ for (var i = 0; i < it.length; i++) { }} 
+            {{?it[i].flagLetter}}
+                <p id="{{=it[i].flagLetter}}" class="groupTitle">{{=it[i].flagLetter}}</p>
+            {{? }}
+            <div class="item"   tapmode   onclick="selPerson(this)" data-val='no1'>
+            <!-- <div class="item"   tapmode   onclick="selPerson(this)" data-val='no1'> -->
+                <!-- <span class="sel"></span> -->
+                <img src="{{=it[i].remark_head_img_url ? it[i].remark_head_img_url : it[i].head_img_url}}">
+                <div class="title">
+                    <h3 class="name">{{=it[i].remark_nickname ? it[i].remark_nickname : it[i].nickname}}</h3>
+                    <p class="position">{{=it[i].remark_current_position ? it[i].remark_current_position : it[i].current_position}}</p>
+                </div>
+            </div>
+        {{ }; }}
+        </script>
+    </div>
+    <div class="slidePage flex-def flex-zTopBottom flex-zCenter flex-cEnd" >
+        <!-- <a  href="#A">A</a>
+        <a  href="#B">B</a>
+        <a  href="#C">C</a>
+        <a  href="#D">D</a>
+        <a  href="#E">E</a>
+        <a  href="#F">F</a>
+        <a  href="#G">G</a>
+        <a  href="#H">H</a>
+        <a  href="#I">I</a>
+        <a  href="#J">J</a>
+        <a  href="#K">K</a>
+        <a  href="#L">L</a>
+        <a  href="#M">M</a>
+        <a  href="#N">N</a>
+        <a  href="#O">O</a>
+        <a  href="#P">P</a>
+        <a  href="#Q">Q</a>
+        <a  href="#R">R</a>
+        <a  href="#S">S</a>
+        <a  href="#T">T</a>
+        <a  href="#U">U</a>
+        <a  href="#V">V</a>
+        <a  href="#W">W</a>
+        <a  href="#X">X</a>
+        <a  href="#Y">Y</a>
+        <a  href="#Z">Z</a>
+        <a  href="#">#</a> -->
+    </div>
     <script type="text/javascript" src="../script/common.js"></script>
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/doT.min.js"></script>
     <script type="text/javascript" src="../script/pinyin4js.js"></script>
     <script type="text/javascript">
+    var data = [
+        {
+            flag: 'A',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../image/tx_1.jpg'
+        },
+        {
+            flag: 'E',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../image/tx_3.jpg'
+        },
+        {
+            flag: 'F',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../image/tx_2.jpg'
+        },
+        {
+            flag: 'B',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../image/tx_4.jpg'
+        },
+         {
+            flag: 'A',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../image/tx_1.jpg'
+        },
+        {
+            flag: 'D',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../image/tx_3.jpg'
+        },
+        {
+            flag: 'W',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../image/tx_2.jpg'
+        },
+        {
+            flag: 'Q',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../image/tx_4.jpg'
+        },
+         {
+            flag: 'R',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../image/tx_1.jpg'
+        },
+        {
+            flag: 'X',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../image/tx_3.jpg'
+        },
+        {
+            flag: 'T',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../image/tx_2.jpg'
+        },
+        {
+            flag: 'Y',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../image/tx_4.jpg'
+        },
+         {
+            flag: 'U',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../image/tx_1.jpg'
+        },
+        {
+            flag: 'I',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../image/tx_3.jpg'
+        },
+        {
+            flag: 'O',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../image/tx_2.jpg'
+        },
+        {
+            flag: 'P',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../image/tx_4.jpg'
+        },
+        {
+            flag: 'Z',
+            name: 'name3',
+            position: '第一学科技公司',
+            headUrl: '../image/tx_5.jpg'
+        }
+    ]
     apiready = function() {
-        moduleInit()
-        // requestData();
-        // $api.css($api.dom('body'), 'height:' + api.frameHeight*2/100+'rem');
-        // console.log(JSON.stringify())
-        // console.log($api.byId('news_wrap'))
-        // console.log(api.frameHeight*2/100)
-        // query();
-        // api.openFrame({
-        //     name: 'frameName',
-        //     url: './frame.html',
-        //     rect: {
-        //         x: 0,
-        //         y: $api.offset($api.byId('news_wrap')).h,
-        //         w: 'auto',
-        //         h: 'auto'
-        //     },
-        //     pageParam: {
-        //         name: 'value'
-        //     },
-        //     bounces: true
-        // });
+        moduleInit();
+        query();
+        api.addEventListener({
+            name: 'remindWho'
+        }, function(ret, err) {
+            if (ret) {
+                var pitchOn = $api.domAll('.pitchOn'),
+                    pitchOnArr = [];
+                for (var i = 0; i < pitchOn.length; i++) {
+                    pitchOnArr.push($api.attr($api.closest(pitchOn[i], 'li'), 'data-val'))
+                }
+                api.closeWin();
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
+        api.addEventListener({
+            name: 'editUserInfo'
+        }, function(ret, err) {
+            if (ret) {
+                query();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     }
-    function gtouchmove(){   
-        // console.log(document.body.scrollTop)
-        // query();
-        // $api.css($api.dom('header'), 'opacity:' + document.body.scrollTop/500 + '');
-    };    // 隐藏列表
+    // 数据排序
+    function sortData(data) {
+        var letterArr = [];
+        for (var i = 0; i < data.length; i++) {
+            for (var j = 0; j < data.length; j++) {
+                if (data[i].flag < data[j].flag) {
+                    var temp = data[i];
+                    data[i] = data[j];
+                    data[j] = temp;
+                }
+            }
+         }
+        letterArr.push(data[0].flag)
+        for (var i = 0; i < data.length; i++) {
+            data[0].flagLetter = data[0].flag
+            if (i>0) {
+                if (data[i].flag !== data[i-1].flag) {
+                    data[i].flagLetter = data[i].flag;
+                    letterArr.push(data[i].flag)
+                }
+            }
+         }
+         // 侧边栏
+         var str = '' ;
+         for (var i = 0; i < letterArr.length; i++) {
+             str += '<a  href="#'+ letterArr[i] +'">'+ letterArr[i] +'</a>'
+         }
+         $api.html($api.dom('.slidePage'), str);
+         getData(data)
+    }
+    // 选中好友
+    function selPerson(ele) {
+        var sel = ele.getElementsByClassName('sel')[0];
+        if ($api.hasCls(sel, 'pitchOn')) {
+            $api.removeCls(sel, 'pitchOn');
+        } else {
+            $api.addCls(sel, 'pitchOn');
+        }
+    }
+
+   // 隐藏列表
     function hideList(ele,n) {
         var pBorder = $api.closest(ele, 'p');
         var name = '.itemList' + n;
@@ -461,7 +775,7 @@
             name: SQLName,
             sql: 'SELECT * FROM addressList'
         }, function(ret, err) {
-            console.log('查询到的数据:')
+            console.log('查询到的数据:' + JSON.stringify(ret))
             if (ret.status) {
                 // setTimeout(function(){
                 //     if (ret.data=='') {
@@ -475,7 +789,8 @@
                 //     query();
                 // } else {
                     // console.log('有数据')
-                    dakai(paixv(ret.data))
+                    // dakai(paixv(ret.data))
+                    sortData(ret.data)
                 // }
             } else {
                 // console.log(JSON.stringify(err));
@@ -536,7 +851,7 @@
             // }
             arr[data[a].initial].push (data[i])
         }
-        console.log('处理完的数据:')
+        console.log('处理完的数据:' + JSON.stringify(arr))
         return arr;
     }
     </script>
