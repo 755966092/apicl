@@ -6,6 +6,13 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
+        .bbottomLoading {
+            text-align: center; 
+            font-size: .24rem;
+            color: #999;
+            line-height: .8rem;
+            display: none;
+        }
         .no_data {
          background-color: #EDECF3; 
          text-align: center;
@@ -254,7 +261,7 @@
                 {{ }; }}
             {{?}}
     </script>
-  
+    <p class="bbottomLoading">正在加载...</p>
    
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -262,7 +269,8 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 
 <script type="text/javascript">
-    var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"],parameter;
+    var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
+    var dataList = [], page_num = 1, dataListFlag = [],selectedObj,condition,parameter,flag;
     apiready = function(){
         moduleInit();
         api.execScript({
@@ -279,17 +287,20 @@
             bgColor: '#EFEFF4',
         }, function(ret, err) {
             //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
-            requireData();
+            requireData(condition);
         });
         api.addEventListener({
             name: 'editSupplyAfter'
         }, function(ret, err) {
             if (ret) {
+                page_num = 1;
                 requireData();
             } else {
                 alert(JSON.stringify(err));
             }
         });
+          // 上啦加载
+        scrollBotton()
     };
     // 用户详情页面
     function openUserInfoPage(ele){
@@ -303,7 +314,105 @@
         });
     }
 
-    
+    // 滚动到底部触发的事件
+    function scrollBotton() {
+        // 滚动到底部触发的事件
+        api.addEventListener({
+            name:'scrolltobottom',
+            extra:{
+                threshold:0            //设置距离底部多少距离时触发，默认值为0，数字类型
+            }
+        }, function(ret, err){        
+            console.log('已滚动到底部')
+            // alert('已滚动到底部');
+            if ($api.text($api.dom('.bbottomLoading')) == '暂无更多供求') {
+
+            } else {
+                $api.css($api.dom('.bbottomLoading'), 'display: block');
+                if (page_num == 1) {
+                    page_num = 2;
+                }
+                requireData2(condition);
+            }
+            
+        });
+    }
+    function requireData2 (data) {
+        var data = data || {};
+        var latitude,longitude;
+        if (data !== {}) {
+            if (data.order == 'distance') {
+                bMap.getLocation({
+                    accuracy: '100m',
+                    autoStop: true,
+                    filter: 1
+                }, function(ret, err) {
+                    if (ret.status) {
+                        data.latitude = ret.lat;
+                        data.longitude = ret.lon;
+                    } else {
+                        alert(err.code);
+                    }
+                });
+            }
+        }
+        api.ajax({
+            url: apiSite + '/demand/index',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+               values: { 
+                    token: $api.getStorage('userToken'),
+                    // keyword: '',
+                    type: data.type || '', 
+                    sub_type: data.sub_type || '',
+                    category_ids: data.category_ids || '',     
+                    order: data.order || '',
+                    latitude: data.latitude || '',      
+                    longitude: data.longitude || '',
+                    page_num: page_num     
+               }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                console.log(1)
+                if (ret.code == 200) {
+                    page_num++;
+                    if (ret.data.list.length < 15) {
+                            // $api.css($api.dom('.bbottomLoading'), 'display: none');
+                            $api.text($api.dom('.bbottomLoading'), '暂无更多供求');
+                        }else {
+                            if (ret.data.list) {
+                                $api.text($api.dom('.bbottomLoading'), '暂无更多供求');
+                            } else {
+                                $api.css($api.dom('.bbottomLoading'), 'display: none');
+                            }
+                            for (var i = 0; i < ret.data.list.length; i++) {
+                                // 解析图片json
+                                ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
+
+                                if(ret.data.list[i].unit == 0) {
+                                    ret.data.list[i].unit = _dataSource[_dataSource.length-1]
+                                } else {
+                                    ret.data.list[i].unit = _dataSource[ret.data.list[i].unit-1]
+                                }
+                                ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
+                            }
+                            for (var i = 0; i < ret.data.list.length; i++) {
+                                dataList.push(ret.data.list[i])
+                            }
+                            getData(dataList);
+                            selfAdaption();
+                        }
+                    } else {
+                        alert(ret.msg)
+                    }
+               
+            } else {
+                alert(JSON.stringify(err.msg))
+            }
+        })
+    }
     // 根据上传图片的多少自适应图片的大小
     function selfAdaption() {
         var listContent = $api.domAll('.item');
@@ -326,15 +435,17 @@
     // 筛选后结果
     function bySelect() {
         api.addEventListener({
-           name: 'screeningResults'
+           name: 'screeningResults1'
         }, function(ret, err) {
            
            if (ret.value.flag) {
             // $api.css($api.dom('.title1'), 'display:block');
             parameter = ret.value.parameter
            }
-           requireData(ret.value.condition)
-           selfAdaption();
+            condition = ret.value.condition
+            page_num = 1;
+            requireData(ret.value.condition)
+            selfAdaption();
         })
 
         api.addEventListener({
@@ -409,18 +520,19 @@
                     token: $api.getStorage('userToken'),
                     // keyword: '',
                     type: data.type || '', 
-                    sub_type: data.sub_type || '',
-                    // category_ids: '',     
+                    // sub_type: data.sub_type || '',
+                    category_ids: data.category_ids || '',     
                     order: data.order || '',
                     latitude: latitude || '',      
-                    longitude: longitude || ''     
+                    longitude: longitude || '',
+                    page_num: page_num    
                }
             }
         }, function(ret, err) {
              // 停止下拉刷新
                 api.refreshHeaderLoadDone()
             if(ret) {
-                console.log('397:::'+JSON.stringify(ret.data))
+                // console.log('397:::'+JSON.stringify(ret.data))
                 if (supplyCache === ret.data.list) {
 
                 } else {

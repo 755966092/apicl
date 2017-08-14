@@ -290,7 +290,7 @@
             $api.css($api.dom('.loading'), 'display: none');
             $api.text($api.dom('.bbottomLoading'), '正在加载...');
             //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
-             if (flag) {
+            if (flag) {
                 requireData(condition);
             } else {
                 requireData();
@@ -300,6 +300,7 @@
             name: 'editSupplyAfter'
         }, function(ret, err) {
             if (ret) {
+                    page_num = 1;
                     requireData();
             } else {
                 alert(JSON.stringify(err));
@@ -329,13 +330,16 @@
                 threshold:0            //设置距离底部多少距离时触发，默认值为0，数字类型
             }
         }, function(ret, err){        
+            console.log('已滚动到底部')
             // alert('已滚动到底部');
             if ($api.text($api.dom('.bbottomLoading')) == '暂无更多供求') {
 
             } else {
                 $api.css($api.dom('.bbottomLoading'), 'display: block');
-                page_num++;
-                requireData2();
+                if (page_num == 1) {
+                    page_num = 2;
+                }
+                requireData2(condition);
             }
             
         });
@@ -360,7 +364,6 @@
         }
     }
     // 筛选后结果
-    
     function bySelect() {
         api.addEventListener({
            name: 'screeningResults'
@@ -369,12 +372,13 @@
             $api.css($api.dom('.loading'), 'display: block');
             console.log('监听结果::'+JSON.stringify(ret))
             // $api.css($api.dom('.title1'), 'display:block');
-            parameter = ret.value.parameter
+            // parameter = ret.value.parameter
            }
            if (ret.value.condition) {
             flag = 1
            }
            condition = ret.value.condition;
+           page_num = 1;
            requireData(ret.value.condition)
            // selfAdaption();
         })
@@ -434,18 +438,20 @@
                         alert(err.code);
                     }
                 });
+            } else {
+                // 缓存字段  supply_publish_1
+                var supplyCache = $api.getStorage('supply_publish_1');
+                if (supplyCache) {
+                    getData(supplyCache);
+                    selfAdaption();
+                }
+                fliderSupply(data,supplyCache)
             }
         }
-        // 缓存字段  supply_publish_1
-        var supplyCache = $api.getStorage('supply_publish_1');
-        if (supplyCache) {
-            getData(supplyCache);
-            selfAdaption();
-        }
-        fliderSupply(data,supplyCache)
         
     }
     function fliderSupply(data,supplyCache) {
+        console.log('参数2:::'+JSON.stringify(data))
         api.ajax({
             url: apiSite + '/supply/index',
             method: 'post',
@@ -465,6 +471,7 @@
             }
         }, function(ret, err) {
             if(ret) {
+                console.log(page_num)
                 console.log(JSON.stringify(ret))
                 $api.css($api.dom('.loading'), 'display: none');
                 // 停止下拉刷新
@@ -506,7 +513,6 @@
         })
     }
     function requireData2 (data) {
-        console.log(page_num)
         var data = data || {};
         var latitude,longitude;
         if (data !== {}) {
@@ -535,7 +541,7 @@
                     // keyword: '',
                     type: data.type || '', 
                     sub_type: data.sub_type || '',
-                    // category_ids: '',     
+                    category_ids: data.category_ids || '',     
                     order: data.order || '',
                     latitude: data.latitude || '',      
                     longitude: data.longitude || '',
@@ -544,30 +550,37 @@
             }
         }, function(ret, err) {
             if(ret) {
-                if (ret.data.list.length < 15) {
-                        $api.css($api.dom('.bbottomLoading'), 'display: none');
-                    }else {
-                        if (ret.data.list) {
+                console.log(1)
+                if (ret.code == 200) {
+                    page_num++;
+                    if (ret.data.list.length < 15) {
+                            // $api.css($api.dom('.bbottomLoading'), 'display: none');
                             $api.text($api.dom('.bbottomLoading'), '暂无更多供求');
-                        } else {
-                            $api.css($api.dom('.bbottomLoading'), 'display: none');
-                        }
-                        for (var i = 0; i < ret.data.list.length; i++) {
-                            // 解析图片json
-                            ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
-
-                            if(ret.data.list[i].unit == 0) {
-                                ret.data.list[i].unit = _dataSource[_dataSource.length-1]
+                        }else {
+                            if (ret.data.list) {
+                                $api.text($api.dom('.bbottomLoading'), '暂无更多供求');
                             } else {
-                                ret.data.list[i].unit = _dataSource[ret.data.list[i].unit-1]
+                                $api.css($api.dom('.bbottomLoading'), 'display: none');
                             }
-                            ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
+                            for (var i = 0; i < ret.data.list.length; i++) {
+                                // 解析图片json
+                                ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
+
+                                if(ret.data.list[i].unit == 0) {
+                                    ret.data.list[i].unit = _dataSource[_dataSource.length-1]
+                                } else {
+                                    ret.data.list[i].unit = _dataSource[ret.data.list[i].unit-1]
+                                }
+                                ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
+                            }
+                            for (var i = 0; i < ret.data.list.length; i++) {
+                                dataList.push(ret.data.list[i])
+                            }
+                            getData(dataList);
+                            selfAdaption();
                         }
-                        for (var i = 0; i < ret.data.list.length; i++) {
-                            dataList.push(ret.data.list[i])
-                        }
-                        getData(dataList);
-                        selfAdaption();
+                    } else {
+                        alert(ret.msg)
                     }
                
             } else {

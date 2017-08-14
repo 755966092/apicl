@@ -237,7 +237,7 @@
             height: .8rem;
             background: url(../../image/loading_more.gif)no-repeat;
             background-size: .8rem .8rem;
-            position: absolute;
+            position: fixed;
             top: 0;
             bottom: 0;
             right: 0;
@@ -792,11 +792,10 @@
             }
         }, function(ret, err) {
             if(ret) {
+                $api.css($api.dom('.loading'), 'display: none');
                 if (ret.code !== 200) {
-
                     alert(ret.msg)
                 } else {
-                    $api.css($api.dom('.loading'), 'display: block');
                     requireData();
                 }
             } else {

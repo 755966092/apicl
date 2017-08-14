@@ -273,34 +273,30 @@ apiready = function() {
         badge: 0
         // 清除角标
     });
-    ajpush.init(function(ret) {
-        if (ret && ret.status){
-            console.log('300:::'+JSON.stringify(ret))
-
-            //success
-        }
-    });
-    ajpush.getRegistrationId(function(ret) {
-        console.log('315:::'+JSON.stringify(ret))
-    });
+    // 初始化极光, ios自动推送
+    if (api.systemType=='Android') {
+        ajpush.init();
+    }
+    ajpush.getRegistrationId();
     ajpush.setListener(
         function(ret) {
              var id = ret.id;
              var title = ret.title;
              var content = ret.content;
              var extra = ret.extra;
+             console.log(JSON.stringify(ret))
              // alert('292'+JSON.stringify(ret))
              // if (ret.extra.type == 1) {
-             //    api.openWin({
-             //        name: 'txl_addFellow_friendRequest_win',
-             //        url: './addressList/txl_addFellow_friendRequest_win.html',
-             //    });
+                // api.openWin({
+                //     name: 'txl_addFellow_friendRequest_win',
+                //     url: './addressList/txl_addFellow_friendRequest_win.html',
+                // });
              // } 
              // else if (ret.extra.type === 2) {
              //    // 供应订单 订单id reference_id
              //    api.openWin({
              //        name: 'winName',
-             //        url: './me/me_gdd.html',
+             //        url: './me/me_gdd_info.html',
              //        pageParam: {
              //            order_id: ret.extra.reference_id
              //        }
@@ -324,7 +320,29 @@ apiready = function() {
             var content = ajpush.content;
             var extra = ajpush.extra;
             console.log('307:::'+JSON.stringify(ret))
-            alert('307:::'+JSON.stringify(ret))
+            // alert('307:::'+JSON.stringify(ret))
+            if (extra.type == 2) {
+                api.openWin({
+                    name: 'me_gdd_info',
+                    url: './me/me_gdd_info.html',
+                    pageParam: {
+                        order_id: extra.reference_id
+                    }
+                });
+            } else if (extra.type == 3) {
+                api.openWin({
+                    name: 'me_qdd_info',
+                    url: './me/me_qdd_info.html',
+                    pageParam: {
+                        order_id: extra.reference_id
+                    }
+                });
+            } else if (extra.type == 1) {
+                api.openWin({
+                    name: 'txl_addFellow_friendRequest_win',
+                    url: './addressList/txl_addFellow_friendRequest_win.html',
+                });
+            }
         }
     })
     // 监听ios信息

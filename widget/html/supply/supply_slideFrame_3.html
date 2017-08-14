@@ -156,7 +156,7 @@
         <div class="head"></div>
     </header>
         <div class="warp flex-item"   tapmode   onclick="api.closeFrame()">
-            <div class="main"   tapmode   onclick="event.cancelBubble=true;">
+            <div class="main"   tapmode   onclick="event.stopPropagation()">
                 <div>
                     <ul class="no1">
                         <p>类别</p>
@@ -283,14 +283,14 @@
                 $api.text($api.dom('.school'), api.pageParam.parameter.category_ids);
             }
         }
-        if (api.pageParam.type == 1) {
+        if (api.pageParam.type == 0) {
             // 搜索供
             url = '/supply/index';
             for (var i = 0; i < $api.domAll('.no1 li').length; i++) {
                 $api.removeCls($api.domAll('.no1 li')[i], 'sel');
             }
             $api.addCls($api.byId('supply'), 'sel');
-        } else if (api.pageParam.type == 2) {
+        } else if (api.pageParam.type == 1) {
             // 搜索求
             url = '/demand/index';
             for (var i = 0; i < $api.domAll('.no1 li').length; i++) {

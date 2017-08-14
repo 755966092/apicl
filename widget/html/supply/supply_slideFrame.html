@@ -5,7 +5,7 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
-     <style>
+    <style>
         html,body {
             height: 100%;
             width: 100%;    
@@ -202,7 +202,17 @@
 <script type="text/javascript">
     var selectedObj=0,parameter,str,flag,categoryData;
     apiready = function(){
+        console.log(JSON.stringify(api.pageParam))
         fnInit();
+        // 供求不同的筛选
+        if (api.pageParam.type == 0) {
+            // 供
+
+        } else {
+            // 求
+            // 不显示no22
+            $api.css($api.dom('.no22'), 'display: none');
+        }
         api.addEventListener({
             name: 'selClass'
         }, function(ret, err) {
@@ -348,7 +358,7 @@
                 type: '',
                 order: '',
                 sub_type: '',
-                order: ''
+                category_ids: ''
             }
             // sel[0] = 类型个人 | 公司
             // sel[1] = 类别自产自销 | 代理
@@ -375,19 +385,41 @@
             }
             console.log('发送事件:::'+JSON.stringify(parameter))
             // 发送事件, 刷新筛选结果
-            api.sendEvent({
-                name: 'screeningResults',
-                extra: {
-                    condition: parameter,
-                    flag: flag
-                }
-            });
+            // 0 供赛选
+            // 1 求赛选
+            if (api.pageParam.type == 0) {
+                console.log('发送0')
+                api.sendEvent({
+                    name: 'screeningResults',
+                    extra: {
+                        condition: parameter,
+                        flag: flag
+                    }
+                });
+            } else {
+                console.log('发送1')
+                api.sendEvent({
+                    name: 'screeningResults1',
+                    extra: {
+                        condition: parameter,
+                        flag: flag
+                    }
+                });
+            }
              api.closeFrame();
 
         }
         else {
             $api.text($api.dom('.selText'), '请选择分类');
             $api.attr($api.dom('.selText'), 'data-category', '');
+            // parameter.category_ids = '';
+            
+            api.sendEvent({
+                name: 'selClass',
+                extra: {
+                    selectedArr: 0
+                }
+            });
             selectedObj = 0
             var no1 = document.getElementsByClassName('no1')[0]
             var liArr = no1.getElementsByTagName('li');

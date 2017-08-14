@@ -309,7 +309,6 @@
                     if (ret.code == 200) {
                         $api.css($api.dom('.loading'), 'display: none');
                         insertData();
-                        
                     } else {
                         $api.css($api.dom('.loading'), 'display: none');
                         alert(ret.msg)
@@ -348,9 +347,7 @@
             }
         }, function(ret, err) {
             if(ret) {
-                console.log('278::::'+JSON.stringify(ret))
                 // 插入到个人信息表
-                
                 // 插入到备注电话表
                 var sql = 'INSERT OR REPLACE INTO tb_remarks_contact(list_id,user_id,contact_id,phone,type,sub_type, is_default) VALUES'
                 for (var i = 0; i < ret.data.list.length; i++) {
@@ -358,7 +355,7 @@
                     if (ret.data.list[i].is_default == 1) {
                         db.executeSql({
                             name: SQLName,
-                            sql: 'UPDATE addressList set remark_current_contact = ' + ret.data.list[i].phone+' WHERE user_id = ' + api.pageParam.userId
+                            sql: 'UPDATE addressList set remark_current_contact = "' + ret.data.list[i].phone +'" WHERE user_id = ' + api.pageParam.userId
                         },function(ret,err){
                             if (ret.status) {
                                 api.sendEvent({
@@ -367,7 +364,15 @@
                                         flag: api.pageParam.flag
                                     }
                                 });
-                                
+                                db.selectSql({
+                                    name: SQLName,
+                                    sql: 'SELECT * FROM addressList WHERE user_id = ' + api.pageParam.userId
+                                }, function(ret, err){        
+                                    if( ret.status ){
+                                    }else{
+                                        alert( JSON.stringify( err ) );
+                                    }
+                                });
                             }else {
                                 api.alert({msg:err.msg});
                             }
