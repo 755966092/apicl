@@ -81,20 +81,31 @@
             background-size: .44rem .44rem;
             background-position: .11rem center;
         }
-        .list:nth-child(2) {
+        .list:nth-child(2){
             margin-top: .2rem;
             padding-bottom: .02rem;   
         }
+        .list:nth-child(3) {
+            padding-bottom: .02rem;   
+            margin-bottom: .2rem;
+        }
         .list:nth-child(2) .wrap1 {
             background: #fff url(../image/icon_find/icon_person.png)no-repeat;
-            -webkit-background-size: .44rem .44rem;
-            background-size: .44rem .44rem;
+            -webkit-background-size: .42rem .37rem;
+            background-size: .42rem .37rem;
             background-position: .11rem center;
         }
         .list:nth-child(3) .wrap1 {
+            background: #fff url(../image/icon_find/icon_peopleAround .png)no-repeat;
+            -webkit-background-size: .38rem .43rem;
+            background-size: .38rem .43rem;
+            background-position: .11rem center;
+
+        }
+        .list:nth-child(4) .wrap1 {
             background: #fff url(../image/icon_find/icon_supply.png)no-repeat;
-            -webkit-background-size: .44rem .44rem;
-            background-size: .44rem .44rem;
+            -webkit-background-size: .37rem .38rem;
+            background-size: .37rem .38rem;
             background-position: .11rem center;
         }
     </style>
@@ -113,6 +124,12 @@
         <div class="list" tapmode   onclick="openPage(1)">
            <div class="wrap1">
                 <span class="text"   >找人</span>
+                <span class="rightArrowhead"></span>
+           </div>
+        </div>
+        <div class="list" tapmode   onclick="openPage(2)">
+           <div class="wrap1">
+                <span class="text"   >附近的人</span>
                 <span class="rightArrowhead"></span>
            </div>
         </div>
@@ -143,7 +160,7 @@
     function openPage(n) {
         // openDb($api.getStorage('userToken'));
         // requestData();
-        if (n) {
+        if (n === 1) {
             api.openWin({
                 name: 'txl_fellowSearch2',
                 url: './addressList/txl_fellowSearch.html',
@@ -152,11 +169,17 @@
                 }
                
             });
-        } else {
+        } else if (n === 0) {
             api.openWin({
                 name: 'supply_searchSupply_win2',
                 url: './supply/supply_searchSupply_win.html',
                
+            });
+        } else {
+            console.log(111)
+            api.openWin({
+                name: 'find_peopleAround_win',
+                url: './find/find_peopleAround_win.html'
             });
         }
         
