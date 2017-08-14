@@ -323,6 +323,22 @@
             if(ret) {
                 if (ret.code == 200) {
                     console.log(JSON.stringify(ret))
+                    api.sendEvent({
+                        name: 'circleTopicComment'
+                    });
+                    api.execScript({
+                        frameName: 'find_frame',
+                        script: 'requestData();'
+                    });
+                    api.execScript({
+                        name: 'find_cricleInfo_win',
+                        script: 'requestData();'
+                    });
+                    api.execScript({
+                        name: 'find_dynamicState_win',
+                        frameName: 'find_dynamicState_frame',
+                        script: 'requestData();'
+                    });
                     requestData()
                 } else {
                     alert(ret.msg)

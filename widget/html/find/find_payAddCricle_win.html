@@ -193,7 +193,18 @@
                         frameName: 'find_frame',
                         script: 'requestData();'
                     });
-                    api.closeWin();
+                    api.execScript({
+                        name: 'find_cricleInfo_win',
+                        script: 'requestData();'
+                    });
+                    api.execScript({
+                        name: 'find_dynamicState_win',
+                        frameName: 'find_dynamicState_frame',
+                        script: 'requestData();'
+                    });
+                    api.closeToWin({
+                        name: 'find_cricleInfo_win'
+                    });
                     // alert(JSON.stringify(ret))
                 } else {
                     alert(JSON.stringify(err.msg))

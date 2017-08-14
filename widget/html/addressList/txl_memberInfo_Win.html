@@ -39,9 +39,18 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
+    var oneselfPageFlag = 0;
     apiready = function(){
         moduleInit();
-        
+        api.addEventListener({
+            name: 'oneselfPage'
+        }, function(ret, err) {
+            if (ret) {
+                oneselfPageFlag = 1;
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
         fnInit();
         if (1) {
             var userId = api.pageParam.userId
@@ -101,7 +110,8 @@
             name: 'txl_addFellow_PersonInfoSet_win',
             url: './txl_addFellow_PersonInfoSet_win.html',
             pageParam: {
-                userId: api.pageParam.userId
+                userId: api.pageParam.userId,
+                oneselfPageFlag: oneselfPageFlag
             },
             bounces: false
         });

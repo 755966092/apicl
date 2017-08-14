@@ -634,27 +634,28 @@
             saveToPhotoAlbum: false
         }, function(ret, err) {
             if (ret) {
-                 
-                base64Data.img.push(ret.data);
-                getData(base64Data);
-                $api.css($api.dom('.loading'), 'display: block');
-               //  var baseUrl = 'img.iinnet.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com
-                var obj = api.require('qiniuUpfile');
-                obj.upfile({
-                    file: ret.data,
-                }, function(retUpfile, err) {
-                    if (retUpfile.status) {
-                        if (retUpfile.oper == "complete") {
-                            //上传成功后组装访问路径，或直接访问文档
-                            imgArr.push('http://'+ baseUrl +'/'+ retUpfile.info.key);
-                            $api.css($api.dom('.loading'), 'display: none');
-                            // duibi($api.domAll('.imgpage').length,imgArr.length)
-                        } else if (retUpfile.oper == "progress") {
-                            //上传过程中获取进度数据
-                            // console.log(retUpfile.percent);
+               if (ret.data) {
+                    base64Data.img.push(ret.data);
+                    getData(base64Data);
+                    $api.css($api.dom('.loading'), 'display: block');
+                   //  var baseUrl = 'img.iinnet.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com
+                    var obj = api.require('qiniuUpfile');
+                    obj.upfile({
+                        file: ret.data,
+                    }, function(retUpfile, err) {
+                        if (retUpfile.status) {
+                            if (retUpfile.oper == "complete") {
+                                //上传成功后组装访问路径，或直接访问文档
+                                imgArr.push('http://'+ baseUrl +'/'+ retUpfile.info.key);
+                                $api.css($api.dom('.loading'), 'display: none');
+                                // duibi($api.domAll('.imgpage').length,imgArr.length)
+                            } else if (retUpfile.oper == "progress") {
+                                //上传过程中获取进度数据
+                                // console.log(retUpfile.percent);
+                            }
                         }
-                    }
-                });
+                    });
+               }
             } else {
                 // alert(JSON.stringify(err.msg));
             }

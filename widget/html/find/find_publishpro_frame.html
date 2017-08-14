@@ -628,12 +628,14 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
             saveToPhotoAlbum: false
         }, function(ret, err) {
             if (ret) {
-                base64Data.push(ret.data);
-                getData(base64Data);
-                $api.css($api.dom('.loading'), 'display: block');
-                pushImg(ret);
+                if (ret.data) {
+                    base64Data.push(ret.data);
+                    getData(base64Data);
+                    $api.css($api.dom('.loading'), 'display: block');
+                    pushImg(ret);
+                }
             } else {
-                alert(JSON.stringify(err.msg));
+                // alert(JSON.stringify(err.msg));
             }
         });
     }

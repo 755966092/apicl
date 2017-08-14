@@ -408,13 +408,13 @@
             saveToPhotoAlbum: false
         }, function(ret, err) {
             if (ret) {
-
-
-                $api.css($api.dom('header.header'), 'background-color: #3A393E');
-                $api.css($api.dom('header.header .head'), 'background-color: #3A393E');
-                $api.css($api.dom('.rightBtn'), 'display: block');
-                $api.text($api.dom('.winTitle'), '选择头像');
-                clipImage(ret)
+                if (ret.data) {
+                    $api.css($api.dom('header.header'), 'background-color: #3A393E');
+                    $api.css($api.dom('header.header .head'), 'background-color: #3A393E');
+                    $api.css($api.dom('.rightBtn'), 'display: block');
+                    $api.text($api.dom('.winTitle'), '选择头像');
+                    clipImage(ret)
+                }
                 // $api.css($api.dom('.loading'), 'display: block');
                 
                 // $api.attr($api.byId('headImg'), 'src', ret.data);

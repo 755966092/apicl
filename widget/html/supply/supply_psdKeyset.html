@@ -215,6 +215,7 @@
             if(ret) {
                 console.log(JSON.stringify(ret))
                 if (ret.code == 200) {
+                    
                     api.sendEvent({
                         name: 'saleMoney'
                     });
@@ -235,11 +236,15 @@
                             paramPhone: api.pageParam.paramPhone
                          }
                      }); 
+                        api.closeWin({
+                            name: 'supply_info_immediate_order'
+                        });
                     setTimeout(function() {
                         api.closeFrame({
                             name: 'supply_modeOfPayment'
                         });
                         api.closeFrame();
+                        api.closeWin();
                     },500)
                 } else {
                     alert(ret.msg)

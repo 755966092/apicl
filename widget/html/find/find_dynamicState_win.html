@@ -61,12 +61,42 @@
                 h: 'auto'
             },
             pageParam:　{
-                circle_id: api.pageParam.circle_id
+                circle_id: api.pageParam.circle_id,
+                circle_name: api.pageParam.circle_name
             }
         });
     };
 
     function openShadow() {
+        api.ajax({
+            url: apiSite + '/circle/detail',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       circle_id: api.pageParam.circle_id
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code == 200) {
+                    if (ret.data.is_member) {
+                        openPulish(1);
+                    } else {
+                        openPulish(0);
+                    }
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+        
+        
+    }
+    function openPulish(flag) {
         api.openFrame({
             name: 'find_publishBombBox',
             url: './find_publishBombBox.html',
@@ -79,11 +109,10 @@
             },
             pageParam: {
                 headerH: headerH,
-                flag: api.pageParam.flag,
+                flag: flag,
                 circle_id: api.pageParam.circle_id
             }
         });
-        
     }
 </script>
 </html>

@@ -286,6 +286,9 @@
                                                         paramPhone: api.pageParam.paramPhone
                                                     }
                                                 });
+                                                api.closeWin({
+                                                    name: 'supply_info_immediate_order'
+                                                });
                                                 api.sendEvent({
                                                     name: 'saleMoney'
                                                 });
@@ -348,6 +351,9 @@
                                                 api.sendEvent({
                                                     name: 'filterOrder'
                                                 });
+                                                api.closeWin({
+                                                    name: 'supply_info_immediate_order'
+                                                });
                                                 api.closeWin();
                                             } else {
                                                 // alert(JSON.stringify(ret))
@@ -390,6 +396,7 @@
         }, function(ret, err) {
             if (ret) {
                 if (ret.status) {
+                    
                     //支付成功
                     api.openWin({
                         name: 'supply_payResult_win',
@@ -409,6 +416,9 @@
                     });
                   api.sendEvent({
                         name: 'filterOrder'
+                    });
+                    api.closeWin({
+                        name: 'supply_info_immediate_order'
                     });
                     api.closeWin();
                 } else {

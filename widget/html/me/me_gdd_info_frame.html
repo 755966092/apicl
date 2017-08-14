@@ -208,7 +208,7 @@
             margin-top: .5rem;
         }
         .orderTime {
-            height: 1.96rem;
+            /*height: 1.96rem;*/
             background-color: #fff;
             margin-top: .2rem;
             padding: .3rem;
@@ -405,7 +405,9 @@
                     <span class="label fr" tapmode onclick="copyString()"   id="copy">复制</span>
                 </p>
                 <p>下单时间：<span class="code">{{=it.order_info.create_time}}</span></p>
+                {{?it.order_info.reason}}
                 <p>取消原因：<span class="code">{{=it.order_info.reason==null?'':it.order_info.reason}}</span></p>
+                {{?}}
             </div>
             <div class="remark">
                 备注：<span>{{=it.order_info.note==null?"":it.order_info.note}}</span>
@@ -716,6 +718,7 @@
                     obj: {
                         token: $api.getStorage('userToken'),
                         order_id: id,
+                        title: $api.text($api.dom('.supplyName')),
                     },
                     price: $api.text($api.dom('.totalNumber')),
                     flag: 1
@@ -769,7 +772,7 @@
                         // colorActive: '#fff'
                     },
                     title: {
-                        text: '请选择退款原因',
+                        text: '请选择取消订单原因',
                         size: 20,
                         h: 35,
                         bg: '#eee',
@@ -790,6 +793,7 @@
         } else if (flagText === '补差价') {
             console.log($api.not($api.closest(ele, '.btnGroup'), '.selector'))
             var total;
+            param.title = $api.text($api.dom('.supplyName'));
             if ($api.domAll('.btn').length == 2) {
                 // 已付款
                 total = 0;
@@ -815,53 +819,53 @@
             });
         } else if (flagText === '退款') {
             var tatol = $api.text($api.dom('.totalNumber'));
-            // api.openFrame({
-            //     name: 'me_gdd_info_frame_refund',
-            //     url: './me_gdd_info_frame_refund.html',
-            //     rect: {
-            //         x: 0,
-            //         y: 0,
-            //         w: api.winWidth,
-            //         h: api.winHeight
-            //     },
-            //     pageParam: {
-            //         tatol: tatol,
-            //         param: param
-            //     },
-            //     bounces: false
-            // });
-            api.prompt({
-                title: '退款',
-                // msg: 'message',
-                text: '请输入退款金额',
-                buttons: ['确定', '取消']
-            }, function(ret, err) {
-                if (ret) {
-                    if(buttonIndex == 1) {
-                        param.money = ret.text
-                        api.ajax({
-                            url: apiSite + '/supply_order/sellerRefundService',
-                            method: 'post',
-                            headers: apiHeader,
-                            data: {
-                                   values: param
-                            }
-                        }, function(ret, err) {
-                            if(ret) {
-                                // alert(JSON.stringify(ret))
-                                if (ret.code === 200) {
-                                } else {
-                                    alert(ret.msg)
-                                }
-                            } else {
-                                alert(JSON.stringify(err))
-                            }
-                        })
-                    }
-                } else {
-                    alert(JSON.stringify(err));
-                }
+            api.openFrame({
+                name: 'me_gdd_info_frame_refund',
+                url: './me_gdd_info_frame_refund.html',
+                rect: {
+                    x: 0,
+                    y: 0,
+                    w: api.winWidth,
+                    h: api.winHeight
+                },
+                pageParam: {
+                    tatol: tatol,
+                    param: param
+                },
+                bounces: false
             });
+            // api.prompt({
+            //     title: '退款',
+            //     // msg: 'message',
+            //     text: '请输入退款金额',
+            //     buttons: ['确定', '取消']
+            // }, function(ret, err) {
+            //     if (ret) {
+            //         if(buttonIndex == 1) {
+            //             param.money = ret.text
+            //             api.ajax({
+            //                 url: apiSite + '/supply_order/sellerRefundService',
+            //                 method: 'post',
+            //                 headers: apiHeader,
+            //                 data: {
+            //                        values: param
+            //                 }
+            //             }, function(ret, err) {
+            //                 if(ret) {
+            //                     // alert(JSON.stringify(ret))
+            //                     if (ret.code === 200) {
+            //                     } else {
+            //                         alert(ret.msg)
+            //                     }
+            //                 } else {
+            //                     alert(JSON.stringify(err))
+            //                 }
+            //             })
+            //         }
+            //     } else {
+            //         alert(JSON.stringify(err));
+            //     }
+            // });
         }else if (flagText === '优惠') {
             api.openFrame({
                 name: 'me_gdd_info_frame_sale',

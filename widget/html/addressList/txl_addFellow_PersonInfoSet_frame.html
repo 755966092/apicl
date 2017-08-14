@@ -162,35 +162,49 @@
 <script type="text/javascript">
     apiready = function(){
         moduleInit();
-        console.log(JSON.stringify(api.pageParam))
+        console.log(JSON.stringify(api.pageParam));
+        if (api.pageParam.oneselfPageFlag) {
+            $api.css($api.dom('.btn'), 'background-color: #1AAD19');
+            $api.text($api.dom('.btn'), '编辑资料');
+        }
     };
 
     function changeState (ele) {
         $api.toggleCls(ele, 'sel');
     }
     function delectFell() {
-        api.ajax({
-            url: apiSite + '/friend/removeFriend',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                   values: { 
-                       token: $api.getStorage('userToken'),
-                       user_id: api.pageParam.user_id
-                   }
-            }
-        }, function(ret, err) {
-            if(ret) {
-                if (ret.code == 200) {
-                    updateSql();
-                    
-                } else {
-                    alert(ret.msg)
+        if (api.pageParam.oneselfPageFlag) {
+            api.openWin({
+                name: 'me_info',
+                url: '../me/me_info.html',
+                pageParam: {
+                    name: 'value'
                 }
-            } else {
-                alert(JSON.stringify(err))
-            }
-        })
+            });
+        } else {
+            api.ajax({
+                url: apiSite + '/friend/removeFriend',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                       values: { 
+                           token: $api.getStorage('userToken'),
+                           user_id: api.pageParam.user_id
+                       }
+                }
+            }, function(ret, err) {
+                if(ret) {
+                    if (ret.code == 200) {
+                        updateSql();
+                        
+                    } else {
+                        alert(ret.msg)
+                    }
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
+        }
     }
     function updateSql() {
         db.executeSql({

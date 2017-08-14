@@ -114,7 +114,15 @@
             }
         }, function(ret, err) {
             if (ret) {
-                api.closeWin();
+                if (ret.code == 200) {
+                    api.closeToWin({
+                        name: 'me_info_qtlxfs'
+                    });
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
             }
         })
     }

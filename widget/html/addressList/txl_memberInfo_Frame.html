@@ -518,7 +518,6 @@
     var SQLName = 'db_' + $api.getStorage('userToken');
     var targetRongId;
     apiready = function () {
-        console.log('会员F:::'+api.pageParam.flag)
         $api.css($api.dom('.shadow'), 'height:'+$api.offset($api.dom('.main')).h+'px;');
         // console.log('484:::'+JSON.stringify(api.pageParam))
         if(api.pageParam.userId == 0) {
@@ -1085,6 +1084,10 @@
                 }
                 $api.css($api.dom('.title .icon'), 'display: none');
                 $api.css($api.dom('.shadow'), 'display:block');
+                // 右上角三个点
+                api.sendEvent({
+                    name: 'oneselfPage'
+                });
                 break;
             case 2:
                 $api.text(relationship_level, '一度人脉熟识好友');
