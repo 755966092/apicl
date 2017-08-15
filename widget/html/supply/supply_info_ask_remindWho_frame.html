@@ -96,17 +96,24 @@
             background-position: 0 center;
         }
         .slidePage {
-            /*width: .3rem;*/
-
+            width: .6rem;
+            text-align: right;
+            /*background-color: rgba(255,0,0,.5);*/
             position: fixed;
-            right: .1rem;
-            top: 2rem;
+            right: 0;
+            top: 0;
             height: 100%;
             font-size: .24rem;
+            box-sizing: border-box;
+            padding-right: .1rem;
+        }
+        .slidePage div {
+            width: .2rem;
         }
         .slidePage a{
-            display: block;
+             width: .2rem;
             text-align: center;
+            color: #555;
         }
         .groupTitle {
             font-size: .24rem;
@@ -134,8 +141,8 @@
         <div class=" list resultList"></div>
         <script type="text/x-dot-template" id="listT">
         {{ for (var i = 0; i < it.length; i++) { }} 
-            {{?it[i].flag}}
-                <p id="{{=it[i].flag}}" class="groupTitle">{{=it[i].flag}}</p>
+            {{?it[i].flagLetter}}
+                <p id="{{=it[i].flagLetter}}" class="groupTitle">{{=it[i].flagLetter}}</p>
             {{? }}
             <div class="item"   tapmode   onclick="selPerson(this)" data-val='no1'>
                
@@ -149,8 +156,8 @@
         {{ }; }}
         </script>
     </div>
-    <div class="slidePage">
-        <a href="#A">A</a>
+    <div class="slidePage flex-def flex-zTopBottom flex-zCenter flex-cEnd"  ontouchmove="move()">
+        <!-- <a href="#A">A</a>
         <a href="#B">B</a>
         <a href="#C">C</a>
         <a href="#D">D</a>
@@ -176,7 +183,10 @@
         <a href="#X">X</a>
         <a href="#Y">Y</a>
         <a href="#Z">Z</a>
-        <a href="#">#</a>
+        <a href="#">#</a> -->
+        <div class="wrap">
+            
+        </div>
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -185,131 +195,683 @@
 <script type="text/javascript">
     var data = [
         {
-            initial: 'A',
+            flag: 'A',
             name: 'name1',
             position: '第一学科技公司',
             headUrl: '../../image/tx_1.jpg'
         },
         {
-            initial: 'E',
+            flag: 'E',
             name: 'name5',
             position: '第一学科技公司',
             headUrl: '../../image/tx_3.jpg'
         },
         {
-            initial: 'F',
+            flag: 'F',
             name: 'name6',
             position: '第一学科技公司',
             headUrl: '../../image/tx_2.jpg'
         },
         {
-            initial: 'B',
+            flag: 'B',
             name: 'name2',
             position: '第一学科技公司',
             headUrl: '../../image/tx_4.jpg'
         },
          {
-            initial: 'A',
+            flag: 'A',
             name: 'name1',
             position: '第一学科技公司',
             headUrl: '../../image/tx_1.jpg'
         },
         {
-            initial: 'D',
+            flag: 'D',
             name: 'name5',
             position: '第一学科技公司',
             headUrl: '../../image/tx_3.jpg'
         },
         {
-            initial: 'W',
+            flag: 'W',
             name: 'name6',
             position: '第一学科技公司',
             headUrl: '../../image/tx_2.jpg'
         },
         {
-            initial: 'Q',
+            flag: 'Q',
             name: 'name2',
             position: '第一学科技公司',
             headUrl: '../../image/tx_4.jpg'
         },
          {
-            initial: 'R',
+            flag: 'R',
             name: 'name1',
             position: '第一学科技公司',
             headUrl: '../../image/tx_1.jpg'
         },
         {
-            initial: 'X',
+            flag: 'X',
             name: 'name5',
             position: '第一学科技公司',
             headUrl: '../../image/tx_3.jpg'
         },
         {
-            initial: 'T',
+            flag: 'T',
             name: 'name6',
             position: '第一学科技公司',
             headUrl: '../../image/tx_2.jpg'
         },
         {
-            initial: 'Y',
+            flag: 'Y',
             name: 'name2',
             position: '第一学科技公司',
             headUrl: '../../image/tx_4.jpg'
         },
          {
-            initial: 'U',
+            flag: 'U',
             name: 'name1',
             position: '第一学科技公司',
             headUrl: '../../image/tx_1.jpg'
         },
         {
-            initial: 'I',
+            flag: 'I',
             name: 'name5',
             position: '第一学科技公司',
             headUrl: '../../image/tx_3.jpg'
         },
         {
-            initial: 'O',
+            flag: 'O',
             name: 'name6',
             position: '第一学科技公司',
             headUrl: '../../image/tx_2.jpg'
         },
         {
-            initial: 'P',
+            flag: 'P',
             name: 'name2',
             position: '第一学科技公司',
             headUrl: '../../image/tx_4.jpg'
         },
         {
-            initial: 'Z',
+            flag: 'Z',
             name: 'name3',
             position: '第一学科技公司',
             headUrl: '../../image/tx_5.jpg'
-        }
+        },{
+            flag: 'A',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            flag: 'E',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            flag: 'F',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            flag: 'B',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+         {
+            flag: 'A',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            flag: 'D',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            flag: 'W',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            flag: 'Q',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+         {
+            flag: 'R',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            flag: 'X',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            flag: 'T',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            flag: 'Y',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+         {
+            flag: 'U',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            flag: 'I',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            flag: 'O',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            flag: 'P',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+        {
+            flag: 'Z',
+            name: 'name3',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_5.jpg'
+        },{
+            flag: 'A',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            flag: 'E',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            flag: 'F',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            flag: 'B',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+         {
+            flag: 'A',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            flag: 'D',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            flag: 'W',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            flag: 'Q',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+         {
+            flag: 'R',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            flag: 'X',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            flag: 'T',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            flag: 'Y',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+         {
+            flag: 'U',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            flag: 'I',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            flag: 'O',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            flag: 'P',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+        {
+            flag: 'Z',
+            name: 'name3',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_5.jpg'
+        },{
+            flag: 'A',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            flag: 'E',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            flag: 'F',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            flag: 'B',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+         {
+            flag: 'A',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            flag: 'D',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            flag: 'W',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            flag: 'Q',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+         {
+            flag: 'R',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            flag: 'X',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            flag: 'T',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            flag: 'Y',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+         {
+            flag: 'U',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            flag: 'I',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            flag: 'O',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            flag: 'P',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+        {
+            flag: 'Z',
+            name: 'name3',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_5.jpg'
+        },{
+            flag: 'A',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            flag: 'E',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            flag: 'F',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            flag: 'B',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+         {
+            flag: 'A',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            flag: 'D',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            flag: 'W',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            flag: 'Q',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+         {
+            flag: 'R',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            flag: 'X',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            flag: 'T',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            flag: 'Y',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+         {
+            flag: 'U',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            flag: 'I',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            flag: 'O',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            flag: 'P',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+        {
+            flag: 'Z',
+            name: 'name3',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_5.jpg'
+        },{
+            flag: 'A',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            flag: 'E',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            flag: 'F',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            flag: 'B',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+         {
+            flag: 'A',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            flag: 'D',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            flag: 'W',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            flag: 'Q',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+         {
+            flag: 'R',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            flag: 'X',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            flag: 'T',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            flag: 'Y',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+         {
+            flag: 'U',
+            name: 'name1',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_1.jpg'
+        },
+        {
+            flag: 'I',
+            name: 'name5',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_3.jpg'
+        },
+        {
+            flag: 'O',
+            name: 'name6',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_2.jpg'
+        },
+        {
+            flag: 'P',
+            name: 'name2',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_4.jpg'
+        },
+        {
+            flag: 'Z',
+            name: 'name3',
+            position: '第一学科技公司',
+            headUrl: '../../image/tx_5.jpg'
+        },
     ]
-
-    // 数据排序
-     for (var i = 0; i < data.length; i++) {
-        for (var j = 0; j < data.length; j++) {
-            if (data[i].initial < data[j].initial) {
-                var temp = data[i];
-                data[i] = data[j];
-                data[j] = temp;
+    var letterArr = [],letterObj = [];
+    function f_check_uppercase(obj)   {          
+       if (/[A-Z]/.test(obj))    {   
+          return true;   
+       }    
+       return false;   
+    }
+    sortData(data)
+    function sortData(data) {
+        for (var i = 0; i < data.length; i++) {
+            for (var j = 0; j < data.length; j++) {
+                if (data[i].flag < data[j].flag) {
+                    var temp = data[i];
+                    data[i] = data[j];
+                    data[j] = temp;
+                }
             }
-        }
-     }
-     for (var i = 0; i < data.length; i++) {
-         data[0].flag = data[0].initial
-        if (i>0) {
-            if (data[i].initial !== data[i-1].initial) {
-                data[i].flag = data[i].initial
-            }
-        }
-     
-     }
+         }
 
+         if (f_check_uppercase(data[0].flag)) {
+            letterArr.push(data[0].flag)
+         } else {
+            letterArr.push('#')
+         }
+        for (var i = 0; i < data.length; i++) {
+            if(f_check_uppercase(data[0].flag)) {
+                data[0].flagLetter = data[0].flag
+            } else {
+                data[0].flagLetter = '#'
+            }
+            if (i>0) {
+                if (data[i].flag !== data[i-1].flag) {
+                    if (f_check_uppercase(data[i].flag)) {
+                        data[i].flagLetter = data[i].flag;
+                        letterArr.push(data[i].flag)
+                    } else {
+                        data[i].flagLetter = '#';
+                        letterArr.push('#')
+                    }
+                }
+            }
+         }
+         // 侧边栏
+         var str = '' ;
+         // console.log($api.dom('.wrap').getBoundingClientRect())
+         for (var i = 0; i < letterArr.length; i++) {
+            str += '<a ontouchstart="anchorJump('+ letterArr[i] +')"  >'+ letterArr[i] +'</a>'
+         }
+         $api.html($api.dom('.slidePage div'), str);
+         getData(data)
+         var clientArr = $api.dom('a').getBoundingClientRect();
+         for (var i = 0; i < letterArr.length; i++) {
+                letterObj.push({
+                        letterArr: letterArr[i],
+                        clientY: clientArr
+                    })
+                
+                clientArr +=  $api.offset($api.dom('a')).h;
+         }
+    }
+    function anchorJump(n) {
+       location.hash = '#' + n
+    }
+    function move() {
+       //  获取开始点击的位置
+       //  每滑动一个a标签的高度切换一个锚点
+        event.preventDefault();
+        anchorJump($api.text(document.elementFromPoint(event.changedTouches[0].clientX,event.changedTouches[0].clientY)))
+    }
      
-    getData(data)
     apiready = function(){
         api.addEventListener({
             name: 'remindWho'
