@@ -55,31 +55,31 @@
     <div class="main">
     
           <ul >
-            <li class=" flex-def flex-cCenter flex-zBetween" >
+            <li tapmode onclick="selType(this, 1)" class=" flex-def flex-cCenter flex-zBetween" >
                 <span class="title">关系</span>  
                 <div class="flex-def flex-zEnd flex-cCenter flex-item">
-                    <span class="relation">一度好友</span>
+                    <span class="relation">一度人脉</span>
                     <span class="icon"></span>
                 </div>
             </li>
-            <li class=" flex-def flex-cCenter flex-zBetween">
+            <li tapmode onclick="selType(this, 2)" class=" flex-def flex-cCenter flex-zBetween">
                 <span class="title">性别</span>  
                 <div class="flex-def flex-zEnd flex-cCenter flex-item">
                     <span class="relation">女生</span>
                     <span class="icon"></span>
                 </div>
             </li>
-            <li class=" flex-def flex-cCenter flex-zBetween">
+            <li tapmode onclick="selType(this, 3)" class=" flex-def flex-cCenter flex-zBetween">
                 <span class="title">家乡</span>  
                 <div class="flex-def flex-zEnd flex-cCenter flex-item">
                     <span class="relation">北京-东城区</span>
                     <span class="icon"></span>
                 </div>
             </li>
-            <li class=" flex-def flex-cCenter flex-zBetween">
+            <li tapmode onclick="selType(this, 4)" class=" flex-def flex-cCenter flex-zBetween">
                 <span class="title">年龄</span>  
                 <div class="flex-def flex-zEnd flex-cCenter flex-item">
-                    <span class="relation">15-25</span>
+                    <span class="relation">不限</span>
                     <span class="icon"></span>
                 </div>
             </li>
@@ -88,11 +88,195 @@
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../data/city_3.js"></script>
 <script type="text/javascript">
     apiready = function(){
         moduleInit();
+        // 监听点击完成按钮事件
+        eventMonitoring('CompleteTheScreeningOfNearbyPeople')
     };
-  
+    // 事件监听
+    function eventMonitoring(eventName) {
+        api.addEventListener({
+            name: eventName
+        }, function(ret, err) {
+            if (ret) {
+                submitData();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    // 提交数据
+    function submitData () {
+        var paramElement = $api.domAll('.relation');
+        var paramArr = [];
+        for (var i = 0; i < paramElement.length; i++) {
+            paramArr.push($api.text(paramElement[i]))
+        }
+        api.sendEvent({
+            name: 'ScreeningIsComplete',
+            extra: {
+                filterParameters: paramArr
+            }
+        });
+        api.closeWin();
+    }
+    function selType(ele, n) {
+        // 1 关系
+        // 2 性别
+        // 3 家乡
+        // 4 年龄
+        var data, dataArr = [],col = 1;
+        var active = [];
+        var text = $api.text($api.dom(ele, '.relation'));
+        if (n === 1) {
+            data = [
+                {
+                    name: '一度人脉'
+                },{
+                    name: '二度人脉'
+                },{
+                    name: '三度人脉'
+                },{
+                    name: '四度人脉'
+                },{
+                    name: '五度人脉'
+                },{
+                    name: '六度人脉'
+                },{
+                    name: '平台好友'
+                },{
+                    name: '无关系'
+                },
+            ];
+            dataArr = ['一度人脉','二度人脉','三度人脉','四度人脉','五度人脉','六度人脉','平台好友','无关系'];
+            if (dataArr.indexOf(text) == -1) {
+                active = [1]
+            } else {
+                active.push(dataArr.indexOf(text))
+            }
+        } else if (n === 2) {
+            data = [
+                {
+                    name: '男生'
+                },
+                {
+                    name: '女生'
+                }
+            ];
+            dataArr = ['男生', '女生'];
+            if (dataArr.indexOf(text) == -1) {
+                active = [1]
+            } else {
+                active.push(dataArr.indexOf(text))
+            }
+        } else if (n === 3) {
+            col = 2;
+            data = city;
+            var selText1 = text.split('-')
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].name == selText1[0]) {
+                    active.push(i);
+                    for (var j = 0; j < data[i].sub.length; j++) {
+                        if (data[i].sub[j].name == selText1[1]) {
+                            active.push(j);
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        } else  {
+            data = [
+                {
+                    name: '不限'
+                },{
+                    name: '18岁以下'
+                },{
+                    name: '18-22岁'
+                },{
+                    name: '23-26岁'
+                },{
+                    name: '27-35岁'
+                },{
+                    name: '35岁以上'
+                },
+            ];
+            dataArr = ['不限', '18岁以下','18-22岁','23-26岁','27-35岁','35岁以上'];
+            if (dataArr.indexOf(text) == -1) {
+                active = [1]
+            } else {
+                active.push(dataArr.indexOf(text))
+            }
+        }
+
+        var fontsize = 16,rowLength = 5;
+        if (api.systemType === 'ios') {
+            fontsize = 20;
+            rowLength = 7;
+        }
+        UIActionSelector.open({
+            datas: data,
+            actives: active,
+            layout: {
+                row: rowLength,
+                col: col,
+                height: 30,
+                size: fontsize,
+                sizeActive: fontsize+2,
+                rowSpacing: 5,
+                colSpacing: 5,
+                maskBg: 'rgba(0,0,0,0.5)',
+                bg: '#fff',
+                color: '#888',
+                colorSelected: '#000'
+            },
+            animation: true,
+            cancel: {
+                text: '取消',
+                size: 16,
+                w: 60,
+                h: 40,
+                bg: '#eee',
+                // bgActive: '#ccc',
+                color: '#000',
+                // colorActive: '#fff'
+            },
+            ok: {
+                text: '完成',
+                size: 16,
+                w: 60,
+                h: 40,
+                bg: '#eee',
+                // bgActive: '#ccc',
+                color: '#000',
+                // colorActive: '#fff'
+            },
+            title: {
+                text: '请选择',
+                size: 20,
+                h: 40,
+                bg: '#F0F0F0',
+                color: '#000'
+            },
+            fixedOn: api.frameName
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.eventType == 'ok') {
+                    // 编辑性别
+                    if (n === 3) {
+                        $api.text($api.dom(ele, '.relation'), ret.level1 + '-' + ret.level2);
+                    } else {
+                        $api.text($api.dom(ele, '.relation'), ret.level1);
+                    }
+
+                }
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
+    }
     
 </script>
 </html>

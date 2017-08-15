@@ -46,7 +46,6 @@ function exitApp() {
 
                 }
             });
-
             db.closeDatabase({
                 name: 'test'
             }, function(ret, err) {

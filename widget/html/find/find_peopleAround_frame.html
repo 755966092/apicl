@@ -9,13 +9,13 @@
         li {
             width: 7.5rem;
             box-sizing: border-box;
-            padding: .1rem .17rem;
+            padding: .1rem .17rem .16rem;
             border-bottom: .01rem solid #d9d9d9;
             background-color: #fff;
         }
         li img {
             width: .83rem;
-            height: .8rem 3px;
+            height: .83rem;
             border-radius: .1rem;
             margin-right: .26rem;
         }
@@ -36,12 +36,15 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        /*// 行高 = 24
+        // 边距 = 8*/
         li .content span{
+            border-top: .08rem solid #f2f2f2;
+            border-bottom: .08rem solid #f2f2f2;
             max-width: 1.6rem;
-            max-height: .66rem;
-            padding: .0rem .1rem;
-            box-sizing: border-box;
-            line-height: .3rem;
+            max-height: .64rem;
+            padding: 0 .1rem;
+            border-radius: .08rem;
             font-size: .2rem;
             color: #999;
             background-color: #F2F2F2;
@@ -83,7 +86,7 @@
                         <p>100米以内</p>
                     </div>
                     <span class="content flex-def flex-cCenter">
-                        <span>个性签名个性签</span>
+                        <span>个性签性签</span>
                     </span>
                 </div>
             </li>
@@ -111,9 +114,28 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
     apiready = function(){
-        
+        eventMonitoring('ScreeningIsComplete')
     };
-  
+    
+    // 事件监听
+    function eventMonitoring(eventName) {
+        api.addEventListener({
+            name: eventName
+        }, function(ret, err) {
+            if (ret) {
+                requireData(ret);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+    // 请求数据
+    function requireData(ret) {
+        // 参数
+        var param = ret.value.filterParameters;
+        alert(JSON.stringify(param))
+    }
     
 </script>
 </html>
