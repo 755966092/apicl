@@ -123,28 +123,32 @@
             }
         }, function(ret, err) {
             if(ret) {
-                $api.css($api.dom('.shadow'), 'display:none');
-                console.log(JSON.stringify(ret))
-                if (ret.data.info.type == 1) {
-                    // 免费入群
-                    $api.text($api.dom('.winTitle'), '免费入群');
-                    $api.text($api.dom('.circle_info'), '圈主设置了免费入群');
-                    $api.text($api.dom('.price'), '￥0');
-                    $api.text($api.dom('.btn'), '立即加入');
+                if (ret.code == 200) {
+                    $api.css($api.dom('.shadow'), 'display:none');
+                    console.log(JSON.stringify(ret))
+                    if (ret.data.info.type == 1) {
+                        // 免费入群
+                        $api.text($api.dom('.winTitle'), '免费入群');
+                        $api.text($api.dom('.circle_info'), '圈主设置了免费入群');
+                        $api.text($api.dom('.price'), '￥0');
+                        $api.text($api.dom('.btn'), '立即加入');
 
+                    } else {
+                        // 付费入群
+                        $api.text($api.dom('.winTitle'), '付费入群');
+                        $api.text($api.dom('.circle_info'), '圈主设置了需支付如下金额才能加入');
+                        $api.text($api.dom('.price'), '￥'+ret.data.info.price);
+                        $api.text($api.dom('.btn'), '付费入群');
+                        price = ret.data.info.price;
+                    }
+                    $api.text($api.dom('.title'), ret.data.info.title);
+                    $api.text($api.dom('.circleMasterName'), '圈主：'+ ret.data.info.owner_nickname);
+                    $api.attr($api.dom('.head_img'), 'src', ret.data.info.image_url);
                 } else {
-                    // 付费入群
-                    $api.text($api.dom('.winTitle'), '付费入群');
-                    $api.text($api.dom('.circle_info'), '圈主设置了需支付如下金额才能加入');
-                    $api.text($api.dom('.price'), '￥'+ret.data.info.price);
-                    $api.text($api.dom('.btn'), '付费入群');
-                    price = ret.data.info.price;
+                    alert(ret.msg)
                 }
-                $api.text($api.dom('.title'), ret.data.info.title);
-                $api.text($api.dom('.circleMasterName'), '圈主：'+ ret.data.info.owner_nickname);
-                $api.attr($api.dom('.head_img'), 'src', ret.data.info.image_url);
             } else {
-                alert('错误信息'+JSON.stringify(err))
+                console.log('错误信息'+JSON.stringify(err))
             }
         })
     }
@@ -205,7 +209,7 @@
                     api.closeToWin({
                         name: 'find_cricleInfo_win'
                     });
-                    // alert(JSON.stringify(ret))
+                    // // alert(JSON.stringify(ret))
                 } else {
                     alert(JSON.stringify(err.msg))
                 }

@@ -50,7 +50,7 @@ function exitApp() {
                 name: 'test'
             }, function(ret, err) {
                 if (ret.status) {
-                    // alert(JSON.stringify(ret));
+                    // // alert(JSON.stringify(ret));
                 } else {
                     alert(JSON.stringify(err.msg));
                 }
