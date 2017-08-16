@@ -243,7 +243,9 @@
             height: .9rem;
             line-height: .9rem;
             color: #fff;
-            margin-top: .75rem;
+            /*margin-top: .75rem;*/
+            position: fixed;
+            bottom: 0;
         }
         .hull {
             display: none;
@@ -418,6 +420,15 @@
             //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
             requireData();
         });
+        api.addEventListener({
+            name: 'filterOrder'
+        }, function(ret, err) {
+            if (ret) {
+                requireData();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     };
     // 进入供应详情
     function openSupplyInfoPage(ele) {
@@ -450,7 +461,8 @@
             url: '../supply/supply_commentPage.html',
             pageParam: {
                 obj: obj,
-                flag: flag
+                flag: api.pageParam.flag,
+                type: 'demand'
             }
         });
     }
