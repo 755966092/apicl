@@ -291,8 +291,16 @@ var  mainH, _main, scrollH;
             name: 'receiveMsg'
         }, function(ret, err) {
             console.log('258:::' + JSON.stringify(ret))
-            if (ret.value.targetId == targetRongId) {
+            var value = ret.value
+            if (value.targetId == targetRongId) {
                  addReceMsg(ret.value.msg, youHeadImg,0);
+                 // if (value.msgContent.result.message.objectName == 'RC:VcMsg') {
+                 //    addReceMsg(value.msg, youHeadImg,0);
+                 // } else if (value.msgContent.result.message.objectName == 'RC:TxtMsg') {
+                 //    addReceVoiceMessages(value.msgContent.result,)
+                 // } else {
+
+                 // }
             }
             // 收到消息后, 添加消息内容到页面
            
@@ -503,9 +511,9 @@ var  mainH, _main, scrollH;
                     normalImg: 'widget://image/chatPage/key1.png'
                 },
                 // 录音按钮
-                // speechBtn: {
-                //     normalImg: 'widget://image/chatPage/cam1.png'
-                // },
+                speechBtn: {
+                    normalImg: 'widget://image/chatPage/cam1.png'
+                },
                 recordBtn: {
                     normalBg: '#c4c4c4',
                     activeBg: '#999999',
@@ -741,7 +749,7 @@ var  mainH, _main, scrollH;
         }, function(ret, err) {
             if (ret) {
                 console.log(voicePath)
-                // // alert(JSON.stringify(ret));
+                // alert(JSON.stringify(ret));
             } else {
                 alert(JSON.stringify(err));
             }
@@ -820,7 +828,7 @@ var  mainH, _main, scrollH;
                 count: count
             }, function(ret, err) {
                 console.log('482:'+JSON.stringify(ret))
-                // // alert(JSON.stringify(ret))
+                // alert(JSON.stringify(ret))
                 for (var i = 0; i < ret.result.length ; i++) {
                     if (ret.result[i].messageDirection == 'RECEIVE') {
                         // 消息方向：SEND(发送) 或者 RECEIVE(接受)
@@ -898,7 +906,7 @@ var  mainH, _main, scrollH;
             console.log('558:'+JSON.stringify(ret))
             if (ret.status == 'prepare') {
               sendMsg = ret.result.message.content.text;
-              // // alert(JSON.stringify(ret));
+              // alert(JSON.stringify(ret));
             }
                
             else if (ret.status == 'success') {
@@ -919,7 +927,7 @@ var  mainH, _main, scrollH;
                     msg: '第三个message' + err.code,
                 }, function(ret, err) {
                     if (ret) {
-                        // alert(JSON.stringify(ret));
+                        alert(JSON.stringify(ret));
                     } else {
                         alert(JSON.stringify(err.msg));
                     }

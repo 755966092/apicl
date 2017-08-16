@@ -209,7 +209,8 @@ function receiveMsg() {
             name: 'receiveMsg',
             extra: {
                 msg: ret.result.message.content.text,
-                targetId: ret.result.message.senderUserId
+                targetId: ret.result.message.senderUserId,
+                msgContent: ret
             }
         });
     })

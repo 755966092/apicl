@@ -7,12 +7,6 @@
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <link rel="stylesheet" type="text/css" href="../../css/flex.css"/>
    <style type="text/css">
-        html,body {
-            background-color: #F0F0F6;
-        }
-       .main {
-
-       }
         .search {
             height: .5rem;
             line-height: .5rem;
@@ -120,6 +114,24 @@
             padding: .1rem .3rem;
             background-color: #F0F0F6;
         }
+        .letter {
+            width: 1rem;
+            height: 1rem;
+            line-height: 1rem;
+            text-align: center;
+            background-color: rgba(0,0,0,0.3);
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            border-radius: 50%;
+            /*display: none;*/
+            font-size: .4rem;
+            color: #fff;
+            opacity: 0;
+        }
    </style>
 </head>
 <body>
@@ -145,7 +157,6 @@
                 <p id="{{=it[i].flagLetter}}" class="groupTitle">{{=it[i].flagLetter}}</p>
             {{? }}
             <div class="item"   tapmode   onclick="selPerson(this)" data-val='no1'>
-               
                 <span class="sel"></span>
                 <img src="{{=it[i].headUrl}}">
                 <div class="title">
@@ -156,42 +167,15 @@
         {{ }; }}
         </script>
     </div>
-    <div class="slidePage flex-def flex-zTopBottom flex-zCenter flex-cEnd"  ontouchmove="move()">
-        <!-- <a href="#A">A</a>
-        <a href="#B">B</a>
-        <a href="#C">C</a>
-        <a href="#D">D</a>
-        <a href="#E">E</a>
-        <a href="#F">F</a>
-        <a href="#G">G</a>
-        <a href="#H">H</a>
-        <a href="#I">I</a>
-        <a href="#J">J</a>
-        <a href="#K">K</a>
-        <a href="#L">L</a>
-        <a href="#M">M</a>
-        <a href="#N">N</a>
-        <a href="#O">O</a>
-        <a href="#P">P</a>
-        <a href="#Q">Q</a>
-        <a href="#R">R</a>
-        <a href="#S">S</a>
-        <a href="#T">T</a>
-        <a href="#U">U</a>
-        <a href="#V">V</a>
-        <a href="#W">W</a>
-        <a href="#X">X</a>
-        <a href="#Y">Y</a>
-        <a href="#Z">Z</a>
-        <a href="#">#</a> -->
-        <div class="wrap">
-            
-        </div>
+    <div class="slidePage flex-def flex-zTopBottom flex-zCenter flex-cEnd" ontouchend="touchEnd()"  ontouchmove="move()">
+        <div class="wrap"></div>
     </div>
+    <div class="letter"></div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript" src="../../script/jquery.min.js"></script>
 <script type="text/javascript">
     var data = [
         {
@@ -846,30 +830,42 @@
          }
          // 侧边栏
          var str = '' ;
-         // console.log($api.dom('.wrap').getBoundingClientRect())
          for (var i = 0; i < letterArr.length; i++) {
-            str += '<a ontouchstart="anchorJump('+ letterArr[i] +')"  >'+ letterArr[i] +'</a>'
+            str += '<a ontouchstart="anchorJump(this)"  >'+ letterArr[i] +'</a>'
          }
-         $api.html($api.dom('.slidePage div'), str);
+         // $api.html($api.dom('.slidePage div'), str);
+         $('.slidePage div').html(str)
          getData(data)
-         var clientArr = $api.dom('a').getBoundingClientRect();
-         for (var i = 0; i < letterArr.length; i++) {
-                letterObj.push({
-                        letterArr: letterArr[i],
-                        clientY: clientArr
-                    })
-                
-                clientArr +=  $api.offset($api.dom('a')).h;
-         }
     }
     function anchorJump(n) {
-       location.hash = '#' + n
+        var text = $api.text(n);
+        if (text.length < 2) {
+            // $api.text($api.dom('.letter'), text);
+            $('.letter').text(text)
+            // $api.css($api.dom('.letter'), 'opacity: 1');
+            $('.letter').css({'opacity':' 1'})
+            location.hash = '#' + text
+        }
+    }
+    function touchEnd() {
+        var opcityNum = 1;
+        setInterval(function () {
+            opcityNum -= 0.1;
+            if (opcityNum > 0) {
+                console.log(opcityNum);
+                // $api.css($api.dom('.letter'), 'opacity:' + opcityNum);
+                // $api.css($api.dom('.letter'), 'opacity:' + opcityNum);
+                $('.letter').css({'opacity': opcityNum})
+            } else {
+                clearInterval();
+            }
+        },50)
     }
     function move() {
        //  获取开始点击的位置
        //  每滑动一个a标签的高度切换一个锚点
         event.preventDefault();
-        anchorJump($api.text(document.elementFromPoint(event.changedTouches[0].clientX,event.changedTouches[0].clientY)))
+        anchorJump(document.elementFromPoint(event.changedTouches[0].clientX,event.changedTouches[0].clientY))
     }
      
     apiready = function(){
