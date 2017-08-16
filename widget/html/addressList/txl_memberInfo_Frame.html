@@ -564,10 +564,8 @@
     function selCurrentStatus(ele) {
         var type = $api.attr(ele, 'data-type'), status_id= $api.attr(ele, 'data-statusId');
         // console.log(type+'---'+status_id+'---'+api.pageParam.userId)
-        for (var i = 0; i < $api.domAll('.iconStatus').length; i++) {
-            $api.removeCls($api.domAll('.iconStatus')[i], 'sel');
-        };
-        $api.addCls($api.dom(ele, '.iconStatus'), 'sel');
+        
+        
         api.ajax({
             url: apiSite + '/remark_user/setDefaultStatus',
             method: 'post',
@@ -583,6 +581,10 @@
         }, function(ret, err) {
             if(ret) {
                 if (ret.code == 200) {
+                    for (var i = 0; i < $api.domAll('.iconStatus').length; i++) {
+                        $api.removeCls($api.domAll('.iconStatus')[i], 'sel');
+                    };
+                    $api.addCls($api.dom(ele, '.iconStatus'), 'sel');
                     // // alert(JSON.stringify(ret))
                     // console.log('修改当前状态成功')
                     // 更新数据库
@@ -620,7 +622,7 @@
         });
     }
     // 获取会员信息
-    function requireData(flag) {
+    function requireData(flag,data) {
         var current_company = $api.byId('current_company');
         var current_position = $api.byId('current_position');
         var current_degree = $api.byId('current_degree');
@@ -644,7 +646,8 @@
         }, function (ret, err) {
             if (ret) {
                 if (ret.code == 200) {
-                    console.log('获取线上信息:::'+JSON.stringify(ret))
+                    console.log('获取线上备注信息:::'+JSON.stringify(ret))
+                    // infoComparison(data, ret.data.info)
                     api.ajax({
                         url: apiSite + '/user/detail',
                         method: 'post',
@@ -657,6 +660,9 @@
                         }
                     }, function(retDetail, errDetail) {
                         if(retDetail) {
+                            console.log('获取线上原始信息:::'+JSON.stringify(retDetail))
+                            console.log('数据库信息:::'+JSON.stringify(data))
+                            infoComparison(data,retDetail.data.info)
                             relationship_level_flag = retDetail.data.relationship_level;
                             targetRongId = retDetail.data.info.rongcloud_user_id;
                             if (flag) {
@@ -741,6 +747,8 @@
                                     $api.text(birthday, retDetail.data.info.birthday == '0000-00-00' ? '' : retDetail.data.info.birthday);
                                 }
                             } else {
+                                // 有本地信息 对比信息
+                                
                                 paramRealName = retDetail.data.info.real_name;
                                 //  当前状态
                                 if (retDetail.data.status.length > 0) {
@@ -763,6 +771,38 @@
                 alert(JSON.stringify(err))
             }
         })
+    }
+    // 对比信息
+    function infoComparison(obj1, obj2) {
+        for (key1 in obj1) {
+            for (key2 in obj2) {
+                if (obj1[key1] == null) {
+                    obj1[key1] = ''
+                } 
+                if (obj2[key2] == null) {
+                    obj2[key2] = ''
+                } 
+                if (key1 === key2) {
+                    if (!(obj1[key1] == obj2[key2])) {
+                        // 更新本地库
+                        updateSql(key1, obj2[key2])
+                    }
+                }
+            }
+        }
+    }
+    // 更新数据库
+    function updateSql(key, data) {
+        db.executeSql({
+            name: 'db_' + $api.getStorage('userToken'),
+            sql: ' UPDATE addressList SET ' + key + '= "' + data + '" WHERE user_id = ' + api.pageParam.userId 
+        }, function(ret, err){        
+            if( ret.status ){
+                initPage();
+            }else{
+                alert( JSON.stringify( err ) );
+            }
+        });
     }
     // 电话
     function requireContact() {
@@ -1045,7 +1085,7 @@
                     } else {
                         requireContact();
                     }
-                    requireData(0);
+                    requireData(0,ret.data[0]);
                 } else {
                     // 获取线上
                     requireData(1);

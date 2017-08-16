@@ -472,6 +472,25 @@
                         // 语音消息
                         data[i].latestMessage.text = '[语音]'
                     }
+
+                    if (data[i].latestMessage.extra) {
+                        if ($api.strToJson(data[i].latestMessage.extra).type === 4) {
+                            if ($api.getStorage(data[i].latestMessage.extra) == 'value') {
+                                // 以添加
+                                console.log('已加入本地酷')
+                            } else {
+                                // 未添加
+                                $api.setStorage(data[i].latestMessage.extra, 'value');
+                                // 一度人脉好友执行
+                                console.log('一度人脉好友执行')
+                                api.execScript({
+                                    name: 'listWin_txl_listWin',
+                                    frameName: 'txl_listWin_frame',
+                                    script: 'requireFriend();'
+                                });
+                            }
+                        }
+                    }
                 }
                 // 网络数据有更新 刷新数据 从新缓存数据
                 if (cacheFieldName !== data) {

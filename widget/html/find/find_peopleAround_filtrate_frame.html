@@ -148,9 +148,11 @@
                     name: '平台好友'
                 },{
                     name: '无关系'
+                },{
+                    name: '不限'
                 },
             ];
-            dataArr = ['一度人脉','二度人脉','三度人脉','四度人脉','五度人脉','六度人脉','平台好友','无关系'];
+            dataArr = ['一度人脉','二度人脉','三度人脉','四度人脉','五度人脉','六度人脉','平台好友','无关系','不限'];
             if (dataArr.indexOf(text) == -1) {
                 active = [1]
             } else {
@@ -163,9 +165,12 @@
                 },
                 {
                     name: '女生'
+                },
+                {
+                    name: '不限'
                 }
             ];
-            dataArr = ['男生', '女生'];
+            dataArr = ['男生', '女生','不限'];
             if (dataArr.indexOf(text) == -1) {
                 active = [1]
             } else {
@@ -173,7 +178,14 @@
             }
         } else if (n === 3) {
             col = 2;
+             
             data = city;
+            data.unshift({
+                  name: "不限",
+                  sub: [{
+                    name: "不限"
+                  }]
+              })
             var selText1 = text.split('-')
             for (var i = 0; i < data.length; i++) {
                 if (data[i].name == selText1[0]) {

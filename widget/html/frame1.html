@@ -92,11 +92,11 @@
         }
         .main_no1,
         .main_no2 {
-            border-bottom: .01rem solid #EBEBEB;
             font-size: .3rem;
             line-height: .94rem;
-            padding-left: .36rem;
-            border-bottom: .01rem solid #d9d9d9;
+            padding-left: .18rem;
+            /*border-bottom: .01rem solid #d9d9d9;*/
+            background-color: #fff;
 
         }
         .mt36r {
@@ -106,17 +106,21 @@
            background-color: #fff;
         }
         .main_no2 {
-            padding-left: 1.26rem;
-            background: #fff url(../image/iocn_addressList/icon_chu.png)no-repeat;
-            -webkit-background-size: .64rem .64rem;
-            background-size: .64rem .64rem;
-            background-position: .36rem .2rem;
             /*margin-bottom: .6rem;*/
         }
         .wrap {
             padding: .2rem 0;
         }
-        .main_no1 p {
+        .main_no2 .mainP {
+            border-bottom: .01rem solid #d9d9d9;
+            padding-left: .84rem;
+            background: #fff url(../image/iocn_addressList/icon_chu.png)no-repeat;
+            -webkit-background-size: .62rem .62rem;
+            background-size: .62rem .62rem;
+            background-position: 0 .2rem;
+        }
+        .main_no1 p,
+        .main_no2 p {
             height: .94rem;
             line-height: .94rem;
             font-size: .3rem;
@@ -128,13 +132,13 @@
         }
         .main_no1 .icon {
             background: #fff url(../image/iocn_addressList/icon_yi.png)no-repeat;
-            -webkit-background-size: .64rem .64rem;
-            background-size: .64rem .64rem;
+            -webkit-background-size: .62rem .62rem;
+            background-size: .62rem .62rem;
             /*background-position: 0 .2rem;*/
             box-sizing: border-box;
             /*padding-left: .9rem;*/
-            width: .64rem;
-            height: .64rem;
+            width: .62rem;
+            height: .62rem;
             float: left;
             display: inline-block;
             margin-right: .2rem;
@@ -142,12 +146,12 @@
         }
          .main_no1 .san {
              background: #fff url(../image/iocn_addressList/icon_san.png)no-repeat;
-            -webkit-background-size: .64rem .64rem;
-            background-size: .64rem .64rem;
+            -webkit-background-size: .62rem .62rem;
+            background-size: .62rem .62rem;
         }.main_no1 .er {
              background: #fff url(../image/iocn_addressList/icon_2.png)no-repeat;
-            -webkit-background-size: .64rem .64rem;
-            background-size: .64rem .64rem;
+            -webkit-background-size: .62rem .62rem;
+            background-size: .62rem .62rem;
         }
         .itemList1 {
             padding-left: .9rem;
@@ -174,19 +178,18 @@
             background-color: #fff;
             margin-bottom: .2rem;
             height: 1rem;
-            width: 7.5rem;
-            padding: 0 .36rem;
+            padding: 0 .18rem;
             font-size: 0;
         }
         .main_no3 .icon {
             display: inline-block;
-            width: .64rem;
-            height: .64rem;
+            width: .62rem;
+            height: .62rem;
             text-align: center;
             line-height: .7rem;
             background: url(../image/iocn_addressList/icon_wen.png)no-repeat;
-            -webkit-background-size: .64rem .64rem;
-            background-size: .64rem .64rem;
+            -webkit-background-size: .62rem .62rem;
+            background-size: .62rem .62rem;
             font-size: .45rem;
             color: #fff;
         }
@@ -230,34 +233,24 @@
         }
         .list .item {
             font-size: 0;
-            height: 1rem;
+            height: 1.1rem;
             box-sizing: border-box;
-            padding: 0 .3rem 0 .3rem;
+            padding: 0 .18rem 0 .18rem;
             overflow: hidden;
             border-bottom: .01rem solid #f7f7f7;
 
-            display: -webkit-box; /* 老版本语法: Safari, iOS, Android browser, older WebKit browsers. */
-            display: -moz-box; /* 老版本语法: Firefox (buggy) */
-            display: -ms-flexbox; /* 混合版本语法: IE 10 */
-            display: -webkit-flex; /* 新版本语法: Chrome 21+ */
-            display: flex; /* 新版本语法: Opera 12.1, Firefox 22+ */
-
-            -webkit-box-align: center;
-            -moz-align-items: center;
-            -webkit-align-items: center;
-            align-items: center;
+           
         }
         .list .item img {
             margin-right: .1rem;
-            margin-left: .1rem;
-            width: .64rem;
-            height: .64rem;
+            width: .62rem;
+            height: .62rem;
         }
         .list .item .title {
             width: 5rem;
         }
         .list .item .title .name {
-            font-size: .28rem;
+            font-size: .3rem;
             white-space:nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -265,6 +258,7 @@
         .list .item .title .position {
             font-size: .24rem;
             white-space:nowrap;
+            color: #999;
             overflow: hidden;
             text-overflow: ellipsis;
 
@@ -328,6 +322,11 @@
             display: none;
             /*opacity: 0;*/
         }
+        .contactCount {
+            text-align: center;
+            color: #999;
+            font-size: .34rem;
+        }
     </style>
 </head>
 
@@ -355,7 +354,9 @@
             </div>
         </div>
         <div class="main_no2"   tapmode   onclick="onceConnected(1,4)">
-            初识好友（无通讯录）
+            <div class="mainP">
+                初识好友（无通讯录）
+            </div>
         </div>
         <div class="main_no1"   >
             <p class="mainP flex-def flex-cCenter" >
@@ -409,7 +410,7 @@
             {{?it[i].flagLetter}}
                 <p id="{{=it[i].flagLetter}}" class="groupTitle">{{=it[i].flagLetter}}</p>
             {{? }}
-            <div class="item"  data-id="{{=it[i].user_id}}" tapmode   onclick="selPerson(this)" data-val='no1'>
+            <div class="item flex-def flex-cCenter"  data-id="{{=it[i].user_id}}" tapmode   onclick="selPerson(this)" data-val='no1'>
             <!-- <div class="item"   tapmode   onclick="selPerson(this)" data-val='no1'> -->
                 <!-- <span class="sel"></span> -->
                 <img src="{{=it[i].remark_head_img_url ? it[i].remark_head_img_url : it[i].head_img_url}}">
@@ -418,6 +419,7 @@
                     <p class="position">{{=it[i].remark_current_position ? it[i].remark_current_position : it[i].current_position}}</p>
                 </div>
             </div>
+            <p class="contactCount">{{=it.length}}位联系人</p>
         {{ }; }}
         </script>
     </div>
@@ -554,18 +556,18 @@
 
    // 隐藏列表
     function hideList(ele,n) {
-        var pBorder = $api.closest(ele, 'p');
         var name = '.itemList' + n;
         var list = $api.domAll(name);
+        var main_no1 = $api.domAll('.main_no1');
         for (var i = 0; i < list.length; i++) {
             if ($api.hasCls(list[i], 'hide')) {
                 $api.removeCls(list[i], 'hide');
-                $api.css(pBorder, 'border-bottom:.01rem solid #d9d9d9');
             } else {
-                $api.css(pBorder, 'border-bottom:0');
+                
                 $api.addCls(list[i], 'hide');
             }
         }
+
         // query();
     }
     // 打开人脉关系图
