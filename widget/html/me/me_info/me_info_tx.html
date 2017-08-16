@@ -69,7 +69,7 @@
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
 <script type="text/javascript">
-    var falg = 0; // 0 的时候是上传相片; 1 的时候是保存剪切的照片
+    var flag = 0; // 0 的时候是上传相片; 1 的时候是保存剪切的照片
     var FNImageClip ;
     apiready = function() {
         FNImageClip = api.require('FNImageClip');
@@ -119,6 +119,7 @@
         }
     }
     function clipImage(ret) {
+        console.log(flag)
         FNImageClip.open({
             rect: {
                 x: 0,
@@ -133,10 +134,10 @@
             style: {
                 mask: 'rgba(0,0,0,0.4)',
                 clip: {
-                    w: 200,
-                    h: 200,
-                    x: api.winWidth / 2 - 100,
-                    y: api.winHeight / 2 - 100,
+                    w: api.winWidth-1,
+                    h: api.winWidth,
+                    x: 0,
+                    y: api.winHeight / 2 - api.winWidth / 2,
                     borderColor: '#0f0',
                     borderWidth: 1,
                     appearance: 'rectangle'
@@ -161,7 +162,7 @@
     }
     function imgSave() {
             FNImageClip.save({
-                destPath: 'fs://imageClip/result.png',
+                // destPath: 'fs://imageClip/result.png',
                 copyToAlbum: false,
                 quality: 1
             },function(ret, err){        
