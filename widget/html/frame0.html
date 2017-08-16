@@ -288,12 +288,12 @@
         // }
         // 滚动到底部触发的事件    
         // scrollBotton();
-        contrastCache('chatMessage',historyNews)
+        contrastCache('chatMessage',historyNews);
+        // 去除头像上的消息数量
         api.addEventListener({
             name: 'refurbish'
         }, function(ret, err) {
             historicalNews();
-            // historyNews(cacheFieldName);
         });
     }
     function delNesItem(ele,n) {
@@ -468,6 +468,10 @@
                     data[i].user_id = ret.data.list[data[i].targetId].user_id;
                     data[i].remark_nickname = ret.data.list[data[i].targetId].remark_nickname;
                     data[i].remark_head_img_url = ret.data.list[data[i].targetId].remark_head_img_url;
+                    if (data[i].objectName == 'RC:VcMsg') {
+                        // 语音消息
+                        data[i].latestMessage.text = '[语音]'
+                    }
                 }
                 // 网络数据有更新 刷新数据 从新缓存数据
                 if (cacheFieldName !== data) {
@@ -548,6 +552,7 @@
         });
         
     }
+
     </script>
 </body>
 

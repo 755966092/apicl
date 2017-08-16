@@ -292,15 +292,16 @@ var  mainH, _main, scrollH;
         }, function(ret, err) {
             console.log('258:::' + JSON.stringify(ret))
             var value = ret.value
+            console.log("objName:::"+ value.msgContent.result.message.objectName)
             if (value.targetId == targetRongId) {
-                 addReceMsg(ret.value.msg, youHeadImg,0);
-                 // if (value.msgContent.result.message.objectName == 'RC:VcMsg') {
-                 //    addReceMsg(value.msg, youHeadImg,0);
-                 // } else if (value.msgContent.result.message.objectName == 'RC:TxtMsg') {
-                 //    addReceVoiceMessages(value.msgContent.result,)
-                 // } else {
+                 // addReceMsg(ret.value.msg, youHeadImg,0);
+                 if (value.msgContent.result.message.objectName == 'RC:VcMsg') {
+                    addReceVoiceMessages(value.msgContent.result,youHeadImg,0)
+                 } else if (value.msgContent.result.message.objectName == 'RC:TxtMsg') {
+                    addReceMsg(value.msg, youHeadImg,0);
+                 } else {
 
-                 // }
+                 }
             }
             // 收到消息后, 添加消息内容到页面
            
@@ -319,6 +320,10 @@ var  mainH, _main, scrollH;
         var sourcePath = "widget://image/chatPage/emotion";//表情存放目录
            getImgsPaths(sourcePath, function (emotion) {
             emotionData = emotion;
+        });
+        // 去除头像上的消息数量
+        api.sendEvent({
+            name: 'refurbish'
         });
 
     };
@@ -736,8 +741,9 @@ var  mainH, _main, scrollH;
             var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
             $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-voivePath= "'+ msg.content.voicePath +'">语音</p><span class="voiceTime voiceTimeOther fl">'+ msg.content.duration +'"</span></div>');
         } else {
-            // 当前发送的消息
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ new Date().toLocaleTimeString() +'</p><div data-msgId="" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="" class="fl flex-def flex-cCenter" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg +'">语音</p><span class="voiceTime voiceTimeOther fl">"</span></div>');
+            // 当前接收的消息
+            var time = new Date(msg.message.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.message.sentTime).toLocaleTimeString() : new Date(msg.message.sentTime).toLocaleString()
+            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.message.messageId +'">'+ time +'</p><div data-msgId="'+ msg.message.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.message.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-voivePath= "'+ msg.message.content.voicePath +'">语音</p><span class="voiceTime voiceTimeOther fl">'+ msg.message.content.duration +'"</span></div>');
         }
             slideBut();
     }
