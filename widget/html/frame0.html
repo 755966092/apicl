@@ -325,7 +325,7 @@
         var e = window.event;
         startX = e.touches[0].pageX;
         startY = e.touches[0].pageY;
-        console.log(startY)
+        // console.log(startY)
     };   
     function gtouchmove(){   
         var e = window.event;
@@ -358,7 +358,7 @@
             }, function(ret, err) {
                 if (ret) {
                     $api.setStorage('UserCenter', ret.data);
-                    console.log(JSON.stringify(ret))
+                    // console.log(JSON.stringify(ret))
                     userName = ret.data.info.nickname,
                     headImg = ret.data.info.head_img_url,
                     sex = ret.data.info.sex,
@@ -461,7 +461,7 @@
            }
        }, function(ret, err) {
             if(ret) {
-                console.log('456:::'+JSON.stringify(ret))
+                // console.log('456:::'+JSON.stringify(ret))
                 for (var i = 0; i < data.length; i++) {
                     data[i].url = ret.data.list[data[i].targetId].head_img_url;
                     data[i].nickname = ret.data.list[data[i].targetId].nickname;
@@ -471,18 +471,19 @@
                     if (data[i].objectName == 'RC:VcMsg') {
                         // 语音消息
                         data[i].latestMessage.text = '[语音]'
-                    }
+                    } else if (data[i].objectName == 'RC:ImgMsg')
+                        data[i].latestMessage.text = '[图片]'
 
                     if (data[i].latestMessage.extra) {
                         if ($api.strToJson(data[i].latestMessage.extra).type === 4) {
                             if ($api.getStorage(data[i].latestMessage.extra) == 'value') {
                                 // 以添加
-                                console.log('已加入本地酷')
+                                // console.log('已加入本地酷')
                             } else {
                                 // 未添加
                                 $api.setStorage(data[i].latestMessage.extra, 'value');
                                 // 一度人脉好友执行
-                                console.log('一度人脉好友执行')
+                                // console.log('一度人脉好友执行')
                                 api.execScript({
                                     name: 'listWin_txl_listWin',
                                     frameName: 'txl_listWin_frame',
@@ -495,7 +496,7 @@
                 // 网络数据有更新 刷新数据 从新缓存数据
                 if (cacheFieldName !== data) {
                     $api.setStorage('chatMessage', data);
-                    console.log('463:::'+JSON.stringify(data))
+                    // console.log('463:::'+JSON.stringify(data))
                     getData(data);
                 } 
                 
@@ -528,7 +529,6 @@
 
     // 关闭添加好友弹窗
     function closeNews() {
-        console.log('1111')
         for (var i = 0; i < $api.domAll('.warp').length; i++) {
             $api.css($api.domAll('.warp')[i], 'left: 0rem ');
         } 
