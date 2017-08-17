@@ -574,8 +574,8 @@ var  mainH, _main, scrollH;
                     activeImg: 'widget://image/chatPage/album2.png'
                 }, {
                     title: '拍照',
-                    normalImg: 'widget://image/chatPage/loc1.png',
-                    activeImg: 'widget://image/chatPage/loc2.png'
+                    normalImg: 'widget://image/chatPage/album1.png',
+                    activeImg: 'widget://image/chatPage/album2.png'
                 }, {
                     title: '位置',
                     normalImg: 'widget://image/chatPage/loc1.png',
@@ -601,7 +601,13 @@ var  mainH, _main, scrollH;
                       console.log('点击了第'+ret.index+'个附加按钮')
                       if (ret.index === 0) {
                         // 打开相册
-                        openPicture();
+                        openPicture('album');
+                      } else if (ret.index === 1) {
+                        // 打开相机
+                        openPicture('camera');
+                      } else if (ret.index === 2) {
+                        // 发送位置
+                        
                       }
                 }
             } else {
@@ -611,12 +617,14 @@ var  mainH, _main, scrollH;
      
     }
     // 打开相册
-    function openPicture() {
+    function openPicture(type) {
          api.getPicture({
-            sourceType: 'library',
+            sourceType: type,
             mediaValue: 'pic',
+            encodingType: 'jpg',
             destinationType: 'url',
             quality: 100,
+            saveToPhotoAlbum: true
         }, function(ret, err) {
             if (ret) {
                 if (ret.data) {
