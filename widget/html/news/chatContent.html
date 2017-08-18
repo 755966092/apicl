@@ -42,8 +42,8 @@
             background-color: #A0E75A;
             font-size: .28rem;
             min-height: .72rem;
-            /*min-width: 0.1rem;*/
-            max-width: 3.76rem;
+            min-width: 0.7rem;
+            max-width: 4.7rem;
             color: #000;
             line-height: .42rem;
             margin-right: .3rem;
@@ -207,6 +207,11 @@
         .voiceTimeOther {
             margin-left: .1rem;
         }
+        .voiceMsg {
+        }
+        .oneself .voiceMsg {
+
+        }
     </style>
 </head>
 <body id="body" ontouchstart="closeDiv1();">
@@ -225,17 +230,16 @@
     </div>
     <p class="promptText">请勿发布违法违规内容，共同营造文明和谐的聊天环境</p>
     <div class="main">
-        <!-- <p class="time">04:19</p>
+       <!--  <p class="time">04:19</p>
         <div class="oneself clearfix">
             <img class="fr oneselfImg" src="../../image/tx_2.jpg">
-            <p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart()" ontouchmove="gtouchmove()" ontouchend="gtouchend()"> <img class="imgNews" src="../../image/tx_1.jpg" width="20" height="20"> </p>
+            <p class="fr flex-def flex-cCenter flex-zEnd" style="width:5rem"   ontouchstart="gtouchstart()" ontouchmove="gtouchmove()" ontouchend="gtouchend()"> <img class="fr" src="../../image/chatPage/icon_play1.gif"  height="20"> </p>
             <span class="voiceTime fr">20"</span>
         </div>
         <div class="other clearfix">
             <img class="fl otherImg" src="../../image/tx_2.jpg">
-            <p class="fl flex-def flex-cCenter">asdas 大神 阿请勿发布违</p>
+            <p class="fl flex-def flex-cCenter"><img  src="../../image/chatPage/icon_play.gif"  height="20"></p>
             <span class="voiceTime voiceTimeOther fl">20"</span>
-
         </div> -->
     </div>
     <div class="shadow" >
@@ -911,24 +915,97 @@ var  mainH, _main, scrollH;
             // 历史消息
             // // 当天显示时间
             // 不是当天显示年月日 时分秒
-            var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-voivePath= "'+ msg.content.voicePath +'">语音</p><span class="voiceTime voiceTimeOther fl">'+ msg.content.duration +'"</span></div>');
+            var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString();
+            var widthNum = msg.content.duration;
+            // widthNum = widthNum > 7 ? widthNum : 7;
+            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" style="width:'+ widthNum/4  +'rem" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-voivePath= "'+ msg.content.voicePath +'"><img class="voiceMsg fl"  src="../../image/chatPage/icon_break.png"  height="20"></p><span class="voiceTime voiceTimeOther fl">'+ msg.content.duration +'"</span></div>');
         } else {
             // 当前接收的消息
-            var time = new Date(msg.message.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.message.sentTime).toLocaleTimeString() : new Date(msg.message.sentTime).toLocaleString()
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.message.messageId +'">'+ time +'</p><div data-msgId="'+ msg.message.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.message.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-voivePath= "'+ msg.message.content.voicePath +'">语音</p><span class="voiceTime voiceTimeOther fl">'+ msg.message.content.duration +'"</span></div>');
+            var time = new Date(msg.message.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.message.sentTime).toLocaleTimeString() : new Date(msg.message.sentTime).toLocaleString();
+            var widthNum = msg.message.content.duration;
+            // widthNum = widthNum > 7 ? widthNum : 7;
+            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.message.messageId +'">'+ time +'</p><div data-msgId="'+ msg.message.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.message.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="playVoice(this)" style="width:'+ widthNum/4 +'rem" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-voivePath= "'+ msg.message.content.voicePath +'"><img class="voiceMsg fl"  src="../../image/chatPage/icon_break.png"  height="20"></p><span class="voiceTime voiceTimeOther fl">'+ msg.message.content.duration +'"</span></div>');
         }
             slideBut();
     }
+    // 发送语音消息后新建
+    function addSendVoiceMessages(msg, headImg, n) {
+         
+        if (n == 1) {
+            // 历史消息
+            var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString();
+            var widthNum = msg.content.duration;
+             // widthNum = widthNum > 7 ? widthNum : 7;
+            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" style="width:'+ widthNum/4 +'rem" data-voivePath= "'+ msg.content.voicePath +'" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">'+ msg.content.duration +'"</span></div>');
+        } else {
+            var widthNum = msg.duration;
+             // widthNum = widthNum > 7 ? widthNum : 7;
+            // console.log(JSON.stringify(msg))
+            // 当前发送的消息
+            $api.append($api.dom('.main'),'<p class="newsTime" >'+ new Date().toLocaleTimeString() +'</p><div data-msgId="" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" style="width:'+ widthNum/4 +'rem" ontouchmove="gtouchmove()" data-msgId="" ontouchend="gtouchend()" data-voivePath= "'+ msg.path +'" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">'+ msg.duration +'"</span></div>');
+            
+        }
+        slideBut();
+    }
     // 播放语音
     function playVoice(ele) {
-        var voicePath = $api.attr(ele, 'data-voivePath');
+        // <img class="voiceMsg"  src="../../image/chatPage/icon_break.png"  height="20">
+        // 有其他播放的语音暂停
+        // 当前语音是否正在播放
+        if ($api.hasCls($api.closest(ele, 'div'), 'oneself')) {
+            // 自己
+            if ($api.attr($api.dom(ele, '.voiceMsg'), 'src') == '../../image/chatPage/icon_play1.gif') {
+                api.stopPlay();
+                $api.attr($api.dom(ele, '.voiceMsg'), 'src','../../image/chatPage/icon_break1.png');
+            } else {
+                playVoice2(ele)
+            }
+            
+        } else {
+            // other
+            if ($api.attr($api.dom(ele, '.voiceMsg'), 'src') == '../../image/chatPage/icon_play.gif') {
+                api.stopPlay();
+                $api.attr($api.dom(ele, '.voiceMsg'), 'src','../../image/chatPage/icon_break.png');
+            } else {
+                playVoice2(ele)
+            }
+        }
+       
+    }
+    function playVoice2(ele) {
+         // 暂停其他正在播放的语音
+        var currentPlay = $api.dom('.voiceMsg[src="../../image/chatPage/icon_play1.gif"]');
+        var currentPlay1 = $api.dom('.voiceMsg[src="../../image/chatPage/icon_play.gif"]');
+        if (currentPlay) {
+            api.stopPlay();
+            // 自己
+            $api.attr(currentPlay, 'src','../../image/chatPage/icon_break1.png');
+        }
+        if (currentPlay1) {
+            api.stopPlay();
+            // other
+            $api.attr(currentPlay1, 'src','../../image/chatPage/icon_break.png');
+        }
+        // 更换播放图标
+        if ($api.hasCls($api.closest(ele, 'div'), 'oneself')) {
+            // 自己
+            $api.attr($api.dom(ele, '.voiceMsg'), 'src','../../image/chatPage/icon_play1.gif');
+        } else {
+            // other
+            $api.attr($api.dom(ele, '.voiceMsg'), 'src','../../image/chatPage/icon_play.gif');
+        }
+        // 播放语音
         api.startPlay({
-            path: voicePath
+            path: $api.attr(ele, 'data-voivePath')
         }, function(ret, err) {
             if (ret) {
-                // console.log(voicePath)
-                // alert(JSON.stringify(ret));
+                if ($api.hasCls($api.closest(ele, 'div'), 'oneself')) {
+                    // 自己
+                    $api.attr($api.dom(ele, '.voiceMsg'), 'src','../../image/chatPage/icon_break1.png');
+                } else {
+                    // other
+                    $api.attr($api.dom(ele, '.voiceMsg'), 'src','../../image/chatPage/icon_break.png');
+                }
             } else {
                 alert(JSON.stringify(err));
             }
@@ -951,20 +1028,7 @@ var  mainH, _main, scrollH;
         }
             slideBut();
     }
-    // 发送语音消息后新建
-    function addSendVoiceMessages(msg, headImg, n) {
-        if (n == 1) {
-            // 历史消息
-            var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" data-voivePath= "'+ msg.content.voicePath +'" >语音</p><span class="voiceTime fr">'+ msg.content.duration +'"</span></div>');
-        } else {
-            // console.log(JSON.stringify(msg))
-            // 当前发送的消息
-            $api.append($api.dom('.main'),'<p class="newsTime" >'+ new Date().toLocaleTimeString() +'</p><div data-msgId="" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="" ontouchend="gtouchend()" data-voivePath= "'+ msg.path +'" >语音</p><span class="voiceTime fr">'+ msg.duration +'"</span></div>');
-            
-        }
-        slideBut();
-    }
+    
     // 发送消息后新建消息
     function addSendMsg(msg, headImg, n) {
         if (n == 1) {

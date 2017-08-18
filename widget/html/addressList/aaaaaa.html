@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/flex.css"/>
+    <style type="text/css">
+        .search {
+            height: .791rem;
+            width: 100%;
+            background-color: #EFEFF4;
+            box-sizing: border-box;
+            padding: .14rem .16rem;
+            font-size: 0;   
+            position: relative;
+
+        }
+        .search input {
+            background-color: #fff;
+            height: .503rem;    
+             /*width: 6.4rem;*/
+            width: 100%;
+            float: left;
+            font-size: .24rem;
+            outline: none;
+            text-align: center;
+            padding: 0 .3rem;
+            box-sizing: border-box;
+        }
+        .sxIcon {
+            display: inline-block;
+            width: .64rem;
+            height: .5rem;
+            background: url(../../image/icon_supply/icon_sx.png)no-repeat;
+            -webkit-background-size: .35rem .35rem;
+            background-size: .35rem .35rem;
+            background-position: center center;          
+            margin-left: .1rem;
+        }
+        .searchIcon {
+            display: inline-block;
+            width: .25rem;
+            height: .791rem;
+            background: url(../../image/icon_supply/icon_search.png)no-repeat;
+            -webkit-background-size: .25rem .26rem;
+            background-size: .25rem .26rem;
+            background-position: 0 center;
+            position: absolute;
+            top: 0;
+            left: 2.8rem;
+        }
+        p.nodata {
+            text-align: center;
+            font-size: .3rem;
+            color: #999;
+            margin-top: .5rem;
+            display: none;
+        }
+        .loading {
+            width: .8rem;
+            height: .8rem;
+            background: url(../../image/loading_more.gif)no-repeat;
+            background-size: .8rem .8rem;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            margin: auto;
+         }
+
+        /* 手写列表 */
+
+            
+            .list {
+                background-color: #fff;
+            }
+            .list .item {
+                font-size: 0;
+                height: 1.1rem;
+                box-sizing: border-box;
+                padding: 0 .16rem 0 .16rem;
+                overflow: hidden;
+                border-bottom: .01rem solid #d9d9d9;
+
+               
+            }
+            .list .item img {
+                margin-right: .1rem;
+                width: .62rem;
+                height: .62rem;
+            }
+            .list .item .title {
+                width: 5rem;
+            }
+            .list .item .title .name {
+                font-size: .29rem;
+                font-weight: 400;
+                white-space:nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .list .item .title .position {
+                display: inline-block;
+                font-size: .24rem;
+                max-width: 1.8rem;
+                white-space:nowrap;
+                color: #999;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .sel {
+                display: inline-block;
+                width: .44rem;
+                height: .44rem;
+                background: url(../image/icon_member/icon_cz01.png)no-repeat;
+                -webkit-background-size: .44rem .44rem;
+                background-size: .44rem .44rem;
+                background-position: 0 center;
+            }
+            .pitchOn {
+                background: url(../image/icon_member/icon_cz02.png)no-repeat;
+                -webkit-background-size: .44rem .44rem;
+                background-size: .44rem .44rem;
+                background-position: 0 center;
+            }
+            .slidePage {
+                width: .6rem;
+                text-align: right;
+                /*background-color: rgba(255,0,0,.5);*/
+                position: fixed;
+                right: 0;
+                top: 0;
+                height: 100%;
+                font-size: .18rem;
+                box-sizing: border-box;
+                padding-right: .1rem;
+            }
+            .slidePage a{
+               /* text-align: right;
+                box-sizing: border-box;
+                display: block;
+                padding-right: .1rem;*/
+                width: .2rem;
+                font-weight: 550;
+                margin: .02rem 0;
+                text-align: center;
+                color: #555;
+            }
+            .slidePage div {
+                width: .2rem;
+            }
+            .groupTitle {
+                font-size: .24rem;
+                padding: .08rem .16rem;
+                background-color: #F0F0F6;
+            }
+            .letter {
+                position: fixed;
+                top: 0;bottom: 0;
+                right: 0;left: 0;
+                margin: auto;
+                border-radius: 50%;
+                width: .8rem;
+                height: .8rem;
+                line-height: .8rem;
+                text-align: center;
+                font-size: .3rem;
+                background-color: rgba(0,0,0,.3);
+                display: none;
+                /*opacity: 0;*/
+            }
+            .contactCount {
+                text-align: center;
+                color: #999;
+                font-size: .34rem;
+                line-height: 1.1rem
+            }
+        /* 手写列表 */
+   </style>
+</head>
+<body>
+    <div class="search">
+        <input type="text" onblur="loseFocus()" onfocus="getFocus()" onkeyup="hideSearIcon(this)" name="" placeholder="搜索">
+        <span class="searchIcon"></span>
+        <!-- <span class="sxIcon"  tapmode onclick="openSlideBar()"></span> -->
+    </div>
+    <div class="loading" ></div>
+    <p data-type='1' class=" nodata no1">暂无相识好友</p>
+    <p data-type='2' class=" nodata no2">暂无熟识好友</p>
+    <p data-type='3' class=" nodata no3">暂无尚未加入</p>
+    <p data-type='4' class=" nodata no4">暂无初识好友</p>
+    <p data-type='5' class=" nodata no5">暂无一度人脉</p>
+    <div class="main">
+        <div class=" list resultList"></div>
+        <script type="text/x-dot-template" id="listT">
+        {{ for (var i = 0; i < it.length; i++) { }} 
+            {{?it[i].flagLetter}}
+                <p id="{{=it[i].flagLetter}}" class="groupTitle">{{=it[i].flagLetter}}</p>
+            {{?}}
+            <div class="item flex-def flex-cCenter"  data-id="{{=it[i].user_id}}" tapmode   onclick="selPerson(this)" data-val='no1'>
+            <!-- <div class="item"   tapmode   onclick="selPerson(this)" data-val='no1'> -->
+                <!-- <span class="sel"></span> -->
+                <img src="{{=it[i].remark_head_img_url ? it[i].remark_head_img_url : it[i].head_img_url}}">
+                <div class="title">
+                    <h3 class="name">{{=it[i].remark_nickname ? it[i].remark_nickname : it[i].nickname}}</h3>
+                    {{?it[i].remark_current_company}}
+                    <p class="position">{{=it[i].remark_current_company}}&nbsp;</p>
+                    {{??it[i].current_company}}
+                    <p class="position">{{=it[i].current_company}}&nbsp;</p>
+                    {{??}}
+                    {{?}}
+
+                    {{?it[i].remark_current_position}}
+                    <p class="position">{{=it[i].remark_current_position}}&nbsp;</p>
+                    {{??it[i].current_position}}
+                    <p class="position">{{=it[i].current_position}}&nbsp;</p>
+                    {{??}}
+                    {{?}}
+
+                    {{?it[i].remark_current_degree}}
+                    <p class="position">{{=it[i].remark_current_degree}}</p>
+                    {{??it[i].current_degree}}
+                    <p class="position">{{=it[i].current_degree}}</p>
+                    {{??}}
+                    {{?}}
+                </div>
+            </div>
+        {{ }; }}
+        <p class="contactCount">{{=it.length}}位联系人</p>
+        </script>
+    </div>
+    <div class="slidePage flex-def flex-zTopBottom flex-zCenter flex-cEnd" ontouchmove="move()">
+        <div ></div>
+    </div>
+    <div class="letter"></div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript" src="../../script/pinyin4js.js"></script>
+<script type="text/javascript">
+    var data = ['#','a','A','b','c','#','？']
+    for (var i = 0; i < data.length; i++) {
+            for (var j = 0; j < data.length; j++) {
+                if (data[i] < data[j]) {
+                    var temp = data[i];
+                    data[i] = data[j];
+                    data[j] = temp;
+                }
+            }
+        }
+         console.log(data)
+    var letterArr = [],letterObj = [];
+    apiready = function(){
+        moduleInit();
+        requireData();
+    }
+        
+    function move() {
+        event.preventDefault();
+        //  获取开始点击的位置
+        //  每滑动一个a标签的高度切换一个锚点
+        anchorJump(document.elementFromPoint(event.changedTouches[0].clientX,event.changedTouches[0].clientY))
+    }
+    function anchorJump(n) {
+        var text = $api.text(n);
+        if (text.length < 2) {
+            $api.css($api.dom('.letter'), 'display: block');
+            // $api.css($api.dom('.letter'), 'opacity: 1');
+            $api.text($api.dom('.letter'), text);
+            location.hash = '#' + text;
+            setTimeout(function () {
+                $api.css($api.dom('.letter'), 'display: none');
+            },1500)
+
+        }
+    }
+    function anchorJump1(n) {
+        location.hash = '#' + n
+    }
+    // 数据排序
+    function sortData(data) {
+        for (var i = 0; i < data.length; i++) {
+            for (var j = 0; j < data.length; j++) {
+                if (data[i].flag < data[j].flag) {
+                    var temp = data[i];
+                    data[i] = data[j];
+                    data[j] = temp;
+                }
+            }
+         }
+
+         if (f_check_uppercase(data[0].flag)) {
+            letterArr.push(data[0].flag)
+         } else {
+            letterArr.push('#')
+         }
+        for (var i = 0; i < data.length; i++) {
+            if(f_check_uppercase(data[0].flag)) {
+                data[0].flagLetter = data[0].flag
+            } else {
+                data[0].flagLetter = '#'
+            }
+            if (i>0) {
+                if (data[i].flag !== data[i-1].flag) {
+                    if (f_check_uppercase(data[i].flag)) {
+                        data[i].flagLetter = data[i].flag;
+                        letterArr.push(data[i].flag)
+                    } else {
+                        data[i].flagLetter = '#';
+                        letterArr.push('#')
+                    }
+                }
+            }
+         }
+         // 侧边栏
+         var str = '' ;
+         for (var i = 0; i < letterArr.length; i++) {
+            str += '<a ontouchstart="anchorJump(this)"  >'+ letterArr[i] +'</a>'
+         }
+         console.log(str)
+         $api.html($api.dom('.slidePage div'), str);
+         getData(data)
+         var clientArr = parseInt($api.dom('a').getBoundingClientRect().top);
+         // var clientArr = parseInt($api.dom('a').offsetTop);
+         for (var i = 0; i < letterArr.length; i++) {
+                letterObj.push({
+                        letterArr: letterArr[i],
+                        clientY: clientArr
+                    })
+                
+                clientArr +=  $api.offset($api.dom('a')).h;
+         }
+    }
+    // 选中好友
+    function selPerson(ele) {
+        // var sel = ele.getElementsByClassName('sel')[0];
+        // if ($api.hasCls(sel, 'pitchOn')) {
+        //     $api.removeCls(sel, 'pitchOn');
+        // } else {
+        //     $api.addCls(sel, 'pitchOn');
+        // }
+        var userId = $api.attr(ele, 'data-id');
+        api.openWin({
+            name: 'txl_memberInfo_Win',
+            url: './addressList/txl_memberInfo_Win.html',
+            pageParam: {
+                userId: userId
+            }
+        });
+    }
+    // 请求数据
+    // function requireData() {
+    //     api.ajax({
+    //         url: apiSite + '/contact/getBossContact',
+    //         method: 'post',
+    //         headers: apiHeader,
+    //         data: {
+    //                values: { 
+    //                    token: $api.getStorage('userToken'),
+    //                }
+    //         }
+    //     }, function(ret, err) {
+    //         if(ret) {
+    //             $api.css($api.dom('.loading'), 'display:none');
+    //             console.log(JSON.stringify(ret))
+    //         } else {
+    //             alert(JSON.stringify(err))
+    //         }
+    //     })
+    // }
+
+
+
+     // 请求数据
+    function requireData() {
+        // console.log('请求数据')
+        api.ajax({
+            url: apiSite + '/contact/getBossContact',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+               values: { 
+                  token: $api.getStorage('userToken'),
+               }
+            }
+        }, function(ret, err) {
+            $api.css($api.dom('.loading'), 'display:none');
+            disData(ret.data.single_list, 1)
+            disData(ret.data.both_list, 2)
+            disData(ret.data.unavailable_list, 3)
+        })
+           
+    }
+    function disData (data, type) {
+        // console.log('disData'+type)
+        // console.log('disData'+data)
+        if (data != '') {
+            for (var i = 0; i < data.length; i++) {
+                // single_list
+                // both_list
+                // friend_list
+                // 去除空格
+                data[i].nickname = $api.trimAll(data[i].nickname)
+                if (data[i].remark_nickname) {
+                    data[i].litter = PinyinHelper.getShortPinyin(data[i].remark_nickname).toUpperCase();
+                } else {
+                    data[i].litter = PinyinHelper.getShortPinyin(data[i].nickname).toUpperCase();
+                }
+                // data[i].litter = PinyinHelper.getShortPinyin(data[i].nickname).toUpperCase();
+                data[i].title = data[i].nickname;
+                data[i].img = data[i].head_img_url;
+                data[i].titleSize = 15;
+                if (data[i].current_position == null) {
+                    data[i].current_position = '';
+                } 
+                if (data[i].current_company == null) {
+                    data[i].current_company = '';
+                }
+            }
+            // 模块数据格式
+            litterSort(data, type)
+            // sqlSyntax(initialData);
+        }
+    }
+    // 排序
+    function litterSort(data,type) {
+        for (var i = 0; i < data.length; i++) {
+            for (var j = 0; j < data.length; j++) {
+                if (data[i].litter < data[j].litter) {
+                    var temp = data[i];
+                    data[i] = data[j];
+                    data[j] = temp;
+                }
+            }
+         }
+         sqlSyntax(data, type);
+    }
+    // 拼数据库语法字符串
+    function sqlSyntax(data1, type) {
+        for (var i = 0; i < data1.length; i++) {
+            data1[i].flag = data1[i].litter[0];
+        }
+        // console.log('数据库语法字符串:'+data1);
+        var SQLName = 'db_'+$api.getStorage('userToken');
+        var SQL = 'INSERT OR REPLACE INTO addressList(user_id,nickname,real_name,head_img_url,current_company,current_position,current_contact,current_degree, titleSize,title,img,flag,litter,type, sex, remark_nickname, remark_real_name, remark_head_img_url, remark_sex, remark_birthday, remark_hometown, remark_current_company, remark_current_position, remark_current_degree, remark_current_contact) VALUES '
+        for (var i = 0; i < data1.length; i++) {
+            SQL += '('+data1[i].user_id+',"'+ data1[i].nickname +'","'+ data1[i].real_name +'","'+ data1[i].head_img_url +'","'+ (data1[i].current_company || "") +'","'+ (data1[i].current_position || "")+'","'+ (data1[i].current_contact || "") +'","'+ (data1[i].current_degree || "") +'","'+ data1[i].titleSize +'","'+ data1[i].title +'","'+ data1[i].img+'","'+ data1[i].flag +'","'+ data1[i].litter +'","'+ type +'","'+ (data1[i].sex || 1) +'","'+ (data1[i].remark_nickname || "") +'","'+ (data1[i].remark_real_name || "") +'","'+ (data1[i].remark_head_img_url || "") +'","'+ (data1[i].remark_sex || "") +'","'+ (data1[i].remark_birthday || "") +'","'+ (data1[i].remark_hometown || "") +'","'+ (data1[i].remark_current_company || "") +'","'+ (data1[i].remark_current_position || "") +'","'+ (data1[i].remark_current_degree || "") +'","'+ (data1[i].remark_current_contact || "") +'"),';
+        }
+        SQL = SQL.substring(0,SQL.length-1) + ';'
+        db.executeSql({
+            name: SQLName,
+            sql: SQL
+        }, function(ret, err) {
+            if (ret.status) {
+                console.log('执行语句正确'+JSON.stringify(ret));
+            } else {
+                console.log('执行语句错误:' + JSON.stringify(err))
+            }
+        });
+    }
+</script>
+</html>
+
+
+
+

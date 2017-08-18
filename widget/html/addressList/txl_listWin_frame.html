@@ -51,7 +51,7 @@
             top: 0;
             left: 2.8rem;
         }
-        p {
+        p.nodata {
             text-align: center;
             font-size: .3rem;
             color: #999;
@@ -70,6 +70,115 @@
             left: 0;
             margin: auto;
          }
+
+        /* 手写列表 */
+
+            
+            .list {
+                background-color: #fff;
+            }
+            .list .item {
+                font-size: 0;
+                height: 1.1rem;
+                box-sizing: border-box;
+                padding: 0 .16rem 0 .16rem;
+                overflow: hidden;
+                border-bottom: .01rem solid #d9d9d9;
+
+               
+            }
+            .list .item img {
+                margin-right: .1rem;
+                width: .62rem;
+                height: .62rem;
+            }
+            .list .item .title {
+                width: 5rem;
+            }
+            .list .item .title .name {
+                font-size: .29rem;
+                font-weight: 400;
+                white-space:nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .list .item .title .position {
+                display: inline-block;
+                font-size: .24rem;
+                max-width: 1.8rem;
+                white-space:nowrap;
+                color: #999;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .sel {
+                display: inline-block;
+                width: .44rem;
+                height: .44rem;
+                background: url(../image/icon_member/icon_cz01.png)no-repeat;
+                -webkit-background-size: .44rem .44rem;
+                background-size: .44rem .44rem;
+                background-position: 0 center;
+            }
+            .pitchOn {
+                background: url(../image/icon_member/icon_cz02.png)no-repeat;
+                -webkit-background-size: .44rem .44rem;
+                background-size: .44rem .44rem;
+                background-position: 0 center;
+            }
+            .slidePage {
+                width: .6rem;
+                text-align: right;
+                /*background-color: rgba(255,0,0,.5);*/
+                position: fixed;
+                right: 0;
+                top: 0;
+                height: 100%;
+                font-size: .18rem;
+                box-sizing: border-box;
+                padding-right: .1rem;
+            }
+            .slidePage a{
+               /* text-align: right;
+                box-sizing: border-box;
+                display: block;
+                padding-right: .1rem;*/
+                width: .2rem;
+                font-weight: 550;
+                margin: .02rem 0;
+                text-align: center;
+                color: #555;
+            }
+            .slidePage div {
+                width: .2rem;
+            }
+            .groupTitle {
+                font-size: .24rem;
+                padding: .08rem .16rem;
+                background-color: #F0F0F6;
+            }
+            .letter {
+                position: fixed;
+                top: 0;bottom: 0;
+                right: 0;left: 0;
+                margin: auto;
+                border-radius: 50%;
+                width: .8rem;
+                height: .8rem;
+                line-height: .8rem;
+                text-align: center;
+                font-size: .3rem;
+                background-color: rgba(0,0,0,.3);
+                display: none;
+                /*opacity: 0;*/
+            }
+            .contactCount {
+                text-align: center;
+                color: #999;
+                font-size: .34rem;
+                line-height: 1.1rem
+            }
+        /* 手写列表 */
    </style>
 </head>
 <body>
@@ -79,11 +188,54 @@
         <!-- <span class="sxIcon"  tapmode onclick="openSlideBar()"></span> -->
     </div>
     <div class="loading" ></div>
-    <p data-type='1' class="no1">暂无相识好友</p>
-    <p data-type='2' class="no2">暂无熟识好友</p>
-    <p data-type='3' class="no3">暂无尚未加入</p>
-    <p data-type='4' class="no4">暂无初识好友</p>
-    <p data-type='5' class="no5">暂无一度人脉</p>
+    <p data-type='1' class=" nodata no1">暂无相识好友</p>
+    <p data-type='2' class=" nodata no2">暂无熟识好友</p>
+    <p data-type='3' class=" nodata no3">暂无尚未加入</p>
+    <p data-type='4' class=" nodata no4">暂无初识好友</p>
+    <p data-type='5' class=" nodata no5">暂无一度人脉</p>
+    <div class="main">
+        <div class=" list resultList"></div>
+        <script type="text/x-dot-template" id="listT">
+        {{ for (var i = 0; i < it.length; i++) { }} 
+            {{?it[i].flagLetter}}
+                <p id="{{=it[i].flagLetter}}" class="groupTitle">{{=it[i].flagLetter}}</p>
+            {{?}}
+            <div class="item flex-def flex-cCenter"  data-id="{{=it[i].user_id}}" tapmode   onclick="selPerson(this)" data-val='no1'>
+            <!-- <div class="item"   tapmode   onclick="selPerson(this)" data-val='no1'> -->
+                <!-- <span class="sel"></span> -->
+                <img src="{{=it[i].remark_head_img_url ? it[i].remark_head_img_url : it[i].head_img_url}}">
+                <div class="title">
+                    <h3 class="name">{{=it[i].remark_nickname ? it[i].remark_nickname : it[i].nickname}}</h3>
+                    {{?it[i].remark_current_company}}
+                    <p class="position">{{=it[i].remark_current_company}}&nbsp;</p>
+                    {{??it[i].current_company}}
+                    <p class="position">{{=it[i].current_company}}&nbsp;</p>
+                    {{??}}
+                    {{?}}
+
+                    {{?it[i].remark_current_position}}
+                    <p class="position">{{=it[i].remark_current_position}}&nbsp;</p>
+                    {{??it[i].current_position}}
+                    <p class="position">{{=it[i].current_position}}&nbsp;</p>
+                    {{??}}
+                    {{?}}
+
+                    {{?it[i].remark_current_degree}}
+                    <p class="position">{{=it[i].remark_current_degree}}</p>
+                    {{??it[i].current_degree}}
+                    <p class="position">{{=it[i].current_degree}}</p>
+                    {{??}}
+                    {{?}}
+                </div>
+            </div>
+        {{ }; }}
+        <p class="contactCount">{{=it.length}}位联系人</p>
+        </script>
+    </div>
+    <div class="slidePage flex-def flex-zTopBottom flex-zCenter flex-cEnd" ontouchmove="move()">
+        <div ></div>
+    </div>
+    <div class="letter"></div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -91,35 +243,16 @@
 <script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
     var selVal=0,selectedObj,apiPageParamFlag;
+    var letterArr = [],letterObj = []
     apiready = function(){
         moduleInit();
-        // requestData()
-        // query();
         // 监听筛选条件
         if (api.pageParam.flag == 4) {
             requireFriend();
         }
         apiPageParamFlag = api.pageParam.flag;
         addFilter();
-        if(apiPageParamFlag) {
-            // var contactLevelOneStorage =  $api.getStorage('contactLevelOne'+apiPageParamFlag);
-            // console.log('联系人缓存'+JSON.stringify(contactLevelOneStorage))
-            // if (contactLevelOneStorage) {
-            //     dakai(contactLevelOneStorage)
-            //     query(parseInt(apiPageParamFlag));
-            // } else {
-                query(parseInt(apiPageParamFlag));
-            // }
-        } else {
-            // var contactLevelOneStorage =  $api.getStorage('contactLevelOne');
-            // console.log('联系人缓存'+JSON.stringify(contactLevelOneStorage))
-            // if (contactLevelOneStorage) {
-                // dakai(contactLevelOneStorage)
-                // query();
-            // } else {
-                query();
-            // }
-        }
+        initPage();
         api.addEventListener({
             name: 'editUserInfo'
         }, function(ret, err) {
@@ -146,9 +279,115 @@
             }
         });
     };
+    // 初始化页面
+    function initPage() {
+        // if(apiPageParamFlag) {
+        //     // db.selectSql({
+        //     //         name: 'db_'+$api.getStorage('userToken'),
+        //     //         sql: 'SELECT * FROM addressList_one WHERE type = ' + apiPageParamFlag,
+        //     //     }, function(ret, err){        
+        //     //         if( ret.status ){
+        //     //             if (ret.data.length != 0) {
+        //     //                 console.log('有数据')
+        //     //                 console.log(apiPageParamFlag)
+        //     //                 dakai($api.strToJson(ret.data[0].str))
+        //     //             } else {
+        //     //                 console.log('无数据')
+        //     //                 console.log(apiPageParamFlag)
+        //     //                 query(parseInt(apiPageParamFlag));
+        //     //             }
+        //     //         }else{
+        //     //             alert('273:'+ JSON.stringify( err ) );
+        //     //         }
+        //     //     });
+            
+        // } else {
+        //         db.selectSql({
+        //             name: 'db_'+$api.getStorage('userToken'),
+        //             sql: 'SELECT * FROM addressList_one WHERE type = 1',
+        //         }, function(ret, err){        
+        //             if( ret.status ){
+        //                 if (ret.data.length != 0) {
+        //                     console.log('有数据')
+        //                     console.log(apiPageParamFlag)
+        //                     dakai($api.strToJson(ret.data[0].str))
+        //                 } else {
+        //                     console.log('无数据')
+        //                     console.log(apiPageParamFlag)
+        //                     query();
+        //                 }
+        //             }else{
+        //                 alert('292'+ JSON.stringify( err ) );
+        //             }
+        //         });
+        // }
+        setTimeout(function () {
+            var sqlStatement;
+            if (!apiPageParamFlag) {
+                sqlStatement = 'SELECT str FROM addressList_one WHERE type = 5'
+            } else {
+                sqlStatement = 'SELECT str FROM addressList_one WHERE type = ' + apiPageParamFlag
+            }
+            db.selectSql({
+                name: 'db_'+$api.getStorage('userToken'),
+                sql: sqlStatement,
+            }, function(ret, err){        
+                if( ret.status ){
+                    if (ret.data.length != 0) {
+                        console.log('有数据')
+                        dakai($api.strToJson(ret.data[0].str))
+                        if (apiPageParamFlag) {
+                            query(parseInt(apiPageParamFlag), ret.data[0].str);
+                        } else {
+                            query(0,ret.data[0].str);
+                        }
+                    } else {
+                        console.log('无数据')
+                        console.log(apiPageParamFlag)
+                        if (apiPageParamFlag) {
+                            query(parseInt(apiPageParamFlag));
+                        } else {
+                            query();
+                        }
+                    }
+                }else{
+                    alert('292'+ JSON.stringify( err ) );
+                }
+            });
+        },10)
+    }
+    // 查询缓存数据库
+    function searchAddressListOne() {
+        var sqlStatement;
+        if (!apiPageParamFlag) {
+            sqlStatement = 'SELECT * FROM addressList_one WHERE type = 5'
+        } else {
+            sqlStatement = 'SELECT * FROM addressList_one WHERE type = ' + apiPageParamFlag
+        }
+        db.selectSql({
+            name: 'db_'+$api.getStorage('userToken'),
+            sql: sqlStatement,
+        }, function(ret, err){        
+            if( ret.status ){
+                if (ret.data.length != 0) {
+                    console.log('有数据')
+                    dakai($api.strToJson(ret.data[0].str))
+                } else {
+                    console.log('无数据')
+                    console.log(apiPageParamFlag)
+                    if (apiPageParamFlag) {
+                        query(parseInt(apiPageParamFlag));
+                    } else {
+                        query();
+                    }
+                }
+            }else{
+                alert('292'+ JSON.stringify( err ) );
+            }
+        });
+    }
     function requireFriend() {
-        console.log('执行了加好友')
-         api.ajax({
+        api.ajax({
                 url: apiSite + '/contact/friend',
                 method: 'post',
                 headers: apiHeader,
@@ -424,11 +663,9 @@
             }
         });
     }
-    // 
     // 查询数据库
-    function query(condition) {
+    function query(condition,rawData) {
         // 查询条件 condition
-        console.log(condition)
         var SQLName = 'db_'+$api.getStorage('userToken');
         var SQLsentence;
         if (condition) {
@@ -445,54 +682,63 @@
             // console.log('ret:'+JSON.stringify(ret))
             // console.log('err:'+JSON.stringify(err))
             if (ret.status) {
-                console.log(1)
                 // console.log('查询数据库'+JSON.stringify(ret))
                 $api.css($api.dom('.loading'), 'display:none');
-
                 for (var i = 0; i < $api.domAll('p').length; i++) {
-                    $api.css($api.domAll('p')[i], 'display:none');
+                    $api.css($api.domAll('p.nodata')[i], 'display:none');
                 } 
-
                 if (ret.data.length == 0 && condition === 4) {
-                    console.log(1111 +'--'+ condition)
-                    listContact.close();
                     $api.css($api.dom('p.no4'), 'display:block');
                 } else if(ret.data.length == 0 && condition===1) {
                     // console.log(2222 +'--'+ condition)
-                    listContact.close();
                     $api.css($api.dom('p.no1'), 'display:block');
                 }else if(ret.data.length == 0 && condition===2) {
                     // console.log(333 +'--'+ condition)
-                    listContact.close();
                     $api.css($api.dom('p.no2'), 'display:block');
                 }else if(ret.data.length == 0 && condition===3) {
                     // console.log(444 +'--'+ condition)
-                    listContact.close();
                     $api.css($api.dom('p.no3'), 'display:block');
                 } else if(ret.data.length == 0){
-                    listContact.close();
                     $api.css($api.dom('p.no5'), 'display:block');
                 } else {
                     var contactLevelOne = paixv(ret.data);
                     if (apiPageParamFlag) {
-                        if (contactLevelOne == $api.setStorage('contactLevelOne'+apiPageParamFlag)) {
-
-                        } else {
-                            // console.log(JSON.stringify(contactLevelOne))
-                            $api.setStorage('contactLevelOne'+apiPageParamFlag, contactLevelOne);
-                            dakai(contactLevelOne)
-                        }
+                            console.log( rawData)
+                            console.log( $api.jsonToStr(contactLevelOne))
+                            if (rawData == $api.jsonToStr(contactLevelOne)) {
+                                console.log('数据没更新')
+                            } else {
+                                console.log('数据更新')
+                                dakai(contactLevelOne)
+                                insertOneSql(apiPageParamFlag,contactLevelOne)
+                            }
                     } else {
-                        if (contactLevelOne == $api.setStorage('contactLevelOne', contactLevelOne)) {
-
-                        } else {
-                            $api.setStorage('contactLevelOne', contactLevelOne);
-                            dakai(contactLevelOne)
-                        }
+                            if (rawData == $api.jsonToStr(contactLevelOne)) {
+                                console.log('数据没更新')
+                            } else {
+                                console.log('数据更新')
+                                dakai(contactLevelOne)
+                                insertOneSql(5,contactLevelOne)
+                            }
+                            // 一度完整列表
+                            
                     }
                 }
             } else {
                 console.log(JSON.stringify(err));
+            }
+        });
+    }
+    function insertOneSql(type,str) {
+        str = $api.jsonToStr(str);
+       db.executeSql({
+            name: SQLName,
+            sql: "INSERT OR REPLACE INTO addressList_one (type, str) VALUES ("+ type +",'"+ str +"')"    
+        }, function(ret, err){        
+            if( ret.status ){
+                console.log('缓存成功')
+            }else{
+                alert('756:'+ JSON.stringify( err ) );
             }
         });
     }
@@ -516,7 +762,6 @@
     }   
     
     function paixv (data) {
-        console.log('paixv')
         for (var i = 0; i < data.length; i++) {
             for (var j = 0; j < data.length; j++) {
                 if (data[i].litter < data[j].litter) {
@@ -569,11 +814,9 @@
             // }
             arr[data[a].initial].push (data[i])
         }
-        console.log('处理完的数据:'+JSON.stringify(arr))
         return arr;
     }
     function dakai(data1) {
-        console.log(JSON.stringify(data1))
         var dataArr = [];
         var dataKeyArr = [];
         for(key in data1) {
