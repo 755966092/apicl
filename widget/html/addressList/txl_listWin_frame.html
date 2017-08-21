@@ -817,13 +817,10 @@
         return arr;
     }
     function dakai(data1) {
+        console.log('打开列表')
         var dataArr = [];
         var dataKeyArr = [];
-        for(key in data1) {
-            // console.log(data1[key])
-            dataArr = dataArr.concat(data1[key]);
-            dataKeyArr.push(key)
-        }
+        console.log('打开列表')
         // console.log(JSON.stringify(dataArr))
         var rightObj;
         if (apiPageParamFlag) {
@@ -834,7 +831,9 @@
                     title: '呼叫'
                 }]
         }
+        console.log('打开列表')
         var searchHei = $api.offset($api.dom('.search')).h
+        console.log('打开列表')
         listContact.open({
             x: -1000,
             y: -1000,
@@ -843,41 +842,47 @@
             data: [],
             fixedOn: api.frameName
         },function(ret,err){
+            console.log('打开关闭')
         })
+        console.log('打开列表')
         listContact.close();
+        console.log('打开列表')
         listContact.open({
-                x : 0,
-                y : searchHei,
-                w : api.frameWidth,
-                h : api.winHeight - api.pageParam.headerH - searchHei,
-                bgColor: '#f8f8f8',
-                // 分割线颜色
-                borderColor: '#d9d9d9',
-                // 左滑按钮
-                rightBtn: [{
-                    color: '#20AC19',
-                    title: '呼叫'
-                }],
-                imgHeight: 32,
-                groupTitle: {
-                    color: '#999',       
-                    size: 14,   
-                    bgColor: '#f8f8f8'
-                },
-                rightBg: '#fff',
-                indicator: {
-                    bgColor: 'rgba(0,0,0,0)',
-                    color: '#5A5A5A'
-                },
-                cellBgColor: '#fff',
-                // 搜索框
-                // searchBar: {
-                //     bgColor: '#fff',         //（可选项）搜索条背景色，字符串，默认透明，支持 rgb，rgba，#
-                //     placeholder: '搜索'      //（可选项）搜索条提示文字，字符串类型，默认空，不传则不显示提示文字
-                // },
-                data: data1,
-                fixedOn: api.frameName
-            }, function(ret, err) {
+            x : 0,
+            y : searchHei,
+            w : api.frameWidth,
+            h : api.winHeight - api.pageParam.headerH - searchHei,
+            bgColor: '#f8f8f8',
+            // 分割线颜色
+            borderColor: '#d9d9d9',
+            // 左滑按钮
+            rightBtn: [{
+                color: '#20AC19',
+                title: '呼叫'
+            }],
+            imgHeight: 32,
+            groupTitle: {
+                color: '#999',       
+                size: 14,   
+                bgColor: '#f8f8f8'
+            },
+            rightBg: '#fff',
+            indicator: {
+                bgColor: 'rgba(0,0,0,0)',
+                color: '#5A5A5A'
+            },
+            cellBgColor: '#fff',
+            // 搜索框
+            // searchBar: {
+            //     bgColor: '#fff',         //（可选项）搜索条背景色，字符串，默认透明，支持 rgb，rgba，#
+            //     placeholder: '搜索'      //（可选项）搜索条提示文字，字符串类型，默认空，不传则不显示提示文字
+            // },
+            data: data1,
+            fixedOn: api.frameName
+        }, function(ret, err) {
+                console.log($api.html($api.dom('html')))
+                console.log(JSON.stringify(ret))
+
                 if (ret) {
                     if (ret.clickType == 0) {
                         // 获取点击联系人信息
@@ -908,6 +913,11 @@
                                 number: tel
                             });
                         } else {
+                            for(key in data1) {
+                                // console.log(data1[key])
+                                dataArr = dataArr.concat(data1[key]);
+                                dataKeyArr.push(key)
+                            }
                             api.call({
                                 type: 'tel_prompt',
                                 number: dataArr[ret.index].remark_current_contact

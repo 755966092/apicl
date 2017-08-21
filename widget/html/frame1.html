@@ -411,10 +411,10 @@
             <span class="icon"></span>
             <span class="text">人脉等级说明</span>
         </div>
-       <!--  <div class="main_no3 flex-def flex-cCenter" tapmode onclick="openSchemaPage(0)">
+        <div class="main_no3 flex-def flex-cCenter" tapmode onclick="openSchemaPage(0)">
             <span class="icon"></span>
             <span class="text">通讯录测试</span>
-        </div> -->
+        </div>
     </div>
     <div class="main">
        <!--  <div class="search">
@@ -485,20 +485,6 @@
         createTable();
         initPage();
         api.addEventListener({
-            name: 'remindWho'
-        }, function(ret, err) {
-            if (ret) {
-                var pitchOn = $api.domAll('.pitchOn'),
-                    pitchOnArr = [];
-                for (var i = 0; i < pitchOn.length; i++) {
-                    pitchOnArr.push($api.attr($api.closest(pitchOn[i], 'li'), 'data-val'))
-                }
-                api.closeWin();
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
-        api.addEventListener({
             name: 'editUserInfo'
         }, function(ret, err) {
             if (ret) {
@@ -509,26 +495,34 @@
         });
     }
     // doT模版获取数据
-    function getData(data) {
-        var listTText = $api.byId('listT').text;
-        var fnListT = doT.template(listTText);
-        var html = fnListT(data);
+    function getData(data, htmlStr) {
         var list = $api.dom('.resultList');
-        $api.html(list, html);
-        $api.css($api.dom('.loading'), 'display: none');
+        $api.html($api.dom('.slidePage div'), $api.getStorage('frame1SlideBar'));
+        if (htmlStr) {
+            $api.html(list, htmlStr);
+        } else {
+            var listTText = $api.byId('listT').text;
+            var fnListT = doT.template(listTText);
+            var html = fnListT(data);
+            $api.html(list, html);
+            $api.css($api.dom('.loading'), 'display: none');
+            insertOneSql('7', html)
+        }
     }
 
     function initPage() {
+        // type = 7; html数据缓存
+        // type = 6; json数据缓存
         setTimeout(function () {
             db.selectSql({
                 name: 'db_'+$api.getStorage('userToken'),
-                sql: 'SELECT str FROM addressList_one WHERE type = 6',
+                sql: 'SELECT str FROM addressList_one WHERE type = 7',
             }, function(ret, err){        
                 if( ret.status ){
                     if (ret.data.length != 0) {
                         console.log('有数据')
-                        $api.html($api.dom('.slidePage div'), $api.getStorage('frame1SlideBar'));
-                        getData($api.strToJson(ret.data[0].str))
+                        // $api.html($api.dom('.slidePage div'), $api.getStorage('frame1SlideBar'));
+                        getData('',ret.data[0].str)
                         query();
                     } else {
                         console.log('无数据')
@@ -538,6 +532,24 @@
                     alert('292'+ JSON.stringify( err ) );
                 }
             });
+            // db.selectSql({
+            //     name: 'db_'+$api.getStorage('userToken'),
+            //     sql: 'SELECT str FROM addressList_one WHERE type = 6',
+            // }, function(ret, err){        
+            //     if( ret.status ){
+            //         if (ret.data.length != 0) {
+            //             console.log('有数据')
+            //             $api.html($api.dom('.slidePage div'), $api.getStorage('frame1SlideBar'));
+            //             getData($api.strToJson(ret.data[0].str))
+            //             query();
+            //         } else {
+            //             console.log('无数据')
+            //             query();
+            //         }
+            //     }else{
+            //         alert('292'+ JSON.stringify( err ) );
+            //     }
+            // });
         },100)
     }
     function createTable() {
@@ -585,7 +597,6 @@
                 }
             }
          }
-         console.log(JSON.stringify(data))
         for (var i = 0; i < data.length; i++) {
              
             if (i>0) {
@@ -613,9 +624,9 @@
          for (var i = 0; i < letterArr.length; i++) {
             str += '<a ontouchstart="anchorJump(this)"  >'+ letterArr[i] +'</a>'
          }
-         $api.html($api.dom('.slidePage div'), str);
+         
          $api.setStorage('frame1SlideBar', str);
-         insertOneSql(6,data)
+         // insertOneSql(6,data)
          getData(data)
          // var clientArr = parseInt($api.dom('a').getBoundingClientRect().top);
          // // var clientArr = parseInt($api.dom('a').offsetTop);
@@ -637,7 +648,7 @@
             if( ret.status ){
                 console.log('缓存成功')
             }else{
-                alert('756:'+ JSON.stringify( err ) );
+                // alert('756:'+ JSON.stringify( err ) );
             }
         });
     }
@@ -679,22 +690,22 @@
     function openSchemaPage(n) {
         if (n) {
 
-        api.openWin({
-            name: 'txl_relationSchema_win',
-            url: './addressList/txl_relationSchema_win.html',
-            pageParam: {
-                name: 'value'
-            }
-        });
-    } else {
-        api.openWin({
-            name: 'aaaaaa',
-            url: './addressList/aaaaaa.html',
-            pageParam: {
-                name: 'value'
-            }
-        });
-    }
+            api.openWin({
+                name: 'txl_relationSchema_win',
+                url: './addressList/txl_relationSchema_win.html',
+                pageParam: {
+                    name: 'value'
+                }
+            });
+        } else {
+            api.openWin({
+                name: 'aaaaaa',
+                url: './addressList/aaaaaa.html',
+                pageParam: {
+                    name: 'value'
+                }
+            });
+        }
     }
     function openS() {
         api.openWin({
