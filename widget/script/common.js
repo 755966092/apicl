@@ -107,6 +107,7 @@ var rong,
     wxPay,
     aliPay,
     ajpush,
+    fs,
     FNImageClip,
     SQLName;
 
@@ -124,6 +125,8 @@ function moduleInit() {
     db = api.require('db');
     // 融云模块
     rong = api.require('rongCloud2');
+    // 文件模块
+    fs = api.require('fs');
     //聊天界面模块
     UIChatBox = api.require('UIChatBox');
     //列表模块

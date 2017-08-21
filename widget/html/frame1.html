@@ -345,7 +345,6 @@
         }
     </style>
 </head>
-
 <body >
     <div class="loading"></div>
     <div id="news_wrap" class=" clearfix">
@@ -411,10 +410,14 @@
             <span class="icon"></span>
             <span class="text">人脉等级说明</span>
         </div>
-        <div class="main_no3 flex-def flex-cCenter" tapmode onclick="openSchemaPage(0)">
+       <!--  <div class="main_no3 flex-def flex-cCenter" tapmode onclick="openSchemaPage(0)">
             <span class="icon"></span>
             <span class="text">通讯录测试</span>
         </div>
+        <div class="main_no3 flex-def flex-cCenter" tapmode onclick="function_name(6)">
+            <span class="icon"></span>
+            <span class="text">通讯录测22试</span>
+        </div> -->
     </div>
     <div class="main">
        <!--  <div class="search">
@@ -481,8 +484,6 @@
     var letterArr = [],letterObj = []
     apiready = function() {
         moduleInit(); 
-        // query();
-        createTable();
         initPage();
         api.addEventListener({
             name: 'editUserInfo'
@@ -506,10 +507,60 @@
             var html = fnListT(data);
             $api.html(list, html);
             $api.css($api.dom('.loading'), 'display: none');
+            createFile()
             insertOneSql('7', html)
         }
     }
-
+    function createFile() {
+        fs.exist({
+            path: 'widget://html/frame1.html'
+        }, function(ret, err) {
+            if (ret.exist) {
+                    console.log(JSON.stringify(ret))
+                    // 存在打开
+                    openFile();
+            } else {
+                // 不纯在新建
+                createFile_1();
+            }
+        });
+        
+    }
+    function createFile_1() {
+        fs.createFile({
+            path: 'widget://html/frame1.html'
+        }, function(ret, err) {
+            if (ret.status) {
+                console.log('518:::'+JSON.stringify(ret));
+                openFile();
+            } else {
+                console.log('541:::'+JSON.stringify(err));
+            }
+        });
+    }
+    function openFile() {
+         fs.open({
+                path: 'widget://html/frame1.html',
+                flags: 'read_write'
+            }, function(ret, err) {
+                if (ret.status) {
+                    var htmlStr = $api.html($api.dom('html'));
+                    htmlStr = htmlStr.replace('initPage();','')
+                    fs.write({
+                        fd: ret.fd,
+                        data: '<html>'+ htmlStr +'</html>',
+                    }, function(ret, err){        
+                        if( ret.status ){
+                            console.log('531:::'+ JSON.stringify( ret ) );
+                        }else{
+                            console.log('533:::'+ JSON.stringify( err ) );
+                        }
+                    });
+                } else {
+                    console.log('537:::'+JSON.stringify(err));
+                }
+            });
+    }
     function initPage() {
         // type = 7; html数据缓存
         // type = 6; json数据缓存
@@ -551,18 +602,6 @@
             //     }
             // });
         },100)
-    }
-    function createTable() {
-        db.executeSql({
-            name: 'db_'+$api.getStorage('userToken'),
-            sql: 'CREATE TABLE IF NOT EXISTS addressList_one(type INT, str TEXT)'    
-        }, function(ret, err){        
-            if( ret.status ){
-                console.log('新建表成功')
-            }else{
-                alert( JSON.stringify( err ) );
-            }
-        });
     }
     function move() {
         event.preventDefault();
@@ -689,7 +728,6 @@
     // 打开人脉关系图
     function openSchemaPage(n) {
         if (n) {
-
             api.openWin({
                 name: 'txl_relationSchema_win',
                 url: './addressList/txl_relationSchema_win.html',
@@ -697,7 +735,7 @@
                     name: 'value'
                 }
             });
-        } else {
+        }  else {
             api.openWin({
                 name: 'aaaaaa',
                 url: './addressList/aaaaaa.html',
@@ -706,6 +744,15 @@
                 }
             });
         }
+    }
+    function function_name() {
+            api.openWin({
+                name: 'txl_relationSchema_win',
+                url: './frame1.html',
+                pageParam: {
+                    name: 'value'
+                }
+            });
     }
     function openS() {
         api.openWin({
