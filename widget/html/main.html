@@ -518,7 +518,6 @@ function openRemarksDb() {
         sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_contact(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, contact_id int, phone varchar(255), type int, sub_type int, is_default int)'
     }, function(ret, err){
        // alert('1main_ret:'+JSON.stringify(ret))
-        console.log('表1')
     });
 
     // 备注其他联系方式
@@ -527,14 +526,12 @@ function openRemarksDb() {
         sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_other_contact(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, contact_id int, info varchar(255), type int, sub_type int)'
     }, function(ret, err){
        // alert('2main_ret:'+JSON.stringify(ret))
-       console.log('表2')
     });
     // 备注地址
     db.executeSql({
         name: SQLName,
         sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_address(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, address_id int, province varchar(255), city varchar(255), district varchar(255), address varchar(255), note varchar(255))'
     }, function(ret, err){
-        console.log('表3')
        // alert('3main_ret:'+JSON.stringify(ret))
     });
     // 备注内容
@@ -543,7 +540,6 @@ function openRemarksDb() {
         name: SQLName,
         sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_education(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, education_id int, type int, school varchar(255), major varchar(255), degree varchar(255), description varchar(255),start_date varchar(255),end_date varchar(255))'
     }, function(ret, err){
-    console.log('表4')
        // alert('4main_ret:'+JSON.stringify(ret))
     });
     // 备注工作经历
@@ -551,7 +547,6 @@ function openRemarksDb() {
         name: SQLName,
         sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_work(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, work_id int, company_id int, company_name varchar(255), position varchar(255), description varchar(255), is_default int,start_date varchar(255),end_date varchar(255))'
     }, function(ret, err){
-        console.log('表5')
        // alert('5main_ret:'+JSON.stringify(ret))
     });
     // 备注项目经历
@@ -559,7 +554,6 @@ function openRemarksDb() {
         name: SQLName,
         sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_project(list_id varchar(255) PRIMARY KEY NOT NULL,user_id int, project_id int, name varchar(255), url varchar(255), role varchar(255), description varchar(255), achievement varchar(255),start_date varchar(255),end_date varchar(255))'
     }, function(ret, err){
-        console.log('表6')
        // alert('6main_ret:'+JSON.stringify(ret))
     });
     // 个人信息表
@@ -568,7 +562,6 @@ function openRemarksDb() {
         sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_user_info(remark_user_id int PRIMARY KEY NOT NULL, current_position varchar(255), current_degree varchar(255), current_company varchar(255), nickname varchar(255), real_name varchar(255), birthday varchar(255), hometown varchar(255), sex int, head_img_url varchar(255), extra_id int, extra_content varchar(255), extra_image_url varchar(255))'
     }, function(ret, err){
         if( ret.status ){
-            console.log('表7')
             // alert( JSON.stringify( ret ) );
         }else{
             alert('473'+ JSON.stringify( err ) );
@@ -591,15 +584,16 @@ function openRemarksDb() {
         sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_status(remark_user_id int , status_id int PRIMARY KEY NOT NULL, name varchar(255), position varchar(255), degree varchar(255), start_date varchar(255), is_default int, type int)'
     }, function(ret, err){
         if( ret.status ){
-            console.log('表8')
             // alert('用户当前状态表格'+ JSON.stringify( ret ) );
         }else{
             alert('473'+ JSON.stringify( err ) );
         }
     });
+     
+
      // db.executeSql({
      //     name: SQLName,
-     //     sql: 'DROP TABLE tb_remarks_contact1'
+     //     sql: 'DROP TABLE addressList_one'
      // }, function(ret, err){
      //     if( ret.status ){
      //         alert('2'+ JSON.stringify( ret ) );

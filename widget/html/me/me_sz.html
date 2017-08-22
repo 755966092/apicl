@@ -139,6 +139,20 @@
         });
     }
     function login() {
+        var tableArr = ['addressList','tb_remarks_contact','tb_remarks_other_contact','tb_remarks_address','tb_remarks_education','tb_remarks_work','tb_remarks_project','tb_remarks_user_info','tb_remarks_status', 'addressList_simplify']
+        for (var i = 0;i < tableArr.length; i++) {
+            db.executeSql({
+                name: 'db_'+$api.getStorage('userToken'),
+                sql: 'DROP TABLE IF EXISTS '+tableArr[i]   
+            },function(ret,err){
+                if (ret.status) {
+                       // console.log('执行成功'+i)
+                }else {
+                    // api.alert({msg:err.msg});
+                    alert('167:'+JSON.stringify(err))
+                }
+            });
+        }
         api.ajax({
             url: apiSite + '/settings/logout',
             method: 'post',
@@ -154,19 +168,7 @@
                 alert(JSON.stringify(err))
             }
         })
-        var tableArr = ['addressList','tb_remarks_contact','tb_remarks_other_contact','tb_remarks_address','tb_remarks_education','tb_remarks_work','tb_remarks_project','tb_remarks_user_info','tb_remarks_status']
-        for (var i = 0;i < tableArr.length; i++) {
-            db.executeSql({
-                name: 'db_'+$api.getStorage('userToken'),
-                sql: 'DROP TABLE IF EXISTS '+tableArr[i]   
-            },function(ret,err){
-                if (ret.status) {
-                       // console.log('执行成功'+i)
-                }else {
-                    api.alert({msg:err.msg});
-                }
-            });
-        }
+        
         // 退出戎云
         rong.disconnect({
             isReceivePush: false
@@ -367,11 +369,26 @@
             // console.log('数据库语法字符串:'+data1);
             var SQLName = 'db_'+$api.getStorage('userToken');
             var SQL = 'INSERT OR REPLACE INTO addressList(user_id,nickname,head_img_url,current_company,current_position,current_contact,current_degree, titleSize,title,img,flag,litter,type, sex, remark_nickname, remark_real_name, remark_head_img_url, remark_sex, remark_birthday, remark_hometown, remark_current_company, remark_current_position, remark_current_degree, remark_current_contact) VALUES '
+            var SQL2 = 'INSERT OR REPLACE INTO addressList_simplify(user_id,title,head_img_url,current_position,current_company,current_degree, flag,type) VALUES '
             for (var i = 0; i < data1.length; i++) {
                 SQL += '('+data1[i].user_id+',"'+ data1[i].nickname +'","'+ data1[i].head_img_url +'","'+ (data1[i].current_company || "") +'","'+ (data1[i].current_position || "")+'","'+ (data1[i].current_contact || "") +'","'+ (data1[i].current_degree || "") +'","'+ data1[i].titleSize +'","'+ data1[i].title +'","'+ data1[i].img+'","'+ data1[i].flag +'","'+ data1[i].litter +'","'+ type +'","'+ (data1[i].sex || 1) +'","'+ (data1[i].remark_nickname || "") +'","'+ (data1[i].remark_real_name || "") +'","'+ (data1[i].remark_head_img_url || "") +'","'+ (data1[i].remark_sex || "") +'","'+ (data1[i].remark_birthday || "") +'","'+ (data1[i].remark_hometown || "") +'","'+ (data1[i].remark_current_company || "") +'","'+ (data1[i].remark_current_position || "") +'","'+ (data1[i].remark_current_degree || "") +'","'+ (data1[i].remark_current_contact || "") +'"),';
+                SQL2 += '('+data1[i].user_id+',"'+ (data1[i].remark_nickname || data1[i].nickname) +'","'+ (data1[i].remark_head_img_url || data1[i].head_img_url) +'","'+ (data1[i].remark_current_company  || (data1[i].current_company || "")) +'","'+ (data1[i].remark_current_position || (data1[i].current_position || "")) +'","'+ (data1[i].remark_current_degree || (data1[i].current_degree || ""))   +'","'+ data1[i].flag  +'","'+ type  +'"),';
             }
             SQL = SQL.substring(0,SQL.length-1) + ';'
+            SQL2 = SQL2.substring(0,SQL2.length-1) + ';'
             // console.log(SQL)
+            //         sql: 'CREATE TABLE IF NOT EXISTS addressList_simplify(user_id int PRIMARY KEY NOT NULL, nickname varchar(255),head_img_url varchar(255), current_position varchar(255), current_company varchar(255), current_degree varchar(255), flag varchar(255), type int)'   
+
+            db.executeSql({
+                name: SQLName,
+                sql: SQL2    
+            }, function(ret, err){        
+                if( ret.status ){
+                    console.log( JSON.stringify( ret ) );
+                }else{
+                    alert( JSON.stringify( err ) );
+                }
+            });
             db.executeSql({
                 name: SQLName,
                 sql: SQL

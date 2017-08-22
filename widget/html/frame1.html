@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
@@ -8,7 +7,11 @@
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <style>
-        .search {
+        html,body {
+            height: 23rem;
+            background-color: #fff;
+        }
+        /*.search {
             border-radius: .04rem;
             display: block;
             height: .5rem;
@@ -32,7 +35,7 @@
         }
         .search .searchText {
             font-size: .24rem;
-        }
+        }*/
        
         .news {
             display: flex;
@@ -80,7 +83,7 @@
             top: .1rem;
             left: .8rem;
         }
-        
+
         ul li p {
             color: #9B9B9B;
             word-wrap: break-word;
@@ -303,7 +306,7 @@
             box-sizing: border-box;
             padding-right: .1rem;
         }
-        .slidePage a{
+        .slidePage span{
            /* text-align: right;
             box-sizing: border-box;
             display: block;
@@ -410,30 +413,16 @@
             <span class="icon"></span>
             <span class="text">人脉等级说明</span>
         </div>
-       <!--  <div class="main_no3 flex-def flex-cCenter" tapmode onclick="openSchemaPage(0)">
+         <div class="main_no3 flex-def flex-cCenter" tapmode onclick="openSchemaPage(0)">
             <span class="icon"></span>
             <span class="text">通讯录测试</span>
         </div>
-        <div class="main_no3 flex-def flex-cCenter" tapmode onclick="function_name(6)">
+        <!-- <div class="main_no3 flex-def flex-cCenter" tapmode onclick="function_name(6)">
             <span class="icon"></span>
             <span class="text">通讯录测22试</span>
         </div> -->
     </div>
-    <div class="main">
-       <!--  <div class="search">
-            <span class="searchIcon"></span>
-            <span class="searchText">搜索</span>
-        </div> -->
-        <!-- <ul class="list clearfix">
-            <li   tapmode   onclick="selPerson(this)" data-val='no1'>
-                <span class="sel"></span>
-                <img src="../image/tx_3.jpg">
-                <div class="title">
-                    <h3 class="name">Name1</h3>
-                    <p class="position">第一学科技公司 董事长</p>
-                </div>
-            </li>
-        </ul> -->
+   <!--  <div class="main">
         <div class=" list resultList"></div>
         <script type="text/x-dot-template" id="listT">
         {{ for (var i = 0; i < it.length; i++) { }} 
@@ -441,28 +430,21 @@
                 <p id="{{=it[i].flagLetter}}" class="groupTitle">{{=it[i].flagLetter}}</p>
             {{? }}
             <div class="item flex-def flex-cCenter"  data-id="{{=it[i].user_id}}" tapmode   onclick="selPerson(this)" data-val='no1'>
-            <!-- <div class="item"   tapmode   onclick="selPerson(this)" data-val='no1'> -->
-                <!-- <span class="sel"></span> -->
-                <img src="{{=it[i].remark_head_img_url ? it[i].remark_head_img_url : it[i].head_img_url}}">
+                <img src="{{=it[i].head_img_url}}">
                 <div class="title">
-                    <h3 class="name">{{=it[i].remark_nickname ? it[i].remark_nickname : it[i].nickname}}</h3>
-                    {{?it[i].remark_current_company}}
-                    <p class="position">{{=it[i].remark_current_company}}&nbsp;</p>
-                    {{??it[i].current_company}}
+                    <h3 class="name">{{=it[i].title}}</h3>
+                   
+                    {{?it[i].current_company}}
                     <p class="position">{{=it[i].current_company}}&nbsp;</p>
                     {{??}}
                     {{?}}
 
-                    {{?it[i].remark_current_position}}
-                    <p class="position">{{=it[i].remark_current_position}}&nbsp;</p>
-                    {{??it[i].current_position}}
+                    {{?it[i].current_position}}
                     <p class="position">{{=it[i].current_position}}&nbsp;</p>
                     {{??}}
                     {{?}}
 
-                    {{?it[i].remark_current_degree}}
-                    <p class="position">{{=it[i].remark_current_degree}}</p>
-                    {{??it[i].current_degree}}
+                    {{?it[i].current_degree}}
                     <p class="position">{{=it[i].current_degree}}</p>
                     {{??}}
                     {{?}}
@@ -471,17 +453,18 @@
         {{ }; }}
         <p class="contactCount">{{=it.length}}位联系人</p>
         </script>
-    </div>
+    </div> -->
     <div class="slidePage flex-def flex-zTopBottom flex-zCenter flex-cEnd" ontouchmove="move()">
         <div ></div>
     </div>
     <div class="letter"></div>
     <script type="text/javascript" src="../script/common.js"></script>
+    <script type="text/javascript" src="../script/jquery.min.js"></script>
     <script type="text/javascript" src="../script/api.js"></script>
     <script type="text/javascript" src="../script/doT.min.js"></script>
     <script type="text/javascript" src="../script/pinyin4js.js"></script>
     <script type="text/javascript">
-    var letterArr = [],letterObj = []
+    var letterArr = [],letterObj = [];
     apiready = function() {
         moduleInit(); 
         initPage();
@@ -497,19 +480,13 @@
     }
     // doT模版获取数据
     function getData(data, htmlStr) {
-        var list = $api.dom('.resultList');
-        $api.html($api.dom('.slidePage div'), $api.getStorage('frame1SlideBar'));
-        if (htmlStr) {
-            $api.html(list, htmlStr);
-        } else {
+            $api.html($api.dom('.slidePage div'), $api.getStorage('frame1SlideBar'));
+            var list = $api.dom('.resultList');
             var listTText = $api.byId('listT').text;
             var fnListT = doT.template(listTText);
             var html = fnListT(data);
             $api.html(list, html);
-            $api.css($api.dom('.loading'), 'display: none');
-            createFile()
-            insertOneSql('7', html)
-        }
+            $api.css($api.dom('.loading'), 'display:none');
     }
     function createFile() {
         fs.exist({
@@ -562,46 +539,27 @@
             });
     }
     function initPage() {
-        // type = 7; html数据缓存
-        // type = 6; json数据缓存
         setTimeout(function () {
             db.selectSql({
                 name: 'db_'+$api.getStorage('userToken'),
-                sql: 'SELECT str FROM addressList_one WHERE type = 7',
-            }, function(ret, err){        
+                sql: 'SELECT * FROM addressList_simplify WHERE type IN (1,2,3,4) order by flag asc',
+            }, function(ret, err){  
                 if( ret.status ){
                     if (ret.data.length != 0) {
-                        console.log('有数据')
-                        // $api.html($api.dom('.slidePage div'), $api.getStorage('frame1SlideBar'));
-                        getData('',ret.data[0].str)
-                        query();
+                        // sortData(ret.data)
+                        setTimeout(function () {
+                            dakai(paixv(ret.data));
+                        },1)
                     } else {
-                        console.log('无数据')
-                        query();
+                        setTimeout(function () {
+                            query();
+                        },1)
                     }
                 }else{
                     alert('292'+ JSON.stringify( err ) );
                 }
             });
-            // db.selectSql({
-            //     name: 'db_'+$api.getStorage('userToken'),
-            //     sql: 'SELECT str FROM addressList_one WHERE type = 6',
-            // }, function(ret, err){        
-            //     if( ret.status ){
-            //         if (ret.data.length != 0) {
-            //             console.log('有数据')
-            //             $api.html($api.dom('.slidePage div'), $api.getStorage('frame1SlideBar'));
-            //             getData($api.strToJson(ret.data[0].str))
-            //             query();
-            //         } else {
-            //             console.log('无数据')
-            //             query();
-            //         }
-            //     }else{
-            //         alert('292'+ JSON.stringify( err ) );
-            //     }
-            // });
-        },100)
+        },1)
     }
     function move() {
         event.preventDefault();
@@ -610,34 +568,38 @@
         anchorJump(document.elementFromPoint(event.changedTouches[0].clientX,event.changedTouches[0].clientY))
     }
     function anchorJump(n) {
+        event.stopPropagation();
+        event.preventDefault();
         var text = $api.text(n);
         if (text.length < 2) {
-            $api.css($api.dom('.letter'), 'display: block');
+            // $api.css($api.dom('.letter'), 'display: block');
             // $api.css($api.dom('.letter'), 'opacity: 1');
-            $api.text($api.dom('.letter'), text);
-            location.hash = '#' + text;
-            setTimeout(function () {
-                $api.css($api.dom('.letter'), 'display: none');
-            },1500)
+            // $api.text($api.dom('.letter'), text);
+            // location.hash = '#' + text;
+            $("html,body").animate({scrollTop:$("#"+text).offset().top}, 1);
+            return false;
+            // setTimeout(function () {
+            //     $api.css($api.dom('.letter'), 'display: none');
+            // },1500)
 
         }
     }
     function anchorJump1(n) {
-        location.hash = '#' + n
+        // location.hash = '#' + n
+        $("#"+n).animate({scrollTop:$("#"+n).offset().top}, 500);
     }
     // 数据排序
     function sortData(data) {
+        // for (var i = 0; i < data.length; i++) {
+        //     for (var j = 0; j < data.length; j++) {
+        //         if (data[i].flag < data[j].flag) {
+        //             var temp = data[i];
+        //             data[i] = data[j];
+        //             data[j] = temp;
+        //         }
+        //     }
+        //  }
         for (var i = 0; i < data.length; i++) {
-            for (var j = 0; j < data.length; j++) {
-                if (data[i].flag < data[j].flag) {
-                    var temp = data[i];
-                    data[i] = data[j];
-                    data[j] = temp;
-                }
-            }
-         }
-        for (var i = 0; i < data.length; i++) {
-             
             if (i>0) {
                 if (data[i].flag !== data[i-1].flag) {
                     if (f_check_uppercase(data[i].flag)) {
@@ -661,26 +623,16 @@
          // 侧边栏
          var str = '' ;
          for (var i = 0; i < letterArr.length; i++) {
-            str += '<a ontouchstart="anchorJump(this)"  >'+ letterArr[i] +'</a>'
+            str += '<span ontouchstart="anchorJump(this)"  >'+ letterArr[i] +'</span>'
          }
-         
-         $api.setStorage('frame1SlideBar', str);
-         // insertOneSql(6,data)
-         getData(data)
-         // var clientArr = parseInt($api.dom('a').getBoundingClientRect().top);
-         // // var clientArr = parseInt($api.dom('a').offsetTop);
-         // for (var i = 0; i < letterArr.length; i++) {
-         //    letterObj.push({
-         //            letterArr: letterArr[i],
-         //            clientY: clientArr
-         //        })
-            
-         //    clientArr +=  $api.offset($api.dom('a')).h;
-         // }
+            $api.setStorage('frame1SlideBar', str);
+            // getData(data)
+            // dakai(data)
+            console.log('703:::'+data.length)
     }
     function insertOneSql(type,str) {
         str = $api.jsonToStr(str);
-       db.executeSql({
+        db.executeSql({
             name: SQLName,
             sql: "INSERT OR REPLACE INTO addressList_one (type, str) VALUES ("+ type +",'"+ str +"')"    
         }, function(ret, err){        
@@ -708,9 +660,9 @@
             }
         });
     }
-
-   // 隐藏列表
+    // 隐藏列表
     function hideList(ele,n) {
+        listContact.hide();
         var name = '.itemList' + n;
         var list = $api.domAll(name);
         var main_no1 = $api.domAll('.main_no1');
@@ -722,7 +674,10 @@
                 $api.addCls(list[i], 'hide');
             }
         }
-
+        var listH = $api.offset($api.byId('news_wrap')).h;
+        $api.css($api.dom('html'), 'height:' + (listH+450)/50 + 'rem');
+        $api.css($api.dom('body'), 'height:' + (listH+450)/50 + 'rem');
+        initPage();
         // query();
     }
     // 打开人脉关系图
@@ -811,10 +766,6 @@
     }
 
     function dakai(data1) {
-        console.log(data1)
-        console.log('data1')
-        // var hei = $api.offset($api.dom('.main_no1')).h * 2 + $api.offset($api.dom('.wrap')).h; 
-        // var hei = $api.offset($api.dom('.main_no1')).h * 4 + $api.offset($api.dom('.wrap')).h; 
          listContact.open({
             x: -1000,
             y: -1000,
@@ -827,9 +778,9 @@
         listContact.close();
         listContact.open({
                 x : 0,
-                y : 500,
+                y : $api.offset($api.byId('news_wrap')).h,
                 w : api.frameWidth,
-                h : api.frameHeight,
+                h : 550,
                 bgColor: '#EFEFF4',
                 // 分割线颜色
                 borderColor: '#EDEDED',
@@ -856,7 +807,8 @@
                 // 搜索框
                 // searchBar: {},
                 data: data1,
-                fixedOn: api.frameName
+                fixedOn: 'frame1',
+                fixed: false
             }, function(ret, err) {
                 if (ret) {
                     // alert(JSON.stringify(ret))
@@ -866,6 +818,8 @@
                     // alert(JSON.stringify(err.msg));
                 }
             });
+        listContact.show();
+            $api.css($api.dom('.loading'), 'display: none');
     }
      // 打开人脉详情
     function addFriends(userId) {
@@ -889,7 +843,7 @@
         // 查询数据库
         db.selectSql({
             name: SQLName,
-            sql: 'SELECT * FROM addressList'
+            sql: 'SELECT * FROM addressList_simplify order by flag asc'
         }, function(ret, err) {
             // console.log('查询到的数据:' + JSON.stringify(ret))
             if (ret.status) {
@@ -906,32 +860,27 @@
                 // } else {
                     // console.log('有数据')
                     // dakai(paixv(ret.data))
-                    sortData(ret.data)
+                    setTimeout(function () {
+                        sortData(ret.data);
+                    },1)
                 // }
             } else {
                 // console.log(JSON.stringify(err));
             }
         });
     }
-    function paixv (data) {
-        console.log('paixv')
-        for (var i = 0; i < data.length; i++) {
-            for (var j = 0; j < data.length; j++) {
-                if (data[i].litter < data[j].litter) {
-                    var temp = data[i];
-                    data[i] = data[j];
-                    data[j] = temp;
-                }
-            }
-        }
+   function paixv (data) {
+        // for (var i = 0; i < data.length; i++) {
+        //     for (var j = 0; j < data.length; j++) {
+        //         if (data[i].litter < data[j].litter) {
+        //             var temp = data[i];
+        //             data[i] = data[j];
+        //             data[j] = temp;
+        //         }
+        //     }
+        // }
         for (var i = 0; i < data.length; i++) {
             data[i].placeholderImg = "widget://image/icon_defaultHead.png";
-            if (data[i].remark_head_img_url) {
-                data[i].img = data[i].remark_head_img_url;
-            } 
-            if (data[i].remark_nickname) {
-                data[i].title = data[i].remark_nickname
-            }
             if (f_check_uppercase(data[0].flag)) {
                 data[0].initial = data[0].flag;
             } else {
@@ -950,6 +899,10 @@
         var arr = {}
         var a;
         for (var i = 0; i < data.length; i++) {
+            data[i].subTitle = '副标题';
+            data[i].titleSize = 15;
+            data[i].subTitleColor = '#999'
+
             if (data[i].initial) {
                 if (data[i].initial == '#') {
                     if (arr[data[i].initial]) {
@@ -967,7 +920,6 @@
             // }
             arr[data[a].initial].push (data[i])
         }
-        console.log('处理完的数据:' + JSON.stringify(arr))
         return arr;
     }
     </script>
