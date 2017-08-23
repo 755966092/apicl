@@ -216,7 +216,9 @@
          .hide {
              display: none;
         }
-        
+        .wrap {
+            background-color: #EDECF3;
+        }
         .search {
             width: 7.26rem;
             box-sizing: border-box;
@@ -351,10 +353,10 @@
 <body >
     <div class="loading"></div>
     <div id="news_wrap" class=" clearfix">
-       <div class="wrap clearfix">
+       <div class="wrap flex-def flex-cCenter flex-zCenter">
             <div class="search flex-def flex-cCenter flex-zCenter"   tapmode   onclick="openS()">
-                <div><span class="searchIcon"></span>
-                <span class="searchText">搜索</span></div>
+                <span class="searchIcon"></span>
+                <span class="searchText">搜索</span>
             </div>
        </div>
         <!-- <div class="main_no2"   tapmode   onclick="onceConnected(1,4)">
@@ -413,10 +415,10 @@
             <span class="icon"></span>
             <span class="text">人脉等级说明</span>
         </div>
-         <div class="main_no3 flex-def flex-cCenter" tapmode onclick="openSchemaPage(0)">
+         <!-- <div class="main_no3 flex-def flex-cCenter" tapmode onclick="openSchemaPage(0)">
             <span class="icon"></span>
             <span class="text">通讯录测试</span>
-        </div>
+        </div> -->
         <!-- <div class="main_no3 flex-def flex-cCenter" tapmode onclick="function_name(6)">
             <span class="icon"></span>
             <span class="text">通讯录测22试</span>
@@ -472,7 +474,7 @@
             name: 'editUserInfo'
         }, function(ret, err) {
             if (ret) {
-                query();
+                initPage();
             } else {
                 alert(JSON.stringify(err));
             }
@@ -662,7 +664,7 @@
     }
     // 隐藏列表
     function hideList(ele,n) {
-        listContact.hide();
+        $api.css($api.dom('.loading'), 'display:block');
         var name = '.itemList' + n;
         var list = $api.domAll(name);
         var main_no1 = $api.domAll('.main_no1');
@@ -818,8 +820,8 @@
                     // alert(JSON.stringify(err.msg));
                 }
             });
-        listContact.show();
-            $api.css($api.dom('.loading'), 'display: none');
+        
+        $api.css($api.dom('.loading'), 'display: none');
     }
      // 打开人脉详情
     function addFriends(userId) {
@@ -899,10 +901,9 @@
         var arr = {}
         var a;
         for (var i = 0; i < data.length; i++) {
-            data[i].subTitle = '副标题';
+            // data[i].subTitle = (data[i].current_company || ""+ data[i].current_position || ""+data[i].current_degree||"") ? (data[i].current_company || ""+" "+ data[i].current_position || ""+" "+data[i].current_degree||"") : ""
             data[i].titleSize = 15;
             data[i].subTitleColor = '#999'
-
             if (data[i].initial) {
                 if (data[i].initial == '#') {
                     if (arr[data[i].initial]) {

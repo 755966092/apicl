@@ -369,7 +369,6 @@
                }
             }
        }, function(ret, err) {
-            console.log('上传完请求:'+JSON.stringify(ret))
             
             api.ajax({
                 url: apiSite + '/contact/friend',
@@ -448,18 +447,44 @@
         for (var i = 0; i < data1.length; i++) {
             data1[i].flag = data1[i].litter[0];
         }
-        // console.log('数据库语法字符串:'+data1);
+        console.log('数据库语法字符串:'+JSON.stringify(data1));
         var SQLName = 'db_'+$api.getStorage('userToken');
         var SQL = 'INSERT OR REPLACE INTO addressList(user_id,nickname,real_name,head_img_url,current_company,current_position,current_contact,current_degree, titleSize,title,img,flag,litter,type, sex, remark_nickname, remark_real_name, remark_head_img_url, remark_sex, remark_birthday, remark_hometown, remark_current_company, remark_current_position, remark_current_degree, remark_current_contact) VALUES '
-        var SQL2 = 'INSERT OR REPLACE INTO addressList_simplify(user_id,title,head_img_url,current_position,current_company,current_degree, flag,type) VALUES '
+        var SQL2 = 'INSERT OR REPLACE INTO addressList_simplify(user_id,title,img,subTitle, flag,type) VALUES ';
         for (var i = 0; i < data1.length; i++) {
+        var subTitleStr= '';
             SQL += '('+data1[i].user_id+',"'+ data1[i].nickname +'","'+ data1[i].real_name +'","'+ data1[i].head_img_url +'","'+ (data1[i].current_company || "") +'","'+ (data1[i].current_position || "")+'","'+ (data1[i].current_contact || "") +'","'+ (data1[i].current_degree || "") +'","'+ data1[i].titleSize +'","'+ data1[i].title +'","'+ data1[i].img+'","'+ data1[i].flag +'","'+ data1[i].litter +'","'+ type +'","'+ (data1[i].sex || 1) +'","'+ (data1[i].remark_nickname || "") +'","'+ (data1[i].remark_real_name || "") +'","'+ (data1[i].remark_head_img_url || "") +'","'+ (data1[i].remark_sex || "") +'","'+ (data1[i].remark_birthday || "") +'","'+ (data1[i].remark_hometown || "") +'","'+ (data1[i].remark_current_company || "") +'","'+ (data1[i].remark_current_position || "") +'","'+ (data1[i].remark_current_degree || "") +'","'+ (data1[i].remark_current_contact || "") +'"),';
-            SQL2 += '('+data1[i].user_id+',"'+ (data1[i].remark_nickname || data1[i].nickname) +'","'+ (data1[i].remark_head_img_url || data1[i].head_img_url) +'","'+ (data1[i].remark_current_company  || (data1[i].current_company || "")) +'","'+ (data1[i].remark_current_position || (data1[i].current_position || "")) +'","'+ (data1[i].remark_current_degree || (data1[i].current_degree || ""))   +'","'+ data1[i].flag  +'","'+ type  +'"),';
+            
+            if (data1[i].remark_current_company) {
+                subTitleStr += data1[i].remark_current_company+" "   
+            } else if(data1[i].current_company){
+                subTitleStr += data1[i].current_company+" "   
+            } else {
+               
+            }
+            if (data1[i].remark_current_position) {
+                subTitleStr += data1[i].remark_current_position + " "
+            } else if (data1[i].current_position) {
+                subTitleStr += data1[i].current_position + " "
+            } else {
+               
+            }
+            if (data1[i].remark_current_degree) {
+                subTitleStr += data1[i].remark_current_degree+" "
+            } else if (data1[i].current_degree) {
+                subTitleStr += data1[i].current_degree+" "
+            } else {
+               
+            }
+            // subTitleStr
+            
+            SQL2 += '('+data1[i].user_id+',"'+ (data1[i].remark_nickname || data1[i].nickname) +'","'+ (data1[i].remark_head_img_url || data1[i].head_img_url) +'","'+ subTitleStr +'","'+  data1[i].flag  +'","'+ type  +'"),';
 
         }
 
         SQL = SQL.substring(0,SQL.length-1) + ';'
         SQL2 = SQL2.substring(0,SQL2.length-1) + ';'
+        console.log(SQL2)
         db.executeSql({
             name: SQLName,
             sql: 'CREATE TABLE IF NOT EXISTS addressList(user_id int PRIMARY KEY NOT NULL, nickname varchar(255),real_name varchar(255), head_img_url varchar(255), current_position varchar(255), current_company varchar(255), current_degree varchar(255), current_contact varchar(255), titleSize int, title varchar(255), img varchar(255), flag varchar(255), litter varchar(255), type int, sex varchat(10), remark_nickname varchar(255),  remark_real_name varchar(255) , remark_head_img_url varchar(255) , remark_sex varchar(255) , remark_birthday varchar(255) , remark_hometown varchar(255) , remark_current_company varchar(255) , remark_current_position varchar(255) , remark_current_degree varchar(255), remark_current_contact varchar(255), current_status varchar(255))'
@@ -479,7 +504,6 @@
                         }, function(ret, err){        
                             if( ret.status ){
                                 // console.log( '插入数据'+JSON.stringify( ret ) );
-                                
                             }else{
                                 console.log( '插入数据:' + JSON.stringify( err ) );
                             }
@@ -494,7 +518,7 @@
         });
         db.executeSql({
             name: 'db_'+$api.getStorage('userToken'),
-            sql: 'CREATE TABLE IF NOT EXISTS addressList_simplify(user_id int PRIMARY KEY NOT NULL, title varchar(255),head_img_url varchar(255), current_position varchar(255), current_company varchar(255), current_degree varchar(255), flag varchar(255), type int)'   
+            sql: 'CREATE TABLE IF NOT EXISTS addressList_simplify(user_id int PRIMARY KEY NOT NULL, title varchar(255),img varchar(255), subTitle varchar(255), flag varchar(255), type int)'   
         }, function(ret, err){        
             if( ret.status ){
                 console.log('新建表成功')

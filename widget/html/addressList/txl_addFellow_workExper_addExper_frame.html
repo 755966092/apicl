@@ -229,6 +229,7 @@
                         });
                     }
                     $api.css($api.dom('.loading'), 'display: none');
+                    statusCurrent();
                     insertData();
                 } else {
                     alert(ret.msg);
@@ -272,11 +273,9 @@
       // 打开时间选择器
     function openTime(ele) {
         for (var i = 0; i < $api.domAll('input').length; i++) {
-                console.log($api.domAll('input')[i])
                 $api.domAll('input')[i].blur()
             }
         for (var i = 0; i < $api.domAll('textarea').length; i++) {
-                console.log($api.domAll('textarea')[i])
                 $api.domAll('textarea')[i].blur()
             }
         var data = $api.attr(ele, 'data-val');
@@ -365,6 +364,10 @@
         console.log('334ret:'+JSON.stringify(ret))
         var sql = 'INSERT OR REPLACE INTO tb_remarks_work(list_id,user_id,work_id,company_id,company_name,position, description, is_default, start_date, end_date) VALUES '
         for (var i = 0; i < ret.data.list.length; i++) {
+            if (ret.data.list[i].is_default && ret.data.list[i].end_date == '0000-00-00') {
+                console.log(ret.data.list[i].company_name +' '+ ret.data.list[i].position)
+                // undateSqlAddressListSimplify(ret.data.list[i].company_name +' '+ ret.data.list[i].position)
+            }
             sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].work_id  +'",'+api.pageParam.userId+','+ret.data.list[i].work_id+',"'+ret.data.list[i].company_id+'","'+ret.data.list[i].company_name+'","'+ret.data.list[i].position+'","'+ret.data.list[i].description+'",'+ret.data.list[i].is_default+',"'+ret.data.list[i].start_date+'","'+ret.data.list[i].end_date+'"),'
         }
         sql = sql.substring(0,sql.length-1);
@@ -388,6 +391,9 @@
     function updateSql (ret) {
         for (var i = 0; i < ret.data.list.length; i++) {
             if (ret.data.list[i].work_id == api.pageParam.work_id) {
+                if (ret.data.list[i].is_default && ret.data.list[i].end_date == '0000-00-00') {
+                    // undateSqlAddressListSimplify(ret.data.list[i].company_name +' '+ ret.data.list[i].position)
+                }
                 db.executeSql({
                     name: SQLName,
                     sql: 'UPDATE tb_remarks_work SET company_name = "' + ret.data.list[i].company_name + '",position = "' + ret.data.list[i].position+ '",description = "' + ret.data.list[i].description+ '",is_default = "' + ret.data.list[i].is_default+ '",start_date = "' + ret.data.list[i].start_date+ '",end_date = "' + ret.data.list[i].end_date + '" WHERE work_id =' + api.pageParam.work_id    
@@ -403,7 +409,57 @@
                     }
                 });
             }
+
+           
        }
+    }
+    function statusCurrent() {
+        api.ajax({
+            url: apiSite + '/remark_user/fullInfo',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       remark_user_id: api.pageParam.userId,
+                   }
+            }
+        }, function(ret, err) {
+            console.log(JSON.stringify(ret.data.status))
+            for (var i = 0; i < ret.data.status.length; i++) {
+                if (ret.data.status[i].is_default == 1) {
+                    console.log('431:'+JSON.stringify(ret))
+                    var subTitle = ret.data.status[i].name +' '+ ret.data.status[i].position +' '+ ret.data.status[i].degree;
+                    db.executeSql({
+                        name: 'db_'+$api.getStorage('userToken'),
+                        sql: 'UPDATE addressList_simplify SET subTitle = "'+ subTitle +'" WHERE user_id =' + api.pageParam.userId
+                    }, function(ret, err){        
+                        if( ret.status ){
+                            console.log('437更新成功:'+subTitle)
+                          api.sendEvent({
+                              name: 'editUserInfo'
+                          });
+                        }else{
+                            alert( JSON.stringify( err ) );
+                        }
+                    });
+                }
+            }
+        })
+    }
+    function undateSqlAddressListSimplify(subTitle) {
+        db.executeSql({
+            name: 'db_'+$api.getStorage('userToken'),
+            sql: 'UPDATE addressList_simplify SET subTitle = "'+ subTitle +'" WHERE user_id =' + api.pageParam.userId
+        }, function(ret, err){        
+            if( ret.status ){
+              api.sendEvent({
+                  name: 'editUserInfo'
+              });
+            }else{
+                alert( JSON.stringify( err ) );
+            }
+        });
     }
 </script>
 </html>

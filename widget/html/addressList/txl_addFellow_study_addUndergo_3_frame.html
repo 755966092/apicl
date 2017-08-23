@@ -328,6 +328,7 @@
                             });
                         }
                         $api.css($api.dom('.loading'), 'display: none');
+                        statusCurrent();
                         insertData();
                     } else {
                         $api.css($api.dom('.loading'), 'display: none');
@@ -342,7 +343,46 @@
         }
            
     }
-
+    function statusCurrent() {
+        api.ajax({
+            url: apiSite + '/remark_user/fullInfo',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                       token: $api.getStorage('userToken'),
+                       remark_user_id: api.pageParam.userId,
+                   }
+            }
+        }, function(ret, err) {
+            for (var i = 0; i < ret.data.status.length; i++) {
+                if (ret.data.status[i].is_default==1 && ret.data.status[i].type == 2) {
+                    switch(ret.data.status[i].degree) {
+                        case '0':ret.data.status[i].degree = '';break;
+                        case '1':ret.data.status[i].degree = '专科';break;
+                        case '2':ret.data.status[i].degree = '本科';break;
+                        case '3':ret.data.status[i].degree = '硕士';break;
+                        case '4':ret.data.status[i].degree = '博士';break;
+                        case '5':ret.data.status[i].degree = '博士后';break;
+                    }
+                    var subTitle = ret.data.status[i].name +' '+ ret.data.status[i].position +' '+ ret.data.status[i].degree;
+                    db.executeSql({
+                        name: 'db_'+$api.getStorage('userToken'),
+                        sql: 'UPDATE addressList_simplify SET subTitle = "'+ subTitle +'" WHERE user_id =' + api.pageParam.userId
+                    }, function(ret, err){        
+                        if( ret.status ){
+                            console.log('更新成功:'+subTitle)
+                          api.sendEvent({
+                              name: 'editUserInfo'
+                          });
+                        }else{
+                            alert( JSON.stringify( err ) );
+                        }
+                    });
+                }
+            }
+        })
+    }
     function insertData() {
         var SQLName = 'db_'+$api.getStorage('userToken');
         api.ajax({

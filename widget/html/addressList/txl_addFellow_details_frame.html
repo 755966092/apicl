@@ -179,7 +179,6 @@
             real_name = $api.val($api.dom('.realName')),
             nickname = $api.val($api.dom('.nickName')),
             sex = $api.text($api.dom('.sex')) == '男'? 1 : 2;
-            console.log(real_name+'---'+nickname);
         if ((head_img_url == api.pageParam.paramHeadImg) && (real_name === api.pageParam.paramRealName) && (nickname === api.pageParam.paramNickname) && (sex == api.pageParam.paramSex)) {
             // 没修改不提交
         } else {
@@ -218,19 +217,19 @@
                         }
                     }, function(retWeb, err) {
                         if(retWeb) {
+                            var litter =  PinyinHelper.getShortPinyin(retWeb.data.info.nickname).toUpperCase();
+                            undateSqlAddressListSimplify(retWeb.data.info.nickname, retWeb.data.info.head_img_url, litter[0])
                             db.selectSql({
                                 name: 'db_'+$api.getStorage('userToken'),
                                 sql: 'SELECT * FROM addressList where user_id=' + api.pageParam.userId
                             }, function(ret, err){        
                                 if( ret.status ){
                                     // 备注后的昵称姓名, 转换为拼音
-                                    var litter =  PinyinHelper.getShortPinyin(retWeb.data.info.nickname).toUpperCase();
                                     db.executeSql({ 
                                         name: 'db_'+$api.getStorage('userToken'),
                                         sql: 'UPDATE addressList SET remark_nickname = "'+ retWeb.data.info.nickname +'",remark_head_img_url = "'+ retWeb.data.info.head_img_url +'", title = "'+ retWeb.data.info.nickname+'", flag = "'+ litter[0]+'", litter = "'+ litter +'",remark_real_name = "'+ retWeb.data.info.real_name +'", remark_sex = "'+ retWeb.data.info.sex  +'" WHERE user_id = ' + api.pageParam.userId
                                     }, function(ret, err){        
                                         if( ret.status ){
-                                            console.log('688:' + JSON.stringify( ret ) );
                                             // api.execScript({
                                             //     name: 'main',
                                             //     frameName: 'frame1',
@@ -252,7 +251,9 @@
                                             //     }
                                             // });
                                             api.sendEvent({
-                                                name: 'editUserInfo',                                     extra: {                                         flag: api.pageParam.flag                                     }
+                                                name: 'editUserInfo',
+                                                extra: {
+                                                    flag: api.pageParam.flag                                     }
                                             });
                                             api.closeWin();
                                             
@@ -264,10 +265,6 @@
                                     alert( JSON.stringify( err ) );
                                 }
                             });
-
-
-
-                            
                         } else {
                            alert(JSON.stringify(err))
                         }
@@ -280,6 +277,20 @@
             }
             });
         }
+    }
+    function undateSqlAddressListSimplify(title, head_img_url, flag) {
+        db.executeSql({
+            name: SQLName,
+            sql: 'UPDATE addressList_simplify SET title = "'+ title +'",img="'+head_img_url+'",flag="'+flag+'" WHERE user_id =' + api.pageParam.userId
+        }, function(ret, err){        
+            if( ret.status ){
+              api.sendEvent({
+                  name: 'editUserInfo'
+              });
+            }else{
+                alert( JSON.stringify( err ) );
+            }
+        });
     }
     function requireData() {
         api.ajax({
