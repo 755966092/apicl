@@ -206,9 +206,20 @@
                         frameName: 'find_dynamicState_frame',
                         script: 'requestData();'
                     });
-                    api.closeToWin({
-                        name: 'find_cricleInfo_win'
+                    // api.closeToWin({
+                    //     name: 'find_cricleInfo_win'
+                    // });
+                    api.openWin({
+                        name: 'find_cricleInfo_win',
+                        url: './find_cricleInfo_win.html',
+                        pageParam: {
+                            circle_id: api.pageParam.circle_id
+                        },
+                        reload: true
                     });
+                    setTimeout(function () {
+                        api.closeWin();
+                    },500)
                     // // alert(JSON.stringify(ret))
                 } else {
                     alert(JSON.stringify(err.msg))
