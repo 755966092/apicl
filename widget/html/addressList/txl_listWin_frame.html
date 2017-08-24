@@ -242,22 +242,19 @@
     apiready = function(){
         moduleInit();
         // 监听筛选条件
-        if (api.pageParam.flag == 4) {
-            requireFriend();
-        }
         apiPageParamFlag = api.pageParam.flag;
-        addFilter();
-        // initPage();
-        if (apiPageParamFlag) {
+        if (apiPageParamFlag == 4) {
+            requireFriend();
+        } else if(apiPageParamFlag && apiPageParamFlag!= 4) {
             query(apiPageParamFlag);
         } else {
             query()
         }
+        addFilter();
         api.addEventListener({
             name: 'editUserInfo'
         }, function(ret, err) {
             if (ret) {
-                console.log('监听到事件：'+JSON.stringify(ret))
                 if(ret.value.flag) {
                     query(ret.value.flag)
                 } else {
@@ -408,7 +405,6 @@
                         if (retSql) {
                             if (retSql.status) {
                                 // 网上相识好友和数据库一样多 不更新数据库
-                                console.log(retSql.data.length+ '=='+ retFriend.data.list.length)
                                 if (retSql.data.length == retFriend.data.list.length) {
                                     query(4);
                                 } else {

@@ -174,8 +174,9 @@ function rongyun(rongToken) {
 
 // 查看历史消息
 function historicalNews() {
-    // alert('开始发送事件')
+    console.log('开始发送事件')
     rong.getConversationList(function(ret, err) {
+        console.log('historNews'+JSON.stringify(ret))
         api.sendEvent({
             name: 'historNews',
             extra: {

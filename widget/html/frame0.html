@@ -293,7 +293,7 @@
         api.addEventListener({
             name: 'refurbish'
         }, function(ret, err) {
-            historicalNews();
+            historyNews();
         });
     }
     function delNesItem(ele,n) {
@@ -304,7 +304,7 @@
                 conversationType: 'PRIVATE',
                 targetId: targetId
             }, function(ret, err) {
-                historicalNews();
+                historyNews();
             })
         } else {
             $api.remove($api.closest(ele, 'li'));
@@ -386,16 +386,14 @@
     }
 
     function contrastCache(cacheFieldName,  fn) {
+        console.log('xuanran yemian')
         var cacheFieldName = $api.getStorage(cacheFieldName);
          if (cacheFieldName) {
-            console.log('386:::'+JSON.stringify(cacheFieldName))
             getData(cacheFieldName)
-            console.log('使用缓存');
             fn(cacheFieldName);
         } else {
             // 历史消息
             fn(cacheFieldName);    
-            console.log('网络获取');
         }
 
     }
@@ -422,29 +420,44 @@
     }
     // 历史消息
     function historyNews(cacheFieldName){
-        console.log('获取历史消息')
+        console.log('历史消息列表')
         // 历史消息列表
-        api.addEventListener({
-            name: 'historNews'
-        }, function(ret, err) {
-            if (ret) {
-                console.log('获取历史消息'+JSON.stringify(ret))
+        rong.getConversationList(function(ret, err) {
                 var targetRongIdArr = [];
-                for (var i = 0; i < ret.value.data.length; i++) {
-                    ret.value.data[i].time = changeTime(ret.value.data[i].receivedTime);
-                    targetRongIdArr.push(ret.value.data[i].targetId);
+                for (var i = 0; i < ret.result.length; i++) {
+                    ret.result[i].time = changeTime(ret.result[i].receivedTime);
+                    targetRongIdArr.push(ret.result[i].targetId);
                 }
                 api.execScript({
                   name: 'main',
                   // frameName: 'fram0',
                   script: 'getTotalCount();'
-              });
+                });
                 // 获取聊天对方信息
-                getSideInfo(targetRongIdArr, ret.value.data, cacheFieldName);
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
+                getSideInfo(targetRongIdArr, ret.result, cacheFieldName);
+
+        })
+        // api.addEventListener({
+        //     name: 'historNews'
+        // }, function(ret, err) {
+        //     if (ret) {
+        //         console.log('获取历史消息'+JSON.stringify(ret))
+        //         var targetRongIdArr = [];
+        //         for (var i = 0; i < ret.value.data.length; i++) {
+        //             ret.value.data[i].time = changeTime(ret.value.data[i].receivedTime);
+        //             targetRongIdArr.push(ret.value.data[i].targetId);
+        //         }
+        //         api.execScript({
+        //           name: 'main',
+        //           // frameName: 'fram0',
+        //           script: 'getTotalCount();'
+        //         });
+        //         // 获取聊天对方信息
+        //         getSideInfo(targetRongIdArr, ret.value.data, cacheFieldName);
+        //     } else {
+        //         alert(JSON.stringify(err.msg));
+        //     }
+        // });
     }
      // 获取聊天对方信息
     function getSideInfo(rongUserId, data, cacheFieldName) {
