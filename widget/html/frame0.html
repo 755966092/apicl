@@ -216,7 +216,7 @@
 
         <ul class="resultList"></ul>
         <script type="text/x-dot-template" id="listT">
-            {{?it.length!=0}}
+            {{?it.length > 0}}
                 {{ for (var i = 0; i < it.length; i++) { }} 
                     <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" data-remark_nickname="{{=it[i].remark_nickname}}" ontouchstart=";event.stopPropagation();"  data-userId="{{=it[i].user_id}}"  tapmode   onclick="openChat(this)">
                         <div class="warp" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove(this)" ontouchend="gtouchend(this)">
@@ -271,7 +271,7 @@
     var chatMessage;
      apiready = function() {
         moduleInit()
-        console.log($api.getStorage('userToken'))
+        // console.log($api.getStorage('userToken'))
         // 监听打开加好友窗口  
         monitorEvent();
         // 缓存个人信息
@@ -315,9 +315,6 @@
                 // api.toast({ msg: ret.status });
             })
         }
-
-
-       
     }
     var startX,startY;
     var endX,endY;
@@ -391,14 +388,14 @@
     function contrastCache(cacheFieldName,  fn) {
         var cacheFieldName = $api.getStorage(cacheFieldName);
          if (cacheFieldName) {
-            // console.log('386:::'+JSON.stringify(cacheFieldName))
+            console.log('386:::'+JSON.stringify(cacheFieldName))
             getData(cacheFieldName)
-            // console.log('使用缓存');
+            console.log('使用缓存');
             fn(cacheFieldName);
         } else {
             // 历史消息
             fn(cacheFieldName);    
-            // console.log('网络获取');
+            console.log('网络获取');
         }
 
     }
@@ -425,11 +422,13 @@
     }
     // 历史消息
     function historyNews(cacheFieldName){
+        console.log('获取历史消息')
         // 历史消息列表
         api.addEventListener({
             name: 'historNews'
         }, function(ret, err) {
             if (ret) {
+                console.log('获取历史消息'+JSON.stringify(ret))
                 var targetRongIdArr = [];
                 for (var i = 0; i < ret.value.data.length; i++) {
                     ret.value.data[i].time = changeTime(ret.value.data[i].receivedTime);
