@@ -525,22 +525,26 @@
                     }
                 });
                db.executeSql({
-            name: 'db_'+$api.getStorage('userToken'),
-            sql: 'CREATE TABLE IF NOT EXISTS addressList_simplify(user_id int PRIMARY KEY NOT NULL, title varchar(255),img varchar(255), subTitle varchar(255), flag varchar(255), type int)'   
-        }, function(ret, err){        
-            if( ret.status ){
-                console.log('新建表成功')
-                db.executeSql({
                     name: 'db_'+$api.getStorage('userToken'),
-                    sql: 'CREATE INDEX IF NOT EXISTS type_idx ON addressList_simplify (type);'    
+                    sql: 'CREATE TABLE IF NOT EXISTS addressList_simplify(user_id int PRIMARY KEY NOT NULL, title varchar(255),img varchar(255), subTitle varchar(255), flag varchar(255), type int)'   
                 }, function(ret, err){        
                     if( ret.status ){
+                        console.log('新建表成功')
                         db.executeSql({
                             name: 'db_'+$api.getStorage('userToken'),
-                            sql: 'CREATE INDEX IF NOT EXISTS flag_idx ON addressList_simplify (flag);'    
+                            sql: 'CREATE INDEX IF NOT EXISTS type_idx ON addressList_simplify (type);'    
                         }, function(ret, err){        
                             if( ret.status ){
-                               
+                                db.executeSql({
+                                    name: 'db_'+$api.getStorage('userToken'),
+                                    sql: 'CREATE INDEX IF NOT EXISTS flag_idx ON addressList_simplify (flag);'    
+                                }, function(ret, err){        
+                                    if( ret.status ){
+                                       
+                                    }else{
+                                        alert( JSON.stringify( err ) );
+                                    }
+                                });
                             }else{
                                 alert( JSON.stringify( err ) );
                             }
@@ -549,10 +553,6 @@
                         alert( JSON.stringify( err ) );
                     }
                 });
-            }else{
-                alert( JSON.stringify( err ) );
-            }
-        });
             } else {
                 alert('新建库错误:'+JSON.stringify(err));
             }
