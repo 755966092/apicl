@@ -166,7 +166,7 @@
    var flag = 0; // 如果flag是0, 说明联系方式是用户本来的
    var flagClick = 0; // 如果flagClick是0, 点击选择默认联系联系方式
     apiready = function(){
-        console.log(JSON.stringify(api.pageParam))
+        // console.log(JSON.stringify(api.pageParam))
         moduleInit();
         monitorEvent();
         requireData();
@@ -195,24 +195,24 @@
                 }
             }, function(ret, err) {
                 if(ret) {
-                    console.log('设置成功')
-                    db.executeSql({
-                        name: 'db_'+$api.getStorage('userToken'),
-                        sql: 'UPDATE addressList SET remark_current_contact = "' + $api.text($api.dom(ele, '.phoneText')) + '" WHERE user_id = ' + api.pageParam.userId
-                    }, function(ret, err){        
-                        if( ret.status ){
-                            console.log('ret203:::'+$api.text($api.dom(ele, '.phoneText')) )
-                            // alert( JSON.stringify( ret ) );
-                            api.sendEvent({
-                                name: 'editUserInfo',
-                                extra: {
-                                    flag: api.pageParam.flag                                      
-                                }
-                            });
-                        }else{
-                            alert( JSON.stringify( err ) );
-                        }
-                    });
+                    // db.executeSql({
+                    //     name: 'db_'+$api.getStorage('userToken'),
+                    //     sql: 'UPDATE addressList SET remark_current_contact = "' +  + '" WHERE user_id = ' + api.pageParam.userId
+                    // }, function(ret, err){        
+                    //     if( ret.status ){
+                    //         console.log('ret203:::'+$api.text($api.dom(ele, '.phoneText')) )
+                    //         // alert( JSON.stringify( ret ) );
+                    //         api.sendEvent({
+                    //             name: 'editUserInfo',
+                    //             extra: {
+                    //                 flag: api.pageParam.flag                                      
+                    //             }
+                    //         });
+                    //     }else{
+                    //         alert( JSON.stringify( err ) );
+                    //     }
+                    // });
+                    updateAddressList($api.text($api.dom(ele, '.phoneText')))
                     upsateSql();
 
                     // // alert(JSON.stringify(ret))
@@ -288,7 +288,7 @@
     }
 
     // 处理数据
-    function handleData(data) {
+    function handleData(data,flag) {
         for (var i = 0; i < data.length; i++) {
             if (data[i].sub_type == 1) {
                 data[i].sub_type = '工作'
@@ -297,6 +297,12 @@
             }
         }
         getData(data);
+        if (flag == 'delData') {
+             flagClick = 0;
+             api.sendEvent({
+                 name: 'listenToEvents'
+             });
+        }
     }
     function litterSort(data) {
         for (var i = 0; i < data.length; i++) {
@@ -353,7 +359,7 @@
                         sql: 'DELETE FROM tb_remarks_contact WHERE contact_id = ' + contact_id  
                     }, function(ret, err){        
                         if( ret.status ){
-                            upsateSql();
+                            upsateSql('delData');
                         }else{
                             alert( JSON.stringify( err ) );
                         }
@@ -367,7 +373,6 @@
         
     }
     function addPhone() {
-        console.log(111)
         api.openWin({
             name: 'winName',
             url: './txl_addFellow_addPhone_win.html',
@@ -378,8 +383,7 @@
         });
     }
     // 更新数据库
-    function upsateSql() {
-        console.log('更新数据库')
+    function upsateSql(flagDel) {
         api.ajax({
             url: apiSite + '/remark_user/contactList',
             method: 'post',
@@ -391,51 +395,54 @@
                    }
             }
         }, function(ret, err) {
-            console.log('387:::'+JSON.stringify(ret))
-            for (var i = 0; i < ret.data.list.length; i++) {
-                db.executeSql({
-                    name: 'db_'+$api.getStorage('userToken'),
-                    sql: 'UPDATE tb_remarks_contact SET is_default = ' + ret.data.list[i].is_default + ' WHERE contact_id = ' + ret.data.list[i].contact_id
-                }, function(ret, err){  
-                    if( ret.status ){
-                       console.log('更新成功');
+            if (ret) {
+                if (ret.data.list.length > 0) {
+                    for (var i = 0; i < ret.data.list.length; i++) {
+                        db.executeSql({
+                            name: 'db_'+$api.getStorage('userToken'),
+                            sql: 'UPDATE tb_remarks_contact SET is_default = ' + ret.data.list[i].is_default + ' WHERE contact_id = ' + ret.data.list[i].contact_id
+                        }, function(ret, err){  
+                            if( ret.status ){
+                            }else{
+                                alert(JSON.stringify( err ) );
+                            }
+                        });
+                        if(ret.data.list[i].is_default == 1) {
+                            // 默认备注的电话
+                            db.executeSql({
+                                name: 'db_'+$api.getStorage('userToken'),
+                                sql: 'UPDATE addressList SET remark_current_contact = ' + ret.data.list[i].phone + ' WHERE user_id = ' + api.pageParam.userId
+                            }, function(ret, err){  
+                                if( ret.status ){
+                                   api.sendEvent({
+                                       name: 'editUserInfo'
+                                   });
+                                   requireData(flagDel);
+                                }else{
+                                    alert(JSON.stringify( err ) );
+                                }
+                            });
 
-                    }else{
-                        alert(JSON.stringify( err ) );
+                        }
                     }
-                });
-                // if(ret.data.list[i].is_default == 1) {
-                //     db.executeSql({
-                //        name: 'db_'+$api.getStorage('userToken'),
-                //        sql: 'UPDATE addressList SET remark_current_contact = ' + ret.data.list[i].phone + ' WHERE user_id = ' + api.pageParam.userId
-                //     }, function(ret, err){        
-                //        if( ret.status ){
-                //            alert('更新成功2')
-                //        }else{
-                //            alert( JSON.stringify( err ) );
-                //        }
-                //     });
-                // }
+                } else {
+                    requireData(flagDel);
+                }
             }
             
         })
     }
 
-    function requireData() {
+    function requireData(flagDel) {
         var SQLName = 'db_'+$api.getStorage('userToken');
         db.selectSql({
             name: SQLName,
             sql: 'SELECT * FROM tb_remarks_contact WHERE user_id = ' + api.pageParam.userId
         }, function(ret, err){        
             if( ret.status ){
-                console.log('506::'+ JSON.stringify( ret ) );
                 if (ret.data.length != 0) {
                     flag = 1;
-                    handleData(litterSort(ret.data))
-                    console.log('本地数据库'+JSON.stringify(ret.data))
-                    for (var i = 0; i < ret.data.length; i++) {
-                        ret.data[i]
-                    }
+                    handleData(litterSort(ret.data),flagDel)
                 } else {
                     api.ajax({
                         url: apiSite + '/remark_user/contactList',
@@ -450,9 +457,8 @@
                     }, function(ret, err) {
                         if(ret) {
                             if (ret.data.list.length != 0) {
-                                console.log('线上备注'+JSON.stringify(ret.data.list))
                                 flag = 1;
-                                handleData(litterSort(ret.data.list))
+                                handleData(litterSort(ret.data.list),flagDel)
                             } else {
                                 api.ajax({
                                     url: apiSite + '/user/contactList',
@@ -466,10 +472,14 @@
                                     }
                                 }, function(ret, err) {
                                     if(ret) {
-                                        console.log('用户自己的'+JSON.stringify(ret.data.list));
                                         flag = 0
                                         if (ret.data.list.length > 0 ){
-                                            handleData(litterSort(ret.data.list));
+                                            handleData(litterSort(ret.data.list),flagDel);
+                                            for (var i = 0; i < ret.data.list.length; i++) {
+                                                if(ret.data.list[i].is_default == 1) {
+                                                    updateAddressList(ret.data.list[i].phone)
+                                                }
+                                            }
                                         }
                                     } else {
                                         alert(JSON.stringify(err))
@@ -487,6 +497,23 @@
         });
         
        
+    }
+    function updateAddressList(phone) {
+        db.executeSql({
+            name: 'db_'+$api.getStorage('userToken'),
+            sql: 'UPDATE addressList SET remark_current_contact = "' + phone + '" WHERE user_id = ' + api.pageParam.userId
+        }, function(ret, err){        
+            if( ret.status ){
+                api.sendEvent({
+                    name: 'editUserInfo',
+                    extra: {
+                        flag: api.pageParam.flag                                      
+                    }
+                });
+            }else{
+                alert( JSON.stringify( err ) );
+            }
+        });
     }
   
 </script>

@@ -49,6 +49,8 @@
             },
             bounces: false
         });
+
+        listenToEvents();
     };
     function enter () {
         if ($api.text($api.dom('.rightBtn')) == '编辑') {
@@ -71,6 +73,23 @@
                 }
             });
         }
+    }
+    function listenToEvents() {
+        api.addEventListener({
+            name: 'listenToEvents'
+        }, function(ret, err) {
+            if (ret) {
+                $api.text($api.dom('.rightBtn'), '编辑');
+                api.sendEvent({
+                    name: 'keepPhone',
+                    extra: {
+                        valueName1: '编辑',
+                    }
+                });
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     }
 </script>
 </html>
