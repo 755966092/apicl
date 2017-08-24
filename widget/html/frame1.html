@@ -117,7 +117,7 @@
 
         }
         .main_no2 .mainP {
-             border-bottom: .01rem solid #d9d9d9;
+             /*border-bottom: .01rem solid #d9d9d9;*/
              padding-left: .84rem;
              background: #fff url(../image/iocn_addressList/icon_chu.png)no-repeat;
              -webkit-background-size: .62rem .62rem;
@@ -168,21 +168,21 @@
          }
          .itemList1 {
              padding-left: .9rem;
-             /*background: url(../image/iocn_addressList/icon_1icon.png)no-repeat;*/
-             -webkit-background-size: .216rem .234rem;
-             background-size: .216rem .234rem;
+             background: url(../image/iocn_addressList/icon_1icon.png)no-repeat;
+             -webkit-background-size: .4rem .13rem;
+             background-size: .4rem .13rem;
              background-position: .37rem center;
          }.itemList2 {
              padding-left: .9rem;
-             /*background: url(../image/iocn_addressList/icon_2icon.png)no-repeat;*/
-             -webkit-background-size: .216rem .234rem;
-             background-size: .216rem .234rem;
+             background: url(../image/iocn_addressList/icon_2icon.png)no-repeat;
+             -webkit-background-size: .4rem .26rem;
+             background-size: .4rem .26rem;
              background-position: .37rem center;
          }.itemList3 {
              padding-left: .9rem;
-             /*background: url(../image/iocn_addressList/icon_3icon.png)no-repeat;*/
-             -webkit-background-size: .216rem .234rem;
-             background-size: .216rem .234rem;
+             background: url(../image/iocn_addressList/icon_3icon.png)no-repeat;
+             -webkit-background-size: .4rem .03rem;
+             background-size: .4rem .03rem;
              background-position: .37rem center;
          }
          .main_no3 {
@@ -210,6 +210,9 @@
              line-height: 1rem;
              font-size: .29rem;
          }
+        /* .itemList {
+            display: none;
+         }*/
          .itemList .bb0 {
              border-bottom: 0;
          }   
@@ -348,6 +351,10 @@
             font-size: .34rem;
             line-height: 1.1rem
         }
+        .mb16 {
+            height: .15rem;
+            background-color: #EDECF3;
+        }
     </style>
 </head>
 <body >
@@ -364,36 +371,38 @@
                 好友圈
             </div>
         </div> -->
+         <div class="main_no2"   tapmode   onclick="onceConnected(1,4)">
+            <div class="mainP">
+                初识好友（无通讯录）
+            </div>
+        </div>
+        <div class="mb16"></div>
         <div class="main_no1"  >
             <p class="mainP flex-def flex-cCenter" >
                 <span class="icon" tapmode onclick="hideList(this,1)"></span>
                 <span class="flex-item" tapmode onclick="onceConnected(1)">一度人脉</span>
             </p>
-            <div class="itemList itemList1"  tapmode   onclick="onceConnected(1,2)">
+            <div class="itemList hide itemList_one itemList1"  tapmode   onclick="onceConnected(1,2)">
                 <p>熟识好友（双向通讯录）</p>
             </div>
-            <div class="itemList itemList1"  tapmode   onclick="onceConnected(1,1)">
+            <div class="itemList hide itemList_one itemList2"  tapmode   onclick="onceConnected(1,1)">
                 <p>相识好友（单向通讯录）</p>
             </div>
-            <div class="itemList itemList1"  tapmode   onclick="onceConnected(1,3)">
+            <div class="itemList hide itemList_one itemList3"  tapmode   onclick="onceConnected(1,3)">
                 <p class="">尚未加入（有通讯录）</p>
             </div>
         </div>
         
-        <div class="main_no2"   tapmode   onclick="onceConnected(1,4)">
-            <div class="mainP">
-                初识好友（无通讯录）
-            </div>
-        </div>
+       
         <div class="main_no1"   >
             <p class="mainP flex-def flex-cCenter" >
                 <span class="icon er" tapmode onclick="hideList(this,2)"></span>
                 <span tapmode   onclick="onceConnected(2)" class="flex-item">二度人脉</span>
             </p>
-            <div class="itemList itemList2" tapmode   onclick="onceConnected(2,1)">
+            <div class="itemList hide itemList_two itemList3" tapmode   onclick="onceConnected(2,1)">
                 <p>我在用户</p>
                  </div>
-            <div class="itemList itemList2" tapmode   onclick="onceConnected(2,2)">
+            <div class="itemList hide itemList_two itemList3" tapmode   onclick="onceConnected(2,2)">
                 <p class="">尚未加入</p>
 
             </div>
@@ -403,10 +412,10 @@
                 <span class="icon san" tapmode onclick="hideList(this,3)"></span>
                 <span class="flex-item" tapmode  onclick="onceConnected(3)">三度人脉</span>
             </p>
-            <div class="itemList itemList3" tapmode   onclick="onceConnected(3,1)">
+            <div class="itemList hide itemList_three itemList3" tapmode   onclick="onceConnected(3,1)">
                 <p>我在用户</p>
             </div>
-            <div class="itemList itemList3" tapmode   onclick="onceConnected(3,2)">
+            <div class="itemList hide itemList_three itemList3" tapmode   onclick="onceConnected(3,2)">
                 <p class="">尚未加入</p>
             </div>
         </div>
@@ -665,7 +674,14 @@
     // 隐藏列表
     function hideList(ele,n) {
         $api.css($api.dom('.loading'), 'display:block');
-        var name = '.itemList' + n;
+        var name;
+        if (n == 1) {
+            name = '.itemList_one';
+        } else if (n == 2) {
+            name = '.itemList_two';
+        } else {
+            name = '.itemList_three';
+        }
         var list = $api.domAll(name);
         var main_no1 = $api.domAll('.main_no1');
         for (var i = 0; i < list.length; i++) {
