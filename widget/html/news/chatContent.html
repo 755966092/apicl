@@ -336,7 +336,7 @@ var  mainH, _main, scrollH;
             // 收到消息后, 添加消息内容到页面
            
         });
-         xiala(messageId);
+        xiala(messageId);
 
         // 最新聊天记录
        api.setFrameAttr({
@@ -396,6 +396,13 @@ var  mainH, _main, scrollH;
             }, function(ret, err) {
                 if (ret.status){
                     api.toast({ msg: '刪除成功' });
+                    $api.rmStorage('chatRecord_'+targetRongId);
+                     var news = historicalNews();
+                    api.execScript({
+                        name: 'main',
+                        frameName: 'frame0',
+                        script: news
+                    });
                 } else {
                     api.toast({ msg: '刪除失败' });
 
@@ -616,7 +623,7 @@ var  mainH, _main, scrollH;
     }
     // 打开相册
     function openPicture(type) {
-         api.getPicture({
+        api.getPicture({
             sourceType: type,
             mediaValue: 'pic',
             encodingType: 'jpg',
@@ -786,21 +793,23 @@ var  mainH, _main, scrollH;
                 count: 20
             }, function(ret, err) {
                 // console.log('ret:::'+JSON.stringify(ret))
-                // if (argument) {
-                //     if (argument.result.length == ret.result.length) {
-                //         // 无更新
-                //         console.log('无更新')
-                //     } else {
-                //         console.log('有更新')
-                //         // 有更新
-                //         $api.setStorage('chatRecord_'+targetRongId, ret)
-                //         renderPage(ret);
-                //     }
-                // } else {
+                if (argument) {
+                    if (argument.result.length == ret.result.length) {
+                        // 无更新
+                        // console.log('无更新')
+                    } else {
+                        // console.log('有更新')
+                        // 有更新
+                        $api.html($api.dom('.main'), '');
+                        $api.setStorage('chatRecord_'+targetRongId, ret)
+                        renderPage(ret);
+                    }
+                } else {
+                        $api.html($api.dom('.main'), '');
                         $api.setStorage('chatRecord_'+targetRongId, ret)
                         renderPage(ret);
 
-                // }
+                }
             })
 
     }

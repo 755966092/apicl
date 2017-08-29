@@ -186,10 +186,6 @@
         // 登陆 测试不输入账号密码
         var mobile = $api.val($api.dom('#txzh'));
         var password = $api.val($api.dom('#psd'));
-        
-        // 后期删除
-        // var mobile = '17600103536';
-        // var password = '123456'
         api.ajax({
             url: apiSite + '/login/doLogin',
             method: 'post',
@@ -235,13 +231,9 @@
                     $api.setStorage('rongToken', rongToken);
                     
 
-                    // alert('缓存信息：' + $api.getStorage('userToken'))
                     // 把当前的usertoken和rongtoken广播出去
                     // sendToken (userToken,rongToken)
                     syncContacts(userToken, rongToken)
-                    
-                   
-
                 } else {
                     api.toast({
                         msg: ret.msg
@@ -258,6 +250,7 @@
 
     function loginSuccess () {
         // 登陆完成
+        rongyun(rongToken);
          api.openWin({
             name: 'mainPage',
             url: '../main.html',
@@ -339,7 +332,7 @@
                         });
                     // },100)
                     loginSuccess(userToken, rongToken);
-                    rongyun(rongToken);
+                    
                     
                 // }
     }

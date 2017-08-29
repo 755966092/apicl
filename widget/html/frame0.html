@@ -428,36 +428,37 @@
                     ret.result[i].time = changeTime(ret.result[i].receivedTime);
                     targetRongIdArr.push(ret.result[i].targetId);
                 }
+                api.sendEvent({
+                    name: 'historNews',
+                    extra: {
+                        data: ret.result
+                    }
+                });
+                // 获取聊天对方信息
+                getSideInfo(targetRongIdArr, ret.result, cacheFieldName);
+
+        })
+        api.addEventListener({
+            name: 'historNews'
+        }, function(ret, err) {
+            if (ret) {
+                console.log('获取历史消息'+JSON.stringify(ret))
+                var targetRongIdArr = [];
+                for (var i = 0; i < ret.value.data.length; i++) {
+                    ret.value.data[i].time = changeTime(ret.value.data[i].receivedTime);
+                    targetRongIdArr.push(ret.value.data[i].targetId);
+                }
                 api.execScript({
                   name: 'main',
                   // frameName: 'fram0',
                   script: 'getTotalCount();'
                 });
                 // 获取聊天对方信息
-                getSideInfo(targetRongIdArr, ret.result, cacheFieldName);
-
-        })
-        // api.addEventListener({
-        //     name: 'historNews'
-        // }, function(ret, err) {
-        //     if (ret) {
-        //         console.log('获取历史消息'+JSON.stringify(ret))
-        //         var targetRongIdArr = [];
-        //         for (var i = 0; i < ret.value.data.length; i++) {
-        //             ret.value.data[i].time = changeTime(ret.value.data[i].receivedTime);
-        //             targetRongIdArr.push(ret.value.data[i].targetId);
-        //         }
-        //         api.execScript({
-        //           name: 'main',
-        //           // frameName: 'fram0',
-        //           script: 'getTotalCount();'
-        //         });
-        //         // 获取聊天对方信息
-        //         getSideInfo(targetRongIdArr, ret.value.data, cacheFieldName);
-        //     } else {
-        //         alert(JSON.stringify(err.msg));
-        //     }
-        // });
+                getSideInfo(targetRongIdArr, ret.value.data, cacheFieldName);
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
     }
      // 获取聊天对方信息
     function getSideInfo(rongUserId, data, cacheFieldName) {

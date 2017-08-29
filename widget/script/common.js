@@ -47,7 +47,7 @@ function exitApp() {
                 }
             });
             db.closeDatabase({
-                name: 'test'
+                name: 'db_' + $api.getStorage('userToken')
             }, function(ret, err) {
                 if (ret.status) {
                     // // alert(JSON.stringify(ret));
@@ -151,19 +151,15 @@ function moduleInit() {
 
 // 接入融云
 function rongyun(rongToken) {
-
     rong.init(function(ret, err) {
-        if (ret.status == 'error')
+        if (ret.status == 'error') {
             api.toast({
                 msg: err.code
             });
+        }
     });
     receiveMsg();
     rong.connect({
-        // 用户1
-        // token: 'aAoW4oalHGpvB6Hw89bG0XzZSHvx/Xm6zmi6cWDa3L4VyfNcz/KXDFQxtpoQ+os1nT0799sMXlXPvUAK3FnjIY94cnJzE+aT'
-        // 用户2r
-        // token: 'hjjQ018gh2aPKpdyjqhX0nzZSHvx/Xm6zmi6cWDa3L4VyfNcz/KXDDNYtoRSbb1+nT0799sMXlXSm1rb7lqSfY94cnJzE+aT'
         token: rongToken
     }, function(ret, err) {
         if (ret.status == 'success') {
@@ -174,16 +170,13 @@ function rongyun(rongToken) {
 
 // 查看历史消息
 function historicalNews() {
-    console.log('开始发送事件')
     rong.getConversationList(function(ret, err) {
-        console.log('historNews'+JSON.stringify(ret))
         api.sendEvent({
             name: 'historNews',
             extra: {
                 data: ret.result
             }
         });
-
     })
 }
 
@@ -194,7 +187,6 @@ function receiveMsg() {
         // alert(JSON.stringify(ret.result.connectionStatus))
         if (ret.result.connectionStatus === 'KICKED') {
             alert('您已在另一台设备登录');
-
             api.openWin({
                 name: 'me_login',
                 url: 'widget://html/enroll/me_login.html'
@@ -218,6 +210,57 @@ function receiveMsg() {
             }
         });
     })
+}
+
+function dropOut() {
+    // 退出戎云
+    rong.disconnect({
+        isReceivePush: false
+    }, function(ret, err) {
+        if ('success' == ret.status) {
+
+        }
+    });
+    db.openDatabase({
+        name: 'db_' + $api.getStorage('userToken'),
+    }, function(ret, err) {
+        if (ret.status) {
+            var tableArr = ['addressList', 'tb_remarks_contact', 'tb_remarks_other_contact', 'tb_remarks_address', 'tb_remarks_education', 'tb_remarks_work', 'tb_remarks_project', 'tb_remarks_user_info', 'tb_remarks_status', 'addressList_simplify']
+            for (var i = 0; i < tableArr.length; i++) {
+                db.executeSql({
+                    name: 'db_' + $api.getStorage('userToken'),
+                    sql: 'DROP TABLE IF EXISTS ' + tableArr[i]
+                }, function(ret, err) {
+                    if (ret.status) {
+                        // console.log('执行成功'+i)
+                        api.ajax({
+                            url: apiSite + '/settings/logout',
+                            method: 'post',
+                            headers: apiHeader,
+                            data: {
+                                values: {
+                                    token: $api.getStorage('userToken'),
+                                }
+                            }
+                        }, function(ret, err) {
+                            if (ret) {
+                                $api.clearStorage();
+                            } else {
+                                alert(JSON.stringify(err))
+                            }
+                        })
+                    } else {
+                        alert(JSON.stringify(err))
+                    }
+                });
+            }
+        } else {
+            alert(JSON.stringify(err));
+        }
+    });
+    api.closeToWin({
+        name: 'loginPage'
+    });
 }
 
 
