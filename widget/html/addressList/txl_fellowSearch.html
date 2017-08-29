@@ -165,9 +165,13 @@ var hisDataArr=[],n=1;
                 searchFellow();
             }
         } else if (api.pageParam.type == 'mix') {
-            searchFellowMix();
+            if (e.keyCode == 13) {
+                searchFellow();
+            }
         } else {
-            searchFellow();         
+            if (e.keyCode == 13) {
+                searchFellow();
+            }  
         }
 
         keyUp($api.dom('input'))
@@ -188,59 +192,66 @@ var hisDataArr=[],n=1;
     }
     function keyUp(ele) {
         // alert('keyup')
-        var val = $api.val(ele);
-        if (val == '') {
-            $api.css($api.dom('.clearIcon'), 'display:none');
-            // api.closeFrame({
-            //     name: 'fellowSearchFruit'
-            // });
-            // getData(hisDataArr);
-        } else {
-            $api.css($api.dom('.clearIcon'), 'display:inline-block');
+        if (event.keyCode == 13) {
+            var val = $api.val(ele);
+            if (val == '') {
+                $api.css($api.dom('.clearIcon'), 'display:none');
+                // api.closeFrame({
+                //     name: 'fellowSearchFruit'
+                // });
+                // getData(hisDataArr);
+            } else {
+                $api.css($api.dom('.clearIcon'), 'display:inline-block');
+            }
         }
         
     }
     
     function searchFellow() {
         var val = $api.val($api.dom('input'));
-        hisDataArr.push(val);
+        console.log(val)
+        // hisDataArr.push(val);
         // // 输入框为空的关闭搜索结果页面
         if (api.pageParam.type == 'web') {
             // 网络数据
-            api.ajax({
-                url: apiSite + '/user/search',
-                method: 'post',
-                headers: apiHeader,
-                data: {
-                    values: { 
-                        token: $api.getStorage('userToken'),
-                        keyword: val
+            if (val) {
+                api.ajax({
+                    url: apiSite + '/user/search',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                        values: { 
+                            token: $api.getStorage('userToken'),
+                            keyword: val
+                        }
                     }
-                }
-            }, function(ret, err) {
-                if (ret) {
-                    if(ret.code == 200) {
-                        openPage(ret.data.list);
-                        api.sendEvent({
-                            name: 'addf',
-                            extra: {val: ret.data.list}
-                        }); 
+                }, function(ret, err) {
+                    if (ret) {
+                        if(ret.code == 200) {
+                            openPage(ret.data.list);
+                            api.sendEvent({
+                                name: 'addf',
+                                extra: {val: ret.data.list}
+                            }); 
+                        } else {
+                            alert(ret.msg)
+                        }
                     } else {
-                        alert(ret.msg)
+                        alert(JSON.stringify(err))
                     }
-                } else {
-                    alert(JSON.stringify(err))
-                }
-                    
-            })
+                        
+                })
+            }
         } else {
             // 本地数据
-            sqlSearch(val)
+            if (val) {
+                sqlSearch(val)
+            }
         }
     }
     function searchFellowMix() {
         var val = $api.val($api.dom('input'));
-        hisDataArr.push(val);
+        // hisDataArr.push(val);
         // // 输入框为空的关闭搜索结果页面
             // 网络数据
             api.ajax({
@@ -256,18 +267,19 @@ var hisDataArr=[],n=1;
             }, function(ret, err) {
                 if (ret) {
                     if(ret.code == 200) {
+                        console.log(JSON.stringify(ret))
                         // 本地数据
-                        db.selectSql({
-                            name: 'db_' + $api.getStorage('userToken'),
-                            sql: 'SELECT * FROM addressList WHERE (nickname LIKE "%'+val+'%") or (remark_nickname LIKE "%'+val+'%") or (remark_current_contact LIKE "%'+val+'%")'     
-                        },function(retSql,err){
-                            if (retSql.status) {
+                        // db.selectSql({
+                        //     name: 'db_' + $api.getStorage('userToken'),
+                        //     sql: 'SELECT * FROM addressList WHERE (nickname LIKE "%'+val+'%") or (remark_nickname LIKE "%'+val+'%") or (remark_current_contact LIKE "%'+val+'%")'     
+                        // },function(retSql,err){
+                        //     if (retSql.status) {
                                 // 打开页面事件只执行一次
-                                if (retSql.data.length != 0) {
-                                    openPage(retSql.data.concat(ret.data.list));
+                                if (ret.data.list.length != 0) {
+                                    openPage(ret.data.list);
                                     api.sendEvent({
                                         name: 'addf',
-                                        extra: {val: retSql.data.concat(ret.data.list)}
+                                        extra: {val: ret.data.list}
                                     });  
                                 } else {
                                     openPage(ret.data.list);
@@ -276,10 +288,10 @@ var hisDataArr=[],n=1;
                                         extra: {val: ret.data.list}
                                     });
                                 }
-                            }else {
-                                api.alert({msg:err.msg});
-                            }
-                        });
+                        //     }else {
+                        //         api.alert({msg:err.msg});
+                        //     }
+                        // });
                     } else {
                         alert(ret.msg)
                     }

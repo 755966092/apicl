@@ -243,6 +243,15 @@
         moduleInit();
         // 监听筛选条件
         apiPageParamFlag = api.pageParam.flag;
+        api.addEventListener({
+            name: 'removeFriend'
+        }, function(ret, err) {
+            if (ret) {
+                requireFriend();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
         if (apiPageParamFlag == 4) {
             requireFriend();
         } else if(apiPageParamFlag && apiPageParamFlag!= 4) {
@@ -397,10 +406,11 @@
                        }
                 }
             }, function(retFriend, err) {
+                console.log('400:'+JSON.stringify(retFriend))
                 if(retFriend) {
                     db.selectSql({
                         name: SQLName,
-                        sql: 'SELECT * FROM addressList WHERE type = 4'
+                        sql: 'SELECT * FROM addressList_simplify WHERE type = 4'
                     }, function(retSql, errSql) {
                         if (retSql) {
                             if (retSql.status) {
@@ -408,7 +418,8 @@
                                 if (retSql.data.length == retFriend.data.list.length) {
                                     query(4);
                                 } else {
-                                    disData(retFriend.data.list, 4)
+                                    delSqlType4(retFriend.data.list, 4);
+                                    
                                 }
                             } else {
                                 // alert(JSON.stringify(ret))
@@ -423,6 +434,19 @@
                     alert(JSON.stringify(err))
                 }
             })
+    }
+    // 删除数据库
+    function delSqlType4(data,num) {
+        db.executeSql({
+            name: SQLName,
+            sql: 'DELETE FROM addressList_simplify WHERE type = 4'    
+        }, function(ret, err){        
+            if( ret.status ){
+                disData(data,num)
+            }else{
+                alert( JSON.stringify( err ) );
+            }
+        });
     }
      // 处理数据
     function disData (data, type) {
@@ -520,6 +544,17 @@
                 // console.log( JSON.stringify( ret ) );
                 db.executeSql({
                     name: SQLName,
+                    sql: SQL2
+                }, function(ret, err) {
+                    if (ret.status) {
+                        query(4);
+                        console.log('执行语句正确'+JSON.stringify(ret));
+                    } else {
+                        console.log('执行语句错误:' + JSON.stringify(err))
+                    }
+                });
+                db.executeSql({
+                    name: SQLName,
                     sql: SQL   
                 }, function(ret, err){        
                     if( ret.status ){
@@ -528,16 +563,7 @@
                         alert( '插入数据:' + JSON.stringify( err ) );
                     }
                 });
-                db.executeSql({
-                    name: SQLName,
-                    sql: SQL2
-                }, function(ret, err) {
-                    if (ret.status) {
-                        console.log('执行语句正确'+JSON.stringify(ret));
-                    } else {
-                        console.log('执行语句错误:' + JSON.stringify(err))
-                    }
-                });
+
          //     }else{
          //         alert( '设置唯一索引' + JSON.stringify( err ) );
          //     }
@@ -746,8 +772,6 @@
                 } else {
                     var contactLevelOne = paixv(ret.data);
                     if (apiPageParamFlag) {
-                            console.log( rawData)
-                            console.log( $api.jsonToStr(contactLevelOne))
                             if (rawData == $api.jsonToStr(contactLevelOne)) {
                                 console.log('数据没更新')
                             } else {
@@ -946,18 +970,24 @@
                                         tel = data1[dataKeyArr[dataKeyArr.indexOf(ret.key)+1]][ret.index].current_contact
                                 }
                             }
-                            console.log(tel)
-                            api.call({
-                                type: 'tel_prompt',
-                                number: tel
-                            });
+                            if (tel) {
+                                api.call({
+                                    type: 'tel_prompt',
+                                    number: tel
+                                });
+                            } else {
+                                alert('您没有对方的手机号码')
+                            }
                         } else {
-                            console.log(JSON.stringify(ret))
-                            
-                            api.call({
-                                type: 'tel_prompt',
-                                number: dataArr[ret.index].current_contact
-                            });
+                             if (dataArr[ret.index].current_contact) {
+                                api.call({
+                                    type: 'tel_prompt',
+                                    number: dataArr[ret.index].current_contact
+                                });
+                            } else {
+                                alert('您没有对方的手机号码')
+                            }
+                           
                         }
                     }
 

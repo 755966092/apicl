@@ -31,10 +31,7 @@
 <script type="text/javascript" src="../../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
-
-        
         fnInit();
-        
         api.openFrame({
             name: 'me_info_project_addproject_frome',
             url: './me_info_project_addproject_frome.html',
@@ -45,7 +42,7 @@
                 h: 'auto'
             },
             pageParam: {
-                userToken: api.pageParam.userToken || $api.getStorage('userToken'),
+                userToken: $api.getStorage('userToken'),
                 flag: api.pageParam.flag,
                 project_id: api.pageParam.project_id
             },
@@ -67,16 +64,20 @@
             headers: apiHeader,
             data: {
                 values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                    token: $api.getStorage('userToken'),
                     project_id: api.pageParam.project_id
                 }
             }
         }, function(ret, err) {
             if (ret) {
-                api.sendEvent({
-                    name: 'addStudy'
-                });
-                api.closeWin();
+                if(ret.code === 200) {
+                    api.sendEvent({
+                        name: 'delStudy'
+                    });
+                    api.closeWin();
+                } else {
+                    alert(ret.msg)
+                }
             } else {
                 alert(JSON.stringify(err.msg));
             }

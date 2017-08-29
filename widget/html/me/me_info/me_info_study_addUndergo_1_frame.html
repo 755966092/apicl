@@ -132,13 +132,13 @@
                <div class="wrap">
                    <p>
                         学校
-                        <input maxlength="11" type="text" id="school" class="telIpt" name="" placeholder ="必填" >
+                        <input  type="text" id="school" class="telIpt" name="" placeholder ="必填" >
                    </p>
                 </div>
                <div class="wrap">
                    <p>
                         专业
-                        <input maxlength="11" type="text" id="major" class="telIpt" name="" placeholder ="必填" >
+                        <input  type="text" id="major" class="telIpt" name="" placeholder ="必填" >
                    </p>
                 </div>
                <div class="wrap">
@@ -376,12 +376,17 @@
                 }
             }
         }, function(ret, err) {
+            console.log('正确:'+JSON.stringify(ret))
+            console.log('错误iu:'+JSON.stringify(err))
             if (ret) {
-
-             api.sendEvent({
-                 name: 'addStudy'
-             });
-             api.closeWin();
+                if (ret.code === 200) {
+                     api.sendEvent({
+                         name: 'addStudy'
+                     });
+                     api.closeWin();
+                 } else {
+                    alert(ret.msg);
+                 }
             } else {
                 alert(JSON.stringify(err.msg));
             }

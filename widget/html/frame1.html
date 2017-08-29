@@ -8,8 +8,9 @@
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <style>
         html,body {
-            height: 16.5rem;
+            /*height: 16rem;*/
             background-color: #fff;
+            padding-bottom: 7.1rem;
         }
         /*.search {
             border-radius: .04rem;
@@ -241,8 +242,10 @@
             background-size: .25rem .26rem;
             background-position: 0 center;
             vertical-align: top;
+            margin-right: .05rem;
         }
         .search .searchText {
+            color: #999;
             font-size: .24rem;
         }
 
@@ -373,7 +376,7 @@
         </div> -->
          <div class="main_no2"   tapmode   onclick="onceConnected(1,4)">
             <div class="mainP">
-                初识好友（无通讯录）
+                初识好友（无手机通讯录）
             </div>
         </div>
         <div class="mb16"></div>
@@ -383,13 +386,13 @@
                 <span class="flex-item" tapmode onclick="onceConnected(1)">一度人脉</span>
             </p>
             <div class="itemList hide itemList_one itemList1"  tapmode   onclick="onceConnected(1,2)">
-                <p>熟识好友（双向通讯录）</p>
+                <p>熟识好友（双向手机通讯录）</p>
             </div>
             <div class="itemList hide itemList_one itemList2"  tapmode   onclick="onceConnected(1,1)">
-                <p>相识好友（单向通讯录）</p>
+                <p>相识好友（单向手机通讯录）</p>
             </div>
             <div class="itemList hide itemList_one itemList3"  tapmode   onclick="onceConnected(1,3)">
-                <p class="">尚未加入（有通讯录）</p>
+                <p class="">尚未加入（有手机通讯录）</p>
             </div>
         </div>
         
@@ -400,7 +403,7 @@
                 <span tapmode   onclick="onceConnected(2)" class="flex-item">二度人脉</span>
             </p>
             <div class="itemList hide itemList_two itemList3" tapmode   onclick="onceConnected(2,1)">
-                <p>我在用户</p>
+                <p>二度好友</p>
                  </div>
             <div class="itemList hide itemList_two itemList3" tapmode   onclick="onceConnected(2,2)">
                 <p class="">尚未加入</p>
@@ -413,7 +416,7 @@
                 <span class="flex-item" tapmode  onclick="onceConnected(3)">三度人脉</span>
             </p>
             <div class="itemList hide itemList_three itemList3" tapmode   onclick="onceConnected(3,1)">
-                <p>我在用户</p>
+                <p>三度好友</p>
             </div>
             <div class="itemList hide itemList_three itemList3" tapmode   onclick="onceConnected(3,2)">
                 <p class="">尚未加入</p>
@@ -422,7 +425,7 @@
         
         <div class="main_no3 flex-def flex-cCenter" tapmode onclick="openSchemaPage(1)">
             <span class="icon"></span>
-            <span class="text">人脉等级说明</span>
+            <span class="text">人脉等级相关说明</span>
         </div>
          <!-- <div class="main_no3 flex-def flex-cCenter" tapmode onclick="openSchemaPage(0)">
             <span class="icon"></span>
@@ -477,6 +480,9 @@
     <script type="text/javascript">
     var letterArr = [],letterObj = [];
     apiready = function() {
+        if (api.systemType == 'andioid') {
+            $api.css($api.dom('html'), 'padding-bottom: 7.8rem');
+        }
         moduleInit(); 
         initPage();
         api.addEventListener({
@@ -692,9 +698,9 @@
                 $api.addCls(list[i], 'hide');
             }
         }
-        var listH = $api.offset($api.byId('news_wrap')).h;
-        $api.css($api.dom('html'), 'height:' + (listH+550)/50 + 'rem');
-        $api.css($api.dom('body'), 'height:' + (listH+550)/50 + 'rem');
+        // var listH = $api.offset($api.byId('news_wrap')).h;
+        // $api.css($api.dom('html'), 'height:' + (listH+550)/50 + 'rem');
+        // $api.css($api.dom('body'), 'height:' + (listH+550)/50 + 'rem');
         initPage();
         // query();
     }
@@ -865,18 +871,24 @@
                                         tel = data1[dataKeyArr[dataKeyArr.indexOf(ret.key)+1]][ret.index].current_contact
                                 }
                             }
-                            console.log(tel)
-                            api.call({
-                                type: 'tel_prompt',
-                                number: tel
-                            });
+                            if (tel) {
+                                api.call({
+                                    type: 'tel_prompt',
+                                    number: tel
+                                });
+                            } else {
+                                alert('您没有对方的手机号码')
+                            }
                         } else {
-                            console.log(JSON.stringify(ret))
+                            if (dataArr[ret.index].current_contact) {
+                                api.call({
+                                    type: 'tel_prompt',
+                                    number: dataArr[ret.index].current_contact
+                                });
+                            } else {
+                                alert('您没有对方的手机号码')
+                            }
                             
-                            api.call({
-                                type: 'tel_prompt',
-                                number: dataArr[ret.index].current_contact
-                            });
                         }
                     }
                 } else {

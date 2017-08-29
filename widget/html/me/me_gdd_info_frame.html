@@ -160,6 +160,10 @@
             height: .91rem;
             margin-right: .2rem;
          }.orderInfo .top .text .supplyName{
+            max-width: 3.5rem;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
             font-size: .28rem;
             color: #333;
          }.orderInfo .top .text .price{
@@ -546,7 +550,6 @@
             }
         }, function(ret, err) {
             if(ret) {
-                    console.log('获取的数据:'+JSON.stringify(ret))
                     // 停止下拉刷新
                     api.refreshHeaderLoadDone();
                 if (ret.code === 200){
@@ -560,7 +563,7 @@
                     // // alert(JSON.stringify(ret))
                     // 处理订单单位
                     if (ret.data.supply_info.unit) {
-                        ret.data.supply_info.unit = _dataSource[ret.data.supply_info.unit];
+                        ret.data.supply_info.unit = _dataSource[ret.data.supply_info.unit-1];
                     } else {
                         ret.data.supply_info.unit = '未定义';
 

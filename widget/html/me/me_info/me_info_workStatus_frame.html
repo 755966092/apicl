@@ -64,10 +64,9 @@
         {{ for (var i = 0; i < it.length; i++) { }} 
             {{?it[i].type == 2}}
             <div class="study flex-def flex-cCenter" tapmode onclick="selStatus(this)" data-statusId="{{=it[i].status_id}}" data-type="{{=it[i].type}}">
-                <img src="../../../image/tx_2.jpg">
                 <div class="flex-item">
                     <h3>{{=it[i].name}}</h3>
-                    <p>{{=it[i].start_date}}, {{=it[i].position}}，{{=it[i].degree}}</p>
+                    <p>{{=it[i].start_date}}{{=it[i].position==''?'': '，'+it[i].position}}{{=it[i].degree==0?'':'，'+it[i].degree}}</p>
                 </div>
                 {{?it[i].is_default == 1}}
                     <span class="selIcon"></span>
@@ -77,11 +76,9 @@
             </div>
             {{??}}
             <div class="work study flex-def flex-cCenter" tapmode onclick="selStatus(this)" data-statusId="{{=it[i].status_id}}" data-type="{{=it[i].type}}">
-                <img src="../../../image/tx_2.jpg">
                 <div class="flex-item">
                     <h3>{{=it[i].name}}</h3>
-                    <p>{{=it[i].start_date}}, {{=it[i].position}}，{{=it[i].degree}}</p>
-                    <!-- <div class="schoolInfo">开发我再</div> -->
+                    <p>{{=it[i].start_date}}，{{=it[i].position}}</p>
                 </div>
                 {{?it[i].is_default == 1}}
                 <span class="selIcon"></span>

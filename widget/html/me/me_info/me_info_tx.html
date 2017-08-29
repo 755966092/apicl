@@ -152,6 +152,7 @@
         });
     }
     function enter () {
+        console.log('155:'+flag)
         if (flag) {
             imgSave();
         } else {
@@ -161,11 +162,13 @@
         
     }
     function imgSave() {
+        
             FNImageClip.save({
-                // destPath: 'fs://imageClip/result.png',
+                destPath: 'fs://imageClip/result.png',
                 copyToAlbum: false,
                 quality: 1
-            },function(ret, err){        
+            },function(ret, err){  
+                console.log('170:'+JSON.stringify(ret))      
                 if(ret) {
                     flag = 0;
                     $api.attr($api.dom('img'), 'src', ret.destPath);
@@ -176,6 +179,7 @@
             });
     }
     function pushImg(imgUrl) {
+        console.log("181:"+imgUrl)
             var obj = api.require('qiniuUpfile');
             obj.upfile({
                 file: imgUrl,

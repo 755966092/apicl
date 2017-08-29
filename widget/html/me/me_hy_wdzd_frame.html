@@ -74,9 +74,14 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
     var type = ["提现","充值VIP","邀请收入","支付供应订单","供应订单补差价","供应订单优惠","供应订单收入","供应订单退款","支付求助订单","求助订单收入","求助订单退款","付费入群"]
-
+    var page_num = 1,accountDetailObj=[];
     apiready = function(){
-      requestData(    )
+      requestData();
+      api.addEventListener({
+         name: 'scrolltobottom'
+      }, function(ret, err) {
+            requestData();
+      });
     };
     function requestData() {
       api.ajax({
@@ -86,15 +91,23 @@
           data: {
                values: { 
                  token: $api.getStorage('userToken'),
+                 page_num: page_num
                }
           }
       }, function(ret, err) {
         if(ret) {
-          for (var i = 0; i < ret.data.list.length; i++) {
-            ret.data.list[i].type = type[ret.data.list[i].type-1]
+          if (ret.code == 200) {
+            console.log('数量:'+ret.data.list.length)
+            console.log('页数:'+page_num)
+            if (ret.data.list.length > 0) {
+                page_num += 1;
+                for (var i = 0; i < ret.data.list.length; i++) {
+                  ret.data.list[i].type = type[ret.data.list[i].type-1]
+                }
+                accountDetailObj = accountDetailObj.concat(ret.data.list)
+                getData(accountDetailObj)
+            }
           }
-          console.log(JSON.stringify(ret))
-          getData(ret.data.list)
         } else {
           alert(JSON.stringify(err.msg))
         }

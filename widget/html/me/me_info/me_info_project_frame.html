@@ -117,7 +117,7 @@
     var zipcode;//邮编
     apiready = function(){
         // 请求地址列表
-	    getCityList();
+        getCityList();
         // 删除
         delDz();
         // 监听增加地址事件
@@ -132,6 +132,16 @@
                 alert(JSON.stringify(err.msg));
             }
         });
+        api.addEventListener({
+            name: 'delStudy'
+        }, function(ret, err) {
+            if (ret) {
+                getCityList();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+       
     };
     // 监听增加地址事件
     function addCity()　{
@@ -209,7 +219,7 @@
                 }
                 getData(ret.data.list)
             } else {
-                alert(JSON.stringify(err.msg));
+                alert('212'+JSON.stringify(err.msg));
             }
         });
     }

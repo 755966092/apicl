@@ -120,7 +120,7 @@
                <div class="wrap">
                    <p>
                         学校
-                        <input maxlength="11" type="text" id="school" class="telIpt" name="" placeholder ="必填" >
+                        <input  type="text" id="school" class="telIpt" name="" placeholder ="必填" >
                    </p>
               </div>
                <div class="wrap">
@@ -376,10 +376,14 @@
             }
         }, function(ret, err) {
             if (ret) {
-             api.sendEvent({
-                 name: 'addStudy'
-             });
-             api.closeWin();
+                if (ret.code === 200) {
+                     api.sendEvent({
+                         name: 'addStudy'
+                     });
+                     api.closeWin();
+                 } else {
+                    alert(ret.msg);
+                 }
             } else {
                 alert(JSON.stringify(err.msg));
             }

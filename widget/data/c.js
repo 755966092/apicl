@@ -1,88 +1,29 @@
-342::: {
-	"code": 200,
-	"msg": "",
-	"time": 1503997997,
-	"data": {
-		"info": {
-			"circle_id": 1,
-			"title": "我在第一批用户交流圈",
-			"description": "第一批我在忠实用户聚集地",
-			"image_url": "http://img.iinnet.com/system/system-head-img.png",
-			"announcement": "",
-			"member_count": 11,
-			"topic_count": 7,
-			"status": 2
-		},
-		"is_member": true,
-		"is_owner": false,
-		"note": "",
-		"member_list": [{
-			"member_id": 1,
-			"user_id": 232,
-			"note": "",
-			"nickname": "App Store 审核专用",
-			"head_img_url": "http://img.iinnet.com/system/default-head-img.png"
-		}, {
-			"member_id": 3,
-			"user_id": 505,
-			"note": "",
-			"nickname": "尹中华",
-			"head_img_url": "http://img.iinnet.com/FrT9kKWQnre3tTRGUpmmO0l__6Xx"
-		}, {
-			"member_id": 4,
-			"user_id": 376,
-			"note": "",
-			"nickname": "测试1",
-			"head_img_url": "http://img.iinnet.com/FhVIRSYCgWN9r7QvEtiDFU0fJ3Hi"
-		}, {
-			"member_id": 5,
-			"user_id": 228,
-			"note": "",
-			"nickname": "Boweniac",
-			"head_img_url": "http://img.iinnet.com/system/default-head-img.png"
-		}, {
-			"member_id": 6,
-			"user_id": 2472,
-			"note": "",
-			"nickname": "小羊",
-			"head_img_url": "http://img.iinnet.com/system/default-head-img.png"
-		}, {
-			"member_id": 7,
-			"user_id": 3,
-			"note": "李彤亮",
-			"nickname": "李彤亮",
-			"head_img_url": "http://img.iinnet.com/FuRJwvkGrepJ3cm97KJi5DEL21Jt"
-		}, {
-			"member_id": 8,
-			"user_id": 9732,
-			"note": "",
-			"nickname": "cisily",
-			"head_img_url": "http://img.iinnet.com/system/default-head-img.png"
-		}, {
-			"member_id": 9,
-			"user_id": 909,
-			"note": "",
-			"nickname": "测试13260",
-			"head_img_url": "http://img.iinnet.com/FlcfxZr8WXKbW73wfy4tn7LNU-2Z"
-		}, {
-			"member_id": 10,
-			"user_id": 204,
-			"note": "我在用户交流圈",
-			"nickname": "佛易道科",
-			"head_img_url": "http://img.iinnet.com/FjFss9l3Em4xWSZMExjUr5XQlRMx"
-		}, {
-			"member_id": 13,
-			"user_id": 1029,
-			"note": "",
-			"nickname": "老土",
-			"head_img_url": "http://img.iinnet.com/system/default-head-img.png"
-		}, {
-			"member_id": 14,
-			"user_id": 837,
-			"note": "",
-			"nickname": "测试2",
-			"head_img_url": "http://img.iinnet.com/Fmz4QrS442UQOgkQVn2t4g25xy4t"
-		}]
-	}
+网络信息 {
+	"user_id": 3,
+	"nickname": "李彤亮",
+	"real_name": "李彤亮",
+	"sex": 1,
+	"head_img_url": "http://img.iinnet.com/FudOQo_IDY9fUAkYwA4vRuO37bIQ",
+	"hometown": "山东-青岛",
+	"birthday": "1992-09-24",
+	"current_company": "北京邮电大学",
+	"current_position": "物流工程",
+	"current_degree": "硕士",
+	"current_contact": "17600103536",
+	"status": 1,
+	"rongcloud_user_id": "abfe62b277e07b44e5980029d5dd06d5"
 }
-at find_cricleInfo_win.html: 426
+at txl_memberInfo_Frame.html: 823
+本地信息 {
+	"data": [{
+		"user_id": "3",
+		"title": "李彤亮",
+		"img": "http://img.iinnet.com/FudOQo_IDY9fUAkYwA4vRuO37bIQ",
+		"subTitle": "北京邮电大学 物流工程 硕士 ",
+		"current_contact": "0107631313",
+		"flag": "G",
+		"type": "1"
+	}],
+	"status": true
+}
+at txl_memberInfo_Frame.html: 829

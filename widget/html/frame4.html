@@ -314,7 +314,7 @@
                 var userCenterData = $api.getStorage('UserCenter');
                 if (userCenterData) {
                     // 缓存
-                    reviseContent(userCenterData.info.nickname, $api.getStorage('imgCache'), userCenterData.info.sex, userCenterData.info.current_company, userCenterData.info.current_position);
+                    reviseContent(userCenterData.info.nickname, $api.getStorage('imgCache'), userCenterData.info.sex, userCenterData.info.current_company, userCenterData.info.current_position, userCenterData.info.current_degree);
                     requireData();
                 } else {
                     // 无缓冲
@@ -345,6 +345,7 @@
                         currentCompany = ret.data.info.current_company, 
                         // 当前职位
                         currentPosition = ret.data.info.current_position;
+                        currentDegree = ret.data.info.current_degree;
                         // 设置本地缓存
                         $api.setStorage('userName', userName); 
                         $api.setStorage('userSex', sex); 
@@ -356,7 +357,7 @@
                         }
                         
                         // 初始化页面内容   
-                        reviseContent(userName, headImg, sex, currentCompany, currentPosition);
+                        reviseContent(userName, headImg, sex, currentCompany, currentPosition,currentDegree);
                         // 图片缓存
                         api.imageCache({
                             url: headImg,
@@ -389,7 +390,7 @@
         }
 
         // 修改文本内容
-        function reviseContent(userName, headImg, sex, currentCompany, currentPosition) {
+        function reviseContent(userName, headImg, sex, currentCompany, currentPosition, currentDegree) {
             var name = $api.dom('.userName'),
                 head = $api.dom('.headImg'),
                 sexImg = $api.dom('.sexImg'),
@@ -399,15 +400,9 @@
             // 设置用户头像
             $api.attr(head, 'src', headImg);
             // 设置当前状态
-            if (currentCompany != null && currentPosition == null) {
-                $api.text(personalInfo, currentCompany);
-            } else if (currentPosition != null && currentCompany == null) {
-                $api.text(personalInfo, currentPosition);
-            }else if (currentPosition == null && currentCompany == null) {
-                // $api.text(personalInfo, currentPosition);
-            } else {
-                $api.text(personalInfo, currentCompany+' '+currentPosition);
-            }
+            var posStr = currentCompany + ' '+currentPosition+' '+currentDegree
+            $api.text(personalInfo, posStr);
+            
             // 设置用户性别
             if (sex == 1 ) {
                 $api.attr(sexImg, 'src', '../image/icon_my/icon_my01.png');

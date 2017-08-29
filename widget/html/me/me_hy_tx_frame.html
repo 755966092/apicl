@@ -28,6 +28,12 @@
         .surplusMoney {
             color: #999;
             font-size: .24rem;
+            margin-bottom: .05rem;
+            
+        }
+        #text {
+          box-sizing: border-box;
+          width: 7.5rem;
         }
         .all {
             color: #576B9E;
@@ -37,7 +43,7 @@
             font-size: 0;
             padding: 0 .36rem;
             height: 1.04rem;
-            line-height: 1.04rem;
+            /*line-height: 1.04rem;*/
             background-color: #fff;
 
         }
@@ -140,9 +146,12 @@
             </div>
         </div>
 
-        <div class="surplus">  
-            <span class="surplusMoney">帐户余额 <span>￥</span><span class="money">--</span>,</span>
-            <span class="all"   tapmode   onclick="allGet()">全部提现</span>
+        <div class="surplus flex-def flex-cCenter">  
+            <div>
+              <span class="surplusMoney">帐户余额 <span>￥</span><span class="money">--</span>,</span>
+              <span class="all"   tapmode   onclick="allGet()">全部提现</span>
+              <p class="surplusMoney" id="text"></p>
+            </div>
             <!-- <span class="surplusMoney fr">手续费¥<span class="poundage">1.00</span></span> -->
         </div>
         <div class="direction">
@@ -201,6 +210,7 @@
            }
        }, function(ret, err) {
            if(ret) {
+              $api.text($api.byId('text'), ret.data.withdraw_info);
                console.log(JSON.stringify(ret));
                // 设置余额
                $api.text($api.dom('.money'), ret.data.balance);
