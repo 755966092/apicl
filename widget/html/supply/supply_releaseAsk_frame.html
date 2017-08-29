@@ -226,6 +226,15 @@
             height: 1.6rem;
             margin-bottom: .1rem;
         }
+        .clearfix span.imgpage {
+            margin-right: .1rem;
+            width: 1.6rem;
+            height: 1.6rem;
+            margin-bottom: .1rem;   
+            -webkit-background-size: 1.6rem 1.6rem;
+            background-size: 1.6rem 1.6rem;
+            background-position: center center;
+        }
         .mult {
             -webkit-box-lines: multiple; 
             box-lines: multiple;
@@ -258,7 +267,8 @@
         </div>
         <textarea placeholder="描述一下您求助的内容" rows="5" id="description"></textarea>
         <div class="mult clearfix flex-def resultList">
-           <!--  <img class="fl imgpage" tapmode  src="">
+            <!-- <img class="fl imgpage" tapmode  src="../../image/tx_1.jpg"> -->
+            <!-- <span class="fl imgpage" style="background: url(../../image/tx_1.jpg)no-repeat;background-size: 1.6rem 1.6rem;background-position: center center"></span>
             <img  src="../../image/icon_supply/icon_addMedia_1.png" class="addImg" onclick="openImg()" tapmode>
             <img  src="../../image/icon_supply/icon_addMedia_2.png"> -->
            
@@ -270,12 +280,16 @@
             <div class="addMedia">
                 <span class="icon"></span>
                 <span>添加视频</span>
+                
+                <img class="fl imgpage" tapmode onclick="openImgPage(this)" data-id = '{{=i}}' 
+                src="{{=it.img[i]}}">
+
             </div> -->
         </div>
 
         <script type="text/x-dot-template" id="listT">
             {{ for (var i = 0; i < it.img.length; i++) { }} 
-                <img class="fl imgpage" tapmode onclick="openImgPage(this)" data-id = '{{=i}}' src="{{=it.img[i]}}">
+                <span class="fl imgpage" onclick="openImgPage(this)" data-id = '{{=i}}'  data-src="{{=it.img[i]}}" style="background: url({{=it.img[i]}})no-repeat;background-size: 1.6rem auto;background-position: center center"></span>
             {{ }; }}
             {{?it.img.length==0&&it.video.length==0}}
                 <img  src="../../image/icon_supply/icon_addMedia_1.png" class="addImg" onclick="openImg()" tapmode>
@@ -567,10 +581,12 @@
             // targetHeight: 100,
             saveToPhotoAlbum: false
         }, function(ret, err) {
+            // console.log(JSON.stringify(ret))
             if (ret) {
                 if (ret.data) {
-                    base64Data.img.push(ret.base64Data);
+                    base64Data.img.push(ret.data);
                     getData(base64Data);
+                    console.log(JSON.stringify(base64Data))
                     $api.css($api.dom('.loading'), 'display: block');
                    //  var baseUrl = 'img.iinnet.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com
                     var obj = api.require('qiniuUpfile');
@@ -596,7 +612,7 @@
         });
     }
     function openImgPage(ele) {
-       var data = $api.attr(ele, 'src'),
+       var data = $api.attr(ele, 'data-src'),
             n = parseInt($api.attr(ele, 'data-id'));
         api.openWin({
             name: 'supply_releaseSupply_imgPage_win',

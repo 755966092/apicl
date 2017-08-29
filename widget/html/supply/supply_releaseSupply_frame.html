@@ -242,14 +242,15 @@
             height: 1.6rem;
             margin-bottom: .1rem;
         }
-        .resultList span.imgpage{
+        .clearfix span.imgpage {
             margin-right: .1rem;
             width: 1.6rem;
             height: 1.6rem;
-            margin-bottom: .1rem;
-            
+            margin-bottom: .1rem;   
+            -webkit-background-size: 1.6rem 1.6rem;
+            background-size: 1.6rem 1.6rem;
+            background-position: center center;
         }
-
         .mult {
             -webkit-box-lines: multiple; 
             box-lines: multiple;
@@ -299,8 +300,7 @@
 
         <script type="text/x-dot-template" id="listT">
             {{ for (var i = 0; i < it.img.length; i++) { }} 
-                <!-- <img class="fl imgpage" tapmode onclick="openImgPage(this)" data-id = '{{=i}}' src="{{=it.img[i]}}"> -->
-                <span class="fl imgpage" tapmode onclick="openImgPage(this)" data-url="{{=it.img[i]}}" data-id = '{{=i}}' style="background: url({{=it.img[i]}});-webkit-background-size: 1.6rem ;background-size: 1.6rem ;background-position: center center;"></span>
+                <span class="fl imgpage" onclick="openImgPage(this)" data-id = '{{=i}}'  data-src="{{=it.img[i]}}" style="background: url({{=it.img[i]}})no-repeat;background-size: 1.6rem auto;background-position: center center"></span>
             {{ }; }}
             {{?it.img.length==0&&it.video.length==0}}
                 <img  src="../../image/icon_supply/icon_addMedia_1.png" class="addImg" onclick="openImg()" tapmode>
