@@ -194,8 +194,6 @@ function receiveMsg() {
             api.closeWin({
                 name: 'main'
             });
-
-
         }
     });
     rong.setOnReceiveMessageListener(function(ret, err) {

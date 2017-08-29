@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <style>
         html,body {
-            height: 23rem;
+            height: 18rem;
             background-color: #fff;
         }
         /*.search {
@@ -784,6 +784,13 @@
     }
 
     function dakai(data1) {
+        var dataArr = [];
+        var dataKeyArr = [];
+        for(key in data1) {
+            // console.log(data1[key])
+            dataArr = dataArr.concat(data1[key]);
+            dataKeyArr.push(key)
+        }
          listContact.open({
             x: -1000,
             y: -1000,
@@ -809,6 +816,10 @@
                 //     color: '#000',
                 //     title: '删除'
                 // }],
+                rightBtn: [{
+                    color: '#20AC19',
+                    title: '呼叫'
+                }],
                 imgHeight: 32,
                 groupTitle: {
                     color: '#999',       
@@ -829,9 +840,45 @@
                 fixed: false
             }, function(ret, err) {
                 if (ret) {
-                    // alert(JSON.stringify(ret))
-                    console.log(JSON.stringify(data1[ret.key][ret.index]));
-                    addFriends(data1[ret.key][ret.index].user_id);
+                     if (ret.clickType == 0) {
+                        // 获取点击联系人信息
+                        addFriends(data1[ret.key][ret.index].user_id);
+                    }
+                    if (ret.clickType == 1) {
+                        // 获取点击联系人信息
+                        // 安卓全局索引
+                        // ios+1
+                        if (api.systemType == 'ios') {
+                            var tel;
+                            if (dataKeyArr.indexOf(ret.key)==-1) {
+                                // 查找不到
+                                if (data1[dataKeyArr[0]][ret.index].remark_current_contact) {
+                                        tel = data1[dataKeyArr[0]][ret.index].remark_current_contact
+                                } else if (data1[dataKeyArr[0]][ret.index].current_contact){
+                                        tel = data1[dataKeyArr[0]][ret.index].current_contact
+                                }
+                            } else {
+
+                                if (data1[dataKeyArr[dataKeyArr.indexOf(ret.key)+1]][ret.index].current_contact) {
+                                        tel = data1[dataKeyArr[dataKeyArr.indexOf(ret.key)+1]][ret.index].current_contact
+                                } else if (data1[dataKeyArr[dataKeyArr.indexOf(ret.key)+1]][ret.index].current_contact) {
+                                        tel = data1[dataKeyArr[dataKeyArr.indexOf(ret.key)+1]][ret.index].current_contact
+                                }
+                            }
+                            console.log(tel)
+                            api.call({
+                                type: 'tel_prompt',
+                                number: tel
+                            });
+                        } else {
+                            console.log(JSON.stringify(ret))
+                            
+                            api.call({
+                                type: 'tel_prompt',
+                                number: dataArr[ret.index].current_contact
+                            });
+                        }
+                    }
                 } else {
                     // alert(JSON.stringify(err.msg));
                 }

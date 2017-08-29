@@ -7,7 +7,7 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <link rel="stylesheet" type="text/css" href="../../css/flex.css"/>
-   <style type="text/css">
+    <style type="text/css">
        
         .move {
            font-size: 0;
@@ -504,16 +504,27 @@
             sql: 'UPDATE addressList SET remark_current_contact = "' + phone + '" WHERE user_id = ' + api.pageParam.userId
         }, function(ret, err){        
             if( ret.status ){
-                api.sendEvent({
-                    name: 'editUserInfo',
-                    extra: {
-                        flag: api.pageParam.flag                                      
+                db.executeSql({
+                    name: 'db_'+$api.getStorage('userToken'),
+                    sql: 'UPDATE addressList_simplify SET current_contact = "' + phone + '" WHERE user_id = ' + api.pageParam.userId
+                }, function(ret, err){        
+                    if( ret.status ){
+                        api.sendEvent({
+                            name: 'editUserInfo',
+                            extra: {
+                                flag: api.pageParam.flag                                      
+                            }
+                        });
+                    }else{
+                        alert( JSON.stringify( err ) );
                     }
                 });
             }else{
                 alert( JSON.stringify( err ) );
             }
         });
+        
+
     }
   
 </script>

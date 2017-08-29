@@ -24,7 +24,10 @@
 <script type="text/javascript">
     apiready = function(){
         fnInit();
-       api.openFrame({
+        if (api.pageParam.supply_id) {
+            $api.css($api.dom('.rightBtn'), 'display:none');
+          }
+        api.openFrame({
            name: 'supply_releaseAsk_frame',
            url: 'supply_releaseAsk_frame.html',
            rect: {
