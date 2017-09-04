@@ -794,9 +794,8 @@ var  mainH, _main, scrollH;
                 // targetId: name,
                 count: 20
             }, function(ret, err) {
-                // console.log('ret:::'+JSON.stringify(ret))
                 if (argument) {
-                    if (argument.result.length == ret.result.length) {
+                    if (argument.result[0].sentTime == ret.result[0].sentTime) {
                         // 无更新
                         // console.log('无更新')
                     } else {
@@ -817,9 +816,10 @@ var  mainH, _main, scrollH;
     }
     // 渲染页面
     function renderPage(ret) {
+        // console.log('559:::::'+JSON.stringify(ret))
         for (var i = ret.result.length-1; i >= 0 ; i--) {
             if (ret.result[i].messageDirection == 'RECEIVE') {
-                // console.log('559:::::'+JSON.stringify(ret))
+                
                 // 消息方向：SEND(发送) 或者 RECEIVE(接受)
                 if (ret.result[i].objectName == 'RC:VcMsg') {
                     // 语音
