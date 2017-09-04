@@ -532,7 +532,7 @@
 
                 }
 
-                data.info.sub_type == 1 ? $api.text(sub_type, '自产自销') : $api.text(sub_type, '代理')
+                data.info.sub_type == 1 ? $api.text(sub_type, '自产自销') : $api.text(sub_type, '代理代销')
                 data.info.form == 1 ? $api.text(form, '线上') : $api.text(form, '线下')
                 base64Data.img = eval(data.info.image_json); 
                 getData(base64Data)
@@ -721,7 +721,7 @@
         // if (releaseFlag == 1) {
             var token = $api.getStorage('userToken'),            //string  用户Token
                 title = $api.val($api.byId('title')),           //string  标题
-                sub_type = $api.text($api.byId('sub_type')) == '自产自销' ? 1 : 2,            //int 类别ID（1-自产自销，2-代理）
+                sub_type = $api.text($api.byId('sub_type')) == '自产自销' ? 1 : 2,            //int 类别ID（1-自产自销，2-代理代销
                 category_id = $api.attr($api.byId('category_id'), 'data-id'),         //int 分类ID
                 price = $api.val($api.byId('price')),           //float   价格
                 unit = _dataSource.indexOf($api.text($api.byId('unit')))+1,            //string  单位
@@ -921,10 +921,10 @@
                     name: '自产自销'
                 },
                 {
-                    name: '代理'
+                    name: '代理代销'
                 }
             ];
-            _dataSource2 = ['自产自销','代理']
+            _dataSource2 = ['自产自销','代理代销']
             flag = 1;
         } else if (_data == '_format') {
             _dataSource = [

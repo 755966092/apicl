@@ -1,29 +1,32 @@
-网络信息 {
-	"user_id": 3,
-	"nickname": "李彤亮",
-	"real_name": "李彤亮",
-	"sex": 1,
-	"head_img_url": "http://img.iinnet.com/FudOQo_IDY9fUAkYwA4vRuO37bIQ",
-	"hometown": "山东-青岛",
-	"birthday": "1992-09-24",
-	"current_company": "北京邮电大学",
-	"current_position": "物流工程",
-	"current_degree": "硕士",
-	"current_contact": "17600103536",
-	"status": 1,
-	"rongcloud_user_id": "abfe62b277e07b44e5980029d5dd06d5"
-}
-at txl_memberInfo_Frame.html: 823
-本地信息 {
-	"data": [{
-		"user_id": "3",
-		"title": "李彤亮",
-		"img": "http://img.iinnet.com/FudOQo_IDY9fUAkYwA4vRuO37bIQ",
-		"subTitle": "北京邮电大学 物流工程 硕士 ",
-		"current_contact": "0107631313",
-		"flag": "G",
-		"type": "1"
-	}],
-	"status": true
-}
-at txl_memberInfo_Frame.html: 829
+09 - 04 11: 53: 56.961 I / app3c(5787): list::[{
+	"conversationTitle": "",
+	"conversationType": "PRIVATE",
+	"draft": "",
+	"isTop": false,
+	"latestMessage": {
+		"extra": "",
+		"text": "[流泪]"
+	},
+	"latestMessageId": 2,
+	"objectName": "RC:TxtMsg",
+	"receivedStatus": "READ",
+	"receivedTime": 1504496455256,
+	"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
+	"sentStatus": "SENT",
+	"sentTime": 1504496455858,
+	"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5",
+	"unreadMessageCount": 0,
+	"time": {
+		"sencond": 55,
+		"minute": 40,
+		"hour": 11,
+		"year": 2017,
+		"month": 8,
+		"day": 1
+	},
+	"url": "http://img.iinnet.com/Fmz4QrS442UQOgkQVn2t4g25xy4t",
+	"nickname": "测试2",
+	"user_id": 837,
+	"remark_nickname": null,
+	"remark_head_img_url": null
+}] at frame0.html: 294

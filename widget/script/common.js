@@ -37,7 +37,7 @@ function exitApp() {
                 retData: {
                     name: 'closeWidget'
                 },
-                silent: true
+                silent: trueÎ
             });
             rong.disconnect({
                 isReceivePush: false

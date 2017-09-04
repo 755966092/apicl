@@ -36,6 +36,15 @@
             font-size: .24rem;
             color: #9b9b9b;
         }
+        .description {
+            margin-left: .1rem;
+            color: #999;
+            font-size: .24rem;
+            max-width: 4.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
         
         footer {
             font-size: 0;   
@@ -236,15 +245,15 @@
                 <div class="choose clearfix flex-def flex-zLeftRight flex-cCenter" data-id="{{=it.user_id}}" tapmode onclick="openUserInfoPage(this)">
                     <img src="{{=it.head_img_url}}">
                     <div class="issuerInfo flex-item flex-def flex-zLeftRight flex-cCenter flex-zBetween">
-                        <div>
+                        <div class="flex-def flex-cCenter">
                             <span class="name">{{=it.nickname}}</span>
                             {{?it.current_company==null&&it.current_position!=null}}
-                                <span> {{=it.current_position}}</span>
+                                <span class="description"> {{=it.current_position}}</span>
                             {{??it.current_position==null&&it.current_company!=null}}
-                                <span>{{=it.current_company}}</span>
+                                <span class="description">{{=it.current_company}}</span>
                             {{??it.current_position==null&&it.current_company==null}}
                             {{??}}
-                                <span>{{=it.current_company}} {{=it.current_position}}</span>
+                                <span class="description">{{=it.current_company}} {{=it.current_position}}</span>
                             {{?}}
                         </div>
                         <span class="icon"></span>

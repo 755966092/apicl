@@ -106,7 +106,7 @@
     <script type="text/x-dot-template" id="listT">
         {{?it.length > 0}}
             {{ for (var i = 0; i < it.length; i++) { }} 
-                <div class="wrap">
+                <div class="wrap" >
                     <div class="item">
                         <div class="user flex-cCenter flex-def">
                             <div class="img">
@@ -127,7 +127,7 @@
                                 {{?}}
                             </div>
                         </div>
-                        <div class="info flex-cCenter flex-def">
+                        <div class="info flex-cCenter flex-def" tapmode onclick="openInfo(this)" data-id="{{=it[i].supply_id}}">
                             <div class="img">
                                 <img src="{{=it[i].image_json[0]}}">
                             </div>
@@ -195,6 +195,17 @@
                 alert(JSON.stringify(err.msg))
             }
         })
+    }
+
+    // 打开详情
+    function openInfo(ele) {
+        api.openWin({
+            name: 'supply_info_frame',
+            url: '../supply/supply_info_frame.html',
+            pageParam: {
+                supply_id: api.pageParam.supply_id
+            }
+        });
     }
 </script>
 </html>

@@ -37,7 +37,7 @@
             background: url(../image/icon_supply/icon_search.png)no-repeat;
             -webkit-background-size: .25rem .26rem;
             background-size: .25rem .26rem;
-            background-position: 0 center; 
+            background-position: 0 center;
             vertical-align: top;
             box-sizing: border-box;
         }
@@ -145,30 +145,6 @@
         .warp {
             border-bottom: 0.6px solid #D9D9D9;
         }
-        @keyframes animate1 {
-            from {
-                left: 0rem;
-            }
-            to {
-                left: -3rem;
-            }
-        }
-        @keyframes animate2 {
-            from {
-                left: -3rem;
-            }
-            to {
-                left: 0rem;
-            }
-        }
-        .animate1 {
-            animation: animate1 0.5s;
-            animation-fill-mode: forwards;
-        }
-        .animate2 {
-            animation: animate2 0.5s;
-            animation-fill-mode: forwards;
-        }
     </style>
 </head>
 
@@ -181,7 +157,7 @@
         </div> -->
 
 
-        <!-- <ul>
+       <!--  <ul>
             <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" ontouchstart=";event.stopPropagation();"   tapmode   onclick="openChat(this)">
                 <div class="warp" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove(this)" ontouchend="gtouchend(this)">
                     <div class="headImg">
@@ -218,7 +194,24 @@
                     <span class="del">删除</span>
                 </span>
             </li>
-        </ul>    -->
+        </ul> -->
+        <!-- <ul class="resultList"> -->
+            <!-- <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" ontouchstart=";event.stopPropagation();"   tapmode   onclick="openChat(this)">
+                <div class="warp">
+                    <div class="headImg ">
+                        <img class="fl" src="../image/tx_4.jpg">
+                    </div>
+                    <div class="contentRight">
+                        <div class="name">
+                            <h3>{{=it[i].nickname}}</h3>
+                            <span class="time">速度度速度度速度度</span>
+                        </div>
+                        <p>{{=i{{=it[i].latestMessagelatestMessagelatestMessagelatestMessagelatestMessagelatestMessagelatestMessage.text}}</p>
+                    </div>
+                </div>
+            </li> -->
+        <!-- </ul> -->
+
 
         <ul class="resultList"></ul>
         <script type="text/x-dot-template" id="listT">
@@ -255,11 +248,21 @@
                         </span>
                     </li>
                 {{ }; }}
+                {{ }; }}
             {{??}}
                 <p class="noNews">暂无消息</p>
             {{?}}
                 
         </script>
+        <!-- <ul>
+            <li class="{{=it[i].select}} chatList" data-name="{{=it[i].targetId}}"   tapmode   onclick="openChat(this)">
+                <img class="fl" src="../image/tx_5.jpg">
+                <h3>testUser2</h3>
+                 <h3>{{=it[i].targetId}}</h3> 
+                <span class="fr">11：20</span>
+                <p>{{=it[i].latestMessage.text}}</p>
+                </li>
+        </ul> -->
     </div>
     <script type="text/javascript" src="../script/common.js"></script>
     <script type="text/javascript" src="../script/api.js"></script>
@@ -268,10 +271,21 @@
     var chatMessage;
      apiready = function() {
         moduleInit()
+        // console.log($api.getStorage('userToken'))
         // 监听打开加好友窗口  
         monitorEvent();
         // 缓存个人信息
         requireData();
+        // chatMessage = $api.getStorage('chatMessage');
+        // if (chatMessage) {
+        //     getData(chatMessage)
+        //     console.log('使用缓存')
+        //     historyNews();
+        // } else {
+        //     // 历史消息
+        //     historyNews(cacheFieldName);    
+        //     console.log('网络获取')
+        // }
         // 滚动到底部触发的事件    
         // scrollBotton();
         contrastCache('chatMessage',historyNews);
@@ -280,75 +294,6 @@
             name: 'refurbish'
         }, function(ret, err) {
             historyNews();
-        });
-    }
-    function initView(data) {
-        var UIListView = api.require('UIListView');
-        // console.log(JSON.stringify(data))
-        var dataList = [{}];
-        for (var i = 0; i < data.length; i++) {
-            // dataList.push(data[i]);
-            dataList[i].imgPath = data[i].url;
-            dataList[i].subTitle = data[i].latestMessage.text;
-            dataList[i].title = data[i].nickname;
-            dataList[i].url = data[i].url;
-            dataList[i].time = data[i].time;
-            dataList[i].remark = data[i].time.hour+':'+data[i].time.minute;
-        }
-        UIListView.open({
-            rect: {
-                x: 0,
-                y: 0,
-                w: api.winWidth,
-                h: api.frameHeight
-            },
-            data: dataList,
-            rightBtns: [{
-                bgColor: '#388e8e',
-                activeBgColor: '',
-                width: 70,
-                title: '按钮',
-                titleSize: 12,
-                titleColor: '#fff',
-                icon: '',
-                iconWidth: 20
-            },{
-                bgColor: '#388e8e',
-                activeBgColor: '',
-                width: 70,
-                title: '按钮',
-                titleSize: 12,
-                titleColor: '#fff',
-                icon: '',
-                iconWidth: 20
-            }],
-            styles: {
-                borderColor: '#696969',
-                item: {
-                    bgColor: '#AFEEEE',
-                    activeBgColor: '#F5F5F5',
-                    height: 55.0,
-                    imgWidth: 40,
-                    imgHeight: 40,
-                    imgCorner: 4,
-                    placeholderImg: '',
-                    titleSize: 16.0,
-                    titleColor: '#000',
-                    subTitleSize: 12.0,
-                    subTitleColor: '#999',
-                    remarkColor: '#999',
-                    remarkSize: 12.0,
-                    remarkIconWidth: 30
-                }
-            },
-            showScrollBar:false,
-            fixedOn: api.frameName
-        }, function(ret, err) {
-            if (ret) {
-                // alert(JSON.stringify(ret));
-            } else {
-                alert(JSON.stringify(err));
-            }
         });
     }
     function delNesItem(ele,n) {
@@ -385,42 +330,15 @@
         endY = e.touches[0].pageY;  
     };   
     function gtouchend(ele) {
-        if (endX == 0 && endY == 0) {
-
-        } else {
-            var X = endX - startX,
-            Y = Math.abs(endY - startY);
-        }
-        
-        console.log('坐标:'+X+','+Y)
-        console.log('移动坐标:'+endX+','+endY)
-        console.log('开始坐标:'+startX+','+startY)
-        if ( X < -20 && Y < 100) {
-            X = 0, Y = 0;
-            endX = 0;
-            endY = 0;
-            startX = 0;
-            startY = 0;
-            // 左滑
+        var X = endX - startX,
+        Y = Math.abs(endY - startY);  
+        if ( X < -10 && Y < 100) {
             for (var i = 0; i < $api.domAll('.warp').length; i++) {
-                // $api.css($api.domAll('.warp')[i], 'left: 0rem ');
-                $api.removeCls($api.domAll('.warp')[i], 'animate2');
-                $api.removeCls($api.domAll('.warp')[i], 'animate1');
+                $api.css($api.domAll('.warp')[i], 'left: 0rem ');
              } 　　　　　　
-
-            // $api.css(ele, 'left: -3rem ');
-            $api.addCls(ele, 'animate1');
-            
-        } else if(X > 20 && Y < 100) {
-             X = 0, Y = 0;
-             endX = 0;
-            endY = 0;
-            startX = 0;
-            startY = 0;
-            // 右滑
-            $api.removeCls(ele, 'animate1');
-            $api.addCls(ele, 'animate2');
-            // $api.css(ele, 'left: 0rem ');
+            $api.css(ele, 'left: -3rem ');
+        } else if(X > 10 && Y < 10) {
+            $api.css(ele, 'left: 0rem ');
         }   
     }
 
@@ -436,36 +354,31 @@
                 }
             }, function(ret, err) {
                 if (ret) {
-                    
-                    
-                    if(ret.code === 200) {
-                        $api.setStorage('UserCenter', ret.data);
-                        userName = ret.data.info.nickname,
-                        headImg = ret.data.info.head_img_url,
-                        sex = ret.data.info.sex,
-                        // 当前公司
-                        currentCompany = ret.data.info.current_company, 
-                        // 当前职位
-                        currentPosition = ret.data.info.current_position;
-                        // 设置本地缓存
-                        $api.setStorage('userName', userName); 
-                        $api.setStorage('userSex', sex); 
-                        $api.setStorage('currentCompany', currentCompany); 
-                        $api.setStorage('currentPosition', currentPosition);
-                        // 图片缓存
-                        api.imageCache({
-                            url: headImg,
-                            policy: 'cache_else_network'
-                        }, function(ret, err) {
-                            if (ret) {
-                                $api.setStorage('imgCache', ret.url); 
-                            } else {
-                                alert(JSON.stringify(err.msg));
-                            }
-                        });
-                    } else {
-                        alert(ret.msg)
-                    }
+                    $api.setStorage('UserCenter', ret.data);
+                    // console.log(JSON.stringify(ret))
+                    userName = ret.data.info.nickname,
+                    headImg = ret.data.info.head_img_url,
+                    sex = ret.data.info.sex,
+                    // 当前公司
+                    currentCompany = ret.data.info.current_company, 
+                    // 当前职位
+                    currentPosition = ret.data.info.current_position;
+                    // 设置本地缓存
+                    $api.setStorage('userName', userName); 
+                    $api.setStorage('userSex', sex); 
+                    $api.setStorage('currentCompany', currentCompany); 
+                    $api.setStorage('currentPosition', currentPosition);
+                    // 图片缓存
+                    api.imageCache({
+                        url: headImg,
+                        policy: 'cache_else_network'
+                    }, function(ret, err) {
+                        if (ret) {
+                            $api.setStorage('imgCache', ret.url); 
+                        } else {
+                            alert(JSON.stringify(err.msg));
+                        }
+                    });
                 } else {
                     alert(JSON.stringify(err.msg));
                 }
@@ -473,6 +386,7 @@
     }
 
     function contrastCache(cacheFieldName,  fn) {
+        console.log('xuanran yemian')
         var cacheFieldName = $api.getStorage(cacheFieldName);
          if (cacheFieldName) {
             getData(cacheFieldName)
@@ -506,6 +420,7 @@
     }
     // 历史消息
     function historyNews(cacheFieldName){
+        console.log('历史消息列表')
         // 历史消息列表
         rong.getConversationList(function(ret, err) {
                 var targetRongIdArr = [];
@@ -513,14 +428,12 @@
                     ret.result[i].time = changeTime(ret.result[i].receivedTime);
                     targetRongIdArr.push(ret.result[i].targetId);
                 }
-                // api.sendEvent({
-                //     name: 'historNews',
-                //     extra: {
-                //         data: ret.result
-                //     }
-                // });
-                
-                // console.log('553:::'+JSON.stringify(ret))
+                api.sendEvent({
+                    name: 'historNews',
+                    extra: {
+                        data: ret.result
+                    }
+                });
                 // 获取聊天对方信息
                 getSideInfo(targetRongIdArr, ret.result, cacheFieldName);
 
@@ -529,7 +442,7 @@
             name: 'historNews'
         }, function(ret, err) {
             if (ret) {
-                // console.log('获取历史消息'+JSON.stringify(ret))
+                console.log('获取历史消息'+JSON.stringify(ret))
                 var targetRongIdArr = [];
                 for (var i = 0; i < ret.value.data.length; i++) {
                     ret.value.data[i].time = changeTime(ret.value.data[i].receivedTime);
@@ -598,7 +511,6 @@
                     $api.setStorage('chatMessage', data);
                     // console.log('463:::'+JSON.stringify(data))
                     getData(data);
-                    // initView(data);
                 } 
                 
            } else {
@@ -651,7 +563,7 @@
     function openChat(ele) {
         // var major_Name = $api.text(ele);
         var nickname = $api.attr(ele, 'data-nickname');
-        var remark_nickname = $api.attr(ele, 'data-remark_nickname') == 'null' ? '' : $api.attr(ele, 'data-remark_nickname');
+        var remark_nickname = $api.attr(ele, 'data-remark_nickname');
         var targetId = $api.attr(ele, 'data-targetId');
         var userId = $api.attr(ele, 'data-userId');
         var headImg = $api.attr($api.dom(ele, 'img'), 'src');
