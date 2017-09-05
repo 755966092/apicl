@@ -266,7 +266,6 @@ apiready = function() {
         name: 'db_'+$api.getStorage('userToken')
     }, function(ret, err) {
         if (ret.status) {
-            console.log('打开成功');
             openRemarksDb()
         } else {
             alert('267:'+JSON.stringify(err.msg));
@@ -382,11 +381,11 @@ function addF() {
 
 // 获取所有未读消息数
 function getTotalCount() {
-    console.log('获取所有未读消息数')
+    // console.log('获取所有未读消息数')
     rong.getTotalUnreadCount(function(ret, err) {
-        console.log('295:::'+JSON.stringify(ret))
+        // console.log('295:::'+JSON.stringify(ret))
         if (ret.result == 0 || !ret.result) {
-            console.log('295295消息')
+            // console.log('295295消息')
             $api.html($api.byId('title'), '我在<span class="rightBtn"   tapmode   onclick="addFellow()">+</span> ');
                 $api.css($api.byId('newsCount'), 'display: none');
             api.setAppIconBadge({
@@ -394,23 +393,23 @@ function getTotalCount() {
                 // 清除角标
             });
         } else {
-            console.log('重新设置消息输了1')
+            // console.log('重新设置消息输了1')
             api.setAppIconBadge({
                 badge: ret.result
                 // 清除角标
             });
-            console.log('重新设置消息数量2'+JSON.stringify(ret))
+            // console.log('重新设置消息数量2'+JSON.stringify(ret))
             if(ret.result > 0) {
-                console.log('重新设置消息数量3'+JSON.stringify(ret))
+                // console.log('重新设置消息数量3'+JSON.stringify(ret))
                 $api.html($api.byId('title'), '我在(' +ret.result+ ')<span class="rightBtn"   tapmode   onclick="addFellow()">+</span> ');
-                console.log('重新设置消息数量3.1'+JSON.stringify(ret))
+                // console.log('重新设置消息数量3.1'+JSON.stringify(ret))
                 $api.css($api.byId('newsCount'), 'display: inline-block');
-                console.log('重新设置消息数量3.2'+JSON.stringify(ret))
+                // console.log('重新设置消息数量3.2'+JSON.stringify(ret))
                 $api.html($api.byId('newsCount'), ret.result);
-                console.log('重新设置消息数量3.3'+JSON.stringify(ret))
+                // console.log('重新设置消息数量3.3'+JSON.stringify(ret))
             } else {
                 $api.css($api.byId('newsCount'), 'display: none');
-                console.log('重新设置消息数量3-1'+JSON.stringify(ret))
+                // console.log('重新设置消息数量3-1'+JSON.stringify(ret))
 
             }
         }
@@ -507,7 +506,7 @@ function addFellow() {
 }
 // 点击发布按钮
 function addPublish() {
-    console.log('点到加号')
+    // console.log('点到加号')
     // api.sendEvent({
     //     name: 'addPublish'
     // });
@@ -606,7 +605,6 @@ function openRemarksDb() {
         name: SQLName,
         sql: 'CREATE TABLE addressList_simplify(user_id int PRIMARY KEY NOT NULL, title varchar(255),img varchar(255), subTitle varchar(255), current_contact varchar(255), flag varchar(255), type int)'   
     }, function(ret, err){    
-        console.log(JSON.stringify(ret))    
         if( ret.status ){
             db.executeSql({
                 name: 'db_'+$api.getStorage('userToken'),

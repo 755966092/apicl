@@ -46,7 +46,7 @@
          .main_no1 span:nth-child(2) {
             line-height: .7rem;
             color: #999;
-            font-size: .3rem;   
+            font-size: .24rem;   
             line-height: .33rem;    
         }
         .main_no1 i {
@@ -218,7 +218,7 @@
     {{ for (var i = 0; i < it.length; i++) { }} 
         <div class="warp" onclick="event.stopPropagation();">
             <div class="main_no1 flex-def flex-cCenter">
-                <img src="{{=it[i].head_img_url}}" data-id="{{=it[i].user_id}}" onclick="openUserId(this)">
+                <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" data-id="{{=it[i].user_id}}" onclick="openUserId(this)">
                 <div class="flex-item flex-def flex-cCenter flex-zBetween">
                     <div>
                         <span>{{=it[i].nickname}}</span>
@@ -343,7 +343,7 @@
         }, function(ret, err) {
             if(ret) {
                 if(ret.code == 200) {
-                    console.log('ta:'+JSON.stringify(ret))
+                    // console.log('ta:'+JSON.stringify(ret))
                     // 停止下拉刷新
                     api.refreshHeaderLoadDone();
                         $api.css($api.dom('.loading'), 'display:none'); 

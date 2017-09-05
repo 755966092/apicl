@@ -207,7 +207,7 @@
                 {{ for (var i = 0; i < it.length; i++) { }} 
                     <div class="item flex-def" data-id="{{=it[i].supply_id}}" data-company="{{=it[i].company_name}}"   tapmode   onclick="info(this)">
                         <div class="headImg">
-                            <img src="{{=it[i].head_img_url}}" tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation();">
+                            <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation();">
                         </div>
                         <div class="content flex-def flex-zTopBottom flex-item">
                             <div class="title flex-def flex-zBetween">
@@ -425,7 +425,7 @@
     
     // 请求数据
     function requireData (data) {
-        console.log('参数:::'+JSON.stringify(data))
+        // console.log('参数:::'+JSON.stringify(data))
         var data = data || {};
         var latitude,longitude;
         if (data !== {}) {
@@ -456,7 +456,7 @@
         
     }
     function fliderSupply(data,supplyCache) {
-        console.log('参数2:::'+JSON.stringify(data))
+        // console.log('参数2:::'+JSON.stringify(data))
         api.ajax({
             url: apiSite + '/supply/index',
             method: 'post',
@@ -477,8 +477,8 @@
         }, function(ret, err) {
             if(ret) {
                 // console.log(page_num)
-                console.log('数据:::'+JSON.stringify(ret.data.list.length))
-                console.log('页数:::'+JSON.stringify(page_num))
+                // console.log('数据:::'+JSON.stringify(ret.data.list.length))
+                // console.log('页数:::'+JSON.stringify(page_num))
                 $api.css($api.dom('.loading'), 'display: none');
                 // 停止下拉刷新
                 api.refreshHeaderLoadDone()

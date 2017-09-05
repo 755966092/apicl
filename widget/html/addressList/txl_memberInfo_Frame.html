@@ -641,7 +641,6 @@
     }
     // 获取会员信息
     function requireData(flag,data) {
-        console.log('网络信息')
         var current_company = $api.byId('current_company');
         var current_position = $api.byId('current_position');
         var current_degree = $api.byId('current_degree');
@@ -851,10 +850,8 @@
                                 
                                 // 电话
                                 if (ret.data.info.current_contact) {
-                                    console.log('11111111')
                                     $api.text(phone, ret.data.info.current_contact);
                                 } else {
-                                    console.log('22222222')
                                     $api.text(phone, retDetail.data.info.current_contact);
                                 }
 
@@ -903,13 +900,13 @@
         }
     }
     function infoComparison2(remarkInfo,obj) {
-        console.log('网络信息'+JSON.stringify(obj))
+        // console.log('网络信息'+JSON.stringify(obj))
         db.selectSql({
             name: 'db_' + $api.getStorage('userToken'),
             sql: 'SELECT * FROM addressList_simplify WHERE user_id = ' + api.pageParam.userId
         }, function(ret, err){        
             if( ret.status ){
-                console.log('本地信息'+JSON.stringify( ret ) );
+                // console.log('本地信息'+JSON.stringify( ret ) );
                 if (!remarkInfo.nickname) {
                     if (obj.nickname != ret.data[0].title) {
                         updateListSql('title', obj.nickname);
@@ -960,7 +957,19 @@
                    }
                });
             }else{
-                alert( JSON.stringify( err ) );
+                createSimplify(key, data);
+            }
+        });
+    }
+    function createSimplify(key, data) {
+        db.executeSql({
+            name: 'db_'+$api.getStorage('userToken'),
+            sql: 'ALTER TABLE addressList_simplify ADD current_contact varchar(255)'   
+        }, function(ret, err){        
+            if( ret.status ){
+                updateListSql(key, data);
+            }else{
+                // alert( JSON.stringify( err ) );
             }
         });
     }
@@ -1245,10 +1254,8 @@
                     }
                     // 电话
                     if (ret.data[0].remark_current_contact) {
-                        console.log('if (ret.data[0].remark_current_contact) {')
                         $api.text(phone, ret.data[0].remark_current_contact);
                     } else if (ret.data[0].current_contact) {
-                        console.log('ret.data[0].current_contact')
                         $api.text(phone, ret.data[0].current_contact);
                     } else {
                         requireContact();
@@ -1260,7 +1267,6 @@
                 }
             } else {
                 requireData(1);
-                console.log('953:'+JSON.stringify(err));
             }
         });
         db.selectSql({

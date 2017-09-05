@@ -516,7 +516,6 @@
     }
     // 获取个人资料
     function myAjax() {
-        console.log('执行myAjax')
         if ($api.getStorage('userInfo')) {
             // 有缓存
             console.log('缓存' + $api.getStorage('imgCache'))
@@ -532,7 +531,6 @@
             reviseContent(userName,zName, headImg, sex, hometown, birthday);
             requireData();
         } else {
-            console.log('网络')
             // 无缓存
             requireData();
         }
@@ -550,7 +548,7 @@
                 }
             }, function(ret, err) {
                 if (ret) {
-                        console.log('请求数据'+JSON.stringify(ret))
+                        // console.log('请求数据'+JSON.stringify(ret))
                         $api.setStorage('userInfo', ret.data);
                         userName = ret.data.info.nickname,
                         zName = ret.data.info.real_name,
