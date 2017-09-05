@@ -286,6 +286,7 @@
         api.setCustomRefreshHeaderInfo({
             bgColor: '#EFEFF4',
         }, function(ret, err) {
+            page_num = 1;
             //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
             requireData(condition);
         });
@@ -313,7 +314,7 @@
             }
         });
     }
-
+    var scrollFlag = 1;
     // 滚动到底部触发的事件
     function scrollBotton() {
         // 滚动到底部触发的事件
@@ -328,11 +329,14 @@
             if ($api.text($api.dom('.bbottomLoading')) == '暂无更多供求') {
 
             } else {
-                $api.css($api.dom('.bbottomLoading'), 'display: block');
-                if (page_num == 1) {
-                    page_num = 2;
+                if(scrollFlag) {
+                    scrollFlag = 0;
+                    $api.css($api.dom('.bbottomLoading'), 'display: block');
+                    if (page_num == 1) {
+                        page_num = 2;
+                    }
+                    requireData2(condition);
                 }
-                requireData2(condition);
             }
             
         });
@@ -532,7 +536,8 @@
              // 停止下拉刷新
                 api.refreshHeaderLoadDone()
             if(ret) {
-                // console.log('397:::'+JSON.stringify(ret.data))
+                console.log('数据:::'+JSON.stringify(ret.data.list.length))
+                console.log('页数:::'+JSON.stringify(page_num))
                 if (supplyCache === ret.data.list) {
 
                 } else {

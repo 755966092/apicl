@@ -261,6 +261,7 @@ var name,headImg = $api.getStorage('imgCache'),youHeadImg;
 var messageId,targetRongId,emotionData,userId,newsText,msgId;
 var  mainH, _main, scrollH;
     apiready = function(){
+        console.log(JSON.stringify(api.pageParam))
         moduleInit();
         // console.log('参数内容:'+JSON.stringify(api.pageParam))
         if (api.pageParam.supplyName) {
@@ -755,7 +756,7 @@ var  mainH, _main, scrollH;
            }
        }, function(ret, err) {
            if(ret) {
-                youHeadImg = ret.data.list[rongUserId].head_img_url;
+                youHeadImg = ret.data.list[rongUserId].head_img_url+'?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim';
                 userId = ret.data.list[rongUserId].user_id;
                 $api.setStorage('youHeadImg_'+targetRongId, youHeadImg);
                 $api.setStorage('userId_'+targetRongId, userId);
@@ -786,7 +787,6 @@ var  mainH, _main, scrollH;
        
     }
     function contrastMessage(argument) {
-        // console.log('argument:::'+JSON.stringify(argument))
             rong.getLatestMessages({
                 conversationType: 'PRIVATE',
                 // 目标rongyun用户名
@@ -794,7 +794,7 @@ var  mainH, _main, scrollH;
                 // targetId: name,
                 count: 20
             }, function(ret, err) {
-                if (argument) {
+                if (argument.result.length>0) {
                     if (argument.result[0].sentTime == ret.result[0].sentTime) {
                         // 无更新
                         // console.log('无更新')

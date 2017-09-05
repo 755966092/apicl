@@ -1,158 +1,5 @@
-ret::: {
+{
 	"result": [{
-		"content": {
-			"extra": "",
-			"text": "[流泪]"
-		},
-		"conversationType": "PRIVATE",
-		"extra": "",
-		"messageDirection": "SEND",
-		"messageId": 51,
-		"objectName": "RC:TxtMsg",
-		"receivedTime": 1504518388735,
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
-		"sentStatus": "SENT",
-		"sentTime": 1504518389117,
-		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5"
-	}, {
-		"content": {
-			"extra": "",
-			"text": "1"
-		},
-		"conversationType": "PRIVATE",
-		"extra": "",
-		"messageDirection": "SEND",
-		"messageId": 50,
-		"objectName": "RC:TxtMsg",
-		"receivedTime": 1504518315137,
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
-		"sentStatus": "SENT",
-		"sentTime": 1504518315240,
-		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5"
-	}, {
-		"content": {
-			"extra": "",
-			"text": "2"
-		},
-		"conversationType": "PRIVATE",
-		"extra": "",
-		"messageDirection": "SEND",
-		"messageId": 49,
-		"objectName": "RC:TxtMsg",
-		"receivedTime": 1504518308695,
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
-		"sentStatus": "SENT",
-		"sentTime": 1504518308815,
-		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5"
-	}, {
-		"content": {
-			"extra": "",
-			"text": "1\n"
-		},
-		"conversationType": "PRIVATE",
-		"extra": "",
-		"messageDirection": "SEND",
-		"messageId": 48,
-		"objectName": "RC:TxtMsg",
-		"receivedTime": 1504518301913,
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
-		"sentStatus": "SENT",
-		"sentTime": 1504518302786,
-		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5"
-	}, {
-		"content": {
-			"duration": 3,
-			"extra": "",
-			"voicePath": "/data/user/0/com.iinnet.apicloud/files/759d2765861e5ba5f4b8e576bfeaee33/voice/47.amr"
-		},
-		"conversationType": "PRIVATE",
-		"extra": "",
-		"messageDirection": "SEND",
-		"messageId": 47,
-		"objectName": "RC:VcMsg",
-		"receivedTime": 1504518275308,
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
-		"sentStatus": "SENT",
-		"sentTime": 1504518275551,
-		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5"
-	}, {
-		"content": {
-			"extra": "",
-			"text": "[流泪]"
-		},
-		"conversationType": "PRIVATE",
-		"extra": "",
-		"messageDirection": "SEND",
-		"messageId": 46,
-		"objectName": "RC:TxtMsg",
-		"receivedTime": 1504518267312,
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
-		"sentStatus": "SENT",
-		"sentTime": 1504518267513,
-		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5"
-	}, {
-		"content": {
-			"duration": 1,
-			"extra": "",
-			"voicePath": "/data/user/0/com.iinnet.apicloud/files/759d2765861e5ba5f4b8e576bfeaee33/voice/45.amr"
-		},
-		"conversationType": "PRIVATE",
-		"extra": "",
-		"messageDirection": "SEND",
-		"messageId": 45,
-		"objectName": "RC:VcMsg",
-		"receivedTime": 1504518253197,
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
-		"sentStatus": "SENT",
-		"sentTime": 1504518253519,
-		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5"
-	}, {
-		"content": {
-			"duration": 1,
-			"extra": "",
-			"voicePath": "/data/user/0/com.iinnet.apicloud/files/759d2765861e5ba5f4b8e576bfeaee33/voice/44.amr"
-		},
-		"conversationType": "PRIVATE",
-		"extra": "",
-		"messageDirection": "SEND",
-		"messageId": 44,
-		"objectName": "RC:VcMsg",
-		"receivedTime": 1504518247887,
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
-		"sentStatus": "SENT",
-		"sentTime": 1504518249749,
-		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5"
-	}, {
-		"content": {
-			"extra": "",
-			"text": "2"
-		},
-		"conversationType": "PRIVATE",
-		"extra": "",
-		"messageDirection": "SEND",
-		"messageId": 43,
-		"objectName": "RC:TxtMsg",
-		"receivedTime": 1504518239837,
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
-		"sentStatus": "SENT",
-		"sentTime": 1504518239965,
-		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5"
-	}, {
-		"content": {
-			"extra": "",
-			"text": "1"
-		},
-		"conversationType": "PRIVATE",
-		"extra": "",
-		"messageDirection": "SEND",
-		"messageId": 42,
-		"objectName": "RC:TxtMsg",
-		"receivedTime": 1504518237015,
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
-		"sentStatus": "SENT",
-		"sentTime": 1504518237825,
-		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5"
-	}, {
 		"content": {
 			"extra": "",
 			"text": "[得意]"
@@ -160,43 +7,103 @@ ret::: {
 		"conversationType": "PRIVATE",
 		"extra": "",
 		"messageDirection": "SEND",
-		"messageId": 41,
+		"messageId": 14,
 		"objectName": "RC:TxtMsg",
-		"receivedTime": 1504518200529,
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
+		"receivedTime": 1504590343033,
+		"senderUserId": "47d2b511386521e8235274b1287e5525",
 		"sentStatus": "SENT",
-		"sentTime": 1504518200665,
-		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5"
+		"sentTime": 1504590343362,
+		"targetId": "759d2765861e5ba5f4b8e576bfeaee33"
 	}, {
 		"content": {
 			"extra": "",
-			"text": "3"
+			"text": "[微笑][微笑]"
 		},
 		"conversationType": "PRIVATE",
 		"extra": "",
 		"messageDirection": "SEND",
-		"messageId": 40,
+		"messageId": 13,
 		"objectName": "RC:TxtMsg",
-		"receivedTime": 1504518197343,
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
+		"receivedTime": 1504590191621,
+		"senderUserId": "47d2b511386521e8235274b1287e5525",
 		"sentStatus": "SENT",
-		"sentTime": 1504518197465,
-		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5"
+		"sentTime": 1504590191975,
+		"targetId": "759d2765861e5ba5f4b8e576bfeaee33"
 	}, {
 		"content": {
 			"extra": "",
-			"text": "78"
+			"text": "中学"
+		},
+		"conversationType": "PRIVATE",
+		"extra": "",
+		"messageDirection": "RECEIVE",
+		"messageId": 12,
+		"objectName": "RC:TxtMsg",
+		"receivedTime": 1504579768760,
+		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
+		"sentStatus": "SENT",
+		"sentTime": 1504579768845,
+		"targetId": "759d2765861e5ba5f4b8e576bfeaee33"
+	}, {
+		"content": {
+			"extra": "",
+			"text": "[闭嘴][闭嘴]"
+		},
+		"conversationType": "PRIVATE",
+		"extra": "",
+		"messageDirection": "RECEIVE",
+		"messageId": 11,
+		"objectName": "RC:TxtMsg",
+		"receivedTime": 1504579749346,
+		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
+		"sentStatus": "SENT",
+		"sentTime": 1504579748952,
+		"targetId": "759d2765861e5ba5f4b8e576bfeaee33"
+	}, {
+		"content": {
+			"extra": "",
+			"text": "9"
 		},
 		"conversationType": "PRIVATE",
 		"extra": "",
 		"messageDirection": "SEND",
-		"messageId": 39,
+		"messageId": 10,
 		"objectName": "RC:TxtMsg",
-		"receivedTime": 1504518186499,
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
+		"receivedTime": 1504579632648,
+		"senderUserId": "47d2b511386521e8235274b1287e5525",
 		"sentStatus": "SENT",
-		"sentTime": 1504518186594,
-		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5"
+		"sentTime": 1504579633411,
+		"targetId": "759d2765861e5ba5f4b8e576bfeaee33"
+	}, {
+		"content": {
+			"extra": "",
+			"text": "8"
+		},
+		"conversationType": "PRIVATE",
+		"extra": "",
+		"messageDirection": "SEND",
+		"messageId": 9,
+		"objectName": "RC:TxtMsg",
+		"receivedTime": 1504579631058,
+		"senderUserId": "47d2b511386521e8235274b1287e5525",
+		"sentStatus": "SENT",
+		"sentTime": 1504579632628,
+		"targetId": "759d2765861e5ba5f4b8e576bfeaee33"
+	}, {
+		"content": {
+			"extra": "",
+			"text": "7"
+		},
+		"conversationType": "PRIVATE",
+		"extra": "",
+		"messageDirection": "SEND",
+		"messageId": 8,
+		"objectName": "RC:TxtMsg",
+		"receivedTime": 1504579630877,
+		"senderUserId": "47d2b511386521e8235274b1287e5525",
+		"sentStatus": "SENT",
+		"sentTime": 1504579631500,
+		"targetId": "759d2765861e5ba5f4b8e576bfeaee33"
 	}, {
 		"content": {
 			"extra": "",
@@ -205,13 +112,13 @@ ret::: {
 		"conversationType": "PRIVATE",
 		"extra": "",
 		"messageDirection": "SEND",
-		"messageId": 38,
+		"messageId": 7,
 		"objectName": "RC:TxtMsg",
-		"receivedTime": 1504518182627,
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
+		"receivedTime": 1504579629911,
+		"senderUserId": "47d2b511386521e8235274b1287e5525",
 		"sentStatus": "SENT",
-		"sentTime": 1504518182725,
-		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5"
+		"sentTime": 1504579630300,
+		"targetId": "759d2765861e5ba5f4b8e576bfeaee33"
 	}, {
 		"content": {
 			"extra": "",
@@ -220,13 +127,13 @@ ret::: {
 		"conversationType": "PRIVATE",
 		"extra": "",
 		"messageDirection": "SEND",
-		"messageId": 37,
+		"messageId": 6,
 		"objectName": "RC:TxtMsg",
-		"receivedTime": 1504518181364,
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
+		"receivedTime": 1504579629092,
+		"senderUserId": "47d2b511386521e8235274b1287e5525",
 		"sentStatus": "SENT",
-		"sentTime": 1504518181502,
-		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5"
+		"sentTime": 1504579629324,
+		"targetId": "759d2765861e5ba5f4b8e576bfeaee33"
 	}, {
 		"content": {
 			"extra": "",
@@ -235,13 +142,13 @@ ret::: {
 		"conversationType": "PRIVATE",
 		"extra": "",
 		"messageDirection": "SEND",
-		"messageId": 36,
+		"messageId": 5,
 		"objectName": "RC:TxtMsg",
-		"receivedTime": 1504518180268,
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
+		"receivedTime": 1504579627578,
+		"senderUserId": "47d2b511386521e8235274b1287e5525",
 		"sentStatus": "SENT",
-		"sentTime": 1504518180357,
-		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5"
+		"sentTime": 1504579628251,
+		"targetId": "759d2765861e5ba5f4b8e576bfeaee33"
 	}, {
 		"content": {
 			"extra": "",
@@ -250,13 +157,13 @@ ret::: {
 		"conversationType": "PRIVATE",
 		"extra": "",
 		"messageDirection": "SEND",
-		"messageId": 35,
+		"messageId": 4,
 		"objectName": "RC:TxtMsg",
-		"receivedTime": 1504518178892,
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
+		"receivedTime": 1504579626718,
+		"senderUserId": "47d2b511386521e8235274b1287e5525",
 		"sentStatus": "SENT",
-		"sentTime": 1504518179035,
-		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5"
+		"sentTime": 1504579627130,
+		"targetId": "759d2765861e5ba5f4b8e576bfeaee33"
 	}, {
 		"content": {
 			"extra": "",
@@ -265,13 +172,13 @@ ret::: {
 		"conversationType": "PRIVATE",
 		"extra": "",
 		"messageDirection": "SEND",
-		"messageId": 34,
+		"messageId": 3,
 		"objectName": "RC:TxtMsg",
-		"receivedTime": 1504518177373,
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
+		"receivedTime": 1504579626070,
+		"senderUserId": "47d2b511386521e8235274b1287e5525",
 		"sentStatus": "SENT",
-		"sentTime": 1504518177596,
-		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5"
+		"sentTime": 1504579626269,
+		"targetId": "759d2765861e5ba5f4b8e576bfeaee33"
 	}, {
 		"content": {
 			"extra": "",
@@ -280,29 +187,29 @@ ret::: {
 		"conversationType": "PRIVATE",
 		"extra": "",
 		"messageDirection": "SEND",
-		"messageId": 33,
+		"messageId": 2,
 		"objectName": "RC:TxtMsg",
-		"receivedTime": 1504518173434,
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
+		"receivedTime": 1504579624793,
+		"senderUserId": "47d2b511386521e8235274b1287e5525",
 		"sentStatus": "SENT",
-		"sentTime": 1504518174354,
-		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5"
+		"sentTime": 1504579625060,
+		"targetId": "759d2765861e5ba5f4b8e576bfeaee33"
 	}, {
 		"content": {
 			"extra": "",
-			"text": "[流泪]"
+			"text": "[撇嘴][撇嘴]"
 		},
 		"conversationType": "PRIVATE",
 		"extra": "",
 		"messageDirection": "SEND",
-		"messageId": 32,
+		"messageId": 1,
 		"objectName": "RC:TxtMsg",
-		"receivedTime": 1504517943792,
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
+		"receivedTime": 1504579599768,
+		"senderUserId": "47d2b511386521e8235274b1287e5525",
 		"sentStatus": "SENT",
-		"sentTime": 1504517944849,
-		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5"
+		"sentTime": 1504579601497,
+		"targetId": "759d2765861e5ba5f4b8e576bfeaee33"
 	}],
 	"status": "success"
 }
-at chatContent.html: 797
+at chatContent.html: 799
