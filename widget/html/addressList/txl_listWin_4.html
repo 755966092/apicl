@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+</head>
+<body>
+     <header  class="header">
+        <div class="head">
+            <span class="callback"   tapmode   onclick="api.closeWin()">
+                <!--<span class="heaDicon"></span>-->
+                返回
+            </span>
+            <span class="winTitle">
+                熟识圈
+            </span>
+        </div>
+    </header>
+   
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        moduleInit();
+        fnInit();
+        api.openFrame({
+            name: 'txl_listWin_frame',
+            url: './txl_listWin_frame_4.html',
+            rect: {
+                x: 0,
+                y: headerH,
+                w: 'auto',
+                h: api.winHeight
+            },
+            pageParam: {
+                headerH: headerH,
+                flag: api.pageParam.flag
+            },
+            bounces: false
+        });
+        // dakai();
+    };
+    // 通讯录添加好友
+    function addF() {
+        api.openWin({
+            name: 'txl_addFellow_win',
+            url: './txl_addFellow_win.html',
+            bounces: false
+        });
+    }
+
+    function dakai() {
+        var data;
+         api.ajax({
+            url: apiSite + '/contact/levelOne',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+               values: { 
+                  token: $api.getStorage('userToken'),
+                  
+               }
+            }
+       }, function(ret, err) {
+           
+            data = ret.data.list
+            for (var i = 0; i < data.length; i++) {
+                data[i].employee_id = data[i].user_id;
+                data[i].remark = data[i].nickname;
+                data[i].position = data[i].current_position;
+                data[i].dept_name = data[i].current_company;
+            }
+             UIListContacts.open({
+                rect : {
+                    x : 0,
+                    y : headerH,
+                    h : api.winHeight
+                },
+                contacts : data,
+                fixedOn : api.frameName
+            }, function(ret,err) {
+                // alert(JSON.stringify(ret)+'----'+JSON.stringify(err))
+                if (ret==='click') {
+                    // alert(JSON.stringify(ret));
+                }
+            });
+            
+
+       })
+       
+           
+        
+   }
+</script>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/flex.css"/>
+    <style>
+        ul {
+            padding-left: 0.36rem;
+            background-color: #fff;
+        }
+        li {
+            background-color: #fff;
+            height: 1.1rem;
+            border-bottom: .01rem solid #d9d9d9;
+        }
+        .text {
+            font-size: 0.3rem;
+            margin-left: 0.2rem;
+            max-width: 5rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .headImg {
+
+            width: 0.62rem;
+            height: 0.62rem;
+            background-color: #d8d8d8;
+            /*background: url(../../image/tx_1.jpg);*/
+            background-size: .62rem .62rem;
+        }
+        .headImg .item {
+            margin-right: .01rem;
+            width: .2rem;
+            height: .2rem;
+            background: url(../../image/tx_1.jpg);
+            -webkit-background-size: .2rem .2rem;
+            background-size: .2rem .2rem;
+
+        }
+        .headImg .item:nth-child(3n) {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <ul>
+        <li class="flex-def flex-cCenter" tapmode onclick="openFamiliarCircle(this)">
+            <span class="headImg flex-def flex-wrap flex-cCenter flex-zCenter">
+                <span class="item"></span>
+                <span class="item"></span>
+                <span class="item"></span>
+                <span class="item"></span>
+                <span class="item"></span>
+                <span class="item"></span>
+            </span>
+            <span class="text">啦啦啦、nana等和您组成</span>
+        </li>
+    </ul>
+    <p class="no_data">暂无熟识圈</p>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        moduleInit();
+        requireData();
+        console.log(111)
+    };
+    function openFamiliarCircle(ele) {
+        api.openWin({
+            name: 'winname',
+            url: './txl_familiarCircle_win.html',
+            bounces: false,
+            pageParam: {
+                key : 'value'
+            }
+        });
+    }
+    
+    function requireData() {
+        api.ajax({
+            url: apiSite + '/contact/bothContactCircle',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: $api.getStorage('userToken')
+                }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    console.log(JSON.stringify(ret))
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+</script>
+</html>
+
+
+
+

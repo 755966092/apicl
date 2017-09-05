@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../css/style.css" />
     <style>
+
         .noNews {
             margin-top: .2rem;
             text-align: center;
@@ -330,6 +331,9 @@
                 conversationType: 'PRIVATE',
                 targetId: targetId
             }, function(ret, err) {
+                if ($api.domAll('.chatList').length == 0) {
+                    contrastCache('chatMessage',historyNews);
+                }
                 // api.toast({ msg: ret.status });
             })
         }

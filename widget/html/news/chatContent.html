@@ -281,6 +281,7 @@ var  mainH, _main, scrollH;
         nickname = api.pageParam.nickname;
         var sourcePath = "widget://image/chatPage/emotion";//表情存放目录
         if ($api.getStorage('youHeadImg_'+targetRongId)) {
+            
             userId = $api.getStorage('userId_'+targetRongId);
             youHeadImg = $api.getStorage('youHeadImg_'+targetRongId);
             api.sendEvent({
@@ -293,7 +294,6 @@ var  mainH, _main, scrollH;
                 emotionData = emotion;
                 getNews();
             });
-            
         } else {
             getImgsPaths(sourcePath, function (emotion) {
                 emotionData = emotion;
@@ -743,6 +743,7 @@ var  mainH, _main, scrollH;
     }
     // 获取聊天对方信息
     function getSideInfo(rongUserId) {
+        console.log('第一步')
         rongUserIdArr = rongUserId.split();
         api.ajax({
            url: apiSite + '/user/chatUserInfo',
@@ -791,16 +792,21 @@ var  mainH, _main, scrollH;
                 conversationType: 'PRIVATE',
                 // 目标rongyun用户名
                 targetId: targetRongId,
-                // targetId: name,
                 count: 20
             }, function(ret, err) {
-                if (argument.result.length>0) {
-                    if (argument.result[0].sentTime == ret.result[0].sentTime) {
-                        // 无更新
-                        // console.log('无更新')
+                if (argument) {
+                    if(argument.result.length>0){
+                        if (argument.result[0].sentTime == ret.result[0].sentTime) {
+                            // 无更新
+                            console.log('无更新')
+                        } else {
+                            console.log('有更新')
+                            // 有更新
+                            $api.html($api.dom('.main'), '');
+                            $api.setStorage('chatRecord_'+targetRongId, ret)
+                            renderPage(ret);
+                        }
                     } else {
-                        // console.log('有更新')
-                        // 有更新
                         $api.html($api.dom('.main'), '');
                         $api.setStorage('chatRecord_'+targetRongId, ret)
                         renderPage(ret);
@@ -1060,12 +1066,14 @@ var  mainH, _main, scrollH;
     }
     // 查看历史记录 往上面添加消息
     function addSendMsgTop(msg, headImg) {
+        console.log('历史消息1'+JSON.stringify(msg))
         var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
-        $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div class="oneself clearfix"><img class="fr oneselfImg" src="'+ headImg +'" tapmode data-id="1" onclick="openMemberInfo(this)"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg.content.text +'"> ' + transText(msg.content.text) + ' </p></div>');
+        $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img class="fr oneselfImg" src="'+ headImg +'" tapmode data-id="1" onclick="openMemberInfo(this)"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-msgId="'+ msg.messageId +'" data-newsText= "'+ msg.content.text +'"> ' + transText(msg.content.text) + ' </p></div>');
     }
     function addReceMsgTop(msg, youHeadImg) {
+        console.log('历史消息2'+JSON.stringify(msg))
         var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
-        $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div class="other clearfix"><img class="fl otherImg" tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" src="'+ api.pageParam.headImg +'"><p class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg.content.text +'">' + transText(msg.content.text) + '</p></div>');
+        $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img class="fl otherImg" tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" src="'+ api.pageParam.headImg +'"><p class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-msgId="'+ msg.messageId +'" data-newsText= "'+ msg.content.text +'">' + transText(msg.content.text) + '</p></div>');
     }
 
     // 滚动到页面底部
@@ -1088,7 +1096,7 @@ var  mainH, _main, scrollH;
                 oldestMessageId: messageId,
                 count: count
             }, function(ret, err) {
-                console.log('482:'+JSON.stringify(ret))
+                // console.log('482:'+JSON.stringify(ret))
                 // alert(JSON.stringify(ret))
                 for (var i = 0; i < ret.result.length ; i++) {
                     // if (ret.result[i].messageDirection == 'RECEIVE') {
@@ -1231,6 +1239,10 @@ var  mainH, _main, scrollH;
     function gtouchstart(ele){   
         newsText = $api.attr(ele, 'data-newsText');
         msgId = $api.attr(ele, 'data-msgId');
+        console.log($api.text(ele))
+        console.log($api.html(ele))
+
+        console.log('id::'+msgId+'text::'+ newsText)
         var e = window.event
         var x = e.touches[0].clientX ,y=e.touches[0].clientY 
         timeOutEvent = setTimeout("longPress("+x+","+y+")",500);
