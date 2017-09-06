@@ -300,6 +300,7 @@ function getData(data) {
     // console.log('渲染模版333')
     var html = fnListT(data);
     // console.log('渲染模版444')
+    // console.log(html+' at 304')
     var list = $api.dom('.resultList');
     // console.log('渲染模版555')
     // 替换resultList所有内容

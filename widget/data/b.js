@@ -1,17 +1,47 @@
-历史消息1 {
-    "content": {
-        "extra": "",
-        "text": "[撇嘴][撇嘴]"
-    },
-    "conversationType": "PRIVATE",
-    "extra": "",
-    "messageDirection": "SEND",
-    "messageId": 1,
-    "objectName": "RC:TxtMsg",
-    "receivedTime": 1504579599768,
-    "senderUserId": "47d2b511386521e8235274b1287e5525",
-    "sentStatus": "SENT",
-    "sentTime": 1504579601497,
-    "targetId": "759d2765861e5ba5f4b8e576bfeaee33"
+{
+    "userArr": [{
+        "remark_hometown": null,
+        "remark_current_contact": "18611901229",
+        "birthday": null,
+        "remark_nickname": "杨慧",
+        "remark_birthday": null,
+        "user_id": 236,
+        "nickname": "Una",
+        "remark_head_img_url": null,
+        "sex": 2,
+        "current_contact": "18611901229",
+        "remark_real_name": null,
+        "head_img_url": "http://img.iinnet.com/FtiKpkN07pcKR-f77pown3PgTVy9",
+        "current_degree": "",
+        "remark_sex": null,
+        "current_company": "",
+        "remark_current_company": null,
+        "remark_current_position": null,
+        "remark_current_degree": null,
+        "current_position": "",
+        "real_name": "Una",
+        "hometown": ""
+    }, {
+        "remark_hometown": null,
+        "remark_current_contact": "18611900589",
+        "birthday": null,
+        "remark_nickname": "杨玉招",
+        "remark_birthday": null,
+        "user_id": 1034,
+        "nickname": "Aimee",
+        "remark_head_img_url": null,
+        "sex": 1,
+        "current_contact": "18611900589",
+        "remark_real_name": null,
+        "head_img_url": "http://img.iinnet.com/Fp2hA07ym-t17PztncYHrR4HZiXJ",
+        "current_degree": "",
+        "remark_sex": null,
+        "current_company": "",
+        "remark_current_company": null,
+        "remark_current_position": null,
+        "remark_current_degree": null,
+        "current_position": "",
+        "real_name": "Aimee",
+        "hometown": ""
+    }]
 }
-at chatContent.html: 1069

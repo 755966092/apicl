@@ -5,7 +5,9 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
-    <style></style>
+    <style>
+
+    </style>
 </head>
 <body>
      <header  class="header">
@@ -14,7 +16,6 @@
                 返回
             </span>
             <span class="winTitle">
-                熟识圈
             </span>
             <span class="rightBtn" tapmode onclick="addF()"></span>
         </div>
@@ -25,7 +26,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
-        
+        $api.text($api.dom('.winTitle'), api.pageParam.title);
         moduleInit();
         fnInit();
         api.openFrame({
@@ -37,6 +38,9 @@
                 y: headerH,
                 w: 'auto',
                 h: 'auto'
+            },
+            pageParam: {
+                userArr: api.pageParam.userArr
             }
         });
    }

@@ -10,12 +10,18 @@
         ul {
             padding-left: 0.36rem;
             background-color: #fff;
+            border-bottom: .01rem solid #d9d9d9;
         }
         li {
             background-color: #fff;
             height: 1.1rem;
             border-bottom: .01rem solid #d9d9d9;
+            
         }
+        li:last-child {
+            border-bottom: 0;
+        }
+        
         .text {
             font-size: 0.3rem;
             margin-left: 0.2rem;
@@ -25,51 +31,123 @@
             white-space: nowrap;
         }
         .headImg {
-
+            text-align: center;
+            font-size: 0;
             width: 0.62rem;
             height: 0.62rem;
             background-color: #d8d8d8;
             /*background: url(../../image/tx_1.jpg);*/
             background-size: .62rem .62rem;
         }
-        .headImg .item {
-            margin-right: .01rem;
+        .headImg .item, 
+        .headImg .item2 {
+            font-size: 0;
             width: .2rem;
+            margin-right: 0.01rem;
+            margin-bottom: 0.01rem;
             height: .2rem;
-            background: url(../../image/tx_1.jpg);
-            -webkit-background-size: .2rem .2rem;
-            background-size: .2rem .2rem;
+            /* background: url(../../image/tx_1.jpg);-webkit-background-size: .2rem .2rem;background-size: .2rem .2rem; */
 
         }
-        .headImg .item:nth-child(3n) {
-            margin: 0;
+        .headImg .item2 {
+            margin-right: 0.02rem;
+            margin-bottom: 0.02rem;
         }
+        .text .name {
+            display: inline-block;
+            max-width: 3rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .headImg .item:nth-child(3n), 
+        .headImg .item2:nth-child(2n) {
+            margin-right: 0;
+        }
+        .headImg .item:nth-child(7), 
+        .headImg .item:nth-child(8), 
+        .headImg .item:nth-child(9), 
+        .headImg .item2:nth-child(3), 
+        .headImg .item2:nth-child(4) {
+            margin-bottom: 0;
+        }
+        
     </style>
 </head>
 <body>
-    <ul>
-        <li class="flex-def flex-cCenter" tapmode onclick="openFamiliarCircle(this)">
-            <span class="headImg flex-def flex-wrap flex-cCenter flex-zCenter">
-                <span class="item"></span>
-                <span class="item"></span>
-                <span class="item"></span>
-                <span class="item"></span>
-                <span class="item"></span>
-                <span class="item"></span>
-            </span>
-            <span class="text">啦啦啦、nana等和您组成</span>
+    <div class="loading"></div> 
+    <div class="resultList"></div>
+    <!-- <ul> -->
+         <!-- <li class="flex-def flex-cCenter" tapmode onclick="openFamiliarCircle(this)">
+            <div class="flex-def headImg flex-zCenter flex-wrap flex-cCenter">
+                <span class="flex-def flex-wrap flex-zCenter">
+                    <span class="item" style="background: url(../../image/tx_1.jpg);-webkit-background-size: .2rem .2rem;background-size: .2rem .2rem;"></span>
+                </span>
+            </div>
+            <span class="text flex-def flex-cCenter "><span class="name">啦啦啦</span>  、<span class="name">nana</span>等和您组成</span>
         </li>
-    </ul>
-    <p class="no_data">暂无熟识圈</p>
+        <li class="flex-def flex-cCenter" tapmode onclick="openFamiliarCircle(this)">
+            <div class="flex-def headImg flex-zCenter flex-wrap flex-cCenter">
+                <span class="flex-def flex-wrap flex-zCenter">
+                    <span style="width:.3rem;height:.3rem;background: url(../../image/tx_1.jpg);-webkit-background-size: .3rem .3rem;background-size: .3rem .3rem;" class="item2"></span>
+                </span>
+            </div>
+            <span class="text flex-def flex-cCenter">啦啦啦、nana等和您组成</span>
+        </li>  -->
+    <!-- </ul> -->
+    <script type="text/x-dot-template" id="listT">
+        {{?JSON.stringify(it)==='{}'}}
+            <p class="no_data">暂无熟识圈</p>
+        {{??}}
+            <ul>
+            {{ for (var key in it) { }}
+                {{ if (it.hasOwnProperty(key)) { }}
+                    {{ if (parseInt(key) > 4) { }}
+                        {{ for (var i = 0; i < it[key].length; i++) { }}
+                            <li class="flex-def flex-cCenter" tapmode onclick="openFamiliarCircle(this)" data-arr='{{=JSON.stringify(it[key][i])}}' data-title="{{=it[key][i][0].remark_nickname=='null'?it[key][i][0].nickname:it[key][i][0].remark_nickname}}、{{=it[key][i][1].remark_nickname=='null'?it[key][i][1].nickname:it[key][i][1].remark_nickname}}等和您组成">
+                                <div class="flex-def headImg flex-zCenter flex-wrap flex-cCenter">
+                                    <span class="flex-def flex-wrap flex-zCenter">
+                                        {{?it[key][i].length > 9}}
+                                            {{ for (var j = 0; j < 9; j++) { }}
+                                                <span class="item" style="background: url({{=it[key][i][j].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim);-webkit-background-size: .2rem .2rem;background-size: .2rem .2rem;"></span>
+                                            {{ } }}
+                                        {{??}}
+                                            {{ for (var j = 0; j < it[key][i].length; j++) { }}
+                                                <span class="item" style="background: url({{=it[key][i][j].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim);-webkit-background-size: .2rem .2rem;background-size: .2rem .2rem;"></span>
+                                            {{ } }}
+                                        {{?}}
+                                    </span>
+                                </div>
+                                <span class="text flex-def flex-cCenter"><span class="name">{{=it[key][i][0].remark_nickname=='null'?it[key][i][0].nickname:it[key][i][0].remark_nickname}}</span>、<span class="name">{{=it[key][i][1].remark_nickname=='null'?it[key][i][1].nickname:it[key][i][1].remark_nickname}}</span>等和您组成</span>
+                            </li>
+                        {{ } }}
+                    {{ } else { }}
+                        {{ for (var i = 0; i < it[key].length; i++) { }}
+                            <li class="flex-def flex-cCenter" tapmode onclick="openFamiliarCircle(this)" data-arr='{{=JSON.stringify(it[key][i])}}' data-title="{{=it[key][i][0].remark_nickname=='null'?it[key][i][0].nickname:it[key][i][0].remark_nickname}}、{{=it[key][i][1].remark_nickname=='null'?it[key][i][1].nickname:it[key][i][1].remark_nickname}}等和您组成">
+                                <div class="flex-def headImg flex-zCenter flex-wrap flex-cCenter">
+                                    <span class="flex-def flex-wrap flex-zCenter">
+                                        {{ for (var j = 0; j < it[key][i].length; j++) { }}
+                                            <span style="width:.3rem;height:.3rem;background: url({{=it[key][i][j].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim);-webkit-background-size: .3rem .3rem;background-size: .3rem .3rem;" class="item2"></span>
+                                        {{ } }}
+                                    </span>
+                                </div>
+                                <span class="text flex-def flex-cCenter"><span class="name">{{=it[key][i][0].remark_nickname=='null'?it[key][i][0].nickname:it[key][i][0].remark_nickname}}</span>、<span class="name">{{=it[key][i][1].remark_nickname=='null'?it[key][i][1].nickname:it[key][i][1].remark_nickname}}</span>等和您组成</span>
+                            </li>
+                        {{ } }}
+                    {{ } }}
+                {{ } }}
+            {{ } }}
+            </ul>
+        {{?}}
+    </script>
+    
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
     apiready = function(){
-        moduleInit();
         requireData();
-        console.log(111)
     };
     function openFamiliarCircle(ele) {
         api.openWin({
@@ -77,7 +155,8 @@
             url: './txl_familiarCircle_win.html',
             bounces: false,
             pageParam: {
-                key : 'value'
+                userArr: $api.attr(ele, 'data-arr'),
+                title: $api.attr(ele, 'data-title')
             }
         });
     }
@@ -89,13 +168,15 @@
             headers: apiHeader,
             data: {
                 values: { 
-                    token: $api.getStorage('userToken')
+                    // token: $api.getStorage('userToken')
+                    token: 'dbc12736-78bc-c33d-e855-2110d26a4ee4'
                 }
             }
         }, function(ret, err) {
             if(ret) {
                 if (ret.code === 200) {
-                    console.log(JSON.stringify(ret))
+                    getData(ret.data.list);
+                    $api.css($api.dom('.loading'), 'display: none');
                 } else {
                     alert(ret.msg)
                 }
