@@ -1,0 +1,85 @@
+
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+        <title>搜索</title>
+        <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+        <link rel="stylesheet" type="text/css" href="../../css/style.css" />
+        <style>
+            .top {
+                height: 0.8rem;
+                width: 7.5rem;
+                background-color: #EDECF3;
+            }
+            input {
+                width: 6.35rem;
+                height: 0.5rem;
+                margin: 0 .15rem 0 .3rem;
+                border-radius: .05rem;
+                background: #fff url(../../image/icon_supply/icon_search.png)no-repeat;
+                background-size: .24rem .24rem;
+                background-position: .13rem center;
+                box-sizing: border-box;
+                padding-left: 0.5rem;
+            }
+            span {
+                color: #0ABB07;
+                font-size: 0.3rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="top flex-def flex-cCenter">
+            <input type="text" oninput="changeInput(this)">
+            <span class="flagText" tapmodu onclick="search(this)">取消</span>
+        </div>
+        <script type="text/javascript" src="../../script/api.js"></script>
+        <script type="text/javascript" src="../../script/common.js"></script>
+        <script type="text/javascript" src="../../script/pinyin4js.js"></script>
+        <script type="text/javascript">
+            var headerH;
+            apiready = function(){
+                pageInit();
+                api.openFrame({
+                    name: 'search_main_frame',
+                    url: './search_main_frame.html',
+                    bounces: false,
+                    rect: {
+                        x: 0,
+                        y: headerH,
+                        w: 'auto',
+                        h: 'auto'
+                    }
+                });
+            }
+            function pageInit() {
+                $api.fixStatusBar($api.dom('.top'));
+                headerH = $api.offset($api.dom('.top')).h;
+            }
+            function changeInput(ele) {
+                var val = $api.val(ele);
+                $api.text($api.dom('.flagText'), '搜索');
+                if (!val) {
+                    $api.text($api.dom('.flagText'), '取消');
+
+                }
+            }
+            function search(ele) {
+                var text = $api.text(ele);
+                if (text === '取消') {
+                    // 关闭页面
+                    api.closeWin();
+                } else { 
+                    // 搜索
+                    searchResults();
+                }
+            }
+            function searchResults () {
+                var keyWord = $api.val($api.dom('input'));
+
+            }
+        </script>
+    </body>
+</html>
