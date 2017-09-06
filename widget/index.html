@@ -19,35 +19,69 @@
 <script type="text/javascript">
     apiready = function () {
         moduleInit();
-
-        if($api.getStorage('rongToken')) {
-             // alert('index');
-             rongyun($api.getStorage('rongToken'));
-             api.openWin({
-                name: 'main',
-                url: 'html/main.html',
-                slidBackEnabled: false,
-                animation: {
-                    type: 'none',
-                    subType: 'from_right',
-                    duration:0
+        // $api.rmStorage('guidePages');
+        api.ajax({
+            url: apiSite + '/common/checkVersion',
+            method: 'post',
+            headers: apiHeader
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    console.log(ret.data.current_version);
+                    
+                    // if(ret.data.current_version == api.appVersion) {
+                    if(ret.data.current_version == '1.0.9') {
+                        // 判断是否是地第一次进入app
+                        judgment();
+                    } else {
+                        // 进入引导页
+                        openGuidePage();
+                    }
+                } else {
+                    alert(ret.msg)
                 }
-            });
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+       
+    }
+    function judgment() {
+        if ($api.getStorage('guidePages')) {
+            // 不进入引导页
+            openMain();
         } else {
-           // alert()
-            api.openWin({
-                name: 'loginPage',
-                url: './html/enroll/me_login.html',
-                slidBackEnabled: false
-            });
+             // 进入引导页
+             openGuidePage();
         }
-        
-        // var news = historicalNews();
-        //     api.execScript({
-        //         name: 'main',
-        //         frameName: 'frame0',
-        //         script: news
-        //     });
+    }
+    function openGuidePage() {
+        api.openWin({
+                name: 'guidePage_win',
+                url: './html/guidePage/guidePage_win.html',
+                bounces: false,
+            });
+    }
+    function openMain() {
+        if($api.getStorage('rongToken')) {
+                rongyun($api.getStorage('rongToken'));
+                api.openWin({
+                    name: 'main',
+                    url: 'html/main.html',
+                    slidBackEnabled: false,
+                    animation: {
+                        type: 'none',
+                        subType: 'from_right',
+                        duration: 0
+                    }
+                });
+            } else {
+                api.openWin({
+                    name: 'loginPage',
+                    url: './html/enroll/me_login.html',
+                    slidBackEnabled: false
+                });
+            }
     }
 </script>
 
