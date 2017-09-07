@@ -20,32 +20,15 @@
     apiready = function () {
         moduleInit();
         // $api.rmStorage('guidePages');
-        api.ajax({
-            url: apiSite + '/common/checkVersion',
-            method: 'post',
-            headers: apiHeader
-        }, function(ret, err) {
-            if(ret) {
-                if (ret.code === 200) {
-                    if(ret.data.current_version == api.appVersion) {
-                    // if(ret.data.current_version == '1.0.9') {
-                        // 判断是否是地第一次进入app
-                        judgment();
-                    } else {
-                        // 进入引导页
-                        openGuidePage();
-                    }
-                } else {
-                    alert(ret.msg)
-                }
-            } else {
-                alert(JSON.stringify(err))
-            }
-        })
-       
+        /**
+        * 缓存当前本地版本号
+        * 判断缓存的是否和当前版本号相同, 相同进入主页, 不相同进入引导页
+        */
+        
+        judgment();
     }
     function judgment() {
-        if ($api.getStorage('guidePages')) {
+        if ($api.getStorage('guidePages') == api.appVersion) {
             // 不进入引导页
             openMain();
         } else {
@@ -80,6 +63,31 @@
                     slidBackEnabled: false
                 });
             }
+    }
+    // 判断线上
+    function ajaxVer() {
+        api.ajax({
+            url: apiSite + '/common/checkVersion',
+            method: 'post',
+            headers: apiHeader
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    if(ret.data.current_version == api.appVersion) {
+                    // if(ret.data.current_version == '1.0.9') {
+                        // 判断是否是地第一次进入app
+                        judgment();
+                    } else {
+                        // 不进入引导页
+                        openMain();
+                    }
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
     }
 </script>
 
