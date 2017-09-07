@@ -335,7 +335,8 @@
             left: .3rem;        
          } 
          header.header {
-            background-color: rgba(58,57,62,.1);
+            /* background-color: rgba(58,57,62,.1); */
+            background: linear-gradient(rgba(58,57,62,.5), rgba(58,57,62,0));
             position: fixed;
             width: 7.5rem;
             top: 0;
@@ -524,7 +525,12 @@
     apiready = function(){
         fnInit();
         window.onscroll = function() {
-            $api.css($api.dom('header.header'), 'background-color: rgba(58,57,62,' + document.body.scrollTop/145 + ')');
+            var opacityNum = document.body.scrollTop/145;
+            if (opacityNum < 0.1 ){
+                $api.css($api.dom('header.header'), 'background: linear-gradient(rgba(58,57,62,.5), rgba(58,57,62,0));');
+            } else {
+                $api.css($api.dom('header.header'), 'background: rgba(58,57,62,' + opacityNum + ')');
+            }
         }
         // 初始化页面
         initialise(api.pageParam.flag, api.pageParam.compaby_name, api.pageParam.demand_id);
