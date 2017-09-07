@@ -1,47 +1,93 @@
-{
-    "userArr": [{
-        "remark_hometown": null,
-        "remark_current_contact": "18611901229",
-        "birthday": null,
-        "remark_nickname": "杨慧",
-        "remark_birthday": null,
-        "user_id": 236,
-        "nickname": "Una",
-        "remark_head_img_url": null,
-        "sex": 2,
-        "current_contact": "18611901229",
-        "remark_real_name": null,
-        "head_img_url": "http://img.iinnet.com/FtiKpkN07pcKR-f77pown3PgTVy9",
-        "current_degree": "",
-        "remark_sex": null,
-        "current_company": "",
-        "remark_current_company": null,
-        "remark_current_position": null,
-        "remark_current_degree": null,
-        "current_position": "",
-        "real_name": "Una",
-        "hometown": ""
-    }, {
-        "remark_hometown": null,
-        "remark_current_contact": "18611900589",
-        "birthday": null,
-        "remark_nickname": "杨玉招",
-        "remark_birthday": null,
-        "user_id": 1034,
-        "nickname": "Aimee",
-        "remark_head_img_url": null,
-        "sex": 1,
-        "current_contact": "18611900589",
-        "remark_real_name": null,
-        "head_img_url": "http://img.iinnet.com/Fp2hA07ym-t17PztncYHrR4HZiXJ",
-        "current_degree": "",
-        "remark_sex": null,
-        "current_company": "",
-        "remark_current_company": null,
-        "remark_current_position": null,
-        "remark_current_degree": null,
-        "current_position": "",
-        "real_name": "Aimee",
-        "hometown": ""
-    }]
+列表页 {
+    "code": 200,
+    "data": {
+        "list": [{
+            "description": "测试",
+            "unit": 0,
+            "total_money": "0.01",
+            "head_img_url": "http://img.iinnet.com/FgjgDANLueXLbhe3Ga2Z4XBO_7xz",
+            "amount": 1,
+            "current_position": "",
+            "current_degree": "",
+            "order_id": 88,
+            "type": 1,
+            "title": "测试",
+            "price": "0.01",
+            "user_id": 9969,
+            "supply_id": 62,
+            "image_json": "[]",
+            "current_company": "",
+            "button": {
+                "extra": {
+                    "is_show": false,
+                    "url": "/supply_order/buyerPayExtraMoney"
+                },
+                "discount": {
+                    "is_show": false,
+                    "url": "/supply_order/sellerDiscountService"
+                },
+                "finish": {
+                    "is_show": false,
+                    "url": ""
+                },
+                "confirm_service": {
+                    "is_show": false,
+                    "url": "/supply_order/sellerConfirmService"
+                },
+                "cancel": {
+                    "is_show": true,
+                    "url": "/supply_order/buyerCancelService"
+                },
+                "confirm_finish": {
+                    "is_show": false,
+                    "url": "/supply_order/buyerConfirmFinishService"
+                },
+                "refuse_cancel": {
+                    "is_show": false,
+                    "url": "/supply_order/sellerRefuseCancelService"
+                },
+                "comment": {
+                    "is_show": false,
+                    "url": ""
+                },
+                "delete": {
+                    "is_show": false,
+                    "url": ""
+                },
+                "pay": {
+                    "is_show": false,
+                    "url": "/supply_order/buyerPay"
+                },
+                "again": {
+                    "is_show": false,
+                    "url": "/supply_order/buyerCreateOrder"
+                },
+                "refuse_service": {
+                    "is_show": false,
+                    "url": "/supply_order/sellerRefuseService"
+                },
+                "extend": {
+                    "is_show": false,
+                    "url": "/supply_order/buyerExtendService"
+                },
+                "refund": {
+                    "is_show": false,
+                    "url": "/supply_order/sellerRefundService"
+                },
+                "confirm_cancel": {
+                    "is_show": false,
+                    "url": "/supply_order/sellerConfirmCancelService"
+                }
+            },
+            "reason_list": {
+                "1": "服务者有事无法完成服务",
+                "2": "突然不想购买了",
+                "3": "有更好的服务"
+            },
+            "nickname": "测试18765",
+            "status": 3
+        }]
+    },
+    "msg": "",
+    "time": 1504751797
 }
