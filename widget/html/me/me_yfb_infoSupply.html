@@ -7,6 +7,7 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/swiper.min.css"/>
     <style type="text/css">
       
         .main {
@@ -321,17 +322,24 @@
 <body>
     <div id="cloaswin" onclick="api.closeWin();"></div>
     <div class="loading" ></div>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <!-- <img src="http://imgsrc.baidu.com/imgad/pic/item/83025aafa40f4bfb281dbe70094f78f0f63618c0.jpg" class="swiper-slide blue-slide">
+            <img src="http://imgsrc.baidu.com/imgad/pic/item/5366d0160924ab18cb0aad123ffae6cd7b890bf2.jpg" class="swiper-slide red-slide">
+            <img src="http://img.taopic.com/uploads/allimg/140826/267848-140R60T34860.jpg" class="swiper-slide orange-slide"> -->
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
     <div class="resultList"></div>
     <script type="text/x-dot-template" id="listT">
         <div class="main flex-def flex-zTopBottom">
-            <div class="img">
+            <!-- <div class="img">
                 {{?it.info.image_json!=null}}
                     <img src="{{=it.info.image_json[0]}}">
                 {{??}}
                     <img src="../../image/noimage.jpg">
                 {{?}}
-                
-            </div>
+            </div> -->
             <div class="title flex-def flex-zLeftRight flex-cCenter">
                 <img src="{{=it.info.head_img_url}}" alt="">
                 <div class="titleRight">
@@ -462,6 +470,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/jquery.min.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript" src="../../script/swiper.min.js"></script>
 <script type="text/javascript">
     var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
     apiready = function(){
@@ -477,6 +486,17 @@
             }
         });
     };
+    function swiperFun() {
+        console.log('初始化swiper');
+        var mySwiper = new Swiper('.swiper-container',{
+            loop: true,
+            autoplay: 3000,
+            pagination : '.swiper-pagination',
+            observer: true,  //修改swiper自己或子元素时，自动初始化swiper
+            observeParents: true,    //修改swiper的父元素时，自动初始化swiper
+        });
+        console.log($api.html($api.dom('.swiper-container')))
+    }
     // 初始化页面
     function  initialise() {
         // 请求数据
@@ -493,7 +513,9 @@
         }, function(ret, err) {
 
             if (ret.code == 200) {
+                
                 // 解析图片json
+                
                 ret.data.info.image_json = eval(ret.data.info.image_json);    
                 if ( ret.data.info.unit > 0) {
                      ret.data.info.unit = _dataSource[ ret.data.info.unit-1]
@@ -502,10 +524,26 @@
                 }
                 ret.data.info.type = ret.data.info.type === 1 ? "个人" : "公司";
                 ret.data.info.status = ret.data.info.status === 1 ? '暂停' : (ret.data.info.status = ret.data.info.status === 2 ? '开启' : '已删除');
-
+                var eleHtml='';
+                for (var i = 0; i < ret.data.info.image_json.length; i++) {
+                    eleHtml += '<img src="'+ ret.data.info.image_json[i] +'?imageView2/1/w/750/h/436/format/jpg/q/100|imageslim" class="swiper-slide blue-slide">'
+                    ret.data.info.image_json[i] = ret.data.info.image_json[i] + '?imageMogr2/auto-orient/thumbnail/710x/blur/1x0/quality/100|imageslim'
+                }
+                console.log(eleHtml)
+               
                 $api.css($api.dom('.loading'), 'display:none');
-                console.log(JSON.stringify(ret.data))     
-                getData(ret.data);
+                // console.log(JSON.stringify(ret.data))    
+
+               
+                if (eleHtml) {
+                    $api.html($api.dom('.swiper-wrapper'), eleHtml);
+                } else {
+                     $api.html($api.dom('.swiper-wrapper'), '<img class="default" src="../../image/noimage.jpg">');
+                }
+                 if (ret.data.info.image_json.length > 1) {
+                    swiperFun();
+                 }
+                 getData(ret.data);
             } else {
                 alert(ret.msg)
             }
