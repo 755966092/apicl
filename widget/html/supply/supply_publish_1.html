@@ -556,45 +556,41 @@
             }
         }, function(ret, err) {
             if(ret) {
-                scrollFlag = 1;
-                // console.log('页数:::'+page_num);
-                // console.log('数据:::'+JSON.stringify(ret.data.list.length));
                 if (ret.code == 200) {
+                    scrollFlag = 1;
                     page_num++;
-                    if (ret.data.list.length < 15) {
-                            // $api.css($api.dom('.bbottomLoading'), 'display: none');
-                            $api.text($api.dom('.bbottomLoading'), '暂无更多供求');
-                        }else {
-                            if (ret.data.list) {
-                                $api.text($api.dom('.bbottomLoading'), '暂无更多供求');
-                            } else {
-                                $api.css($api.dom('.bbottomLoading'), 'display: none');
-                            }
-                            for (var i = 0; i < ret.data.list.length; i++) {
-                                // 解析图片json
-                                ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
-
-                                if(ret.data.list[i].unit == 0) {
-                                    ret.data.list[i].unit = _dataSource[_dataSource.length-1]
-                                } else {
-                                    ret.data.list[i].unit = _dataSource[ret.data.list[i].unit-1]
-                                }
-                                ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
-                            }
-                            for (var i = 0; i < ret.data.list.length; i++) {
-                                dataList.push(ret.data.list[i])
-                            }
-                            getData(dataList);
-                            selfAdaption();
-                        }
+                    if (ret.data.list<20) {
+                        $api.text($api.dom('.bbottomLoading'), '暂无更多供求');
                     } else {
-                        alert(ret.msg)
+                        $api.css($api.dom('.bbottomLoading'), 'display: none');
                     }
-               
+                    renderPage(ret)
+                } else {
+                    alert(ret.msg)
+                }
             } else {
                 alert(JSON.stringify(err.msg))
             }
         })
+    }
+     // 渲染页面
+     function renderPage(ret) {
+        for (var i = 0; i < ret.data.list.length; i++) {
+            // 解析图片json
+            ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
+
+            if(ret.data.list[i].unit == 0) {
+                ret.data.list[i].unit = _dataSource[_dataSource.length-1]
+            } else {
+                ret.data.list[i].unit = _dataSource[ret.data.list[i].unit-1]
+            }
+            ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
+        }
+        for (var i = 0; i < ret.data.list.length; i++) {
+            dataList.push(ret.data.list[i])
+        }
+        getData(dataList);
+        selfAdaption();
     }
     // 进入详情
     function info(ele) {

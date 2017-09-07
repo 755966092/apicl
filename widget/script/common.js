@@ -325,7 +325,7 @@ function initTime(time) {
             return nowTime.getHours() - pageTime.getHours() + '小时之前'
         } else {
             var timeText = nowTime.getMinutes() - pageTime.getMinutes() == 0 ? '刚刚' : nowTime.getMinutes() - pageTime.getMinutes() + '分钟之前'
-            console.log(timeText)
+            // console.log(timeText)
             return nowTime.getMinutes() - pageTime.getMinutes() == 0 ? '刚刚' : nowTime.getMinutes() - pageTime.getMinutes() + '分钟之前'
         }
     }
