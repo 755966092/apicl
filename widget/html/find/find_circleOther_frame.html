@@ -92,106 +92,161 @@
             color: #999;
             line-height: .5rem;
         }
+        .bbottomLoading {
+            text-align: center; 
+            font-size: .24rem;
+            color: #999;
+            line-height: .8rem;
+            display: block;
+        }
     </style>
 </head>
 <body>
-    <div class="resultList">
-       </div>
-       <script type="text/x-dot-template" id="listT">
-           <!--  {{?it.user_list.length != 0}}
-               <div class="user">
-                    <p class="category">我的</p>
-                    {{ for (var i = 0; i < it.user_list.length; i++) { }} 
-                        <div class="wrap" data-flag='1' data-name='{{=it.user_list[i].title}}' data-id='{{=it.user_list[i].circle_id}}' tapmode   onclick="openCircleInfo(this)">
-                            <div class=" list flex-def flex-cCenter">
-                                <img src="{{=it.user_list[i].image_url}}">
-                                <div>
-                                    <div class="circlTitle">
-                                       <div class="circleInfo">
-                                           <h3>{{=it.user_list[i].title}}</h3>
-                                           <p class="circleIntroduce">{{=it.user_list[i].description}}</p>
-                                       </div>
+    <div class="resultList clearfix"></div>
+    <script type="text/x-dot-template" id="listT">
+        {{?it.length != 0}}
+            <div class="other">
+                {{ for (var i = 0; i < it.length; i++) { }} 
+                    <div class="wrap" data-flag='0' data-id='{{=it[i].circle_id}}' tapmode data-name='{{=it[i].title}}'   onclick="openCircleInfo(this)">
+                        <div class=" list flex-def flex-cCenter">
+                        
+                            <img src="{{=it[i].image_url}}">
+                            <div>
+                                <div class="circlTitle">
+                                    <div class="circleInfo">
+                                        <h3>{{=it[i].title}}</h3>
+                                        <p class="circleIntroduce">{{=it[i].description}}</p>
                                     </div>
-                                    <p class="circleData">
-                                       <span class="circleTitle">成员: <span class="quantity">{{=it.user_list[i].member_count}}</span></span>
-                                       <span class="circleTitle">发布: <span class="quantity">{{=it.user_list[i].topic_count}}</span></span>
-                                    </p>
                                 </div>
+                                <p class="circleData">
+                                    <span class="circleTitle">成员: <span class="quantity">{{=it[i].member_count}}</span></span>
+                                    <span class="circleTitle">发布: <span class="quantity">{{=it[i].topic_count}}</span></span>
+                                </p>
                             </div>
                         </div>
-                    {{ }; }}
-               </div>
-            {{?}} -->
-            {{?it.other_list.length != 0}}
-                <div class="other">
-                    <!-- <p class="category">其他</p> -->
-                    {{ for (var i = 0; i < it.other_list.length; i++) { }} 
-                        <div class="wrap" data-flag='0' data-id='{{=it.other_list[i].circle_id}}' tapmode data-name='{{=it.other_list[i].title}}'   onclick="openCircleInfo(this)">
-                            <div class=" list flex-def flex-cCenter">
-                           
-                                <img src="{{=it.other_list[i].image_url}}">
-                                <div>
-                                    <div class="circlTitle">
-                                       <div class="circleInfo">
-                                           <h3>{{=it.other_list[i].title}}</h3>
-                                           <p class="circleIntroduce">{{=it.other_list[i].description}}</p>
-                                       </div>
-                                    </div>
-                                    <p class="circleData">
-                                       <span class="circleTitle">成员: <span class="quantity">{{=it.other_list[i].member_count}}</span></span>
-                                       <span class="circleTitle">发布: <span class="quantity">{{=it.other_list[i].topic_count}}</span></span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    {{ }; }}
-                </div>
-            {{??}}
-            <p class="no_data">没有任何我在圈</p>
-            {{?}}
-
-       </script>
-     
+                    </div>
+                {{ }; }}
+            </div>
+        {{??}}
+        <p class="no_data">没有任何我在圈</p>
+        {{?}}
+    </script>
+    <p class="bbottomLoading">正在加载...</p>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    
+    var page_num = 1,dataList=[];
     apiready = function(){
         requestData();
-        // 下拉刷新
+        scrollTop();
+        scrollBotton();
+    };
+    function scrollTop() {
+         // 下拉刷新
         api.setCustomRefreshHeaderInfo({
             bgColor: '#EFEFF4',
         }, function(ret, err) {
+            page_num = 1;
             //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
+            // $api.text($api.dom('.bbottomLoading'), '正在加载...');
              requestData();
         });
         api.addEventListener({
             name: 'circleTopicComment'
         }, function(ret, err) {
             if (ret) {
+                page_num = 1;
                 requestData();
             } else {
                 alert(JSON.stringify(err));
             }
         });
-    };
+    }
+    var scrollFlag = 1;
+    // 滚动到底部触发的事件
+    function scrollBotton() {
+        // 滚动到底部触发的事件
+        api.addEventListener({
+            name:'scrolltobottom',
+            extra:{
+                threshold:0            //设置距离底部多少距离时触发，默认值为0，数字类型
+            }
+        }, function(ret, err){        
+            
+            // alert('已滚动到底部');
+            if ($api.text($api.dom('.bbottomLoading')) == '暂无更多圈子') {
+                console.log('暂无更多圈子');
+            } else {
+                if(scrollFlag) {
+                    console.log('上啦加载');
+                    scrollFlag = 0;
+                    $api.css($api.dom('.bbottomLoading'), 'display: block');
+                    if (page_num == 1) {
+                        page_num = 2;
+                    }
+                    requestData2();
+                }
+            }
+            
+        });
+    }
     function requestData() {
          api.ajax({
-            url: apiSite + '/circle/index',
+            url: apiSite + '/circle/otherList',
             method: 'post',
             headers: apiHeader,
             data: {
                values: { 
-                    token: $api.getStorage('userToken')
+                    token: $api.getStorage('userToken'),
+                    page_num: page_num
                }
             }
         }, function(ret, err) {
             api.refreshHeaderLoadDone()
             if(ret) {
                 if(ret.code === 200) {
-                    getData(ret.data)
+                    if (ret.data.list.length<20) {
+                        $api.css($api.dom('.bbottomLoading'), 'display: block');
+                        $api.text($api.dom('.bbottomLoading'), '暂无更多圈子');
+                    } else {
+                        $api.css($api.dom('.bbottomLoading'), 'display: none');
+                    }
+                    // console.log(JSON.stringify(ret))
+                    getData(ret.data.list)
+                    dataList = ret.data.list;
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err.msg))
+            }
+        })
+    }
+    function requestData2() {
+         api.ajax({
+            url: apiSite + '/circle/otherList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+               values: { 
+                    token: $api.getStorage('userToken'),
+                    page_num: page_num
+               }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if(ret.code === 200) {
+                    scrollFlag = 1;
+                    page_num++;
+                    if (ret.data.list.length<20) {
+                        $api.text($api.dom('.bbottomLoading'), '暂无更多圈子');
+                    } else {
+                        $api.css($api.dom('.bbottomLoading'), 'display: none');
+                    }
+                    dataList = dataList.concat(ret.data.list)
+                    getData(dataList)
                 } else {
                     alert(ret.msg)
                 }

@@ -1,93 +1,87 @@
-列表页 {
+{
     "code": 200,
-    "data": {
-        "list": [{
-            "description": "测试",
-            "unit": 0,
-            "total_money": "0.01",
-            "head_img_url": "http://img.iinnet.com/FgjgDANLueXLbhe3Ga2Z4XBO_7xz",
-            "amount": 1,
-            "current_position": "",
-            "current_degree": "",
-            "order_id": 88,
-            "type": 1,
-            "title": "测试",
-            "price": "0.01",
-            "user_id": 9969,
-            "supply_id": 62,
-            "image_json": "[]",
-            "current_company": "",
-            "button": {
-                "extra": {
-                    "is_show": false,
-                    "url": "/supply_order/buyerPayExtraMoney"
-                },
-                "discount": {
-                    "is_show": false,
-                    "url": "/supply_order/sellerDiscountService"
-                },
-                "finish": {
-                    "is_show": false,
-                    "url": ""
-                },
-                "confirm_service": {
-                    "is_show": false,
-                    "url": "/supply_order/sellerConfirmService"
-                },
-                "cancel": {
-                    "is_show": true,
-                    "url": "/supply_order/buyerCancelService"
-                },
-                "confirm_finish": {
-                    "is_show": false,
-                    "url": "/supply_order/buyerConfirmFinishService"
-                },
-                "refuse_cancel": {
-                    "is_show": false,
-                    "url": "/supply_order/sellerRefuseCancelService"
-                },
-                "comment": {
-                    "is_show": false,
-                    "url": ""
-                },
-                "delete": {
-                    "is_show": false,
-                    "url": ""
-                },
-                "pay": {
-                    "is_show": false,
-                    "url": "/supply_order/buyerPay"
-                },
-                "again": {
-                    "is_show": false,
-                    "url": "/supply_order/buyerCreateOrder"
-                },
-                "refuse_service": {
-                    "is_show": false,
-                    "url": "/supply_order/sellerRefuseService"
-                },
-                "extend": {
-                    "is_show": false,
-                    "url": "/supply_order/buyerExtendService"
-                },
-                "refund": {
-                    "is_show": false,
-                    "url": "/supply_order/sellerRefundService"
-                },
-                "confirm_cancel": {
-                    "is_show": false,
-                    "url": "/supply_order/sellerConfirmCancelService"
-                }
-            },
-            "reason_list": {
-                "1": "服务者有事无法完成服务",
-                "2": "突然不想购买了",
-                "3": "有更好的服务"
-            },
-            "nickname": "测试18765",
-            "status": 3
-        }]
-    },
     "msg": "",
-    "time": 1504751797
+    "time": 1504763852,
+    "data": {
+        "user_list": [{
+            "circle_id": 1,
+            "title": "我在第一批用户交流圈",
+            "description": "第一批我在忠实用户聚集地",
+            "image_url": "http://img.iinnet.com/system/system-head-img.png",
+            "member_count": 12,
+            "topic_count": 7
+        }, {
+            "circle_id": 9,
+            "title": "程序猿",
+            "description": "安卓开发程序猿或者是对开发感兴趣的同学，一起交流下啊！！！",
+            "image_url": "http://img.iinnet.com/FuaTRSlgsHU9I734GMyTExKUEWG3",
+            "member_count": 2,
+            "topic_count": 0
+        }, {
+            "circle_id": 6,
+            "title": "设计交流",
+            "description": "设计交流",
+            "image_url": "http://img.iinnet.com/FkfF7fzoH2qxoDHw81Xy49ER8tzj",
+            "member_count": 2,
+            "topic_count": 0
+        }],
+        "other_list": [{
+            "circle_id": 1,
+            "title": "我在第一批用户交流圈",
+            "description": "第一批我在忠实用户聚集地",
+            "image_url": "http://img.iinnet.com/system/system-head-img.png",
+            "member_count": 12,
+            "topic_count": 7
+        }, {
+            "circle_id": 2,
+            "title": "上海",
+            "description": "因为上海",
+            "image_url": "http://img.iinnet.com/Fm86HI11Y4UbVtk9Qaad17dolWGo",
+            "member_count": 1,
+            "topic_count": 0
+        }, {
+            "circle_id": 4,
+            "title": "技术交流圈",
+            "description": "各种软件、硬件技术交流",
+            "image_url": "http://img.iinnet.com/Fjq6MGA0SZFobNRjAFKKMdh_os1W",
+            "member_count": 1,
+            "topic_count": 0
+        }, {
+            "circle_id": 5,
+            "title": "自主招生",
+            "description": "随时了解高考自主招生最新动态及培训服务，互相交流学习，欢迎大家加入",
+            "image_url": "http://img.iinnet.com/Fn2SjcP_SAWyEh1JQE758eB0wzHC",
+            "member_count": 1,
+            "topic_count": 0
+        }, {
+            "circle_id": 6,
+            "title": "设计交流",
+            "description": "设计交流",
+            "image_url": "http://img.iinnet.com/FkfF7fzoH2qxoDHw81Xy49ER8tzj",
+            "member_count": 2,
+            "topic_count": 0
+        }, {
+            "circle_id": 7,
+            "title": "关注流浪狗",
+            "description": "关注流浪狗  爱护流浪狗  他们是可爱的宝贝  只是少了一个温暖的家",
+            "image_url": "http://img.iinnet.com/FsQ4rsaP2k22Lcf_buB-h0PoOBHz",
+            "member_count": 1,
+            "topic_count": 0
+        }, {
+            "circle_id": 8,
+            "title": "复古风爱好者",
+            "description": "欢迎和我一样喜欢复古风的小伙伴",
+            "image_url": "http://img.iinnet.com/FsADDW1wwpWV0_SfXnI8Wiv-cbu8",
+            "member_count": 1,
+            "topic_count": 0
+        }, {
+            "circle_id": 9,
+            "title": "程序猿",
+            "description": "安卓开发程序猿或者是对开发感兴趣的同学，一起交流下啊！！！",
+            "image_url": "http://img.iinnet.com/FuaTRSlgsHU9I734GMyTExKUEWG3",
+            "member_count": 2,
+            "topic_count": 0
+        }]
+    }
 }
+at find_circleOther_frame.html: 239

@@ -2,7 +2,7 @@
  * cleave.js - 0.9.2
  * https://github.com/nosir/cleave.js
  * Apache License Version 2.0
- *
+ * 表单验证插件
  * Copyright (C) 2012-2017 Max Huang https://github.com/nosir/
  */
 ! function(e, t) {
