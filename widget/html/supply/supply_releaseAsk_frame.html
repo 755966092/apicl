@@ -989,10 +989,11 @@
 
     // 获取位置
     function getPos() {
+
         if (api.systemType === 'ios') {
             bMap.initMapSDK(function(ret) {
                 if (ret.status) {
-                   getLocation();
+                    getLocation();
                 } else {
                     alert(JSON.stringify(err.msg))
                 }
@@ -1012,7 +1013,7 @@
             if (ret.status) {
                 // // alert(JSON.stringify(ret));
                 getCoords(ret.lon, ret.lat)
-                // alert('经度：' + ret.lon + '----' +'纬度:'+ret.lat)
+                // console.log('经度：' + ret.lon + '----' +'纬度:'+ret.lat)
                 latitude = ret.lat;
                 longitude = ret.lon;
             } else {
@@ -1035,7 +1036,7 @@
                 district = ret.district;
 
                 // // alert(JSON.stringify(ret))
-                // alert('地区'+ret.district + '省份'+ret.city +'地址'+ret.address )
+                // console.log('地区'+ret.district + '省份'+ret.city +'地址'+ret.address )
                 $api.text($api.byId('position'), address);
                 // ret.district // 地区
                 // ret.city // 省份
