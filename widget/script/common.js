@@ -293,6 +293,8 @@ function changeTime(time) {
 
 // doT模版获取数据
 function getData(data) {
+    // 原生方法
+    //  document.getElementsByClassName('resultList')[0].innerHTML = doT.template(document.getElementById('listT').innerHTML)(data)
     // // console.log('渲染模版111')
     var listTText = $api.byId('listT').text;
     // // console.log('渲染模版222')

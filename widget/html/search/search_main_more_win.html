@@ -34,16 +34,20 @@
                 color: #0ABB07;
                 font-size: 0.3rem;
             }
-            #callbackBtn {
-                display: none;
-                
+            .callbackBtn {
+                display: inline-block;
+                width: 0.22rem;
+                height: 0.37rem;
+                background: url(../../image/icon_fanh02.png)no-repeat;
+                background-size: .22rem .37rem;
+
             }
         </style>
     </head>
     <body>
         <div class="top ">
             <div class="wrap flex-def flex-cCenter">
-                <!-- <span id="callbackBtn">返回</span> -->
+                <span tapmode onclick="api.closeWin()" class="callbackBtn"></span>
                 <input class="flex-item" type="text" oninput="changeInput(this)">
                 <span class="flagText" tapmodu onclick="search(this)">取消</span>
             </div>
@@ -54,6 +58,7 @@
         <script type="text/javascript">
             var headerH;
             apiready = function(){
+                $api.val($api.dom('input'), api.pageParam.ret.value.keyword );
                 moduleInit();
                 // 设置状态栏文字颜色
                 api.setStatusBarStyle({
@@ -61,17 +66,17 @@
                 });
                 pageInit();
                 api.openFrame({
-                    name: 'search_main_frame',
-                    url: './search_main_frame.html',
+                    name: 'search_main_more_frame',
+                    url: './search_main_more_frame.html',
                     bounces: false,
-                    pageParam: {
-                        headerH: headerH
-                    },
                     rect: {
                         x: 0,
                         y: headerH,
                         w: 'auto',
                         h: 'auto'
+                    },
+                    pageParam: {
+                        ret: api.pageParam.ret
                     }
                 });
             }
@@ -81,11 +86,6 @@
             }
             function changeInput(ele) {
                 var val = $api.val(ele);
-                // $api.text($api.dom('.flagText'), '搜索');
-                // if (!val) {
-                //     $api.text($api.dom('.flagText'), '取消');
-                // }
-                // 搜索功能
                 searchSql(val)
             }
             function searchSql(keyword) {
@@ -97,15 +97,11 @@
                         if (retSql.status) {
                             if (retSql.data.length > 0) {
                                 api.sendEvent({
-                                    name: 'searchSql',
+                                    name: 'searchSqlMore',
                                     extra: {
                                         user: retSql.data,
                                         keyword: keyword
                                     }
-                                });
-                            } else {
-                                api.sendEvent({
-                                    name: 'searchSql'
                                 });
                             }
                         } else {
@@ -114,7 +110,7 @@
                     })
                 } else {
                     api.sendEvent({
-                        name: 'searchSql'
+                        name: 'searchSqlMore'
                     });
                 }
                 
