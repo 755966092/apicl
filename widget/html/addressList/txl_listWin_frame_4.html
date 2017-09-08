@@ -104,7 +104,7 @@
                 {{ if (it.hasOwnProperty(key)) { }}
                     {{ if (parseInt(key) > 4) { }}
                         {{ for (var i = 0; i < it[key].length; i++) { }}
-                            <li class="flex-def flex-cCenter" tapmode onclick="openFamiliarCircle(this)" data-arr='{{=JSON.stringify(it[key][i])}}' data-title="{{=it[key][i][0].remark_nickname=='null'?it[key][i][0].nickname:it[key][i][0].remark_nickname}}、{{=it[key][i][1].remark_nickname=='null'?it[key][i][1].nickname:it[key][i][1].remark_nickname}}等和您组成">
+                            <li class="flex-def flex-cCenter" tapmode onclick="openFamiliarCircle(this)" data-arr='{{=JSON.stringify(it[key][i])}}'>
                                 <div class="flex-def headImg flex-zCenter flex-wrap flex-cCenter">
                                     <span class="flex-def flex-wrap flex-zCenter">
                                         {{?it[key][i].length > 9}}
@@ -123,7 +123,7 @@
                         {{ } }}
                     {{ } else { }}
                         {{ for (var i = 0; i < it[key].length; i++) { }}
-                            <li class="flex-def flex-cCenter" tapmode onclick="openFamiliarCircle(this)" data-arr='{{=JSON.stringify(it[key][i])}}' data-title="{{=it[key][i][0].remark_nickname=='null'?it[key][i][0].nickname:it[key][i][0].remark_nickname}}、{{=it[key][i][1].remark_nickname=='null'?it[key][i][1].nickname:it[key][i][1].remark_nickname}}等和您组成">
+                            <li class="flex-def flex-cCenter" tapmode onclick="openFamiliarCircle(this)" data-arr='{{=JSON.stringify(it[key][i])}}'>
                                 <div class="flex-def headImg flex-zCenter flex-wrap flex-cCenter">
                                     <span class="flex-def flex-wrap flex-zCenter">
                                         {{ for (var j = 0; j < it[key][i].length; j++) { }}
@@ -160,7 +160,7 @@
             bounces: false,
             pageParam: {
                 userArr: $api.attr(ele, 'data-arr'),
-                title: $api.attr(ele, 'data-title')
+                title: $api.text($api.dom(ele, '.text'))
             }
         });
     }
@@ -172,8 +172,8 @@
             headers: apiHeader,
             data: {
                 values: { 
-                    // token: $api.getStorage('userToken')
-                    token: 'dbc12736-78bc-c33d-e855-2110d26a4ee4'
+                    token: $api.getStorage('userToken')
+                    // token: 'dbc12736-78bc-c33d-e855-2110d26a4ee4'
                 }
             }
         }, function(ret, err) {

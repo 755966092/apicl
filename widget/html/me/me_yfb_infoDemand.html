@@ -8,7 +8,31 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style type="text/css">
-        
+        img.default {
+            width: 7.5rem;
+            height: 4.36rem;
+        }
+
+        header.header {
+            background: linear-gradient(rgba(58,57,62,.5), rgba(58,57,62,0));
+            position: fixed;
+            width: 7.5rem;
+            top: 0;
+            left: 0;
+            z-index: 999;
+         }
+         header .head {
+            background-color: rgba(58,57,62,0)
+         }
+         .swiper-wrapper img {
+            height: 4.36rem;
+         }
+         header .rightBtn {
+            line-height: .5rem;
+            color: #fff;
+            font-size: .65rem;
+         }
+
         .main {
             /*margin-bottom: 1.5rem;*/
             padding-bottom: 1.5rem;
@@ -24,7 +48,7 @@
             height: 1rem;
             padding: 0 .3rem;
             box-sizing: border-box;
-            border-bottom: .01rem solid #E8E8E8;
+            /* border-bottom: .01rem solid #E8E8E8; */
             background-color: #fff;
         }
         .title img {
@@ -51,7 +75,8 @@
         }
         .title2 {
             padding: .2rem .3rem .1rem;
-            border-bottom: .01rem solid #E8E8E8;
+            /* border-bottom: .01rem solid #E8E8E8; */
+            margin: .2rem 0;
             background-color: #fff;
         }
         .title2 .typeIcon {
@@ -83,8 +108,10 @@
         }
         .price {
             font-size: 0;
-            margin: .2rem 0 .45rem;
+            margin: .2rem 0 .2rem;
+            padding-bottom: 0.2rem;
             /*width: 100%;*/
+            border-bottom: .01rem solid #d9d9d9;
         }
         .price .priceText {
             color: #D0011B;
@@ -308,16 +335,9 @@
         }
          
 
-         #cloaswin {
-            width: .44rem;  
-            height: .44rem; 
-            background: url(../../image/icon_supply/icon_callback.png)no-repeat;
-            -webkit-background-size: .44rem .44rem;
-            background-size: .44rem .44rem;
-            position: fixed;    
-            top: .55rem;                
-            left: .3rem;        
-         }  
+        .swiper-wrapper img {
+            height: 4.36rem;
+         }
          .label {
             font-size: .2rem;
             color: #0076FF;
@@ -330,18 +350,36 @@
     </style>
 </head>     
 <body>
-    <div id="cloaswin" onclick="api.closeWin();"></div>
-    <!-- <div class="loading" ></div> -->
+    <header  class="header">
+        <div class="head">
+            <span class="callback"   tapmode   onclick="api.closeWin()">返回</span>
+            <span class="winTitle">
+                信息详情
+            </span>
+            <!-- <div class="rightBtn">...</div> -->
+        </div>
+    </header>
+    <div class="loading" ></div>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <!-- <img src="http://imgsrc.baidu.com/imgad/pic/item/83025aafa40f4bfb281dbe70094f78f0f63618c0.jpg" class="swiper-slide blue-slide">
+            <img src="http://imgsrc.baidu.com/imgad/pic/item/5366d0160924ab18cb0aad123ffae6cd7b890bf2.jpg" class="swiper-slide red-slide">
+            <img src="http://img.taopic.com/uploads/allimg/140826/267848-140R60T34860.jpg" class="swiper-slide orange-slide"> -->
+        </div>
+        <div class="swiper-pagination">
+            
+        </div>
+    </div>
     <div class="resultList"></div>
     <script type="text/x-dot-template" id="listT">
         <div class="main flex-def flex-zTopBottom">
-            <div class="img">
+            <!-- <div class="img">
                 {{?it.info.image_json[0]}}
                     <img src="{{=it.info.image_json[0]}}">
                 {{??}}
                     <img src="../../image/noimage.jpg">
                 {{?}}
-            </div>
+            </div> -->
             <div class="title flex-def flex-zLeftRight flex-cCenter">
                 <img src="{{=it.info.head_img_url}}" alt="">
                 <div class="titleRight">
@@ -471,9 +509,27 @@
 <script type="text/javascript">
     var editStatus = 1, delStatus = 1, edit = 1;
     apiready = function(){
+        fnInit();
+        window.onscroll = function() {
+            var opacityNum = document.body.scrollTop/145;
+            if (opacityNum < 0.1 ){
+                $api.css($api.dom('header.header'), 'background: linear-gradient(rgba(58,57,62,.5), rgba(58,57,62,0));');
+            } else {
+                $api.css($api.dom('header.header'), 'background-color: rgba(58,57,62,' + opacityNum + ')');
+            }
+        }
         // 初始化页面
         initialise();
     };
+    function swiperFun() {
+        var mySwiper = new Swiper('.swiper-container', {
+            loop: true,
+            autoplay: 3000,
+            pagination: '.swiper-pagination',
+            observer: true, //修改swiper自己或子元素时，自动初始化swiper
+            observeParents: true, //修改swiper的父元素时，自动初始化swiper
+        });
+    }
     // 放弃求助
     function demandCancel(n) {
         if (n == 0) {
@@ -579,7 +635,24 @@
                 ret.data.info.type = ret.data.info.type === 1 ? "个人" : "公司";
                 var statusArr=["求助中","帮助中","已结束","已失效","已删除"]
                 // ret.data.info.status = statusArr[ret.data.info.status-1]
-                $api.css($api.dom('.loading'), 'display:none');  
+                var eleHtml = '';
+                for (var i = 0; i < ret.data.info.image_json.length; i++) {
+                    eleHtml += '<img src="' + ret.data.info.image_json[i] +
+                        '?imageView2/1/w/750/h/436/format/jpg/q/100|imageslim" class="swiper-slide">'
+                    ret.data.info.image_json[i] = ret.data.info.image_json[i] +
+                        '?imageMogr2/auto-orient/thumbnail/710x/blur/1x0/quality/100|imageslim'
+                }
+                console.log(eleHtml)
+                $api.css($api.dom('.loading'), 'display:none');
+                // console.log(JSON.stringify(ret.data))    
+                if (eleHtml) {
+                    $api.html($api.dom('.swiper-wrapper'), eleHtml);
+                } else {
+                    $api.html($api.dom('.swiper-wrapper'),'<img class="default" src="../../image/noimage.jpg">');
+                }
+                if (ret.data.info.image_json.length > 1) {
+                    swiperFun();
+                }
                 getData(ret.data);
                 if (ret.data.info.status == 1) {
                     // 可放弃,可编辑, 不可删除
