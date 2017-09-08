@@ -212,7 +212,7 @@
                 }, function(ret, err) {
                     // ;CREATE UNIQUE INDEX user_id_idx on addressList (user_id);
                     if (ret.status) { 
-                        // console.log(JSON.stringify(ret));
+                        // // // console.log(JSON.stringify(ret));
                         // alert('执行成功')
 
                     } else {
@@ -224,7 +224,7 @@
             sql: 'CREATE TABLE IF NOT EXISTS addressList_simplify(user_id int PRIMARY KEY NOT NULL, title varchar(255),img varchar(255), subTitle varchar(255), current_contact varchar(255), flag varchar(255), type int)'   
         }, function(ret, err){        
             if( ret.status ){
-                console.log('新建表成功')
+                // // console.log('新建表成功')
                 db.executeSql({
                     name: 'db_'+$api.getStorage('userToken'),
                     sql: 'CREATE INDEX IF NOT EXISTS type_idx ON addressList_simplify (type);'    
@@ -255,7 +255,7 @@
     }
     // 请求数据
     function requestData() {
-        // console.log('请求数据')
+        // // // console.log('请求数据')
         api.ajax({
             url: apiSite + '/contact/index',
             method: 'post',
@@ -266,7 +266,7 @@
                }
             }
        }, function(ret, err) {
-            console.log('请求数据2222222'+JSON.stringify(ret))
+            // // console.log('请求数据2222222'+JSON.stringify(ret))
             api.ajax({
                 url: apiSite + '/contact/friend',
                 method: 'post',
@@ -294,8 +294,8 @@
            
     }
     function disData (data, type) {
-        // console.log('disData'+type)
-        // console.log('disData'+data)
+        // // // console.log('disData'+type)
+        // // // console.log('disData'+data)
         if (data != '') {
             for (var i = 0; i < data.length; i++) {
                 // single_list
@@ -339,12 +339,12 @@
     }
     // 拼数据库语法字符串
     function sqlSyntax(data1, type) {
-        // console.log('数据库'+ type)
-        // console.log('数据库'+ data1)
+        // // // console.log('数据库'+ type)
+        // // // console.log('数据库'+ data1)
         for (var i = 0; i < data1.length; i++) {
             data1[i].flag = data1[i].litter[0];
         }
-        // console.log('数据库语法字符串:'+data1);
+        // // // console.log('数据库语法字符串:'+data1);
         var SQLName = 'db_'+$api.getStorage('userToken');
         var SQL = 'INSERT OR REPLACE INTO addressList(user_id,nickname,real_name,head_img_url,current_company,current_position,current_contact,current_degree, titleSize,title,img,flag,litter,type, sex, remark_nickname, remark_real_name, remark_head_img_url, remark_sex, remark_birthday, remark_hometown, remark_current_company, remark_current_position, remark_current_degree, remark_current_contact) VALUES '
         var SQL2 = 'INSERT OR REPLACE INTO addressList_simplify(user_id,title,img,subTitle,current_contact, flag,type) VALUES ';
@@ -384,7 +384,7 @@
             }
         SQL = SQL.substring(0,SQL.length-1) + ';'
         SQL2 = SQL2.substring(0,SQL2.length-1) + ';'
-        // console.log(SQL)
+        // // // console.log(SQL)
         db.executeSql({
             name: SQLName,
             sql: SQL2
@@ -395,7 +395,7 @@
                     sql: SQL
                 }, function(ret, err) {
                     if (ret.status) {
-                        console.log('执行语句正确'+JSON.stringify(ret));
+                        // // console.log('执行语句正确'+JSON.stringify(ret));
                         api.closeWin({
                             name: 'login_enroll1'
                         });
@@ -404,11 +404,11 @@
                         });
                         api.closeWin();
                     } else {
-                        console.log('执行语句错误:' + JSON.stringify(err))
+                        // // console.log('执行语句错误:' + JSON.stringify(err))
                     }
                 });
             } else {
-                console.log('执行语句错误:' + JSON.stringify(err))
+                // // console.log('执行语句错误:' + JSON.stringify(err))
             }
         });
     }

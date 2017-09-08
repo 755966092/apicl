@@ -122,7 +122,7 @@
             }
         }, function(ret, err) {
             if(ret) {
-                console.log("144::::::"+JSON.stringify(ret))
+                // // console.log("144::::::"+JSON.stringify(ret))
                 $api.val($api.byId('inputValue'), ret.data.info.info);
             } else {
                 alert(JSON.stringify(err))
@@ -193,7 +193,7 @@
                                 sql: 'UPDATE tb_remarks_other_contact SET info = "'+ ret.data.list[i].info +'" WHERE contact_id = ' + api.pageParam.obj.id    
                             }, function(ret, err){        
                                 if( ret.status ){
-                                    console.log( JSON.stringify( ret ) );
+                                    // // console.log( JSON.stringify( ret ) );
                                     api.sendEvent({
                                         name: 'addRemarkOtherContact'
                                     });
@@ -204,7 +204,7 @@
                         }
                     }
                 } else {
-                    console.log('334ret:'+JSON.stringify(ret))
+                    // // console.log('334ret:'+JSON.stringify(ret))
                     var sql = 'INSERT OR REPLACE INTO tb_remarks_other_contact(list_id,user_id,contact_id,info,type,sub_type) VALUES '
                     for (var i = 0; i < ret.data.list.length; i++) {
                         sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].contact_id  +'",'+api.pageParam.userId+','+ret.data.list[i].contact_id+',"'+ret.data.list[i].info+'",'+ret.data.list[i].type+','+ret.data.list[i].sub_type+'),'
@@ -214,8 +214,8 @@
                         name: SQLName,
                         sql: sql   
                     }, function(ret, err){  
-                        console.log('334ret:'+JSON.stringify(ret))
-                        console.log('335err:'+JSON.stringify(err))
+                        // // console.log('334ret:'+JSON.stringify(ret))
+                        // // console.log('335err:'+JSON.stringify(err))
                         api.sendEvent({
                             name: 'addRemarkOtherContact'
                         });
@@ -225,7 +225,7 @@
                                 sql: 'SELECT * FROM tb_remarks_other_contact WHERE user_id=' + api.pageParam.userId
                             }, function(ret, err){  
                                 if( ret.status ){
-                                    console.log('340:'+JSON.stringify(ret))
+                                    // // console.log('340:'+JSON.stringify(ret))
                                 }else{
                                     alert(JSON.stringify( err ) );
                                 }

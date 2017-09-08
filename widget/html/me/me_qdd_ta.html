@@ -294,12 +294,12 @@
             name: 'filterOrder'
         }, function(ret, err) {
             if (ret) {
-                console.log(JSON.stringify(ret))
+                // // console.log(JSON.stringify(ret))
                 if (ret.value) {
-                    console.log(1)
+                    // // console.log(1)
                     requireData(ret.value.type, ret.value.status, ret.value.sub_type);
                 } else {
-                    console.log(2)
+                    // // console.log(2)
                     requireData();
                 }
             } else {
@@ -343,7 +343,7 @@
         }, function(ret, err) {
             if(ret) {
                 if(ret.code == 200) {
-                    // console.log('ta:'+JSON.stringify(ret))
+                    // // // console.log('ta:'+JSON.stringify(ret))
                     // 停止下拉刷新
                     api.refreshHeaderLoadDone();
                         $api.css($api.dom('.loading'), 'display:none'); 
@@ -376,12 +376,12 @@
                             for(key in ret.data.list[i].button) {
                                 for(key1 in ret.data.list[i].button[key]) {
                                     if (ret.data.list[i].button[key].is_show == true){
-                                        // console.log(key)
+                                        // // // console.log(key)
                                         // key 即是要显示的按钮
                                         ret.data.list[i].button[key].key = key;
                                         ret.data.list[i].button.buttonArr.push(ret.data.list[i].button[key])
                                         break;
-                                        // console.log(key1 +':::'+ret.data.list[i].button[key][key1])
+                                        // // // console.log(key1 +':::'+ret.data.list[i].button[key][key1])
                                     }
                                 }
                             } 
@@ -469,11 +469,11 @@
         }
         var text = $api.attr(ele, 'data-val');
         if (text == 'lx') {
-            console.log(1)
+            // // console.log(1)
             $api.css($api.dom('.lx'), 'display:block');
             $api.css($api.dom('.zt'), 'display:none');
         } else {
-            console.log(2)
+            // // console.log(2)
             $api.css($api.dom('.lx'), 'display:none');
             $api.css($api.dom('.zt'), 'display:block');
         }
@@ -677,13 +677,13 @@
                     if (ret) {
                         if (ret.eventType == 'ok') {
                             $api.css($api.dom('.loading'), 'display: block');
-                            console.log(JSON.stringify(ret))
+                            // // console.log(JSON.stringify(ret))
                             obj = {
                                 token: $api.getStorage('userToken'),
                                 order_id: id,
                                 reason: ret.selectedInfo[0].id
                             }
-                            console.log('obj::'+JSON.stringify(obj))
+                            // // console.log('obj::'+JSON.stringify(obj))
                             ajaxOperate(obj, url)
                         }
                     } else {

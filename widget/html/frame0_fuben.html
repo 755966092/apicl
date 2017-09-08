@@ -271,7 +271,7 @@
     var chatMessage;
      apiready = function() {
         moduleInit()
-        // console.log($api.getStorage('userToken'))
+        // // // console.log($api.getStorage('userToken'))
         // 监听打开加好友窗口  
         monitorEvent();
         // 缓存个人信息
@@ -279,12 +279,12 @@
         // chatMessage = $api.getStorage('chatMessage');
         // if (chatMessage) {
         //     getData(chatMessage)
-        //     console.log('使用缓存')
+        //     // // console.log('使用缓存')
         //     historyNews();
         // } else {
         //     // 历史消息
         //     historyNews(cacheFieldName);    
-        //     console.log('网络获取')
+        //     // // console.log('网络获取')
         // }
         // 滚动到底部触发的事件    
         // scrollBotton();
@@ -322,7 +322,7 @@
         var e = window.event;
         startX = e.touches[0].pageX;
         startY = e.touches[0].pageY;
-        // console.log(startY)
+        // // // console.log(startY)
     };   
     function gtouchmove(){   
         var e = window.event;
@@ -355,7 +355,7 @@
             }, function(ret, err) {
                 if (ret) {
                     $api.setStorage('UserCenter', ret.data);
-                    // console.log(JSON.stringify(ret))
+                    // // // console.log(JSON.stringify(ret))
                     userName = ret.data.info.nickname,
                     headImg = ret.data.info.head_img_url,
                     sex = ret.data.info.sex,
@@ -386,7 +386,7 @@
     }
 
     function contrastCache(cacheFieldName,  fn) {
-        console.log('xuanran yemian')
+        // // console.log('xuanran yemian')
         var cacheFieldName = $api.getStorage(cacheFieldName);
          if (cacheFieldName) {
             getData(cacheFieldName)
@@ -420,7 +420,7 @@
     }
     // 历史消息
     function historyNews(cacheFieldName){
-        console.log('历史消息列表')
+        // // console.log('历史消息列表')
         // 历史消息列表
         rong.getConversationList(function(ret, err) {
                 var targetRongIdArr = [];
@@ -442,7 +442,7 @@
             name: 'historNews'
         }, function(ret, err) {
             if (ret) {
-                console.log('获取历史消息'+JSON.stringify(ret))
+                // // console.log('获取历史消息'+JSON.stringify(ret))
                 var targetRongIdArr = [];
                 for (var i = 0; i < ret.value.data.length; i++) {
                     ret.value.data[i].time = changeTime(ret.value.data[i].receivedTime);
@@ -474,7 +474,7 @@
            }
        }, function(ret, err) {
             if(ret) {
-                // console.log('456:::'+JSON.stringify(ret))
+                // // // console.log('456:::'+JSON.stringify(ret))
                 for (var i = 0; i < data.length; i++) {
                     data[i].url = ret.data.list[data[i].targetId].head_img_url;
                     data[i].nickname = ret.data.list[data[i].targetId].nickname;
@@ -491,12 +491,12 @@
                         if ($api.strToJson(data[i].latestMessage.extra).type === 4) {
                             if ($api.getStorage(data[i].latestMessage.extra) == 'value') {
                                 // 以添加
-                                // console.log('已加入本地酷')
+                                // // // console.log('已加入本地酷')
                             } else {
                                 // 未添加
                                 $api.setStorage(data[i].latestMessage.extra, 'value');
                                 // 一度人脉好友执行
-                                // console.log('一度人脉好友执行')
+                                // // // console.log('一度人脉好友执行')
                                 api.execScript({
                                     name: 'listWin_txl_listWin',
                                     frameName: 'txl_listWin_frame',
@@ -509,7 +509,7 @@
                 // 网络数据有更新 刷新数据 从新缓存数据
                 if (cacheFieldName !== data) {
                     $api.setStorage('chatMessage', data);
-                    // console.log('463:::'+JSON.stringify(data))
+                    // // // console.log('463:::'+JSON.stringify(data))
                     getData(data);
                 } 
                 

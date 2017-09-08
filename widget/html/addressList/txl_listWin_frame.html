@@ -278,7 +278,7 @@
         }, function(ret, err) {
             if (ret) {
                 apiPageParamFlag = ret.value.flag
-                console.log(JSON.stringify(ret));
+                // // console.log(JSON.stringify(ret));
                 query(apiPageParamFlag);
             } else {
                 alert(JSON.stringify(err));
@@ -294,12 +294,12 @@
         //     //     }, function(ret, err){        
         //     //         if( ret.status ){
         //     //             if (ret.data.length != 0) {
-        //     //                 console.log('有数据')
-        //     //                 console.log(apiPageParamFlag)
+        //     //                 // // console.log('有数据')
+        //     //                 // // console.log(apiPageParamFlag)
         //     //                 dakai($api.strToJson(ret.data[0].str))
         //     //             } else {
-        //     //                 console.log('无数据')
-        //     //                 console.log(apiPageParamFlag)
+        //     //                 // // console.log('无数据')
+        //     //                 // // console.log(apiPageParamFlag)
         //     //                 query(parseInt(apiPageParamFlag));
         //     //             }
         //     //         }else{
@@ -314,12 +314,12 @@
         //         }, function(ret, err){        
         //             if( ret.status ){
         //                 if (ret.data.length != 0) {
-        //                     console.log('有数据')
-        //                     console.log(apiPageParamFlag)
+        //                     // // console.log('有数据')
+        //                     // // console.log(apiPageParamFlag)
         //                     dakai($api.strToJson(ret.data[0].str))
         //                 } else {
-        //                     console.log('无数据')
-        //                     console.log(apiPageParamFlag)
+        //                     // // console.log('无数据')
+        //                     // // console.log(apiPageParamFlag)
         //                     query();
         //                 }
         //             }else{
@@ -340,10 +340,10 @@
                 sql: sqlStatement,
             }, function(ret, err){        
                 time2 = new Date().getTime();
-                console.log('查询时间:'+(time2 - time))
+                // // console.log('查询时间:'+(time2 - time))
                 if( ret.status ){
                     if (ret.data.length != 0) {
-                        console.log('有数据')
+                        // // console.log('有数据')
                         dakai($api.strToJson(ret.data[0].str))
                         if (apiPageParamFlag) {
                             query(parseInt(apiPageParamFlag), ret.data[0].str);
@@ -351,8 +351,8 @@
                             query(0,ret.data[0].str);
                         }
                     } else {
-                        console.log('无数据')
-                        console.log(apiPageParamFlag)
+                        // // console.log('无数据')
+                        // // console.log(apiPageParamFlag)
                         if (apiPageParamFlag) {
                             query(parseInt(apiPageParamFlag));
                         } else {
@@ -379,11 +379,11 @@
         }, function(ret, err){        
             if( ret.status ){
                 if (ret.data.length != 0) {
-                    console.log('有数据')
+                    // // console.log('有数据')
                     dakai($api.strToJson(ret.data[0].str))
                 } else {
-                    console.log('无数据')
-                    console.log(apiPageParamFlag)
+                    // // console.log('无数据')
+                    // // console.log(apiPageParamFlag)
                     if (apiPageParamFlag) {
                         query(parseInt(apiPageParamFlag));
                     } else {
@@ -406,7 +406,7 @@
                        }
                 }
             }, function(retFriend, err) {
-                console.log('400:'+JSON.stringify(retFriend))
+                // // console.log('400:'+JSON.stringify(retFriend))
                 if(retFriend) {
                     db.selectSql({
                         name: SQLName,
@@ -416,10 +416,10 @@
                             if (retSql.status) {
                                 // 网上相识好友和数据库一样多 不更新数据库
                                 if (retSql.data.length == retFriend.data.list.length) {
-                                    console.log('不更新')
+                                    // // console.log('不更新')
                                     query(4);
                                 } else {
-                                    console.log('更新数据')
+                                    // // console.log('更新数据')
                                     delSqlType4(retFriend.data.list, 4);
                                     
                                 }
@@ -452,7 +452,7 @@
     }
      // 处理数据
     function disData (data, type) {
-        // console.log('disData'+JSON.stringify(data))
+        // // // console.log('disData'+JSON.stringify(data))
         if (data != '' ) {
             for (var i = 0; i < data.length; i++) {
                 // single_list
@@ -497,7 +497,7 @@
         for (var i = 0; i < data1.length; i++) {
             data1[i].flag = data1[i].litter[0];
         }
-        // console.log('数据库语法字符串:'+data1);
+        // // // console.log('数据库语法字符串:'+data1);
         var SQLName = 'db_'+$api.getStorage('userToken');
          var SQL = 'INSERT OR REPLACE INTO addressList(user_id,nickname,head_img_url,current_company,current_position,current_contact,current_degree, titleSize,title,img,flag,litter,type, sex, remark_nickname, remark_real_name, remark_head_img_url, remark_sex, remark_birthday, remark_hometown, remark_current_company, remark_current_position, remark_current_degree, remark_current_contact) VALUES '
             var SQL2 = 'INSERT OR REPLACE INTO addressList_simplify(user_id,title,img,subTitle,current_contact, flag,type) VALUES ';
@@ -543,16 +543,16 @@
         //      sql: 'CREATE UNIQUE INDEX IF NOT EXISTS user_id_idx ON addressList (user_id)'    
         //  }, function(ret, err){        
         //      if( ret.status ){
-                // console.log( JSON.stringify( ret ) );
+                // // // console.log( JSON.stringify( ret ) );
                 db.executeSql({
                     name: SQLName,
                     sql: SQL2
                 }, function(ret, err) {
                     if (ret.status) {
                         query(4);
-                        console.log('执行语句正确'+JSON.stringify(ret));
+                        // // console.log('执行语句正确'+JSON.stringify(ret));
                     } else {
-                        console.log('执行语句错误:' + JSON.stringify(err))
+                        // // console.log('执行语句错误:' + JSON.stringify(err))
                     }
                 });
                 db.executeSql({
@@ -560,7 +560,7 @@
                     sql: SQL   
                 }, function(ret, err){        
                     if( ret.status ){
-                        console.log( '插入数据'+JSON.stringify( ret ) );
+                        // // console.log( '插入数据'+JSON.stringify( ret ) );
                     }else{
                         alert( '插入数据:' + JSON.stringify( err ) );
                     }
@@ -596,7 +596,7 @@
                         SQL += '('+ret.data.list[i].user_id+',"'+ ret.data.list[i].nickname +'","'+ ret.data.list[i].head_img_url +'","'+ (ret.data.list[i].current_company || "") +'","'+ (ret.data.list[i].current_position || "") +'","'+ (ret.data.list[i].current_degree || "") +'","'+ 15 +'","'+ ret.data.list[i].nickname +'","'+ ret.data.list[i].head_img_url+'","'+ litter[0] +'","'+ litter +'","'+ 4 +'","'+ (ret.data.list[i].sex || 1) +'","'+ (ret.data.list[i].remark_nickname || "") +'","'+ (ret.data.list[i].remark_real_name || "") +'","'+ (ret.data.list[i].remark_head_img_url || "") +'","'+ (ret.data.list[i].remark_sex || "") +'","'+ (ret.data.list[i].remark_birthday || "") +'","'+ (ret.data.list[i].remark_hometown || "") +'","'+ (ret.data.list[i].remark_current_company || "") +'","'+ (ret.data.list[i].remark_current_position || "") +'","'+ (ret.data.list[i].remark_current_degree || "") +'","'+ (ret.data.list[i].remark_current_contact || "") +'"),';
                     }
                 SQL = SQL.substring(0,SQL.length-1)
-                // console.log(SQL+'000')
+                // // // console.log(SQL+'000')
                 db.executeSql({
                     name: SQLName,
                     sql: SQL
@@ -643,7 +643,7 @@
             }
         }, function(ret, err) {
             if(ret) {
-                console.log(JSON.stringify(ret))
+                // // console.log(JSON.stringify(ret))
             } else {
                 alert(JSON.stringify(err.msg))
             }
@@ -730,7 +730,7 @@
                 dakai(paixv(ret.data))
                 // reloadData(paixv(ret.data))
             } else {
-                console.log(JSON.stringify(err));
+                // // console.log(JSON.stringify(err));
             }
         });
     }
@@ -744,16 +744,16 @@
         } else {
             SQLsentence = 'SELECT * FROM addressList_simplify WHERE type IN (1,2,3) order by flag asc';
         }
-        // console.log('308:::'+SQLsentence)
+        // // // console.log('308:::'+SQLsentence)
         // 查询数据库
         db.selectSql({
             name: SQLName,
             sql: SQLsentence
         }, function(ret, err) {
-            // console.log('ret:'+JSON.stringify(ret))
-            // console.log('err:'+JSON.stringify(err))
+            // // // console.log('ret:'+JSON.stringify(ret))
+            // // // console.log('err:'+JSON.stringify(err))
             if (ret.status) {
-                // console.log('查询数据库'+JSON.stringify(ret))
+                // // // console.log('查询数据库'+JSON.stringify(ret))
                 $api.css($api.dom('.loading'), 'display:none');
                 for (var i = 0; i < $api.domAll('p').length; i++) {
                     $api.css($api.domAll('p.nodata')[i], 'display:none');
@@ -761,13 +761,13 @@
                 if (ret.data.length == 0 && condition === 4) {
                     $api.css($api.dom('p.no4'), 'display:block');
                 } else if(ret.data.length == 0 && condition===1) {
-                    // console.log(2222 +'--'+ condition)
+                    // // // console.log(2222 +'--'+ condition)
                     $api.css($api.dom('p.no1'), 'display:block');
                 }else if(ret.data.length == 0 && condition===2) {
-                    // console.log(333 +'--'+ condition)
+                    // // // console.log(333 +'--'+ condition)
                     $api.css($api.dom('p.no2'), 'display:block');
                 }else if(ret.data.length == 0 && condition===3) {
-                    // console.log(444 +'--'+ condition)
+                    // // // console.log(444 +'--'+ condition)
                     $api.css($api.dom('p.no3'), 'display:block');
                 } else if(ret.data.length == 0){
                     $api.css($api.dom('p.no5'), 'display:block');
@@ -775,17 +775,17 @@
                     var contactLevelOne = paixv(ret.data);
                     if (apiPageParamFlag) {
                             if (rawData == $api.jsonToStr(contactLevelOne)) {
-                                console.log('数据没更新')
+                                // // console.log('数据没更新')
                             } else {
-                                console.log('数据更新')
+                                // // console.log('数据更新')
                                 dakai(contactLevelOne)
                                 // insertOneSql(apiPageParamFlag,contactLevelOne)
                             }
                     } else {
                             if (rawData == $api.jsonToStr(contactLevelOne)) {
-                                console.log('数据没更新')
+                                // // console.log('数据没更新')
                             } else {
-                                console.log('数据更新')
+                                // // console.log('数据更新')
                                 dakai(contactLevelOne)
                                 // insertOneSql(5,contactLevelOne)
                             }
@@ -794,7 +794,7 @@
                     }
                 }
             } else {
-                console.log(JSON.stringify(err));
+                // // console.log(JSON.stringify(err));
             }
         });
     }
@@ -805,7 +805,7 @@
             sql: "INSERT OR REPLACE INTO addressList_one (type, str) VALUES ("+ type +",'"+ str +"')"    
         }, function(ret, err){        
             if( ret.status ){
-                console.log('缓存成功')
+                // // console.log('缓存成功')
             }else{
                 alert('756:'+ JSON.stringify( err ) );
             }
@@ -886,11 +886,11 @@
         var dataArr = [];
         var dataKeyArr = [];
         for(key in data1) {
-            // console.log(data1[key])
+            // // // console.log(data1[key])
             dataArr = dataArr.concat(data1[key]);
             dataKeyArr.push(key)
         }
-        // console.log(JSON.stringify(dataArr))
+        // // // console.log(JSON.stringify(dataArr))
         var rightObj;
         if (apiPageParamFlag) {
             rightObj = [];

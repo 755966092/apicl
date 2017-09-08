@@ -202,7 +202,7 @@
 <script type="text/javascript">
     var selectedObj=0,parameter,str,flag,categoryData;
     apiready = function(){
-        console.log(JSON.stringify(api.pageParam))
+        // // console.log(JSON.stringify(api.pageParam))
         fnInit();
         // 供求不同的筛选
         if (api.pageParam.type == 0) {
@@ -227,7 +227,7 @@
                 selectedObj = ret.value.selectedArr;
                 // selectedObj[val][0].str = ret.value.schoolName;
                 str = ret.value.schoolName;
-                console.log('第一页面:'+JSON.stringify(selectedObj))
+                // // console.log('第一页面:'+JSON.stringify(selectedObj))
             } else {
                 alert(JSON.stringify(err));
             }
@@ -262,26 +262,26 @@
             $api.text($api.dom('.selText'), api.pageParam.selectedObj[0].str);
             var id = '';
             for (var i = 0; i < api.pageParam.selectedObj.length; i++) {
-                // console.log('循环参数')
+                // // // console.log('循环参数')
                 for (var j = 0; j < categoryData.length; j++) {
-                    // console.log('循环数据')
-                    // console.log('循环数据1' + JSON.stringify(api.pageParam.selectedObj[i].title))
-                    // console.log('循环数据2' + JSON.stringify(categoryData[j].name))
+                    // // // console.log('循环数据')
+                    // // // console.log('循环数据1' + JSON.stringify(api.pageParam.selectedObj[i].title))
+                    // // // console.log('循环数据2' + JSON.stringify(categoryData[j].name))
                     if (api.pageParam.selectedObj[i].title == categoryData[j].name) {
                         id += categoryData[j].category_id +',';
                     }
                 }
             }
             id = id.substring(0,id.length-1);
-            console.log(id)
+            // // console.log(id)
             $api.attr($api.dom('.no2Icon'), 'data-category',id);
                    
            
         }
 
-        console.log('赛选:::'+JSON.stringify(selectedObj))
+        // // console.log('赛选:::'+JSON.stringify(selectedObj))
         parameter = api.pageParam.parameter
-        console.log('parameter:::'+JSON.stringify(parameter))
+        // // console.log('parameter:::'+JSON.stringify(parameter))
         if (api.pageParam.parameter != 0) {
             for (var i = 0; i < $api.domAll('span[data-type]').length; i++) {
                 $api.removeCls($api.domAll('span[data-type]')[i], 'sel');
@@ -383,12 +383,12 @@
                 break;
 
             }
-            console.log('发送事件:::'+JSON.stringify(parameter))
+            // // console.log('发送事件:::'+JSON.stringify(parameter))
             // 发送事件, 刷新筛选结果
             // 0 供赛选
             // 1 求赛选
             if (api.pageParam.type == 0) {
-                console.log('发送0')
+                // // console.log('发送0')
                 api.sendEvent({
                     name: 'screeningResults',
                     extra: {
@@ -397,7 +397,7 @@
                     }
                 });
             } else {
-                console.log('发送1')
+                // // console.log('发送1')
                 api.sendEvent({
                     name: 'screeningResults1',
                     extra: {

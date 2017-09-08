@@ -200,7 +200,7 @@
             }
         }, function(ret, err) {
             if (ret) {
-                console.log(JSON.stringify(ret))
+                // // console.log(JSON.stringify(ret))
                 if (ret.code == 200) {
                     ret.data.info.end_date = ret.data.info.end_date == '0000-00-00'?'至今':ret.data.info.end_date;
                     $api.val($api.byId('company_name'), ret.data.info.name);    
@@ -275,7 +275,7 @@
             }
         }, function(ret, err) {
             if(ret) {
-                console.log('334ret:'+JSON.stringify(ret))
+                // // console.log('334ret:'+JSON.stringify(ret))
                 var sql = 'INSERT OR REPLACE INTO tb_remarks_project(list_id,user_id,project_id,name,url,role, description, achievement, start_date, end_date) VALUES '
                 for (var i = 0; i < ret.data.list.length; i++) {
                     sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].project_id  +'",'+api.pageParam.userId+','+ret.data.list[i].project_id+',"'+ret.data.list[i].name+'","'+ret.data.list[i].url+'","'+ret.data.list[i].role+'","'+ret.data.list[i].description+'","'+ret.data.list[i].achievement+'","'+ret.data.list[i].start_date+'","'+ret.data.list[i].end_date+'"),'
@@ -285,8 +285,8 @@
                     name: SQLName,
                     sql: sql   
                 }, function(ret, err){  
-                    console.log('334ret:'+JSON.stringify(ret))
-                    console.log('335err:'+JSON.stringify(err))
+                    // // console.log('334ret:'+JSON.stringify(ret))
+                    // // console.log('335err:'+JSON.stringify(err))
                     api.sendEvent({
                         name: '_addStudy'
                     });
@@ -296,7 +296,7 @@
                             sql: 'SELECT * FROM tb_remarks_project WHERE user_id=' + api.pageParam.userId
                         }, function(ret, err){  
                             if( ret.status ){
-                                console.log('340:'+JSON.stringify(ret))
+                                // // console.log('340:'+JSON.stringify(ret))
                             }else{
                                 alert(JSON.stringify( err ) );
                             }

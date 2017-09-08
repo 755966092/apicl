@@ -296,7 +296,7 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
         }, function(ret, err) {
             if (ret) {
                 $api.text($api.byId('position'), ret.value.address);
-                console.log(JSON.stringify(ret))
+                // // console.log(JSON.stringify(ret))
                 province = ret.value.province;
                 city = ret.value.city;
                 address = ret.value.address;
@@ -318,7 +318,7 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
     // 选择圈子
     function selCircle(ele) {
         var circleId = $api.attr($api.byId('circleName'), 'data-circleId');
-        console.log(circleId)
+        // // console.log(circleId)
         api.openWin({
             name: 'find_publishpro_win_selCircle',
             url: './find_publishpro_win_selCircle.html',
@@ -540,9 +540,9 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
     // 获取位置
     function getPos() {
         if (api.systemType == 'ios') {
-                console.log(111111111111111111)
+                // // console.log(111111111111111111)
             bMap.initMapSDK(function(ret,err) {
-                console.log(222222222222222)
+                // // console.log(222222222222222)
                 if (ret.status) {
                    getLocation();
                 } else {
@@ -556,14 +556,14 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
     }
     // 获取经纬度
     function getLocation() {
-        console.log(333333333333)
+        // // console.log(333333333333)
         bMap.getLocation({
             accuracy: '100m',
             autoStop: true,
             filter: 1
         }, function(ret, err) {
             if (ret.status) {
-                console.log('540540540'+JSON.stringify(ret))
+                // // console.log('540540540'+JSON.stringify(ret))
                 getCoords(ret.lon, ret.lat)
             } else {
                 alert(err);
@@ -577,7 +577,7 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
             lat: lat
         }, function(ret, err) {
             if (ret.status) {
-                console.log(ret.address)
+                // // console.log(ret.address)
                 $api.text($api.dom('.position'), ret.address);
                 province = ret.province//省 ret.province
                 city = ret.city//市 ret.city
@@ -655,7 +655,7 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
                     // getData(base64Data);
                 } else if (ret.oper == "progress") {
                     //上传过程中获取进度数据
-                    console.log(ret.percent);
+                    // // console.log(ret.percent);
                 }
             }
         });

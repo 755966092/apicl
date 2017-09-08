@@ -394,7 +394,7 @@
     apiready = function(){
         moduleInit();
         classify()
-        console.log('369:::'+JSON.stringify(api.pageParam))
+        // // console.log('369:::'+JSON.stringify(api.pageParam))
         if (api.pageParam.demand_id) {
             $api.text($api.dom('.btn'), '确定');
             $api.css($api.dom('.btn'), 'display: block');
@@ -423,7 +423,7 @@
         }, function(ret, err) {
             if (ret) {
                 $api.text($api.byId('position'), ret.value.name+'-'+ret.value.address);
-                console.log(JSON.stringify(ret))
+                // // console.log(JSON.stringify(ret))
                 province = ret.value.province;
                 city = ret.value.city;
                 address = ret.value.address;
@@ -439,7 +439,7 @@
             name: 'selCompany'
         }, function(ret, err) {
             if (ret) {
-                console.log(JSON.stringify(ret))
+                // // console.log(JSON.stringify(ret))
                 $api.text($api.byId('company_name'), ret.value.company_name);
                 $api.attr($api.byId('company_name'), 'data-id', ret.value.company_id);
             } else {
@@ -581,12 +581,12 @@
             // targetHeight: 100,
             saveToPhotoAlbum: false
         }, function(ret, err) {
-            // console.log(JSON.stringify(ret))
+            // // // console.log(JSON.stringify(ret))
             if (ret) {
                 if (ret.data) {
                     base64Data.img.push(ret.data);
                     getData(base64Data);
-                    console.log(JSON.stringify(base64Data))
+                    // // console.log(JSON.stringify(base64Data))
                     $api.css($api.dom('.loading'), 'display: block');
                    //  var baseUrl = 'img.iinnet.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com
                     var obj = api.require('qiniuUpfile');
@@ -601,7 +601,7 @@
                                 // duibi($api.domAll('.imgpage').length,imgArr.length)
                             } else if (retUpfile.oper == "progress") {
                                 //上传过程中获取进度数据
-                                // console.log(retUpfile.percent);
+                                // // // console.log(retUpfile.percent);
                             }
                         }
                     });
@@ -628,7 +628,7 @@
     var releaseFlag = 0;
     function duibi(a,b) {
         if (a == b) {
-            // console.log(b)
+            // // // console.log(b)
             releaseFlag = 1;
         } 
     }
@@ -649,7 +649,7 @@
                             duibi($api.domAll('.imgpage').length,imgArr)
                         } else if (ret.oper == "progress") {
                             //上传过程中获取进度数据
-                            // console.log(ret.percent);
+                            // // // console.log(ret.percent);
                         }
                     }
                 });
@@ -1061,7 +1061,7 @@
         }, function(ret, err) {
             if(ret) {
                 releaseFlag = 1;
-                console.log(JSON.stringify(ret))
+                // // console.log(JSON.stringify(ret))
                 imgArr = eval(ret.data.info.image_json)
                 editSupply(ret.data)
             } else {
