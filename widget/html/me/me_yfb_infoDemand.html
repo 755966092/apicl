@@ -324,12 +324,12 @@
             background-position: center bottom;
         }
         footer i.sus {
-            background: url(../../image/icon_supply/icon_sus.png)no-repeat;
+            background: url(../../image/icon_supply/icon_pause.png)no-repeat;
             background-size: .4rem .4rem;
             background-position: center bottom;
         }
         footer i.sus_2 {
-            background: url(../../image/icon_supply/icon_sus_1.png)no-repeat;
+            background: url(../../image/icon_supply/icon_pause1.png)no-repeat;
             background-size: .4rem .4rem;
             background-position: center bottom;
         }
@@ -400,6 +400,7 @@
                         <span class="typeIcon">{{=it.info.type}}</span>
                         <p>{{=it.info.title}}</p>
                     </div>
+                    <!-- 分享按钮 -->
                     <!-- <div class="shareIcon"></div> -->
                 </div>
                 <div class="price flex-def flex-zBetween flex-zLeftRight">
@@ -637,10 +638,12 @@
                 // ret.data.info.status = statusArr[ret.data.info.status-1]
                 var eleHtml = '';
                 for (var i = 0; i < ret.data.info.image_json.length; i++) {
-                    eleHtml += '<img src="' + ret.data.info.image_json[i] +
+                    if(i<5) {
+                        eleHtml += '<img src="' + ret.data.info.image_json[i] +
                         '?imageView2/1/w/750/h/436/format/jpg/q/100|imageslim" class="swiper-slide">'
-                    ret.data.info.image_json[i] = ret.data.info.image_json[i] +
+                        ret.data.info.image_json[i] = ret.data.info.image_json[i] +
                         '?imageMogr2/auto-orient/thumbnail/710x/blur/1x0/quality/100|imageslim'
+                    }
                 }
                 console.log(eleHtml)
                 $api.css($api.dom('.loading'), 'display:none');

@@ -362,6 +362,11 @@
             background-size: .4rem .4rem;
             background-position: center bottom;
         }
+        footer i.pause {
+            background: url(../../image/icon_supply/icon_pause.png)no-repeat;
+            background-size: .4rem .4rem;
+            background-position: center bottom;
+        }
 
 
         
@@ -432,7 +437,8 @@
                         <!-- <span class="typeIcon">000</span> -->
                         <p>{{=it.info.title}}</p>
                     </div>
-                    <div class="shareIcon"></div>
+                    <!-- 分享按钮 -->
+                    <!-- <div class="shareIcon"></div> -->
                 </div>
                 <div class="price flex-def flex-zBetween flex-zLeftRight">
                     <div class="priceText">
@@ -517,7 +523,11 @@
         </div>
         <footer>
             <span ontouchstart="handleBtn(this,0)">
+                {{?it.info.status == '开启'}}
                 <i class="sus"></i>{{=it.info.status}}
+                {{??}}
+                <i class="pause"></i>{{=it.info.status}}
+                {{?}}
             </span>
             <span ontouchstart="handleBtn(this,1)">
                 <i></i>
@@ -598,10 +608,12 @@
                     .status === 2 ? '开启' : '已删除');
                 var eleHtml = '';
                 for (var i = 0; i < ret.data.info.image_json.length; i++) {
-                    eleHtml += '<img src="' + ret.data.info.image_json[i] +
+                    if (i<5) {
+                        eleHtml += '<img src="' + ret.data.info.image_json[i] +
                         '?imageView2/1/w/750/h/436/format/jpg/q/100|imageslim" class="swiper-slide">'
-                    ret.data.info.image_json[i] = ret.data.info.image_json[i] +
+                        ret.data.info.image_json[i] = ret.data.info.image_json[i] +
                         '?imageMogr2/auto-orient/thumbnail/710x/blur/1x0/quality/100|imageslim'
+                    }
                 }
                 console.log(eleHtml)
                 $api.css($api.dom('.loading'), 'display:none');
@@ -649,10 +661,12 @@
         }, function (ret, err) {
             if (ret) {
                 if (ret.code == 200) {
+                    console.log(JSON.stringify(ret));
+                    
                     if ($api.text(ele) === '暂停') {
                         $api.html(ele, '<i class="sus"></i>开启');
                     } else {
-                        $api.html(ele, '<i class="sus"></i>暂停');
+                        $api.html(ele, '<i class="pause"></i>暂停');
                     }
                     api.sendEvent({
                         name: 'editSupplyAfter'
