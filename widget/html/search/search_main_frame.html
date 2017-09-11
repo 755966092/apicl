@@ -338,12 +338,9 @@
                     name: 'searchSql'
                 }, function(ret, err){
                     if (ret.value) {
-                        console.log('有数据');
-                        
                         user = ret;
                         renderPage(ret)
                     } else {
-                        console.log('无数据');
                         // 搜索结果为空的时候清空页面
                         getData([]);
                     }
@@ -361,10 +358,8 @@
                 ret.value.user.push(ret.value.keyword)
                 for (var i = 0; i < ret.value.user.length; i++) {
                     if(i<3) {
-                        console.log(JSON.stringify(ret.value.user[i]));
-                        
                         var element = ret.value.user[i];
-                        var reg = new RegExp(ret.value.keyword, 'g');
+                        var reg = new RegExp(ret.value.keyword, '');
                         // 替换搜索关键字
                         if(element.remark_nickname) {
                             element.remark_nickname = element.remark_nickname.replace(reg, '<span class="colorFont">'+ ret.value.keyword +'</span>')
