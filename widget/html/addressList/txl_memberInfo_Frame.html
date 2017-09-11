@@ -1289,6 +1289,16 @@
     function relationship(relationship_levelType,status) {
         // // // console.log(relationship_levelType)
         var btn = $api.byId('btn');
+        if(status == 1) {
+            sweitchData1(relationship_levelType)
+            $api.text(btn, '加为好友');
+        } else {
+            sweitchData(relationship_levelType)
+            $api.css($api.byId('btn'), 'display: none');
+        }
+    }
+    function sweitchData1(relationship_levelType) {
+        var btn = $api.byId('btn');
         switch (relationship_levelType) {
             case 1:
                 $api.text(relationship_level, '自己');
@@ -1307,12 +1317,12 @@
                 $api.text(relationship_level, '一度人脉熟识好友');
                 break;
             case 3:
-                if(status == 1) {
+                // if(status == 1) {
                     $api.text(relationship_level, '一度人脉相识好友');
-                } else {
-                    $api.css($api.byId('btn'), 'display: none');
-                    $api.text(relationship_level, '一度人脉尚未加入');
-                }
+                // } else {
+                    // $api.css($api.byId('btn'), 'display: none');
+                    // $api.text(relationship_level, '一度人脉尚未加入');
+                // }
                 // 1 相识
                 // -1 一度人脉尚未加入
                 break;
@@ -1335,9 +1345,66 @@
                 $api.text(relationship_level, '六度人脉' + compareRelation(status));
                 break;
             case 10:
-                $api.text(relationship_level, '无任何关系');
-                $api.text(btn, '加为好友');
+                // $api.text(relationship_level, '无任何关系');
+                // if(status == 1) {
+                    $api.text(btn, '加为好友');
+                    $api.text(relationship_level, '无任何关系');
+                // } else {
+                //     $api.css($api.byId('btn'), 'display: none');
+                //     $api.text(relationship_level, '无任何关系');
+                // }
                 break;
+        }
+    }
+    function sweitchData(relationship_levelType) {
+        var btn = $api.byId('btn');
+        $api.css($api.byId('btn'), 'display: none');
+        switch (relationship_levelType) {
+            case 1:
+                $api.text(relationship_level, '自己');
+                $api.css(btn, 'display: none');
+                for (var i = 0; i < $api.domAll('ul li .icon').length; i++) {
+                    $api.css($api.domAll('ul li .icon')[i], 'display: none');
+                }
+                $api.css($api.dom('.title .icon'), 'display: none');
+                $api.css($api.dom('.shadow'), 'display:block');
+                // 右上角三个点
+                api.sendEvent({
+                    name: 'oneselfPage'
+                });
+                break;
+            case 2:
+                $api.text(relationship_level, '一度人脉熟识好友');
+                break;
+            case 3:
+                    
+                    $api.text(relationship_level, '一度人脉尚未加入');
+                // 1 相识
+                // -1 一度人脉尚未加入
+                break;
+            case 4:
+                $api.text(relationship_level, '初识好友');
+                break;
+            case 5:
+                $api.text(relationship_level, '二度人脉' + compareRelation(status));
+                break;
+            case 6:
+                $api.text(relationship_level, '三度人脉' + compareRelation(status));
+                break;
+            case 7:
+                $api.text(relationship_level, '四度人脉' + compareRelation(status));
+                break;
+            case 8:
+                $api.text(relationship_level, '五度人脉' + compareRelation(status));
+                break;
+            case 9:
+                $api.text(relationship_level, '六度人脉' + compareRelation(status));
+                break;
+            case 10:
+                // $api.text(relationship_level, '无任何关系');
+                $api.css($api.byId('btn'), 'display: none');
+                $api.text(relationship_level, '无任何关系');
+                break;ß
         }
     }
     function compareRelation(status) {
