@@ -48,7 +48,7 @@
         <div class="top ">
             <div class="wrap flex-def flex-cCenter">
                 <span tapmode onclick="api.closeWin()" class="callbackBtn"></span>
-                <input class="flex-item" type="text" oninput="changeInput(this)">
+                <input class="flex-item" type="text" disabled="true" oninput="changeInput(this)">
                 <span class="flagText" tapmodu onclick="search(this)">取消</span>
             </div>
         </div>
@@ -66,8 +66,8 @@
                 });
                 pageInit();
                 api.openFrame({
-                    name: 'search_main_more_frame',
-                    url: './search_main_more_frame.html',
+                    name: 'search_main_web_frame',
+                    url: './search_main_web_frame.html',
                     bounces: false,
                     rect: {
                         x: 0,
@@ -80,29 +80,41 @@
                     }
                 });
             }
+          
             function pageInit() {
                 $api.fixStatusBar($api.dom('.top'));
                 headerH = $api.offset($api.dom('.top')).h;
             }
             function changeInput(ele) {
                 var val = $api.val(ele);
+                console.log(val)
                 searchSql(val)
             }
             function searchSql(keyword) {
-                if (keyword) {
-                    db.selectSql({
-                        name: 'db_' + $api.getStorage('userToken'),
-                        sql: 'SELECT * FROM addressList WHERE (nickname LIKE "%'+keyword+'%") or (remark_nickname LIKE "%'+keyword+'%") or (remark_current_contact LIKE "%'+keyword+'%") or (current_contact LIKE "%'+keyword+'%")'      
-                    },function(retSql,err){
-                        if (retSql.status) {
-                            if (retSql.data.length > 0) {
-                                api.sendEvent({
-                                    name: 'searchSqlMore',
-                                    extra: {
-                                        user: retSql.data,
-                                        keyword: keyword
-                                    }
-                                });
+                console.log(keyword)
+                if (keyword){
+                    api.ajax({
+                        url: apiSite + '/user/search',
+                        method: 'post',
+                        headers: apiHeader,
+                        data: {
+                            values: { 
+                                token: $api.getStorage('userToken'),
+                                keyword: keyword
+                            }
+                        }
+                    }, function(ret, err) {
+                        if (ret) {
+                            if (ret.code === 200){
+                                if (ret.data.length > 0) {
+                                    api.sendEvent({
+                                        name: 'searchSqlMore',
+                                        extra: {
+                                            user: ret.data,
+                                            keyword: keyword
+                                        }
+                                    });
+                                }
                             }
                         } else {
                             alert(JSON.stringify(ret))

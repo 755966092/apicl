@@ -147,21 +147,18 @@
         <script type="text/x-dot-template" id="listT">
             {{?it.length != 0}}
                 <div class="contactPerso">
-                    <p class="title">一度人脉和初识好友</p>
                     <ul>
                         {{~it :value:index}}
-                            {{?index!=it.length-1}}
-                                <li class="flex-def flex-cCenter" data-userId={{=value.user_id}} tapmode onclick="openInfo(this)">
-                                    <img  src="{{=value.remark_head_img_url?value.remark_head_img_url:value.head_img_url}}" alt="">
-                                    <div class="text">
-                                        <h3>{{=value.remark_nickname?value.remark_nickname:value.nickname}}</h3>
-                                        {{?value.contain}}
-                                        <p>{{=value.contain}}</p>
-                                        {{??}}
-                                        {{?}}
-                                    </div>
-                                </li>
-                            {{?}}
+                            <li class="flex-def flex-cCenter" data-userId={{=value.user_id}} tapmode onclick="openInfo(this)">
+                                <img  src="{{=value.remark_head_img_url?value.remark_head_img_url:value.head_img_url}}" alt="">
+                                <div class="text">
+                                    <h3>{{=value.remark_nickname?value.remark_nickname:value.nickname}}</h3>
+                                    {{?value.contain}}
+                                    <p>{{=value.contain}}</p>
+                                    {{??}}
+                                    {{?}}
+                                </div>
+                            </li>
                         {{~}}
                     </ul>
                 </div>
@@ -311,6 +308,7 @@
                     name: 'searchSqlMore'
                 }, function(ret, err){
                     if (ret.value) {
+                        console.log(JSON.stringify(ret))
                         renderPage(ret)
                     } else {
                         // 搜索结果为空的时候清空页面
