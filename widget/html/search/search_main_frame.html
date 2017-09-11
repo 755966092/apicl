@@ -140,33 +140,53 @@
                 font-size: 0.24rem;
                 color: #999;
             }
+            .defaultTitle {
+                padding: .5rem 0;
+                color: #999;
+                text-align: center;
+                font-size: 0.3rem;
+            }
+            .defaultTable {
+                padding: 0.2rem 0;
+                text-align: center;
+            }
+            .defaultTable span {
+                font-size: 0.28rem;
+                color: #27B24A;
+                margin: 0 .3rem;
+            }
+            
+
         </style>
     </head>
     <body>
-        <div class="resultList"></div>
+        <div class="resultList">
+            <p class="defaultTitle">搜索指定内容</p>
+            <p class="defaultTable"><span>一度人脉</span><span>二度人脉</span><span>三度人脉</span></p>
+            <p class="defaultTable"><span>一度人脉</span><span>二度人脉</span><span>三度人脉</span></p>
+        </div>
+        
         <script type="text/x-dot-template" id="listT">
-            {{?it.length != 0}}
+            {{?it.user.length != 0}}
                 <div class="contactPerso">
                     <p class="title">一度人脉和初识好友</p>
                     <ul>
-                        {{~it :value:index}}
+                        {{~it.user :value:index}}
                             {{?index<3}}
-                                {{?index!=it.length-1}}
-                                    <li class="flex-def flex-cCenter" data-userId={{=value.user_id}} tapmode onclick="openInfo(this)">
-                                        <img  src="{{=value.remark_head_img_url?value.remark_head_img_url:value.head_img_url}}" alt="">
-                                        <div class="text">
-                                            <h3>{{=value.remark_nickname?value.remark_nickname:value.nickname}}</h3>
-                                            {{?value.contain}}
-                                                <p>{{=value.contain}}</p>
-                                            {{??}}
-                                            {{?}}
-                                        </div>
-                                    </li>
-                                {{?}}
+                                <li class="flex-def flex-cCenter" data-userId={{=value.user_id}} tapmode onclick="openInfo(this)">
+                                    <img  src="{{=value.remark_head_img_url?value.remark_head_img_url:value.head_img_url}}" alt="">
+                                    <div class="text">
+                                        <h3>{{=value.remark_nickname?value.remark_nickname:value.nickname}}</h3>
+                                        {{?value.contain}}
+                                            <p>{{=value.contain}}</p>
+                                        {{??}}
+                                        {{?}}
+                                    </div>
+                                </li>
                             {{?}}
                         {{~}}
                     </ul>
-                    {{?it.length > 3}}
+                    {{?it.user.length > 3}}
                         <p class="seeMore flex-def flex-cCenter flex-zBetween" tapmode onclick="openMorePage()">
                                 <span class="icon"></span>
                                 <span class="flex-item">查看更多</span>
@@ -174,25 +194,16 @@
                         </p>
                     {{?}}
                 </div>
-                <div class="web flex-def flex-cCenter flex-zBetween">
-                    <img src="../../image/iocn_addressList/icon_searchMore.png" alt="">
-                    <div class="flex-item">
-                        <h3>搜一搜二度人脉</h3>
-                        <!-- <h3>搜一搜二度人脉 {{=it[it.length-1]}}</h3> -->
-                        <!-- <p>人脉、供求、项目、我在圈等</p> -->
-                    </div>
-                    <div class="icon2"></div>
-                </div>
-                <div class="web flex-def flex-cCenter flex-zBetween">
-                    <img src="../../image/iocn_addressList/icon_searchMore.png" alt="">
-                    <div class="flex-item">
-                        <h3>搜一搜三度人脉</h3>
-                        <!-- <h3>搜一搜二度人脉 {{=it[it.length-1]}}</h3> -->
-                        <!-- <p>人脉、供求、项目、我在圈等</p> -->
-                    </div>
-                    <div class="icon2"></div>
-                </div>
             {{?}}
+            <div class="web flex-def flex-cCenter flex-zBetween" tapmode onclick="searcWeb('{{=it.keyword}}')">
+                <img src="../../image/iocn_addressList/icon_search.png" alt="">
+                <div class="flex-item">
+                    <h3>搜一搜 {{=it.keyword}}</h3>
+                    <!-- <h3>搜一搜二度人脉 {{=it[it.length-1]}}</h3> -->
+                    <!-- <p>人脉、供求、项目、我在圈等</p> -->
+                </div>
+                <div class="icon2"></div>
+            </div>
         </script>
         <!-- <div class="contactPerso">
             <p class="title">联系人</p>
@@ -337,12 +348,25 @@
                 api.addEventListener({
                     name: 'searchSql'
                 }, function(ret, err){
+                    if (ret.value.user) {
+                        user = ret;
+                        renderPage(ret)
+                    } else{
+                        // 搜索结果为空的时候清空页面
+                        // getData();
+                        $api.html($api.dom('.resultList'), '<p class="defaultTitle">搜索指定内容</p><p class="defaultTable"><span>一度人脉</span><span>二度人脉</span><span>三度人脉</span></p><p class="defaultTable"><span>一度人脉</span><span>二度人脉</span><span>三度人脉</span></p>');
+                    }
+                });
+                api.addEventListener({
+                    name: 'searchSqlMore'
+                }, function(ret, err){
                     if (ret.value) {
                         user = ret;
                         renderPage(ret)
                     } else {
                         // 搜索结果为空的时候清空页面
-                        getData([]);
+                        // getData([]);
+                        $api.html($api.dom('.resultList'), '<p class="defaultTitle">搜索指定内容</p><p class="defaultTable"><span>一度人脉</span><span>二度人脉</span><span>三度人脉</span></p><p class="defaultTable"><span>一度人脉</span><span>二度人脉</span><span>三度人脉</span></p>');
                     }
                 });
             }
@@ -355,7 +379,7 @@
                 });
             }
             function renderPage(ret) {
-                ret.value.user.push(ret.value.keyword)
+                // ret.value.user.push(ret.value.keyword)
                 for (var i = 0; i < ret.value.user.length; i++) {
                     if(i<3) {
                         var element = ret.value.user[i];
@@ -384,7 +408,7 @@
                         }
                     }
                 }
-                getData(ret.value.user);
+                getData(ret.value);
             }
             // 查看更多联系人
             function openMorePage() {
@@ -399,6 +423,53 @@
                 });
                 // 修改顶部搜索框
                
+            }
+            // 搜索网络
+            function searcWeb(keyword) {
+                console.log(keyword);
+                if (keyword) {
+                    api.ajax({
+                        url: apiSite + '/user/search',
+                        method: 'post',
+                        headers: apiHeader,
+                        data: {
+                            values: { 
+                                token: $api.getStorage('userToken'),
+                                keyword: keyword
+                            }
+                        }
+                    }, function(ret, err) {
+                        if(ret) {
+                            if (ret.code === 200) {
+                                console.log(JSON.stringify(ret));
+                                if (ret.data.list.length == 0) {
+                                    api.alert({
+                                        title: '该用户不存在', 
+                                        msg: '无法找到该用户, 请检查您填写的号码是否正确'
+                                    });
+                                } else {
+                                    api.openWin({
+                                        name: 'search_main_more_win',
+                                        url: './search_main_more_win.html',
+                                        bounces: false,
+                                        pageParam: {
+                                            ret: {
+                                                value: {
+                                                    keyword: keyword,
+                                                    user: ret.data.list
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
+                            } else {
+                                alert(ret.msg)
+                            }
+                        } else {
+                            alert(JSON.stringify(err))
+                        }
+                    })
+                }
             }
         </script>
     </body>

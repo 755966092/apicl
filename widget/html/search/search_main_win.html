@@ -74,6 +74,16 @@
                         h: 'auto'
                     }
                 });
+                api.addEventListener({
+                    name: 'searchSqlMore'
+                }, function(ret, err){
+                    if (ret.value) {
+                        $api.val($api.dom('input'), ret.value.keyword );
+                    } else {
+                        $api.val($api.dom('input'), '' );
+
+                    }
+                });
             }
             function pageInit() {
                 $api.fixStatusBar($api.dom('.top'));
@@ -105,7 +115,11 @@
                                 });
                             } else {
                                 api.sendEvent({
-                                    name: 'searchSql'
+                                    name: 'searchSql',
+                                    extra: {
+                                        keyword: keyword,
+                                        user: retSql.data
+                                    }
                                 });
                             }
                         } else {
@@ -114,7 +128,7 @@
                     })
                 } else {
                     api.sendEvent({
-                        name: 'searchSql'
+                        name: 'searchSql',
                     });
                 }
                 
@@ -132,6 +146,10 @@
             function searchResults () {
                 var keyWord = $api.val($api.dom('input'));
 
+            }
+            // 关闭遮罩层
+            function closeShadow() {
+                $api.css($api.dom('.shadow'), 'display: none');
             }
         </script>
     </body>
