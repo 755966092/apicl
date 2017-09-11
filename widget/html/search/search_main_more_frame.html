@@ -147,7 +147,7 @@
         <script type="text/x-dot-template" id="listT">
             {{?it.length != 0}}
                 <div class="contactPerso">
-                    <p class="title">联系人</p>
+                    <p class="title">一度人脉和初识好友</p>
                     <ul>
                         {{~it :value:index}}
                             {{?index!=it.length-1}}
@@ -349,16 +349,16 @@
                         }
                     }
                     if (element.remark_current_contact) {
-
                         if(element.remark_current_contact.indexOf(ret.value.keyword) != -1){
                             element.remark_current_contact = element.remark_current_contact.replace(reg, '<span class="colorFont">'+ ret.value.keyword +'</span>')
-                            element.contain += '备注电话: '+element.remark_current_contact;
+                            if(element.remark_current_contact != element.current_contact) {
+                                element.contain += '备注电话: '+element.remark_current_contact;
+                            }
                         }
                     }
                 }
                 getData(ret.value.user);
             }
-                
         </script>
     </body>
 </html>

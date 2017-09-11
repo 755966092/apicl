@@ -147,10 +147,10 @@
         <script type="text/x-dot-template" id="listT">
             {{?it.length != 0}}
                 <div class="contactPerso">
-                    <p class="title">联系人</p>
+                    <p class="title">一度人脉和初识好友</p>
                     <ul>
                         {{~it :value:index}}
-                            {{?index<2}}
+                            {{?index<3}}
                                 {{?index!=it.length-1}}
                                     <li class="flex-def flex-cCenter" data-userId={{=value.user_id}} tapmode onclick="openInfo(this)">
                                         <img  src="{{=value.remark_head_img_url?value.remark_head_img_url:value.head_img_url}}" alt="">
@@ -166,10 +166,10 @@
                             {{?}}
                         {{~}}
                     </ul>
-                    {{?it.length > 2}}
+                    {{?it.length > 3}}
                         <p class="seeMore flex-def flex-cCenter flex-zBetween" tapmode onclick="openMorePage()">
                                 <span class="icon"></span>
-                                <span class="flex-item">查看更多联系人</span>
+                                <span class="flex-item">查看更多</span>
                             <span class="icon2"></span>
                         </p>
                     {{?}}
@@ -177,8 +177,18 @@
                 <div class="web flex-def flex-cCenter flex-zBetween">
                     <img src="../../image/iocn_addressList/icon_searchMore.png" alt="">
                     <div class="flex-item">
-                        <h3>搜一搜 {{=it[it.length-1]}}</h3>
-                        <p>人脉、供求、项目、我在圈等</p>
+                        <h3>搜一搜二度人脉</h3>
+                        <!-- <h3>搜一搜二度人脉 {{=it[it.length-1]}}</h3> -->
+                        <!-- <p>人脉、供求、项目、我在圈等</p> -->
+                    </div>
+                    <div class="icon2"></div>
+                </div>
+                <div class="web flex-def flex-cCenter flex-zBetween">
+                    <img src="../../image/iocn_addressList/icon_searchMore.png" alt="">
+                    <div class="flex-item">
+                        <h3>搜一搜三度人脉</h3>
+                        <!-- <h3>搜一搜二度人脉 {{=it[it.length-1]}}</h3> -->
+                        <!-- <p>人脉、供求、项目、我在圈等</p> -->
                     </div>
                     <div class="icon2"></div>
                 </div>
@@ -344,13 +354,13 @@
                     name: 'txl_memberInfo_Win',
                     url: '../addressList/txl_memberInfo_Win.html',
                     bounces: false,
-                    pageParam: {usrId : $api.attr(ele, 'data-userId')}
+                    pageParam: {userId : $api.attr(ele, 'data-userId')}
                 });
             }
             function renderPage(ret) {
                 ret.value.user.push(ret.value.keyword)
                 for (var i = 0; i < ret.value.user.length; i++) {
-                    if(i<2) {
+                    if(i<3) {
                         console.log(JSON.stringify(ret.value.user[i]));
                         
                         var element = ret.value.user[i];
@@ -372,7 +382,9 @@
                         if (element.remark_current_contact) {
                             if(element.remark_current_contact.indexOf(ret.value.keyword) != -1){
                                 element.remark_current_contact = element.remark_current_contact.replace(reg, '<span class="colorFont">'+ ret.value.keyword +'</span>')
-                                element.contain += '备注电话: '+element.remark_current_contact;
+                                if(element.remark_current_contact != element.current_contact) {
+                                    element.contain += '备注电话: '+element.remark_current_contact;
+                                }
                             }
                         }
                     }
