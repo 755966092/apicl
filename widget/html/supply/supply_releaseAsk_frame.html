@@ -331,7 +331,8 @@
                     <span class="spanno2 _genre" id="sub_type"></span>
                 </div>
             </li>-->
-            <li class="border100" tapmode   onclick="selectType(this)" data-val="_classify">
+            <!-- <li class="border100" tapmode   onclick="selectType(this)" data-val="_classify"> -->
+            <li class="border100" tapmode   onclick="openClassify()" data-val="_classify">
                 <div class="wrap">
                     <span>分类</span>
                     <span class="spanno2 _classify" id="category_id"></span>
@@ -416,6 +417,14 @@
     // 监听选择修改地址
         monitorSelAddress()
     };
+    // 打开分类页面
+    function openClassify() {
+        api.openWin({
+            name: 'supply_releaseClassifyˆ',
+            url: './supply_releaseClassify.html',
+            bounces: false
+        });
+    }
     // 监听选择修改地址
     function monitorSelAddress() {
         api.addEventListener({
@@ -445,6 +454,14 @@
             } else {
                 alert(JSON.stringify(err));
             }
+        });
+        // 监听选择分类
+        api.addEventListener({
+            name: 'selectClassify'
+        }, function(ret, err){
+            console.log(JSON.stringify(ret)+'监听到时间')
+            $api.text($api.byId('category_id'), ret.value.key.title);
+            $api.attr($api.byId('category_id'), 'data-id',ret.value.key.category_id);
         });
     }
     // 打开公司页面

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style type="text/css">
+        
+    </style>
+</head>
+<body>
+  <div class="loading"></div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/pinyin4js.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        moduleInit();
+        // $api.rmStorage('classifyList');
+        var dataList = $api.getStorage('classifyList');
+        if(dataList) {
+            openList(dataList,'yes')
+        } else {
+            requireData();
+        }
+    };
+    function requireData() {
+        api.ajax({
+            url: apiSite + '/category/index',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: { 
+                        type: 1
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                sortData(ret.data.list)
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+
+    function openList(data1, yes) {
+        if (yes) {
+            // console.log('不缓存')
+        } else{
+            $api.setStorage('classifyList', data1);
+            // console.log('缓存')
+        }
+        // var dataArr = [];
+        // var dataKeyArr = [];
+        // for(key in data1) {
+        //     dataArr = dataArr.concat(data1[key]);
+        //     dataKeyArr.push(key)
+        // }
+        listContact.open({
+            x: -1000,
+            y: -1000,
+            w: 5,
+            h: 5,
+            data: [],
+            fixedOn: api.frameName
+        },function(ret,err){
+        })
+        listContact.close();
+        console.log(api.winHeight);
+        
+        listContact.open({
+                x : 0,
+                y : 0,
+                w : api.winWidth,
+                h : api.winHeight-api.pageParam.headerH,
+                bgColor: '#EFEFF4',
+                // 分割线颜色
+                borderColor: '#EDEDED',
+                groupTitle: {
+                    color: '#999',       
+                    size: 14,   
+                    bgColor: '#EFEFF4'
+                },
+                rightBg: '#fff',
+                // 侧滑
+                indicator: {
+                    bgColor: 'rgba(0,0,0,0)',
+                    color: '#5A5A5A'
+                },
+                cellBgColor: '#fff',
+                // 搜索框
+                // searchBar: {},
+                data: data1,
+                fixedOn: api.frameName,
+                fixed: false
+            }, function(ret, err) {
+                if (ret) {
+                     if (ret.clickType == 0) {
+                        // 获取点击联系人信息
+                        api.sendEvent({
+                            name: 'selectClassify',
+                            extra: {key: data1[ret.key][ret.index]}
+                        });
+                        api.closeWin();
+                    }
+                } else {
+                    // alert(JSON.stringify(err.msg));
+                }
+            });
+        
+        $api.css($api.dom('.loading'), 'display: none');
+    }
+     // 打开人脉详情
+    function addFriends(userId) {
+        api.openWin({
+            name: 'txl_memberInfo_Win',
+            url: './addressList/txl_memberInfo_Win.html',
+            pageParam: {
+                userId: userId
+            }
+        });
+    }
+    function f_check_uppercase(obj)   {          
+       if (/[A-Z]/.test(obj))    {   
+          return true;   
+       }    
+       return false;   
+    }
+    function sortData(data) {
+        for (var i = 0; i < data.length; i++) {
+            data[i].letter = PinyinHelper.getShortPinyin($api.trimAll(data[i].name)).toUpperCase();
+            data[i].flag = data[i].letter[0]; 
+        }
+        for(var i = 0;i < data.length-1; i++) {
+            for(var j = 0; j < data.length-i-1; j++) {
+                if(data[j].letter > data[j+1].letter){
+                    var temp = data[j];
+                    data[j] = data[j+1];
+                    data[j+1] = temp;
+                }
+            }
+        }
+        paixv(data);
+    }
+    function paixv (data) {
+        for (var i = 0; i < data.length; i++) {
+            if (f_check_uppercase(data[0].flag)) {
+                data[0].initial = data[0].flag;
+            } else {
+                data[0].initial = '#';
+            }
+            if (i>0) {
+                if (data[i].flag !== data[i-1].flag) {
+                    if (f_check_uppercase(data[i].flag)) {
+                        data[i].initial = data[i].flag;
+                    } else {
+                        data[i].initial = '#';
+                    }
+                }
+            }
+        }
+        var arr = {}
+        var a;
+        for (var i = 0; i < data.length; i++) {
+            data[i].title = data[i].name;
+            delete data[i].name;
+            delete data[i].letter;
+            delete data[i].flag;
+            data[i].titleSize = 15;
+            if (data[i].initial) {
+                if (data[i].initial == '#') {
+                    if (arr[data[i].initial]) {
+                    } else {
+                        arr[data[i].initial] = [];
+                    }
+                    a = i;
+                } else {
+                    arr[data[i].initial] = [];
+                    a = i;
+                }
+            } 
+            arr[data[a].initial].push (data[i])
+            
+        }
+        openList(arr)
+    }
+</script>
+</html>
