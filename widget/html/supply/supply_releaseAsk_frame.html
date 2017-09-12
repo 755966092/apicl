@@ -633,7 +633,6 @@
         } 
     }
     function selImg() {
-        
        //  var baseUrl = 'img.iinnet.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com
         var obj = api.require('qiniuUpfile');
         for (var i = 0; i < $api.domAll('.imgpage').length; i++) {
@@ -670,7 +669,7 @@
         // if (releaseFlag == 1) {
             var token = $api.getStorage('userToken'),            //string  用户Token
                 title = $api.val($api.byId('title')),           //string  标题
-                category_id = 1,         //int 分类ID
+                category_id = $api.attr($api.byId('category_id'), 'data-id'),        //int 分类ID
                 reward = $api.val($api.byId('reward')),           //float   价格
                 // unit = _dataSource.indexOf($api.text($api.byId('unit')))+1,            //string  单位
                 form = $api.text($api.byId('form')) == '线上' ? 1 : 2,            //int 形式（1-线上，2-线下）
@@ -924,6 +923,10 @@
             if (ret) {
                 if (ret.eventType == 'ok') {
                     $api.text($api.dom('.'+ _data +''), ret.level1);
+                    // 选择分类
+                    if (ret.selectedInfo[0].category_id) {
+                        $api.attr($api.dom('._classify'), 'data-id', ret.selectedInfo[0].category_id);
+                    }
                     if (_dataSource2[1]  == '公司') {
                         if (ret.level1 == '公司') {
                             type = 2;
@@ -934,11 +937,11 @@
                         } else {
                             type = 1;
                             for (var i = 0; i < $api.domAll('.companyName').length; i++) {
-                                
                                 $api.css($api.domAll('.companyName')[i], 'display: none');
                             }
                         }
                     }
+
                 }
             } else {
                 alert(JSON.stringify(err.msg));
