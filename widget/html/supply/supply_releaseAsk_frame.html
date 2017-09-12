@@ -393,7 +393,7 @@
                   classify_dataSource2=[];
     apiready = function(){
         moduleInit();
-        classify()
+        classify();
         // // console.log('369:::'+JSON.stringify(api.pageParam))
         if (api.pageParam.demand_id) {
             $api.text($api.dom('.btn'), '确定');
@@ -456,6 +456,7 @@
     }
     // 编辑供应
     function editSupply(data) {
+        classify();
         var titleIpt = $api.byId('title'),
             descriptionIpt = $api.byId('description'),
             reward = $api.byId('reward'),
@@ -469,11 +470,50 @@
         $api.val(reward, data.info.reward);
 
         var unitText = data.info.unit > 0 ? _dataSource[data.info.unit-1] : '未定义';
+        var classifyData = $api.getStorage('categoryIndex');
+        if (classifyData) {
+            for (var i = 0; i < classifyData.length; i++) {
+                var element = classifyData[i];
+                if(element.category_id == data.info.category_id) {
+                    $api.text(category_id, element.name);
+                    break;
+                }
+            }
+        } else {
+            api.ajax({
+                url: apiSite + '/category/index',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: { 
+                        type: 2
+                    }
+                }
+            }, function(ret, err) {
+                if(ret) {
+                    if(ret.code === 200) {
+                        $api.setStorage('categoryIndex', ret.data.list);
+                        for (var i = 0; i < ret.data.list.length; i++) {
+                            var element = ret.data.list[i];
+                            if(element.category_id == data.info.category_id) {
+                                $api.text(category_id, element.name);
+                                break;
+                            }
+                        }
+                    } else {
+                        alert(ret.msg)
+                    }
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
+        }
+        
         var _categoryId =  categoryArr[data.info.category_id-1]
         $api.text(position, data.info.address);
         $api.text(endTime, data.info.end_date);
         // $api.text(unit, unitText);
-        $api.text(category_id, _categoryId);
+        
         data.info.type == 1 ? $api.text(_type, '个人') : $api.text(_type, '公司');
         if (data.info.type == 2) {
             type = 2;
@@ -978,11 +1018,9 @@
         }, function(ret, err) {
             if(ret) {
                 classify_dataSource = ret.data.list;
-                classify_dataSource = ret.data.list;
                 for (var i = 0; i < ret.data.list.length; i++) {
                     classify_dataSource2.push(ret.data.list[i].name)
                     categoryArr.push(ret.data.list[i].name)
-
                 }
             } else {
                 alert(JSON.stringify(err))

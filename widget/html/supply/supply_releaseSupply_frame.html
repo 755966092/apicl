@@ -342,8 +342,8 @@
                     <span class="spanno2 _genre" id="sub_type"></span>
                 </div>
             </li>
-            <!-- <li class="border100" tapmode   onclick="selectType(this)" data-val="_classify"> -->
-            <li class="border100" tapmode   onclick="openClassify()" data-val="_classify">
+            <li class="border100" tapmode   onclick="selectType(this)" data-val="_classify">
+            <!-- <li class="border100" tapmode   onclick="openClassify()" data-val="_classify"> -->
                 <div class="wrap">
                     <span>分类</span>
                     <span class="spanno2 _classify" id="category_id"></span>
@@ -492,74 +492,79 @@
     }
     // 编辑供应
     function editSupply(data) {
-        api.ajax({
-            url: apiSite + '/category/index',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                   values: { 
-                       type: 1
-                   }
+        var classifyData = $api.getStorage('categoryIndex');
+        if (classifyData) {
+            editSupplyData(classifyData, data);
+        } else {
+            api.ajax({
+                url: apiSite + '/category/index',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                       values: { 
+                           type: 1
+                       }
+                }
+            }, function(ret, err) {
+                if(ret) {
+                    editSupplyData(ret.data.list, data);
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
+        }
+    }
+    function editSupplyData(supplyData, data) {
+        classify_dataSource = supplyData;
+        for (var i = 0; i < supplyData.length; i++) {
+            classify_dataSource2.push(supplyData[i].name)
+            categoryArr.push(supplyData[i].name)
+        }
+            var titleIpt = $api.byId('title'),
+            descriptionIpt = $api.byId('description'),
+            price = $api.byId('price'),
+            _type = $api.byId('_type'),
+            sub_type = $api.byId('sub_type'),
+            form = $api.byId('form'),
+            unit = $api.byId('unit'),
+            category_id = $api.byId('category_id'),
+            position = $api.byId('position');
+        $api.val(titleIpt, data.info.title);
+        $api.val(descriptionIpt, data.info.description);
+        $api.val(price, data.info.price);
+
+        var unitText = data.info.unit > 0 ? _dataSource[data.info.unit-1] : '未定义';
+        for (var i = 0; i < supplyData.length; i++) {
+            if (supplyData[i].category_id == data.info.category_id) {
+                var _categoryId =  supplyData[i].name;
             }
-        }, function(ret, err) {
-            if(ret) {
-                classify_dataSource = ret.data.list;
-                // // // console.log(JSON.stringify(ret))
-                for (var i = 0; i < ret.data.list.length; i++) {
-                    classify_dataSource2.push(ret.data.list[i].name)
-                    categoryArr.push(ret.data.list[i].name)
-                }
-                 var titleIpt = $api.byId('title'),
-                    descriptionIpt = $api.byId('description'),
-                    price = $api.byId('price'),
-                    _type = $api.byId('_type'),
-                    sub_type = $api.byId('sub_type'),
-                    form = $api.byId('form'),
-                    unit = $api.byId('unit'),
-                    category_id = $api.byId('category_id'),
-                    position = $api.byId('position');
-                $api.val(titleIpt, data.info.title);
-                $api.val(descriptionIpt, data.info.description);
-                $api.val(price, data.info.price);
+        }
+        $api.text(position, data.info.address);
+        $api.text(unit, unitText);
+        $api.text(category_id, _categoryId);
+        $api.attr(category_id, 'data-id',data.info.category_id);
 
-                var unitText = data.info.unit > 0 ? _dataSource[data.info.unit-1] : '未定义';
-                for (var i = 0; i < ret.data.list.length; i++) {
-                    if (ret.data.list[i].category_id == data.info.category_id) {
-                        var _categoryId =  ret.data.list[i].name;
-                    }
-                }
-                $api.text(position, data.info.address);
-                $api.text(unit, unitText);
-                $api.text(category_id, _categoryId);
-                $api.attr(category_id, 'data-id',data.info.category_id);
+        data.info.type == 1 ? $api.text(_type, '个人') : $api.text(_type, '公司');
+        if (data.info.type == 2) {
+            type = 2;
+            $api.css($api.dom('.companyName'), 'display:block');
+            $api.text($api.byId('company_name'), data.info.company_name);
+            $api.attr($api.byId('company_name'), 'data-id', data.info.company_id);
 
-                data.info.type == 1 ? $api.text(_type, '个人') : $api.text(_type, '公司');
-                if (data.info.type == 2) {
-                    type = 2;
-                    $api.css($api.dom('.companyName'), 'display:block');
-                    $api.text($api.byId('company_name'), data.info.company_name);
-                    $api.attr($api.byId('company_name'), 'data-id', data.info.company_id);
+        }
 
-                }
-
-                data.info.sub_type == 1 ? $api.text(sub_type, '自产自销') : $api.text(sub_type, '代理代销')
-                data.info.form == 1 ? $api.text(form, '线上') : $api.text(form, '线下')
-                base64Data.img = eval(data.info.image_json); 
-                getData(base64Data)
-                // 编辑供应返回的相关信息
-                address = data.info.address;
-                latitude = data.info.latitude;
-                longitude = data.info.longitude;
-                province = data.info.province;
-                city = data.info.city;
-                district = data.info.district;
-                supply_id = data.info.supply_id;
-            } else {
-                alert(JSON.stringify(err))
-            }
-        })
-       
-
+        data.info.sub_type == 1 ? $api.text(sub_type, '自产自销') : $api.text(sub_type, '代理代销')
+        data.info.form == 1 ? $api.text(form, '线上') : $api.text(form, '线下')
+        base64Data.img = eval(data.info.image_json); 
+        getData(base64Data)
+        // 编辑供应返回的相关信息
+        address = data.info.address;
+        latitude = data.info.latitude;
+        longitude = data.info.longitude;
+        province = data.info.province;
+        city = data.info.city;
+        district = data.info.district;
+        supply_id = data.info.supply_id;
     }
     // 时间选择器
     function openTime(ele) {
