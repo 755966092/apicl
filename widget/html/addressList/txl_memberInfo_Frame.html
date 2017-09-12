@@ -906,29 +906,34 @@
             sql: 'SELECT * FROM addressList_simplify WHERE user_id = ' + api.pageParam.userId
         }, function(ret, err){        
             if( ret.status ){
-                // // // console.log('本地信息'+JSON.stringify( ret ) );
-                if (!remarkInfo.nickname) {
-                    if (obj.nickname != ret.data[0].title) {
-                        updateListSql('title', obj.nickname);
-                        // // console.log('nickname')
+                // 网络信息 obj
+                // 备注信息 remarkInfo
+                // 本地信息 ret
+                // console.log('本地信息'+JSON.stringify( ret ) );
+                if (ret.data.length != 0) {
+                    if (!remarkInfo.nickname) {
+                        if (obj.nickname != ret.data[0].title) {
+                            updateListSql('title', obj.nickname);
+                            // // console.log('nickname')
+                        }
                     }
-                }
-                if (!remarkInfo.head_img_url) {
-                    if (obj.head_img_url != ret.data[0].img) {
-                        updateListSql('img', obj.head_img_url);
+                    if (!remarkInfo.head_img_url) {
+                        if (obj.head_img_url != ret.data[0].img) {
+                            updateListSql('img', obj.head_img_url);
+                        }
                     }
-                }
-                var subTitle = obj.current_company+' '+obj.current_position+' '+obj.current_degree+' ';
-                if (!remarkInfo.current_company || !remarkInfo.current_position || !remarkInfo.current_degree) {
-                    if ($api.trimAll(subTitle) != $api.trimAll(ret.data[0].subTitle)) {
-                        updateListSql('subTitle', subTitle)
-                        // // console.log('subTitle' + subTitle)
+                    var subTitle = obj.current_company+' '+obj.current_position+' '+obj.current_degree+' ';
+                    if (!remarkInfo.current_company || !remarkInfo.current_position || !remarkInfo.current_degree) {
+                        if ($api.trimAll(subTitle) != $api.trimAll(ret.data[0].subTitle)) {
+                            updateListSql('subTitle', subTitle)
+                            // // console.log('subTitle' + subTitle)
+                        }
                     }
-                }
-                if (!remarkInfo.current_contact) {
-                    if (obj.current_contact != ret.data[0].current_contact) {
-                        updateListSql('current_contact', obj.current_contact)
-                        // // console.log('current_contact')
+                    if (!remarkInfo.current_contact) {
+                        if (obj.current_contact != ret.data[0].current_contact) {
+                            updateListSql('current_contact', obj.current_contact)
+                            // // console.log('current_contact')
+                        }
                     }
                 }
             }else{
@@ -1287,17 +1292,16 @@
     }
 
     function relationship(relationship_levelType,status) {
-        // // // console.log(relationship_levelType)
         var btn = $api.byId('btn');
         if(status == 1) {
-            sweitchData1(relationship_levelType)
+            sweitchData1(relationship_levelType, status)
             $api.text(btn, '加为好友');
         } else {
-            sweitchData(relationship_levelType)
+            sweitchData(relationship_levelType, status)
             $api.css($api.byId('btn'), 'display: none');
         }
     }
-    function sweitchData1(relationship_levelType) {
+    function sweitchData1(relationship_levelType, status) {
         var btn = $api.byId('btn');
         switch (relationship_levelType) {
             case 1:
@@ -1356,7 +1360,7 @@
                 break;
         }
     }
-    function sweitchData(relationship_levelType) {
+    function sweitchData(relationship_levelType, status) {
         var btn = $api.byId('btn');
         $api.css($api.byId('btn'), 'display: none');
         switch (relationship_levelType) {
