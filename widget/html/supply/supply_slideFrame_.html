@@ -83,7 +83,7 @@
     </style>
 </head>
 <body   tapmode class=""   onclick="api.closeFrame()">
-   
+   <div class="loading"></div>
     <div class="warp1 flex-def flex-zBetween">
         <header class="header">
             <div class="head"></div>
@@ -123,14 +123,30 @@
         } else {
             settingText();
         }
-        requireCategory()
+        // $api.rmStorage('classifyDataSlide');
+        var classifyDataSlide = $api.getStorage('classifyDataSlide');
+        if(classifyDataSlide) {
+            if (selectedObj != 1) {
+                for (var i = 0; i < selectedObj.length; i++) {
+                    classifyDataSlide[selectedObj[i].key][selectedObj[i].index].titleColor = '#27B24A'
+                }
+            }
+            openList(classifyDataSlide,'yes')
+        } else {
+            requireCategory()
+        }
     }
     // 设置文字
     function settingText () {
         $api.text($api.dom('.selectedText'), '选择分类');
     }
     // 打开列表
-    function openList(data) {
+    function openList(data, yes) {
+        if (yes) {
+
+        } else {
+            $api.setStorage('classifyDataSlide', data);
+        }
         var str='';
         // // console.log(JSON.stringify(api.pageParam.selectedObj))
         if (api.pageParam.selectedObj == 0) {
@@ -190,7 +206,7 @@
                         data: {
                             title: data[ret.key][ret.index].title,
                             titleColor: '#000',
-                            titleSize:14            
+                            titleSize:15            
                         }
                     });
                     $api.text($api.dom('.selectedText'), str);
@@ -220,7 +236,7 @@
                         data: {
                             title: data[ret.key][ret.index].title,
                             titleColor: '#27B24A',
-                            titleSize:14            
+                            titleSize:15            
                         }
                     });
                 }
@@ -229,6 +245,7 @@
                 alert(JSON.stringify(err));
             }
         });
+        $api.css($api.dom('.loading'), 'display: none');
     }
      function requireCategory() {
         api.ajax({
@@ -237,12 +254,13 @@
             headers: apiHeader,
             data: {
                    values: { 
-                       type: api.pageParam.type
+                       type: 1
                    }
             }
         }, function(ret, err) {
             if(ret) {
-                handleData(ret)
+                // handleData(ret)
+                sortData(ret.data.list)
             } else {
                 alert(JSON.stringify(err))
             }
@@ -259,9 +277,9 @@
             obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]] = [];
         }
         for (var i = 0; i < schoolList.length; i++) {
-            obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]].push({category_id:ret.data.list[i].category_id,title:schoolList[i],titleSize:14});
+            obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]].push({category_id:ret.data.list[i].category_id,title:schoolList[i],titleSize:15});
         }
-        if (selectedObj != 1) {
+        if (JSON.stringify(selectedObj) != '{}') {
             for (var i = 0; i < selectedObj.length; i++) {
                 obj[selectedObj[i].key][selectedObj[i].index].titleColor = '#27B24A'
             }
@@ -296,6 +314,71 @@
             api.closeFrame();
             $api.text($api.dom('.selectedText'), discriminate);
         }
+    }
+
+    function f_check_uppercase(obj)   {          
+       if (/[A-Z]/.test(obj))    {   
+          return true;   
+       }    
+       return false;   
+    }
+    function sortData(data) {
+        for (var i = 0; i < data.length; i++) {
+            data[i].letter = PinyinHelper.getShortPinyin($api.trimAll(data[i].name)).toUpperCase();
+            data[i].flag = data[i].letter[0]; 
+        }
+        for(var i = 0;i < data.length-1; i++) {
+            for(var j = 0; j < data.length-i-1; j++) {
+                if(data[j].letter > data[j+1].letter){
+                    var temp = data[j];
+                    data[j] = data[j+1];
+                    data[j+1] = temp;
+                }
+            }
+        }
+        paixv(data);
+    }
+    function paixv (data) {
+        for (var i = 0; i < data.length; i++) {
+            if (f_check_uppercase(data[0].flag)) {
+                data[0].initial = data[0].flag;
+            } else {
+                data[0].initial = '#';
+            }
+            if (i>0) {
+                if (data[i].flag !== data[i-1].flag) {
+                    if (f_check_uppercase(data[i].flag)) {
+                        data[i].initial = data[i].flag;
+                    } else {
+                        data[i].initial = '#';
+                    }
+                }
+            }
+        }
+        var arr = {}
+        var a;
+        for (var i = 0; i < data.length; i++) {
+            data[i].title = data[i].name;
+            delete data[i].name;
+            delete data[i].letter;
+            delete data[i].flag;
+            data[i].titleSize = 15;
+            if (data[i].initial) {
+                if (data[i].initial == '#') {
+                    if (arr[data[i].initial]) {
+                    } else {
+                        arr[data[i].initial] = [];
+                    }
+                    a = i;
+                } else {
+                    arr[data[i].initial] = [];
+                    a = i;
+                }
+            } 
+            arr[data[a].initial].push (data[i])
+            
+        }
+        openList(arr)
     }
 </script>
 </html>

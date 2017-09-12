@@ -217,9 +217,10 @@
             name: 'selClass'
         }, function(ret, err) {
             if (ret) {
+                console.log(JSON.stringify(ret))
                 var id = '';
                 for (var i = 0; i < ret.value.selectedArr.length; i++) {
-                   id += ret.value.obj[ret.value.selectedArr[i].key][ret.value.selectedArr[i].index].category_id+','
+                   id += $api.getStorage('classifyDataSlide')[ret.value.selectedArr[i].key][ret.value.selectedArr[i].index].category_id+','
                 }
                 id = id.substring(0,id.length-1);
                 $api.attr($api.dom('.no2Icon'), 'data-category',id);

@@ -266,7 +266,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-var base64Data = [], role = ['关系人','知情人','甲方','总包单位','分包单位','设计院','销售'],province='',city='',district='',latitude='',longitude='',imgArr=[];
+var base64Data = [], role = ['关系人','知情人','甲方','总包单位','分包单位','设计院','销售'],province='',city='',address="",district='',latitude='',longitude='',imgArr=[];
     apiready = function(){
         moduleInit();
         getPos();
@@ -352,7 +352,8 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
                 content: content,         //string  详细内容
                 province: province,            //string  省份
                 city: city,            //string  城市
-                address: district,         //string  地址
+                address: address,         //string  地址
+                district: district,
                 start_time: start_time,          //string  开始时间
                 end_time: end_time,            //string  结束时间
                 latitude: latitude,            //string  纬度
@@ -577,11 +578,12 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
             lat: lat
         }, function(ret, err) {
             if (ret.status) {
-                // // console.log(ret.address)
+                console.log(JSON.stringify(ret))
                 $api.text($api.dom('.position'), ret.address);
                 province = ret.province//省 ret.province
                 city = ret.city//市 ret.city
                 district = ret.district//区 ret.district
+                address = ret.address//区 ret.district
                 latitude = lat;
                 longitude = lon;
             }
