@@ -114,14 +114,12 @@
             top: 0;
         }
         .list .text .title .titleLable {
-            padding: 0 .06rem;
             font-size: .2rem;
             color: #5D7099;
             text-align: center;
-            line-height: .28rem;
             border: .01rem solid #5D7099;
             border-radius: .06rem;
-            height: .28rem;
+            
             margin-left: .02rem;
         }
         .list .text .stateContent {
@@ -208,8 +206,13 @@
                                 {{??}}
                                 <h3>{{=it[i].nickname}}</h3>
                                 {{?}}
-                                <span class="titleLable">{{=it[i].role}}</span>
+                                
+                                {{?it[i].role_name}}
+                                <span class="titleLable" style="padding: 0 .06rem;line-height: .28rem;height: .28rem;">{{=it[i].role_name}}</span>
+                                {{?}}
+                                {{?it[i].start_time}}
                                 <span class="state">{{=it[i].start_time.substring(0,10)}}</span>
+                                {{?}}
                             </div>
                             <p class="stateContent">{{=it[i].content}}</p>
                             {{?it[i].image_json!=null}}

@@ -1,123 +1,123 @@
 {
-    "status": true,
-    "lon": 116.32841491699212,
-    "lat": 39.998069833327754,
-    "address": "北京市海淀区成府路286号",
-    "province": "北京市",
-    "city": "北京市",
-    "district": "海淀区",
-    "streetName": "成府路",
-    "streetNumber": "286号",
-    "poiList": [{
-        "name": "北京大学",
-        "uid": "ddfd7c2d8db36cf39ee3219e",
-        "address": "北京市海淀区颐和园路5号",
-        "city": "北京市",
-        "phone": "",
-        "postcode": "",
-        "coord": {
-            "lat": 39.99774108567984,
-            "lon": 116.31617266805532
-        }
-    }, {
-        "name": "墨盒子绘本书馆",
-        "uid": "7c5e480b17bb66adadb22a4d",
-        "address": "海淀区成府路289号(近豆瓣书店)",
-        "city": "北京市",
-        "phone": "",
-        "postcode": "",
-        "coord": {
-            "lat": 39.99786545060943,
-            "lon": 116.32830877549513
-        }
-    }, {
-        "name": "仪器耗材橡胶五金",
-        "uid": "7913cd2ef4c654eb373a713a",
-        "address": "北京市成府路276号(清华大学南门西侧)",
-        "city": "北京市",
-        "phone": "",
-        "postcode": "",
-        "coord": {
-            "lat": 39.9978861780755,
-            "lon": 116.32880284352561
-        }
-    }, {
-        "name": "中科科仪大厦",
-        "uid": "c778ece24776113e0c0a7020",
-        "address": "北京市海淀区成府路270号",
-        "city": "北京市",
-        "phone": "",
-        "postcode": "",
-        "coord": {
-            "lat": 39.99780326817318,
-            "lon": 116.32902741990311
-        }
-    }, {
-        "name": "北大东门中关园学生公寓",
-        "uid": "2193d92a4cf3f2c5f7e73be0",
-        "address": "北京市海淀区北大东门中关园",
-        "city": "北京市",
-        "phone": "",
-        "postcode": "",
-        "coord": {
-            "lat": 39.99774799484858,
-            "lon": 116.32716792749746
-        }
-    }, {
-        "name": "北京大学学生公寓",
-        "uid": "1512c5765ce62b0be812e49e",
-        "address": "北京市海淀区北京大学中关新园9号楼北100米",
-        "city": "北京市",
-        "phone": "",
-        "postcode": "",
-        "coord": {
-            "lat": 39.997754904016624,
-            "lon": 116.32706911389135
-        }
-    }, {
-        "name": "北京大学-技术物理系",
-        "uid": "f9fd6062ebdd8d1e0e0e6b83",
-        "address": "北京市海淀区成府路201号北京大学加速器楼",
-        "city": "北京市",
-        "phone": "",
-        "postcode": "",
-        "coord": {
-            "lat": 39.9986323626305,
-            "lon": 116.32699724945054
-        }
-    }, {
-        "name": "北京大学中关新园北区",
-        "uid": "64c0aee88f273ffe047ce804",
-        "address": "北京市海淀区",
-        "city": "北京市",
-        "phone": "",
-        "postcode": "",
-        "coord": {
-            "lat": 39.99676688583297,
-            "lon": 116.32755419886674
-        }
-    }, {
-        "name": "五方院五道口店",
-        "uid": "53cebd502b7a5d782a02e16a",
-        "address": "成府路248号(近清华南路)",
-        "city": "北京市",
-        "phone": "",
-        "postcode": "",
-        "coord": {
-            "lat": 39.99792763298861,
-            "lon": 116.33029403067218
-        }
-    }, {
-        "name": "金泰超市(蓝旗店)",
-        "uid": "eb3675031278261b00ec0157",
-        "address": "北京市海淀区成府路113",
-        "city": "北京市",
-        "phone": "",
-        "postcode": "",
-        "coord": {
-            "lat": 39.998549453641374,
-            "lon": 116.33024013234157
-        }
-    }]
+    "code": 200,
+    "msg": "",
+    "time": 1505219187,
+    "data": {
+        "is_member": true,
+        "is_vip": false,
+        "none_vip_list_count": 5,
+        "vip_list_count": 10,
+        "list": [{
+            "topic_id": 15,
+            "circle_id": 1,
+            "user_id": 9969,
+            "nickname": "测试18765",
+            "head_img_url": "http://img.iinnet.com/FgjgDANLueXLbhe3Ga2Z4XBO_7xz",
+            "role": 0,
+            "role_name": "",
+            "content": "测评",
+            "image_json": "[]",
+            "start_time": "2017-09-10 00:00:00",
+            "end_time": "2021-08-12 00:00:00",
+            "create_time": "2017-09-12 20:18:25",
+            "is_self": "1",
+            "member_note": "",
+            "comment_list": []
+        }, {
+            "topic_id": 12,
+            "circle_id": 1,
+            "user_id": 3,
+            "nickname": "李彤亮",
+            "head_img_url": "http://img.iinnet.com/FudOQo_IDY9fUAkYwA4vRuO37bIQ",
+            "role": 1,
+            "role_name": "关系人",
+            "content": "内测过程有什么问题可以直接在圈子里提出。",
+            "image_json": "[]",
+            "start_time": "2017-09-12 00:00:00",
+            "end_time": "2017-09-22 00:00:00",
+            "create_time": "2017-09-12 20:10:25",
+            "is_self": "-1",
+            "member_note": "李彤亮",
+            "comment_list": []
+        }, {
+            "topic_id": 11,
+            "circle_id": 1,
+            "user_id": 909,
+            "nickname": "测试13260",
+            "head_img_url": "http://img.iinnet.com/FlcfxZr8WXKbW73wfy4tn7LNU-2Z",
+            "role": 1,
+            "role_name": "关系人",
+            "content": "测评",
+            "image_json": "[]",
+            "start_time": "2017-08-12 00:00:00",
+            "end_time": "2017-10-28 00:00:00",
+            "create_time": "2017-09-12 17:45:54",
+            "is_self": "-1",
+            "member_note": "",
+            "comment_list": [{
+                "user_id": 9969,
+                "nickname": "测试18765",
+                "comment_id": 5,
+                "create_time": "2017-09-12 18:38:48",
+                "content": "中学",
+                "root": 1,
+                "comment_user_id": null,
+                "comment_nickname": null,
+                "authority": 1
+            }]
+        }, {
+            "topic_id": 7,
+            "circle_id": 1,
+            "user_id": 204,
+            "nickname": "佛易道科",
+            "head_img_url": "http://img.iinnet.com/Fq_SwUAj6_nn-cl3NOFcOSwfQApE",
+            "role": 1,
+            "role_name": "关系人",
+            "content": "大家好",
+            "image_json": "[]",
+            "start_time": "2017-08-27 00:00:00",
+            "end_time": "2017-09-02 00:00:00",
+            "create_time": "2017-08-27 09:16:40",
+            "is_self": "-1",
+            "member_note": "我在用户交流圈",
+            "comment_list": [{
+                "user_id": 505,
+                "nickname": "尹中华",
+                "comment_id": 3,
+                "create_time": "2017-08-27 09:23:09",
+                "content": "测试通过了？",
+                "root": 1,
+                "comment_user_id": null,
+                "comment_nickname": null,
+                "authority": 1
+            }]
+        }, {
+            "topic_id": 1,
+            "circle_id": 1,
+            "user_id": 505,
+            "nickname": "尹中华",
+            "head_img_url": "http://img.iinnet.com/FrT9kKWQnre3tTRGUpmmO0l__6Xx",
+            "role": 1,
+            "role_name": "关系人",
+            "content": "求联系方式",
+            "image_json": "[\"http:\\/\\/img.iinnet.com\\/Frsb9yimkPhm0xSVZ-xZ2iycKa0H\"]",
+            "start_time": "2017-08-12 00:00:00",
+            "end_time": "2017-08-13 00:00:00",
+            "create_time": "2017-08-12 11:54:29",
+            "is_self": "-1",
+            "member_note": "",
+            "comment_list": [{
+                "user_id": 505,
+                "nickname": "尹中华",
+                "comment_id": 1,
+                "create_time": "2017-08-12 11:57:04",
+                "content": "终于让你看到消息啦，我是误打误撞发现这里的，感觉像发现了宝贝，如果方便请加我微信 crossey ",
+                "root": 1,
+                "comment_user_id": null,
+                "comment_nickname": null,
+                "authority": 1
+            }]
+        }]
+    }
 }
-at find_publishpro_frame.html: 581
+at find_dynamicState_frame.html: 334

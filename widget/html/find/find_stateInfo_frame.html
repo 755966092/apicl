@@ -326,7 +326,10 @@
                 <div class="text flex-item">
                     <div class="name flex-def flex-zBetween">
                         <h3>{{=it.info.user_info.nickname}}</h3>
+                        {{?it.info.topic_info.role == 0}}
+                        {{??}}
                         <span class="label">{{=it.info.topic_info.role_name}}</span>
+                        {{?}}
                     </div>
                     {{?it.info.user_info.current_company && it.info.user_info.current_position==null}}
                     <p class="company">{{=it.info.user_info.current_company}} }}</p>
@@ -376,7 +379,10 @@
                             <div class="discussTitle flex-def flex-zBetween flex-cCenter">
                                 <div>
                                     <span class="discussName">{{=it.list[i].nickname}}</span>
+                                    {{?it.list[i].role == 0}}
+                                    {{??}}
                                     <span class="label">{{=it.list[i].role_name}}</span>
+                                    {{?}}
                                 </div>
                                 <span class="discussTime">{{=it.list[i].create_time}}</span>
                             </div>
@@ -510,10 +516,10 @@
     }
     // 收藏
     function openShadow() {
-        var val = $api.text($api.byId('role')), valId=1;
-        if ( val == '选择角色') {
-            $api.removeCls($api.dom('.shadow'), 'dn');
-        } else {
+        var val = $api.text($api.byId('role')), valId=0;
+        // if ( val == '选择角色') {
+        //     $api.removeCls($api.dom('.shadow'), 'dn');
+        // } else {
             for (var i = 0; i < role.length; i++) {
                 if (val == role[i]) {
                     valId = i+1;
@@ -540,7 +546,7 @@
                     alert(JSON.stringify(err.msg))
                 }
             })
-        }
+        // }
 
     }
     // 评论输入框
