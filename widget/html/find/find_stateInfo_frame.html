@@ -326,7 +326,7 @@
                 <div class="text flex-item">
                     <div class="name flex-def flex-zBetween">
                         <h3>{{=it.info.user_info.nickname}}</h3>
-                        <span class="label">{{=it.info.topic_info.role}}</span>
+                        <span class="label">{{=it.info.topic_info.role_name}}</span>
                     </div>
                     {{?it.info.user_info.current_company && it.info.user_info.current_position==null}}
                     <p class="company">{{=it.info.user_info.current_company}} }}</p>
@@ -376,7 +376,7 @@
                             <div class="discussTitle flex-def flex-zBetween flex-cCenter">
                                 <div>
                                     <span class="discussName">{{=it.list[i].nickname}}</span>
-                                    <span class="label">{{=it.list[i].role}}</span>
+                                    <span class="label">{{=it.list[i].role_name}}</span>
                                 </div>
                                 <span class="discussTime">{{=it.list[i].create_time}}</span>
                             </div>
@@ -485,18 +485,17 @@
                     $api.css($api.dom('footer'), ' display:none;');
                 }
                 var count=0;
-                if (ret.data.info.topic_info.role) {
-
-                    ret.data.info.topic_info.role = role[ret.data.info.topic_info.role]
-                }
+                // if (ret.data.info.topic_info.role) {
+                //     ret.data.info.topic_info.role = role[ret.data.info.topic_info.role]
+                // }
                 ret.data.info.topic_info.create_time = initTime(ret.data.info.topic_info.create_time)
                 for (var i = 0; i < ret.data.list.length; i++) {
                     if (ret.data.list[i].root == 1) {
                         count++;
                     }
-                    if(ret.data.list[i].role) {
-                        ret.data.list[i].role = role[ret.data.list[i].role]
-                    }
+                    // if(ret.data.list[i].role) {
+                    //     ret.data.list[i].role = role[ret.data.list[i].role]
+                    // }
 
                 }
 
