@@ -521,6 +521,7 @@
         $api.css($api.dom('.shadow'), 'height:'+$api.offset($api.dom('.main')).h+'px;');
         // // // console.log('484:::'+JSON.stringify(api.pageParam))
         if(api.pageParam.userId == 0) {
+            // 进入自己的详情页
             api.ajax({
                 url: apiSite + '/user/detail',
                 method: 'post',
@@ -535,6 +536,7 @@
                     // // // console.log('499:::'+JSON.stringify(ret))
                     api.pageParam.userId = ret.data.info.user_id;
                     moduleInit();
+                    console.log('540')
                     initPage();
                     initStatus();
                 } else {
@@ -543,6 +545,7 @@
             })
         } else {
             moduleInit();
+            console.log('549')
             initPage();
             initStatus();
         }
@@ -553,7 +556,7 @@
             name: 'editUserInfo'
         }, function (ret, err) {
             if (ret) {
-                // // // console.log('监听到事件')
+                console.log('监听到事件')
                 initPage();
             } else {
                 alert(JSON.stringify(err));
@@ -563,7 +566,6 @@
     // 备注当前状态
     function selCurrentStatus(ele) {
         var type = $api.attr(ele, 'data-type'), status_id= $api.attr(ele, 'data-statusId');
-
         api.ajax({
             url: apiSite + '/remark_user/setDefaultStatus',
             method: 'post',
@@ -584,8 +586,8 @@
                     };
                     $api.addCls($api.dom(ele, '.iconStatus'), 'sel');
                     $api.text($api.byId('current_company'), $api.text($api.dom(ele, '.statusText')));
-                    $api.text($api.byId('current_company'), $api.text($api.dom(ele, '.statusText')));
-                    $api.text($api.byId('current_company'), $api.text($api.dom(ele, '.statusText')));
+                    // $api.text($api.byId('current_company'), $api.text($api.dom(ele, '.statusText')));
+                    // $api.text($api.byId('current_company'), $api.text($api.dom(ele, '.statusText')));
                     // // alert(JSON.stringify(ret))
                     // // // console.log('修改当前状态成功')
                     // 更新数据库
@@ -623,15 +625,16 @@
                 alert( JSON.stringify( err ) );
             }
         });
-        // // // console.log($api.text($api.dom(ele, '.statusText')))
+        console.log($api.text($api.dom(ele, '.statusText')))
         // 更新列表数据库
         db.executeSql({
             name: SQLName,
             sql: ' UPDATE addressList_simplify SET subTitle = "'+ $api.text($api.dom(ele, '.statusText'))+'" WHERE user_id =' + api.pageParam.userId
         }, function(ret, err){        
             if( ret.status ){
+                console.log('执行成功')
               api.sendEvent({
-                  name: 'editUserInfo'
+                  name: 'editUserInfoUpdateList'
               });
             }else{
                 alert( JSON.stringify( err ) );
@@ -641,6 +644,7 @@
     }
     // 获取会员信息
     function requireData(flag,data) {
+        console.log('执行了')
         var current_company = $api.byId('current_company');
         var current_position = $api.byId('current_position');
         var current_degree = $api.byId('current_degree');
@@ -678,8 +682,7 @@
                         }
                     }, function(retDetail, errDetail) {
                         if(retDetail) {
-                            // // // console.log('获取线上原始信息:::'+JSON.stringify(retDetail))
-                            // // // console.log('数据库信息:::'+JSON.stringify(data))
+                            // console.log('数据库信息:::'+JSON.stringify(data))
                             infoComparison(data,retDetail.data.info);
                             infoComparison2(ret.data.info,retDetail.data.info);
                             relationship_level_flag = retDetail.data.relationship_level;
@@ -955,6 +958,7 @@
             sql: ' UPDATE addressList_simplify SET ' + key + '= "' + data + '" WHERE user_id = ' + api.pageParam.userId 
         }, function(ret, err){        
             if( ret.status ){
+                console.log('发送时间')
                api.sendEvent({
                    name: 'editUserInfo',
                    extra: {
@@ -985,6 +989,7 @@
             sql: ' UPDATE addressList SET ' + key + '= "' + data + '" WHERE user_id = ' + api.pageParam.userId 
         }, function(ret, err){        
             if( ret.status ){
+                console.log('992')
                 initPage();
             }else{
                 alert( JSON.stringify( err ) );
@@ -1101,21 +1106,19 @@
             }
         }, function(ret, err) {
             if(ret) {
-                // // // console.log('741::::'+JSON.stringify(ret))
                 if (!argument) {
                     if (ret.data.status.length != 0) {
-
                         handData(ret)
                     } else {
                         statusUser();
                     }
                 } else {
+                    console.log('对比')
                     // 对比
-                    // // // console.log('data.length:::'+data.length)
-                    // // // console.log('ret.data.status.length:::'+ret.data.status.length)
                     if (data.length != ret.data.status.length) {
                         // 更新数据库
                         handData(ret)
+                        console.log('更新数据库')
                     }
                 }
             } else {
@@ -1146,7 +1149,7 @@
     }
 
     function handData(ret) {
-        // // // console.log('707:::'+JSON.stringify(ret))
+        console.log('707:::'+JSON.stringify(ret))
         if (ret.data.status != '') {
             var sql = 'INSERT OR REPLACE INTO tb_remarks_status(remark_user_id, status_id, name, position, degree, start_date, is_default, type) VALUES ';
             for (var i = 0; i < ret.data.status.length; i++) {

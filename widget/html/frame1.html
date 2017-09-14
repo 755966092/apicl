@@ -495,7 +495,7 @@
         moduleInit(); 
         initPage();
         api.addEventListener({
-            name: 'editUserInfo'
+            name: 'editUserInfoUpdateList'
         }, function(ret, err) {
             if (ret) {
                 initPage();
@@ -565,27 +565,22 @@
             });
     }
     function initPage() {
-        setTimeout(function () {
-            db.selectSql({
-                name: 'db_'+$api.getStorage('userToken'),
-                sql: 'SELECT * FROM addressList_simplify WHERE type IN (1,2,3,4) order by flag asc',
-            }, function(ret, err){  
-                if( ret.status ){
-                    if (ret.data.length != 0) {
-                        // sortData(ret.data)
-                        setTimeout(function () {
-                            dakai(paixv(ret.data));
-                        },60)
-                    } else {
-                        setTimeout(function () {
-                            query();
-                        },1)
-                    }
-                }else{
-                    alert('292'+ JSON.stringify( err ) );
+        db.selectSql({
+            name: 'db_'+$api.getStorage('userToken'),
+            sql: 'SELECT * FROM addressList_simplify WHERE type IN (1,2,3,4) order by flag asc',
+        }, function(ret, err){  
+            if( ret.status ){
+                if (ret.data.length != 0) {
+                        dakai(paixv(ret.data));
+                } else {
+                    setTimeout(function () {
+                        query();
+                    },1)
                 }
-            });
-        },1)
+            }else{
+                alert('292'+ JSON.stringify( err ) );
+            }
+        });
     }
     function move() {
         event.preventDefault();
@@ -974,30 +969,53 @@
         //         }
         //     }
         // }
-        for (var i = 0; i < data.length; i++) {
-            // data[i].placeholderImg = "widget://image/icon_defaultHead.png";
-            if (f_check_uppercase(data[0].flag)) {
-                data[0].initial = data[0].flag;
-            } else {
-                data[0].initial = '#';
+        if(api.systemType == 'ios') {
+            for (var i = 0; i < data.length; i++) {
+                    data[i].placeholderImg = "widget://image/icon_defaultHead.png";
+                if (f_check_uppercase(data[0].flag)) {
+                    data[0].initial = data[0].flag;
+                } else {
+                    data[0].initial = '#';
+                }
+                if (i>0) {
+                    if (data[i].flag !== data[i-1].flag) {
+                        if (f_check_uppercase(data[i].flag)) {
+                            data[i].initial = data[i].flag;
+                        } else {
+                            data[i].initial = '#';
+                        }
+                    }
+                }
             }
-            if (i>0) {
-                if (data[i].flag !== data[i-1].flag) {
-                    if (f_check_uppercase(data[i].flag)) {
-                        data[i].initial = data[i].flag;
-                    } else {
-                        data[i].initial = '#';
+        } else {
+            for (var i = 0; i < data.length; i++) {
+                    // data[i].placeholderImg = "widget://image/icon_defaultHead.png";
+                if (f_check_uppercase(data[0].flag)) {
+                    data[0].initial = data[0].flag;
+                } else {
+                    data[0].initial = '#';
+                }
+                if (i>0) {
+                    if (data[i].flag !== data[i-1].flag) {
+                        if (f_check_uppercase(data[i].flag)) {
+                            data[i].initial = data[i].flag;
+                        } else {
+                            data[i].initial = '#';
+                        }
                     }
                 }
             }
         }
         var arr = {}
         var a;
+        delete data.subTitle;
+        delete data.flag;
+        delete data.type;
         for (var i = 0; i < data.length; i++) {
             // data[i].subTitle = (data[i].current_company || ""+ data[i].current_position || ""+data[i].current_degree||"") ? (data[i].current_company || ""+" "+ data[i].current_position || ""+" "+data[i].current_degree||"") : ""
-            // data[i].titleSize = 15;
+            data[i].titleSize = 15;
             // data[i].subTitleColor = '#999'
-            delete
+            
             if (data[i].initial) {
                 if (data[i].initial == '#') {
                     if (arr[data[i].initial]) {
@@ -1013,8 +1031,6 @@
            
             arr[data[a].initial].push (data[i])
         }
-        console.log(JSON.stringify(arr))
-        
         return arr;
     }
     </script>

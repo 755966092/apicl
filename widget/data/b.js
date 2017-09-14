@@ -1,8 +1,2 @@
-{"user_id":"494",
-"title":"11a杨总",
-"img":"http://img.iinnet.com/system/default-head-img.png",
-"subTitle":"",
-"current_contact":"18763830562",
-"flag":"1",
-"type":"3",
-"initial":"#"
+741::::{ "code":200, "msg":"", "time":1505381386, "data":{ "info":{ "user_id":909, "nickname":"北京—陈佳", "real_name":"", "sex":null, "head_img_url":"", "hometown":"", "birthday":null, "current_company":"测评", "current_position":"测评", "current_degree":"", "current_contact":"18630408439" },"extra":null, "status":[{ "status_id": 31, "user_id": 909, "remark_user_id": 493, "name": "测评", "position": "测评", "degree": "", "start_date": "2017-08-14", "is_default": 1, "type": 1 }, { "status_id": 32, "user_id": 909, "remark_user_id": 493, "name": "工作c", "position": "工作", "degree": "", "start_date": "2017-08-14", "is_default": -1, "type": 1 }, { "status_id": 33, "user_id": 909, "remark_user_id": 493, "name": "工作，3", "position": "测评", "degree": "", "start_date": "2017-08-14", "is_default": -1, "type": 1 }], "contact_list":[], "other_contact_list":[], "address_list":[], "work_list":[{ "work_id": 33, "company_id": null, "company_name": "工作，3", "position": "测评", "description": "测评", "start_date": "2017-08-14", "end_date": "0000-00-00", "is_default": -1 }, { "work_id": 32, "company_id": null, "company_name": "工作c", "position": "工作", "description": "可是", "start_date": "2017-08-14", "end_date": "0000-00-00", "is_default": -1 }, { "work_id": 31, "company_id": null, "company_name": "测评", "position": "测评", "description": "测评", "start_date": "2017-08-14", "end_date": "0000-00-00", "is_default": 1 }], "education_list":[], "project_list":[] } } at txl_memberInfo_Frame.html : 1106
+˝7412::::[{"remark_user_id":"493","status_id":"32","name":"工作c","position":"工作","degree":"","start_date":"2017-08-14","is_default":"-1","type":"1"},{"remark_user_id":"493","status_id":"33","name":"工作，3","position":"测评","degree":"","start_date":"2017-08-14","is_default":"-1","type":"1"},{"remark_user_id":"493","status_id":"31","name":"测评","position":"测评","degree":"","start_date":"2017-08-14","is_default":"1","type":"1"}] at txl_memberInfo_Frame.html : 1107

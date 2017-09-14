@@ -750,10 +750,7 @@
             name: SQLName,
             sql: SQLsentence
         }, function(ret, err) {
-            // // // console.log('ret:'+JSON.stringify(ret))
-            // // // console.log('err:'+JSON.stringify(err))
             if (ret.status) {
-                // // // console.log('查询数据库'+JSON.stringify(ret))
                 $api.css($api.dom('.loading'), 'display:none');
                 for (var i = 0; i < $api.domAll('p').length; i++) {
                     $api.css($api.domAll('p.nodata')[i], 'display:none');
@@ -840,7 +837,8 @@
         //         }
         //     }
         // }
-        for (var i = 0; i < data.length; i++) {
+        if(api.systemType == 'ios') {
+            for (var i = 0; i < data.length; i++) {
             data[i].placeholderImg = "widget://image/icon_defaultHead.png";
             if (f_check_uppercase(data[0].flag)) {
                 data[0].initial = data[0].flag;
@@ -857,11 +855,34 @@
                 }
             }
         }
+        } else {
+            for (var i = 0; i < data.length; i++) {
+            // data[i].placeholderImg = "widget://image/icon_defaultHead.png";
+            if (f_check_uppercase(data[0].flag)) {
+                data[0].initial = data[0].flag;
+            } else {
+                data[0].initial = '#';
+            }
+            if (i>0) {
+                if (data[i].flag !== data[i-1].flag) {
+                    if (f_check_uppercase(data[i].flag)) {
+                        data[i].initial = data[i].flag;
+                    } else {
+                        data[i].initial = '#';
+                    }
+                }
+            }
+        }
+        }
+       
         var arr = {}
         var a;
+        delete data.subTitle;
+        delete data.flag;
+        delete data.type;
         for (var i = 0; i < data.length; i++) {
             data[i].titleSize = 15;
-            data[i].subTitleColor = '#999'
+            // data[i].subTitleColor = '#999'
 
             if (data[i].initial) {
                 if (data[i].initial == '#') {
