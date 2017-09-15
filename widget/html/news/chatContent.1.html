@@ -261,7 +261,7 @@ var name,headImg = $api.getStorage('imgCache'),youHeadImg;
 var messageId,targetRongId,emotionData,userId,newsText,msgId;
 var  mainH, _main, scrollH;
     apiready = function(){
-        console.log(JSON.stringify(api.pageParam))
+        // // console.log(JSON.stringify(api.pageParam))
         moduleInit();
         // // // console.log('参数内容:'+JSON.stringify(api.pageParam))
         if (api.pageParam.supplyName) {
@@ -274,10 +274,14 @@ var  mainH, _main, scrollH;
             $api.css($api.dom('.main'), 'margin-top: .7rem');
             $api.css($api.dom('.promptText'), 'margin-top: .9rem');
         }
+
+        
+
         targetRongId = api.pageParam.targetRongId
         nickname = api.pageParam.nickname;
         var sourcePath = "widget://image/chatPage/emotion";//表情存放目录
         if ($api.getStorage('youHeadImg_'+targetRongId)) {
+            
             userId = $api.getStorage('userId_'+targetRongId);
             youHeadImg = $api.getStorage('youHeadImg_'+targetRongId);
             api.sendEvent({
@@ -305,11 +309,8 @@ var  mainH, _main, scrollH;
         api.addEventListener({
             name: 'sendMsg'
         }, function(ret, err) {
-            
-            console.log('发送消息后:'+JSON.stringify(ret))
-            chatRecordingSql(ret.value,'sendMsg')
             // 发送消息后, 添加消息内容到页面
-            addSendMsg(ret.value.msg.result.message.content.text, headImg,0);
+            addSendMsg(ret.value.msg, headImg,0);
             // 聊天列表获取
             var news = historicalNews();
             api.execScript({
@@ -322,8 +323,6 @@ var  mainH, _main, scrollH;
         api.addEventListener({
             name: 'receiveMsg'
         }, function(ret, err) {
-            console.log('接受消息后:'+JSON.stringify(ret))
-            chatRecordingSql(ret.value, 'receiveMsg')
             var value = ret.value
             if (value.targetId == targetRongId) {
                  // addReceMsg(ret.value.msg, youHeadImg,0);
@@ -359,38 +358,7 @@ var  mainH, _main, scrollH;
     };
     // 查询数据库
     // 查询网络
-    // 聊天记录插入到数据库
-    function chatRecordingSql(params, flagStr) {
-        // console.log(JSON.stringify(params))
-        var SQL = 'INSERT OR REPLACE INTO tb_chat_'+ api.pageParam.targetRongId +'(messageId, receivedTime, objectName, content_extra, content_text, head_img_url) VALUES '
-        if (flagStr === 'sendMsg') {
-            SQL += '('+ params.msg.result.message.messageId +',"'+ params.msg.result.message.sentTime +'","'+ params.msg.result.message.objectName +'","'+ params.msg.result.message.content.extra +'","'+ params.msg.result.message.content.text +'","' + api.pageParam.headImg + '")'
-        } else if (flagStr === 'receiveMsg'){
-            SQL += '('+ params.msgContent.result.message.messageId +',"'+ params.msgContent.result.message.receivedTime +'","'+ params.msgContent.result.message.objectName +'","'+ params.msgContent.result.message.content.extra +'","'+ params.msgContent.result.message.content.text +'","' + api.pageParam.headImg + '")'
-        } else {
-
-        }
-        // console.log(SQL)
-        db.executeSql({
-            name: 'db_'+$api.getStorage('userToken'),
-            sql: SQL
-        },function(ret,err){
-            if (ret.status) {
-                db.selectSql({
-                    name: 'db_'+$api.getStorage('userToken'),
-                    sql: 'SELECT * FROM tb_chat_'+ api.pageParam.targetRongId
-                },function(ret,err){
-                    if (ret.status) {
-                        console.log(JSON.stringify(ret))
-                    }else {
-                        api.alert('386'+{msg:err.msg});
-                    }
-                });
-            }else {
-                api.alert('390'+{msg:err.msg});
-            }
-        });
-    }
+    
     // 打开订单详情
     function openSupplyPage(ele) {
         var url;
@@ -1232,9 +1200,9 @@ var  mainH, _main, scrollH;
             text: msg,
             extra: ''
         }, function(ret, err) {
-            console.log('558:'+JSON.stringify(ret))
+            // // console.log('558:'+JSON.stringify(ret))
             if (ret.status == 'prepare') {
-              sendMsg = ret;
+              sendMsg = ret.result.message.content.text;
               // alert(JSON.stringify(ret));
             }
                

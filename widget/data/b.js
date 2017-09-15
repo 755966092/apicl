@@ -1,51 +1,105 @@
-获取历史消息{"value":{ "data":[
-	{ 
-		"conversationTitle": "", 
-		"conversationType": "PRIVATE", 
-		"draft": "", 
-		"isTop": false, 
-		"latestMessage": { "extra": "", 
-		"text": "[害羞]" }, 
-		"latestMessageId": 5, 
-		"objectName": "RC:TxtMsg", 
-		"receivedStatus": "READ", 
-		"receivedTime": 1505456965536, 
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33", 
-		"sentStatus": "SENT", 
-		"sentTime": 1505456965638, 
-		"targetId": "5e74dac67fafa2e251a25d9c7401847e", 
-		"unreadMessageCount": 0 }, 
-	{ 
-		"conversationTitle": "", 
-		"conversationType": "PRIVATE", 
-		"draft": "", 
-		"isTop": false, 
-		"latestMessage": { "extra": "", 
-		"text": "[撇嘴][撇嘴]" }, 
-		"latestMessageId": 3, 
-		"objectName": "RC:TxtMsg", 
-		"receivedStatus": "READ", 
-		"receivedTime": 1505456862446, 
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33", 
-		"sentStatus": "SENT", 
-		"sentTime": 1505456862733, 
-		"targetId": "1460aa0e1321a0b70904dd730268c2af", 
-		"unreadMessageCount": 0 
-	}, 
-	{ 
-		"conversationTitle": "", 
-		"conversationType": "PRIVATE", 
-		"draft": "", 
-		"isTop": false, 
-		"latestMessage": { "extra": "", 
-		"text": "测评" }, 
-		"latestMessageId": 1, 
-		"objectName": "RC:TxtMsg", 
-		"receivedStatus": "READ", 
-		"receivedTime": 1505454585693, 
-		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33", 
-		"sentStatus": "SENT", 
-		"sentTime": 1505454586842, 
-		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5", 
-		"unreadMessageCount": 0 
-	}] } } 
+{
+	"msg": "[害羞][害羞][害羞][害羞]",
+	"targetId": "759d2765861e5ba5f4b8e576bfeaee33",
+	"msgContent": {
+		"result": {
+			"message": {
+				"extra": "",
+				"sentStatus": "SENT",
+				"messageId": 10,
+				"sentTime": 1505463442183,
+				"conversationType": "PRIVATE",
+				"receivedStatus": "UNREAD",
+				"messageDirection": "RECEIVE",
+				"targetId": "759d2765861e5ba5f4b8e576bfeaee33",
+				"objectName": "RC:TxtMsg",
+				"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
+				"receivedTime": 1505463442385,
+				"content": {
+					"extra": "",
+					"text": "[害羞][害羞][害羞][害羞]"
+				}
+			},
+			"left": 0
+		}
+	}
+} {
+	"msg": {
+		"result": {
+			"message": {
+				"content": {
+					"extra": "",
+					"text": "[流泪][流泪]"
+				},
+				"conversationType": "PRIVATE",
+				"extra": "",
+				"messageDirection": "SEND",
+				"messageId": 28,
+				"objectName": "RC:TxtMsg",
+				"receivedTime": 0,
+				"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
+				"sentStatus": "SENDING",
+				"sentTime": 1505465985527,
+				"targetId": "47d2b511386521e8235274b1287e5525"
+			}
+		},
+		"status": "prepare"
+	}
+}
+at chatContent.html: 364
+
+{
+	"msg": "[冷汗][酷]",
+	"targetId": "47d2b511386521e8235274b1287e5525",
+	"msgContent": {
+		"result": {
+			"left": 0,
+			"message": {
+				"content": {
+					"extra": "",
+					"text": "[冷汗][酷]"
+				},
+				"conversationType": "PRIVATE",
+				"extra": "",
+				"messageDirection": "RECEIVE",
+				"messageId": 29,
+				"objectName": "RC:TxtMsg",
+				"receivedTime": 1505466010316,
+				"senderUserId": "47d2b511386521e8235274b1287e5525",
+				"sentStatus": "SENT",
+				"sentTime": 1505466009127,
+				"targetId": "47d2b511386521e8235274b1287e5525"
+			}
+		}
+	}
+}
+at chatContent.html: 364
+
+
+{
+	"msg": {
+		"result": {
+			"message": {
+				"content": {
+					"extra": "",
+					"text": "[流泪][流泪][流泪][流泪][流泪][流泪][流泪][流泪][流泪][流泪]"
+				},
+				"conversationType": "PRIVATE",
+				"extra": "",
+				"messageDirection": "SEND",
+				"messageId": 30,
+				"objectName": "RC:TxtMsg",
+				"receivedTime": 0,
+				"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33",
+				"sentStatus": "SENDING",
+				"sentTime": 1505466179430,
+				"targetId": "47d2b511386521e8235274b1287e5525"
+			}
+		},
+		"status": "prepare"
+	}
+}
+at chatContent.
+
+
+INSERT OR REPLACE INTO tb_chat_759d2765861e5ba5f4b8e576bfeaee33(messageId, receivedTime, objectName, content_extra, content_text, head_img_url) VALUES (33,"1505467983546","RC:TxtMsg","","[色][色][色]","http://img.iinnet.com/FlcfxZr8WXKbW73wfy4tn7LNU-2Z?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim")

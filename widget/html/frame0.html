@@ -457,14 +457,15 @@
                 // 处理时间
                 for (var i = 0; i < ret.data.length; i++) {
                     var element = ret.data[i];
-                    element.time = changeTime(element.receivedTime);
+                    element.time = changeTime(parseInt(element.receivedTime));
                     if (element.receivedTime < currentTime) {
                         element.timeStr = element.time.year+'-'+element.time.month +'-'+element.time.day+' '+element.time.hour +':'+element.time.minute
                     } else {
                         element.timeStr = element.time.hour +':'+element.time.minute
                     }
                 }
-                getData(ret.data)
+                getData(ret.data);
+                historyNews(ret.data);
             }else {
                 api.alert({msg:err.msg});
             }
@@ -494,6 +495,7 @@
     }
     // 历史消息
     function historyNews(cacheFieldName){
+        console.log('获取历史聊天记录')
         // 历史消息列表
         rong.getConversationList(function(ret, err) {
                 var targetRongIdArr = [];
@@ -514,7 +516,6 @@
                 //         data: ret.result
                 //     }
                 // });
-
                 // // // console.log('553:::'+JSON.stringify(ret))
                 // 获取聊天对方信息
                 getSideInfo(targetRongIdArr, ret.result, cacheFieldName);
@@ -524,9 +525,9 @@
             name: 'historNews'
         }, function(ret, err) {
             if (ret) {
-                console.log('获取历史消息'+JSON.stringify(ret))
+                
+                // console.log('获取历史消息'+JSON.stringify(ret))
                 var targetRongIdArr = [];
-
                 for (var i = 0; i < ret.value.data.length; i++) {
                     ret.value.data[i].time = changeTime(ret.value.data[i].receivedTime);
                     ret.value.data[i].latestMessage_text = ret.value.data[i].latestMessage.text;
@@ -598,23 +599,54 @@
                     }
                 }
                 // 网络数据有更新 刷新数据 从新缓存数据
-                if (cacheFieldName !== data) {
-                    $api.setStorage('chatMessage', data);
-                    console.log('463:::'+JSON.stringify(data))
-                    getData(data);
-                    chatListSql(data);
-                    // initView(data);
-                }
+                getData(data);
+                comparedObj(cacheFieldName,data);
+                // if (cacheFieldName !== data) {
+                //     $api.setStorage('chatMessage', data);
+                //     // console.log('463:::'+JSON.stringify(data))
+                    
+                //     chatListSql(data);
+                    
+                //     // initView(data);
+                // }
 
            } else {
                alert(JSON.stringify(err.msg))
            }
        })
     }
+    function comparedObj(cacheData, data) {
+        // console.log(JSON.stringify(cacheData))
+        if (cacheData) {
+            for (var i = 0; i < cacheData.length; i++) {
+                var elementCacheData = cacheData[i];
+                for (var j = 0; j < data.length; j++) {
+                    if(data[j].user_id == elementCacheData.user_id) {
+                        for (var key in elementCacheData) {
+                            if (elementCacheData.hasOwnProperty(key)) {
+                                var elementChcheObj = elementCacheData[key];
+                                data[j][key] = data[j][key] == null ? '' : data[j][key];
+                                if (key != 'time') {
+                                    if (elementChcheObj != data[j][key]) {
+                                        chatListSql(data);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                }
+            }
+        } else {
+            chatListSql(data);
+        }
+        
+    }
     function chatListSql(data) {
         var SQL = 'INSERT OR REPLACE INTO tb_chat_list (user_id, head_img_url, remark_head_img_url, nickname, remark_nickname, latestMessage_text, receivedTime, targetId, unreadMessageCount) VALUES '
         for (var i = 0; i < data.length; i++) {
             var element = data[i];
+            element.remark_nickname = element.remark_nickname==null?'':element.remark_nickname;
             SQL += '('+ element.user_id +',"'+ (element.head_img_url)+'","'+(element.remark_head_img_url) +'","'+ (element.nickname )+'","'+(element.remark_nickname) +'","'+ element.latestMessage.text +'","'+ element.receivedTime +'","'+ element.targetId +'",'+ element.unreadMessageCount +'),'
         }
         SQL = SQL.substring(0,SQL.length-1) + ';'
@@ -623,7 +655,8 @@
             sql: SQL
         },function(ret,err){
             if (ret.status) {
-                api.alert({msg:'执行SQL成功'});
+                // console.log(JSON.stringify(data))
+                console.log('执行sql成功')
             }else {
                 api.alert({msg:err.msg});
             }
