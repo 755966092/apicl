@@ -276,7 +276,7 @@ function changeTime(time) {
     // 年
     var year = time.getFullYear();
     // 月
-    var month = time.getMonth();
+    var month = time.getMonth()+1;
     // 日
     var day = time.getDay();
     // 星期

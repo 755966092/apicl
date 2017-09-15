@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <style>
         .main_no1 {
-           margin-top: .6rem;
+            margin-top: .6rem;
         }
-        .main_no1 p, .main_no2 p {
-             background-color: #fff;
+
+        .main_no1 p,
+        .main_no2 p {
+            background-color: #fff;
             height: .8rem;
             line-height: .8rem;
             border-bottom: .01rem solid #d9d9d9;
             font-size: .3rem;
             padding: 0 .36rem;
-
         }
+
         .main_no1 p span {
             display: inline-block;
             width: .45rem;
@@ -28,12 +33,15 @@
             background-position: center center;
             display: none;
         }
+
         .main_no1 p span.select {
             display: inline-block;
         }
+
         .main_no2 p {
             margin-top: .2rem;
         }
+
         .button {
             font-size: .34rem;
             width: 6.785rem;
@@ -49,39 +57,46 @@
             margin-top: 1rem;
             margin-bottom: 1rem;
         }
+
         .main_no3 {
             margin-top: 4rem;
         }
-        .main_no2 .telClass{
+
+        .main_no2 .telClass {
             background: #fff url(../../image/icon_zk.png)no-repeat;
             background-size: .15rem .25rem;
             background-position: 7.05rem center;
         }
+
         .main_no2 .telClass_1 {
             margin-right: .3rem;
             color: #36b857;
         }
-        input { 
+
+        input {
             height: .8rem;
             outline: none;
             width: 1.9rem;
         }
+
         .wrap {
             padding-left: .36rem;
             background-color: #fff;
-
         }
+
         .main_no1 .wrap p {
             padding-left: 0;
             padding-right: .36rem;
         }
+
         .loading {
             display: none;
         }
     </style>
 </head>
+
 <body>
-   <!--  <header  class="header">
+    <!--  <header  class="header">
         <div class="head">
             <span class="callback"   tapmode   onclick="api.closeWin()">取消</span>
             <span class="winTitle">
@@ -91,40 +106,40 @@
     </header> -->
     <div class="loading"></div>
     <div class="main clearfix">
-       <div class="main_no1">
-           <div class="wrap">
-               <p   tapmode   onclick="selectClass(this)"  data-val="1">
+        <div class="main_no1">
+            <div class="wrap">
+                <p tapmode onclick="selectClass(this)" data-val="1">
                     移动电话
                     <span class="selClass selClass1 select"></span>
-               </p>
-           </div>
-           <p   tapmode   onclick="selectClass(this)"  data-val="2">
+                </p>
+            </div>
+            <p tapmode onclick="selectClass(this)" data-val="2">
                 固定电话
                 <span class="selClass selClass2"></span>
-           </p>
-       </div>
-       <div class="main_no2">
-           <p class="telClass"  tapmode onclick="selTel()">类别
+            </p>
+        </div>
+        <div class="main_no2">
+            <p class="telClass" tapmode onclick="selTel()">类别
                 <span class="fr telClass_1" id="sub_type">工作</span>
-           </p>
-           <p>电话号码
+            </p>
+            <p>电话号码
                 <input type="text" id="phone" placeholder="输入号码" class="fr">
-           </p>
-       </div>
-       <div class="main_no3 ">
-           <div class="button" tapmode   onclick="addTel()">保存</div>
-       </div>
+            </p>
+        </div>
+        <div class="main_no3 ">
+            <div class="button" tapmode onclick="addTel()">保存</div>
+        </div>
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     var type = 1, sub_type = 1, url;
-    apiready = function(){
+    apiready = function () {
         // // console.log(JSON.stringify(api.pageParam))
         moduleInit();
         modilyType();
-        
+
         if (api.pageParam.contactId) {
             remarkEditContactIndex();
             url = '/remark_user/editContact'
@@ -139,20 +154,20 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
-                   token: $api.getStorage('userToken'),
-                   remark_user_id: api.pageParam.userId,
-                   contact_id: api.pageParam.contactId
+                values: {
+                    token: $api.getStorage('userToken'),
+                    remark_user_id: api.pageParam.userId,
+                    contact_id: api.pageParam.contactId
                 }
             }
-        }, function(ret, err) {
-            if(ret) {
+        }, function (ret, err) {
+            if (ret) {
                 // // console.log(JSON.stringify(ret))
                 $api.val($api.byId('phone'), ret.data.info.phone);
                 $api.text($api.byId('sub_type'), ret.data.info.sub_type == 1 ? '工作' : '生活');
                 if (ret.data.info.type == 1) {
                     // 移动
-                    
+
                 } else {
                     // 固定
                     $api.removeCls($api.dom('.selClass1'), 'select');
@@ -166,10 +181,10 @@
         })
     }
     // 电话类型回调
-    function modilyType(){
+    function modilyType() {
         api.addEventListener({
             name: 'xiugaitel'
-        }, function(ret, err) {
+        }, function (ret, err) {
             if (ret) {
                 if (ret.value.selDate == '工作') {
                     sub_type = 1;
@@ -185,7 +200,7 @@
     // 选择电话类别  生活 || 工作
     function selTel(ele) {
         var text = $api.text($api.byId('sub_type'));
-        var data = ['生活','工作']
+        var data = ['生活', '工作']
         var selArr = []
         for (var i = 0; i < data.length; i++) {
             if (data[i] == text) {
@@ -193,8 +208,8 @@
                 break;
             }
         }
-        
-        var fontsize = 16,rowLength = 5, enterSize = 14;
+
+        var fontsize = 16, rowLength = 5, enterSize = 14;
         if (api.systemType === 'ios') {
             fontsize = 20;
             rowLength = 7;
@@ -203,9 +218,9 @@
         UIActionSelector.open({
             datas: [
                 {
-                    name:'生活'
-                },{
-                    name:'工作'
+                    name: '生活'
+                }, {
+                    name: '工作'
                 }
             ],
             actives: selArr,
@@ -214,7 +229,7 @@
                 col: 1,
                 height: 26,
                 size: fontsize,
-                sizeActive: fontsize+2,
+                sizeActive: fontsize + 2,
                 rowSpacing: 5,
                 colSpacing: 5,
                 maskBg: 'rgba(0,0,0,0.5)',
@@ -247,7 +262,7 @@
                 color: '#000'
             },
             fixedOn: api.frameName
-        }, function(ret, err) {
+        }, function (ret, err) {
             if (ret) {
                 if (ret.eventType == 'ok') {
                     if (ret.level1 == '工作') {
@@ -255,7 +270,7 @@
                     } else {
                         sub_type = 2;
                     }
-                    $api.text($api.byId('sub_type'),ret.level1);
+                    $api.text($api.byId('sub_type'), ret.level1);
                 }
             } else {
                 alert(JSON.stringify(err.msg));
@@ -281,8 +296,8 @@
         if (api.pageParam.contactId) {
             obj = {
                 token: $api.getStorage('userToken'),
-                remark_user_id: api.pageParam.userId, 
-                contact_id: api.pageParam.contactId, 
+                remark_user_id: api.pageParam.userId,
+                contact_id: api.pageParam.contactId,
                 phone: tel,
                 type: type,
                 sub_type: sub_type
@@ -290,7 +305,7 @@
         } else {
             obj = {
                 token: $api.getStorage('userToken'),
-                remark_user_id: api.pageParam.userId, 
+                remark_user_id: api.pageParam.userId,
                 phone: tel,
                 type: type,
                 sub_type: sub_type
@@ -304,7 +319,7 @@
                 data: {
                     values: obj
                 }
-            }, function(ret, err) {
+            }, function (ret, err) {
                 if (ret) {
                     if (ret.code == 200) {
                         $api.css($api.dom('.loading'), 'display: none');
@@ -314,19 +329,19 @@
                         alert(ret.msg)
                     }
                 } else {
-                 alert('192'+JSON.stringify(err.msg))
+                    alert('192' + JSON.stringify(err.msg))
                 }
             })
         }
-        
+
     }
-    function checkPhone(data){ 
+    function checkPhone(data) {
         var phone = /^1[34578]\d{9}$/,
             tel = /^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/;
-        if(!(phone.test(data))&& !(tel.test(data))){ 
+        if (!(phone.test(data)) && !(tel.test(data))) {
             $api.css($api.dom('.loading'), 'display: none');
-            alert("电话号码有误，请重填");  
-            return false; 
+            alert("电话号码有误，请重填");
+            return false;
         } else {
             return true
         }
@@ -334,29 +349,29 @@
     }
 
     function insertData() {
-        var SQLName = 'db_'+$api.getStorage('userToken');
+        var SQLName = 'db_' + $api.getStorage('userToken');
         api.ajax({
             url: apiSite + '/remark_user/contactList',
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
-                       token: $api.getStorage('userToken'),
-                       remark_user_id: api.pageParam.userId, 
-                   }
+                values: {
+                    token: $api.getStorage('userToken'),
+                    remark_user_id: api.pageParam.userId,
+                }
             }
-        }, function(ret, err) {
-            if(ret) {
+        }, function (ret, err) {
+            if (ret) {
                 // 插入到个人信息表
                 // 插入到备注电话表
                 var sql = 'INSERT OR REPLACE INTO tb_remarks_contact(list_id,user_id,contact_id,phone,type,sub_type, is_default) VALUES'
                 for (var i = 0; i < ret.data.list.length; i++) {
-                    sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].contact_id  +'",'+api.pageParam.userId+','+ret.data.list[i].contact_id+',"'+ret.data.list[i].phone+'",'+ret.data.list[i].type+','+ret.data.list[i].sub_type+','+ret.data.list[i].is_default+'),'
+                    sql += '("' + api.pageParam.userId + '_' + ret.data.list[i].contact_id + '",' + api.pageParam.userId + ',' + ret.data.list[i].contact_id + ',"' + ret.data.list[i].phone + '",' + ret.data.list[i].type + ',' + ret.data.list[i].sub_type + ',' + ret.data.list[i].is_default + '),'
                     if (ret.data.list[i].is_default == 1) {
                         db.executeSql({
                             name: SQLName,
-                            sql: 'UPDATE addressList set remark_current_contact = "' + ret.data.list[i].phone +'" WHERE user_id = ' + api.pageParam.userId
-                        },function(ret,err){
+                            sql: 'UPDATE addressList set remark_current_contact = "' + ret.data.list[i].phone + '" WHERE user_id = ' + api.pageParam.userId
+                        }, function (ret, err) {
                             if (ret.status) {
                                 api.sendEvent({
                                     name: 'editUserInfo',
@@ -367,30 +382,30 @@
                                 db.selectSql({
                                     name: SQLName,
                                     sql: 'SELECT * FROM addressList WHERE user_id = ' + api.pageParam.userId
-                                }, function(ret, err){        
-                                    if( ret.status ){
-                                    }else{
-                                        alert( JSON.stringify( err ) );
+                                }, function (ret, err) {
+                                    if (ret.status) {
+                                    } else {
+                                        alert(JSON.stringify(err));
                                     }
                                 });
-                            }else {
-                                api.alert({msg:err.msg});
+                            } else {
+                                api.alert({ msg: err.msg });
                             }
                         });
                     }
                 }
-                sql = sql.substring(0,sql.length-1);
+                sql = sql.substring(0, sql.length - 1);
                 db.executeSql({
                     name: SQLName,
-                    sql: sql   
-                }, function(ret, err){  
-                    if( ret.status ){
+                    sql: sql
+                }, function (ret, err) {
+                    if (ret.status) {
                         api.sendEvent({
                             name: 'addRemarkContact'
                         });
                         api.closeWin();
-                    }else{
-                        alert(JSON.stringify( err ) );
+                    } else {
+                        alert(JSON.stringify(err));
                     }
                 });
             } else {
@@ -398,5 +413,7 @@
             }
         })
     }
+
 </script>
+
 </html>
