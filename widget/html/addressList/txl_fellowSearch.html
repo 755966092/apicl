@@ -97,7 +97,9 @@
     </header>
     <div class="main">  
         <!-- <span class="icon_search"></span> -->
-        <input type="text"   name="" id="ipt" onkeyup="keyUp(this)" placeholder="搜索">
+        <form>
+            <input type="search"   name="" id="ipt"  placeholder="搜索">
+        </form>
         <span class="clearIcon"   tapmode   onclick="clearText()"></span>
     </div>
     <div class="fellow">
@@ -159,7 +161,10 @@ var hisDataArr=[],n=1;
             }
         });
     }
-    $api.addEvt($api.dom('input'), 'keyup', function(e) {
+    $api.dom('form').onsubmit = function() {
+        return false;
+    };
+    $api.addEvt($api.byId('ipt'), 'keyup', function(e) {
         if (api.pageParam.type == 'web') {
             if (e.keyCode == 13) {
                 searchFellow();
@@ -174,7 +179,9 @@ var hisDataArr=[],n=1;
             }  
         }
 
-        keyUp($api.dom('input'))
+        if(api.systemType=='ios') {
+            keyUp($api.byId('ipt'))
+        } 
     });
 
     function deletHis() {
@@ -192,7 +199,7 @@ var hisDataArr=[],n=1;
     }
     function keyUp(ele) {
         // alert('keyup')
-        if (event.keyCode == 13) {
+        // if (event.keyCode == 13) {
             var val = $api.val(ele);
             if (val == '') {
                 $api.css($api.dom('.clearIcon'), 'display:none');
@@ -203,13 +210,12 @@ var hisDataArr=[],n=1;
             } else {
                 $api.css($api.dom('.clearIcon'), 'display:inline-block');
             }
-        }
+        // }
         
     }
     
     function searchFellow() {
-        var val = $api.val($api.dom('input'));
-        // // console.log(val)
+        var val = $api.val($api.byId('ipt'));
         // hisDataArr.push(val);
         // // 输入框为空的关闭搜索结果页面
         if (api.pageParam.type == 'web') {
@@ -250,7 +256,7 @@ var hisDataArr=[],n=1;
         }
     }
     function searchFellowMix() {
-        var val = $api.val($api.dom('input'));
+        var val = $api.val($api.byId('ipt'));
         // hisDataArr.push(val);
         // // 输入框为空的关闭搜索结果页面
             // 网络数据
