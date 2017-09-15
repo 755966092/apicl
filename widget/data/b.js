@@ -1,40 +1,51 @@
-463::: [{
-	"targetId": "26f7bf08fc66d89ea2f02cc1a699a986",
-	"conversationTitle": "",
-	"sentStatus": "SENT",
-	"latestMessage": {
-		"extra": "",
-		"text": "[微笑]"
-	},
-	"conversationType": "PRIVATE",
-	"receivedStatus": "READ",
-	"sentTime": 1505094509342,
-	"objectName": "RC:TxtMsg",
-	"senderUserId": "26f7bf08fc66d89ea2f02cc1a699a986",
-	"unreadMessageCount": 0,
-	"receivedTime": 1505097999001,
-	"isTop": false,
-	"latestMessageId": 3,
-	"draft": "",
-	"time": {
-		"sencond": 39,
-		"minute": 46,
-		"hour": 10,
-		"year": 2017,
-		"month": 8,
-		"day": 1
-	},
-	"url": "http://img.iinnet.com/system/default-head-img.png",
-	"nickname": "哈哈",
-	"user_id": 231,
-	"remark_nickname": "",
-	"remark_head_img_url": ""
-}]
-
-/**
- * 目标id
- * 最后消息
- * 时间
- * 吞吞吐吐拖拖拖拖拖拖拖拖拖拖拖拖拖拖拖拖拖拖拖拖
- * 
- */
+获取历史消息{"value":{ "data":[
+	{ 
+		"conversationTitle": "", 
+		"conversationType": "PRIVATE", 
+		"draft": "", 
+		"isTop": false, 
+		"latestMessage": { "extra": "", 
+		"text": "[害羞]" }, 
+		"latestMessageId": 5, 
+		"objectName": "RC:TxtMsg", 
+		"receivedStatus": "READ", 
+		"receivedTime": 1505456965536, 
+		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33", 
+		"sentStatus": "SENT", 
+		"sentTime": 1505456965638, 
+		"targetId": "5e74dac67fafa2e251a25d9c7401847e", 
+		"unreadMessageCount": 0 }, 
+	{ 
+		"conversationTitle": "", 
+		"conversationType": "PRIVATE", 
+		"draft": "", 
+		"isTop": false, 
+		"latestMessage": { "extra": "", 
+		"text": "[撇嘴][撇嘴]" }, 
+		"latestMessageId": 3, 
+		"objectName": "RC:TxtMsg", 
+		"receivedStatus": "READ", 
+		"receivedTime": 1505456862446, 
+		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33", 
+		"sentStatus": "SENT", 
+		"sentTime": 1505456862733, 
+		"targetId": "1460aa0e1321a0b70904dd730268c2af", 
+		"unreadMessageCount": 0 
+	}, 
+	{ 
+		"conversationTitle": "", 
+		"conversationType": "PRIVATE", 
+		"draft": "", 
+		"isTop": false, 
+		"latestMessage": { "extra": "", 
+		"text": "测评" }, 
+		"latestMessageId": 1, 
+		"objectName": "RC:TxtMsg", 
+		"receivedStatus": "READ", 
+		"receivedTime": 1505454585693, 
+		"senderUserId": "759d2765861e5ba5f4b8e576bfeaee33", 
+		"sentStatus": "SENT", 
+		"sentTime": 1505454586842, 
+		"targetId": "1c007ebdf083d6af7ffe5fe4e0cfb6e5", 
+		"unreadMessageCount": 0 
+	}] } } 

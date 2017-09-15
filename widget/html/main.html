@@ -580,16 +580,29 @@ function openRemarksDb() {
             // // console.log('473'+ JSON.stringify( err ) );
         }
     });
-     // db.executeSql({
-     //     name: SQLName,
-     //     sql: 'DROP TABLE tb_remarks_status'
-     // }, function(ret, err){
-     //     if( ret.status ){
-     //         alert('1'+ JSON.stringify( ret ) );
-     //     }else{
-     //         alert( JSON.stringify( err ) );
-     //     }
-     // });
+    // db.executeSql({
+    //      name: SQLName,
+    //      sql: 'DROP TABLE tb_chat_list'
+    //  }, function(ret, err){
+    //      if( ret.status ){
+    //          alert('1'+ JSON.stringify( ret ) );
+    //      }else{
+    //          alert( JSON.stringify( err ) );
+    //      }
+    //  });
+    // 聊天列表
+    db.executeSql({
+        name: SQLName,
+        sql: 'CREATE TABLE IF NOT EXISTS tb_chat_list(user_id int PRIMARY KEY NOT NULL, head_img_url varchar(255), remark_head_img_url varchar(255), nickname varchar(255), remark_nickname varchar(255), latestMessage_text varchar(255), receivedTime varchar(255), targetId varchar(255),unreadMessageCount int)'
+    }, function(ret, err){
+        if( ret.status ){
+            // alert( JSON.stringify( ret ) );
+        }else{
+            alert('473'+ JSON.stringify( err ) );
+            // // console.log('473'+ JSON.stringify( err ) );
+        }
+    });
+     
     // 用户当前状态表格
     db.executeSql({
         name: SQLName,

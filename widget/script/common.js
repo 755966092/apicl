@@ -278,7 +278,7 @@ function changeTime(time) {
     // 月
     var month = time.getMonth()+1;
     // 日
-    var day = time.getDay();
+    var day = time.getDate();
     // 星期
     var xingqu = time.getDate();
     return {

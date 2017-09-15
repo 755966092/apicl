@@ -20,6 +20,7 @@
                 box-sizing: border-box;
         }
         .search {
+
             border-radius: .04rem;
             display: block;
             height: .5rem;
@@ -38,7 +39,7 @@
             background: url(../image/icon_supply/icon_search.png)no-repeat;
             -webkit-background-size: .25rem .26rem;
             background-size: .25rem .26rem;
-            background-position: 0 center; 
+            background-position: 0 center;
             vertical-align: top;
             box-sizing: border-box;
         }
@@ -51,13 +52,13 @@
             flex-flow: column nowrap;
         }
         ul li {
-            display: -webkit-box; 
-            display: flex; 
+            display: -webkit-box;
+            display: flex;
             width: 7.5rem;
             height: 1.24rem;
             background-color: #fff;
-            display: -webkit-box; 
-            display: flex; 
+            display: -webkit-box;
+            display: flex;
             padding: 0 0 0 .17rem;
             box-sizing: border-box;
             position: relative;
@@ -88,8 +89,8 @@
         ul li .warp {
             position: relative;
             z-index: 20;
-            display: -webkit-box; 
-            display: flex; 
+            display: -webkit-box;
+            display: flex;
             -webkit-box-align:  center;
             align-items: center;
             padding-right: .17rem;
@@ -121,8 +122,8 @@
             border-radius: .12rem;
         }
         .contentRight .name{
-             display: -webkit-box; 
-             display: flex; 
+             display: -webkit-box;
+             display: flex;
              width: 6.05rem;
              -webkit-box-pack: justify;
             justify-content: space-between;
@@ -182,19 +183,19 @@
         </div> -->
 
 
-       
+
 
         <ul class="resultList"></ul>
         <script type="text/x-dot-template" id="listT">
             {{?it.length > 0}}
-                {{ for (var i = 0; i < it.length; i++) { }} 
+                {{ for (var i = 0; i < it.length; i++) { }}
                     <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" data-remark_nickname="{{=it[i].remark_nickname}}" ontouchstart=";event.stopPropagation();"  data-userId="{{=it[i].user_id}}"  tapmode   onclick="openChat(this)">
                         <div class="warp" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove(this)" ontouchend="gtouchend(this)">
                             <div class="headImg">
                                 {{?it[i].remark_head_img_url}}
                                  <img class="fl" src="{{=it[i].remark_head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim">
                                  {{??}}
-                                 <img class="fl" src="{{=it[i].url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim">
+                                 <img class="fl" src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim">
                                  {{?}}
                                  {{?it[i].unreadMessageCount == 0 }}
                                  {{??}}
@@ -208,9 +209,9 @@
                                     {{??}}
                                     <h3>{{=it[i].nickname}}</h3>
                                     {{?}}
-                                    <span class="time">{{=it[i].time.hour}}:{{=it[i].time.minute}}</span>
+                                    <span class="time">{{=it[i].timeStr}}</span>
                                </div>
-                                <p>{{=it[i].latestMessage.text||''}}</p>
+                                <p>{{=it[i].latestMessage_text||''}}</p>
                             </div>
                         </div>
                         <span class="slide">
@@ -222,7 +223,7 @@
             {{??}}
                 <p class="noNews">暂无消息</p>
             {{?}}
-                
+
         </script>
     </div>
     <script type="text/javascript" src="../script/common.js"></script>
@@ -232,11 +233,11 @@
     var chatMessage;
      apiready = function() {
         moduleInit()
-        // 监听打开加好友窗口  
+        // 监听打开加好友窗口
         monitorEvent();
         // 缓存个人信息
         requireData();
-        // 滚动到底部触发的事件    
+        // 滚动到底部触发的事件
         // scrollBotton();
         contrastCache('chatMessage',historyNews);
         // 去除头像上的消息数量
@@ -345,12 +346,12 @@
         startX = e.touches[0].pageX;
         startY = e.touches[0].pageY;
         // // // console.log(startY)
-    };   
-    function gtouchmove(){   
+    };
+    function gtouchmove(){
         var e = window.event;
         endX = e.touches[0].pageX;
-        endY = e.touches[0].pageY;  
-    };   
+        endY = e.touches[0].pageY;
+    };
     function gtouchend(ele) {
         if (endX == 0 && endY == 0) {
 
@@ -373,7 +374,7 @@
 
             // $api.css(ele, 'left: -3rem ');
             $api.addCls(ele, 'animate1');
-            
+
         } else if(X > 20 && Y < 100) {
              X = 0, Y = 0;
              endX = 0;
@@ -384,7 +385,7 @@
             $api.removeCls(ele, 'animate1');
             $api.addCls(ele, 'animate2');
             // $api.css(ele, 'left: 0rem ');
-        }   
+        }
     }
 
     function requireData() {
@@ -393,27 +394,27 @@
                 method: 'post',
                 headers: apiHeader,
                 data: {
-                    values: { 
+                    values: {
                         token: $api.getStorage('userToken')
                     }
                 }
             }, function(ret, err) {
                 if (ret) {
-                    
-                    
+
+
                     if(ret.code === 200) {
                         $api.setStorage('UserCenter', ret.data);
                         userName = ret.data.info.nickname,
                         headImg = ret.data.info.head_img_url,
                         sex = ret.data.info.sex,
                         // 当前公司
-                        currentCompany = ret.data.info.current_company, 
+                        currentCompany = ret.data.info.current_company,
                         // 当前职位
                         currentPosition = ret.data.info.current_position;
                         // 设置本地缓存
-                        $api.setStorage('userName', userName); 
-                        $api.setStorage('userSex', sex); 
-                        $api.setStorage('currentCompany', currentCompany); 
+                        $api.setStorage('userName', userName);
+                        $api.setStorage('userSex', sex);
+                        $api.setStorage('currentCompany', currentCompany);
                         $api.setStorage('currentPosition', currentPosition);
                         // 图片缓存
                         api.imageCache({
@@ -421,7 +422,7 @@
                             policy: 'cache_else_network'
                         }, function(ret, err) {
                             if (ret) {
-                                $api.setStorage('imgCache', ret.url); 
+                                $api.setStorage('imgCache', ret.url);
                             } else {
                                 alert(JSON.stringify(err.msg));
                             }
@@ -434,22 +435,46 @@
                 }
             });
     }
-
+    // 当前时间
+    var time = new Date();
+    // 今天开始的时间戳
+    var currentTime = new Date(time.getFullYear()+'-'+(time.getMonth()+1)+'-'+time.getDate()).getTime();
     function contrastCache(cacheFieldName,  fn) {
-        var cacheFieldName = $api.getStorage(cacheFieldName);
-         if (cacheFieldName) {
-            getData(cacheFieldName)
-            fn(cacheFieldName);
-        } else {
-            // 历史消息
-            fn(cacheFieldName);    
-        }
+        // var cacheFieldName = $api.getStorage(cacheFieldName);
+        //  if (cacheFieldName) {
+        //     getData(cacheFieldName)
+        //     fn(cacheFieldName);
+        // } else {
+        //     // 历史消息
+        //     fn(cacheFieldName);
+        // }
+
+        db.selectSql({
+            name: 'db_'+$api.getStorage('userToken'),
+            sql: 'SELECT * FROM tb_chat_list'
+        },function(ret,err){
+            if (ret.status) {
+                // 处理时间
+                for (var i = 0; i < ret.data.length; i++) {
+                    var element = ret.data[i];
+                    element.time = changeTime(element.receivedTime);
+                    if (element.receivedTime < currentTime) {
+                        element.timeStr = element.time.year+'-'+element.time.month +'-'+element.time.day+' '+element.time.hour +':'+element.time.minute
+                    } else {
+                        element.timeStr = element.time.hour +':'+element.time.minute
+                    }
+                }
+                getData(ret.data)
+            }else {
+                api.alert({msg:err.msg});
+            }
+        });
 
     }
 
     // 监听打开加好友窗口
     function monitorEvent() {
-        // 监听showNews事件，显示添加好友框     
+        // 监听showNews事件，显示添加好友框
         api.addEventListener({
             name: 'showNews'
         }, function() {
@@ -474,6 +499,13 @@
                 var targetRongIdArr = [];
                 for (var i = 0; i < ret.result.length; i++) {
                     ret.result[i].time = changeTime(ret.result[i].receivedTime);
+                    ret.result[i].latestMessage_text = ret.result[i].latestMessage.text;
+                    // receivedTime如果小于今天的时间戳 就不是今天 显示昨天的时间
+                    if (ret.result[i].receivedTime < currentTime) {
+                        ret.result[i].timeStr = ret.result[i].time.year+'-'+ret.result[i].time.month +'-'+ret.result[i].time.day+' '+ret.result[i].time.hour +':'+ret.result[i].time.minute
+                    } else {
+                        ret.result[i].timeStr = ret.result[i].time.hour +':'+ret.result[i].time.minute
+                    }
                     targetRongIdArr.push(ret.result[i].targetId);
                 }
                 // api.sendEvent({
@@ -482,7 +514,7 @@
                 //         data: ret.result
                 //     }
                 // });
-                
+
                 // // // console.log('553:::'+JSON.stringify(ret))
                 // 获取聊天对方信息
                 getSideInfo(targetRongIdArr, ret.result, cacheFieldName);
@@ -492,10 +524,19 @@
             name: 'historNews'
         }, function(ret, err) {
             if (ret) {
-                // // // console.log('获取历史消息'+JSON.stringify(ret))
+                console.log('获取历史消息'+JSON.stringify(ret))
                 var targetRongIdArr = [];
+
                 for (var i = 0; i < ret.value.data.length; i++) {
                     ret.value.data[i].time = changeTime(ret.value.data[i].receivedTime);
+                    ret.value.data[i].latestMessage_text = ret.value.data[i].latestMessage.text;
+                    // 判断显示的时间, 对比时间戳
+                   // receivedTime如果小于今天的时间戳 就不是今天 显示昨天的时间
+                   if (ret.value.data[i].receivedTime < currentTime) {
+                        ret.value.data[i].timeStr = ret.value.data[i].time.year+'-'+ret.value.data[i].time.month +'-'+ret.value.data[i].time.day+' '+ret.value.data[i].time.hour +':'+ret.value.data[i].time.minute
+                    } else {
+                        ret.value.data[i].timeStr = ret.value.data[i].time.hour +':'+ret.value.data[i].time.minute
+                    }
                     targetRongIdArr.push(ret.value.data[i].targetId);
                 }
                 api.execScript({
@@ -517,7 +558,7 @@
            method: 'post',
            headers: apiHeader,
            data: {
-              values: { 
+              values: {
                   token: $api.getStorage('userToken'),
                   id_json: rongUserId
               }
@@ -526,7 +567,7 @@
             if(ret) {
                 // // // console.log('456:::'+JSON.stringify(ret))
                 for (var i = 0; i < data.length; i++) {
-                    data[i].url = ret.data.list[data[i].targetId].head_img_url;
+                    data[i].head_img_url = ret.data.list[data[i].targetId].head_img_url;
                     data[i].nickname = ret.data.list[data[i].targetId].nickname;
                     data[i].user_id = ret.data.list[data[i].targetId].user_id;
                     data[i].remark_nickname = ret.data.list[data[i].targetId].remark_nickname;
@@ -559,15 +600,34 @@
                 // 网络数据有更新 刷新数据 从新缓存数据
                 if (cacheFieldName !== data) {
                     $api.setStorage('chatMessage', data);
-                    // // // console.log('463:::'+JSON.stringify(data))
+                    console.log('463:::'+JSON.stringify(data))
                     getData(data);
+                    chatListSql(data);
                     // initView(data);
-                } 
-                
+                }
+
            } else {
                alert(JSON.stringify(err.msg))
            }
        })
+    }
+    function chatListSql(data) {
+        var SQL = 'INSERT OR REPLACE INTO tb_chat_list (user_id, head_img_url, remark_head_img_url, nickname, remark_nickname, latestMessage_text, receivedTime, targetId, unreadMessageCount) VALUES '
+        for (var i = 0; i < data.length; i++) {
+            var element = data[i];
+            SQL += '('+ element.user_id +',"'+ (element.head_img_url)+'","'+(element.remark_head_img_url) +'","'+ (element.nickname )+'","'+(element.remark_nickname) +'","'+ element.latestMessage.text +'","'+ element.receivedTime +'","'+ element.targetId +'",'+ element.unreadMessageCount +'),'
+        }
+        SQL = SQL.substring(0,SQL.length-1) + ';'
+        db.executeSql({
+            name: 'db_'+$api.getStorage('userToken'),
+            sql: SQL
+        },function(ret,err){
+            if (ret.status) {
+                api.alert({msg:'执行SQL成功'});
+            }else {
+                api.alert({msg:err.msg});
+            }
+        });
     }
     // 滚动到底部触发的事件
     function scrollBotton() {
@@ -577,11 +637,11 @@
             extra:{
                 threshold:0            //设置距离底部多少距离时触发，默认值为0，数字类型
             }
-        }, function(ret, err){        
+        }, function(ret, err){
             // alert('已滚动到底部');
         });
     }
-    
+
     // 打开搜索窗口
     function openS() {
         api.openWin({
@@ -595,7 +655,7 @@
     function closeNews() {
         for (var i = 0; i < $api.domAll('.warp').length; i++) {
             $api.css($api.domAll('.warp')[i], 'left: 0rem ');
-        } 
+        }
         $api.removeCls($api.dom('.addWin'), 'show');
     }
 
@@ -633,7 +693,7 @@
                 headImg: headImg
             }
         });
-        
+
     }
 
     </script>
