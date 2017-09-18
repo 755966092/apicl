@@ -86,7 +86,7 @@
     </div>
     <footer>
         <p class="btn"   tapmode   onclick="accessAddressBook()">同意，并进入我在</p>
-        <p class="after"   tapmode   onclick="openMain()">以后再说</p>
+        <p class="after"   tapmode   onclick="openMainPage()">以后再说</p>
     </footer>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -413,7 +413,9 @@
         });
     }
     
-    function openMain() {
+    function openMainPage() {
+        // 设置缓存字段, 未获取通讯录权限
+        $api.setStorage('noAccessToContacts', 'true');
         api.openWin({
             name: 'main',
             url: '../main.html',

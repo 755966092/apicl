@@ -364,6 +364,10 @@
             height: .15rem;
             background-color: #EDECF3;
         }
+        .no_data {
+            background-color: #fff;
+            display: none;
+        }
     </style>
 </head>
 <body >
@@ -445,6 +449,7 @@
             <span class="text">通讯录测22试</span>
         </div> -->
     </div>
+    <p class="no_data">未获取通讯录权限<br>请获取通讯录权限后在设置里更新通讯录</p>
    <!--  <div class="main">
         <div class=" list resultList"></div>
         <script type="text/x-dot-template" id="listT">
@@ -481,6 +486,7 @@
         <div ></div>
     </div>
     <div class="letter"></div>
+    <!-- <p class="contactCount">位联系人</p> -->
     <script type="text/javascript" src="../script/common.js"></script>
     <script type="text/javascript" src="../script/jquery.min.js"></script>
     <script type="text/javascript" src="../script/api.js"></script>
@@ -565,20 +571,26 @@
             });
     }
     function initPage() {
-        db.selectSql({
-            name: 'db_'+$api.getStorage('userToken'),
-            sql: 'SELECT * FROM addressList_simplify WHERE type IN (1,2,3,4) order by flag asc',
-        }, function(ret, err){  
-            if( ret.status ){
-                if (ret.data.length != 0) {
+        if ($api.getStorage('noAccessToContacts') == 'true') {
+            // 未获取通讯录权限
+            $api.css($api.dom('.loading'), 'display: none');
+            $api.css($api.dom('.no_data'), 'display: block');
+        } else {
+            db.selectSql({
+                name: 'db_'+$api.getStorage('userToken'),
+                sql: 'SELECT * FROM addressList_simplify WHERE type IN (1,2,3,4) order by flag asc',
+            }, function(ret, err){  
+                if( ret.status ){
+                    if (ret.data.length != 0) {
                         dakai(paixv(ret.data));
-                } else {
+                    } else {
                         // query();
+                    }
+                }else{
+                    alert('292'+ JSON.stringify( err ) );
                 }
-            }else{
-                alert('292'+ JSON.stringify( err ) );
-            }
-        });
+            });
+        }
     }
     function move() {
         event.preventDefault();
@@ -824,7 +836,7 @@
                 x : 0,
                 y : $api.offset($api.byId('news_wrap')).h,
                 w : api.frameWidth,
-                h : 500,
+                h : 450,
                 bgColor: '#EFEFF4',
                 // 分割线颜色
                 borderColor: '#EDEDED',
@@ -909,7 +921,7 @@
         
         $api.css($api.dom('.loading'), 'display: none');
     }
-     // 打开人脉详情
+    // 打开人脉详情
     function addFriends(userId) {
         api.openWin({
             name: 'txl_memberInfo_Win',
