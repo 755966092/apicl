@@ -616,20 +616,20 @@ function openRemarksDb() {
     });
     db.executeSql({
         name: SQLName,
-        sql: 'CREATE TABLE addressList_simplify(user_id int PRIMARY KEY NOT NULL, title varchar(255),img varchar(255), subTitle varchar(255), current_contact varchar(255), flag varchar(255), type int)'   
+        sql: 'CREATE TABLE IF NOT EXISTS addressList_simplify(user_id int PRIMARY KEY NOT NULL, title varchar(255),img varchar(255), subTitle varchar(255), current_contact varchar(255), flag varchar(255), type int)'   
     }, function(ret, err){    
         if( ret.status ){
             db.executeSql({
                 name: 'db_'+$api.getStorage('userToken'),
-                sql: 'CREATE INDEX  type_idx ON addressList_simplify (type);'    
+                sql: 'CREATE INDEX  IF NOT EXISTS  type_idx ON addressList_simplify (type);'    
             }, function(ret, err){        
                 if( ret.status ){
                     db.executeSql({
                         name: 'db_'+$api.getStorage('userToken'),
-                        sql: 'CREATE INDEX  flag_idx ON addressList_simplify (flag);'    
+                        sql: 'CREATE INDEX  IF NOT EXISTS  flag_idx ON addressList_simplify (flag);'    
                     }, function(ret, err){        
                         if( ret.status ){
-                           synchronousAddressBook();
+                        //    synchronousAddressBook();
                         }else{
                             alert( JSON.stringify( err ) );
                         }
@@ -655,6 +655,7 @@ function openRemarksDb() {
      // });
 }
     function synchronousAddressBook() {
+        // console.log('synchronousAddressBook')
         setTimeout(function(){
              contacts.queryByPage({
                 pageIndex: 0

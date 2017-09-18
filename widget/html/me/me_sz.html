@@ -113,25 +113,25 @@
 
     };
     
-    function clearAllStrong() {
-        var tableArr = ['addressList','tb_remarks_contact','tb_remarks_other_contact','tb_remarks_address','tb_remarks_education','tb_remarks_work','tb_remarks_project','tb_remarks_user_info','tb_remarks_status', 'addressList_simplify']
-        for (var i = 0;i < tableArr.length; i++) {
-            db.executeSql({
-                name: 'db_'+$api.getStorage('userToken'),
-                sql: 'DELETE FROM '+tableArr[i]   
-            },function(ret,err){
-                if (ret.status) {
-                    api.toast({
-                        msg: '删除成功',
-                        duration: 2000,
-                        location: 'bottom'
-                    });
-                } else {
+    // function clearAllStrong() {
+    //     var tableArr = ['addressList','tb_remarks_contact','tb_remarks_other_contact','tb_remarks_address','tb_remarks_education','tb_remarks_work','tb_remarks_project','tb_remarks_user_info','tb_remarks_status', 'addressList_simplify']
+    //     for (var i = 0;i < tableArr.length; i++) {
+    //         db.executeSql({
+    //             name: 'db_'+$api.getStorage('userToken'),
+    //             sql: 'DELETE FROM '+tableArr[i]   
+    //         },function(ret,err){
+    //             if (ret.status) {
+    //                 api.toast({
+    //                     msg: '删除成功',
+    //                     duration: 2000,
+    //                     location: 'bottom'
+    //                 });
+    //             } else {
 
-                }
-            })
-        }
-    }
+    //             }
+    //         })
+    //     }
+    // }
     function openImg2() {
         api.openWin({
             name: 'openImg',
@@ -268,29 +268,76 @@
     function updateAddressList() {
 
         $api.css($api.dom('.loading'), 'display: block');
+        db.executeSql({
+            name: SQLName,
+            sql: 'CREATE TABLE IF NOT EXISTS addressList_simplify(user_id int PRIMARY KEY NOT NULL, title varchar(255),img varchar(255), subTitle varchar(255), current_contact varchar(255), flag varchar(255), type int)'   
+        }, function(ret, err){    
+            if( ret.status ){
+                db.executeSql({
+                    name: 'db_'+$api.getStorage('userToken'),
+                    sql: 'CREATE INDEX  IF NOT EXISTS  type_idx ON addressList_simplify (type);'    
+                }, function(ret, err){        
+                    if( ret.status ){
+                        db.executeSql({
+                            name: 'db_'+$api.getStorage('userToken'),
+                            sql: 'CREATE INDEX  IF NOT EXISTS  flag_idx ON addressList_simplify (flag);'    
+                        }, function(ret, err){        
+                            if( ret.status ){
+                                queryContacts();
+                            }else{
+                                alert( JSON.stringify( err ) );
+                            }
+                        });
+                    }else{
+                        alert( JSON.stringify( err ) );
+                    }
+                });
+            }else{
+                // 报错addressList_simplify 已经存在
+            }
+        });
+        
+        
+       
+                
+    }
+    function queryContacts() {
         contacts.queryByPage({
             pageIndex: 0
         }, function(ret, err) {
             if (ret.status) {
                 db.executeSql({
                     name: 'db_'+$api.getStorage('userToken'),
-                    sql: 'DELETE FROM addressList'
-                },function(retData,err){
-                    if (retData.status) {
+                    sql: 'CREATE TABLE IF NOT EXISTS addressList(user_id int PRIMARY KEY NOT NULL, nickname varchar(255),real_name varchar(255), head_img_url varchar(255), current_position varchar(255), current_company varchar(255), current_degree varchar(255), current_contact varchar(255), titleSize int, title varchar(255), img varchar(255), flag varchar(255), litter varchar(255), type int, sex varchat(10), remark_nickname varchar(255),  remark_real_name varchar(255) , remark_head_img_url varchar(255) , remark_sex varchar(255) , remark_birthday varchar(255) , remark_hometown varchar(255) , remark_current_company varchar(255) , remark_current_position varchar(255) , remark_current_degree varchar(255), remark_current_contact varchar(255), current_status varchar(255))'
+                }, function(ret, err) {
+                    // ;CREATE UNIQUE INDEX user_id_idx on addressList (user_id);
+                    if (ret.status) { 
+                        // // // console.log(JSON.stringify(ret));
+                        // alert('执行成功')
                         db.executeSql({
                             name: 'db_'+$api.getStorage('userToken'),
-                            sql: 'DELETE FROM addressList_simplify'
-                        },function(retDataList,err){
-                            if (retDataList.status) {
-                                contactUpdate(ret)
+                            sql: 'DELETE FROM addressList'
+                        },function(retData,err){
+                            if (retData.status) {
+                                db.executeSql({
+                                    name: 'db_'+$api.getStorage('userToken'),
+                                    sql: 'DELETE FROM addressList_simplify'
+                                },function(retDataList,err){
+                                    if (retDataList.status) {
+                                        contactUpdate(ret)
+                                    }else {
+                                        api.alert({msg:err.msg});
+                                    }
+                                });
                             }else {
                                 api.alert({msg:err.msg});
                             }
                         });
-                    }else {
-                        api.alert({msg:err.msg});
+                    } else {
+                        alert('新建表错误:'+JSON.stringify(err));
                     }
                 });
+                
             } else {
                 $api.css($api.dom('.loading'), 'display: none');
                 api.toast({
@@ -298,9 +345,6 @@
                 });
             }
         })
-        
-       
-                
     }
     // 同步通讯录2 上传数据
     function contactUpdate(retData) {
@@ -485,29 +529,30 @@
                     // // console.log( '410:::'+JSON.stringify( ret ) );
                 }else{
                     alert( JSON.stringify( err ) );
-                }
-            });
-            db.executeSql({
-                name: SQLName,
-                sql: SQL
-            }, function(ret, err) {
-                if (ret.status) {
-                // // console.log(flag)
-                    if (flag == 4) {
-                        $api.rmStorage('noAccessToContacts');
-                        $api.css($api.dom('.loading'), 'display: none');
-                        api.toast({
-                            msg: '同步通讯录成功'
+                } 
+            }); 
+           
+                db.executeSql({
+                            name: SQLName,
+                            sql: SQL
+                        }, function(ret, err) {
+                            if (ret.status) {
+                            // // console.log(flag)
+                                if (flag == 4) {
+                                    $api.rmStorage('noAccessToContacts');
+                                    $api.css($api.dom('.loading'), 'display: none');
+                                    api.toast({
+                                        msg: '同步通讯录成功'
+                                    });
+                                    api.sendEvent({
+                                        name: 'editUserInfoUpdateList'
+                                    });
+                                    flag = 0;
+                                }
+                            } else {
+                                console.log('执行语句错误:' + JSON.stringify(err))
+                            }
                         });
-                        api.sendEvent({
-                            name: 'editUserInfoUpdateList'
-                        });
-                        flag = 0;
-                    }
-                } else {
-                    console.log('执行语句错误:' + JSON.stringify(err))
-                }
-            });
     }
 
 </script>

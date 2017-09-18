@@ -78,6 +78,8 @@
         // // console.log('listWin:::'+api.pageParam.flag)
         moduleInit();
         fnInit();
+        // 新建表格
+        secondContactsTable();
         api.openFrame({
             name: 'txl_listWin_frame',
             url: './txl_listWin_frame_2.html',
@@ -145,5 +147,23 @@
            
         
    }
+    // 新建表格存二度三度人脉
+    function secondContactsTable() {
+       db.executeSql({
+           name: 'db_'+$api.getStorage('userToken'),
+           sql: 'CREATE TABLE IF NOT EXISTS db_second_contactst_table(user_id int PRIMARY KEY NOT NULL, nickname varchar(255), remark_nickname varchar(255), head_img_url varchar(255), remark_head_img_url varchar(255), type int, status int)'   
+           // type 几度人脉
+           // status 是否加入我在
+        },function(ret,err){
+           if (ret.status) {
+           }else {
+               api.toast({
+                   msg: '数据库异常',
+                   duration: 2000,
+                   location: 'bottom'
+               });
+           }
+       });
+    }
 </script>
 </html>

@@ -125,7 +125,8 @@
     var selVal=0,selectedObj,pageNum = 1,dataArr=[];
     apiready = function(){
         moduleInit();
-        requireData(api.pageParam.flag)
+        // requireData(api.pageParam.flag)
+        initPage();
         scrollToBottom();
         api.addEventListener({
             name: 'editNonFriendsInfo'
@@ -176,10 +177,11 @@
             }
         }, function(ret, err) {
             if(ret) {
-                // // console.log(JSON.stringify(ret))
+                console.log('网络请求')
                 if(ret.code == 200) {
                     pageNum++;
-                    dataArr =  dataArr.concat(ret.data.list)
+                    insertData(ret.data.list, classify);
+                    dataArr =  dataArr.concat(ret.data.list);
                     if (ret.data.list.length == 0 && classify===1) {
                         $api.css($api.dom('p.no1'), 'display:block');
                     } else if(ret.data.list.length == 0 && classify===2) {
@@ -269,7 +271,66 @@
             searchSQL();
         }
     }
-
+    function initPage() {
+        // api.pageParam.flag == 1; 二度好友 
+        // api.pageParam.flag == 1; 二度未加入 
+        if (api.pageParam.flag == 1) {
+            selectSQL = 'SELECT * FROM db_second_contactst_table WHERE status = 1 LIMIT 0,15';
+        } else if (api.pageParam.flag == 2) {
+            selectSQL = 'SELECT * FROM db_second_contactst_table WHERE status = 2 LIMIT 0,15';
+        } else {
+            selectSQL = 'SELECT * FROM db_second_contactst_table LIMIT 0,15';
+        }
+        db.selectSql({
+            name: 'db_'+$api.getStorage('userToken'),
+            sql: selectSQL
+        },function(ret,err){
+            if (ret.status) {
+                if (ret.data.length > 0) {
+                    console.log(JSON.stringify(ret.data.length));
+                    
+                    getData(ret.data);
+                    $api.css($api.dom('.loading'), 'display: none');
+                    // requireData(api.pageParam.flag)
+                } else {
+                    requireData(api.pageParam.flag)
+                }
+            }else {
+                api.alert({msg:err.msg});
+            }
+        });
+    }
+    // 表中插入数据
+    function insertData(data, status) {
+        // db.executeSql({
+        //     name: 'db_'+$api.getStorage('userToken'),
+        //     sql: 'DELETE FROM db_second_contactst_table'
+        // },function(ret,err){
+        //     if (ret.status) {
+        //         api.alert({msg:'执行SQL成功'});
+        //     }else {
+        //         api.alert({msg:err.msg});
+        //     }
+        // });
+        if (data.length > 0) {
+            var SQL = 'INSERT OR REPLACE INTO db_second_contactst_table(user_id, nickname, remark_nickname, head_img_url, remark_head_img_url, type, status) VALUES '
+            for (var i = 0; i < data.length; i++) {
+                var element = data[i];
+                SQL += '('+ element.user_id +',"'+ element.nickname +'","'+ (element.remark_nickname==null?'':element.remark_nickname) +'","'+ element.head_img_url +'","'+ (element.remark_head_img_url==null?'':element.remark_head_img_url) +'",2,'+ (status || 0) +'),'
+            }
+            SQL = SQL.substring(0,SQL.length-1);
+            db.executeSql({
+                name: 'db_'+$api.getStorage('userToken'),
+                sql: SQL
+            },function(ret,err){
+                if (ret.status) {
+                   
+                }else {
+                    api.alert({msg:err.msg});
+                }
+            });
+        }
+    }
 
 </script>
 </html>
