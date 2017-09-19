@@ -23,7 +23,7 @@
             color: #fff;
             text-align: center;
             line-height: .36rem;
-            margin: 0 auto;  
+            margin: 0 auto;
             border-radius: .05rem;
             margin-bottom: .3rem;
         }
@@ -35,7 +35,7 @@
         .main .other img.otherImg {
             width: .72rem;
             height: .72rem;
-            
+
         }
         .main .oneself p,
         .main .other p {
@@ -59,7 +59,7 @@
         .main .oneself p {
             border: .02rem solid #A0E75A;
         }
-        
+
         .main .oneself p:after {
             content: "";
             display: inline-block;
@@ -297,17 +297,17 @@ var  mainH, _main, scrollH;
             });
         }
 
-        
+
         // 调整页面到输入框的后面
-        
+
         // 滚动到底部
         slideBut();
         api.addEventListener({
             name: 'sendMsg'
         }, function(ret, err) {
-            
-            console.log('发送消息后:'+JSON.stringify(ret))
-            chatRecordingSql(ret.value,'sendMsg')
+
+            // console.log('发送消息后:'+JSON.stringify(ret))
+            chatRecordingSql(ret.value.msg,'sendMsg')
             // 发送消息后, 添加消息内容到页面
             addSendMsg(ret.value.msg.result.message.content.text, headImg,0);
             // 聊天列表获取
@@ -322,7 +322,7 @@ var  mainH, _main, scrollH;
         api.addEventListener({
             name: 'receiveMsg'
         }, function(ret, err) {
-            console.log('接受消息后:'+JSON.stringify(ret))
+            // console.log('接受消息后:'+JSON.stringify(ret))
             chatRecordingSql(ret.value, 'receiveMsg')
             var value = ret.value
             if (value.targetId == targetRongId) {
@@ -336,20 +336,20 @@ var  mainH, _main, scrollH;
                  }
             }
             // 收到消息后, 添加消息内容到页面
-           
+
         });
         xiala(messageId);
 
         // 最新聊天记录
        api.setFrameAttr({
-           softInputMode: 'resize',  
+           softInputMode: 'resize',
        });
 
 
         changeHeight();
         // 初始化聊天窗口
         window.setTimeout('chatTools()', 500)
-        
+
 
         // 去除头像上的消息数量
         api.sendEvent({
@@ -362,15 +362,31 @@ var  mainH, _main, scrollH;
     // 聊天记录插入到数据库
     function chatRecordingSql(params, flagStr) {
         // console.log(JSON.stringify(params))
-        var SQL = 'INSERT OR REPLACE INTO tb_chat_'+ api.pageParam.targetRongId +'(messageId, receivedTime, objectName, content_extra, content_text, head_img_url) VALUES '
+        var SQL = 'INSERT OR REPLACE INTO tb_chat_'+ api.pageParam.targetRongId +'(messageId, receivedTime, objectName, messageDirection, content_extra, content_text, head_img_url, filePath, duration, thumbPath) VALUES '
         if (flagStr === 'sendMsg') {
-            SQL += '('+ params.msg.result.message.messageId +',"'+ params.msg.result.message.sentTime +'","'+ params.msg.result.message.objectName +'","'+ params.msg.result.message.content.extra +'","'+ params.msg.result.message.content.text +'","' + api.pageParam.headImg + '")'
+            if (params.result.message.objectName == 'RC:VcMsg') {
+                SQL += '('+ params.result.message.messageId +',"'+ params.result.message.sentTime +'","'+ params.result.message.objectName+'","'+ params.result.message.messageDirection +'","'+ params.result.message.content.extra +'","'+ (params.result.message.content.text || '') +'","' + api.pageParam.headImg + '","'+ params.result.message.content.voicePath+ '","'+ params.result.message.content.duration +'","")'
+            } else if (params.result.message.objectName == 'RC:ImgMsg') {
+                SQL += '('+ params.result.message.messageId +',"'+ params.result.message.sentTime +'","'+ params.result.message.objectName+'","'+ params.result.message.messageDirection +'","'+ params.result.message.content.extra +'","'+ (params.result.message.content.text || '') +'","' + api.pageParam.headImg + '","'+ params.result.message.content.imageUrl + '","","'+ params.result.message.content.thumbPath +'")'
+            } else {
+                SQL += '('+ params.result.message.messageId +',"'+ params.result.message.sentTime +'","'+ params.result.message.objectName+'","'+ params.result.message.messageDirection +'","'+ params.result.message.content.extra +'","'+ (params.result.message.content.text || '') +'","' + api.pageParam.headImg + '","","","")'
+            }
         } else if (flagStr === 'receiveMsg'){
-            SQL += '('+ params.msgContent.result.message.messageId +',"'+ params.msgContent.result.message.receivedTime +'","'+ params.msgContent.result.message.objectName +'","'+ params.msgContent.result.message.content.extra +'","'+ params.msgContent.result.message.content.text +'","' + api.pageParam.headImg + '")'
+            // filePath
+            // duration
+            if (params.msgContent.result.message.objectName == 'RC:VcMsg') {
+                // 语音消息
+                SQL += '('+ params.msgContent.result.message.messageId +',"'+ params.msgContent.result.message.receivedTime +'","'+ params.msgContent.result.message.objectName+'","'+ params.msgContent.result.message.messageDirection +'","'+ params.msgContent.result.message.content.extra +'","'+ (params.msgContent.result.message.content.text || '') +'","' + api.pageParam.headImg + '","'+ params.msgContent.result.message.content.voicePath +'","'+ params.msgContent.result.message.content.duration +'","")'
+            } else if (params.msgContent.result.message.objectName == 'RC:ImgMsg') {
+                // 文字消息
+                SQL += '('+ params.msgContent.result.message.messageId +',"'+ params.msgContent.result.message.receivedTime +'","'+ params.msgContent.result.message.objectName+'","'+ params.msgContent.result.message.messageDirection +'","'+ params.msgContent.result.message.content.extra +'","'+ (params.msgContent.result.message.content.text || '') +'","' + api.pageParam.headImg + '","'+ params.msgContent.result.message.content.imageUrl + '","","'+ params.msgContent.result.message.content.thumbPath +'")'
+            } else {
+                // 文字消息
+                SQL += '('+ params.msgContent.result.message.messageId +',"'+ params.msgContent.result.message.receivedTime +'","'+ params.msgContent.result.message.objectName+'","'+ params.msgContent.result.message.messageDirection +'","'+ params.msgContent.result.message.content.extra +'","'+ (params.msgContent.result.message.content.text || '') +'","' + api.pageParam.headImg + '","","","")'
+            }
         } else {
 
         }
-        // console.log(SQL)
         db.executeSql({
             name: 'db_'+$api.getStorage('userToken'),
             sql: SQL
@@ -381,13 +397,13 @@ var  mainH, _main, scrollH;
                     sql: 'SELECT * FROM tb_chat_'+ api.pageParam.targetRongId
                 },function(ret,err){
                     if (ret.status) {
-                        console.log(JSON.stringify(ret))
+                        console.log('查询到的结果'+JSON.stringify(ret))
                     }else {
-                        api.alert('386'+{msg:err.msg});
+                        alert('386');
                     }
                 });
             }else {
-                api.alert('390'+{msg:err.msg});
+                alert('390'+JSON.stringify(err)+JSON.stringify(ret));
             }
         });
     }
@@ -418,8 +434,8 @@ var  mainH, _main, scrollH;
         $api.css($api.dom('.shadow'), 'display:none');
         // alert('292'+newsText)
         if (n === 4) {
-            var domRem = $api.dom('div[data-msgId="'+ msgId +'"]'); 
-            var domRemTime = $api.dom('.newsTime[data-msgId="'+ msgId +'"]'); 
+            var domRem = $api.dom('div[data-msgId="'+ msgId +'"]');
+            var domRemTime = $api.dom('.newsTime[data-msgId="'+ msgId +'"]');
             $api.remove(domRemTime);
             $api.remove(domRem);
             var arrid = [];
@@ -467,7 +483,7 @@ var  mainH, _main, scrollH;
                 pageParam: {
                     userId: 0
                 }
-            });    
+            });
         } else {
             api.openWin({
                 name: 'txl_memberInfo_Win',
@@ -546,7 +562,7 @@ var  mainH, _main, scrollH;
                     h: inputHeight
                 }
             });
-           
+
         },10)
     }
     // 聊天界面
@@ -635,9 +651,9 @@ var  mainH, _main, scrollH;
                     } else {
                         sendMsg(ret.msg);
                     }
-                   
+
                     // 把聊天内容滑动到最下面
-                } 
+                }
                 if (ret.eventType === 'clickExtras') {
                       if (ret.index === 0) {
                         // 打开相册
@@ -647,14 +663,14 @@ var  mainH, _main, scrollH;
                         openPicture('camera');
                       } else if (ret.index === 2) {
                         // 发送位置
-                        
+
                       }
                 }
             } else {
                 alert(JSON.stringify(err.msg))
             }
         });
-     
+
     }
     // 打开相册
     function openPicture(type) {
@@ -677,6 +693,7 @@ var  mainH, _main, scrollH;
     }
     // 发送图片消息
     function sendImg(ret) {
+        var retprepare;
         rong.sendImageMessage({
             conversationType: 'PRIVATE',
             targetId: targetRongId,
@@ -685,13 +702,14 @@ var  mainH, _main, scrollH;
         }, function(ret, err) {
             if (ret.status == 'prepare') {
                 // // // console.log('发送准备::'+ JSON.stringify(ret.result.message) );
-                addSendImgMessages(ret.result.message,headImg,1)
+                addSendImgMessages(ret.result.message,headImg,1);
+                retprepare = ret;
             }
             else if (ret.status == 'progress') {
                 // // // console.log( '发送中::'+ret.result.progress );
             }
             else if (ret.status == 'success') {
-
+                chatRecordingSql(retprepare,'sendMsg');
                 // // // console.log( '发送成功::'+ret.result.message.messageId );
                 // // // console.log( '发送成功::'+JSON.stringify(prepare) );
             }
@@ -738,6 +756,7 @@ var  mainH, _main, scrollH;
     // 发送语音消息
     function sendVicoe(ret) {
         var retData = ret;
+        var retprepare;
         rong.sendVoiceMessage({
             conversationType: 'PRIVATE',
             targetId: targetRongId,
@@ -745,15 +764,15 @@ var  mainH, _main, scrollH;
             duration: retData.duration,
             extra: ''
         }, function(ret, err) {
-            var retprepare;
+
             if (ret.status == 'prepare'){
                 // 发送准备
-                retprepare = ret.result.message
+                retprepare = ret;
             } else if (ret.status == 'success') {
                 // 发送成功
-                // // // console.log('success::'+ret.result.message.messageId);
-                // 
-                addSendVoiceMessages(retData, headImg, 0)
+                addSendVoiceMessages(retData, headImg, 0);
+                // 存储到表中
+                chatRecordingSql(retprepare,'sendMsg');
             } else if (ret.status == 'error') {
             }
         });
@@ -782,7 +801,7 @@ var  mainH, _main, scrollH;
            method: 'post',
            headers: apiHeader,
            data: {
-              values: { 
+              values: {
                   token: $api.getStorage('userToken'),
                   id_json: rongUserIdArr
               }
@@ -796,12 +815,12 @@ var  mainH, _main, scrollH;
                 api.sendEvent({
                     name: 'getUserId',
                     extra: {
-                        userId: ret.data.list[rongUserId].user_id, 
+                        userId: ret.data.list[rongUserId].user_id,
                     }
                 });
                 // 获取最新消息
                 getNews()
-                
+
            } else {
                alert(JSON.stringify(err.msg))
            }
@@ -817,7 +836,7 @@ var  mainH, _main, scrollH;
         } else {
             contrastMessage()
         }
-       
+
     }
     function contrastMessage(argument) {
             rong.getLatestMessages({
@@ -857,7 +876,7 @@ var  mainH, _main, scrollH;
         // // // console.log('559:::::'+JSON.stringify(ret))
         for (var i = ret.result.length-1; i >= 0 ; i--) {
             if (ret.result[i].messageDirection == 'RECEIVE') {
-                
+
                 // 消息方向：SEND(发送) 或者 RECEIVE(接受)
                 if (ret.result[i].objectName == 'RC:VcMsg') {
                     // 语音
@@ -949,7 +968,7 @@ var  mainH, _main, scrollH;
             // // // console.log(JSON.stringify(msg))
             // 当前发送的消息
             $api.append($api.dom('.main'),'<p class="newsTime" >'+ new Date().toLocaleTimeString() +'</p><div data-msgId="" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="" ontouchend="gtouchend()" d><img class="imgNews" src="../../image/tx_1.jpg"> </p></div>');
-            
+
         }
         slideBut();
     }
@@ -1014,7 +1033,7 @@ var  mainH, _main, scrollH;
             } else {
                 playVoice2(ele)
             }
-            
+
         } else {
             // other
             if ($api.attr($api.dom(ele, '.voiceMsg'), 'src') == '../../image/chatPage/icon_play.gif') {
@@ -1024,7 +1043,7 @@ var  mainH, _main, scrollH;
                 playVoice2(ele)
             }
         }
-       
+
     }
     function playVoice2(ele) {
         // 暂停其他正在播放的语音
@@ -1069,7 +1088,7 @@ var  mainH, _main, scrollH;
     function addReceMsg(msg, youHeadImg, n) {
         // 当天显示时间
         // 不是当天显示年月日 时分秒
-        
+
         if (n == 1) {
             // 历史消息
             // // 当天显示时间
@@ -1082,7 +1101,7 @@ var  mainH, _main, scrollH;
         }
             slideBut();
     }
-    
+
     // 发送消息后新建消息
     function addSendMsg(msg, headImg, n) {
         if (n == 1) {
@@ -1092,7 +1111,7 @@ var  mainH, _main, scrollH;
         } else {
             // 当前发送的消息
             $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ new Date().toLocaleTimeString() +'</p><div data-msgId="" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="" ontouchend="gtouchend()" data-newsText= "'+ msg +'" > ' + transText(msg) + ' </p></div>');
-            
+
         }
             slideBut();
     }
@@ -1115,7 +1134,7 @@ var  mainH, _main, scrollH;
 
     }
 
-    
+
     // 查看历史记录
     function chatHis() {
         messageId -= 20;
@@ -1183,7 +1202,7 @@ var  mainH, _main, scrollH;
     }
 
     // 下拉刷新后 执行函数chatHis(messageId)
-    
+
     function xiala() {
         api.setCustomRefreshHeaderInfo({
             bgColor: '#C0C0C0',
@@ -1210,15 +1229,15 @@ var  mainH, _main, scrollH;
             if (chatHis()) {
                 // 停止刷新
                 api.refreshHeaderLoadDone();
-                
-                
+
+
 
             }
         });
     }
 
       /**
-  * 发送消息 
+  * 发送消息
   * sendMsg(msg)
   * msg: 发送的消息
   */
@@ -1237,19 +1256,19 @@ var  mainH, _main, scrollH;
               sendMsg = ret;
               // alert(JSON.stringify(ret));
             }
-               
+
             else if (ret.status == 'success') {
-              
+
                 api.sendEvent({
                     name: 'sendMsg',
                     extra: {
                         msg: sendMsg
                     }
                 });
-                
-                
+
+
             }
-               
+
             else if (ret.status == 'error') {
                 api.alert({
                     title: 'title',
@@ -1262,13 +1281,13 @@ var  mainH, _main, scrollH;
                     }
                 });
             }
-                
+
         });
     }
 
-    var timeOutEvent=0;//定时器   
-    //开始按   
-    function gtouchstart(ele){   
+    var timeOutEvent=0;//定时器
+    //开始按
+    function gtouchstart(ele){
         newsText = $api.attr(ele, 'data-newsText');
         msgId = $api.attr(ele, 'data-msgId');
         // // console.log($api.text(ele))
@@ -1276,25 +1295,25 @@ var  mainH, _main, scrollH;
 
         // // console.log('id::'+msgId+'text::'+ newsText)
         var e = window.event
-        var x = e.touches[0].clientX ,y=e.touches[0].clientY 
+        var x = e.touches[0].clientX ,y=e.touches[0].clientY
         timeOutEvent = setTimeout("longPress("+x+","+y+")",500);
-        //这里设置定时器，定义长按500毫秒触发长按事件，时间可以自己改，个人感觉500毫秒非常合适   
-        return false;   
-    };   
-    //手释放，如果在500毫秒内就释放，则取消长按事件，此时可以执行onclick应该执行的事件   
-    function gtouchend(){   
-        clearTimeout(timeOutEvent);//清除定时器   
-        if(timeOutEvent!=0){   
-            //这里写要执行的内容（尤如onclick事件）   
-        }   
-        return false;   
-    };   
-    //如果手指有移动，则取消所有事件，此时说明用户只是要移动而不是长按   
-    function gtouchmove(){   
-        clearTimeout(timeOutEvent);//清除定时器   
-        timeOutEvent = 0;   
-    };   
-    //真正长按后应该执行的内容   
+        //这里设置定时器，定义长按500毫秒触发长按事件，时间可以自己改，个人感觉500毫秒非常合适
+        return false;
+    };
+    //手释放，如果在500毫秒内就释放，则取消长按事件，此时可以执行onclick应该执行的事件
+    function gtouchend(){
+        clearTimeout(timeOutEvent);//清除定时器
+        if(timeOutEvent!=0){
+            //这里写要执行的内容（尤如onclick事件）
+        }
+        return false;
+    };
+    //如果手指有移动，则取消所有事件，此时说明用户只是要移动而不是长按
+    function gtouchmove(){
+        clearTimeout(timeOutEvent);//清除定时器
+        timeOutEvent = 0;
+    };
+    //真正长按后应该执行的内容
     function longPress(x,y){
         if (api.frameWidth - (x+10) < api.frameWidth/2) {
             x = x - 70
@@ -1303,10 +1322,10 @@ var  mainH, _main, scrollH;
             y = y - 110
         }
         // // // console.log('坐标:'+x+','+y)
-        timeOutEvent = 0; 
+        timeOutEvent = 0;
         $api.css($api.dom('.shadow'), 'display:inline-block;top:' + 2*y/100 + 'rem;left:' + 2*x/100 + 'rem;');
         // // // console.log(JSON.stringify($api.offset($api.dom('.shadow'))))
-        //执行长按要执行的内容，如弹出菜单   
-    }  
+        //执行长按要执行的内容，如弹出菜单
+    }
 </script>
 </html>

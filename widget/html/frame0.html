@@ -525,7 +525,7 @@
             name: 'historNews'
         }, function(ret, err) {
             if (ret) {
-                
+
                 // console.log('获取历史消息'+JSON.stringify(ret))
                 var targetRongIdArr = [];
                 for (var i = 0; i < ret.value.data.length; i++) {
@@ -575,9 +575,9 @@
                     data[i].remark_head_img_url = ret.data.list[data[i].targetId].remark_head_img_url;
                     if (data[i].objectName == 'RC:VcMsg') {
                         // 语音消息
-                        data[i].latestMessage.text = '[语音]'
+                        data[i].latestMessage_text = '[语音]'
                     } else if (data[i].objectName == 'RC:ImgMsg')
-                        data[i].latestMessage.text = '[图片]'
+                        data[i].latestMessage_text = '[图片]'
 
                     if (data[i].latestMessage.extra) {
                         if ($api.strToJson(data[i].latestMessage.extra).type === 4) {
@@ -604,9 +604,9 @@
                 // if (cacheFieldName !== data) {
                 //     $api.setStorage('chatMessage', data);
                 //     // console.log('463:::'+JSON.stringify(data))
-                    
+
                 //     chatListSql(data);
-                    
+
                 //     // initView(data);
                 // }
 
@@ -634,21 +634,22 @@
                             }
                         }
                     }
-                    
+
                 }
             }
         } else {
             chatListSql(data);
         }
-        
+
     }
     function chatListSql(data) {
+        // console.log(JSON.stringify(data))
         if (data.length > 0 ) {
             var SQL = 'INSERT OR REPLACE INTO tb_chat_list (user_id, head_img_url, remark_head_img_url, nickname, remark_nickname, latestMessage_text, receivedTime, targetId, unreadMessageCount) VALUES '
             for (var i = 0; i < data.length; i++) {
                 var element = data[i];
                 element.remark_nickname = element.remark_nickname==null?'':element.remark_nickname;
-                SQL += '('+ element.user_id +',"'+ (element.head_img_url)+'","'+(element.remark_head_img_url) +'","'+ (element.nickname )+'","'+(element.remark_nickname) +'","'+ element.latestMessage.text +'","'+ element.receivedTime +'","'+ element.targetId +'",'+ element.unreadMessageCount +'),'
+                SQL += '('+ element.user_id +',"'+ (element.head_img_url)+'","'+(element.remark_head_img_url) +'","'+ (element.nickname )+'","'+(element.remark_nickname) +'","'+ (element.latestMessage.text || element.latestMessage_text) +'","'+ element.receivedTime +'","'+ element.targetId +'",'+ element.unreadMessageCount +'),'
             }
             SQL = SQL.substring(0,SQL.length-1) + ';'
             db.executeSql({
@@ -656,7 +657,6 @@
                 sql: SQL
             },function(ret,err){
                 if (ret.status) {
-                    // console.log(JSON.stringify(data))
                     console.log('执行sql成功')
                 }else {
                     api.alert({msg:err.msg});

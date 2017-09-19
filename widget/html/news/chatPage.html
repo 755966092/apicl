@@ -8,9 +8,9 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <style>
-   
+
     /* 加号 */
-    
+
     header.header span.rightBtn {
         display: inline-block;
         /*width: .3rem;*/
@@ -19,7 +19,7 @@
         background-size: .3rem .3rem;
         background-position: right center;
     }
-    
+
     #title {
         width: 3rem;
         overflow: hidden;
@@ -33,7 +33,7 @@
         <div class="head">
             <span class="callback" tapmode onclick="api.closeWin()">返回</span>
             <span class="winTitle" id="title">
-								
+
 						</span>
             <span class="rightBtn" tapmode onclick="openMemberInfo()"></span>
         </div>
@@ -78,7 +78,7 @@
             supplyName: api.pageParam.supplyName,
             priceUint: api.pageParam.priceUint,
             type: api.pageParam.type,
-            targetUserId: userId,   
+            targetUserId: userId,
             order_id: api.pageParam.order_id,
             userId: userId,
             headImg: api.pageParam.headImg
@@ -92,7 +92,7 @@
         // frameName: 'fram0',
         script: 'getTotalCount();'
     });
-    
+
 
     api.addEventListener({
         name: 'getUserId'
@@ -137,7 +137,7 @@ function createSqlTable() {
      });
     db.executeSql({
         name: 'db_'+$api.getStorage('userToken'),
-        sql: 'CREATE TABLE IF NOT EXISTS tb_chat_'+ api.pageParam.targetRongId +'(messageId int PRIMARY KEY NOT NULL, receivedTime char(13), objectName varchar(255), content_extra varchar(255), content_text text, head_img_url varchar(255))'
+        sql: 'CREATE TABLE IF NOT EXISTS tb_chat_'+ api.pageParam.targetRongId +'(messageId int PRIMARY KEY NOT NULL, receivedTime char(13), objectName varchar(255), messageDirection varchar(255), content_extra varchar(255), content_text text, head_img_url varchar(255), filePath varchar(255), duration varchar(255), thumbPath varchar(255))'
     }, function(ret, err){
         if( ret.status ){
             // alert( JSON.stringify( ret ) );
