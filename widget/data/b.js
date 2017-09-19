@@ -1,16 +1,45 @@
-查询到的结果 {
-  "data": [{
-    "messageId": "74",
-    "receivedTime": "1505810136081",
-    "objectName": "RC:ImgMsg",
-    "messageDirection": "RECEIVE",
-    "content_extra": "",
-    "content_text": "",
-    "head_img_url": "http://img.iinnet.com/Fv_xqyeJpEcqvgVhxZUOGRwrhnwp?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim",
-    "filePath": "https://rongcloud-image.cn.ronghub.com/image_jpeg__RC-2017-09-19_49_1505810136770?e=2147483647&token=livk5rb3__JZjCtEiMxXpQ8QscLxbNLehwhHySnX:EXiik0uPPMCmaqIVD7hMKNcSCB0=",
-    "duration": "",
-    "thumbPath": "/data/user/0/com.iinnet.apicloud/files/759d2765861e5ba5f4b8e576bfeaee33/image/thumbnail/74.jpg"
-  }],
-  "status": true
-}
-at chatContent.html: 401
+559::::: [{
+  "messageId": "75",
+  "receivedTime": "1505811311841",
+  "objectName": "RC:TxtMsg",
+  "messageDirection": "SEND",
+  "content_extra": "",
+  "content_text": "[流泪]",
+  "head_img_url": "http://img.iinnet.com/FgjgDANLueXLbhe3Ga2Z4XBO_7xz?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim",
+  "filePath": "",
+  "duration": "",
+  "thumbPath": ""
+}, {
+  "messageId": "76",
+  "receivedTime": "1505811313209",
+  "objectName": "RC:TxtMsg",
+  "messageDirection": "SEND",
+  "content_extra": "",
+  "content_text": "[得意]",
+  "head_img_url": "http://img.iinnet.com/FgjgDANLueXLbhe3Ga2Z4XBO_7xz?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim",
+  "filePath": "",
+  "duration": "",
+  "thumbPath": ""
+}, {
+  "messageId": "77",
+  "receivedTime": "1505811314239",
+  "objectName": "RC:TxtMsg",
+  "messageDirection": "SEND",
+  "content_extra": "",
+  "content_text": "[害羞]",
+  "head_img_url": "http://img.iinnet.com/FgjgDANLueXLbhe3Ga2Z4XBO_7xz?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim",
+  "filePath": "",
+  "duration": "",
+  "thumbPath": ""
+}, {
+  "messageId": "78",
+  "receivedTime": "1505811315263",
+  "objectName": "RC:TxtMsg",
+  "messageDirection": "SEND",
+  "content_extra": "",
+  "content_text": "[调皮]",
+  "head_img_url": "http://img.iinnet.com/FgjgDANLueXLbhe3Ga2Z4XBO_7xz?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim",
+  "filePath": "",
+  "duration": "",
+  "thumbPath": ""
+}] at chatContent.html: 888

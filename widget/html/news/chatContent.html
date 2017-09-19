@@ -261,7 +261,7 @@ var name,headImg = $api.getStorage('imgCache'),youHeadImg;
 var messageId,targetRongId,emotionData,userId,newsText,msgId;
 var  mainH, _main, scrollH;
     apiready = function(){
-        console.log(JSON.stringify(api.pageParam))
+        // console.log(JSON.stringify(api.pageParam))
         moduleInit();
         // // // console.log('参数内容:'+JSON.stringify(api.pageParam))
         if (api.pageParam.supplyName) {
@@ -392,16 +392,16 @@ var  mainH, _main, scrollH;
             sql: SQL
         },function(ret,err){
             if (ret.status) {
-                db.selectSql({
-                    name: 'db_'+$api.getStorage('userToken'),
-                    sql: 'SELECT * FROM tb_chat_'+ api.pageParam.targetRongId
-                },function(ret,err){
-                    if (ret.status) {
-                        console.log('查询到的结果'+JSON.stringify(ret))
-                    }else {
-                        alert('386');
-                    }
-                });
+                // db.selectSql({
+                //     name: 'db_'+$api.getStorage('userToken'),
+                //     sql: 'SELECT * FROM tb_chat_'+ api.pageParam.targetRongId
+                // },function(ret,err){
+                //     if (ret.status) {
+                //         console.log('查询到的结果'+JSON.stringify(ret))
+                //     }else {
+                //         alert('386');
+                //     }
+                // });
             }else {
                 alert('390'+JSON.stringify(err)+JSON.stringify(ret));
             }
@@ -829,7 +829,24 @@ var  mainH, _main, scrollH;
 
     // 获取最新消息
     function getNews() {
+        // 获取缓存字段
         var messageCache = $api.getStorage('chatRecord_'+targetRongId);
+        // db.selectSql({
+        //     name: 'db_'+$api.getStorage('userToken'),
+        //     sql: 'SELECT * FROM tb_chat_'+ api.pageParam.targetRongId
+        // },function(ret,err){
+        //     if (ret.status) {
+        //         // console.log('查询到的结果'+JSON.stringify(ret))
+        //         if (ret.data.length > 0) {
+        //             renderPage(ret.data);
+        //             contrastMessage(ret.data);
+        //         } else {
+        //             contrastMessage()
+        //         }
+        //     }else {
+        //         alert('386');
+        //     }
+        // });
         if (messageCache) {
             renderPage(messageCache);
             contrastMessage(messageCache);
@@ -845,6 +862,30 @@ var  mainH, _main, scrollH;
                 targetId: targetRongId,
                 count: 20
             }, function(ret, err) {
+                // if (argument) {
+                //     if(argument.length>0){
+                //         if (argument[0].receivedTime == ret[0].receivedTime) {
+                //             // 无更新
+                //             // // console.log('无更新')
+                //         } else {
+                //             // // console.log('有更新')
+                //             // 有更新
+                //             $api.html($api.dom('.main'), '');
+                //             // $api.setStorage('chatRecord_'+targetRongId, ret)
+                //             renderPage(ret);
+                //         }
+
+                //     } else {
+                //         $api.html($api.dom('.main'), '');
+                //         // $api.setStorage('chatRecord_'+targetRongId, ret)
+                //         renderPage(ret);
+                //     }
+                // } else {
+                //         $api.html($api.dom('.main'), '');
+                //         // $api.setStorage('chatRecord_'+targetRongId, ret)
+                //         renderPage(ret);
+
+                // }
                 if (argument) {
                     if(argument.result.length>0){
                         if (argument.result[0].sentTime == ret.result[0].sentTime) {
@@ -872,8 +913,50 @@ var  mainH, _main, scrollH;
 
     }
     // 渲染页面
+    function renderPage2(ret) {
+        console.log('559:::::'+JSON.stringify(ret))
+        for (var i = ret.length-1; i >= 0 ; i--) {
+            if (ret[i].messageDirection == 'RECEIVE') {
+
+                // 消息方向：SEND(发送) 或者 RECEIVE(接受)
+                if (ret[i].objectName == 'RC:VcMsg') {
+                    // 语音
+                    addReceVoiceMessages(ret[i], youHeadImg,1)
+                } else if (ret[i].objectName == 'RC:TxtMsg'){
+                    // 文字
+                    addReceMsg(ret[i], youHeadImg,1)
+                } else if (ret[i].objectName == 'RC:ImgMsg'){
+                    // 图片
+                    addReceImgMessages(ret[i], youHeadImg,1)
+                } else {
+
+                }
+            } else {
+                if (ret[i].objectName == 'RC:VcMsg') {
+                    // 语音
+                    addSendVoiceMessages(ret[i], headImg,1)
+                } else if (ret[i].objectName == 'RC:TxtMsg'){
+                    // 文字
+                    addSendMsg(ret[i], headImg,1);
+                } else if (ret[i].objectName == 'RC:ImgMsg'){
+                    // 图片
+                    addSendImgMessages(ret[i], headImg,1)
+                } else {
+
+                }
+
+            }
+            // 获取历史聊天记录后 页面不想上滚动
+            mainH=$api.offset($api.dom('.main')).h;
+            _main = mainH
+            // 最新的消息的messageId,获取历史记录函数内部-20处理
+            messageId = ret.result[0].messageId;
+            slideBut();
+        }
+    }
+    // 渲染页面
     function renderPage(ret) {
-        // // // console.log('559:::::'+JSON.stringify(ret))
+        console.log('559:::::'+JSON.stringify(ret))
         for (var i = ret.result.length-1; i >= 0 ; i--) {
             if (ret.result[i].messageDirection == 'RECEIVE') {
 
@@ -885,6 +968,7 @@ var  mainH, _main, scrollH;
                     // 文字
                     addReceMsg(ret.result[i], youHeadImg,1)
                 } else if (ret.result[i].objectName == 'RC:ImgMsg'){
+                    // 图片
                     addReceImgMessages(ret.result[i], youHeadImg,1)
                 } else {
 
@@ -897,6 +981,7 @@ var  mainH, _main, scrollH;
                     // 文字
                     addSendMsg(ret.result[i], headImg,1);
                 } else if (ret.result[i].objectName == 'RC:ImgMsg'){
+                    // 图片
                     addSendImgMessages(ret.result[i], headImg,1)
                 } else {
 
