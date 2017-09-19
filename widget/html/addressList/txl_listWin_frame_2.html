@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
-    <link rel="stylesheet" type="text/css" href="../../css/flex.css"/>
-   <style type="text/css">
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/flex.css" />
+    <style type="text/css">
         .search {
             height: .791rem;
             width: 100%;
             background-color: #EFEFF4;
             box-sizing: border-box;
             padding: .14rem .16rem;
-            font-size: 0;   
+            font-size: 0;
             position: relative;
-
         }
+
         .search input {
             background-color: #fff;
-            height: .503rem;    
-             /*width: 6.4rem;*/
+            height: .503rem;
+            /*width: 6.4rem;*/
             width: 100%;
             float: left;
             font-size: .24rem;
@@ -29,6 +32,7 @@
             padding: 0 .3rem;
             box-sizing: border-box;
         }
+
         .sxIcon {
             display: inline-block;
             width: .64rem;
@@ -36,9 +40,10 @@
             background: url(../../image/icon_supply/icon_sx.png)no-repeat;
             -webkit-background-size: .35rem .35rem;
             background-size: .35rem .35rem;
-            background-position: center center;          
+            background-position: center center;
             margin-left: .1rem;
         }
+
         .searchIcon {
             display: inline-block;
             width: .25rem;
@@ -51,6 +56,7 @@
             top: 0;
             left: 2.8rem;
         }
+
         p {
             text-align: center;
             font-size: .3rem;
@@ -65,14 +71,17 @@
             border-bottom: .01rem solid #d9d9d9;
             padding: 0 .2rem;
         }
+
         ul li img {
             width: .55rem;
             height: .55rem;
             margin-right: .15rem;
         }
+
         ul li span {
             font-size: .28rem;
         }
+
         .loading {
             width: .8rem;
             height: .8rem;
@@ -84,34 +93,31 @@
             right: 0;
             left: 0;
             margin: auto;
-         }
-   </style>
+        }
+    </style>
 </head>
+
 <body>
-<!--
+    <!--
     <div class="search">
         <input type="text" onblur="loseFocus()" onfocus="getFocus()" onkeyup="hideSearIcon(this)" name="" placeholder="搜索">
         <span class="searchIcon"></span>
-         <span class="sxIcon"  tapmode onclick="openSlideBar()"></span> 
+         <span class="sxIcon"  tapmode onclick="openSlideBar()"></span>
     </div>-->
-    <div class="loading" ></div>
+    <div class="loading"></div>
     <div class="main">
         <ul class="resultList"></ul>
         <script type="text/x-dot-template" id="listT">
-            {{ for (var i = 0; i < it.length; i++) { }} 
-            <li class="flex-def flex-cCenter" tapmode onclick="addFriends(this)" data-id="{{=it[i].user_id}}">
+            {{ for (var i = 0; i
+            < it.length; i++) { }} <li class="flex-def flex-cCenter" tapmode onclick="addFriends(this)"
+                data-id="{{=it[i].user_id}}">
                 {{?it[i].remark_head_img_url}}
-                    <img src="{{=it[i].remark_head_img_url}}">
-                {{??}}
-                    <img src="{{=it[i].head_img_url}}">
-                {{?}}
-                {{?it[i].remark_nickname}} 
-                    <span>{{=it[i].remark_nickname}}</span>
-                {{??}}
-                    <span>{{=it[i].nickname}}</span>
-                {{?}}
-            </li>
-            {{ }; }}
+                <img src="{{=it[i].remark_head_img_url}}"> {{??}}
+                <img src="{{=it[i].head_img_url}}"> {{?}} {{?it[i].remark_nickname}}
+                <span>{{=it[i].remark_nickname}}</span> {{??}}
+                <span>{{=it[i].nickname}}</span> {{?}}
+                </li>
+                {{ }; }}
         </script>
     </div>
     <p data-type='1' class="no1">暂无我在用户</p>
@@ -122,21 +128,21 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    var selVal=0,selectedObj,pageNum = 1,dataArr=[];
-    apiready = function(){
+    var selVal = 0, selectedObj, pageNum = 1, dataArr = [],webFlag = 1;
+    apiready = function () {
         moduleInit();
         // requireData(api.pageParam.flag)
         initPage();
         scrollToBottom();
         api.addEventListener({
             name: 'editNonFriendsInfo'
-        }, function(ret, err) {
+        }, function (ret, err) {
             if (ret) {
                 pageNum = 1;
                 dataArr = [];
-                 if (ret.value.flag) {
+                if (ret.value.flag) {
                     requireData(ret.value.flag);
-                } else　{
+                } else 　{
                     requireData();
                 }
             } else {
@@ -145,19 +151,23 @@
         });
     };
     function scrollToBottom() {
-          // 上啦加载
+        // 上啦加载
         api.addEventListener({
             name: 'scrolltobottom'
-        }, function(ret, err) {
+        }, function (ret, err) {
             // // alert(JSON.stringify(ret));
-            requireData(api.pageParam.flag)
+            if (webFlag == 1) {
+                initPage();
+            } else {
+                requireData(api.pageParam.flag)
+            }
         });
     }
     // 网络获取数据
     function requireData(classify) {
         // // console.log(pageNum)
         var url;
-        if(classify === 1) {
+        if (classify === 1) {
             url = '/contact/levelTwoAvailable';
         } else if (classify === 2) {
             url = '/contact/levelTwoUnavailable';
@@ -170,23 +180,23 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
-                       token: $api.getStorage('userToken'),
-                       page_num: pageNum
-                   }
+                values: {
+                    token: $api.getStorage('userToken'),
+                    page_num: pageNum
+                }
             }
-        }, function(ret, err) {
-            if(ret) {
-                console.log('网络请求')
-                if(ret.code == 200) {
+        }, function (ret, err) {
+            if (ret) {
+                if (ret.code == 200) {
                     pageNum++;
+                    console.log(JSON.stringify(pageNum));
                     insertData(ret.data.list, classify);
-                    dataArr =  dataArr.concat(ret.data.list);
-                    if (ret.data.list.length == 0 && classify===1) {
+                    dataArr = dataArr.concat(ret.data.list);
+                    if (ret.data.list.length == 0 && classify === 1) {
                         $api.css($api.dom('p.no1'), 'display:block');
-                    } else if(ret.data.list.length == 0 && classify===2) {
+                    } else if (ret.data.list.length == 0 && classify === 2) {
                         $api.css($api.dom('p.no2'), 'display:block');
-                    } else if (ret.data.list.length == 0){
+                    } else if (ret.data.list.length == 0) {
                         $api.css($api.dom('p.no3'), 'display:block');
                     }
                     getData(dataArr);
@@ -209,12 +219,12 @@
             pageParam: {
                 userId: userId,
                 flag: api.pageParam.flag,
-                
+
             }
         });
     }
 
-     // 获取焦点事件
+    // 获取焦点事件
     function getFocus() {
         $api.css($api.dom('input'), 'text-align:left');
         $api.css($api.dom('.searchIcon'), 'left:.2rem');
@@ -231,7 +241,7 @@
     function addFilter() {
         api.addEventListener({
             name: 'screeningResultsType'
-        }, function(ret, err) {
+        }, function (ret, err) {
             if (ret) {
                 selVal = ret.value.selVal
                 selectedObj = ret.value.selectedObj
@@ -263,7 +273,7 @@
     }
     function hideSearIcon(ele) {
         var val = $api.val(ele);
-        if (val!==''){
+        if (val !== '') {
             // $api.css($api.dom('.searchIcon'), 'display:none');
             searchSQL(val);
         } else {
@@ -272,31 +282,35 @@
         }
     }
     function initPage() {
-        // api.pageParam.flag == 1; 二度好友 
-        // api.pageParam.flag == 1; 二度未加入 
+        // api.pageParam.flag == 1; 二度好友
+        // api.pageParam.flag == 1; 二度未加入
         if (api.pageParam.flag == 1) {
-            selectSQL = 'SELECT * FROM db_second_contactst_table WHERE status = 1 LIMIT 0,15';
+            selectSQL = 'SELECT * FROM db_second_contactst_table WHERE status = 1 AND type=2 LIMIT '+ (pageNum * 15 - 1) +',15';
         } else if (api.pageParam.flag == 2) {
-            selectSQL = 'SELECT * FROM db_second_contactst_table WHERE status = 2 LIMIT 0,15';
+            selectSQL = 'SELECT * FROM db_second_contactst_table WHERE status = 2 AND type=2 LIMIT '+ (pageNum * 15 - 1) +',15';
         } else {
-            selectSQL = 'SELECT * FROM db_second_contactst_table LIMIT 0,15';
+            selectSQL = 'SELECT * FROM db_second_contactst_table WHERE type=2 LIMIT '+ (pageNum * 15 - 1) +',15';
         }
         db.selectSql({
-            name: 'db_'+$api.getStorage('userToken'),
+            name: 'db_' + $api.getStorage('userToken'),
             sql: selectSQL
-        },function(ret,err){
+        }, function (ret, err) {
             if (ret.status) {
+                pageNum++;
                 if (ret.data.length > 0) {
-                    console.log(JSON.stringify(ret.data.length));
-                    
-                    getData(ret.data);
+                    console.log(JSON.stringify(pageNum));
+                    dataArr = dataArr.concat(ret.data);
+                    getData(dataArr);
                     $api.css($api.dom('.loading'), 'display: none');
                     // requireData(api.pageParam.flag)
                 } else {
-                    requireData(api.pageParam.flag)
+                    if(webFlag == 1) {
+                        requireData(api.pageParam.flag)
+                    }
+                    webFlag = 0;
                 }
-            }else {
-                api.alert({msg:err.msg});
+            } else {
+                api.alert({ msg: err.msg });
             }
         });
     }
@@ -316,25 +330,22 @@
             var SQL = 'INSERT OR REPLACE INTO db_second_contactst_table(user_id, nickname, remark_nickname, head_img_url, remark_head_img_url, type, status) VALUES '
             for (var i = 0; i < data.length; i++) {
                 var element = data[i];
-                SQL += '('+ element.user_id +',"'+ element.nickname +'","'+ (element.remark_nickname==null?'':element.remark_nickname) +'","'+ element.head_img_url +'","'+ (element.remark_head_img_url==null?'':element.remark_head_img_url) +'",2,'+ (status || 0) +'),'
+                SQL += '(' + element.user_id + ',"' + element.nickname + '","' + (element.remark_nickname == null ? '' : element.remark_nickname) + '","' + element.head_img_url + '","' + (element.remark_head_img_url == null ? '' : element.remark_head_img_url) + '",2,' + (status || 0) + '),'
             }
-            SQL = SQL.substring(0,SQL.length-1);
+            SQL = SQL.substring(0, SQL.length - 1);
             db.executeSql({
-                name: 'db_'+$api.getStorage('userToken'),
+                name: 'db_' + $api.getStorage('userToken'),
                 sql: SQL
-            },function(ret,err){
+            }, function (ret, err) {
                 if (ret.status) {
-                   
-                }else {
-                    api.alert({msg:err.msg});
+
+                } else {
+                    api.alert({ msg: err.msg });
                 }
             });
         }
     }
 
 </script>
+
 </html>
-
-
-
-

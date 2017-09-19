@@ -6,8 +6,8 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-        
-        
+
+
         .main {
             padding: 0 .3rem;
             height: .6rem;
@@ -38,7 +38,7 @@
         }
         .clear_search {
             font-size: .28rem;
-            margin-left: .3rem;            
+            margin-left: .3rem;
             color: #1AAD19;
         }
         header.header .rightBtn{
@@ -69,7 +69,7 @@
             <span class="rightBtn" tapmode onclick="addF()"></span>
         </div>
     </header>
-   
+
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -99,12 +99,12 @@
     function secondContactsTable() {
        db.executeSql({
            name: 'db_'+$api.getStorage('userToken'),
-           sql: 'CREATE TABLE IF NOT EXISTS db_second_contactst_table(user_id int PRIMARY KEY NOT NULL, nickname varchar(255), remark_nickname varchar(255), head_img_url varchar(255), remark_head_img_url varchar(255), type int, status int)'   
+           sql: 'CREATE TABLE IF NOT EXISTS db_second_contactst_table(user_id int PRIMARY KEY NOT NULL, nickname varchar(255), remark_nickname varchar(255), head_img_url varchar(255), remark_head_img_url varchar(255), type int, status int)'
            // type 几度人脉
            // status 是否加入我在
         },function(ret,err){
            if (ret.status) {
-               api.alert({msg:'执行SQL成功'});
+            //    api.alert({msg:'执行SQL成功'});
            }else {
                api.alert({msg:err.msg});
            }
@@ -126,13 +126,13 @@
             method: 'post',
             headers: apiHeader,
             data: {
-               values: { 
+               values: {
                   token: $api.getStorage('userToken'),
-                  
+
                }
             }
        }, function(ret, err) {
-           
+
             data = ret.data.list
             for (var i = 0; i < data.length; i++) {
                 data[i].employee_id = data[i].user_id;
@@ -154,12 +154,12 @@
                     // alert(JSON.stringify(ret));
                 }
             });
-            
+
 
        })
-       
-           
-        
+
+
+
    }
 </script>
 </html>
