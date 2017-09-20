@@ -161,11 +161,11 @@
                     </span>
                     <div class="name flex-def flex-cCenter flex-zBetween ">
                         <span class="title ">{{=it[i].title}}</span>
-                        <span tapmode onclick="collect(this);event.stopPropagation();" class="icon "></span>
+                        <span tapmode data-id="{{=it[i].supply_id}}" onclick="collect(this);event.stopPropagation();" class="icon "></span>
                     </div>
                     <div class="user flex-def flex-cCenter flex-zBetween ">
-                        <div class="userLeft flex-def flex-cCenter ">
-                            <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" class="announcerHead" tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation(); ">
+                        <div class="userLeft flex-def flex-cCenter " tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation(); ">
+                            <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" class="announcerHead" >
                             <span class="announcer">{{=it[i].nickname}}</span>
                             <span class="company">{{=it[i].company_name}}</span>
                         </div>
@@ -221,12 +221,47 @@
     };
     // 收藏
     function collect(ele) {
+        var url;
         if ($api.hasCls(ele, 'collect')) {
-            $api.removeCls(ele, 'collect');
+            // 已收藏
+            // $api.removeCls(ele, 'collect');
+            url = '/supply/cancelCollect';
         } else {
-            $api.addCls(ele, 'collect');
+            // 未收藏
+            // $api.addCls(ele, 'collect');
+            url = '/supply/collect';
         }
+        api.ajax({
+            url: apiSite + url,
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: {
+                       token: $api.getStorage('userToken'),
+                       supply_id: $api.attr(ele, 'data-id')
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if ($api.hasCls(ele, 'collect')) {
+                    // 已收藏
+                    $api.removeCls(ele, 'collect');
+                    api.toast({
+                        msg: '取消收藏成功'
+                    });
+                } else {
+                    // 未收藏
+                    $api.addCls(ele, 'collect');
+                    api.toast({
+                        msg: '收藏供应成功'
+                    });
+                }
+            } else {
+                alert(JSON.stringify(err.msg))
+            }
+        })
     }
+
     // 用户详情页面
     function openUserInfoPage(ele){
         var userId = $api.attr(ele, 'data-id');
@@ -364,7 +399,7 @@
                 // 缓存字段  supply_publish_1
                 var supplyCache = $api.getStorage('supply_publish_1');
                 if (supplyCache) {
-                    // console.log(JSON.stringify(supplyCache))
+                    console.log(JSON.stringify(supplyCache))
                     getData(supplyCache);
                     // console.log($api.attr($api.dom('.firstImg'), 'style'))
                     // selfAdaption();

@@ -129,17 +129,17 @@
                 <p class="no_data">暂无数据</p>
             {{??}}
                 {{ for (var i = 0; i < it.length; i++) { }}
-                    <div class="item"  data-id="{{=it[i].supply_id}}" data-company="{{=it[i].company_name}}" tapmode onclick="info(this)">
+                    <div class="item"  data-id="{{=it[i].demand_id}}" data-company="{{=it[i].company_name}}" tapmode onclick="info(this)">
                         <span class="firstImg" style="background: url({{=it[i].image_json[0]?it[i].image_json[0]:'../../image/tx_1.jpg'}})no-repeat;background-size: 7.1rem auto;background-position: center center;">
                             <span class="price ">{{=it[i].reward}}元</span>
                         </span>
                         <div class="name flex-def flex-cCenter flex-zBetween ">
                             <span class="title ">{{=it[i].title}}</span>
-                            <span tapmode onclick="collect(this);event.stopPropagation();" class="icon "></span>
+                            <span tapmode data-id="{{=it[i].demand_id}}" onclick="collect(this);event.stopPropagation();" class="icon "></span>
                         </div>
                         <div class="user flex-def flex-cCenter flex-zBetween ">
-                            <div class="userLeft flex-def flex-cCenter ">
-                                <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" class="announcerHead" tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation(); ">
+                            <div class="userLeft flex-def flex-cCenter " tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation(); ">
+                                <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" class="announcerHead" >
                                 <span class="announcer">{{=it[i].nickname}}</span>
                                 <span class="company">{{=it[i].company_name}}</span>
                             </div>
@@ -231,11 +231,45 @@
     }
      // 收藏
      function collect(ele) {
+        var url;
         if ($api.hasCls(ele, 'collect')) {
-            $api.removeCls(ele, 'collect');
+            // 已收藏
+            // $api.removeCls(ele, 'collect');
+            url = '/demand/cancelCollect';
         } else {
-            $api.addCls(ele, 'collect');
+            // 未收藏
+            // $api.addCls(ele, 'collect');
+            url = '/demand/collect';
         }
+        api.ajax({
+            url: apiSite + url,
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                   values: {
+                       token: $api.getStorage('userToken'),
+                       demand_id: $api.attr(ele, 'data-id')
+                   }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if ($api.hasCls(ele, 'collect')) {
+                    // 已收藏
+                    $api.removeCls(ele, 'collect');
+                    api.toast({
+                        msg: '取消收藏成功'
+                    });
+                } else {
+                    // 未收藏
+                    $api.addCls(ele, 'collect');
+                    api.toast({
+                        msg: '收藏供应成功'
+                    });
+                }
+            } else {
+                alert(JSON.stringify(err.msg))
+            }
+        })
     }
     function requireData2 (data) {
         var data = data || {};
