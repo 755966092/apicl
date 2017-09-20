@@ -46,32 +46,32 @@
         .list {
             box-sizing: border-box;
             width: 100%;
-            font-size: 0;   
+            font-size: 0;
             background-color: #fff;
-            padding: .2rem .3rem; 
-            border-bottom: .01rem solid #e7e7e7;    
+            padding: .2rem .3rem;
+            border-bottom: .01rem solid #e7e7e7;
             /*margin-bottom: .2rem;*/
 
             /* 定义flex */
-            display: -webkit-box; 
-            display: flex; 
-                
+            display: -webkit-box;
+            display: flex;
+
              /*侧轴对齐方式 */
             -webkit-box-align: start ;
             align-items: flex-start;
-        
+
              /*主轴对齐方式 */
-            
-                
+
+
              /*主轴方向 */
             -webkit-box-direction: normal;
             flex-direction: row;
-            
+
         }
         .list .img img {
             width: .78rem;
-            height: .78rem;  
-            
+            height: .78rem;
+
         }
         .list .text {
             /* 子元素是否伸缩 */
@@ -79,16 +79,16 @@
             flex-grow: 1;
             box-sizing: border-box;
             margin-left: .2rem;
-            
+
         }
         .list .text .title {
-            
+
 
             box-sizing: border-box;
             position: relative;
-            
-            display: -webkit-box; 
-            display: flex; 
+
+            display: -webkit-box;
+            display: flex;
             box-sizing: border-box;
             /*主轴方向 */
             -webkit-box-direction: normal;
@@ -119,7 +119,7 @@
             text-align: center;
             border: .01rem solid #5D7099;
             border-radius: .06rem;
-            
+
             margin-left: .02rem;
         }
         .list .text .stateContent {
@@ -148,7 +148,7 @@
             position: relative;
             margin-top: .15rem;
         }
-        
+
         .list .text .discussInfo::before {
             content: "";
             display: inline-block;
@@ -168,11 +168,11 @@
         }
         .list .text .discussInfo .text1 {
             font-size: .24rem;
-            color: #000;   
+            color: #000;
         }
         .list .text .discussInfo .discussContent {
             font-size: .24rem;
-           
+
         }
         .list .text .imgContent {
             margin-top: .1rem;
@@ -194,7 +194,7 @@
          <div class="resultList"></div>
          <script type="text/x-dot-template" id="listT">
             {{?it.length > 0}}
-                {{ for (var i = 0; i < it.length; i++) { }} 
+                {{ for (var i = 0; i < it.length; i++) { }}
                     <div class="list"   tapmode data-id='{{=it[i].topic_id}}' onclick="openStateInfo(this)">
                         <div class="img">
                             <img tapmode onclick="openUserInfoPage(this);event.stopPropagation();" src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" data-id="{{=it[i].user_id}}">
@@ -206,7 +206,7 @@
                                 {{??}}
                                 <h3>{{=it[i].nickname}}</h3>
                                 {{?}}
-                                
+
                                 {{?it[i].role_name}}
                                 <span class="titleLable" style="padding: 0 .06rem;line-height: .28rem;height: .28rem;">{{=it[i].role_name}}</span>
                                 {{?}}
@@ -217,7 +217,7 @@
                             <p class="stateContent">{{=it[i].content}}</p>
                             {{?it[i].image_json!=null}}
                                 <div class="imgContent">
-                                    {{ for (var j = 0; j < it[i].image_json.length; j++) { }} 
+                                    {{ for (var j = 0; j < it[i].image_json.length; j++) { }}
                                         <img class="imgCon" src="{{=it[i].image_json[j]}}" alt="">
                                         <!-- <img class="imgCon" src="../../image/tx_1.jpg" alt=""> -->
                                     {{ }; }}
@@ -229,7 +229,7 @@
                             </div>
                             {{?it[i].comment_list.length!=0}}
                             <div class="discussInfo claerfix" onclick="event.stopPropagation();">
-                                    {{ for (var j = 0; j < it[i].comment_list.length; j++) { }} 
+                                    {{ for (var j = 0; j < it[i].comment_list.length; j++) { }}
                                         {{?it[i].comment_list[j].root==2}}
                                             <div data-usrId='{{=it[i].comment_list[j].comment_id}}' data-id='{{=it[i].topic_id}}' tapmode onclick='addComment(this);event.stopPropagation();'>
                                                 <span class="discussName">{{=it[i].comment_list[j].nickname}}</span>
@@ -289,25 +289,41 @@
                 requestData();
             } else {
                 // 不是圈子成员
-                api.openFrame({
-                    name: 'find_joinCircle',
-                    url: './find_joinCircle.html',
-                    rect: {
-                        x: 0,
-                        y: 0,
-                        w: 'auto',
-                        h: 'auto'
-                    },
-                    pageParam: {
-                        circle_id: api.pageParam.circle_id,
-                        circle_name: api.pageParam.circle_name
-                    },
-                    bounces: false
+                api.confirm({
+                    title: '您尚未加入' + api.pageParam.circle_name,
+                    msg: '普通用户只能查看5条内容，会员可查看10条，如果您想看到全部内容，请点击立即加入',
+                    buttons:['再逛逛', '立即加入']
+                },function(ret,err){
+                    if(ret.buttonIndex == 1){
+                        // 立即加入
+                        api.openWin({
+                            name: 'find_payAddCricle_win',
+                            url: './find_payAddCricle_win.html',
+                            pageParam: {
+                                circle_id: api.pageParam.circle_id
+                            }
+                        });
+                    }
                 });
+                // api.openFrame({
+                //     name: 'find_joinCircle',
+                //     url: './find_joinCircle.html',
+                //     rect: {
+                //         x: 0,
+                //         y: 0,
+                //         w: 'auto',
+                //         h: 'auto'
+                //     },
+                //     pageParam: {
+                //         circle_id: api.pageParam.circle_id,
+                //         circle_name: api.pageParam.circle_name
+                //     },
+                //     bounces: false
+                // });
             }
         });
     };
-    
+
     // 用户详情页面
     function openUserInfoPage(ele){
         api.openWin({
@@ -324,7 +340,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                        circle_id: api.pageParam.circle_id
                    }
@@ -348,7 +364,7 @@
             }
         })
     }
-    
+
     // 评论
     function commentBtn(ele) {
         var topic_id = $api.attr(ele, 'data-id');
@@ -358,7 +374,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                        topic_id: topic_id
                    }
@@ -385,13 +401,13 @@
                 alert(JSON.stringify(err))
             }
         })
-        
+
         // 圈子主题ID api.pageParam.circle_id
-        // 评价内容 
+        // 评价内容
         // 评论级别（1-主题，2-用户） 1
-        // 评论权限 
+        // 评论权限
         // 被评论用户ID（评论级别为用户时必传）
-        
+
     }
     // 评论用户
     function addComment(ele) {
@@ -402,7 +418,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                        topic_id: topic_id
                    }
@@ -445,9 +461,9 @@
                 topic_id: topic_id,
                 rootCount: rootCount,
                 comment_customer_id: comment_customer_id
-            }    
+            }
         }
-        
+
         api.openFrame({
             name: 'find_inputBox',
             url: './find_inputBox.html',
@@ -461,10 +477,10 @@
             bounces: false
         });
     }
-    
+
     // 根据上传图片的多少自适应图片的大小
     function selfAdaption() {
-        
+
         var listContent = $api.domAll('.list');
 
         for (var i = 0; i < listContent.length; i++) {
@@ -489,20 +505,20 @@
     }
     // doT模版获取数据
     function getData(data) {
-        
+
         var listTText = $api.byId('listT').text;
-        
+
         var fnListT = doT.template(listTText);
-        
+
         var html = fnListT(data);
-        
+
         var list = $api.dom('.resultList');
-        
+
         // 替换resultList所有内容
         $api.html(list, html);
         // alert('getData:' + JSON.stringify(data))
     }
-    
+
 
     function openStateInfo(ele) {
         var topic_id = $api.attr(ele, 'data-id');
