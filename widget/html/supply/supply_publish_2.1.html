@@ -7,112 +7,186 @@
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
         .bbottomLoading {
-            text-align: center;
+            text-align: center; 
             font-size: .24rem;
             color: #999;
             line-height: .8rem;
             display: none;
         }
         .no_data {
-         background-color: #EDECF3;
+         background-color: #EDECF3; 
          text-align: center;
-         color: #999;
+         color: #999;  
          font-size: .3rem;
          margin-top: .5rem;
         }
-        .item {
-            width: 7.5rem;
-            height: 5.7rem;
-            background-color: #fff;
-            padding: 0.2rem;
-            box-sizing: border-box;
-            margin-bottom: 0.1rem;
-            border-bottom: .01rem solid #d9d9d9;
+        .label {
+            line-height: .24rem;
+            text-align: center;
+            border-radius: .04rem;
+            width: .41rem;
+            height: .24rem;
+            /*background: url(../../image/icon_supply/icon_gs2.png)no-repeat;*/
+            /*-webkit-background-size: .41rem .24rem;*/
+            /*background-size: .41rem .24rem;*/
+            /*padding-right: .1rem;*/
+            font-size: .16rem;
+            color: #576c96;
+            border: .01rem solid #576c96;
+            margin-right: .1rem;
         }
-
-        .firstImg {
+         .item {
+            background-color: #fff;
+            padding: .2rem .3rem;
+            box-sizing: border-box;
+            border-bottom: .01rem solid #ECECEA;
+        }
+        .main {
+            /*padding: 0 .3rem;*/
+            background-color: #fff;
+        }
+        .commentIcon {
             display: inline-block;
-            width: 100%;
-            height: 3.8rem;
-
-            border-radius: .1rem;
+            width: .34rem;
+            float: right;
+            height: .26rem;
+            background: url(../../image/icon_supply/icon_comment.png)no-repeat;
+            -webkit-background-size: .34rem .26rem;
+            background-size: .34rem .26rem;
+        }
+        .commentText {
+            font-size: 0;
+            margin-top: .2rem;
+        }
+        .commentText ul {
             position: relative;
         }
-
-        .price {
-            display: inline-block;
-            padding: 0 .2rem;
-            height: 0.36rem;
-            line-height: 0.36rem;
-            background-color: #CFAA7F;
-            font-size: 0.3rem;
+        .commentText ul:before {
             position: absolute;
-            bottom: 0.26rem;
-            left: 0;
-            color: #fff;
-            text-align: right
+            left: .2rem;
+            top: -.1rem;
+            content: "";
+            display: inline-block;
+            width: 0rem;
+            height: 0rem;
+            border-right: .1rem solid transparent;
+            border-left: .1rem solid transparent;
+            border-bottom: .1rem solid #F3F3F5;
         }
-
-        .name,
-        .user {
-            height: 0.48rem;
+        .commentText li {
+            font-size: .24rem;
+            background: #F3F3F5;
+            padding: .05rem .2rem;
+        }
+        .headImg {
             font-size: 0;
-            margin-bottom: 0.2rem;
         }
-
-        .title {
-            font-size: 0.34rem;
-            max-width: 5rem;
-            text-overflow: ellipsis;
+        .headImg img {
+            width: .785rem;
+            height: .785rem;
+        }
+        .content {
+            font-size: 0;
+            margin-left: .2rem;
+        }
+        
+        .titleLeft {
+            width: 3.5rem;
+            margin-bottom: .1rem;
+        }
+        .titleLeft .name {
+            font-size: .26rem;
+            color: #576B95;
+            font-weight: 600;
             white-space: nowrap;
             overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 3.5rem;
+        }
+        
+        .titleRight {
+            color: #0ABB07;
+            font-size: .28rem;
         }
 
-        .announcer {
-            margin: 0 .1rem;
+        .info {
+            font-size: 0;
+        }
+        .info {
+            font-size: .24rem;
+            color: #555;
+        }
+        .content_text {
+            margin-top: .1rem;
+            margin-bottom: .17rem;
+        }
+        .content_text .text {
+            font-size: .28rem;
+            color: #000;
+            margin-top: .1rem;
+            line-height: .34rem;
+        }
+        .info .comIcon {
+            line-height: .24rem;
+            text-align: center;
+            border-radius: .04rem;
+            width: .41rem;
+            height: .24rem;
+            /*background: url(../../image/icon_supply/icon_gs2.png)no-repeat;*/
+            /*-webkit-background-size: .41rem .24rem;*/
+            /*background-size: .41rem .24rem;*/
+            /*padding-right: .1rem;*/
+            font-size: .16rem;
+            color: #576c96;
+            border: .01rem solid #576c96;
+            margin-right: .1rem;
         }
 
-        .announcerHead {
-            width: 0.48rem;
-            height: 0.48rem;
-            border-radius: 50%;
-        }
-
-        .user span {
-            font-size: 0.26rem;
-        }
-
-        .name .icon {
-            width: 1rem;
-            height: 0.48rem;
-            background: url(../../image/icon_supply/icon_collecr03.png)no-repeat;
-            background-size: .36rem .31rem;
-            background-position: right center;
-        }
-
-        .name .collect {
-            background: url(../../image/icon_supply/icon_collecr04.png)no-repeat;
-            background-size: .36rem .31rem;
-            background-position: right center;
-        }
-
-        .user .icon {
-            padding-left: 0.35rem;
-            height: 0.16rem;
-            line-height: 0.16rem;
-            background: url(../../image/icon_supply/icon_pageviews.png)no-repeat;
-            background-size: .26rem .16rem;
-            background-position: left center;
-            font-size: 0rem;
-        }
-
-        .icon .count {
-            font-size: 0.18rem;
+        .comment .time {
+            font-size: .2rem;
             color: #999;
         }
+       
+        .results {
+            font-size: .24rem;
+            color: #2BD242;
+            text-align: center;
+            height: .8rem;
+            line-height: .8rem;
+            
+        }
+        .results span {
+            display: inline-block;
+            background:url(../../image/icon_supply/icon_person.png)no-repeat ;
+            -webkit-background-size: .3rem .3rem;
+            background-size: .3rem .3rem;
+            width: .3rem;
+            height: .3rem;
+            vertical-align: text-top;
+            margin-right: .2rem;
+            
+        }
+        .title1 {
+            /*margin-top: .2rem;*/
+            padding: 0 .3rem;
+            border-bottom: .01rem solid #ddd;
+            background-color: #fff;
+            display: none;
+        }
+        .content_img {
+            margin: .1rem .1rem 0 0;
+        }
+        .sexIcon {
+            width: .24rem;
+            height: .24rem;
+            background: url(../../image/icon_supply/icon_person.png)no-repeat;
+            -webkit-background-size: .24rem .24rem;
+            background-size: .24rem .24rem;
+            margin-left: .06rem;
+        }
 
-        .company {
-            color: #999;
+        .comment_name {
+            color: #576B95;
         }
     </style>
 </head>
@@ -128,29 +202,66 @@
             {{?it.length === 0}}
                 <p class="no_data">暂无数据</p>
             {{??}}
-                {{ for (var i = 0; i < it.length; i++) { }}
-                    <div class="item"  data-id="{{=it[i].supply_id}}" data-company="{{=it[i].company_name}}" tapmode onclick="info(this)">
-                        <span class="firstImg" style="background: url({{=it[i].image_json[0]?it[i].image_json[0]:'../../image/tx_1.jpg'}})no-repeat;background-size: 7.1rem auto;background-position: center center;">
-                            <span class="price ">{{=it[i].reward}}元</span>
-                        </span>
-                        <div class="name flex-def flex-cCenter flex-zBetween ">
-                            <span class="title ">{{=it[i].title}}</span>
-                            <span tapmode onclick="collect(this);event.stopPropagation();" class="icon "></span>
+                {{ for (var i = 0; i < it.length; i++) { }} 
+                    <div class="item flex-def" data-id="{{=it[i].demand_id}}" data-company="{{=it[i].company_name}}"   tapmode   onclick="info(this)">
+                        <div class="headImg">
+                            <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation();">
                         </div>
-                        <div class="user flex-def flex-cCenter flex-zBetween ">
-                            <div class="userLeft flex-def flex-cCenter ">
-                                <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" class="announcerHead" tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation(); ">
-                                <span class="announcer">{{=it[i].nickname}}</span>
-                                <span class="company">{{=it[i].company_name}}</span>
+                        <div class="content flex-def flex-zTopBottom flex-item">
+                            <div class="title flex-def flex-zBetween">
+                                <div class="titleLeft flex-def flex-zLeftRight flex-cCenter">
+                                {{?it[i].type==1}}
+                                <span class="label">个人</span>
+                                {{??}}
+                                {{?}}
+                                    <h3 class="name">{{=it[i].title}}</h3>
+                                    <!-- <h3 class="name">{{=it[i].nickname}}</h3> -->
+                                    <!-- <span class="sexIcon"></span> -->
+                                    <!-- <span class="zmfIcon"></span> -->
+                                    <!-- <span class="zmfText">700分</span> -->
+                                </div>
+                                <div class="titleRight">
+                                    {{=it[i].reward}}元<!-- /{{=it[i].unit}} -->
+                                </div>
                             </div>
-                            <span class="icon flex-def flex-cCenter "><span class="count ">66人</span></span>
+                            {{?it[i].company_name}}
+                                <div class="info">
+                                    <p class="commanyName flex-def flex-cCenter">
+                                        <span class="comIcon">公司</span>
+                                        <span>{{=it[i].company_name}}</span>
+                                    </p>
+                                </div>
+                            {{?}}
+                            <div class="content_text">
+                                <p class="text">{{=it[i].description}}</p>
+                                {{?it[i].image_json!=null}}
+                                    {{ for (var j = 0; j < it[i].image_json.length; j++) { }} 
+                                        <img class="content_img" src="{{=it[i].image_json[j]}}">
+                                    {{ } }}
+                               {{?}}
+                            </div>
+                            <div class="comment">
+                                <div class="time">
+                                    <span>{{=it[i].create_time}}</span>
+                                    <!-- 评论图标 -->
+                                    <!-- <div class="commentIcon"></div> -->
+                                </div>
+                               <!--  <div class="commentText">
+                                    <ul>
+                                        <li>
+                                            <span class="comment_name">李志超:</span>
+                                            <span class="comment_content">我是一条评论</span>
+                                        </li>
+                                    </ul>
+                                </div> -->
+                            </div>
                         </div>
-                    </div>
+                </div>
                 {{ }; }}
             {{?}}
     </script>
     <p class="bbottomLoading">正在加载...</p>
-
+   
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -211,7 +322,7 @@
             extra:{
                 threshold:0            //设置距离底部多少距离时触发，默认值为0，数字类型
             }
-        }, function(ret, err){
+        }, function(ret, err){        
             // alert('已滚动到底部');
             if ($api.text($api.dom('.bbottomLoading')) == '暂无更多供求') {
                 // // console.log('已滚动到底部, 不继续请求')
@@ -226,16 +337,8 @@
                     requireData2(condition);
                 }
             }
-
+            
         });
-    }
-     // 收藏
-     function collect(ele) {
-        if ($api.hasCls(ele, 'collect')) {
-            $api.removeCls(ele, 'collect');
-        } else {
-            $api.addCls(ele, 'collect');
-        }
     }
     function requireData2 (data) {
         var data = data || {};
@@ -261,16 +364,16 @@
             method: 'post',
             headers: apiHeader,
             data: {
-               values: {
+               values: { 
                     token: $api.getStorage('userToken'),
                     // keyword: '',
-                    type: data.type || '',
+                    type: data.type || '', 
                     sub_type: data.sub_type || '',
-                    category_ids: data.category_ids || '',
+                    category_ids: data.category_ids || '',     
                     order: data.order || '',
-                    latitude: data.latitude || '',
+                    latitude: data.latitude || '',      
                     longitude: data.longitude || '',
-                    page_num: page_num
+                    page_num: page_num     
                }
             }
         }, function(ret, err) {
@@ -327,15 +430,15 @@
             }
         }
     }
-
-
+    
+    
 
     // 筛选后结果
     function bySelect() {
         api.addEventListener({
            name: 'screeningResults1'
         }, function(ret, err) {
-
+           
            if (ret.value.flag) {
             // $api.css($api.dom('.title1'), 'display:block');
             parameter = ret.value.parameter
@@ -364,7 +467,7 @@
     }
     // 筛选后页面变化
     function viewResults(ele) {
-
+       
         $api.css($api.dom('.results'), 'background: #fff url(../../image/icon_zk.png)no-repeat;background-position: right center;-webkit-background-size: .15rem .25rem;background-size: .15rem .25rem;');
         // $api.css(ele, 'b');
         // getData(data2);
@@ -382,7 +485,7 @@
         }
          $api.html(ele, '查看订阅的筛选结果');
     }
-
+    
     // 请求数据
     function requireData (data) {
         // // // console.log('参数:::'+JSON.stringify(data))
@@ -406,7 +509,6 @@
         }
         var supplyCache = $api.getStorage('supply_publish_2');
         if (supplyCache) {
-            console.log(JSON.stringify(supplyCache))
             getData(supplyCache);
             selfAdaption();
         }
@@ -415,16 +517,16 @@
             method: 'post',
             headers: apiHeader,
             data: {
-               values: {
+               values: { 
                     token: $api.getStorage('userToken'),
                     // keyword: '',
-                    type: data.type || '',
+                    type: data.type || '', 
                     // sub_type: data.sub_type || '',
-                    category_ids: data.category_ids || '',
+                    category_ids: data.category_ids || '',     
                     order: data.order || '',
-                    latitude: latitude || '',
+                    latitude: latitude || '',      
                     longitude: longitude || '',
-                    page_num: page_num
+                    page_num: page_num    
                }
             }
         }, function(ret, err) {
@@ -464,7 +566,7 @@
             }
         })
     }
-
+    
     // 进入详情
     function info(ele) {
         var flag = 0;
@@ -472,7 +574,7 @@
             demand_id = $api.attr(ele, 'data-id');
         if (compaby_name != '') {
             flag = 1;
-        }
+        } 
         // alert(flag +'---'+ compaby_name)
         api.openWin({
             name: 'supply_info_demand_win',
@@ -483,7 +585,7 @@
                 demand_id: demand_id
             }
         });
-
+        
     }
 
 </script>

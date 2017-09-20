@@ -37,17 +37,17 @@
         .search .searchText {
             font-size: .24rem;
         }*/
-       
+
         .news {
             display: flex;
             flex-flow: column nowrap;
         }
-        
+
         ul {
             width: 100%;
             box-sizing: border-box;
         }
-        
+
         ul li {
             width: 100%;
             height: 1.2rem;
@@ -57,13 +57,13 @@
             border-bottom: .01rem solid #D6D6D6;
             position: relative;
         }
-        
+
         ul li img {
             width: .9rem;
             height: .9rem;
             margin-right: .2rem;
         }
-        
+
         ul li h3 {
             margin-top: .1rem;
             margin-bottom: .05rem;
@@ -72,7 +72,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-       
+
         ul li.select:before {
             content: "";
             display: inline-block;
@@ -222,7 +222,7 @@
          }*/
          .itemList .bb0 {
              border-bottom: 0;
-         }   
+         }
          .hide {
              display: none;
         }
@@ -255,7 +255,7 @@
             font-size: .24rem;
         }
 
-        
+
         .list {
             background-color: #fff;
         }
@@ -267,7 +267,7 @@
             overflow: hidden;
             border-bottom: .01rem solid #d9d9d9;
 
-           
+
         }
         .list .item img {
             margin-right: .1rem;
@@ -368,9 +368,11 @@
             background-color: #fff;
             display: none;
         }
+
     </style>
 </head>
 <body >
+
     <div class="loading"></div>
     <div id="news_wrap" class=" clearfix">
        <div class="wrap flex-def flex-cCenter flex-zCenter">
@@ -408,8 +410,8 @@
                 <p class="">尚未加入（有手机通讯录）</p>
             </div>
         </div>
-        
-       
+
+
         <div class="main_no1"   >
             <p class="mainP flex-def flex-cCenter" >
                 <span class="icon er" tapmode onclick="hideList(this,2)"></span>
@@ -435,7 +437,7 @@
                 <p class="">尚未加入</p>
             </div>
         </div>
-        
+
         <div class="main_no3 flex-def flex-cCenter" tapmode onclick="openSchemaPage(1)">
             <span class="icon"></span>
             <span class="text">人脉等级相关说明</span>
@@ -453,7 +455,7 @@
    <!--  <div class="main">
         <div class=" list resultList"></div>
         <script type="text/x-dot-template" id="listT">
-        {{ for (var i = 0; i < it.length; i++) { }} 
+        {{ for (var i = 0; i < it.length; i++) { }}
             {{?it[i].flagLetter}}
                 <p id="{{=it[i].flagLetter}}" class="groupTitle">{{=it[i].flagLetter}}</p>
             {{? }}
@@ -461,7 +463,7 @@
                 <img src="{{=it[i].head_img_url}}">
                 <div class="title">
                     <h3 class="name">{{=it[i].title}}</h3>
-                   
+
                     {{?it[i].current_company}}
                     <p class="position">{{=it[i].current_company}}&nbsp;</p>
                     {{??}}
@@ -498,7 +500,8 @@
         if (api.systemType == 'andioid') {
             $api.css($api.dom('html'), 'padding-bottom: 7.8rem');
         }
-        moduleInit(); 
+
+        moduleInit();
         initPage();
         api.addEventListener({
             name: 'editUserInfoUpdateList'
@@ -509,6 +512,9 @@
                 alert(JSON.stringify(err));
             }
         });
+        if (!$api.getStorage('guidancePage')) {
+            shadowPage();
+        }
     }
     // doT模版获取数据
     function getData(data, htmlStr) {
@@ -533,7 +539,6 @@
                 createFile_1();
             }
         });
-        
     }
     function createFile_1() {
         fs.createFile({
@@ -558,7 +563,7 @@
                     fs.write({
                         fd: ret.fd,
                         data: '<html>'+ htmlStr +'</html>',
-                    }, function(ret, err){        
+                    }, function(ret, err){
                         if( ret.status ){
                             // // console.log('531:::'+ JSON.stringify( ret ) );
                         }else{
@@ -579,7 +584,7 @@
             db.selectSql({
                 name: 'db_'+$api.getStorage('userToken'),
                 sql: 'SELECT * FROM addressList_simplify WHERE type IN (1,2,3,4) order by flag asc',
-            }, function(ret, err){  
+            }, function(ret, err){
                 if( ret.status ){
                     if (ret.data.length != 0) {
                         dakai(paixv(ret.data));
@@ -665,8 +670,8 @@
         str = $api.jsonToStr(str);
         db.executeSql({
             name: SQLName,
-            sql: "INSERT OR REPLACE INTO addressList_one (type, str) VALUES ("+ type +",'"+ str +"')"    
-        }, function(ret, err){        
+            sql: "INSERT OR REPLACE INTO addressList_one (type, str) VALUES ("+ type +",'"+ str +"')"
+        }, function(ret, err){
             if( ret.status ){
                 // // console.log('缓存成功')
             }else{
@@ -708,7 +713,7 @@
             if ($api.hasCls(list[i], 'hide')) {
                 $api.removeCls(list[i], 'hide');
             } else {
-                
+
                 $api.addCls(list[i], 'hide');
             }
         }
@@ -758,7 +763,7 @@
         //         rongToken: api.pageParam.rongToken
         //     }
         // });
-            
+
         // 搜索全部
         api.openWin({
             name: 'search_main_win',
@@ -776,7 +781,7 @@
             //     url = "txl_listWin_shuangxiang"
             // } else if (flag == 3) {
             //     url = "txl_listWin_you"
-            // } else if (flag == 4) { 
+            // } else if (flag == 4) {
             //     url = "txl_listWin_chushi"
             // } else {
             //     url = 'txl_listWin'
@@ -811,9 +816,9 @@
             pageParam: {
                 headerH: headerH
             }
-       });   
+       });
     }
-    
+
     function dakai(data1) {
         var dataArr = [];
         var dataKeyArr = [];
@@ -853,8 +858,8 @@
                 }],
                 imgHeight: 32,
                 groupTitle: {
-                    color: '#999',       
-                    size: 14,   
+                    color: '#999',
+                    size: 14,
                     bgColor: '#EFEFF4'
                 },
                 rightBg: '#fff',
@@ -911,14 +916,14 @@
                             } else {
                                 alert('您没有对方的手机号码')
                             }
-                            
+
                         }
                     }
                 } else {
                     // alert(JSON.stringify(err.msg));
                 }
             });
-        
+
         $api.css($api.dom('.loading'), 'display: none');
     }
     // 打开人脉详情
@@ -931,11 +936,11 @@
             }
         });
     }
-    function f_check_uppercase(obj)   {          
-       if (/[A-Z]/.test(obj))    {   
-          return true;   
-       }    
-       return false;   
+    function f_check_uppercase(obj)   {
+       if (/[A-Z]/.test(obj))    {
+          return true;
+       }
+       return false;
     }
     // 查询数据库
     function query() {
@@ -952,7 +957,7 @@
                 //         query();
                 //     }
                 // },1)
-                // 
+                //
                 // // // console.log('frame1::::::'+JSON.stringify(ret))
                 // if (ret.data.length === 0) {
                 //     // // // console.log('暂无数据')
@@ -1025,7 +1030,7 @@
             // data[i].subTitle = (data[i].current_company || ""+ data[i].current_position || ""+data[i].current_degree||"") ? (data[i].current_company || ""+" "+ data[i].current_position || ""+" "+data[i].current_degree||"") : ""
             data[i].titleSize = 15;
             // data[i].subTitleColor = '#999'
-            
+
             if (data[i].initial) {
                 if (data[i].initial == '#') {
                     if (arr[data[i].initial]) {
@@ -1037,11 +1042,25 @@
                     arr[data[i].initial] = [];
                     a = i;
                 }
-            } 
-           
+            }
+
             arr[data[a].initial].push (data[i])
         }
         return arr;
+    }
+    // 打开遮罩层
+    function shadowPage() {
+        api.openFrame({
+            name: 'txl_guidance',
+            url: './addressList/txl_guidance.html',
+            bounces: false,
+            rect: {
+                x: 0,
+                y: 0,
+                w: api.winWidth,
+                h: api.winHeight
+            }
+        });
     }
     </script>
 </body>
