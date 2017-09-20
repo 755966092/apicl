@@ -42,14 +42,14 @@
         .title input {
             height: .9rem;
             outline: none;
-            width: 5.supply_publish_3.htmlrem;
+            width: 5.3rem;
         }
         textarea {
             width: 100%;
             padding: .2rem 0;
             outline: none;
             resize: none;
-            
+
         }
 
         .addMedia {
@@ -61,7 +61,7 @@
             text-align: center;
             color: #999;
             margin-right: .1rem;
-        }   
+        }
         .addMedia span {
             font-size: .3rem;
         }
@@ -99,13 +99,13 @@
         .classify {
             background-color: #EDECF3;
             font-size: 0;
-            
+
         }
         .classify ul li {
             /*background-color: #fff;*/
             font-size: .3rem;
             height: .8rem;
-            line-height: .8rem; 
+            line-height: .8rem;
             /*border-bottom: .01rem solid #000;*/
             width: 100%;
             /*padding: 0 .3rem 0 .8rem;*/
@@ -156,7 +156,7 @@
         .mb20 {
             margin-bottom: .2rem;
         }
-        
+
 
         .btn {
             display: none;
@@ -167,7 +167,7 @@
             background-color: #08BB08;
             font-size: .34rem;
             color: #fff;
-            text-align: center; 
+            text-align: center;
             line-height: .83rem;
             margin-top: .37rem;
             margin-bottom: .3rem;
@@ -246,13 +246,13 @@
             margin-right: .1rem;
             width: 1.6rem;
             height: 1.6rem;
-            margin-bottom: .1rem;   
+            margin-bottom: .1rem;
             -webkit-background-size: 1.6rem 1.6rem;
             background-size: 1.6rem 1.6rem;
             background-position: center center;
         }
         .mult {
-            -webkit-box-lines: multiple; 
+            -webkit-box-lines: multiple;
             box-lines: multiple;
             flex-wrap:wrap;
             width: 100%;
@@ -266,11 +266,11 @@
             width: 1.6rem;
             height: 1.6rem;
             font-size: 0;
-            
+
             background-color: #f00;
         }
         .companyName {
-            display: none;  
+            display: none;
         }
     </style>
 </head>
@@ -279,14 +279,14 @@
     <div class="contentText clearfix">
         <div class="title">
             <span class="smallTitle">#我提供#</span>
-            <input type="text" placeholder="输入您发布的标题" id="title">
+            <input type="text" placeholder="输入您发布的标题" id="title" maxlength="15">
         </div>
         <textarea placeholder="描述一下您发布的内容" rows="5" id="description"></textarea>
         <div class="mult clearfix flex-def resultList">
            <!--  <img class="fl imgpage" tapmode  src="">
             <img  src="../../image/icon_supply/icon_addMedia_1.png" class="addImg" onclick="openImg()" tapmode>
             <img  src="../../image/icon_supply/icon_addMedia_2.png"> -->
-           
+
 
             <!-- <div class="addMedia" onclick="openImg()" tapmode>
                 <span class="icon"></span>
@@ -299,7 +299,7 @@
         </div>
 
         <script type="text/x-dot-template" id="listT">
-            {{ for (var i = 0; i < it.img.length; i++) { }} 
+            {{ for (var i = 0; i < it.img.length; i++) { }}
                 <span class="fl imgpage" onclick="openImgPage(this)" data-id = '{{=i}}'  data-src="{{=it.img[i]}}" style="background: url({{=it.img[i]}})no-repeat;background-size: 1.6rem auto;background-position: center center"></span>
             {{ }; }}
             {{?it.img.length==0&&it.video.length==0}}
@@ -391,10 +391,10 @@
                     <span class="spanno2"></span>
                 </div>
             </li> -->
-        </ul>        
+        </ul>
     </div>
     <div class="btn" tapmode onclick="addSupply()">发布</div>
-    
+
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -405,7 +405,7 @@
                   address,         //string  地址
                   district,
                   latitude,            //string  纬度
-                  longitude,           //string  经度; 
+                  longitude,           //string  经度;
                   supply_id,
                   _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"],
                   base64Data={
@@ -508,7 +508,7 @@
                 method: 'post',
                 headers: apiHeader,
                 data: {
-                       values: { 
+                       values: {
                            type: 1
                        }
                 }
@@ -562,7 +562,7 @@
 
         data.info.sub_type == 1 ? $api.text(sub_type, '自产自销') : $api.text(sub_type, '代理代销')
         data.info.form == 1 ? $api.text(form, '线上') : $api.text(form, '线下')
-        base64Data.img = eval(data.info.image_json); 
+        base64Data.img = eval(data.info.image_json);
         getData(base64Data)
         // 编辑供应返回的相关信息
         address = data.info.address;
@@ -697,7 +697,7 @@
             }
         });
     }
-    
+
     function selImg() {
         // // console.log('selimg')
         var imgArr = [];
@@ -731,7 +731,7 @@
         if (a == b) {
             // // // console.log(b)
             releaseFlag = 1;
-        } 
+        }
     }
     // 添加供应
     function addSupply() {
@@ -839,7 +839,7 @@
                         } else {
                             alert(ret.msg)
                         }
-                        
+
                     } else {
                         alert(JSON.stringify(err.msg))
                     }
@@ -860,13 +860,13 @@
             if (ret.value.selDate == '公司') {
                 type = 2;
                 for (var i = 0; i < $api.domAll('.companyName').length; i++) {
-                    
+
                     $api.css($api.domAll('.companyName')[i], 'display: block');
                 }
             } else {
                 type = 1;
                 for (var i = 0; i < $api.domAll('.companyName').length; i++) {
-                    
+
                     $api.css($api.domAll('.companyName')[i], 'display: none');
                 }
             }
@@ -880,7 +880,7 @@
         api.openWin({
             name: 'supply_info_ask_remindWho',
             url: './supply_info_ask_remindWho.html'
-            
+
         });
     }
     // 监听事件， 修改页面文本内容
@@ -901,7 +901,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        type: 1
                    }
             }
@@ -960,7 +960,7 @@
             flag = 2;
         }else if (_data == '_classify') {
             _dataSource = classify_dataSource
-            _dataSource2 = classify_dataSource2 
+            _dataSource2 = classify_dataSource2
             flag = 3;
         } else if (_data == '_unit') {
             _dataSource = [
@@ -998,7 +998,7 @@
                     name: "扇"
                 },
                 {
-                    name: "课时" 
+                    name: "课时"
                 },
                 {
                     name: "面议"
@@ -1007,7 +1007,7 @@
                     name: "其他"
                 },
                 {
-                    name: "未定义" 
+                    name: "未定义"
                 }
             ];
             _dataSource2 = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"]
@@ -1092,13 +1092,13 @@
                         if (ret.level1 == '公司') {
                             type = 2;
                             for (var i = 0; i < $api.domAll('.companyName').length; i++) {
-                                
+
                                 $api.css($api.domAll('.companyName')[i], 'display: block');
                             }
                         } else {
                             type = 1;
                             for (var i = 0; i < $api.domAll('.companyName').length; i++) {
-                                
+
                                 $api.css($api.domAll('.companyName')[i], 'display: none');
                             }
                         }
@@ -1141,7 +1141,7 @@
             // // console.log('安卓')
             getLocation();
         }
-        
+
     }
     // 获取经纬度
     function getLocation() {
@@ -1197,7 +1197,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                        supply_id: api.pageParam.supply_id
                    }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html> 
+<html>
 <head>
     <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
@@ -23,6 +23,7 @@
             color: #0ABB07;
         }
         .title input {
+
             height: .9rem;
             outline: none;
             width: 5.3rem;
@@ -32,7 +33,7 @@
             padding: .2rem 0;
             outline: none;
             resize: none;
-            
+
         }
 
         .addMedia {
@@ -44,7 +45,7 @@
             text-align: center;
             color: #999;
             margin-right: .1rem;
-        }   
+        }
         .addMedia span {
             font-size: .3rem;
         }
@@ -82,13 +83,13 @@
         .classify {
             background-color: #EDECF3;
             font-size: 0;
-            
+
         }
         .classify ul li {
             /*background-color: #fff;*/
             font-size: .3rem;
             height: .8rem;
-            line-height: .8rem; 
+            line-height: .8rem;
             /*border-bottom: .01rem solid #000;*/
             width: 100%;
             /*padding: 0 .3rem 0 .8rem;*/
@@ -139,7 +140,7 @@
         .mb20 {
             margin-bottom: .2rem;
         }
-        
+
 
         .btn {
             width: 6.32rem;
@@ -149,7 +150,7 @@
             background-color: #08BB08;
             font-size: .34rem;
             color: #fff;
-            text-align: center; 
+            text-align: center;
             line-height: .83rem;
             margin-top: .37rem;
             margin-bottom: .3rem;
@@ -187,7 +188,7 @@
                 background: #fff url(../../image/icon_supply/icon_03.png)no-repeat;
                 background-size: .34rem .29rem;
                 background-position: .3rem center;
-                
+
             }
             ul li:nth-child(7) {
                 background: #fff url(../../image/icon_supply/icon_05.png)no-repeat;
@@ -230,13 +231,13 @@
             margin-right: .1rem;
             width: 1.6rem;
             height: 1.6rem;
-            margin-bottom: .1rem;   
+            margin-bottom: .1rem;
             -webkit-background-size: 1.6rem 1.6rem;
             background-size: 1.6rem 1.6rem;
             background-position: center center;
         }
         .mult {
-            -webkit-box-lines: multiple; 
+            -webkit-box-lines: multiple;
             box-lines: multiple;
             flex-wrap:wrap;
             width: 100%;
@@ -250,11 +251,11 @@
             width: 1.6rem;
             height: 1.6rem;
             font-size: 0;
-            
+
             background-color: #f00;
         }
         .companyName {
-            display: none;  
+            display: none;
         }
     </style>
 </head>
@@ -263,7 +264,7 @@
     <div class="contentText clearfix">
         <div class="title">
             <span class="smallTitle">#我需要#</span>
-            <input type="text" placeholder="输入您求助的标题" id="title">
+            <input type="text" placeholder="输入您求助的标题" id="title" maxlength="15">
         </div>
         <textarea placeholder="描述一下您求助的内容" rows="5" id="description"></textarea>
         <div class="mult clearfix flex-def resultList">
@@ -271,7 +272,7 @@
             <!-- <span class="fl imgpage" style="background: url(../../image/tx_1.jpg)no-repeat;background-size: 1.6rem 1.6rem;background-position: center center"></span>
             <img  src="../../image/icon_supply/icon_addMedia_1.png" class="addImg" onclick="openImg()" tapmode>
             <img  src="../../image/icon_supply/icon_addMedia_2.png"> -->
-           
+
 
             <!-- <div class="addMedia" onclick="openImg()" tapmode>
                 <span class="icon"></span>
@@ -280,15 +281,15 @@
             <div class="addMedia">
                 <span class="icon"></span>
                 <span>添加视频</span>
-                
-                <img class="fl imgpage" tapmode onclick="openImgPage(this)" data-id = '{{=i}}' 
+
+                <img class="fl imgpage" tapmode onclick="openImgPage(this)" data-id = '{{=i}}'
                 src="{{=it.img[i]}}">
 
             </div> -->
         </div>
 
         <script type="text/x-dot-template" id="listT">
-            {{ for (var i = 0; i < it.img.length; i++) { }} 
+            {{ for (var i = 0; i < it.img.length; i++) { }}
                 <span class="fl imgpage" onclick="openImgPage(this)" data-id = '{{=i}}'  data-src="{{=it.img[i]}}" style="background: url({{=it.img[i]}})no-repeat;background-size: 1.6rem auto;background-position: center center"></span>
             {{ }; }}
             {{?it.img.length==0&&it.video.length==0}}
@@ -311,7 +312,7 @@
                     <span>截至时间</span>
                     <span ontouchstart="openTime(this)" class="spanno2" id="endTime">必填</span>
                 </div>
-            </li> 
+            </li>
 
             <li   tapmode   onclick="selectType(this)" data-val="_type">
                 <div class="wrap">
@@ -354,9 +355,9 @@
             </li>
 
 
-          
 
-<!-- 
+
+<!--
             <li class="mt37"   tapmode   onclick="remindWho()">
                 <div class="wrap">
                     <span>提醒谁看</span>
@@ -369,7 +370,7 @@
                     <span class="spanno2"></span>
                 </div>
             </li> -->
-        </ul>        
+        </ul>
     </div>
     <div class="btn" tapmode onclick="addSupply()"></div>
 </body>
@@ -382,7 +383,7 @@
                   address,         //string  地址
                     district,
                   latitude,            //string  纬度
-                  longitude,           //string  经度; 
+                  longitude,           //string  经度;
                   supply_id,
                   base64Data={
                     img: [],
@@ -502,7 +503,7 @@
                 method: 'post',
                 headers: apiHeader,
                 data: {
-                    values: { 
+                    values: {
                         type: 2
                     }
                 }
@@ -525,12 +526,12 @@
                 }
             })
         }
-        
+
         var _categoryId =  categoryArr[data.info.category_id-1]
         $api.text(position, data.info.address);
         $api.text(endTime, data.info.end_date);
         // $api.text(unit, unitText);
-        
+
         data.info.type == 1 ? $api.text(_type, '个人') : $api.text(_type, '公司');
         if (data.info.type == 2) {
             type = 2;
@@ -540,7 +541,7 @@
 
         }
         data.info.form == 1 ? $api.text(form, '线上') : $api.text(form, '线下')
-        base64Data.img = eval(data.info.image_json); 
+        base64Data.img = eval(data.info.image_json);
         getData(base64Data)
         // 编辑供应返回的相关信息
         address = data.info.address;
@@ -576,15 +577,15 @@
             if (ret) {
                 var time = new Date();
                 if (
-                    ret.year < time.getFullYear() || 
+                    ret.year < time.getFullYear() ||
                     (ret.year === time.getFullYear() && ret.month < time.getMonth()+1) ||
                     (ret.year === time.getFullYear() && ret.month === time.getMonth()+1 && ret.day < time.getDate())) {
                     alert('截至时间不能早于当前时间')
                 } else {
                     $api.text(ele, ret.year+'-'+ret.month+'-'+ret.day);
-                }        
+                }
 
-                
+
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -687,7 +688,7 @@
         if (a == b) {
             // // // console.log(b)
             releaseFlag = 1;
-        } 
+        }
     }
     function selImg() {
        //  var baseUrl = 'img.iinnet.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com
@@ -715,13 +716,13 @@
             }
         };
     }
-   
+
 
     // 添加供应
     function addSupply() {
         // if (openImgFlag == 0) {
         //     releaseFlag = 1;
-        // }   
+        // }
         // 获取页面内容
         // if (releaseFlag == 1) {
             var token = $api.getStorage('userToken'),            //string  用户Token
@@ -825,8 +826,8 @@
         // } else {
         //     addSupply()
         // }
-      
-            
+
+
     }
 
 
@@ -840,13 +841,13 @@
     //         if (ret.value.selDate == '我公司卖') {
     //             type = 2;
     //             for (var i = 0; i < $api.domAll('.companyName').length; i++) {
-                    
+
     //                 $api.css($api.domAll('.companyName')[i], 'display: block');
     //             }
     //         } else {
     //             type = 1;
     //             for (var i = 0; i < $api.domAll('.companyName').length; i++) {
-                    
+
     //                 $api.css($api.domAll('.companyName')[i], 'display: none');
     //             }
     //         }
@@ -860,7 +861,7 @@
         api.openWin({
             name: 'supply_info_ask_remindWho',
             url: './supply_info_ask_remindWho.html'
-            
+
         });
     }
     // // 监听事件， 修改页面文本内容
@@ -924,7 +925,7 @@
             _dataSource2 = classify_dataSource2;
             flag = 3;
         }
-        
+
         var active = [];
         if (_dataSource2.indexOf(person) == -1) {
             active = [0]
@@ -988,7 +989,7 @@
                         if (ret.level1 == '公司') {
                             type = 2;
                             for (var i = 0; i < $api.domAll('.companyName').length; i++) {
-                                
+
                                 $api.css($api.domAll('.companyName')[i], 'display: block');
                             }
                         } else {
@@ -1028,7 +1029,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        type: 2
                    }
             }
@@ -1059,7 +1060,7 @@
         } else {
             getLocation();
         }
-        
+
     }
     // 获取经纬度
     function getLocation() {
@@ -1112,7 +1113,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                        demand_id: api.pageParam.demand_id
                    }
