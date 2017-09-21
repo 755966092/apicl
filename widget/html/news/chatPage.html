@@ -44,6 +44,7 @@
 <script type="text/javascript">
 	var name, targetRongId, userId;
 	apiready = function() {
+        console.log(JSON.stringify(api.pageParam))
     // 初始化模块
     moduleInit()
     targetRongId = api.pageParam.targetRongId;
@@ -137,7 +138,7 @@ function createSqlTable() {
     //  });
     db.executeSql({
         name: 'db_'+$api.getStorage('userToken'),
-        sql: 'CREATE TABLE IF NOT EXISTS tb_chat_'+ api.pageParam.targetRongId +'(messageId int PRIMARY KEY NOT NULL, receivedTime char(13), objectName varchar(255), messageDirection varchar(255), content_extra varchar(255), content_text text, head_img_url varchar(255), filePath varchar(255), duration varchar(255), thumbPath varchar(255))'
+        sql: 'CREATE TABLE IF NOT EXISTS tb_chat_'+ api.pageParam.targetRongId +'(messageId int PRIMARY KEY NOT NULL, receivedTime char(13), user_id int DEFAULT '+ api.pageParam.userId +', objectName varchar(255), messageDirection varchar(255), content_extra varchar(255), content_text text, head_img_url varchar(255), filePath varchar(255), duration varchar(255), thumbPath varchar(255))'
     }, function(ret, err){
         if( ret.status ){
             // alert( JSON.stringify( ret ) );

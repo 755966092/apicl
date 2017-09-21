@@ -117,7 +117,7 @@
             border: .02rem solid #E3E3E3;
         }
         .supply_info {
-            position: fixed;color: top: 0;left: 0;
+            position: fixed; top: 0;left: 0;
             z-index: 999;
             margin-bottom: .2rem;
             width: 7.5rem;
@@ -207,11 +207,7 @@
         .voiceTimeOther {
             margin-left: .1rem;
         }
-        .voiceMsg {
-        }
-        .oneself .voiceMsg {
 
-        }
     </style>
 </head>
 <body id="body" ontouchstart="closeDiv1();">
@@ -365,6 +361,7 @@ var  mainH, _main, scrollH;
     */
 
     function chatRecordingSql(params, flagStr, headImgUrl) {
+        console.log($api.getStorage('imgCache'))
         // console.log(JSON.stringify(params)+headImgUrl)
         var SQL = 'INSERT OR REPLACE INTO tb_chat_'+ api.pageParam.targetRongId +'(messageId, receivedTime, objectName, messageDirection, content_extra, content_text, head_img_url, filePath, duration, thumbPath) VALUES '
         if (flagStr === 'sendMsg') {
@@ -965,8 +962,9 @@ var  mainH, _main, scrollH;
     function renderPage(ret) {
         console.log('559:::::'+JSON.stringify(ret))
         for (var i = ret.result.length-1; i >= 0 ; i--) {
-            if (ret.result[i].messageDirection == 'RECEIVE') {
 
+            if (ret.result[i].messageDirection == 'RECEIVE') {
+                // chatRecordingSql(ret, 'receiveMsg', youHeadImg)
                 // 消息方向：SEND(发送) 或者 RECEIVE(接受)
                 if (ret.result[i].objectName == 'RC:VcMsg') {
                     // 语音
@@ -1029,20 +1027,20 @@ var  mainH, _main, scrollH;
             // 历史消息
             // // 当天显示时间
             // 不是当天显示年月日 时分秒
-            var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
+            var time = new Date(msg.receivedTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.receivedTime).toLocaleTimeString() : new Date(msg.receivedTime).toLocaleString()
             $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="'+ msg.content.imageUrl +'"> </p></div>');
         } else if (n == 2) {
             // // // console.log('历史消息::'+JSON.stringify(msg))
             // 历史消息
             // // 当天显示时间
             // 不是当天显示年月日 时分秒
-            var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
+            var time = new Date(msg.receivedTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.receivedTime).toLocaleTimeString() : new Date(msg.receivedTime).toLocaleString()
             $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="'+ msg.content.imageUrl +'"> </p></div>');
         } else {
             // // // console.log('接受到的图片'+JSON.stringify(msg))
             // 当前接收的消息
-            var time = new Date(msg.message.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.message.sentTime).toLocaleTimeString() : new Date(msg.message.sentTime).toLocaleString()
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.message.messageId +'">'+ time +'</p><div data-msgId="'+ msg.message.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.message.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" > <img class="imgNews" src="'+ msg.message.content.imageUrl +'"></p></div>');
+            var time = new Date(msg.receivedTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.receivedTime).toLocaleTimeString() : new Date(msg.receivedTime).toLocaleString()
+            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" > <img class="imgNews" src="'+ msg.content.imageUrl +'"></p></div>');
         }
         slideBut();
     }
@@ -1466,17 +1464,12 @@ var  mainH, _main, scrollH;
         // 当天显示时间
         // 不是当天显示年月日 时分秒
         if (n == 1) {
-            // 历史消息
-            // // 当天显示时间
-            // 不是当天显示年月日 时分秒
             var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString();
             var widthNum = msg.content.duration;
-            // widthNum = widthNum > 7 ? widthNum : 7;
             $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" style="width:'+ widthNum/4  +'rem" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-voivePath= "'+ msg.content.voicePath +'"><img class="voiceMsg fl"  src="../../image/chatPage/icon_break.png"  height="20"></p><span class="voiceTime voiceTimeOther fl">'+ msg.content.duration +'"</span></div>');
         } else if(n==2) {
             var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString();
             var widthNum = msg.content.duration;
-             // widthNum = widthNum > 7 ? widthNum : 7;
             $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" style="width:'+ widthNum/4 +'rem" data-voivePath= "'+ msg.content.voicePath +'" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">'+ msg.content.duration +'"</span></div>');
         } else {
             // 当前接收的消息
@@ -1491,12 +1484,12 @@ var  mainH, _main, scrollH;
     function sqlAddSendVoiceMessages(msg, headImg, n) {
         if (n == 1) {
             // 历史消息
-            var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString();
+            var time = new Date(msg.receivedTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.receivedTime).toLocaleTimeString() : new Date(msg.receivedTime).toLocaleString();
             var widthNum = msg.content.duration;
              // widthNum = widthNum > 7 ? widthNum : 7;
             $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" style="width:'+ widthNum/4 +'rem" data-voivePath= "'+ msg.content.voicePath +'" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">'+ msg.content.duration +'"</span></div>');
         } else if(n==2) {
-            var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString();
+            var time = new Date(msg.receivedTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.receivedTime).toLocaleTimeString() : new Date(msg.receivedTime).toLocaleString();
             var widthNum = msg.content.duration;
              // widthNum = widthNum > 7 ? widthNum : 7;
             $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" style="width:'+ widthNum/4 +'rem" data-voivePath= "'+ msg.content.voicePath +'" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">'+ msg.content.duration +'"</span></div>');

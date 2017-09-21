@@ -135,7 +135,7 @@
                         </span>
                         <div class="name flex-def flex-cCenter flex-zBetween ">
                             <span class="title ">{{=it[i].title}}</span>
-                            <span tapmode data-id="{{=it[i].demand_id}}" onclick="collect(this);event.stopPropagation();" class="icon "></span>
+                            <span tapmode data-id="{{=it[i].demand_id}}" onclick="collect(this);event.stopPropagation();" class=" {{=it[i].is_collect==true?"collect icon":"icon"}} "></span>
                         </div>
                         <div class="user flex-def flex-cCenter flex-zBetween ">
                             <div class="userLeft flex-def flex-cCenter " tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation(); ">
@@ -143,7 +143,7 @@
                                 <span class="announcer">{{=it[i].nickname}}</span>
                                 <span class="company">{{=it[i].company_name}}</span>
                             </div>
-                            <span class="icon flex-def flex-cCenter "><span class="count ">66人</span></span>
+                            <span class="icon flex-def flex-cCenter "><span class="count ">{{=it[i].browse_count}}</span></span>
                         </div>
                     </div>
                 {{ }; }}
@@ -485,6 +485,7 @@
                         // 处理时间
                         ret.data.list[i].create_time = initTime(ret.data.list[i].create_time)
                     }
+                    console.log(JSON.stringify(ret.data.list))
                     getData(ret.data.list);
                     dataList = ret.data.list;
                     $api.setStorage('supply_publish_2', ret.data.list);

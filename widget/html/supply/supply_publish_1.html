@@ -161,7 +161,8 @@
                     </span>
                     <div class="name flex-def flex-cCenter flex-zBetween ">
                         <span class="title ">{{=it[i].title}}</span>
-                        <span tapmode data-id="{{=it[i].supply_id}}" onclick="collect(this);event.stopPropagation();" class="icon "></span>
+
+                        <span tapmode data-id="{{=it[i].supply_id}}" onclick="collect(this);event.stopPropagation();" class=" {{=it[i].is_collect==true?"collect icon":"icon"}}"></span>
                     </div>
                     <div class="user flex-def flex-cCenter flex-zBetween ">
                         <div class="userLeft flex-def flex-cCenter " tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation(); ">
@@ -169,7 +170,7 @@
                             <span class="announcer">{{=it[i].nickname}}</span>
                             <span class="company">{{=it[i].company_name}}</span>
                         </div>
-                        <span class="icon flex-def flex-cCenter "><span class="count ">66人</span></span>
+                        <span class="icon flex-def flex-cCenter "><span class="count ">{{=it[i].browse_count}}</span></span>
                     </div>
                 </div>
             {{ }; }}
@@ -399,7 +400,7 @@
                 // 缓存字段  supply_publish_1
                 var supplyCache = $api.getStorage('supply_publish_1');
                 if (supplyCache) {
-                    console.log(JSON.stringify(supplyCache))
+                    // console.log(JSON.stringify(supplyCache))
                     getData(supplyCache);
                     // console.log($api.attr($api.dom('.firstImg'), 'style'))
                     // selfAdaption();
