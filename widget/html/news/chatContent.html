@@ -255,7 +255,7 @@
 // var rongToken, userToken;
 var name,headImg = $api.getStorage('imgCache'),youHeadImg;
 var messageId,targetRongId,emotionData,userId,newsText,msgId;
-var  mainH, _main = $api.offset($api.dom('.main')).h, scrollH;
+var  mainH, _main = 0, scrollH;
     apiready = function(){
         // console.log(JSON.stringify(api.pageParam))
         moduleInit();
@@ -894,7 +894,8 @@ var  mainH, _main = $api.offset($api.dom('.main')).h, scrollH;
             if (ret.status) {
                 if (ret.data.length > 0) {
                     renderPageSql(ret.data, 1);
-                    contrastMessage(ret.data)
+                    contrastMessage(ret.data);
+                    _main = $api.offset($api.dom('.main')).h;
                 } else {
                     contrastMessage()
                 }
@@ -978,7 +979,7 @@ var  mainH, _main = $api.offset($api.dom('.main')).h, scrollH;
                 messageId = ret[0].messageId;
             }
             if(api.systemType=='ios') {
-                scrollTopPage()
+                scrollTopPage();
             }
         } else {
             for (var i = ret.length - 1; i >= 0 ; i--) {
@@ -1016,8 +1017,8 @@ var  mainH, _main = $api.offset($api.dom('.main')).h, scrollH;
         }
 
         // 获取历史聊天记录后 页面不想上滚动
-        mainH=$api.offset($api.dom('.main')).h;
-        _main = mainH
+        // mainH=$api.offset($api.dom('.main')).h;
+        // _main = mainH
         if (n == 1) {
             slideBut();
         }
@@ -1056,8 +1057,8 @@ var  mainH, _main = $api.offset($api.dom('.main')).h, scrollH;
 
             }
             // 获取历史聊天记录后 页面不想上滚动
-            mainH=$api.offset($api.dom('.main')).h;
-            _main = mainH
+            // mainH=$api.offset($api.dom('.main')).h;
+            // _main = mainH
             // 最新的消息的messageId,获取历史记录函数内部-20处理
             messageId = ret.result[ret.result.length-1].messageId;
             slideBut();
@@ -1306,12 +1307,10 @@ var  mainH, _main = $api.offset($api.dom('.main')).h, scrollH;
             },function(ret,err){
                 if (ret.status) {
                     countId += 20;
-                    console.log('查询到的结果'+JSON.stringify(ret.data))
-                    console.log('查询到的结果'+JSON.stringify(ret.data.length))
                     if (ret.data.length > 0) {
                         renderPageSql(ret.data, 2);
+
                     } else {
-                        console.log(messageId)
                         rong.getHistoryMessages({
                             conversationType: 'PRIVATE',
                             // 目标rongyun用户名
@@ -1319,12 +1318,9 @@ var  mainH, _main = $api.offset($api.dom('.main')).h, scrollH;
                             oldestMessageId: messageId,
                             count: count
                         }, function(ret, err) {
-                            console.log(messageId)
                             allCahtSql(ret.result)
                             for (var i = 0; i < ret.result.length ; i++) {
                                 if (ret.result[i].messageDirection == 'RECEIVE') {
-                                    console.log('查看历史记录:::::'+JSON.stringify(ret));
-
                                     // 消息方向：SEND(发送) 或者 RECEIVE(接受)
                                     if (ret.result[i].objectName == 'RC:VcMsg') {
                                         // 语音
@@ -1382,7 +1378,7 @@ var  mainH, _main = $api.offset($api.dom('.main')).h, scrollH;
             mainH = $api.offset($api.dom('.main')).h;
             scrollH = mainH - _main;
             _main =  mainH;
-            window.scrollTo(0,scrollH-150);
+            window.scrollTo(0,scrollH);
     }
     // 下拉刷新后 执行函数chatHis(messageId)
 
@@ -1434,7 +1430,6 @@ var  mainH, _main = $api.offset($api.dom('.main')).h, scrollH;
             text: msg,
             extra: ''
         }, function(ret, err) {
-            console.log('558:'+JSON.stringify(ret))
             if (ret.status == 'prepare') {
               sendMsg = ret;
               // alert(JSON.stringify(ret));
