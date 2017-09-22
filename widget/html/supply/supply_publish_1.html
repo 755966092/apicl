@@ -27,7 +27,7 @@
 
         .item {
             width: 7.5rem;
-            height: 5.7rem;
+            /* height: 5.7rem; */
             background-color: #fff;
             padding: 0.2rem;
             box-sizing: border-box;
@@ -39,23 +39,28 @@
             display: inline-block;
             width: 100%;
             height: 3.8rem;
-
+            margin-top: 0.2rem;
             border-radius: .1rem;
             position: relative;
         }
 
         .price {
             display: inline-block;
+            box-sizing: border-box;
             padding: 0 .2rem;
             height: 0.36rem;
             line-height: 0.36rem;
-            background-color: #CFAA7F;
-            font-size: 0.3rem;
+            background-color: rgba(0,0,0,.4);
+            width: 100%;
+            font-size: 0;
             position: absolute;
-            bottom: 0.26rem;
+            bottom: 0;
             left: 0;
             color: #fff;
             text-align: right
+        }
+        .price span {
+            font-size: 0.24rem;
         }
 
         .name,
@@ -64,7 +69,12 @@
             font-size: 0;
             margin-bottom: 0.2rem;
         }
-
+        .user {
+            margin: 0;
+        }
+        .createTime {
+            margin-bottom: 0.24rem;
+        }
         .title {
             font-size: 0.34rem;
             max-width: 5rem;
@@ -74,18 +84,16 @@
         }
 
         .announcer {
-            margin: 0 .1rem;
+            font-size: 0.26rem;
         }
 
         .announcerHead {
-            width: 0.48rem;
-            height: 0.48rem;
+            width: 0.72rem;
+            height: 0.72rem;
             border-radius: 50%;
         }
 
-        .user span {
-            font-size: 0.26rem;
-        }
+
 
         .name .icon {
             width: 1rem;
@@ -118,12 +126,46 @@
 
         .company {
             color: #999;
+            font-size: 0.22rem;
+        }
+        .price2 {
+            font-size: 0.28rem;
+            color: #CFAA7F;
+        }
+        .username {
+            margin-left: 0.2rem;
+        }
+        .label {
+            font-size: 0.2rem;
+            color: #CFAA7F;
+        }
+        .createTime {
+            font-size: 0.24rem;
+        }
+        .classifyLabel {
+            border: .01rem solid #0ABB07;
+            color: #0ABB07;
+            font-size: 0.24rem;
+            border-radius: .17rem;
+            padding: 0 .12rem;
+        }
+        .position {
+            padding-left: 0.3rem;
+            background: url(../../image/icon_supply/icon_position.png)no-repeat;
+            background-size: .18rem .24rem;
+            background-position: left center
+        }
+        .distance {
+            padding-left: 0.3rem;
+
+            background: url(../../image/icon_supply/icon_distance.png)no-repeat;
+            background-size: .2rem .2rem;
+            background-position: left center
         }
     </style>
 </head>
 
 <body>
-
     <!--  <div class="title1">
         <p class="results"   tapmode   onclick="viewResults(this)">
             <span></span>
@@ -132,23 +174,31 @@
     </div> -->
 
     <!-- <div class="item">
+        <div class="userLeft flex-def flex-cCenter flex-zBetween">
+            <img src="../../image/tx_1.jpg" class="announcerHead">
+            <div class="username flex-item">
+                <p class="announcer">人鱼</p>
+                <p class="company">人鱼</p>
+            </div>
+            <p class="price2"></p>
+        </div>
         <span class="firstImg" style="display:inline-block;width:100%;height:3.8rem;background:url(../../image/tx_1.jpg)no-repeat;background-size:7.1rem 3.8rem;background-position: center center;border-radius:.1rem;">
-            <span class="price">$140/小时</span>
+            <span class="price ">
+                    <span class="position fl">清华大学</span>
+                    <span class="distance">距离我10.00km</span>
+            </span>
         </span>
         <div class="name flex-def flex-cCenter flex-zBetween">
-            <span class="title">陪跑</span>
+            <span class="title">陪跑<span class="label">[个人]</span></span>
             <span tapmode onclick="collect(this)" class="icon"></span>
         </div>
+        <p class="createTime">2016-12-24 09:52:22</p>
         <div class="user flex-def flex-cCenter flex-zBetween">
-            <div class="userLeft flex-def flex-cCenter">
-                <img src="../../image/tx_1.jpg" class="announcerHead">
-                <span class="announcer">人鱼</span>
-                <span class="company">人鱼</span>
-            </div>
+            <span class="classifyLabel">健身</span>
             <span class="icon flex-def flex-cCenter"><span class="count">66人</span></span>
         </div>
     </div> -->
-    <!-- <div class="loading"></div> -->
+    <div class="loading"></div>
     <div class="resultList"></div>
     <script type="text/x-dot-template" id="listT">
         {{?it.length === 0}}
@@ -156,20 +206,32 @@
         {{??}}
             {{ for (var i = 0; i < it.length; i++) { }}
                 <div class="item"  data-id="{{=it[i].supply_id}}" data-company="{{=it[i].company_name}}" tapmode onclick="info(this)">
+                    <div class="userLeft flex-def flex-cCenter flex-zBetween">
+                        <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" class="announcerHead" >
+                        <div class="username flex-item">
+                            <p class="announcer">{{=it[i].nickname}}</p>
+                            <p class="company">{{=it[i].company_name}}</p>
+                        </div>
+                        <p class="price2">{{=it[i].price}}元/{{=it[i].unit}}</p>
+                    </div>
                     <span class="firstImg" style="background: url({{=it[i].image_json[0]?it[i].image_json[0]:'../../image/tx_1.jpg'}})no-repeat;background-size: 7.1rem auto;background-position: center center;">
-                        <span class="price ">{{=it[i].price}}元/{{=it[i].unit}}</span>
+                        <!-- <span class="price ">
+                                <span class="position fl">清华大学</span>
+                                <span class="distance">距离我10.00km</span>
+                        </span> -->
                     </span>
                     <div class="name flex-def flex-cCenter flex-zBetween ">
-                        <span class="title ">{{=it[i].title}}</span>
-
+                        <span class="title ">{{=it[i].title}}<span class="label"> [{{=it[i].sub_type == 2?'公司':'个人'}}]</span></span>
                         <span tapmode data-id="{{=it[i].supply_id}}" onclick="collect(this);event.stopPropagation();" class=" {{=it[i].is_collect==true?"collect icon":"icon"}}"></span>
                     </div>
+                    <p class="createTime">{{=it[i].create_time}}</p>
                     <div class="user flex-def flex-cCenter flex-zBetween ">
-                        <div class="userLeft flex-def flex-cCenter " tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation(); ">
+                        <!-- <div class="userLeft flex-def flex-cCenter " tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation(); ">
                             <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" class="announcerHead" >
                             <span class="announcer">{{=it[i].nickname}}</span>
                             <span class="company">{{=it[i].company_name}}</span>
-                        </div>
+                        </div> -->
+                        <span class="classifyLabel">{{=it[i].category_name}}</span>
                         <span class="icon flex-def flex-cCenter "><span class="count ">{{=it[i].browse_count}}</span></span>
                     </div>
                 </div>
@@ -400,8 +462,9 @@
                 // 缓存字段  supply_publish_1
                 var supplyCache = $api.getStorage('supply_publish_1');
                 if (supplyCache) {
-                    // console.log(JSON.stringify(supplyCache))
+                    console.log(JSON.stringify(supplyCache))
                     getData(supplyCache);
+                    $api.css($api.dom('.loading'), 'display: none');
                     // console.log($api.attr($api.dom('.firstImg'), 'style'))
                     // selfAdaption();
                 }

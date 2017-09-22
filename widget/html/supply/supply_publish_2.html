@@ -6,6 +6,14 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
+        .no_data {
+            background-color: #EDECF3;
+            text-align: center;
+            color: #999;
+            font-size: .3rem;
+            margin-top: .5rem;
+        }
+
         .bbottomLoading {
             text-align: center;
             font-size: .24rem;
@@ -13,16 +21,10 @@
             line-height: .8rem;
             display: none;
         }
-        .no_data {
-         background-color: #EDECF3;
-         text-align: center;
-         color: #999;
-         font-size: .3rem;
-         margin-top: .5rem;
-        }
+
         .item {
             width: 7.5rem;
-            height: 5.7rem;
+            /* height: 5.7rem; */
             background-color: #fff;
             padding: 0.2rem;
             box-sizing: border-box;
@@ -34,23 +36,28 @@
             display: inline-block;
             width: 100%;
             height: 3.8rem;
-
+            margin-top: 0.2rem;
             border-radius: .1rem;
             position: relative;
         }
 
         .price {
             display: inline-block;
+            box-sizing: border-box;
             padding: 0 .2rem;
             height: 0.36rem;
             line-height: 0.36rem;
-            background-color: #CFAA7F;
-            font-size: 0.3rem;
+            background-color: rgba(0,0,0,.4);
+            width: 100%;
+            font-size: 0;
             position: absolute;
-            bottom: 0.26rem;
+            bottom: 0;
             left: 0;
             color: #fff;
             text-align: right
+        }
+        .price span {
+            font-size: 0.24rem;
         }
 
         .name,
@@ -59,7 +66,12 @@
             font-size: 0;
             margin-bottom: 0.2rem;
         }
-
+        .user {
+            margin: 0;
+        }
+        .createTime {
+            margin-bottom: 0.24rem;
+        }
         .title {
             font-size: 0.34rem;
             max-width: 5rem;
@@ -69,18 +81,16 @@
         }
 
         .announcer {
-            margin: 0 .1rem;
+            font-size: 0.26rem;
         }
 
         .announcerHead {
-            width: 0.48rem;
-            height: 0.48rem;
+            width: 0.72rem;
+            height: 0.72rem;
             border-radius: 50%;
         }
 
-        .user span {
-            font-size: 0.26rem;
-        }
+
 
         .name .icon {
             width: 1rem;
@@ -113,6 +123,41 @@
 
         .company {
             color: #999;
+            font-size: 0.22rem;
+        }
+        .price2 {
+            font-size: 0.28rem;
+            color: #CFAA7F;
+        }
+        .username {
+            margin-left: 0.2rem;
+        }
+        .label {
+            font-size: 0.2rem;
+            color: #CFAA7F;
+        }
+        .createTime {
+            font-size: 0.24rem;
+        }
+        .classifyLabel {
+            border: .01rem solid #0ABB07;
+            color: #0ABB07;
+            font-size: 0.24rem;
+            border-radius: .17rem;
+            padding: 0 .12rem;
+        }
+        .position {
+            padding-left: 0.3rem;
+            background: url(../../image/icon_supply/icon_position.png)no-repeat;
+            background-size: .18rem .24rem;
+            background-position: left center
+        }
+        .distance {
+            padding-left: 0.3rem;
+
+            background: url(../../image/icon_supply/icon_distance.png)no-repeat;
+            background-size: .2rem .2rem;
+            background-position: left center
         }
     </style>
 </head>
@@ -130,19 +175,32 @@
             {{??}}
                 {{ for (var i = 0; i < it.length; i++) { }}
                     <div class="item"  data-id="{{=it[i].demand_id}}" data-company="{{=it[i].company_name}}" tapmode onclick="info(this)">
+                        <div class="userLeft flex-def flex-cCenter flex-zBetween">
+                            <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" class="announcerHead" >
+                            <div class="username flex-item">
+                                <p class="announcer">{{=it[i].nickname}}</p>
+                                <p class="company">{{=it[i].company_name}}</p>
+                            </div>
+                            <p class="price2">{{=it[i].reward}}元</p>
+                        </div>
                         <span class="firstImg" style="background: url({{=it[i].image_json[0]?it[i].image_json[0]:'../../image/tx_1.jpg'}})no-repeat;background-size: 7.1rem auto;background-position: center center;">
-                            <span class="price ">{{=it[i].reward}}元</span>
+                            <!-- <span class="price ">
+                                    <span class="position fl">清华大学</span>
+                                    <span class="distance">距离我{{=it[i].distance}}</span>
+                            </span> -->
                         </span>
                         <div class="name flex-def flex-cCenter flex-zBetween ">
-                            <span class="title ">{{=it[i].title}}</span>
+                            <span class="title ">{{=it[i].title}}<span class="label"> [{{=it[i].sub_type == 2?'公司':'个人'}}]</span></span>
                             <span tapmode data-id="{{=it[i].demand_id}}" onclick="collect(this);event.stopPropagation();" class=" {{=it[i].is_collect==true?"collect icon":"icon"}} "></span>
                         </div>
+                        <p class="createTime">{{=it[i].create_time}}</p>
                         <div class="user flex-def flex-cCenter flex-zBetween ">
-                            <div class="userLeft flex-def flex-cCenter " tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation(); ">
+                            <!-- <div class="userLeft flex-def flex-cCenter " tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation(); ">
                                 <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" class="announcerHead" >
                                 <span class="announcer">{{=it[i].nickname}}</span>
                                 <span class="company">{{=it[i].company_name}}</span>
-                            </div>
+                            </div> -->
+                            <span class="classifyLabel">{{=it[i].category_name}}</span>
                             <span class="icon flex-def flex-cCenter "><span class="count ">{{=it[i].browse_count}}</span></span>
                         </div>
                     </div>
@@ -421,23 +479,26 @@
     function requireData (data) {
         // // // console.log('参数:::'+JSON.stringify(data))
         var data = data || {};
-        var latitude,longitude;
-        if (data !== {}) {
-            if (data.order == 'distance') {
-                bMap.getLocation({
-                    accuracy: '100m',
-                    autoStop: true,
-                    filter: 1
-                }, function(ret, err) {
-                    if (ret.status) {
+        var latitude,longitude,latitudeNum,longitudeNum;
+        bMap.getLocation({
+            accuracy: '100m',
+            autoStop: true,
+            filter: 1
+        }, function(ret, err) {
+            if (ret.status) {
+                latitudeNum = ret.lat;
+                longitudeNum = ret.lon;
+                if (data !== {}) {
+                    if (data.order == 'distance') {
                         data.latitude = ret.lat;
                         data.longitude = ret.lon;
-                    } else {
-                        alert(err.code);
                     }
-                });
+                }
+
+            } else {
+                alert(err.code);
             }
-        }
+        });
         var supplyCache = $api.getStorage('supply_publish_2');
         if (supplyCache) {
             console.log(JSON.stringify(supplyCache))
@@ -472,18 +533,19 @@
                 } else {
                     for (var i = 0; i < ret.data.list.length; i++) {
                         // 解析图片json
-                        ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
-                        for (var j = 0; j < ret.data.list[i].image_json.length; j++) {
-                            ret.data.list[i].image_json[j] = ret.data.list[i].image_json[j]+'?imageView2/1/w/310/h/190/interlace/1/q/80|imageslim'
+                        var element = ret.data.list[i];
+                        element.image_json = eval(element.image_json);
+                        for (var j = 0; j < element.image_json.length; j++) {
+                            element.image_json[j] = element.image_json[j]+'?imageView2/1/w/310/h/190/interlace/1/q/80|imageslim'
                         }
-                        if(ret.data.list[i].unit == 0) {
-                            ret.data.list[i].unit = _dataSource[_dataSource.length-1]
+                        if(element.unit == 0) {
+                            element.unit = _dataSource[_dataSource.length-1]
                         } else {
-                            ret.data.list[i].unit = _dataSource[ret.data.list[i].unit-1]
+                            element.unit = _dataSource[element.unit-1]
                         }
-                        ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
+                        element.company_name = element.company_name == null ? '' : element.company_name;
                         // 处理时间
-                        ret.data.list[i].create_time = initTime(ret.data.list[i].create_time)
+                        element.create_time = initTime(element.create_time);
                     }
                     console.log(JSON.stringify(ret.data.list))
                     getData(ret.data.list);
