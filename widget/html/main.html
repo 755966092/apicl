@@ -224,12 +224,12 @@
 <script type="text/javascript" src="../script/common.js"></script>
 <script type="text/javascript" src="../script/pinyin4js.js"></script>
 <script type="text/javascript">
-var userToken, rongToken,footerH;
+var userToken, rongToken,footerH, addPublishUrl = './supply/supply_addSupply.html';
 apiready = function() {
     footerH = $api.offset($api.byId('footer')).h;
     fnInit();
     // 创建缓存目录
-    
+
     // 获取传递参数
     moduleInit();
     $api.fixStatusBar($api.dom('header'));
@@ -287,24 +287,6 @@ apiready = function() {
              var title = ret.title;
              var content = ret.content;
              var extra = ret.extra;
-             // alert('292'+JSON.stringify(ret))
-             // if (ret.extra.type == 1) {
-                // api.openWin({
-                //     name: 'txl_addFellow_friendRequest_win',
-                //     url: './addressList/txl_addFellow_friendRequest_win.html',
-                // });
-             // } 
-             // else if (ret.extra.type === 2) {
-             //    // 供应订单 订单id reference_id
-             //    api.openWin({
-             //        name: 'winName',
-             //        url: './me/me_gdd_info.html',
-             //        pageParam: {
-             //            order_id: ret.extra.reference_id
-             //        }
-             //    });
-             // }
-
         }
     );
     // 监听安卓
@@ -354,20 +336,19 @@ apiready = function() {
             // // console.log('318::key: "value", '+JSON.stringify(ret))
         }
     })
-   
+    // 监听frame2切换到圈子页面, 弹出层的按钮
+    api.addEventListener({
+        name: 'switch_to_the_circle_pop_up_button'
+    }, function(ret, err){
+        addPublishUrl = './supply/supply_addSupply_1.html'
+    });
+    api.addEventListener({
+        name: 'switch_to_the_supply_pop_up_button'
+    }, function(ret, err){
+        addPublishUrl = './supply/supply_addSupply.html'
+    });
 }
-    // 创建文件目录
-    // function createDir() {
-    //     fs.createDir({
-    //         path: 'fs://concatDir'
-    //     }, function(ret, err) {
-    //         if (ret.status) {
-    //             // // console.log(JSON.stringify(ret)+'创建成功');
-    //         } else {
-    //             alert('365'+JSON.stringify(err));
-    //         }
-    //     });
-    // }
+
 
 // 通讯录添加好友
 function addF() {
@@ -512,7 +493,7 @@ function addPublish() {
     // });
     api.openFrame({
         name: 'supply_addSupply',
-        url: './supply/supply_addSupply.html',
+        url: addPublishUrl,
         rect: {
             x: 0,
             y: headerH,
@@ -602,7 +583,7 @@ function openRemarksDb() {
             // // console.log('473'+ JSON.stringify( err ) );
         }
     });
-     
+
     // 用户当前状态表格
     db.executeSql({
         name: SQLName,
@@ -616,18 +597,18 @@ function openRemarksDb() {
     });
     db.executeSql({
         name: SQLName,
-        sql: 'CREATE TABLE IF NOT EXISTS addressList_simplify(user_id int PRIMARY KEY NOT NULL, title varchar(255),img varchar(255), subTitle varchar(255), current_contact varchar(255), flag varchar(255), type int)'   
-    }, function(ret, err){    
+        sql: 'CREATE TABLE IF NOT EXISTS addressList_simplify(user_id int PRIMARY KEY NOT NULL, title varchar(255),img varchar(255), subTitle varchar(255), current_contact varchar(255), flag varchar(255), type int)'
+    }, function(ret, err){
         if( ret.status ){
             db.executeSql({
                 name: 'db_'+$api.getStorage('userToken'),
-                sql: 'CREATE INDEX  IF NOT EXISTS  type_idx ON addressList_simplify (type);'    
-            }, function(ret, err){        
+                sql: 'CREATE INDEX  IF NOT EXISTS  type_idx ON addressList_simplify (type);'
+            }, function(ret, err){
                 if( ret.status ){
                     db.executeSql({
                         name: 'db_'+$api.getStorage('userToken'),
-                        sql: 'CREATE INDEX  IF NOT EXISTS  flag_idx ON addressList_simplify (flag);'    
-                    }, function(ret, err){        
+                        sql: 'CREATE INDEX  IF NOT EXISTS  flag_idx ON addressList_simplify (flag);'
+                    }, function(ret, err){
                         if( ret.status ){
                         //    synchronousAddressBook();
                         }else{
@@ -666,7 +647,7 @@ function openRemarksDb() {
                         method: 'post',
                         headers: apiHeader,
                         data: {
-                            values: { 
+                            values: {
                                 token: $api.getStorage('userToken'),
                                 contact_json:ret
                             }
@@ -700,7 +681,7 @@ function openRemarksDb() {
             method: 'post',
             headers: apiHeader,
             data: {
-               values: { 
+               values: {
                   token: $api.getStorage('userToken'),
                }
             }
@@ -710,7 +691,7 @@ function openRemarksDb() {
                 method: 'post',
                 headers: apiHeader,
                 data: {
-                       values: { 
+                       values: {
                            token: $api.getStorage('userToken'),
                        }
                 }
@@ -719,7 +700,7 @@ function openRemarksDb() {
                     if (retFriend.code == 200) {
                         disData(ret.data.friend_list.concat(retFriend.data.list), 4)
                     } else {
-                        alert(retFriend.msg)                        
+                        alert(retFriend.msg)
                     }
                 } else {
                     alert(JSON.stringify(err))
@@ -729,7 +710,7 @@ function openRemarksDb() {
             disData(ret.data.both_list, 2)
             disData(ret.data.unavailable_list, 3)
        })
-           
+
     }
     function disData (data, type) {
         // // // console.log('disData'+type)
@@ -752,7 +733,7 @@ function openRemarksDb() {
                 data[i].titleSize = 15;
                 if (data[i].current_position == null) {
                     data[i].current_position = '';
-                } 
+                }
                 if (data[i].current_company == null) {
                     data[i].current_company = '';
                 }
@@ -791,35 +772,35 @@ function openRemarksDb() {
                 var subTitleStr= '',contactStr = '';
                 SQL += '('+data1[i].user_id+',"'+ data1[i].nickname +'","'+ data1[i].head_img_url +'","'+ (data1[i].current_company || "") +'","'+ (data1[i].current_position || "")+'","'+ (data1[i].current_contact || "") +'","'+ (data1[i].current_degree || "") +'","'+ data1[i].titleSize +'","'+ data1[i].title +'","'+ data1[i].img+'","'+ data1[i].flag +'","'+ data1[i].litter +'","'+ type +'","'+ (data1[i].sex || 1) +'","'+ (data1[i].remark_nickname || "") +'","'+ (data1[i].remark_real_name || "") +'","'+ (data1[i].remark_head_img_url || "") +'","'+ (data1[i].remark_sex || "") +'","'+ (data1[i].remark_birthday || "") +'","'+ (data1[i].remark_hometown || "") +'","'+ (data1[i].remark_current_company || "") +'","'+ (data1[i].remark_current_position || "") +'","'+ (data1[i].remark_current_degree || "") +'","'+ (data1[i].remark_current_contact || "") +'"),';
                 if (data1[i].remark_current_company) {
-                    subTitleStr += data1[i].remark_current_company+" "   
+                    subTitleStr += data1[i].remark_current_company+" "
                 } else if(data1[i].current_company){
-                    subTitleStr += data1[i].current_company+" "   
+                    subTitleStr += data1[i].current_company+" "
                 } else {
-                   
+
                 }
                 if (data1[i].remark_current_position) {
                     subTitleStr += data1[i].remark_current_position + " "
                 } else if (data1[i].current_position) {
                     subTitleStr += data1[i].current_position + " "
                 } else {
-                   
+
                 }
                 if (data1[i].remark_current_degree) {
                     subTitleStr += data1[i].remark_current_degree+" "
                 } else if (data1[i].current_degree) {
                     subTitleStr += data1[i].current_degree+" "
                 } else {
-                   
+
                 }
                 if (data1[i].remark_current_contact) {
                     contactStr = data1[i].remark_current_contact;
                 } else if(data1[i].current_contact) {
                     contactStr = data1[i].current_contact
                 } else {
-                    
+
                 }
                 // subTitleStr
-                SQL2 += '('+data1[i].user_id+',"'+ (data1[i].remark_nickname || data1[i].nickname) +'","'+ (data1[i].remark_head_img_url || data1[i].head_img_url) +'","'+ subTitleStr+'","'+ contactStr +'","'+  data1[i].flag  +'","'+ type  +'"),';            
+                SQL2 += '('+data1[i].user_id+',"'+ (data1[i].remark_nickname || data1[i].nickname) +'","'+ (data1[i].remark_head_img_url || data1[i].head_img_url) +'","'+ subTitleStr+'","'+ contactStr +'","'+  data1[i].flag  +'","'+ type  +'"),';
             }
         SQL2 = SQL2.substring(0,SQL2.length-1) + ';'
         // // // console.log(SQL)
@@ -828,11 +809,11 @@ function openRemarksDb() {
             sql: SQL2
         }, function(ret, err) {
             if (ret.status) {
-                
+
             } else {
                 // // console.log('执行语句错误:' + JSON.stringify(err))
             }
         });
-        
+
     }
 </script>

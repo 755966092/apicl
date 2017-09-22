@@ -6,7 +6,7 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../css/api.css"/>
     <style>
-         header {   
+         header {
             background-color: #3A393E;
             height: 1rem;
             color: #fff;
@@ -29,15 +29,15 @@
             right: .2rem;
         }
 
-        
+
         .main {
 
         }
         .main .listContent {
-            height: 1.3rem;  
+            height: 1.3rem;
             border-bottom: .01rem solid #E0E0E0;
             background-color: #fff;
-            padding:  0 .3rem; 
+            padding:  0 .3rem;
             margin-top: .2rem;
             position: relative;
         }
@@ -45,15 +45,15 @@
         /* 左边提现 */
         .main .listContent .jl_left {
             font-size: .28rem;
-            line-height: 1.3rem;   
+            line-height: 1.3rem;
         }
 
         /* 右边钱数 */
         .main .listContent .jl_right {
             font-size: .34rem;
-            text-align: right;  
-            height: 1.16rem;    
-            padding-top: .2rem;    
+            text-align: right;
+            height: 1.16rem;
+            padding-top: .2rem;
             box-sizing: border-box;
             color: #27B24A;
             position: absolute;
@@ -65,7 +65,7 @@
         }
         .main .listContent .bearFruit {
             font-size: .24rem;
-            margin-top: .15rem; 
+            margin-top: .15rem;
         }
 
         .img {
@@ -167,8 +167,8 @@
         .ipt {
             padding: .15rem .3rem;
             /*height: .5rem;*/
-            font-size: 0;  
-            display: none; 
+            font-size: 0;
+            display: none;
             position: relative;
         }
         .ipt input {
@@ -210,8 +210,8 @@
     </style>
 </head>
 <body>
-     
-    <div class="main">  
+
+    <div class="main">
     <div class="nav">
         <span class="search"  id="search"  tapmode   onclick="searchSupply(this)"></span>
         <span class="head act" data-id="0"   tapmode   onclick="switchApr(0)">
@@ -230,8 +230,8 @@
          <input type="text" name="" class="inputText" onblur="hideIpt()" onkeyup="showClear(this)">
          <span class="clearText"   tapmode   onclick="clearText()"></span>
     </div>
-   
-        
+
+
     </div>
 </body>
 <script type="text/javascript" src="../script/api.js"></script>
@@ -275,27 +275,27 @@
         api.openFrameGroup({
             name: 'supply_publish',
             rect: {
-                 x: 0, 
-                 y: frameH+1, 
+                 x: 0,
+                 y: frameH+1,
                  w: 'auto',
                  h: footerH-1
             },
             scrollEnabled: true,
             index: 0,
             frames: [{
-                name: 'publishGroup1', 
+                name: 'publishGroup1',
                 url: './supply/supply_publish_1.html',
                 pageParam: {
                     headerH: api.pageParam.headerH
                 }
             },{
-                name: 'publishGroup2', 
+                name: 'publishGroup2',
                 url: './supply/supply_publish_2.html',
                 pageParam: {
                     headerH: api.pageParam.headerH
                 }
             },{
-                name: 'publishGroup3', 
+                name: 'publishGroup3',
                 url: './supply/supply_publish_3.html',
                 pageParam: {
                     headerH: api.pageParam.headerH
@@ -339,6 +339,15 @@
     }
     // 切换头部的标题颜色
     function switchAprIndex(index){
+        if (index == 2) {
+            api.sendEvent({
+                name: 'switch_to_the_circle_pop_up_button',
+            });
+        } else {
+            api.sendEvent({
+                name: 'switch_to_the_supply_pop_up_button',
+            });
+        }
         sliderbarCallback('indexbar',index)
         var aprItems = $api.domAll('.head');
         for (var i = 0; i < aprItems.length; i++) {
@@ -384,7 +393,7 @@
         // $api.css($api.dom('.ipt'), 'display:block');
         // 获取当前页面显示的是供还是求
         var currentPage = $api.attr($api.dom('.act'), 'data-id');
-        // 1 供  2 求  3 圈 
+        // 1 供  2 求  3 圈
         api.openWin({
             name: 'supply_searchSupply_win',
             url: 'supply/supply_searchSupply_win.html',
@@ -403,7 +412,7 @@
         } else {
             $api.css($api.dom('.clearText'), 'display: inline-block');
         }
-        
+
     }
     // 清除文字
     function clearText() {

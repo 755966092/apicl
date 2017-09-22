@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+      html, body {
+        background-color: rgba(0,0,0,0.3);
+        color: #fff;
+        width: 100%;
+        height: 100%;
+      }
+      header.header {
+        background-color: transparent;
+      }
+      div {
+        width: 100%;
+        height: 100%;
+      }
+      ul {
+        width: 2.48rem;
+        height: 1.55rem;
+        float: right;
+        padding: 0 .13rem 0;
+        box-sizing: border-box;
+        background-color: #3A393F;
+        font-size: .28rem;
+        margin-right: .1rem;
+        position: relative;
+        margin-top: .2rem;
+      }
+      ul span {
+        position: absolute;
+        width: 0px;
+        height: 0px;
+        right: .3rem;
+        top: -.15rem;
+        border-right: 10px solid transparent;
+        border-left: 10px solid transparent;
+        border-bottom: 10px solid #3A393F;
+      }
+      ul li {
+        padding-left: .87rem;
+        height: .75rem;
+        line-height: .75rem;
+        border-bottom: .01rem solid #4E4C51;
+
+      }
+
+      ul li:first-child {
+        background: url(../../image/icon_supply/icon_qiu.png)no-repeat;
+        -webkit-background-size: .35rem .29rem;
+        background-size: .35rem .29rem;
+        background-position: .25rem center;
+      }
+      ul li:nth-child(2) {
+        background: url(../../image/icon_supply/icon_gong.png)no-repeat;
+        -webkit-background-size: .28rem .28rem;
+        background-size: .28rem .28rem;
+        background-position: .25rem center;
+        border-bottom: 0;
+      }
+    </style>
+</head>
+<body tapmode onclick="api.closeFrame()">
+  <!--<header class="header"></header>-->
+   <div tapmode onclick="api.closeFrame()">
+       <ul>
+           <li tapmode onclick="publish(1);event.stopPropagation();">发布主题</li>
+           <li tapmode onclick="publish(0);event.stopPropagation();">创建圈子</li>
+           <span></span>
+       </ul>
+   </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        // fnInit()
+    };
+
+    function publish(n) {
+        if (n) {
+            // 1  发布项目
+            api.openWin({
+                name: 'find_publishPro_win',
+                url: '../find/find_publishPro_win.html',
+                pageParam: {
+                    headerH:headerH
+                }
+            });
+            setTimeout(function (){
+                api.closeFrame()
+            },500)
+        } else {
+          api.openWin({
+            name: 'find_foundCircle_win',
+            url: '../find/find_foundCircle_win.html',
+            pageParam: {
+              name: 'value'
+            }
+        });
+        }
+        setTimeout(function(){
+          api.closeFrame();
+        },500)
+    }
+
+
+
+
+
+</script>
+</html>
