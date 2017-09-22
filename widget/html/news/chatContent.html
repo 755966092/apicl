@@ -892,21 +892,16 @@ var  mainH, _main = $api.offset($api.dom('.main')).h, scrollH;
             sql: 'SELECT * FROM tb_chat_'+ api.pageParam.targetRongId +'  ORDER BY receivedTime DESC  LIMIT 20'
         },function(ret,err){
             if (ret.status) {
-                console.log('查询到的结果'+JSON.stringify(ret.data))
-                console.log('查询到的结果'+JSON.stringify(ret.data.length))
-                console.log(messageId)
                 if (ret.data.length > 0) {
-
                     renderPageSql(ret.data, 1);
-                    // contrastMessage(ret.data);
+                    contrastMessage(ret.data)
                 } else {
                     contrastMessage()
                 }
             }else {
-                alert('386');
+                // alert('386');
             }
         });
-
         // 获取缓存字段
         // var messageCache = $api.getStorage('chatRecord_'+targetRongId);
         // if (messageCache) {
@@ -924,64 +919,70 @@ var  mainH, _main = $api.offset($api.dom('.main')).h, scrollH;
                 targetId: targetRongId,
                 count: 20
             }, function(ret, err) {
-                // if (argument) {
-                //     if(argument.length>0){
-                //         if (argument[0].receivedTime == ret[0].receivedTime) {
-                //             // 无更新
-                //             // // console.log('无更新')
-                //         } else {
-                //             // // console.log('有更新')
-                //             // 有更新
-                //             $api.html($api.dom('.main'), '');
-                //             // $api.setStorage('chatRecord_'+targetRongId, ret)
-                //             renderPage(ret);
-                //         }
-
-                //     } else {
-                //         $api.html($api.dom('.main'), '');
-                //         // $api.setStorage('chatRecord_'+targetRongId, ret)
-                //         renderPage(ret);
-                //     }
-                // } else {
-                //         $api.html($api.dom('.main'), '');
-                //         // $api.setStorage('chatRecord_'+targetRongId, ret)
-                //         renderPage(ret);
-
-                // }
                 if (argument) {
-                    if(argument.result.length>0){
-                        if (argument.result[0].sentTime == ret.result[0].sentTime) {
+                    if(argument.length>0){
+                        if (argument[0].messageId == ret.result[0].messageId) {
                             // 无更新
-                            // // console.log('无更新')
                         } else {
-                            // // console.log('有更新')
                             // 有更新
                             $api.html($api.dom('.main'), '');
-                            $api.setStorage('chatRecord_'+targetRongId, ret)
+                            allCahtSql(ret.result)
                             renderPage(ret);
+
                         }
                     } else {
                         $api.html($api.dom('.main'), '');
-                        $api.setStorage('chatRecord_'+targetRongId, ret)
-
+                        allCahtSql(ret.result)
                         renderPage(ret);
                     }
                 } else {
                         $api.html($api.dom('.main'), '');
-                        $api.setStorage('chatRecord_'+targetRongId, ret)
                         allCahtSql(ret.result)
                         renderPage(ret);
-
                 }
             })
 
     }
     // 渲染页面
     function renderPageSql(ret, n) {
-        // console.log('559:::::'+JSON.stringify(ret))
         if (n == 2) {
             for (var i = 0; i < ret.length; i++) {
-                console.log(ret[i].messageId)
+                if (ret[i].messageDirection == 'RECEIVE') {
+                    // 消息方向：SEND(发送) 或者 RECEIVE(接受)
+                    if (ret[i].objectName == 'RC:VcMsg') {
+                        // 语音
+                        sqlAddReceVoiceMessages(ret[i], n)
+                    } else if (ret[i].objectName == 'RC:TxtMsg'){
+                        // 文字
+                        sqlAddReceMsg(ret[i], n)
+                    } else if (ret[i].objectName == 'RC:ImgMsg'){
+                        // 图片
+                        sqlAddReceImgMessages(ret[i], n)
+                    } else {
+
+                    }
+                } else {
+                    if (ret[i].objectName == 'RC:VcMsg') {
+                        // 语音
+                        sqlAddSendVoiceMessages(ret[i], n)
+                    } else if (ret[i].objectName == 'RC:TxtMsg'){
+                        // 文字
+                        sqlAddSendMsg(ret[i], n);
+                    } else if (ret[i].objectName == 'RC:ImgMsg'){
+                        // 图片
+                        sqlAddSendImgMessages(ret[i], n)
+                    } else {
+
+                    }
+                }
+                messageId = ret[0].messageId;
+            }
+            if(api.systemType=='ios') {
+                scrollTopPage()
+            }
+        } else {
+            for (var i = ret.length - 1; i >= 0 ; i--) {
+                // console.log(ret[i].messageId)
                 if (ret[i].messageDirection == 'RECEIVE') {
                     // 消息方向：SEND(发送) 或者 RECEIVE(接受)
                     if (ret[i].objectName == 'RC:VcMsg') {
@@ -1011,58 +1012,19 @@ var  mainH, _main = $api.offset($api.dom('.main')).h, scrollH;
                     }
                 }
             }
-            if(api.systemType=='ios') {
-                scrollTopPage()
-            }
-        } else {
-            for (var i = ret.length - 1; i >= 0 ; i--) {
-            console.log(ret[i].messageId)
-            if (ret[i].messageDirection == 'RECEIVE') {
-                // 消息方向：SEND(发送) 或者 RECEIVE(接受)
-                if (ret[i].objectName == 'RC:VcMsg') {
-                    // 语音
-                    sqlAddReceVoiceMessages(ret[i], n)
-                } else if (ret[i].objectName == 'RC:TxtMsg'){
-                    // 文字
-                    sqlAddReceMsg(ret[i], n)
-                } else if (ret[i].objectName == 'RC:ImgMsg'){
-                    // 图片
-                    sqlAddReceImgMessages(ret[i], n)
-                } else {
-
-                }
-            } else {
-                if (ret[i].objectName == 'RC:VcMsg') {
-                    // 语音
-                    sqlAddSendVoiceMessages(ret[i], n)
-                } else if (ret[i].objectName == 'RC:TxtMsg'){
-                    // 文字
-                    sqlAddSendMsg(ret[i], n);
-                } else if (ret[i].objectName == 'RC:ImgMsg'){
-                    // 图片
-                    sqlAddSendImgMessages(ret[i], n)
-                } else {
-
-                }
-            }
-        }
+            messageId = ret[ret.length-1].messageId;
         }
 
         // 获取历史聊天记录后 页面不想上滚动
         mainH=$api.offset($api.dom('.main')).h;
         _main = mainH
-        // 最新的消息的messageId,获取历史记录函数内部-20处理
-        messageId = ret[ret.length-1].messageId;
-        console.log(messageId)
         if (n == 1) {
             slideBut();
         }
     }
     // 渲染页面
     function renderPage(ret) {
-        // console.log('559:::::'+JSON.stringify(ret))
         for (var i = ret.result.length-1; i >= 0 ; i--) {
-
             if (ret.result[i].messageDirection == 'RECEIVE') {
                 // chatRecordingSql(ret, 'receiveMsg', youHeadImg)
                 // 消息方向：SEND(发送) 或者 RECEIVE(接受)
@@ -1097,7 +1059,7 @@ var  mainH, _main = $api.offset($api.dom('.main')).h, scrollH;
             mainH=$api.offset($api.dom('.main')).h;
             _main = mainH
             // 最新的消息的messageId,获取历史记录函数内部-20处理
-            messageId = ret.result[0].messageId;
+            messageId = ret.result[ret.result.length-1].messageId;
             slideBut();
         }
     }
@@ -1327,7 +1289,6 @@ var  mainH, _main = $api.offset($api.dom('.main')).h, scrollH;
 
     // 滚动到页面底部
     function slideBut() {
-        console.log('滚动到底部')
         // scrollIntoView 滚动到可是界面的底部   true滚动到顶部
         $api.dom('.main').scrollIntoView(false);
 
@@ -1336,8 +1297,7 @@ var  mainH, _main = $api.offset($api.dom('.main')).h, scrollH;
     var countId = 20;
     // 查看历史记录
     function chatHis() {
-
-        messageId -= 20;
+        // messageId -= 20;
         var count = messageId>20?20:messageId;
         if (messageId > 0) {
             db.selectSql({
@@ -1348,12 +1308,10 @@ var  mainH, _main = $api.offset($api.dom('.main')).h, scrollH;
                     countId += 20;
                     console.log('查询到的结果'+JSON.stringify(ret.data))
                     console.log('查询到的结果'+JSON.stringify(ret.data.length))
-
-                    console.log(messageId)
                     if (ret.data.length > 0) {
                         renderPageSql(ret.data, 2);
-
                     } else {
+                        console.log(messageId)
                         rong.getHistoryMessages({
                             conversationType: 'PRIVATE',
                             // 目标rongyun用户名
@@ -1363,17 +1321,10 @@ var  mainH, _main = $api.offset($api.dom('.main')).h, scrollH;
                         }, function(ret, err) {
                             console.log(messageId)
                             allCahtSql(ret.result)
-                            // console.log('482:'+JSON.stringify(ret))
-                            // alert(JSON.stringify(ret))
                             for (var i = 0; i < ret.result.length ; i++) {
-                                // if (ret.result[i].messageDirection == 'RECEIVE') {
-                                //     // 消息方向：SEND(发送) 或者 RECEIVE(接受)
-                                //     addReceMsgTop(ret.result[i], youHeadImg)
-                                // } else {
-                                //     addSendMsgTop(ret.result[i], headImg);
-                                // }
                                 if (ret.result[i].messageDirection == 'RECEIVE') {
-                                    // // // console.log('559:::::'+JSON.stringify(ret))
+                                    console.log('查看历史记录:::::'+JSON.stringify(ret));
+
                                     // 消息方向：SEND(发送) 或者 RECEIVE(接受)
                                     if (ret.result[i].objectName == 'RC:VcMsg') {
                                         // 语音
@@ -1400,6 +1351,7 @@ var  mainH, _main = $api.offset($api.dom('.main')).h, scrollH;
                                     }
                                 }
                             }
+                            messageId = ret.result[ret.result.length - 1].messageId
                             if(api.systemType=='ios') {
                                 scrollTopPage()
                             }
@@ -1430,7 +1382,6 @@ var  mainH, _main = $api.offset($api.dom('.main')).h, scrollH;
             mainH = $api.offset($api.dom('.main')).h;
             scrollH = mainH - _main;
             _main =  mainH;
-            console.log('----------------------------------------IOS')
             window.scrollTo(0,scrollH-150);
     }
     // 下拉刷新后 执行函数chatHis(messageId)
