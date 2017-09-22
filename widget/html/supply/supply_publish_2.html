@@ -480,25 +480,24 @@
         // // // console.log('参数:::'+JSON.stringify(data))
         var data = data || {};
         var latitude,longitude,latitudeNum,longitudeNum;
-        bMap.getLocation({
-            accuracy: '100m',
-            autoStop: true,
-            filter: 1
-        }, function(ret, err) {
-            if (ret.status) {
-                latitudeNum = ret.lat;
-                longitudeNum = ret.lon;
-                if (data !== {}) {
-                    if (data.order == 'distance') {
-                        data.latitude = ret.lat;
-                        data.longitude = ret.lon;
-                    }
-                }
+        if (data !== {}) {
+            if (data.order == 'distance') {
+                bMap.getLocation({
+                    accuracy: '100m',
+                    autoStop: true,
+                    filter: 1
+                }, function(ret, err) {
+                    if (ret.status) {
+                                data.latitude = ret.lat;
+                                data.longitude = ret.lon;
 
-            } else {
-                alert(err.code);
+
+                    } else {
+                        alert(err.code);
+                    }
+                });
             }
-        });
+        }
         var supplyCache = $api.getStorage('supply_publish_2');
         if (supplyCache) {
             console.log(JSON.stringify(supplyCache))

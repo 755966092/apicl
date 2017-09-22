@@ -8,7 +8,7 @@
     <style>
         html,body {
             height: 100%;
-            width: 100%;    
+            width: 100%;
             background-color: rgba(0,0,0,0.4);
         }
 
@@ -16,8 +16,8 @@
         }
         .warp1 {
             height: 100%;
-             display: -webkit-box; 
-            display: flex; 
+             display: -webkit-box;
+            display: flex;
             -webkit-box-direction: normal;
             -webkit-box-orient: vertical;
             flex-direction: column;
@@ -72,7 +72,7 @@
             line-height: .79rem;
             color: #555;
         }
-        .main ul.no1 li span:nth-child(2), 
+        .main ul.no1 li span:nth-child(2),
         .main ul.no1 li span:nth-child(3) {
             margin-right: .12rem;
         }
@@ -82,7 +82,7 @@
             background-size: .96rem .6rem;
             color: #27B24A;
         }
-       
+
         .main ul.no1 li span.li_span4 {
             background-size: 1.78rem .79rem;
             width: 1.78rem;
@@ -103,7 +103,7 @@
             line-height: .79rem;
             /*border-top: .01rem solid #d9d9d9;*/
             font-size: 0;
-            
+
         }
         .main ul.no2 li p {
             font-size: .24rem;
@@ -121,7 +121,7 @@
         }
         .footer span {
             height: .9rem;
-            width: 3rem;    
+            width: 3rem;
             font-size: .34rem;
             text-align: center;
             line-height: .9rem;
@@ -132,7 +132,7 @@
             background-color: #27B24A;
             color: #fff;
         }
-        
+
         header.header {
             opacity: 0;
         }
@@ -150,7 +150,7 @@
     </style>
 </head>
 <body   tapmode class=""   onclick="api.closeFrame()">
-   
+
     <div class="warp1 flex-def flex-zBetween">
          <header  class="header clearfix">
             <div class="head">
@@ -181,28 +181,28 @@
                              <span   tapmode  data-type="price" onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4">价格最低</span>
                              <span   tapmode  data-type="create_time" onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4">最新发布</span>
                         </li>
-                     </ul>  
+                     </ul>
                     <ul class="no2">
                         <li class="no2List sel clearfix"   tapmode   onclick="li_spanP(this);event.cancelBubble=true;" >
                             <p>分类<span class="no2Icon selText">选择分类</span></p>
                         </li>
                     </ul>
                 </div>
-            </div> 
+            </div>
             <div class="footer">
                 <span   tapmode   onclick="enter(0);event.stopPropagation();">重置</span>
                 <span   tapmode   onclick="enter(1);event.stopPropagation();">确定</span>
             </div>
         </div>
     </div>
-    
+
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     var selectedObj=0,parameter,str,flag,categoryData;
     apiready = function(){
-        // // console.log(JSON.stringify(api.pageParam))
+        console.log(JSON.stringify(api.pageParam))
         fnInit();
         // 供求不同的筛选
         if (api.pageParam.type == 0) {
@@ -234,26 +234,32 @@
             }
         });
         ajaxClass();
-       
+
     }
     function ajaxClass() {
-        api.ajax({
-            url: apiSite + '/category/index',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                   values: { 
-                       type: api.pageParam.type,
-                   }
-            }
-        }, function(ret, err) {
-            if(ret) {
-                categoryData = ret.data.list;
-                 initPage(ret.data.list);
-            } else {
-                alert(JSON.stringify(err))
-            }
-        })
+        categoryData = $api.getStorage('categoryIndex');
+        if (categoryData) {
+            api.ajax({
+                url: apiSite + '/category/index',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: {
+                        type: api.pageParam.type,
+                    }
+                }
+            }, function(ret, err) {
+                if(ret) {
+
+                    $api.setStorage('categoryIndex', ret.data.list);
+                    initPage(ret.data.list);
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
+        } else {
+            initPage(categoryData);
+        }
     }
     // 进入筛选页面初始化页面
     function initPage(categoryData) {
@@ -263,26 +269,17 @@
             $api.text($api.dom('.selText'), api.pageParam.selectedObj[0].str);
             var id = '';
             for (var i = 0; i < api.pageParam.selectedObj.length; i++) {
-                // // // console.log('循环参数')
                 for (var j = 0; j < categoryData.length; j++) {
-                    // // // console.log('循环数据')
-                    // // // console.log('循环数据1' + JSON.stringify(api.pageParam.selectedObj[i].title))
-                    // // // console.log('循环数据2' + JSON.stringify(categoryData[j].name))
                     if (api.pageParam.selectedObj[i].title == categoryData[j].name) {
                         id += categoryData[j].category_id +',';
                     }
                 }
             }
             id = id.substring(0,id.length-1);
-            // // console.log(id)
             $api.attr($api.dom('.no2Icon'), 'data-category',id);
-                   
-           
         }
 
-        // // console.log('赛选:::'+JSON.stringify(selectedObj))
         parameter = api.pageParam.parameter
-        // // console.log('parameter:::'+JSON.stringify(parameter))
         if (api.pageParam.parameter != 0) {
             for (var i = 0; i < $api.domAll('span[data-type]').length; i++) {
                 $api.removeCls($api.domAll('span[data-type]')[i], 'sel');
@@ -414,7 +411,7 @@
             $api.text($api.dom('.selText'), '请选择分类');
             $api.attr($api.dom('.selText'), 'data-category', '');
             // parameter.category_ids = '';
-            
+
             api.sendEvent({
                 name: 'selClass',
                 extra: {
@@ -429,7 +426,7 @@
                     $api.removeCls(liArr[i].childNodes[j], 'sel');
                 }
                 // $api.addCls(liArr[i].childNodes[3], 'sel');
-            }  
+            }
             for (var i = 0; i < $api.domAll('.no2List').length; i++) {
                 $api.removeCls($api.domAll('.no2List')[i], 'sel');
                 for(var j = 0; j < $api.domAll('.no2List')[i].childNodes.length ; j++) {
