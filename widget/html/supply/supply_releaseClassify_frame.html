@@ -6,7 +6,7 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style type="text/css">
-        
+
     </style>
 </head>
 <body>
@@ -19,7 +19,7 @@
     apiready = function(){
         moduleInit();
         // $api.rmStorage('classifyList');
-        var dataList = $api.getStorage('classifyList');
+        var dataList = $api.getStorage('classifyDataSlide');
         if(dataList) {
             openList(dataList,'yes')
         } else {
@@ -32,7 +32,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                         type: 1
                    }
             }
@@ -49,7 +49,7 @@
         if (yes) {
             // console.log('不缓存')
         } else{
-            $api.setStorage('classifyList', data1);
+            $api.setStorage('classifyDataSlide', data1);
             // console.log('缓存')
         }
         // var dataArr = [];
@@ -69,7 +69,7 @@
         })
         listContact.close();
         console.log(api.winHeight);
-        
+
         listContact.open({
                 x : 0,
                 y : 0,
@@ -79,8 +79,8 @@
                 // 分割线颜色
                 borderColor: '#EDEDED',
                 groupTitle: {
-                    color: '#999',       
-                    size: 14,   
+                    color: '#999',
+                    size: 14,
                     bgColor: '#EFEFF4'
                 },
                 rightBg: '#fff',
@@ -109,7 +109,7 @@
                     // alert(JSON.stringify(err.msg));
                 }
             });
-        
+
         $api.css($api.dom('.loading'), 'display: none');
     }
      // 打开人脉详情
@@ -122,16 +122,16 @@
             }
         });
     }
-    function f_check_uppercase(obj)   {          
-       if (/[A-Z]/.test(obj))    {   
-          return true;   
-       }    
-       return false;   
+    function f_check_uppercase(obj)   {
+       if (/[A-Z]/.test(obj))    {
+          return true;
+       }
+       return false;
     }
     function sortData(data) {
         for (var i = 0; i < data.length; i++) {
             data[i].letter = PinyinHelper.getShortPinyin($api.trimAll(data[i].name)).toUpperCase();
-            data[i].flag = data[i].letter[0]; 
+            data[i].flag = data[i].letter[0];
         }
         for(var i = 0;i < data.length-1; i++) {
             for(var j = 0; j < data.length-i-1; j++) {
@@ -180,9 +180,9 @@
                     arr[data[i].initial] = [];
                     a = i;
                 }
-            } 
+            }
             arr[data[a].initial].push (data[i])
-            
+
         }
         openList(arr)
     }
