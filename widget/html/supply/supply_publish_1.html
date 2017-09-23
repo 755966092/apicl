@@ -215,13 +215,13 @@
                         <p class="price2">{{=it[i].price}}元/{{=it[i].unit}}</p>
                     </div>
                     <span class="firstImg" style="background: url({{=it[i].image_json[0]?it[i].image_json[0]:'../../image/tx_1.jpg'}})no-repeat;background-size: 7.1rem auto;background-position: center center;">
-                        <!-- <span class="price ">
-                                <span class="position fl">清华大学</span>
-                                <span class="distance">距离我10.00km</span>
-                        </span> -->
+                       <span class="price ">
+                                <!-- <span class="position fl">清华大学</span> -->
+                                <span class="distance">距离我{{=it[i].distance}}km</span>
+                        </span>
                     </span>
                     <div class="name flex-def flex-cCenter flex-zBetween ">
-                        <span class="title ">{{=it[i].title}}<span class="label"> [{{=it[i].sub_type == 2?'公司':'个人'}}]</span></span>
+                        <span class="title ">{{=it[i].title}}<span class="label"> [{{=it[i].type == 2?'公司':'个人'}}]</span></span>
                         <span tapmode data-id="{{=it[i].supply_id}}" onclick="collect(this);event.stopPropagation();" class=" {{=it[i].is_collect==true?"collect icon":"icon"}}"></span>
                     </div>
                     <p class="createTime">{{=it[i].create_time}}</p>
@@ -444,7 +444,6 @@
         var data = data || {};
         var latitude,longitude;
         if (data !== {}) {
-            if (data.order == 'distance') {
                 bMap.getLocation({
                     accuracy: '100m',
                     autoStop: true,
@@ -453,28 +452,26 @@
                     if (ret.status) {
                         data.latitude = ret.lat;
                         data.longitude = ret.lon;
-                        fliderSupply(data)
+                         // 缓存字段  supply_publish_1
+                        var supplyCache = $api.getStorage('supply_publish_1');
+                        if (supplyCache) {
+                            console.log(JSON.stringify(supplyCache))
+                            getData(supplyCache);
+                            $api.css($api.dom('.loading'), 'display: none');
+                            // console.log($api.attr($api.dom('.firstImg'), 'style'))
+                            // selfAdaption();
+                        }
+                        fliderSupply(data,supplyCache)
                     } else {
                         alert(err.code);
                     }
                 });
-            } else {
-                // 缓存字段  supply_publish_1
-                var supplyCache = $api.getStorage('supply_publish_1');
-                if (supplyCache) {
-                    console.log(JSON.stringify(supplyCache))
-                    getData(supplyCache);
-                    $api.css($api.dom('.loading'), 'display: none');
-                    // console.log($api.attr($api.dom('.firstImg'), 'style'))
-                    // selfAdaption();
-                }
-                fliderSupply(data,supplyCache)
-            }
+               
         }
 
     }
     function fliderSupply(data,supplyCache) {
-        // // // console.log('参数2:::'+JSON.stringify(data))
+        console.log('参数2:::'+JSON.stringify(data))
         api.ajax({
             url: apiSite + '/supply/index',
             method: 'post',
@@ -495,7 +492,7 @@
         }, function(ret, err) {
             if(ret) {
                 // // // console.log(page_num)
-                // // // console.log('数据:::'+JSON.stringify(ret.data.list.length))
+                console.log('数据:::'+JSON.stringify(ret.data.list))
                 // // // console.log('页数:::'+JSON.stringify(page_num))
                 // $api.css($api.dom('.loading'), 'display: none');
                 // 停止下拉刷新
@@ -539,22 +536,22 @@
     function requireData2 (data) {
         var data = data || {};
         var latitude,longitude;
-        if (data !== {}) {
-            if (data.order == 'distance') {
-                bMap.getLocation({
-                    accuracy: '100m',
-                    autoStop: true,
-                    filter: 1
-                }, function(ret, err) {
-                    if (ret.status) {
-                        data.latitude = ret.lat;
-                        data.longitude = ret.lon;
-                    } else {
-                        alert(err.code);
-                    }
-                });
+        // if (data !== {}) {
+        //     if (data.order == 'distance') {
+        bMap.getLocation({
+            accuracy: '100m',
+            autoStop: true,
+            filter: 1
+        }, function(ret, err) {
+            if (ret.status) {
+                data.latitude = ret.lat;
+                data.longitude = ret.lon;
+            } else {
+                alert(err.code);
             }
-        }
+        });
+        //     }
+        // }
         api.ajax({
             url: apiSite + '/supply/index',
             method: 'post',
