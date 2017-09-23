@@ -80,7 +80,7 @@
             color: #999;
         }
         .label {
-            font-size: .2rem;
+             font-size: .2rem;
             color: #0076FF;
             border: .01rem solid #0076FF;
             text-align: center;
@@ -127,9 +127,14 @@
                                 {{?}}
                             </div>
                         </div>
-                        <div class="info flex-cCenter flex-def">
+                        <div class="info flex-cCenter flex-def"  tapmode onclick="openInfo(this)" data-id="{{=it[i].demand_id}}">
                             <div class="img">
+                                 {{?it[i].image_json[0]}}
                                 <img src="{{=it[i].image_json[0]}}">
+                                {{??}}
+                                <img src="../../image/noimage.jpg">
+                                {{?}}
+                               
                             </div>
                             <div class="text flex-item">
                                 <div class="top flex-def flex-zBetween flex-cCenter">
@@ -141,7 +146,7 @@
                                         {{?}}                                        
                                         <span class="title">{{=it[i].title}}</span>
                                     </div>
-                                    <span class="price">{{=it[i].reward}}元/{{=it[i].unit}}</span>
+                                    <span class="price">{{=it[i].reward}}元</span>
                                 </div>
                                 <div class="bottom flex-def flex-zBetween">
                                     <div class="left">
@@ -182,7 +187,7 @@ var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", 
             }
         }, function(ret, err) {
             if(ret) {
-                // // console.log(JSON.stringify(ret))
+                console.log(JSON.stringify(ret))
                 // // alert(JSON.stringify(ret))
                 for (var i = 0; i < ret.data.list.length; i++) {
                     if ( ret.data.list[i].unit > 0) {
@@ -198,6 +203,16 @@ var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", 
                 alert(JSON.stringify(err))
             }
         })
+    }
+      // 打开详情
+    function openInfo(ele) {
+        api.openWin({
+            name: 'supply_info_frame',
+            url: '../supply/supply_info_demand_frame.html',
+            pageParam: {
+                demand_id: $api.attr(ele, 'data-id')
+            }
+        });
     }
 </script>
 </html>

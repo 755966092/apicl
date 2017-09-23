@@ -129,7 +129,11 @@
                         </div>
                         <div class="info flex-cCenter flex-def" tapmode onclick="openInfo(this)" data-id="{{=it[i].supply_id}}">
                             <div class="img">
+                                 {{?it[i].image_json[0]}}
                                 <img src="{{=it[i].image_json[0]}}">
+                                {{??}}
+                                <img src="../../image/noimage.jpg">
+                                {{?}}
                             </div>
                             <div class="text flex-item">
                                 <div class="top flex-def flex-zBetween flex-cCenter">
@@ -181,6 +185,7 @@
             }
         }, function(ret, err) {
             if(ret) {
+                console.log(JSON.stringify(ret))
                 for (var i = 0; i < ret.data.list.length; i++) {
                     if ( ret.data.list[i].unit > 0) {
                          ret.data.list[i].unit = _dataSource[ ret.data.list[i].unit-1]
@@ -203,7 +208,7 @@
             name: 'supply_info_frame',
             url: '../supply/supply_info_frame.html',
             pageParam: {
-                supply_id: api.pageParam.supply_id
+                supply_id: $api.attr(ele, 'data-id')
             }
         });
     }
