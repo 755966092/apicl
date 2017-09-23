@@ -108,7 +108,7 @@
             {{ for (var i = 0; i < it.length; i++) { }} 
                 <div class="wrap" >
                     <div class="item">
-                        <div class="user flex-cCenter flex-def">
+                        <div  data-id="{{=it[i].user_id}}" tapmode onclick="openUserInfo(this)" class="user flex-cCenter flex-def">
                             <div class="img">
                                 {{?it[i].head_img_url}}
                                 <img src="{{=it[i].head_img_url}}">
@@ -173,6 +173,14 @@
     apiready = function(){
         requestData();
     };
+    function openUserInfo(ele) {
+        api.openWin({
+            name: 'txl_memberInfo_Win',
+            url: '../addressList/txl_memberInfo_Win.html',
+            bounces: false,
+            pageParam: {userId : $api.attr(ele, 'data-id')}
+        });
+    }
     function requestData() {
         api.ajax({
             url: apiSite + '/user_center/supplyCollect',
