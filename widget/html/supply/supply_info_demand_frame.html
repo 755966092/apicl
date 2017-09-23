@@ -380,7 +380,7 @@
                 <img id="imgHeight" src="../../image/tx_4.jpg">
             </div> -->
             <div class="title flex-def flex-zLeftRight flex-cCenter" tapmode onclick="openUserInfoPage(this)" data-id="{{=it.info.user_id}}">
-                <img src="{{=it.info.head_img_url}}" >
+                <img id="headImg" src="{{=it.info.head_img_url}}" >
                 <div class="titleRight">
                     <h3>{{=it.info.nickname}}</h3>
                     {{?it.info.current_company==null&&it.info.current_position!=null}}
@@ -397,14 +397,14 @@
                 <div class="top flex-def flex-zBetween">
                     <div class="titleName flex-def flex-zLeftRight flex-cCenter">
                         <span class="typeIcon">{{=it.info.type}}</span>
-                        <p>{{=it.info.title}}</p>
+                        <p class="demandName">{{=it.info.title}}</p>
                     </div>
                     <!-- 分享按钮 -->
                     <!-- <div class="shareIcon"></div> -->
                 </div>
                 <div class="price flex-def flex-zBetween flex-zLeftRight">
                     <div class="priceText">
-                        ￥{{=it.info.reward}}元
+                        ￥<span class="reward">{{=it.info.reward}}</span>元
                     </div>
                     <div class="time">
                         {{=it.info.create_time}}
@@ -492,7 +492,7 @@
         </div>
         {{?!it.is_self_add}}
         <footer>
-            <span><i></i>聊天</span>
+            <span  data-headUrl="{{=it.info.head_img_url}}" tapmode onclick="openChatPage(this)" data-rongId="{{=it.info.rongcloud_user_id}}"><i></i>聊天</span>
             {{?it.is_collect}}
                 <span id="collect" ontouchstart="supplyCollect(this)"><i class="cancelCollect"></i>取消收藏</span>
             {{??}}
@@ -537,6 +537,28 @@
             }
         });
     };
+     // 打开聊天页面
+    function openChatPage(ele) {
+        var rong_id = $api.attr(ele, 'data-rongId');
+        var userName = $api.text($api.dom('h3'));
+        // 头像 昵称 供应名字 价格 单位
+        var userHeadImg = $api.attr($api.byId('headImg'), 'src');
+        var supplyName = $api.text($api.dom('.demandName'));
+        var priceUint = $api.text($api.dom('.reward')); 
+        api.openWin({
+            name: 'chatPage',
+            url: '../news/chatPage.html',
+             pageParam: {
+                type:'supplyInfo',
+                targetRongId: rong_id,
+                nickname: userName,
+                headImg: userHeadImg,
+                supplyName: supplyName,
+                priceUint: priceUint,
+                order_id: api.pageParam.order_id
+            }
+        });
+    }
     // 打开用户详情
     function openUserInfoPage(ele) {
         var userId = $api.attr(ele, 'data-id');
