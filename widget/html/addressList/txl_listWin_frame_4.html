@@ -17,6 +17,7 @@
             height: 1.1rem;
             border-bottom: .01rem solid #d9d9d9;
 
+
         }
         li:last-child {
             border-bottom: 0;
@@ -71,30 +72,55 @@
         .headImg .item2:nth-child(4) {
             margin-bottom: 0;
         }
+        .peopleCount {
+            text-align: right;
+            width: .44rem;
+            height: 100%;
+            font-size: .18rem;
+            background: url(../../image/iocn_addressList/icon_perpleCount.png)no-repeat;
+            -webkit-background-size: .44rem .44rem;
+            background-size: .44rem .44rem;
+            background-position: right top;
+            box-sizing: border-box;
+            padding: .04rem;
+            padding-right: 0;
+            color: #fff;
 
+
+        }
+        .peopleCount span {
+
+            transform:rotate(45deg);
+        }
     </style>
 </head>
 <body>
     <div class="loading"></div>
     <div class="resultList"></div>
-    <!-- <ul> -->
-         <!-- <li class="flex-def flex-cCenter" tapmode onclick="openFamiliarCircle(this)">
-            <div class="flex-def headImg flex-zCenter flex-wrap flex-cCenter">
-                <span class="flex-def flex-wrap flex-zCenter">
-                    <span class="item" style="background: url(../../image/tx_1.jpg);-webkit-background-size: .2rem .2rem;background-size: .2rem .2rem;"></span>
-                </span>
+   <!--  <ul>
+         <li class="flex-def flex-cCenter flex-zBetween" tapmode onclick="openFamiliarCircle(this)">
+            <div class="flex-def  flex-zCenter">
+                <div class="flex-def headImg flex-zCenter flex-wrap flex-cCenter">
+                    <span class="flex-def flex-wrap flex-zCenter">
+                        <span class="item" style="background: url(../../image/tx_1.jpg);-webkit-background-size: .2rem .2rem;background-size: .2rem .2rem;"></span>
+                    </span>
+                </div>
+                <span class="text flex-def flex-cCenter "><span class="name">啦啦啦</span>  、<span class="name">nana</span>等和您组成</span>
             </div>
-            <span class="text flex-def flex-cCenter "><span class="name">啦啦啦</span>  、<span class="name">nana</span>等和您组成</span>
+            <span class="peopleCount"><span>5人</span></span>
+        </li>  <li class="flex-def flex-cCenter flex-zBetween" tapmode onclick="openFamiliarCircle(this)">
+            <div class="flex-def  flex-zCenter">
+                <div class="flex-def headImg flex-zCenter flex-wrap flex-cCenter">
+                    <span class="flex-def flex-wrap flex-zCenter">
+                        <span class="item" style="background: url(../../image/tx_1.jpg);-webkit-background-size: .2rem .2rem;background-size: .2rem .2rem;"></span>
+                    </span>
+                </div>
+                <span class="text flex-def flex-cCenter "><span class="name">啦啦啦</span>  、<span class="name">nana</span>等和您组成</span>
+            </div>
+            <span class="peopleCount"><span>5人</span></span>
         </li>
-        <li class="flex-def flex-cCenter" tapmode onclick="openFamiliarCircle(this)">
-            <div class="flex-def headImg flex-zCenter flex-wrap flex-cCenter">
-                <span class="flex-def flex-wrap flex-zCenter">
-                    <span style="width:.3rem;height:.3rem;background: url(../../image/tx_1.jpg);-webkit-background-size: .3rem .3rem;background-size: .3rem .3rem;" class="item2"></span>
-                </span>
-            </div>
-            <span class="text flex-def flex-cCenter">啦啦啦、nana等和您组成</span>
-        </li>  -->
-    <!-- </ul> -->
+       
+    </ul> -->
     <script type="text/x-dot-template" id="listT">
         {{?JSON.stringify(it)==='{}'}}
             <p class="no_data">暂无熟识圈</p>
@@ -104,7 +130,8 @@
                 {{ if (it.hasOwnProperty(key)) { }}
                     {{ if (parseInt(key) > 4) { }}
                         {{ for (var i = 0; i < it[key].length; i++) { }}
-                            <li class="flex-def flex-cCenter" tapmode onclick="openFamiliarCircle(this)" data-arr='{{=JSON.stringify(it[key][i])}}'>
+                            <li class="flex-def flex-cCenter flex-zBetween" tapmode onclick="openFamiliarCircle(this)" data-arr='{{=JSON.stringify(it[key][i])}}'>
+                             <div class="flex-def  flex-zCenter">
                                 <div class="flex-def headImg flex-zCenter flex-wrap flex-cCenter">
                                     <span class="flex-def flex-wrap flex-zCenter">
                                         {{?it[key][i].length > 9}}
@@ -119,11 +146,14 @@
                                     </span>
                                 </div>
                                 <span class="text flex-def flex-cCenter"><span class="name">{{=it[key][i][0].remark_nickname=='null'?it[key][i][0].nickname:it[key][i][0].remark_nickname}}</span>、<span class="name">{{=it[key][i][1].remark_nickname=='null'?it[key][i][1].nickname:it[key][i][1].remark_nickname}}</span>等和您组成</span>
+                                </div>
+                                <span class="peopleCount"><span>{{key}}人</span></span>
                             </li>
                         {{ } }}
                     {{ } else { }}
                         {{ for (var i = 0; i < it[key].length; i++) { }}
                             <li class="flex-def flex-cCenter" tapmode onclick="openFamiliarCircle(this)" data-arr='{{=JSON.stringify(it[key][i])}}'>
+                            <div class="flex-def  flex-zCenter">
                                 <div class="flex-def headImg flex-zCenter flex-wrap flex-cCenter">
                                     <span class="flex-def flex-wrap flex-zCenter">
                                         {{ for (var j = 0; j < it[key][i].length; j++) { }}
@@ -136,6 +166,8 @@
                                 {{??}}
                                 <span class="text flex-def flex-cCenter"><span class="name">{{=it[key][i][0].remark_nickname=='null'?it[key][i][0].nickname:it[key][i][0].remark_nickname}}</span>、<span class="name">{{=it[key][i][1].remark_nickname=='null'?it[key][i][1].nickname:it[key][i][1].remark_nickname}}</span>和您组成</span>
                                 {{?}}
+                                </div>
+                                <span class="peopleCount"><span>{{key}}人</span></span>
                             </li>
                         {{ } }}
                     {{ } }}
