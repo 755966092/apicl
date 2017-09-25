@@ -285,11 +285,20 @@
         // api.pageParam.flag == 1; 二度好友
         // api.pageParam.flag == 1; 二度未加入
         if (api.pageParam.flag == 1) {
+            $api.setStorage('Once-the-network-cache-tag', 'true');
             selectSQL = 'SELECT * FROM db_second_contactst_table WHERE status = 1 AND type=2 LIMIT '+ (pageNum * 15 - 1) +',15';
         } else if (api.pageParam.flag == 2) {
+            $api.setStorage('second-degree-population-cache', 'true');
             selectSQL = 'SELECT * FROM db_second_contactst_table WHERE status = 2 AND type=2 LIMIT '+ (pageNum * 15 - 1) +',15';
         } else {
-            selectSQL = 'SELECT * FROM db_second_contactst_table WHERE type=2 LIMIT '+ (pageNum * 15 - 1) +',15';
+
+            if ($api.getStorage('Once-the-network-cache-tag') && $api.getStorage('second-degree-population-cache')) {
+                selectSQL = 'SELECT * FROM db_second_contactst_table WHERE type=2 LIMIT '+ (pageNum * 15 - 1) +',15';
+            } else {
+                selectSQL = 'SELECT * FROM db_second_contactst_table WHERE type=200 LIMIT '+ (pageNum * 15 - 1) +',15';
+                $api.setStorage('Once-the-network-cache-tag', 'true');
+                $api.setStorage('second-degree-population-cache', 'true');
+            }
         }
         db.selectSql({
             name: 'db_' + $api.getStorage('userToken'),
@@ -298,8 +307,6 @@
             if (ret.status) {
                 pageNum++;
                 if (ret.data.length > 0) {
-                    console.log('数据库数据::'+JSON.stringify(ret.data.length));
-                    console.log('数据库语句::' + selectSQL)
                     dataArr = dataArr.concat(ret.data);
                     getData(dataArr);
                     $api.css($api.dom('.loading'), 'display: none');
@@ -343,7 +350,6 @@
                 sql: SQL
             }, function (ret, err) {
                 if (ret.status) {
-                    console.log('插入二度人脉成功')
                 } else {
                     api.alert({ msg: err.msg });
                 }

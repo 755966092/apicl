@@ -163,12 +163,29 @@
     function initPage() {
         // api.pageParam.flag == 1; 二度好友
         // api.pageParam.flag == 1; 二度未加入
+        // if (api.pageParam.flag == 1) {
+        //     selectSQL = 'SELECT * FROM db_second_contactst_table WHERE status = 1 AND type=3 LIMIT '+ (pageNum * 15 - 1) +',15';
+        // } else if (api.pageParam.flag == 2) {
+        //     selectSQL = 'SELECT * FROM db_second_contactst_table WHERE status = 2 AND type=3 LIMIT '+ (pageNum * 15 - 1) +',15';
+        // } else {
+        //     selectSQL = 'SELECT * FROM db_second_contactst_table WHERE type=3 LIMIT '+ (pageNum * 15 - 1) +',15';
+        // }
+
         if (api.pageParam.flag == 1) {
+            $api.setStorage('Once-the-network-cache-tag3', 'true');
             selectSQL = 'SELECT * FROM db_second_contactst_table WHERE status = 1 AND type=3 LIMIT '+ (pageNum * 15 - 1) +',15';
         } else if (api.pageParam.flag == 2) {
+            $api.setStorage('second-degree-population-cache3', 'true');
             selectSQL = 'SELECT * FROM db_second_contactst_table WHERE status = 2 AND type=3 LIMIT '+ (pageNum * 15 - 1) +',15';
         } else {
-            selectSQL = 'SELECT * FROM db_second_contactst_table WHERE type=3 LIMIT '+ (pageNum * 15 - 1) +',15';
+
+            if ($api.getStorage('Once-the-network-cache-tag3') && $api.getStorage('second-degree-population-cache3')) {
+                selectSQL = 'SELECT * FROM db_second_contactst_table WHERE type=3 LIMIT '+ (pageNum * 15 - 1) +',15';
+            } else {
+                selectSQL = 'SELECT * FROM db_second_contactst_table WHERE type=200 LIMIT '+ (pageNum * 15 - 1) +',15';
+                $api.setStorage('Once-the-network-cache-tag3', 'true');
+                $api.setStorage('second-degree-population-cache3', 'true');
+            }
         }
         db.selectSql({
             name: 'db_' + $api.getStorage('userToken'),

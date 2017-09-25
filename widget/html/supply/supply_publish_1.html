@@ -208,7 +208,7 @@
         {{??}}
             {{ for (var i = 0; i < it.length; i++) { }}
                 <div class="item"  data-id="{{=it[i].supply_id}}" data-company="{{=it[i].company_name}}" tapmode onclick="info(this)">
-                    <div class="userLeft flex-def flex-cCenter flex-zBetween">
+                    <div class="userLeft flex-def flex-cCenter flex-zBetween" tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation(); ">
                         <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" class="announcerHead" >
                         <div class="username flex-item">
                             <p class="announcer">{{=it[i].nickname}}</p>
@@ -493,6 +493,7 @@
             }
         }, function(ret, err) {
             if(ret) {
+                $api.css($api.dom('.loading'), 'display: none');
                 // // // console.log(page_num)
                 // console.log('数据:::'+JSON.stringify(ret.data.list))
                 // // // console.log('页数:::'+JSON.stringify(page_num))
