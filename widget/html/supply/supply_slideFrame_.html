@@ -11,17 +11,16 @@
         }
         html,body {
             height: 100%;
-            width: 100%;    
+            width: 100%;
             background-color: rgba(0,0,0,0);
         }
 
-        body {
-        }
+
         .warp1 {
             position: relative;
             height: 100%;
-             display: -webkit-box; 
-            display: flex; 
+             display: -webkit-box;
+            display: flex;
             -webkit-box-direction: normal;
             -webkit-box-orient: vertical;
             flex-direction: column;
@@ -39,8 +38,7 @@
             height: 100%;
             box-sizing: border-box;
         }
-        .main>div:first-child {
-         }
+
         .footer {
             height: .9rem;
             width: 6rem;
@@ -51,7 +49,7 @@
         }
         .footer span {
             height: .9rem;
-            width: 3rem;    
+            width: 3rem;
             font-size: .34rem;
             text-align: center;
             line-height: .9rem;
@@ -62,7 +60,7 @@
             background-color: #27B24A;
             color: #fff;
         }
-        
+
         header.header {
             opacity: 0;
         }
@@ -97,14 +95,14 @@
                    <p class="selected"><span>已选择：</span><span class="selectedText">请选择学校</span></p>
 
                 </div>
-            </div> 
+            </div>
             <div class="footer">
                 <span   tapmode   onclick="enter(0);event.stopPropagation();">取消</span>
                 <span   tapmode   onclick="enter(1);event.stopPropagation();">确定</span>
             </div>
         </div>
     </div>
-    
+
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -156,8 +154,8 @@
             str = ''
         } else {
             // // // console.log('132行: '+JSON.stringify(selectedObj[0]))
-            str = selectedObj[0].str ||''; 
-            // $api.text($api.dom('.selectedText'), str); 
+            str = selectedObj[0].str ||'';
+            // $api.text($api.dom('.selectedText'), str);
         }
         listContact.open({
             x: -1000,
@@ -177,8 +175,8 @@
             imgHeight: 32,
             borderColor: '#d9d9d9',
             groupTitle: {
-                color: '#999',       
-                size: 14,   
+                color: '#999',
+                size: 14,
                 bgColor: '#f8f8f8'
             },
             rightBg: '#fff',
@@ -209,7 +207,7 @@
                         data: {
                             title: data[ret.key][ret.index].title,
                             titleColor: '#000',
-                            titleSize:15            
+                            titleSize:15
                         }
                     });
                     $api.text($api.dom('.selectedText'), str);
@@ -239,11 +237,11 @@
                         data: {
                             title: data[ret.key][ret.index].title,
                             titleColor: '#27B24A',
-                            titleSize:15            
+                            titleSize:15
                         }
                     });
                 }
-                
+
             } else {
                 alert(JSON.stringify(err));
             }
@@ -256,7 +254,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        type: 1
                    }
             }
@@ -319,16 +317,16 @@
         }
     }
 
-    function f_check_uppercase(obj)   {          
-       if (/[A-Z]/.test(obj))    {   
-          return true;   
-       }    
-       return false;   
+    function f_check_uppercase(obj)   {
+       if (/[A-Z]/.test(obj))    {
+          return true;
+       }
+       return false;
     }
     function sortData(data) {
         for (var i = 0; i < data.length; i++) {
             data[i].letter = PinyinHelper.getShortPinyin($api.trimAll(data[i].name)).toUpperCase();
-            data[i].flag = data[i].letter[0]; 
+            data[i].flag = data[i].letter[0];
         }
         for(var i = 0;i < data.length-1; i++) {
             for(var j = 0; j < data.length-i-1; j++) {
@@ -377,9 +375,9 @@
                     arr[data[i].initial] = [];
                     a = i;
                 }
-            } 
+            }
             arr[data[a].initial].push (data[i])
-            
+
         }
         openList(arr)
     }
