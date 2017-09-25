@@ -73,6 +73,7 @@
 
         .user {
             margin: 0;
+            padding: 0.02rem 0;
         }
 
         .createTime {
@@ -198,7 +199,7 @@
                 </div>
                 <p class="price2">{{=it[i].reward}}元</p>
             </div>
-            <span class="firstImg" style="background: url({{=it[i].image_json[0]?it[i].image_json[0]:'../../image/tx_1.jpg'}})no-repeat;background-size: 7.1rem auto;background-position: center center;">
+            <span class="firstImg" style="background: url({{=it[i].image_json[0]?it[i].image_json[0]:'../../image/icon_supply/supply_noImg.png'}})no-repeat;background-size: 7.1rem auto;background-position: center center;">
                            <span class="price ">
                                     <!-- <span class="position fl">清华大学</span> -->
                         <span class="distance">距离我{{=it[i].distance}}km</span>
@@ -357,47 +358,48 @@
             if (ret.status) {
                 data.latitude = ret.lat;
                 data.longitude = ret.lon;
+                api.ajax({
+                    url: apiSite + '/demand/index',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                        values: {
+                            token: $api.getStorage('userToken'),
+                            // keyword: '',
+                            type: data.type || '',
+                            sub_type: data.sub_type || '',
+                            category_ids: data.category_ids || '',
+                            order: data.order || '',
+                            latitude: data.latitude || '',
+                            longitude: data.longitude || '',
+                            page_num: page_num
+                        }
+                    }
+                }, function (ret, err) {
+                    if (ret) {
+                        if (ret.code == 200) {
+                            scrollFlag = 1;
+                            page_num++;
+                            if (ret.data.list < 20) {
+                                $api.text($api.dom('.bbottomLoading'), '暂无更多供求');
+                            } else {
+                                $api.css($api.dom('.bbottomLoading'), 'display: none');
+                            }
+                            renderPage(ret);
+                        } else {
+                            alert(ret.msg)
+                        }
+                    } else {
+                        alert(JSON.stringify(err.msg))
+                    }
+                })
             } else {
                 alert(err.code);
             }
         });
         //     }
         // }
-        api.ajax({
-            url: apiSite + '/demand/index',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: {
-                    token: $api.getStorage('userToken'),
-                    // keyword: '',
-                    type: data.type || '',
-                    sub_type: data.sub_type || '',
-                    category_ids: data.category_ids || '',
-                    order: data.order || '',
-                    latitude: data.latitude || '',
-                    longitude: data.longitude || '',
-                    page_num: page_num
-                }
-            }
-        }, function (ret, err) {
-            if (ret) {
-                if (ret.code == 200) {
-                    scrollFlag = 1;
-                    page_num++;
-                    if (ret.data.list < 20) {
-                        $api.text($api.dom('.bbottomLoading'), '暂无更多供求');
-                    } else {
-                        $api.css($api.dom('.bbottomLoading'), 'display: none');
-                    }
-                    renderPage(ret);
-                } else {
-                    alert(ret.msg)
-                }
-            } else {
-                alert(JSON.stringify(err.msg))
-            }
-        })
+
     }
     // 渲染页面
     function renderPage(ret) {
