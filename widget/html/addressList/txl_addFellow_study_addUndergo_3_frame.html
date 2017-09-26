@@ -48,9 +48,9 @@
             margin-top: 1rem;
             margin-bottom: 1rem;
         }
-       
-        
-        
+
+
+
         .mobile {
             height: .6rem;
             font-size: .28rem;
@@ -66,17 +66,17 @@
             float: right;
             width: 4rem;
             text-align: right;
-            padding-right: .4rem;  
+            padding-right: .4rem;
         }
         span.telIpt {
-            display: inline-block;  
+            display: inline-block;
             font-size: .28rem;
             color: #B1A9AB;
-            height: .8rem;  
+            height: .8rem;
             /*background: url(../../image/icon_zk.png)no-repeat;*/
             background-size: .15rem .25rem;
             background-position: right  center;
-                
+
         }
         .clearIpt {
             display: none;
@@ -90,21 +90,21 @@
        textarea {
         background-color: #fff;
         text-align: left;
-        width: 100%;    
-        font-size: .24rem;  
+        width: 100%;
+        font-size: .24rem;
         color: #000;
-        
+
         padding: .2rem .3rem;
         box-sizing: border-box;
-        outline: none; 
+        outline: none;
        }
        #textLength {
         background-color: #fff;
-        width: 100%;  
-        padding-right:.3rem ; 
-        margin: 0;  
-        text-align: right; 
-        border-top: .01rem solid #EFEFEF;   
+        width: 100%;
+        padding-right:.3rem ;
+        margin: 0;
+        text-align: right;
+        border-top: .01rem solid #EFEFEF;
        }
        #over {
         display: none;
@@ -128,10 +128,14 @@
                    </p>
                </div>
                <p class="time">
-                    时间段
+                    开始时间
                     <span class="telIpt" >
                         <span data-val='start'   tapmode   onclick="openTime(this)" id="time_1">请选择</span >
-                        --
+                    </span>
+               </p>
+               <p class="time">
+                    结束时间
+                    <span class="telIpt" >
                         <span   tapmode   onclick="openTime(this)" id="time_2">请选择</span>
                     </span>
                </p>
@@ -160,7 +164,7 @@
         }
         // fnInit();
         // monitor();
-        
+
         api.addEventListener({
             name: 'editStudy'
         }, function(ret, err) {
@@ -171,9 +175,9 @@
             }
         });
     };
-    
+
     // 打开时间选择器
-    function openTime(ele) {                                                                                                                                    
+    function openTime(ele) {
         for (var i = 0; i < $api.domAll('input').length; i++) {
             $api.domAll('input')[i].blur()
         }for (var i = 0; i < $api.domAll('textarea').length; i++) {
@@ -237,7 +241,7 @@
     function changeText(ele) {
         // alert();
         $api.text($api.byId('textLength'), ele.value.length + '/300');
-    } 
+    }
 
     // 获取数据
     function getCityList() {
@@ -246,7 +250,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
+                values: {
                     token: $api.getStorage('userToken'),
                     remark_user_id: api.pageParam.userId,
                     education_id: api.pageParam.education_id
@@ -255,14 +259,14 @@
         }, function(ret, err) {
             if (ret) {
                 if (ret.data.info.end_date == '0000-00-00' ){
-                     $api.text($api.byId('time_2'), '至今'); 
+                     $api.text($api.byId('time_2'), '至今');
                 } else {
-                    $api.text($api.byId('time_2'), ret.data.info.end_date);    
+                    $api.text($api.byId('time_2'), ret.data.info.end_date);
                 }
-                $api.val($api.byId('school'), ret.data.info.school);    
-                $api.text($api.byId('time_1'), ret.data.info.start_date);    
-               
-                $api.val($api.byId('textarea'), ret.data.info.description); 
+                $api.val($api.byId('school'), ret.data.info.school);
+                $api.text($api.byId('time_1'), ret.data.info.start_date);
+
+                $api.val($api.byId('textarea'), ret.data.info.description);
                 $api.text($api.byId('textLength'), ret.data.info.description.length + '/300');
             } else {
                 alert(JSON.stringify(err.msg));
@@ -273,10 +277,10 @@
     function addStudy() {
         $api.css($api.dom('.loading'), 'display: block');
         // 获取数据
-        var school = $api.val($api.byId('school'));    
-        var time_1 = $api.text($api.byId('time_1'));    
-        var time_2 = $api.text($api.byId('time_2'))=='至今' ? '0000-00-00' : $api.text($api.byId('time_2')) ; 
-        var textarea = $api.val($api.byId('textarea')); 
+        var school = $api.val($api.byId('school'));
+        var time_1 = $api.text($api.byId('time_1'));
+        var time_2 = $api.text($api.byId('time_2'))=='至今' ? '0000-00-00' : $api.text($api.byId('time_2')) ;
+        var textarea = $api.val($api.byId('textarea'));
 
         var obj = {};
         if (api.pageParam.flag) {
@@ -336,12 +340,12 @@
                     }
                 } else {
                     $api.css($api.dom('.loading'), 'display: none');
-                    
+
                     alert(JSON.stringify(err.msg));
                 }
-            }); 
+            });
         }
-           
+
     }
     function statusCurrent() {
         api.ajax({
@@ -349,7 +353,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                        remark_user_id: api.pageParam.userId,
                    }
@@ -369,7 +373,7 @@
                     db.executeSql({
                         name: 'db_'+$api.getStorage('userToken'),
                         sql: 'UPDATE addressList_simplify SET subTitle = "'+ subTitle +'" WHERE user_id =' + api.pageParam.userId
-                    }, function(ret, err){        
+                    }, function(ret, err){
                         if( ret.status ){
                             // // console.log('更新成功:'+subTitle)
                           api.sendEvent({
@@ -390,9 +394,9 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
-                       remark_user_id: api.pageParam.userId, 
+                       remark_user_id: api.pageParam.userId,
                    }
             }
         }, function(ret, err) {
@@ -403,8 +407,8 @@
                         if (ret.data.list[i].education_id == api.pageParam.education_id) {
                             db.executeSql({
                                 name: SQLName,
-                                sql: 'UPDATE tb_remarks_education SET type = ' + ret.data.list[i].type + ',school = "' + ret.data.list[i].school+ '",major = "' + ret.data.list[i].major+ '",degree = "' + ret.data.list[i].degree+ '",description = "' + ret.data.list[i].description+ '",start_date = "' + ret.data.list[i].start_date+ '",end_date = "' + ret.data.list[i].end_date + '" WHERE education_id =' + api.pageParam.education_id    
-                            }, function(ret, err){        
+                                sql: 'UPDATE tb_remarks_education SET type = ' + ret.data.list[i].type + ',school = "' + ret.data.list[i].school+ '",major = "' + ret.data.list[i].major+ '",degree = "' + ret.data.list[i].degree+ '",description = "' + ret.data.list[i].description+ '",start_date = "' + ret.data.list[i].start_date+ '",end_date = "' + ret.data.list[i].end_date + '" WHERE education_id =' + api.pageParam.education_id
+                            }, function(ret, err){
                                 if( ret.status ){
                                     // // console.log( '更新成功'+JSON.stringify( ret ) );
                                     api.sendEvent({
@@ -426,8 +430,8 @@
                     sql = sql.substring(0,sql.length-1);
                     db.executeSql({
                         name: SQLName,
-                        sql: sql   
-                    }, function(ret, err){  
+                        sql: sql
+                    }, function(ret, err){
                         if( ret.status ){
                             // // console.log('334ret:'+JSON.stringify(ret))
                             // // console.log('335err:'+JSON.stringify(err));
@@ -453,7 +457,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
+                values: {
                     token: api.pageParam.userToken || $api.getStorage('userToken'),
                     education_id: api.pageParam.education_id
                 }
@@ -470,6 +474,6 @@
             }
         });
     }
- 
+
 </script>
 </html>
