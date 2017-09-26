@@ -39,7 +39,7 @@
         }
 
         .titleRight {
-            /* display: -webkit-box; 
+            /* display: -webkit-box;
              display: flex;
              -webkit-box-align: start ;
              align-items: flex-start;
@@ -172,7 +172,7 @@
             color: #555;
         }
 
-      
+
 
         .ask > div {
             position: absolute;
@@ -263,11 +263,11 @@
             float: right;
         }
         ul li .liRight {
-           
+
         }
         .status .iconStatus {
             display: inline-block;
-            width: .44rem;  
+            width: .44rem;
             height: .8rem;
             float: right;
         }
@@ -311,6 +311,7 @@
             color: #fff;
             margin-top: .36rem;
             margin-bottom: .2rem;
+            display: none;
         }
 
         .activeTime {
@@ -369,9 +370,9 @@
             </div>
             <div class="company ">
                 <span class="companyName">
-                    <span id="current_company"></span> 
-                    <span id="current_position"></span> 
-                    <span id="current_degree"></span> 
+                    <span id="current_company"></span>
+                    <span id="current_position"></span>
+                    <span id="current_degree"></span>
                 </span>
             </div>
             <!-- <p>加入会员后可查看对方最近一次活跃时间</p> -->
@@ -429,7 +430,7 @@
     <ul class="status mt20 resultList"></ul>
         <script type="text/x-dot-template" id="listT">
             {{?it}}
-                {{ for (var i = 0; i < it.length; i++) { }} 
+                {{ for (var i = 0; i < it.length; i++) { }}
                     {{?it[i].type == 1}}
                         <li tapmode data-statusId = '{{=it[i].status_id}}' data-type = '{{=it[i].type}}' onclick="selCurrentStatus(this)">
                             <span class="statusText">{{=it[i].name}} {{=it[i].position}}</span>
@@ -441,7 +442,7 @@
                         </li>
                     {{??}}
                         <li tapmode data-statusId = '{{=it[i].status_id}}' data-type = '{{=it[i].type}}' onclick="selCurrentStatus(this)">
-                            <span class="statusText">{{=it[i].name}} {{=it[i].position}}  
+                            <span class="statusText">{{=it[i].name}} {{=it[i].position}}
                             {{?it[i].degree==0}}
                             {{??it[i].degree==1}}
                             专科
@@ -468,11 +469,11 @@
             {{??}}
             {{?}}
         </script>
-        
+
       <!--   <li>
             <span>中央财经大学 工商管理 硕士</span>
             <span class="iconStatus sel"></span>
-        </li> 
+        </li>
     </ul>-->
     <ul>
         <li class="mt20" tapmode onclick="openInfo(this)" data-val="study">
@@ -521,13 +522,14 @@
         $api.css($api.dom('.shadow'), 'height:'+$api.offset($api.dom('.main')).h+'px;');
         // // // console.log('484:::'+JSON.stringify(api.pageParam))
         if(api.pageParam.userId == 0) {
+            console.log(JSON.stringify(api.pageParam))
             // 进入自己的详情页
             api.ajax({
                 url: apiSite + '/user/detail',
                 method: 'post',
                 headers: apiHeader,
                 data: {
-                    values: { 
+                    values: {
                         token: $api.getStorage('userToken'),
                     }
                 }
@@ -549,8 +551,8 @@
             initPage();
             initStatus();
         }
-       
-       
+
+
         // requireDetailData();
         api.addEventListener({
             name: 'editUserInfo'
@@ -571,7 +573,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                        remark_user_id: api.pageParam.userId,
                        type: type,
@@ -605,18 +607,18 @@
         db.executeSql({
             name: SQLName,
             sql: ' UPDATE tb_remarks_status SET is_default = '+ -1
-        }, function(ret, err){        
+        }, function(ret, err){
             if( ret.status ){
                 db.executeSql({
                     name: SQLName,
-                    sql: ' UPDATE tb_remarks_status SET is_default = '+ 1 +' WHERE status_id = ' + status_id    
-                }, function(ret, err){        
+                    sql: ' UPDATE tb_remarks_status SET is_default = '+ 1 +' WHERE status_id = ' + status_id
+                }, function(ret, err){
                     if( ret.status ){
                         // alert( JSON.stringify( ret ) );
                         // // // console.log('更新成功')
                         // initStatus();
                         // reviseText()
-                        
+
                     }else{
                         alert( JSON.stringify( err ) );
                     }
@@ -630,7 +632,7 @@
         db.executeSql({
             name: SQLName,
             sql: ' UPDATE addressList_simplify SET subTitle = "'+ $api.text($api.dom(ele, '.statusText'))+'" WHERE user_id =' + api.pageParam.userId
-        }, function(ret, err){        
+        }, function(ret, err){
             if( ret.status ){
                 console.log('执行成功')
               api.sendEvent({
@@ -675,7 +677,7 @@
                         method: 'post',
                         headers: apiHeader,
                         data: {
-                               values: { 
+                               values: {
                                    token: $api.getStorage('userToken'),
                                    user_id: api.pageParam.userId
                                }
@@ -717,7 +719,7 @@
                                 } else {
                                     if (retDetail.data.info.sex == 2) {
                                         $api.addCls(sex, 'sexIcon2');
-                                    }                                    
+                                    }
                                 }
                                 var companyStr ='';
                                  // 当前公司
@@ -751,7 +753,7 @@
                                 } else {
                                     $api.text(hometown, retDetail.data.info.hometown || '');
                                 }
-                                
+
                                 // 电话
                                 if (ret.data.info.current_contact) {
                                     // // console.log('11111111')
@@ -775,13 +777,13 @@
                                 }
                             } else {
                                 // 有本地信息 对比信息
-                                
+
                                 paramRealName = retDetail.data.info.real_name;
                                 //  当前状态
                                 if (retDetail.data.status.length > 0) {
                                     getData(retDetail.data.status);
                                     var statueStr = ''
-                                    statueStr = (retDetail.data.info.current_position || '') +' '+ (retDetail.data.info.current_company || '') +' '+ (retDetail.data.info.current_degree || '') 
+                                    statueStr = (retDetail.data.info.current_position || '') +' '+ (retDetail.data.info.current_company || '') +' '+ (retDetail.data.info.current_degree || '')
                                     // $api.text(current_position, retDetail.data.info.current_position || '');
                                     // $api.text(current_position, retDetail.data.info.current_position || '');
                                     $api.text(current_company, statueStr);
@@ -816,7 +818,7 @@
                                 } else {
                                     if (retDetail.data.info.sex == 2) {
                                         $api.addCls(sex, 'sexIcon2');
-                                    }                                    
+                                    }
                                 }
                                 var companyStr ='';
                                  // 当前公司
@@ -850,7 +852,7 @@
                                 } else {
                                     $api.text(hometown, retDetail.data.info.hometown || '');
                                 }
-                                
+
                                 // 电话
                                 if (ret.data.info.current_contact) {
                                     $api.text(phone, ret.data.info.current_contact);
@@ -875,8 +877,8 @@
                             alert(JSON.stringify(errDetail))
                         }
                     })
-                    
-                   
+
+
                 }
             } else {
                 alert(JSON.stringify(err))
@@ -889,10 +891,10 @@
             for (key2 in obj2) {
                 if (obj1[key1] == null) {
                     obj1[key1] = ''
-                } 
+                }
                 if (obj2[key2] == null) {
                     obj2[key2] = ''
-                } 
+                }
                 if (key1 === key2) {
                     if (!(obj1[key1] == obj2[key2])) {
                         // 更新本地库
@@ -907,7 +909,7 @@
         db.selectSql({
             name: 'db_' + $api.getStorage('userToken'),
             sql: 'SELECT * FROM addressList_simplify WHERE user_id = ' + api.pageParam.userId
-        }, function(ret, err){        
+        }, function(ret, err){
             if( ret.status ){
                 // 网络信息 obj
                 // 备注信息 remarkInfo
@@ -944,7 +946,7 @@
             }
         });
 
-        // 
+        //
         // obj.head_img_url
         // obj.current_company
         // obj.current_position
@@ -955,8 +957,8 @@
     function updateListSql(key, data) {
         db.executeSql({
             name: 'db_' + $api.getStorage('userToken'),
-            sql: ' UPDATE addressList_simplify SET ' + key + '= "' + data + '" WHERE user_id = ' + api.pageParam.userId 
-        }, function(ret, err){        
+            sql: ' UPDATE addressList_simplify SET ' + key + '= "' + data + '" WHERE user_id = ' + api.pageParam.userId
+        }, function(ret, err){
             if( ret.status ){
                 console.log('发送时间')
                api.sendEvent({
@@ -973,8 +975,8 @@
     function createSimplify(key, data) {
         db.executeSql({
             name: 'db_'+$api.getStorage('userToken'),
-            sql: 'ALTER TABLE addressList_simplify ADD current_contact varchar(255)'   
-        }, function(ret, err){        
+            sql: 'ALTER TABLE addressList_simplify ADD current_contact varchar(255)'
+        }, function(ret, err){
             if( ret.status ){
                 updateListSql(key, data);
             }else{
@@ -986,8 +988,8 @@
     function updateSql(key, data) {
         db.executeSql({
             name: 'db_' + $api.getStorage('userToken'),
-            sql: ' UPDATE addressList SET ' + key + '= "' + data + '" WHERE user_id = ' + api.pageParam.userId 
-        }, function(ret, err){        
+            sql: ' UPDATE addressList SET ' + key + '= "' + data + '" WHERE user_id = ' + api.pageParam.userId
+        }, function(ret, err){
             if( ret.status ){
                 console.log('992')
                 initPage();
@@ -1004,7 +1006,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                        user_id: api.pageParam.userId
                    }
@@ -1016,7 +1018,7 @@
                     if (ret.data.list[i].is_default == 1) {
                         $api.text(phone, ret.data.list[i].phone || '');
                         $api.attr(phone, 'data-id', ret.data.list[i].contact_id || '');
-                    } 
+                    }
                 }
             } else {
                 alert('701'+JSON.stringify(err))
@@ -1027,8 +1029,8 @@
     function initStatus() {
         db.selectSql({
             name: SQLName,
-            sql: 'SELECT * FROM tb_remarks_status WHERE remark_user_id = ' + api.pageParam.userId       
-        }, function(ret, err){ 
+            sql: 'SELECT * FROM tb_remarks_status WHERE remark_user_id = ' + api.pageParam.userId
+        }, function(ret, err){
             if( ret.status ){
                 // // // console.log( '626::::' + JSON.stringify( ret ) );
                 if (ret.data.length != 0) {
@@ -1046,7 +1048,7 @@
                                 case '5': ret.data[i].degree = '博士后'; break;
                             }
                         }
-                        
+
                     }
                     // // // console.log('本地数据库tb_remarks_status内容')
                     reviseText(ret.data);
@@ -1074,7 +1076,7 @@
             for (var i = 0; i < data.length; i++) {
                 if (data[i].is_default == 1) {
                     $api.text(current_company, data[i].name+' '+data[i].position+' '+data[i].degree);
-                    
+
                     // if (data[i].type == 2) {
                     //     $api.text(current_company, data[i].name);
                     //     $api.text(current_position, data[i].position);
@@ -1099,7 +1101,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                        remark_user_id: api.pageParam.userId,
                    }
@@ -1171,8 +1173,8 @@
             // // // console.log(sql)
             db.executeSql({
                 name: 'db_' + $api.getStorage('userToken'),
-                sql: sql  
-            }, function(retSql, errSql){        
+                sql: sql
+            }, function(retSql, errSql){
                 if( retSql.status ){
                     reviseText(ret.data.status)
                     getData(ret.data.status)
@@ -1236,7 +1238,7 @@
                     // 昵称
                     if (ret.data[0].remark_nickname) {
                         $api.text(nickname, ret.data[0].remark_nickname);
-                        
+
                     } else {
                         $api.text(nickname, ret.data[0].nickname);
                     }
@@ -1280,7 +1282,7 @@
         db.selectSql({
             name: SQLName,
             sql: 'SELECT * FROM tb_remarks_user_info WHERE remark_user_id = ' + api.pageParam.userId
-        }, function(ret, err){        
+        }, function(ret, err){
             if( ret.status ){
                 // // // console.log('902'+JSON.stringify(ret.data))
                 if (ret.data.length != 0) {
@@ -1297,11 +1299,14 @@
     function relationship(relationship_levelType,status) {
         var btn = $api.byId('btn');
         if(status == 1) {
+            // 1 已加入
+            // 其他 未加入平台
+            $api.css($api.byId('btn'), 'display: block');
             sweitchData1(relationship_levelType, status)
             // $api.text(btn, '加为好友');
         } else {
             sweitchData(relationship_levelType, status)
-            $api.css($api.byId('btn'), 'display: none');
+
         }
     }
     function sweitchData1(relationship_levelType, status) {
@@ -1354,8 +1359,9 @@
             case 10:
                 // $api.text(relationship_level, '无任何关系');
                 // if(status == 1) {
-                    $api.css($api.byId('btn'), 'display: none');
-                    // $api.text(btn, '加为好友');
+                    // $api.css($api.byId('btn'), 'display: none');
+                    $api.text(btn, '加为好友');
+
                     $api.text(relationship_level, '无任何关系');
                 // } else {
                 //     $api.css($api.byId('btn'), 'display: none');
@@ -1385,7 +1391,7 @@
                 $api.text(relationship_level, '一度人脉熟识好友');
                 break;
             case 3:
-                    
+
                     $api.text(relationship_level, '一度人脉尚未加入');
                 // 1 相识
                 // -1 一度人脉尚未加入
@@ -1409,8 +1415,8 @@
                 $api.text(relationship_level, '六度人脉' + compareRelation(status));
                 break;
             case 10:
-                // $api.text(relationship_level, '无任何关系');
-                $api.css($api.byId('btn'), 'display: none');
+                $api.text($api.byId('btn'), '加为好友');
+                // $api.css($api.byId('btn'), 'display: none');
                 $api.text(relationship_level, '无任何关系');
                 break;
         }
@@ -1434,11 +1440,12 @@
                 pageParam: {
                     targetRongId: targetRongId,
                     nickname: nickname,
-                    headImg: $api.attr(head_img_url, 'src')
+                    headImg: $api.attr(head_img_url, 'src'),
+                    userId: api.pageParam.userId
                 }
             });
         } else {
-            api.openWin({   
+            api.openWin({
                 name: 'txl_addFriendsInfo',
                 url: './txl_addFriendsInfo.html',
                 bounces: false,
