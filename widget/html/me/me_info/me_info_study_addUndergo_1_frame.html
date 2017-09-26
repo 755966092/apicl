@@ -6,9 +6,9 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
     <style>
-       
-      
-        
+
+
+
         .main_no1 p, .main_no2 p {
              background-color: #fff;
             height: .8rem;
@@ -48,9 +48,9 @@
             margin-top: 1rem;
             margin-bottom: 1rem;
         }
-       
-        
-        
+
+
+
         .mobile {
             height: .6rem;
             font-size: .28rem;
@@ -66,17 +66,17 @@
             float: right;
             width: 4rem;
             text-align: right;
-            padding-right: .4rem;  
+            padding-right: .4rem;
         }
         span.telIpt {
-            display: inline-block;  
+            display: inline-block;
             font-size: .28rem;
             color: #B1A9AB;
-            height: .8rem;  
+            height: .8rem;
             /*background: url(../../../image/icon_zk.png)no-repeat;*/
             background-size: .15rem .25rem;
             background-position: right  center;
-                
+
         }
         .clearIpt {
             display: none;
@@ -90,20 +90,20 @@
        textarea {
         background-color: #fff;
         text-align: left;
-        width: 100%;    
-        font-size: .24rem;  
+        width: 100%;
+        font-size: .24rem;
         color: #000;
         padding: .2rem .3rem;
         box-sizing: border-box;
-        outline: none; 
+        outline: none;
        }
        #textLength {
         background-color: #fff;
-        width: 100%;  
-        padding-right:.3rem ; 
-        margin: 0;  
-        text-align: right; 
-        border-top: .01rem solid #EFEFEF;   
+        width: 100%;
+        padding-right:.3rem ;
+        margin: 0;
+        text-align: right;
+        border-top: .01rem solid #EFEFEF;
        }
        #over {
         display: none;
@@ -116,14 +116,14 @@
     </style>
 </head>
 <body>
-     
+
     <!-- <header  class="header">
         <div class="head">
             <span class="callback"   tapmode   onclick="api.closeWin()">取消</span>
             <span class="winTitle">
                 新增学习经历
             </span>
-            <span class="rightBtn bj" id="over"   tapmode   onclick="addStudy()">完成</span> 
+            <span class="rightBtn bj" id="over"   tapmode   onclick="addStudy()">完成</span>
         </div>
     </header> -->
         <div class="main clearfix">
@@ -148,10 +148,14 @@
                    </p>
                 </div>
                <p class="time">
-                    时间段
+                    开始时间
                     <span class="telIpt" >
                         <span   tapmode data-val='startTime'   onclick="openTime(this)" id="time_1">请选择</span >
-                        --
+                    </span>
+               </p>
+               <p class="time">
+                    结束时间
+                    <span class="telIpt" >
                         <span   tapmode  data-val='endTime'  onclick="openTime(this)" id="time_2">请选择</span>
                     </span>
                </p>
@@ -172,12 +176,12 @@
     var url;
     apiready = function(){
         moduleInit();
-     
-     
+
+
         if (api.pageParam.flag == 1) {
             url = '/user_center/editEducation';
             // $api.text($api.byId('main_no3'), '删除');
-           
+
             // $api.css($api.byId('over'), 'display:inline-block');
             // $api.css($api.byId('main_no3'), 'background-color:#DF214E');
             // $api.removeAttr($api.byId('main_no3'), '  tapmode   onclick');
@@ -188,7 +192,7 @@
         } else {
             url = '/user_center/addEducation'
         }
-        
+
         // 获取数据
         if (api.pageParam.education_id) {
             getCityList();
@@ -202,7 +206,7 @@
                 alert(JSON.stringify(err.msg));
             }
         });
-        
+
     };
       // 打开时间选择器
     function openTime(ele) {
@@ -268,14 +272,14 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
+                values: {
                     token: $api.getStorage('userToken'),
                     education_id: api.pageParam.education_id
                 }
             }
         }, function(ret, err) {
             if (ret) {
-                
+
                 if (ret.data.info.degree == '1') {
                     ret.data.info.degree = '专科'
                 } else if (ret.data.info.degree == '2') {
@@ -286,18 +290,18 @@
                     ret.data.info.degree = '博士'
                 } else if (ret.data.info.degree == '5'){
                     ret.data.info.degree = '博士后'
-                } 
+                }
                 if (ret.data.info.end_date == '0000-00-00' ){
                     ret.data.info.end_date = '至今'
                 }  else {
 
                 }
-                $api.val($api.byId('school'), ret.data.info.school);    
-                $api.val($api.byId('major'), ret.data.info.major);    
-                $api.text($api.byId('selectEdu'), ret.data.info.degree);   
-                $api.text($api.byId('time_1'), ret.data.info.start_date);    
-                $api.text($api.byId('time_2'), ret.data.info.end_date); 
-                $api.val($api.byId('textarea'), ret.data.info.description); 
+                $api.val($api.byId('school'), ret.data.info.school);
+                $api.val($api.byId('major'), ret.data.info.major);
+                $api.text($api.byId('selectEdu'), ret.data.info.degree);
+                $api.text($api.byId('time_1'), ret.data.info.start_date);
+                $api.text($api.byId('time_2'), ret.data.info.end_date);
+                $api.val($api.byId('textarea'), ret.data.info.description);
                 $api.text($api.byId('textLength'), ret.data.info.description.length + '/300');
             } else {
                 alert(JSON.stringify(err.msg));
@@ -340,12 +344,12 @@
     // 提交数据
     function addStudy() {
         // 获取数据
-        var school = $api.val($api.byId('school'));    
-        var major = $api.val($api.byId('major'));    
-        var selectEdu = $api.text($api.byId('selectEdu'));    
-        var time_1 = $api.text($api.byId('time_1'));    
-        var time_2 = $api.text($api.byId('time_2'))=='至今'?'0000-00-00':$api.text($api.byId('time_2')); 
-        var textarea = $api.val($api.byId('textarea')); 
+        var school = $api.val($api.byId('school'));
+        var major = $api.val($api.byId('major'));
+        var selectEdu = $api.text($api.byId('selectEdu'));
+        var time_1 = $api.text($api.byId('time_1'));
+        var time_2 = $api.text($api.byId('time_2'))=='至今'?'0000-00-00':$api.text($api.byId('time_2'));
+        var textarea = $api.val($api.byId('textarea'));
         if (selectEdu == '专科') {
             selectEdu = 1
         } else if (selectEdu == '本科') {
@@ -357,13 +361,13 @@
         } else if (selectEdu == '博士后') {
             selectEdu = 5
         }
-        
+
          api.ajax({
             url: apiSite + url,
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
+                values: {
                     token: api.pageParam.userToken || $api.getStorage('userToken'),
                     education_id: api.pageParam.education_id,
                     type: 3,
@@ -390,8 +394,8 @@
             } else {
                 alert(JSON.stringify(err.msg));
             }
-        }); 
-           
+        });
+
     }
     // 删除数据
     function delStudy () {
@@ -400,7 +404,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
+                values: {
                     token: api.pageParam.userToken || $api.getStorage('userToken'),
                     education_id: api.pageParam.education_id
                 }
@@ -422,7 +426,7 @@
 
         // alert();
         $api.text($api.byId('textLength'), ele.value.length + '/300');
-    } 
+    }
     // 选择学历
     function selectEdu() {
         api.openFrame({
@@ -528,7 +532,7 @@
     }
     // 选择时间
     function selectTime(n) {
-        
+
         if (n == 2) {
             api.openFrame({
                 name: 'me_info_study_addUndergo_time_2',

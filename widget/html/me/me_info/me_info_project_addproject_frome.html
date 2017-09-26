@@ -6,8 +6,8 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
     <style>
-        
-     
+
+
          .main_no1 .wrap {
             padding-left:  .36rem;
             background-color: #fff;
@@ -22,7 +22,7 @@
 
         }
         .main_no1 p.time {
-            padding: 0 .36rem; 
+            padding: 0 .36rem;
         }
         .main_no1 p span.select {
             display: inline-block;
@@ -64,19 +64,19 @@
             /*margin-left: .5rem;*/
             outline: none;
             float: right;
-            width: 4rem;
+            /* width: 4rem; */
             text-align: right;
-            padding-right: .4rem;  
+            padding-right: .4rem;
         }
         span.telIpt {
-            display: inline-block;  
+            display: inline-block;
             font-size: .28rem;
             color: #B1A9AB;
-            height: .8rem;  
+            height: .8rem;
             /*background: url(../../../image/icon_zk.png)no-repeat;*/
             background-size: .15rem .25rem;
             background-position: right  center;
-                
+
         }
         .clearIpt {
             display: none;
@@ -90,12 +90,12 @@
        textarea {
         background-color: #fff;
         text-align: left;
-        width: 100%;    
-        font-size: .24rem;  
+        width: 100%;
+        font-size: .24rem;
         color: #000;
         padding: .2rem .3rem;
         box-sizing: border-box;
-        outline: none; 
+        outline: none;
         resize: none;
         box-sizing: border-box;
         margin-bottom: .02rem;
@@ -103,11 +103,11 @@
        #textLength,#textLength2 {
         box-sizing: border-box;
         background-color: #fff;
-        width: 100%;  
-        padding-right:.3rem ; 
-        margin: 0;  
-        text-align: right; 
-        border-top: .01rem solid #EFEFEF;   
+        width: 100%;
+        padding-right:.3rem ;
+        margin: 0;
+        text-align: right;
+        border-top: .01rem solid #EFEFEF;
        }
        #over {
         display: none;
@@ -116,7 +116,7 @@
     </style>
 </head>
 <body>
-   
+
     <div class="wrap">
         <div class="main clearfix">
             <p class="mobile ">项目业绩</p>
@@ -139,14 +139,18 @@
                         <input  type="text" id="url" class="telIpt" name="" placeholder ="必填" >
                    </p>
                </div>
-                   <p class="time">
-                        时间段
-                        <span class="telIpt" >
-                            <span   tapmode  data-val='startTime'   onclick="selectTime(this,1)" id="time_1">请选择</span >
-                            --
-                            <span   tapmode  data-val='endTime'     onclick="selectTime(this,2)" id="time_2">请选择</span>
-                        </span>
-                    </p>
+                <p class="time">
+                    开始时间
+                    <span class="telIpt" >
+                        <span   tapmode  data-val='startTime'   onclick="selectTime(this,1)" id="time_1">请选择</span >
+                    </span>
+                </p>
+                <p class="time">
+                    结束时间
+                    <span class="telIpt" >
+                        <span   tapmode  data-val='endTime'     onclick="selectTime(this,2)" id="time_2">请选择</span>
+                    </span>
+                </p>
            </div>
         </div>
         <div class="main clearfix" style="font-size: 0">
@@ -169,19 +173,21 @@
 <script type="text/javascript">
     var url;
     apiready = function(){
+        console.log(JSON.stringify(api.pageParam))
         if (api.pageParam.flag == 1) {
             url = '/user_center/editProject';
+            // 获取数据
+            getCityList();
         } else {
             url = '/user_center/addProject'
         }
-        // 获取数据
-        getCityList();
+
         api.addEventListener({
             name: 'addStudy'
         }, function(ret, err) {
            addStudy();
         });
-        
+
     };
 
     // 获取数据
@@ -191,47 +197,47 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
+                values: {
+                    token: $api.getStorage('userToken'),
                     project_id: api.pageParam.project_id
                 }
             }
         }, function(ret, err) {
             if (ret) {
-                // // console.log(JSON.stringify(ret))
-                ret.data.info.end_date = ret.data.info.end_date == '0000-00-00'?'至今':ret.data.info.end_date;
-                $api.val($api.byId('company_name'), ret.data.info.name);    
-                $api.val($api.byId('company_position'), ret.data.info.role);    
-                $api.val($api.byId('url'), ret.data.info.url);   
-                $api.text($api.byId('time_1'), ret.data.info.start_date);    
-                $api.text($api.byId('time_2'), ret.data.info.end_date); 
-                $api.val($api.byId('textarea'), ret.data.info.description); 
-                $api.val($api.byId('textarea2'), ret.data.info.achievement); 
-                $api.text($api.byId('textLength'), ret.data.info.description.length + '/300');
-                $api.text($api.byId('textLength2'), ret.data.info.achievement.length + '/300');
+                console.log(JSON.stringify(ret))
+                    ret.data.info.end_date = ret.data.info.end_date == '0000-00-00'?'至今':ret.data.info.end_date;
+                    $api.val($api.byId('company_name'), ret.data.info.name);
+                    $api.val($api.byId('company_position'), ret.data.info.role);
+                    $api.val($api.byId('url'), ret.data.info.url);
+                    $api.text($api.byId('time_1'), ret.data.info.start_date);
+                    $api.text($api.byId('time_2'), ret.data.info.end_date);
+                    $api.val($api.byId('textarea'), ret.data.info.description);
+                    $api.val($api.byId('textarea2'), ret.data.info.achievement);
+                    $api.text($api.byId('textLength'), ret.data.info.description.length + '/300');
+                    $api.text($api.byId('textLength2'), ret.data.info.achievement.length + '/300');
             } else {
                 alert(JSON.stringify(err.msg));
             }
         });
     }
-  
+
     // 提交数据
     function addStudy() {
         // 获取数据
-        var name = $api.val($api.byId('company_name'));    
-        var position = $api.val($api.byId('company_position'));    
-        var project_url = $api.val($api.byId('url'));    
-        var time_1 = $api.text($api.byId('time_1'));    
-        var time_2 = $api.text($api.byId('time_2'))=='至今'?'0000-00-00':$api.text($api.byId('time_2')); 
-        var textarea = $api.val($api.byId('textarea')); 
-        var textarea2 = $api.val($api.byId('textarea2')); 
-        
+        var name = $api.val($api.byId('company_name'));
+        var position = $api.val($api.byId('company_position'));
+        var project_url = $api.val($api.byId('url'));
+        var time_1 = $api.text($api.byId('time_1'));
+        var time_2 = $api.text($api.byId('time_2'))=='至今'?'0000-00-00':$api.text($api.byId('time_2'));
+        var textarea = $api.val($api.byId('textarea'));
+        var textarea2 = $api.val($api.byId('textarea2'));
+
          api.ajax({
             url: apiSite + url,
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
+                values: {
                     token: api.pageParam.userToken || $api.getStorage('userToken'),
                     project_id: api.pageParam.project_id,
                     // company_id: '',
@@ -257,14 +263,14 @@
             } else {
                 alert(JSON.stringify(err.msg));
             }
-        }); 
-           
+        });
+
     }
-   
+
     // 编辑文本和修改文本长度内容
     function changeText(ele) {
         $api.text($api.next(ele), ele.value.length + '/300');
-    } 
+    }
     // 选择时间
     // 打开时间选择器
     function selectTime(ele) {

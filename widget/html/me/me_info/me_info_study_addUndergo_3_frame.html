@@ -6,8 +6,8 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
     <style>
-      
-        
+
+
         .main_no1 p, .main_no2 p {
              background-color: #fff;
             height: .8rem;
@@ -50,9 +50,9 @@
             margin-top: 1rem;
             margin-bottom: 1rem;
         }
-       
-        
-        
+
+
+
         .mobile {
             height: .6rem;
             font-size: .28rem;
@@ -67,17 +67,17 @@
             float: right;
             width: 4rem;
             text-align: right;
-            padding-right: .4rem;  
+            padding-right: .4rem;
         }
         span.telIpt {
-            display: inline-block;  
+            display: inline-block;
             font-size: .27rem;
             color: #B1A9AB;
-            height: .8rem;  
+            height: .8rem;
             /*background: url(../../../image/icon_zk.png)no-repeat;*/
             background-size: .15rem .25rem;
             background-position: right  center;
-                
+
         }
         .clearIpt {
             display: none;
@@ -91,20 +91,20 @@
        textarea {
         background-color: #fff;
         text-align: left;
-        width: 100%;    
-        font-size: .24rem;  
+        width: 100%;
+        font-size: .24rem;
         color: #000;
         padding: .2rem .3rem;
         box-sizing: border-box;
-        outline: none; 
+        outline: none;
        }
        #textLength {
         background-color: #fff;
-        width: 100%;  
-        padding-right:.3rem ; 
-        margin: 0;  
-        text-align: right; 
-        border-top: .01rem solid #EFEFEF;   
+        width: 100%;
+        padding-right:.3rem ;
+        margin: 0;
+        text-align: right;
+        border-top: .01rem solid #EFEFEF;
        }
        #over {
         display: none;
@@ -123,10 +123,14 @@
                    </p>
                </div>
                <p class="time">
-                    时间段
+                    开始时间
                     <span class="telIpt" >
                         <span   tapmode data-val="start"   onclick="openTime(this)" id="time_1">请选择</span >
-                        --
+                    </span>
+               </p>
+               <p class="time">
+                    结束时间
+                    <span class="telIpt" >
                         <span   tapmode   onclick="openTime(this)" id="time_2">请选择</span>
                     </span>
                </p>
@@ -176,7 +180,7 @@
             }
         });
     };
-    
+
     // 打开时间选择器
     function openTime(ele) {
         for (var i = 0; i < $api.domAll('input').length; i++) {$api.domAll('input')[i].blur()}
@@ -238,7 +242,7 @@
     function changeText(ele) {
         // alert();
         $api.text($api.byId('textLength'), ele.value.length + '/300');
-    } 
+    }
 
     // 获取数据
     function getCityList() {
@@ -248,7 +252,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
+                values: {
                     token: $api.getStorage('userToken'),
                     education_id: api.pageParam.education_id
                 }
@@ -257,14 +261,14 @@
             if (ret) {
                 // // alert(JSON.stringify(ret))
                 if (ret.data.info.end_date == '0000-00-00' ){
-                     $api.text($api.byId('time_2'), '至今'); 
+                     $api.text($api.byId('time_2'), '至今');
                 } else {
-                    $api.text($api.byId('time_2'), ret.data.info.end_date);    
+                    $api.text($api.byId('time_2'), ret.data.info.end_date);
                 }
-                $api.val($api.byId('school'), ret.data.info.school);    
-                $api.text($api.byId('time_1'), ret.data.info.start_date);    
-               
-                $api.val($api.byId('textarea'), ret.data.info.description); 
+                $api.val($api.byId('school'), ret.data.info.school);
+                $api.text($api.byId('time_1'), ret.data.info.start_date);
+
+                $api.val($api.byId('textarea'), ret.data.info.description);
                 $api.text($api.byId('textLength'), ret.data.info.description.length + '/300');
             } else {
                 alert(JSON.stringify(err.msg));
@@ -274,16 +278,16 @@
     // 提交数据
     function addStudy() {
         // 获取数据
-        var school = $api.val($api.byId('school'));    
-        var time_1 = $api.text($api.byId('time_1'));    
-        var time_2 = $api.text($api.byId('time_2')) == '至今' ? '0000-00-00' : $api.text($api.byId('time_2')); 
-        var textarea = $api.val($api.byId('textarea')); 
+        var school = $api.val($api.byId('school'));
+        var time_1 = $api.text($api.byId('time_1'));
+        var time_2 = $api.text($api.byId('time_2')) == '至今' ? '0000-00-00' : $api.text($api.byId('time_2'));
+        var textarea = $api.val($api.byId('textarea'));
         api.ajax({
             url: apiSite + url,
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
+                values: {
                     token: $api.getStorage('userToken'),
                     education_id: api.pageParam.education_id,
                     type: 1,
@@ -308,8 +312,8 @@
             } else {
                 alert(JSON.stringify(err.msg));
             }
-        }); 
-           
+        });
+
     }
      // 删除数据
     function delStudy () {
@@ -318,7 +322,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
+                values: {
                     token: api.pageParam.userToken || $api.getStorage('userToken'),
                     education_id: api.pageParam.education_id
                 }
