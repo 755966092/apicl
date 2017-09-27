@@ -93,8 +93,8 @@
             </li>
             <!-- <li class="bb" tapmode onclick="clearAllStrong()" data-val='aboutInin'>
                 <div class="text">清除所有缓存</div>
-            </li>
-            <li class="bb" tapmode onclick="clearAllStrong()" data-val='aboutInin'>
+            </li>-->
+            <!-- <li class="bb" tapmode onclick="clearAllStrong()" data-val='aboutInin'>
                 <div class="text">同步赵老师通讯录</div>
             </li> -->
        </ul>
@@ -113,25 +113,65 @@
 
     };
 
-    // function clearAllStrong() {
-    //     var tableArr = ['addressList','tb_remarks_contact','tb_remarks_other_contact','tb_remarks_address','tb_remarks_education','tb_remarks_work','tb_remarks_project','tb_remarks_user_info','tb_remarks_status', 'addressList_simplify']
-    //     for (var i = 0;i < tableArr.length; i++) {
-    //         db.executeSql({
-    //             name: 'db_'+$api.getStorage('userToken'),
-    //             sql: 'DELETE FROM '+tableArr[i]
-    //         },function(ret,err){
-    //             if (ret.status) {
-    //                 api.toast({
-    //                     msg: '删除成功',
-    //                     duration: 2000,
-    //                     location: 'bottom'
-    //                 });
-    //             } else {
+    function clearAllStrong() {
+        // var tableArr = ['addressList','tb_remarks_contact','tb_remarks_other_contact','tb_remarks_address','tb_remarks_education','tb_remarks_work','tb_remarks_project','tb_remarks_user_info','tb_remarks_status', 'addressList_simplify']
+        // for (var i = 0;i < tableArr.length; i++) {
+        //     db.executeSql({
+        //         name: 'db_'+$api.getStorage('userToken'),
+        //         sql: 'DELETE FROM '+tableArr[i]
+        //     },function(ret,err){
+        //         if (ret.status) {
+        //             api.toast({
+        //                 msg: '删除成功',
+        //                 duration: 2000,
+        //                 location: 'bottom'
+        //             });
+        //         } else {
 
-    //             }
-    //         })
-    //     }
-    // }
+        //         }
+        //     })
+        // }
+
+
+        // api.actionSheet({
+        //     title: '选择学历',
+        //     cancelTitle: '取消',
+        //     buttons: ['大学', '中学', '小学']
+        // },function(ret,err){
+        //     api.alert({
+        //         msg: '你刚点击了'+ret.buttonIndex
+        //     });
+        // });
+
+        // api.showProgress({
+        //     title: '努力加载中...',
+        //     text: '先喝杯茶...',
+        //     animationType:'fade',
+        //     modal: true
+        // });
+        // setTimeout(function() {
+        //     api.hideProgress();
+        // }, 2000);
+        api.openPicker({
+            type: 'date',
+            maxDate: new Date().toLocaleDateString().replace(/\//g,'-'),
+            date: '2017-04-24',
+            title:'title'
+        },function(ret,err){
+            var year	= ret.year;
+            var month  = ret.month;
+            var day	= ret.day;
+            var hour	= ret.hour;
+            var minute = ret.minute;
+            if (type == 'date') {
+                var value = year+'年'+month+'月'+day+'日';
+            } else if (type == 'time') {
+                var value = hour+'时'+minute+'分';
+            } else if (type == 'date_time') {
+                var value = year+'年'+month+'月'+day+'日'+hour+'时'+minute+'分';
+            }
+        });
+    }
     function openImg2() {
         api.openWin({
             name: 'openImg',

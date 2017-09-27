@@ -130,7 +130,7 @@
                <p class="time">
                     开始时间
                     <span class="telIpt" >
-                        <span   tapmode   onclick="openTime(this,2)" id="time_2">请选择</span>
+                        <span   tapmode data-val="startTime"  onclick="openTime(this,2)" id="time_1">请选择</span>
                     </span>
                </p>
                <p class="time">
@@ -305,13 +305,14 @@
         api.openPicker({
             type: 'date',
             date: date+'-'+date1+'-'+date2,
+            maxDate: new Date().toLocaleDateString().replace(/\//g,'-'),
             title: text
         }, function(ret, err) {
             if (ret) {
                    var dateYear = new Date().getFullYear(),
                         dateMonth = new Date().getMonth()+1,
                         dateDay = new Date().getDate();
-                 if (data == 'startTime') {
+                if (data == 'startTime') {
                     // 开始时间
                     if ((ret.year > dateYear) || ((ret.year == dateYear) && (ret.month > dateMonth)) || (((ret.year == dateYear) && (ret.month == dateMonth)) && ret.day >= dateDay)) {                        api.toast({
                             msg: '请选择早于当前的时间'
@@ -440,7 +441,7 @@
                         sql: 'UPDATE addressList_simplify SET subTitle = "'+ subTitle +'" WHERE user_id =' + api.pageParam.userId
                     }, function(ret, err){
                         if( ret.status ){
-                            // // console.log('437更新成功:'+subTitle)
+                            console.log('437更新成功:')
                           api.sendEvent({
                               name: 'editUserInfo'
                           });

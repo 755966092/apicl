@@ -11,7 +11,7 @@
         body,html {
             background-color: #EDECF3;
         }
-        
+
         ul.no1 {
             background-color: #EDECF3;
             width: 100%;
@@ -45,7 +45,7 @@
         .wrap .zkIcon {
              display: inline-block;
             width: .15rem;
-            height: 1.42rem;    
+            height: 1.42rem;
             background: url(../../../image/icon_zk.png)no-repeat;
             -webkit-background-size: .15rem .25rem;
             background-size: .15rem .25rem;
@@ -58,15 +58,15 @@
             height: 1.42rem;
             position: absolute;
             right: .64rem;
-             display: -webkit-box; 
-            display: flex; 
+             display: -webkit-box;
+            display: flex;
             -webkit-box-align:  center;
             align-items: center;
         }
         .wrap1 span.zkIcon {
             display: inline-block;
             width: .15rem;
-            height: .797rem;    
+            height: .797rem;
             background: url(../../../image/icon_zk.png)no-repeat;
             -webkit-background-size: .15rem .25rem;
             background-size: .15rem .25rem;
@@ -86,8 +86,8 @@
         }
         .liNo1 .wrap {
             height: 1.42rem;
-             display: -webkit-box; 
-            display: flex; 
+             display: -webkit-box;
+            display: flex;
             -webkit-box-align:  center;
             align-items: center;
         }
@@ -155,7 +155,7 @@
                     <span class="zkIcon"></span>
                 </div>
             </li>
-            
+
 
             <li  data-val="lxfs"  tapmode onclick="login(this)">
                 <div class="wrap1">
@@ -176,14 +176,14 @@
                     <span class="zkIcon"></span>
                 </div>
             </li>
- 
+
             <li  data-val="workExper" tapmode onclick="login(this)">
                 <div class="wrap1">
                     <span class="label">工作经历</span>
                     <span class="zkIcon"></span>
                 </div>
             </li>
- 
+
             <li  data-val="project" class="mb30" tapmode onclick="login(this)">
                 <div class="wrap1">
                     <span class="label">项目业绩</span>
@@ -204,7 +204,7 @@
                     <span class="zkIcon"></span>
                 </div>
             </li>
- 
+
         </ul>
     </div>
     <script type="text/javascript" src="../../../script/api.js"></script>
@@ -218,7 +218,7 @@
             myAjax();
             // 修改头像
             monitor('changeHead' , $api.dom('.headImg'));
-           
+
             // 修改用户名
             monitor('modifyUserName' , $api.dom('.name'));
             // 修改用户名
@@ -255,7 +255,7 @@
                         }
                     });
                 }
-           
+
 
             api.sendFrameToBack ({
                 // from: 'infoframe'
@@ -281,6 +281,7 @@
         api.openPicker({
             type: 'date',
             date: date+'-'+date1+'-'+date2,
+            maxDate: new Date().toLocaleDateString().replace(/\//g,'-'),
             title: '选择生日'
         }, function(ret, err) {
             if (ret) {
@@ -297,7 +298,7 @@
         var selText = $api.text($api.dom(ele, '.'+label+''));
         var _dataSource2 = [],_dataSource = [],col=1;
         var active = [];
-        
+
         if (label === 'sex') {
             _dataSource = [
                 {
@@ -312,7 +313,7 @@
             } else {
                 active.push(_dataSource2.indexOf(selText))
             }
-            
+
         } else {
             col=2;
             _dataSource = city;
@@ -330,7 +331,7 @@
                     break;
                 }
             }
-        } 
+        }
         var fontsize = 16,rowLength = 5;
         if (api.systemType === 'ios') {
             fontsize = 20;
@@ -399,14 +400,14 @@
                         $api.text($api.dom(ele, '.'+ label +''), ret.level1);
                         reviseData('sex');
                     }
-                   
+
                 }
             } else {
                 alert(JSON.stringify(err.msg));
             }
         });
     }
-        
+
     // 修改文本内容
     function reviseContent(userName1, zName1, headImg1, sex1, hometown1, birthday1) {
         var name = $api.dom('.name'),
@@ -425,7 +426,7 @@
         if (sex1 == 1 ) {
             $api.text(sexImg, '男');
             $api.attr(sexImg, 'data-val', 1);
-            
+
         } else {
             $api.text(sexImg, '女');
             $api.attr(sexImg, 'data-val', 2);
@@ -437,7 +438,7 @@
         // 设置用户生日
         $api.text(birthday, birthday1);
     }
-   
+
      // 监听事件
     function monitor (eve, ele) {
         api.addEventListener({
@@ -466,13 +467,13 @@
                     $api.text(ele, val);
                     reviseData();
                 }
-                
-                
+
+
             } else {
                 alert(JSON.stringify(err.msg));
             }
         });
-        
+
     }
     // 修改资料
     function reviseData (type) {
@@ -525,7 +526,7 @@
             sex = $api.getStorage('userInfo').info.sex,
             // sex = ($api.getStorage('userInfo').info.sex === 1)?'男':'女',
             // 家乡
-            hometown = $api.getStorage('userInfo').info.hometown, 
+            hometown = $api.getStorage('userInfo').info.hometown,
             // 生日
             birthday = $api.getStorage('userInfo').info.birthday;
             reviseContent(userName,zName, headImg, sex, hometown, birthday);
@@ -534,7 +535,7 @@
             // 无缓存
             requireData();
         }
-        
+
     }
     function requireData() {
          api.ajax({
@@ -542,7 +543,7 @@
                 method: 'post',
                 headers: apiHeader,
                 data: {
-                    values: { 
+                    values: {
                         token: $api.getStorage('userToken')
                     }
                 }
@@ -555,12 +556,12 @@
                         headImg = ret.data.info.head_img_url,
                         sex = ret.data.info.sex,
                         // 家乡
-                        hometown = ret.data.info.hometown, 
+                        hometown = ret.data.info.hometown,
                         // 生日
                         birthday = ret.data.info.birthday;
                         // 设置本地缓存
-                        $api.setStorage('real_name', zName); 
-                        $api.setStorage('hometown', hometown); 
+                        $api.setStorage('real_name', zName);
+                        $api.setStorage('hometown', hometown);
                         $api.setStorage('birthday', birthday);
                         // 图片缓存
                         api.imageCache({

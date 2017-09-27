@@ -42,7 +42,7 @@
             text-align: center;
             color: #999;
             margin-right: .2rem;
-        }   
+        }
         .addMedia span{
             display: inline-block;
             height: .9rem;
@@ -51,7 +51,7 @@
             -webkit-background-size: .62rem .62rem;
             background-size: .62rem .62rem;
             background-position: bottom center;
-            
+
             margin-bottom: .1rem;
         }
         .addMedia:last-child span {
@@ -74,13 +74,13 @@
         .classify {
             background-color: #EDECF3;
             font-size: 0;
-            
+
         }
         .classify ul li {
             /*background-color: #fff;*/
             font-size: .3rem;
             height: .8rem;
-            line-height: .8rem; 
+            line-height: .8rem;
             width: 100%;
             padding: 0 .3rem 0 .8rem;
             background: #fff url(../../image/icon_my/icon_fb.png)no-repeat;
@@ -89,7 +89,7 @@
             background-position: .3rem center;
             box-sizing: border-box;
         }
-        
+
         .spanno2 {
             margin-right: .2rem;
             display: inline-block;
@@ -116,7 +116,7 @@
         .mb20 {
             margin-bottom: .2rem;
         }
-        
+
 
         .btn {
             width: 6.32rem;
@@ -126,7 +126,7 @@
             background-color: #08BB08;
             font-size: .34rem;
             color: #fff;
-            text-align: center; 
+            text-align: center;
             line-height: .83rem;
             margin-top: 1rem;
         }
@@ -162,10 +162,10 @@
         .time {
             font-size: .28rem;
             color: #9b9b9b;
-        }  
+        }
 
         .mult {
-            -webkit-box-lines: multiple; 
+            -webkit-box-lines: multiple;
             box-lines: multiple;
             flex-wrap:wrap;
             width: 100%;
@@ -189,7 +189,7 @@
 <body>
     <div class="loading"></div>
     <div class="contentText clearfix">
-        
+
         <div class="title">
             <!-- <span class="smallTitle">#我提供#</span> -->
             <input id="title" type="text" placeholder="输入您发布的标题" name="">
@@ -209,7 +209,7 @@
            <!--  <img class="fl imgpage" tapmode  src="">
             <img  src="../../image/icon_supply/icon_addMedia_1.png" class="addImg" onclick="openImg()" tapmode>
             <img  src="../../image/icon_supply/icon_addMedia_2.png"> -->
-           
+
 
             <!-- <div class="addMedia" onclick="openImg()" tapmode>
                 <span class="icon"></span>
@@ -222,7 +222,7 @@
         </div>
 
         <script type="text/x-dot-template" id="listT">
-            {{ for (var i = 0; i < it.length; i++) { }} 
+            {{ for (var i = 0; i < it.length; i++) { }}
                 <img class="fl imgpage" tapmode onclick="openImgPage(this)" data-id = '{{=i}}' src="{{=it[i]}}">
             {{ }; }}
                 <img  src="../../image/icon_supply/icon_addMedia_1.png" class="addImg" onclick="openImg()" tapmode>
@@ -244,7 +244,7 @@
                      --
                     <span class="time" id="endTime" tapmode onclick="openTime(this)" data-val='end'>请选择</span>
                 </span>
-                
+
             </li>
             <li class="mt20" id="is_circle" class="is_circle"   tapmode   onclick="selCircle()">
                 <span>选择圈子</span>
@@ -258,7 +258,7 @@
                 <span>定向投递</span>
                 <span class="spanno2"></span>
             </li> -->
-        </ul>        
+        </ul>
     </div>
     <div class="btn" ontouchstart="addTopic()">发布</div>
 </body>
@@ -337,7 +337,7 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
                         roleId = i+1;
                         break;
                     }
-                } 
+                }
             }
                 // 内容
                 var title = $api.val($api.byId('title'));
@@ -356,8 +356,8 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
                     address: address,         //string  地址
                     district: district,
                     latitude: latitude,            //string  纬度
-                    longitude: longitude,   
-                    image_json: imgArr 
+                    longitude: longitude,
+                    image_json: imgArr
                 }
                 if( start_time ) {
                     obj.start_time = start_time;
@@ -389,7 +389,7 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
 
                         }
                     })
-        
+
     }
     // 选择角色
     function selRole() {
@@ -459,7 +459,7 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
                 if (ret) {
                     // // alert(JSON.stringify(ret))
                     if (ret.eventType == 'ok') {
-                        
+
                         $api.text($api.dom('._status'), ret.level1);
                     }
                 } else {
@@ -475,9 +475,9 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
         });
     }
     // 打开时间选择器
-    function openTime(ele) {                                                                                                                                
-        for (var i = 0; i < $api.domAll('input').length; i++) {            
-          $api.domAll('input')[i].blur()         
+    function openTime(ele) {
+        for (var i = 0; i < $api.domAll('input').length; i++) {
+          $api.domAll('input')[i].blur()
         }
         var data = $api.attr(ele, 'data-val');
         var text;
@@ -551,7 +551,7 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
         } else {
             getLocation();
         }
-         
+
     }
     // 获取经纬度
     function getLocation() {
@@ -602,7 +602,7 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
                     if (index != ret.value.imgId-1) {
                         return item
                     }
-                }) 
+                })
                 imgArr = imgArr.filter(function(item, index) {
                     if (index != ret.value.imgId-1) {
                         return item
@@ -661,7 +661,7 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
     }
     // 更换图片地址
     function changeImgUrl(url) {
-        
+
     }
     function openImgPage(ele) {
        var data = $api.attr(ele, 'src'),
