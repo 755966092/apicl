@@ -6,8 +6,8 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
     <style>
-        
-      
+
+
         .main_no1 {
            margin-top: .6rem;
         }
@@ -36,7 +36,7 @@
         .main_no2 p {
             margin-top: .2rem;
         }
-       
+
         .main_no3 button{
             display: block;
             width: 6.785rem;
@@ -61,7 +61,7 @@
             margin-right: .3rem;
             color: #36b857;
         }
-        input { 
+        input {
             height: .8rem;
             outline: none;
             width: 4rem;
@@ -76,7 +76,7 @@
             <span class="winTitle">
                 网址
             </span>
-            
+
         </div>
     </header>
     <div class="main clearfix">
@@ -96,21 +96,57 @@
     var val = 1;
     apiready = function(){
 	    fnInit();
+        if(api.pageParam.id) {
+            requireData();
+        }
     };
-    // 添加电话完成
-    function addTel() {
-        var tel = $api.val($api.dom('input'));
+    function requireData() {
         api.ajax({
-            url: apiSite + '/user_center/addOtherContact',
+            url: apiSite + '/user_center/editOtherContactIndex',
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
-                    info: tel,
-                    type: 2,
-                    sub_type: val
+                values: {
+                    token: $api.getStorage('userToken'),
+                    contact_id: api.pageParam.id
+
                 }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.code == 200) {
+                    $api.val($api.dom('input'), ret.data.info.info);
+                }
+            }else {
+
+            }
+        })
+    }
+    // 添加电话完成
+    function addTel() {
+        var tel = $api.val($api.dom('input')), url = '/user_center/addOtherContact';
+        var paramObj = {
+                token: $api.getStorage('userToken'),
+                info: tel,
+                type: 2,
+                sub_type: val
+            }
+        if (api.pageParam.id) {
+            url = '/user_center/editOtherContact';
+            paramObj = {
+                token: $api.getStorage('userToken'),
+                info: tel,
+                type: 2,
+                sub_type: val,
+                contact_id: api.pageParam.id
+            }
+        }
+        api.ajax({
+            url: apiSite + url,
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values:paramObj
             }
         }, function(ret, err) {
             if (ret) {

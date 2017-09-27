@@ -70,7 +70,7 @@
             margin-right: .3rem;
             color: #36b857;
         }
-        input { 
+        input {
             height: .8rem;
             outline: none;
             width: 4rem;
@@ -85,18 +85,18 @@
             <span class="winTitle">
                 即时通讯
             </span>
-       
+
         </div>
     </header>
     <div class="main clearfix">
        <div class="main_no1">
            <div class="wrap">
-               <p   tapmode   onclick="selectClass(this)"  data-val="1">
+               <p   tapmode   onclick="selectClass(this)"  data-val="2">
                     QQ
                     <span class="selClass select" data-val='QQ'></span>
                </p>
            </div>
-           <p   tapmode   onclick="selectClass(this)"  data-val="2">
+           <p   tapmode   onclick="selectClass(this)"  data-val="1">
                 微信
                 <span class="selClass" data-val='微信'></span>
            </p>
@@ -117,10 +117,36 @@
     var val = 2;
     apiready = function(){
 	    fnInit();
+        if(api.pageParam.id) {
+            requireData();
+        }
     };
-    
+    function requireData() {
+        api.ajax({
+            url: apiSite + '/user_center/editOtherContactIndex',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: {
+                    token: $api.getStorage('userToken'),
+                    contact_id: api.pageParam.id
 
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.code == 200) {
+                    $api.val($api.dom('input'), ret.data.info.info);
+                    for (var i = 0; i < $api.domAll('.selClass').length; i++) {
+                        $api.removeCls($api.domAll('.selClass')[i], 'select');
+                    }
+                    $api.addCls($api.dom('p[data-val="'+ ret.data.info.sub_type +'"] span'), 'select');
+                }
+            }else {
 
+            }
+        })
+    }
 
     // 选择通讯方式 QQ || 微信
     function selectClass(ele) {
@@ -133,19 +159,30 @@
 
     // 添加电话完成
     function addTel() {
-        var tel = $api.val($api.dom('input'));
         val = $api.attr($api.dom('.select'),'data-val') == 'QQ' ? 2 : 1
+        var tel = $api.val($api.dom('input')), url = '/user_center/addOtherContact';
+        var paramObj = {
+                token: $api.getStorage('userToken'),
+                info: tel,
+                type: 1,
+                sub_type: val
+            }
+        if (api.pageParam.id) {
+            url = '/user_center/editOtherContact';
+            paramObj = {
+                token: $api.getStorage('userToken'),
+                info: tel,
+                type: 1,
+                sub_type: val,
+                contact_id: api.pageParam.id
+            }
+        }
         api.ajax({
-            url: apiSite + '/user_center/addOtherContact',
+            url: apiSite + url,
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
-                    info: tel,
-                    type: 1,
-                    sub_type: val
-                }
+                values:paramObj
             }
         }, function(ret, err) {
             if (ret) {
@@ -160,8 +197,8 @@
                 alert(JSON.stringify(err))
             }
         })
-        
-       
+
+
     }
 
 </script>

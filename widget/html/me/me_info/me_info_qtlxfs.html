@@ -6,29 +6,29 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
     <style>
-       
-       
+
+
         .hide {
             display: none;
         }
     </style>
 </head>
 <body>
-   
+
     <header  class="header">
         <div class="head">
             <span class="callback"   tapmode   onclick="api.closeWin()">返回</span>
             <span class="winTitle">
                 其他联系方式
             </span>
-            <span class="rightBtn bj hide" id="over"   tapmode   onclick="enter()">编辑</span> 
+            <span class="rightBtn bj hide" id="over"   tapmode   onclick="enter()">编辑</span>
         </div>
     </header>
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
 <script type="text/javascript">
-    
+
     apiready = function(){
         fnInit();
         api.openFrame({
@@ -45,10 +45,11 @@
         api.addEventListener({
             name: 'viewappear'
         }, function(ret, err) {
+            $api.text($api.dom('.rightBtn'), '编辑');
             api.sendEvent({
-                    name: 'xgTel',
-                });
-            
+                name: 'xgTel',
+            });
+
         });
         api.addEventListener({
             name: 'showEditText'
@@ -59,9 +60,9 @@
                 alert(JSON.stringify(err));
             }
         });
-       
+
     };
-    
+
    function enter () {
         if ($api.text($api.dom('.rightBtn')) == '编辑') {
             $api.text($api.dom('.rightBtn'), '保存');
@@ -70,10 +71,10 @@
                 name: 'editPhone',
                 extra: {
                     valueName1: '保存',
-                    
+
                 }
             });
-            
+
         } else {
             $api.text($api.dom('.rightBtn'), '编辑');
             api.sendEvent({
