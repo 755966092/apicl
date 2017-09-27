@@ -46,11 +46,11 @@
     </head>
     <body>
         <div class="top ">
-            <div class="wrap flex-def flex-cCenter">
+            <form class="wrap flex-def flex-cCenter">
                 <span tapmode onclick="api.closeWin()" class="callbackBtn"></span>
-                <input class="flex-item" type="text" disabled="true" oninput="changeInput(this)">
+                <input class="flex-item" type="search" disabled="true" oninput="changeInput(this)">
                 <span class="flagText" tapmodu onclick="search(this)">取消</span>
-            </div>
+            </form>
         </div>
         <script type="text/javascript" src="../../script/api.js"></script>
         <script type="text/javascript" src="../../script/common.js"></script>
@@ -80,7 +80,9 @@
                     }
                 });
             }
-          
+            $api.dom('form').onsubmit = function() {
+                return false;
+            };
             function pageInit() {
                 $api.fixStatusBar($api.dom('.top'));
                 headerH = $api.offset($api.dom('.top')).h;
@@ -98,7 +100,7 @@
                         method: 'post',
                         headers: apiHeader,
                         data: {
-                            values: { 
+                            values: {
                                 token: $api.getStorage('userToken'),
                                 keyword: keyword
                             }
@@ -125,14 +127,14 @@
                         name: 'searchSqlMore'
                     });
                 }
-                
+
             }
             function search(ele) {
                 var text = $api.text(ele);
                 if (text === '取消') {
                     // 关闭页面
                     api.closeWin();
-                } else { 
+                } else {
                     // 搜索
                     searchResults();
                 }

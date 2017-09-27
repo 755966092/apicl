@@ -36,17 +36,17 @@
             }
             #callbackBtn {
                 display: none;
-                
+
             }
         </style>
     </head>
     <body>
         <div class="top ">
-            <div class="wrap flex-def flex-cCenter">
+            <form class="wrap flex-def flex-cCenter">
                 <!-- <span id="callbackBtn">返回</span> -->
-                    <input class="flex-item" type="text" oninput="changeInput(this)">
-                <span class="flagText" tapmodu onclick="search(this)">取消</span>
-            </div>
+                    <input class="flex-item" type="search" oninput="changeInput(this)">
+                    <span class="flagText" tapmodu onclick="search(this)">取消</span>
+            </form>
         </div>
         <script type="text/javascript" src="../../script/api.js"></script>
         <script type="text/javascript" src="../../script/common.js"></script>
@@ -97,13 +97,13 @@
                 // }
                 // 搜索功能
                 searchSql(val)
-                
+
             }
             function searchSql(keyword) {
                 if (keyword) {
                     db.selectSql({
                         name: 'db_' + $api.getStorage('userToken'),
-                        sql: 'SELECT * FROM addressList WHERE (nickname LIKE "%'+keyword+'%") or (remark_nickname LIKE "%'+keyword+'%") or (remark_current_contact LIKE "%'+keyword+'%") or (current_contact LIKE "%'+keyword+'%")'      
+                        sql: 'SELECT * FROM addressList WHERE (nickname LIKE "%'+keyword+'%") or (remark_nickname LIKE "%'+keyword+'%") or (remark_current_contact LIKE "%'+keyword+'%") or (current_contact LIKE "%'+keyword+'%")'
                     },function(retSql,err){
                         if (retSql.status) {
                             if (retSql.data.length > 0) {
@@ -132,14 +132,14 @@
                         name: 'searchSql',
                     });
                 }
-                
+
             }
             function search(ele) {
                 var text = $api.text(ele);
                 if (text === '取消') {
                     // 关闭页面
                     api.closeWin();
-                } else { 
+                } else {
                     // 搜索
                     searchResults();
                 }
@@ -152,6 +152,9 @@
             function closeShadow() {
                 $api.css($api.dom('.shadow'), 'display: none');
             }
+               $api.dom('form').onsubmit = function() {
+                    return false;
+                };
         </script>
     </body>
 </html>

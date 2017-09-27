@@ -35,7 +35,7 @@
         }
         /*input::-webkit-input-placeholder{
             text-align: center;
-        }*/       
+        }*/
         .hisSearch {
             font-size: 0;
         }
@@ -120,15 +120,18 @@
 <body>
     <div class="main">
         <div class="ipt ">
-            <input type="text" placeholder="搜索">
-            <span class="filter" tapmode onclick="openFilter()"></span>
+            <form>
+                <!-- <input type="search" name="" id="ipt" placeholder="搜索"> -->
+                <input type="search" placeholder="搜索">
+                <span class="filter" tapmode onclick="openFilter()"></span>
+            </form>
         </div>
     </div>
     <!-- <div class="hisSearch clearfix">
         <div class="title clearfix">
             <span>历史搜索</span>
             <span class="delIcon"   tapmode   onclick="clearHis()"></span>
-           
+
         </div>
         <div class="hisSearchContent clearfix resultList">
             <span class="hisSearchItem">公司</span>
@@ -139,7 +142,7 @@
             <span class="hisSearchItem">互联网互联网</span>
         </div>
         <script type="text/x-dot-template" id="listT">
-            {{ for (var i = 0; i < it.length; i++) { }} 
+            {{ for (var i = 0; i < it.length; i++) { }}
                  <span class="hisSearchItem">{{=it[i]}}</span>
             {{ }; }}
         </script>
@@ -191,7 +194,7 @@
                     }
                 });
                     // }
-                    
+
                 // }
                 if (iputText == '') {
                     api.closeFrame({
@@ -199,7 +202,7 @@
                     });
                     getData(data);
                 }
-                
+
             // }
         });
         api.addEventListener({
@@ -215,9 +218,12 @@
             }
         });
     };
+    $api.dom('form').onsubmit = function() {
+        return false;
+    };
     // getData(data);
     function delIcon(ele) {
-        
+
     }
     function openFilter() {
         $api.dom('input').blur();
