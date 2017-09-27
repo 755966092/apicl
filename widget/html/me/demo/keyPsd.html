@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <style>
+        input {
+            border: 1px solid #f00;
+            width: 7.5rem;
+            height: 0.8rem;
+            font-size: 0.5rem;
+            position: absolute;
+            top: 100;
+            left: 0;
+            z-index: 1000;
+            opacity: 0;
+        }
+        .psd {
+            position: absolute;
+            top: 100;
+            left: 0;
+        }
+        .psd span {
+            display: inline-block;
+            width: 0.5rem;
+            height: 0.5rem;
+            border: 1px solid #f00;
+        }
+    </style>
+</head>
+<body>
+
+     <header  class="header">
+        <div class="head">
+            <span class="callback"   tapmode   onclick="api.closeWin()">返回</span>
+            <span class="winTitle">供订单</span>
+        </div>
+    </header>
+   <input type="tel" oninput="change(this)" maxlength="6">
+   <div class="psd">
+       <span></span>
+       <span></span>
+       <span></span>
+       <span></span>
+       <span></span>
+       <span></span>
+   </div>
+</body>
+<script type="text/javascript" src="../../../script/api.js"></script>
+<script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        fnInit();
+
+    }
+    function change(ele) {
+
+
+        var val = $api.val(ele);
+        console.log(val)
+        var spanArr = $api.domAll('.psd span');
+        for (var i = 0; i < val.length; i++) {
+            $api.css(spanArr[i], 'background: #0f0');
+        }
+        for (var j = 5; j > val.length-1; j--) {
+            $api.css(spanArr[j], 'background: #fff');
+        }
+    }
+
+</script>
+</html>
