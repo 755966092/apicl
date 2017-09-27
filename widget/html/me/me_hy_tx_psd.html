@@ -24,55 +24,50 @@
         margin: auto;
         z-index: 999;
     }
-    body {
-        /*background-color: transparent;*/
-        /*position: relative;*/
-
-    }
     .main {
         background-color: #fff;
         position: fixed;
         bottom: 0;
         left: 0;
     }
-    .pwd-box{  
+    .pwd-box{
         width: 7.08rem;
-        padding-left: 1px;  
-        position: relative;  
-        border: .01rem solid #999999;  
-        border-radius: .06rem;  
-        overflow: hidden; 
+        padding-left: 1px;
+        position: relative;
+        border: .01rem solid #999999;
+        border-radius: .06rem;
+        overflow: hidden;
         margin: 0 auto;
-    }  
-    .pwd-box input[type="tel"]{  
-        width: 99%;  
-        height: 99%;  
-        color: transparent;  
-        position: absolute;  
-        top: 0;  
-        left: 0;  
-        border: none;  
-        font-size: 18px;  
-        opacity: 0;  
-        z-index: 1;  
-        letter-spacing: 1rem;  
-    }  
+    }
+    .pwd-box input[type="tel"]{
+        width: 99%;
+        height: 99%;
+        color: transparent;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: none;
+        font-size: 18px;
+        opacity: 0;
+        z-index: 1;
+        letter-spacing: 1rem;
+    }
     .fake-box {
         font-size: 0;
         text-align: center;
     }
-    .fake-box input{  
-        width: 1.18rem;  
-        height: 1.18rem;  
-        border: none;  
-        border-right: .01rem solid #D9D9D9;  
-        text-align: center;  
-        font-size: .3rem;  
-    }  
-    .fake-box input:nth-last-child(1){  
-        border:none;  
-    }  
-      
+    .fake-box input{
+        width: 1.18rem;
+        height: 1.18rem;
+        border: none;
+        border-right: .01rem solid #D9D9D9;
+        text-align: center;
+        font-size: .3rem;
+    }
+    .fake-box input:nth-last-child(1){
+        border:none;
+    }
+
     .pan {
         width: 7.5rem;
         background-color: #fff;
@@ -81,7 +76,7 @@
     .pan p {
         font-size: 0;
         border-bottom: .01rem solid #E5E7E8;
-    
+
     }
     .pan span:nth-child(2) {
         border-left: .01rem solid #E5E7E8;
@@ -139,17 +134,17 @@
             <span class="clearBtn" tapmode onclick="api.closeFrame()">x</span>
             输入密码
         </h3>
-        <div class="pwd-box">  
-            <input type="tel" maxlength="6" class="pwd-input" readonly=""  oninput="sel(this)" id="pwd-input">  
-            <div class="fake-box flex-def flex-zCenter">  
-                <input type="password" class="mima" readonly="">  
-                <input type="password" class="mima" readonly="">  
-                <input type="password" class="mima" readonly="">  
-                <input type="password" class="mima" readonly="">  
-                <input type="password" class="mima" readonly="">  
-                <input type="password" class="mima" readonly="">  
-            </div>  
-        </div>  
+        <div class="pwd-box">
+            <input type="tel" maxlength="6" class="pwd-input" readonly=""  oninput="sel(this)" id="pwd-input">
+            <div class="fake-box flex-def flex-zCenter">
+                <input type="password" class="mima" readonly="">
+                <input type="password" class="mima" readonly="">
+                <input type="password" class="mima" readonly="">
+                <input type="password" class="mima" readonly="">
+                <input type="password" class="mima" readonly="">
+                <input type="password" class="mima" readonly="">
+            </div>
+        </div>
         <p class="wpwd" tapmode onclick="opwnSetPsd()">忘记密码?</p>
          <div class="pan">
             <p>
@@ -172,7 +167,7 @@
                 <span tapmode onclick="inputNumber(this)">0</span>
                 <span class="leftBotton clearText" tapmode onclick="clearInputNumber(this)">x</span>
             </p>
-        </div> 
+        </div>
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -182,9 +177,9 @@
     function sel(ele) {
         var mimaArr = $api.dom('.fake-box');
         var pwd = $api.trimAll($api.val(ele)),len = pwd.length;
-        for (var i = 0; i < len; i++) {  
+        for (var i = 0; i < len; i++) {
             $api.val($api.eq(mimaArr, i+1), pwd[i]);
-        } 
+        }
         $api.val($api.eq(mimaArr, len+1), '');
         if (len >=6 ) {
            $api.css($api.dom('.loading'), 'display: block');
@@ -220,7 +215,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                        money: api.pageParam.money,
                        pay_password: psd,
@@ -245,7 +240,7 @@
                     setTimeout(function () {
                         api.closeWin({
                             name: 'tx'
-                        }); 
+                        });
                         api.closeWin({
                             name: 'me_hy_tx_info_win'
                         });
@@ -265,7 +260,7 @@
         api.openWin({
             name: 'me_hy_tx_resetPsd_win',
             url: './me_hy_tx_resetPsd_win.html',
-            
+
         });
     }
 </script>

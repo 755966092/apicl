@@ -32,11 +32,11 @@
         }
         footer .selRole .icon {
             width: .28rem;
-            height: .17rem; 
+            height: .17rem;
             background: url(../../image/icon_find/icon_arrow.png)no-repeat;
             background-size: .28rem .17rem;
             margin-left: .1rem;
-            
+
         }
         footer .selRole .icon3 {
             animation: myfirst1 0.5s;
@@ -61,11 +61,11 @@
         }
         footer .collect .icon {
             width: .38rem;
-            height: .33rem; 
+            height: .33rem;
             background: url(../../image/icon_find/icon_collect.png)no-repeat;
             background-size: .38rem .33rem;
             margin-right: .1rem;
-              
+
         }
         footer .collect .text {
             font-size: .34rem;
@@ -75,12 +75,12 @@
             margin-bottom: .2rem;
             box-sizing: border-box;
             padding: 0 .3rem;
-            font-size: 0;   
+            font-size: 0;
             height: 1rem;
             background-color: #fff;
         }
         .statePersonInfo .name {
-            font-size: 0;   
+            font-size: 0;
 
         }
         .statePersonInfo .name h3 {
@@ -212,7 +212,7 @@
             background-size: .15rem .25rem;
             background-position: 0 center;
         }
-        
+
         .discussContent img {
             width: .78rem;
             height: .78rem;
@@ -242,7 +242,7 @@
         .discussTime {
             font-size: .24rem;
             color: #999;
-        } 
+        }
         .discussText {
             font-size: .28rem;
             /*white-space: nowrap;*/
@@ -260,7 +260,7 @@
             width: 7.5rem;
             height: 100%;
             background-color: rgba(0,0,0,0.6);
-            
+
         }
         .dn {
             display: none;
@@ -312,9 +312,6 @@
         }
         .selRoleList ul li:Last-child {
             border: 0;
-        }
-        .resultList {
-
         }
     </style>
 </head>
@@ -471,7 +468,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                        topic_id: api.pageParam.topic_id
                    }
@@ -531,16 +528,16 @@
                 method: 'post',
                 headers: apiHeader,
                 data: {
-                       values: { 
+                       values: {
                            token: $api.getStorage('userToken'),
                            topic_id: api.pageParam.topic_id,
                            role: valId
                        }
                 }
-            }, function(ret, err) { 
+            }, function(ret, err) {
                 if(ret) {
                     // 收藏成功
-                    
+
                     requestData();
                 } else {
                     alert(JSON.stringify(err.msg))
@@ -572,7 +569,7 @@
                 emotionBtn: {
                     normalImg: 'widget://image/chatPage/face1.png'
                 },
-               
+
                 keyboardBtn: {
                     normalImg: 'widget://image/chatPage/key1.png'
                 },
@@ -598,7 +595,7 @@
             if (ret) {
                 if (ret.eventType === 'send') {
                     UIChatBox.closeKeyboard();
-                    
+
                     //  //设置输入框的值
                     UIChatBox.value({
                         msg: ret.msg
@@ -632,7 +629,7 @@
         $api.css($api.dom('.selRoleList'), 'display:block');
         $api.addCls($api.dom('.selRole .icon'), 'icon2');
     }
-    // 
+    //
     function selRoleList(ele) {
         var val = $api.text(ele);
         $api.text($api.byId('role'), val);

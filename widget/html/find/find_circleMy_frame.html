@@ -7,25 +7,25 @@
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
         .no_data {
-         background-color: #EDECF3; 
+         background-color: #EDECF3;
          text-align: center;
-         color: #999;  
+         color: #999;
          font-size: .3rem;
          margin-top: .5rem;
         }
         .list {
-            font-size: 0;   
+            font-size: 0;
             background-color: #fff;
             height: 1.57rem;
-            border-bottom: .01rem solid #e7e7e7;    
-            
+            border-bottom: .01rem solid #e7e7e7;
+
         }
         .user .wrap:last-child .list,
         .other .wrap:last-child .list {
             border-bottom: 0;
         }
         .user, .other {
-             border-bottom: .01rem solid #e7e7e7;    
+             border-bottom: .01rem solid #e7e7e7;
         }
         div.wrap {
             padding-left: .3rem;
@@ -43,21 +43,21 @@
             margin-top: .3rem;
         }
         .list  img {
-            width: .9rem;   
-            height: .9rem;  
-            margin-right: .1rem;    
-        }   
+            width: .9rem;
+            height: .9rem;
+            margin-right: .1rem;
+        }
         .list .circlTitle h3 {
-            font-size: .3rem;  
-            width: 5.5rem;    
+            font-size: .3rem;
+            width: 5.5rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         .list .circlTitle .circleIntroduce {
-            font-size: .28rem;  
+            font-size: .28rem;
             color: #9b9b9b;
-            width: 5.5rem;    
+            width: 5.5rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -71,7 +71,7 @@
             font-size: .24rem;
             color: #999;
             width: 2rem;
-             
+
         }
         .list .circleData .quantity {
             color: #20C11D;
@@ -83,7 +83,7 @@
             background-color: #fff;
             margin-top: .2rem;
             padding: .1rem 0 .1rem .3rem;
-            border-bottom: .01rem solid #e7e7e7;    
+            border-bottom: .01rem solid #e7e7e7;
         }
         .wran {
             margin-top: .2rem;
@@ -93,7 +93,7 @@
             line-height: .5rem;
         }
         .bbottomLoading {
-            text-align: center; 
+            text-align: center;
             font-size: .24rem;
             color: #999;
             line-height: .8rem;
@@ -106,7 +106,7 @@
     <script type="text/x-dot-template" id="listT">
         {{?it.length != 0}}
             <div class="user">
-                {{ for (var i = 0; i < it.length; i++) { }} 
+                {{ for (var i = 0; i < it.length; i++) { }}
                     <div class="wrap" data-flag='1' data-name='{{=it[i].title}}' data-id='{{=it[i].circle_id}}' tapmode   onclick="openCircleInfo(this)">
                         <div class=" list flex-def flex-cCenter">
                             <img src="{{=it[i].image_url}}">
@@ -171,8 +171,8 @@
             extra:{
                 threshold:0            //设置距离底部多少距离时触发，默认值为0，数字类型
             }
-        }, function(ret, err){        
-            
+        }, function(ret, err){
+
             // alert('已滚动到底部');
             if ($api.text($api.dom('.bbottomLoading')) == '暂无更多圈子') {
                 // // console.log('暂无更多圈子');
@@ -187,7 +187,7 @@
                     requestData2();
                 }
             }
-            
+
         });
     }
     function requestData() {
@@ -196,7 +196,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-               values: { 
+               values: {
                     token: $api.getStorage('userToken')
                }
             }
@@ -226,7 +226,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-               values: { 
+               values: {
                     token: $api.getStorage('userToken'),
                     page_num: page_num
                }

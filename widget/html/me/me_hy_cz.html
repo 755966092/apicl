@@ -7,8 +7,6 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style type="text/css">
-        .main {
-        }
         .title {
             font-size: .3rem;
             padding-bottom: .4rem;
@@ -21,7 +19,7 @@
             background-color: #fff;
             padding: .2rem .35rem;
 
-            
+
         }
         .itemList {
             display: inline-block;
@@ -148,13 +146,13 @@
             </span>
         </div>
     </header>
-    <div class="main">  
+    <div class="main">
         <div class="selItem">
             <p class="title">充值金额</p>
             <div class="pl15 flex-def resultList "></div>
         </div>
         <script type="text/x-dot-template" id="listT">
-            {{ for (var i = 0; i < it.length; i++) { }} 
+            {{ for (var i = 0; i < it.length; i++) { }}
                 {{?i == 1 || i == 4}}
                 <div data-count="{{=it[i].month}}" class="itemList m44" tapmode onclick="selType(this)">
                     <span class="item flex-def flex-zTopBottom flex-zCenter flex-cCenter">
@@ -216,7 +214,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                    }
             }
@@ -254,7 +252,7 @@
             if (val === 'balance') {
                 // 余额支付, 判断是否设置支付密码
                 isSetPayPassword(val,month);
-                
+
             } else {
                 // 微信 支付宝支付
                 payMoney(val,month);
@@ -262,8 +260,8 @@
         } else {
             alert('请选择充值月份')
         }
-        
-        
+
+
     }
     // 是否设置支付密码
     function isSetPayPassword(val,month) {
@@ -272,7 +270,7 @@
                 method: 'post',
                 headers: apiHeader,
                 data: {
-                       values: { 
+                       values: {
                            token: $api.getStorage('userToken'),
                        }
                 }
@@ -314,7 +312,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                         token: $api.getStorage('userToken'),
                         month: month,
                         pay_method: val

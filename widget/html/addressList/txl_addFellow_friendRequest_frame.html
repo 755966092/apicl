@@ -16,19 +16,19 @@
             background-color: #EFEFF4;
             box-sizing: border-box;
             padding: .14rem .16rem;
-            font-size: 0;   
+            font-size: 0;
             position: relative;
         }
         .search input {
             background-color: #fff;
-            height: .503rem;    
+            height: .503rem;
             width: 100%;
             float: left;
             font-size: .24rem;
             outline: none;
             text-align: center;
         }
-        
+
         .searchIcon {
             display: inline-block;
             width: .25rem;
@@ -61,10 +61,8 @@
             background-size: .25rem .28rem;
             background-position: 0 center;
         }
-        
-        ul {
 
-        }
+
         ul li {
             padding-left: .18rem;
             background-color: #fff;
@@ -76,8 +74,8 @@
             font-size: 0;
             border-bottom: .01rem solid #ECECEC;
 
-            display: -webkit-box; 
-            display: flex; 
+            display: -webkit-box;
+            display: flex;
 
             -webkit-box-align:  center;
             align-items: center;
@@ -87,8 +85,8 @@
         .liLeft {
             height: 1.2rem;
             box-sizing: border-box;
-            display: -webkit-box; 
-            display: flex; 
+            display: -webkit-box;
+            display: flex;
             -webkit-box-align:  center;
             align-items: center;
         }
@@ -114,8 +112,8 @@
         }
         .liRight {
             height: 1.2rem;
-            display: -webkit-box; 
-            display: flex; 
+            display: -webkit-box;
+            display: flex;
 
             -webkit-box-align:  center;
             align-items: center;
@@ -156,7 +154,7 @@
         }
 
 
-        
+
         .warp {
             height: 1.2rem;
             position: relative;
@@ -234,7 +232,7 @@
            </li>
        </ul>
         <script type="text/x-dot-template" id="listT">
-           {{ for (var i = 0; i < it.length; i++) { }} 
+           {{ for (var i = 0; i < it.length; i++) { }}
                 <li >
                    <div class="warp" data-id="{{=it[i].user_id}}" tapmode onclick="openUseRInfoPage(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove(this)" ontouchend="gtouchend(this)">
                         <div class="liLeft">
@@ -289,9 +287,9 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
-                       
+
                    }
             }
         }, function(ret, err) {
@@ -303,7 +301,7 @@
                         case 3 : ret.data.list[i].status = '已删除'; break;
                         case 4 : ret.data.list[i].status = '默认同意'; break;
                         case 5 : ret.data.list[i].status = '失效'; break;
-                    }   
+                    }
                 }
                 getData(ret.data.list)
             } else {
@@ -320,7 +318,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                        apply_id: applyId
                    }
@@ -341,7 +339,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                    }
             }
@@ -355,7 +353,7 @@
                 db.executeSql({
                     name: SQLName,
                     sql: ' DELETE FROM addressList WHERE user_id = ' + userId
-                }, function(ret, err){        
+                }, function(ret, err){
                     if( ret.status ){
                         // // console.log('删除成功'+ JSON.stringify( ret ) );
                     }else{
@@ -379,7 +377,7 @@
                 db.executeSql({
                     name: SQLName,
                     sql: SQL
-                }, function(ret, err){        
+                }, function(ret, err){
                     if( ret.status ){
                         // // console.log('执行成功')
                         api.execScript({
@@ -403,15 +401,15 @@
          var e = window.event;
          startX = e.touches[0].pageX;
          startY = e.touches[0].pageY;
-     };   
-     function gtouchmove(){   
+     };
+     function gtouchmove(){
          var e = window.event;
          endX = e.touches[0].pageX;
-         endY = e.touches[0].pageY;  
-     };   
+         endY = e.touches[0].pageY;
+     };
      function gtouchend(ele) {
         var X = endX - startX,
-        Y = Math.abs(endY - startY);  
+        Y = Math.abs(endY - startY);
         if ( X < -10 && Y < 100) {
              for (var i = 0; i < $api.domAll('.warp').length; i++) {
                  $api.css($api.domAll('.warp')[i], 'left: 0rem ');
@@ -419,7 +417,7 @@
             $api.css(ele, 'left: -1.2rem ');
         } else if(X > 10 && Y < 10) {
              $api.css(ele, 'left: 0rem ');
-        }   
+        }
      }
 
     // 关闭显示删除按钮
@@ -438,7 +436,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                        apply_id: applyId
                    }

@@ -5,25 +5,25 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
-    
+
     <style type="text/css">
-       
+
         .nav {
             height: .8rem;
             border-bottom: .01rem solid #D3D3D3;
-            font-size: 0;       
+            font-size: 0;
         }
         .nav .head {
-            font-size: .28rem;  
+            font-size: .28rem;
             color: #555;
-            line-height: .8rem;  
+            line-height: .8rem;
             border-left: .01rem solid #D3D3D3;
             text-align: center;
-            width: 50%; 
+            width: 50%;
         }
         .nav .search {
             width: 1rem;
-            height: .8rem;  
+            height: .8rem;
             background: url(../../image/icon_supply/icon_search.png)no-repeat;
             background-position: center center;
             -webkit-background-size: .338rem .349rem;
@@ -35,39 +35,32 @@
             background-position: 0 0;
             width: .15rem;
             height: .1rem;
-            margin-left: .1rem;  
+            margin-left: .1rem;
         }
         .nav .head span.up {
             background-position: -.15rem -.1rem;
         }
-
-
-
-        .list {
-            /*padding: 0 .3rem;*/
-        }
         .main_no1 {
-            
-            font-size: 0;  
-            height: .7rem; 
+            font-size: 0;
+            height: .7rem;
             padding: 0 .3rem;
         }
         .main_no1 img {
-            width: .5rem;   
-            height: .5rem;  
+            width: .5rem;
+            height: .5rem;
             border-radius: 50%;
-            margin-right: .2rem;    
+            margin-right: .2rem;
         }
         .main_no1 span:first-child {
             line-height: .7rem;
-            font-size: .3rem;   
-            line-height: .42rem;    
+            font-size: .3rem;
+            line-height: .42rem;
         }
          .main_no1 span:nth-child(2) {
             line-height: .7rem;
             color: #999;
-            font-size: .24rem;   
-            line-height: .33rem;    
+            font-size: .24rem;
+            line-height: .33rem;
         }
         .main_no1 i {
             display: inline-block;
@@ -142,10 +135,10 @@
             font-size: 0;
         }
         .main_no3 .price {
-            
+
             font-size: .34rem;
             height: .63rem;
-            line-height: .63rem;    
+            line-height: .63rem;
             text-align: right;
             /*padding: 0 .3rem;*/
             padding-left: .3rem;
@@ -164,7 +157,7 @@
             margin-top: .26rem;
             height: .8rem;
             border-bottom: .01rem solid #DFDFDF;
-        }  
+        }
         .main_no3 .appraise span {
             font-size: .24rem;
             width: 1.36rem;
@@ -179,7 +172,7 @@
 
 
         }
-        
+
         .shadow {
             position: fixed;
             top: 0;
@@ -247,7 +240,7 @@
             margin: auto;
          }
     </style>
-    
+
 </head>
 <body>
 <div class="main resultList">
@@ -258,13 +251,13 @@
                     <div>
                         <span>{{=it[i].nickname}}</span>
                         {{?it[i].current_company == null}}
-                               
+
                         {{??it[i].current_position == null}}
                             <span>({{=it[i].current_company}})</span>
                         {{??}}
                             <span>({{=it[i].current_company}} {{=it[i].current_position}})</span>
                         {{?}}
-                        
+
                     </div>
                     <span class="status">{{=it[i].status}}</span>
                 </div>
@@ -312,9 +305,9 @@
         </div> -->
 </div>
 <p class="noOrider">暂无订单</p>
-<div class="loading"></div> 
+<div class="loading"></div>
 <script type="text/x-dot-template" id="listT">
-    {{ for (var i = 0; i < it.length; i++) { }} 
+    {{ for (var i = 0; i < it.length; i++) { }}
         <div class="warp" onclick="event.stopPropagation();">
             <div class="main_no1 flex-def flex-cCenter">
                 <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" data-id="{{=it[i].user_id}}" onclick="openUserId(this)">
@@ -328,7 +321,7 @@
                         {{??}}
                             <span>({{=it[i].current_company}} {{=it[i].current_position}})</span>
                         {{?}}
-                        
+
                     </div>
                     <!-- <i></i> -->
                     <span class="status">{{=it[i].status}}</span>
@@ -384,7 +377,7 @@
 
 
 
-   
+
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -448,7 +441,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                        // token: 'b678d8a0-f0d8-c67e-50b0-4d839ea864d7',
                        type: type || undefined,
@@ -461,7 +454,7 @@
                 if (ret.code === 200) {
                     // 停止下拉刷新
                     api.refreshHeaderLoadDone()
-                    $api.css($api.dom('.loading'), 'display:none'); 
+                    $api.css($api.dom('.loading'), 'display:none');
                     if (ret.data.list.length == 0) {
                         $api.css($api.dom('.noOrider'), 'display: block');
                         getData(ret.data.list)
@@ -494,7 +487,7 @@
                                 case 15: ret.data.list[i].status = '已完成'; break;
                                 case 16: ret.data.list[i].status = '已取消'; break;
                             }
-                            
+
                             // 处理按钮
                             ret.data.list[i].button.buttonArr=[];
                             for(key in ret.data.list[i].button) {
@@ -507,7 +500,7 @@
                                         break;
                                     }
                                 }
-                            } 
+                            }
                             for (var j = 0; j < ret.data.list[i].button.buttonArr.length; j++) {
                                 switch(ret.data.list[i].button.buttonArr[j].key){
                                     case 'confirm_finish': ret.data.list[i].button.buttonArr[j].key = '确认完成'; break;
@@ -536,13 +529,13 @@
                                     $api.css($api.domAll('.btn')[i], 'line-height:.54rem');
                                 }
                                 for (var i = 0; i < $api.domAll('.label').length; i++) {
-                                    
+
                                      $api.css($api.domAll('.label')[i], 'line-height:.24rem');
                                 }
                             }
                         }
                     }
-                   
+
                 } else {
                     alert(ret.msg)
                 }
@@ -560,7 +553,7 @@
         // 替换resultList所有内容
         $api.html(list, html);
         return true;
-    } 
+    }
     function closeShadow() {
         $api.css($api.dom('.shadow'), 'display:none');
         $api.removeCls($api.dom('.up'), 'up');
@@ -864,6 +857,6 @@
             }
         })
     }
-    
+
 </script>
 </html>

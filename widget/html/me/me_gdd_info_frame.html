@@ -56,7 +56,7 @@
              line-height: .33rem;
              margin-top: .1rem;
         }
-        
+
 
         .userInfo {
             height: 1rem;
@@ -134,7 +134,7 @@
          }.serverType p {
             border: 0;
         }
-        
+
         .label{
             font-size: .20rem;
             color: #0076FF;
@@ -146,7 +146,7 @@
             padding: 0 .05rem;
             border: .01rem solid #0076FF;
         }
-        
+
         .orderInfo {
             background-color: #fff;
             border-bottom: .01rem solid #ECECEC;
@@ -240,7 +240,7 @@
          }span {
             color: #3f3f3f;
         }
-            
+
         .appraise {
             width: 7.5rem;
             background-color: #1AAD19;
@@ -251,15 +251,11 @@
             color: #fff;
             margin-top: .75rem;
         }
-        .hull {
-            /*display: none;*/
-        }
-       
     </style>
 </head>
 <body>
     <div class="hull">
-        <div class="main resultList">  
+        <div class="main resultList">
         </div>
         <script type="text/x-dot-template" id="listT">
             <div class="state flex-def flex-cCenter">
@@ -275,7 +271,7 @@
                     <p>{{=it.status_info.description}}</p>
                 </div>
             </div>
-            {{?it.order_info.name == null}} 
+            {{?it.order_info.name == null}}
 
             {{??}}
             <div class="userPosition">
@@ -285,7 +281,7 @@
                 </div>
             </div>
             {{?}}
-            
+
             <div class="serverTime">
                 <p>服务时间：<span>{{=it.order_info.service_time}}</span></p>
             </div>
@@ -298,7 +294,7 @@
                     {{?}}
                 </p>
             </div>
-            
+
              <div class="userInfo flex-def flex-cCenter">
                 {{?it.buyer_info}}
                 <img class="userHead_img" data-id="{{=it.buyer_info.user_id}}" tapmode onclick="openUserInfoPage(this)" src="{{=it.buyer_info.head_img_url}}">
@@ -311,7 +307,7 @@
                     <div class="right flex-def flex-cCenter">
                         <!-- <span tapmode onclick="callTpl()" class="icon_tel"></span> -->
                         <!-- 卖家电话字段 -->
-                       
+
                         <span tapmode onclick="openChatPage(this)" class="icon_chat" data-rong_id='{{=it.buyer_info.rongcloud_user_id}}'></span>
                     </div>
                 </div>
@@ -354,42 +350,42 @@
                                 {{??it.order_info.extra_money=='0.00'}}
                                 <!-- 不显示补差价 -->
                                     {{?it.order_info.discount_money=='0.00'}}
-                                    <p class="count">退款:{{=it.order_info.refund_money}}</p>   
+                                    <p class="count">退款:{{=it.order_info.refund_money}}</p>
                                     {{??it.order_info.discount_money=='0.00'}}
-                                    <p class="count">优惠:{{=it.order_info.discount_money}}</p>   
+                                    <p class="count">优惠:{{=it.order_info.discount_money}}</p>
                                     {{??}}
-                                    <p class="count">退款:{{=it.order_info.refund_money}}</p>   
-                                    <p class="count">优惠:{{=it.order_info.discount_money}}</p>   
+                                    <p class="count">退款:{{=it.order_info.refund_money}}</p>
+                                    <p class="count">优惠:{{=it.order_info.discount_money}}</p>
                                     {{?}}
-                                    
+
                                 {{??it.order_info.discount_money=='0.00'}}
                                 <!-- 不现实优惠 -->
                                     {{?it.order_info.extra_money=='0.00'}}
-                                        <p class="count">退款:{{=it.order_info.refund_money}}</p>   
+                                        <p class="count">退款:{{=it.order_info.refund_money}}</p>
                                     {{??it.order_info.refund_money=='0.00'}}
-                                        <p class="count">补差价:{{=it.order_info.extra_money}}</p>   
+                                        <p class="count">补差价:{{=it.order_info.extra_money}}</p>
                                     {{??}}
-                                        <p class="count">补差价:{{=it.order_info.extra_money}}</p>   
-                                        <p class="count">退款:{{=it.order_info.refund_money}}</p>   
+                                        <p class="count">补差价:{{=it.order_info.extra_money}}</p>
+                                        <p class="count">退款:{{=it.order_info.refund_money}}</p>
                                     {{?}}
                                 {{??it.order_info.refund_money=='0.00'}}
                                 <!-- 不现实退款 -->
                                     {{?it.order_info.extra_money=='0.00'}}
-                                        <p class="count">优惠:{{=it.order_info.discount_money}}</p>   
+                                        <p class="count">优惠:{{=it.order_info.discount_money}}</p>
                                     {{??it.order_info.discount_money=='0.00'}}
-                                        <p class="count">补差价:{{=it.order_info.extra_money}}</p>   
+                                        <p class="count">补差价:{{=it.order_info.extra_money}}</p>
                                     {{??}}
-                                    <p class="count">补差价:{{=it.order_info.extra_money}}</p>   
-                                    <p class="count">优惠:{{=it.order_info.discount_money}}</p>   
+                                    <p class="count">补差价:{{=it.order_info.extra_money}}</p>
+                                    <p class="count">优惠:{{=it.order_info.discount_money}}</p>
                                     {{?}}
                                 {{??}}
-                                    <p class="count">退款:{{=it.order_info.refund_money}}</p>   
-                                    <p class="count">补差价:{{=it.order_info.extra_money}}</p>   
-                                    <p class="count">优惠:{{=it.order_info.discount_money}}</p>   
+                                    <p class="count">退款:{{=it.order_info.refund_money}}</p>
+                                    <p class="count">补差价:{{=it.order_info.extra_money}}</p>
+                                    <p class="count">优惠:{{=it.order_info.discount_money}}</p>
                                 {{?}}
                             </div>
                         </div>
-                            <p class="count">x{{=it.order_info.amount}}</p>                   
+                            <p class="count">x{{=it.order_info.amount}}</p>
                     </div>
                 </div>
                 <div class="bottom">
@@ -406,7 +402,7 @@
                             {{ }; }}
                         </div>
                     </div>
-                </div>            
+                </div>
             </div>
             <div class="orderTime">
                 <p>订单编号：<span class="code" id="code">{{=it.order_info.gen_order_id}}</span>
@@ -422,9 +418,9 @@
                 备注：<span>{{=it.order_info.note}}</span>
             </div>
             {{?}}
-            {{?it.button_info.finish.is_show || it.button_info.confirm_finish.is_show}} 
+            {{?it.button_info.finish.is_show || it.button_info.confirm_finish.is_show}}
                 <div class="appraise" data-url = "{{=it.btnurl}}" data-id='{{=it.order_info.order_id}}' tapmode onclick="completeOrder(this)">完成</div>
-            
+
 
             {{??it.button_info.comment.is_show}}
                  <div class="appraise" tapmode='hover' onclick="commentSupply()">评价</div>
@@ -434,7 +430,7 @@
         </script>
     </div>
     <div class="loading"></div>
-    
+
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -470,8 +466,8 @@
                     'widget://image/loading/3.png',
                     'widget://image/loading/4.png',
                     'widget://image/loading/5.png',
-                  
-                   
+
+
                 ]
             }
         }, function(ret, err) {
@@ -547,7 +543,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                         token: $api.getStorage('userToken'),
                         order_id: api.pageParam.order_id
                    }
@@ -577,23 +573,23 @@
                     //      .pay
                     //      .confirm_service    卖家确认供应订单接单操作
                     //      .refuse_service     卖家拒绝供应订单接单操作
-                    //      
-                    //      
+                    //
+                    //
                     //      .discount   卖家为买家优惠
                     //      .finish 完成订单
-                    //      
+                    //
                     //      .cancel 取消订单
                     //      .confirm_cancel 卖家同意买家取消供应订单操作
                     //      .refuse_cancel  卖家拒绝买家取消供应订单操作
                     //      .refund     卖家为买家退款
-                    //      
+                    //
                     //      .confirm_finish 买家同意买家完成供应订单操作  -- 完成订单
                     //      .extra      买家补差价操作  -- 补全差价
                     //      .again      买家购买供应操作    -- 再来一单
                     //      .comment    买家评价订单操作    -- 评价订单
                     //      .delete     买家删除订单        -- 删除订单
-                    //      
-                     //      
+                    //
+                     //
                     ret.data.button_info.buttonArr=[];
                     for(key in ret.data.button_info) {
                         for(key1 in ret.data.button_info[key]) {
@@ -606,7 +602,7 @@
                                 // // // console.log(key1 +':::'+ret.data.button_info[key][key1])
                             }
                         }
-                    } 
+                    }
                     for (var i = 0; i < ret.data.button_info.buttonArr.length; i++) {
                         switch(ret.data.button_info.buttonArr[i].key){
                             case 'confirm_finish': ret.data.button_info.buttonArr[i].key = '确认完成'; break;
@@ -649,7 +645,7 @@
                                 $api.css($api.domAll('.btn')[i], 'line-height:.54rem');
                             }
                             for (var i = 0; i < $api.domAll('.label').length; i++) {
-                                
+
                                  $api.css($api.domAll('.label')[i], 'line-height:.26rem');
                             }
                         }
@@ -660,7 +656,7 @@
                         api.closeWin();
                     },500)
                 }
-                
+
             } else {
                 alert(JSON.stringify(err.msg))
             }
@@ -792,7 +788,7 @@
                     if (ret) {
                         if (ret.eventType == 'ok') {
                             param.reason = ret.selectedInfo[0].id;
-                          
+
                             ajaxOperate(param, url)
                         }
                     } else {
@@ -1018,7 +1014,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                        order_id: id
                    }
