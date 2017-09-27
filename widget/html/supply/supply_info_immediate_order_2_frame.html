@@ -9,9 +9,9 @@
         .main {
             margin-top: .2rem;
             font-size: 0;
-            
+
         }
-        
+
         .choose {
             height: .7rem;
             background-color: #fff;
@@ -21,7 +21,7 @@
             font-size: .34rem;
             color: #000;
         }
-         
+
          .choose img {
             width: .5rem;
             height: .5rem;
@@ -45,23 +45,23 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        
+
         footer {
-            font-size: 0;   
-            height: 1rem;   
+            font-size: 0;
+            height: 1rem;
             position: fixed;
-            bottom: 0;  
-            left: 0;    
-            width: 100%;    
+            bottom: 0;
+            left: 0;
+            width: 100%;
             background-color: #fff;
             border-top: .06rem solid #F8F8F8;
         }
         footer span {
-            font-size: .34rem;  
-            text-align: center; 
+            font-size: .34rem;
+            text-align: center;
             float: left;
         }
-        
+
         footer .priceTitle {
             height: 1rem;
             line-height: 1rem;
@@ -80,15 +80,15 @@
         }
 
         footer span.enter {
-            font-size: .34rem;  
-            width: 40%; 
-            line-height: 1rem;  
+            font-size: .34rem;
+            width: 40%;
+            line-height: 1rem;
             background-color: #0ABB07;
             color: #fff;
         }
-         
+
         .main {
-           margin-bottom: 1rem; 
+           margin-bottom: 1rem;
         }
         .content {
             background-color: #F8F8F8;
@@ -106,7 +106,7 @@
             width: 1.45rem;
             height: 1.45rem;
             margin-right: .2rem;
-           
+
         }
         .content ._type {
             /*display: inline-block;*/
@@ -200,7 +200,7 @@
             box-sizing: border-box;
         }
         .serveTime .wrap {
-            padding-right: .3rem;   
+            padding-right: .3rem;
             box-sizing: border-box;
             border-bottom: .01rem solid #EBEBEB;
         }
@@ -238,7 +238,7 @@
     </style>
 </head>
 <body>
-   
+
     <div class="main clearfix">
             <div class="resultList"></div>
             <script type="text/x-dot-template" id="listT">
@@ -315,7 +315,7 @@
                         <span class="fr" id="real_name"></span>
                     </div>
                 </div>
-                
+
             </div>
             <div class="tel mt20">
                 <div class="wrap">
@@ -325,8 +325,8 @@
                 </div>
             </div>
     </div>
-    <footer>    
-    
+    <footer>
+
             <span class="priceTitle">
                 <span>合计：</span>
                 <span id="total">
@@ -334,7 +334,7 @@
                     <span id="price">123</span>
                 </span>
             </span>
-            
+
             <span class="enter" tapmode onclick="enterPay()">确认支付</span>
     </footer>
 </body>
@@ -487,7 +487,7 @@
                 });
             }
          } else {
-            
+
             // 线下  姓名  联系方式  地址
             if (service_time == '请选择交易时间') {
                 alert('请选择交易时间')
@@ -529,8 +529,8 @@
                 });
             }
          }
-         
-         
+
+
     }
     // 初始化页面
     function initPage() {
@@ -539,7 +539,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                    }
             }
@@ -566,7 +566,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                    }
             }
@@ -582,14 +582,14 @@
             }
         })
         // 设置真实姓名
-       
+
         // 设置电话
         api.ajax({
             url: apiSite + '/user_center/contactList',
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                    }
             }
@@ -642,35 +642,76 @@
             date3 = new Date().getHours()+3;
             date4 = new Date().getMinutes();
         }
-        api.openPicker({
-            type: 'date-time',
-            date: date + '-' + date1 + '-' + date2 + ' ' + date3 + ':' + date4,
-            title: text
-        }, function(ret, err) {
-            if (ret) {
-                if (ret.minute < 10) {
-                    ret.minute = '0' + ret.minute
-                }
-                if (ret.hour < 10) {
-                    ret.hour = '0' + ret.hour
-                }
-                var time = new Date();
-                if (
-                    ret.year < time.getFullYear() || 
-                    (ret.year === time.getFullYear() && ret.month < time.getMonth()+1) ||
-                    (ret.year === time.getFullYear() && ret.month === time.getMonth()+1 && ret.day < time.getDate()) ||
-                    (ret.year === time.getFullYear() && ret.month === time.getMonth()+1 && ret.day === time.getDate() && ret.hour < time.getHours()) ||
-                    (ret.year === time.getFullYear() && ret.month === time.getMonth()+1 && ret.day === time.getDate() && ret.hour === time.getHours() && ret.minute < time.getMinutes() )
-                          ) {
-                    alert('服务时间不能早于当前时间')
+        if(api.systemType=='ios') {
+            api.openPicker({
+                type: 'date-time',
+                date: date + '-' + date1 + '-' + date2 + ' ' + date3 + ':' + date4,
+                title: text
+            }, function(ret, err) {
+                if (ret) {
+
+                    if (ret.minute < 10) {
+                        ret.minute = '0' + ret.minute
+                    }
+                    if (ret.hour < 10) {
+                        ret.hour = '0' + ret.hour
+                    }
+                    var time = new Date();
+                    if (
+                        ret.year < time.getFullYear() ||
+                        (ret.year === time.getFullYear() && ret.month < time.getMonth()+1) ||
+                        (ret.year === time.getFullYear() && ret.month === time.getMonth()+1 && ret.day < time.getDate()) ||
+                        (ret.year === time.getFullYear() && ret.month === time.getMonth()+1 && ret.day === time.getDate() && ret.hour < time.getHours()) ||
+                        (ret.year === time.getFullYear() && ret.month === time.getMonth()+1 && ret.day === time.getDate() && ret.hour === time.getHours() && ret.minute < time.getMinutes() )
+                            ) {
+                        alert('服务时间不能早于当前时间')
+                    } else {
+                        $api.text(ele, ret.year + '-' + ret.month + '-' + ret.day + ' ' + ret.hour + ':' + ret.minute);
+                    }
+
                 } else {
-                    $api.text(ele, ret.year + '-' + ret.month + '-' + ret.day + ' ' + ret.hour + ':' + ret.minute);
-                }        
-               
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
+                    alert(JSON.stringify(err.msg));
+                }
+            });
+        } else {
+            api.openPicker({
+                type: 'date',
+                date: date + '-' + date1 + '-' + date2,
+                title: text
+            }, function(retYear, err) {
+                if (retYear) {
+                    api.openPicker({
+                        type: 'time',
+                        date: (date3+2)+':'+date4,
+                        title: text
+                    },function(ret,err){
+                        if (ret.minute < 10) {
+                            ret.minute = '0' + ret.minute
+                        }
+                        if (ret.hour < 10) {
+                            ret.hour = '0' + ret.hour
+                        }
+                        var time = new Date();
+                        if (
+                            retYear.year < time.getFullYear() ||
+                            (retYear.year === time.getFullYear() && retYear.month < time.getMonth()+1) ||
+                            (retYear.year === time.getFullYear() && retYear.month === time.getMonth()+1 && retYear.day < time.getDate()) ||
+                            (retYear.year === time.getFullYear() && retYear.month === time.getMonth()+1 && retYear.day === time.getDate() && ret.hour < time.getHours()) ||
+                            (retYear.year === time.getFullYear() && retYear.month === time.getMonth()+1 && retYear.day === time.getDate() && ret.hour === time.getHours() && ret.minute < time.getMinutes() )
+                                ) {
+                            alert('服务时间不能早于当前时间')
+                        } else {
+                            $api.text(ele, ret.year + '-' + ret.month + '-' + ret.day + ' ' + ret.hour + ':' + ret.minute);
+                        }
+                    });
+
+
+                } else {
+                    alert(JSON.stringify(err.msg));
+                }
+            });
+        }
+
     }
 
     // 计算总价
@@ -685,7 +726,7 @@
         price = unitPrice * buyCount
         $api.text($api.byId('price'), price);
     }
-    
+
     // 增减数量
     var count = 0;
     function addCount() {
@@ -701,7 +742,7 @@
     }
 
 
-  
+
 </script>
 </html>
 

@@ -39,7 +39,7 @@
     </style>
 </head>
 <body>
-    
+
     <div class="wrap resultList">
        <!--  <div class="study flex-def flex-cCenter">
             <img src="../../../image/tx_2.jpg">
@@ -61,7 +61,8 @@
     </div>
 
     <script type="text/x-dot-template" id="listT">
-        {{ for (var i = 0; i < it.length; i++) { }} 
+      {{?it.length > 0}}
+        {{ for (var i = 0; i < it.length; i++) { }}
             {{?it[i].type == 2}}
             <div class="study flex-def flex-cCenter" tapmode onclick="selStatus(this)" data-statusId="{{=it[i].status_id}}" data-type="{{=it[i].type}}">
                 <div class="flex-item">
@@ -88,6 +89,9 @@
             </div>
             {{?}}
         {{ }; }}
+        {{??}}
+        <p class="no_data">暂无动态</p>
+        {{?}}
     </script>
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
@@ -99,7 +103,7 @@
         // 请求地址列表
 	    requireData();
     };
-   
+
     // 请求地址列表
     function requireData() {
         api.ajax({
@@ -107,13 +111,12 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
+                values: {
                     token: $api.getStorage('userToken')
                 }
             }
         }, function(ret, err) {
             if (ret) {
-                // // console.log(JSON.stringify(ret))
                 for (var i = 0; i < ret.data.list.length; i++) {
                     if (ret.data.list[i].type === 1) {
                         // 工作
@@ -155,7 +158,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                        type: type,
                        status_id: statusId
