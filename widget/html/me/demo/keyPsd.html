@@ -11,11 +11,11 @@
             width: 7.5rem;
             height: 0.8rem;
             font-size: 0.5rem;
-            position: absolute;
+            /* position: absolute;
             top: 100;
-            left: 0;
+            left: 0; */
             z-index: 1000;
-            opacity: 0;
+            /* opacity: 0; */
         }
         .psd {
             position: absolute;
@@ -50,14 +50,20 @@
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript" src="../../../script/cleave.js"></script>
 <script type="text/javascript">
     apiready = function(){
         fnInit();
 
     }
+    var cleave = new Cleave('.input-element', {
+        numeral: true,
+        numeralThousandsGroupStyle: 'lakh',
+        numeralIntegerScale: 6,
+        numbersDecimalScale: 0,
+
+    });
     function change(ele) {
-
-
         var val = $api.val(ele);
         console.log(val)
         var spanArr = $api.domAll('.psd span');
@@ -66,6 +72,9 @@
         }
         for (var j = 5; j > val.length-1; j--) {
             $api.css(spanArr[j], 'background: #fff');
+        }
+        if (val.length == 6) {
+            alert(val)
         }
     }
 
