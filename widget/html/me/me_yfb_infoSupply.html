@@ -69,7 +69,7 @@
             box-sizing: border-box;
             white-space: nowrap;
             overflow: hidden;
-            text-overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .titleRight h3 {
@@ -479,9 +479,12 @@
                 </div>
                 <div class="infoData">
                     <p>{{=it.info.description}}</p>
-                    {{?it.info.image_json[0]!=null}} {{for(var i=0;i
-                    < it.info.image_json.length; i++){ }} <img src="{{=it.info.image_json[i]}}">
-                        {{ }; }} {{??}} {{?}}
+                    {{?it.info.image_json[0]!=null}}
+                        {{for(var i=0;i < it.info.image_json.length; i++){ }}
+                            <img src="{{=it.info.image_json[i]}}" tapmode onclick="openImgView(this)">
+                        {{ }; }}
+                    {{??}}
+                    {{?}}
 
                 </div>
             </div>
@@ -545,7 +548,7 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript" src="../../script/swiper.min.js"></script>
 <script type="text/javascript">
-    var _dataSource = ["次", "幅", "单", "小时", "分钟", "天", "周", "月", "份", "个", "扇", "课时", "面议", "其他", "未定义"];
+    var _dataSource = ["次", "幅", "单", "小时", "分钟", "天", "周", "月", "份", "个", "扇", "课时", "面议", "其他", "未定义"],paramImg;
     apiready = function () {
         fnInit();
         window.onscroll = function() {
@@ -598,6 +601,7 @@
                 // 解析图片json
 
                 ret.data.info.image_json = eval(ret.data.info.image_json);
+                paramImg = ret.data.info.image_json;
                 if (ret.data.info.unit > 0) {
                     ret.data.info.unit = _dataSource[ret.data.info.unit - 1]
                 } else {
@@ -693,6 +697,18 @@
             url: '../supply/supply_releaseSupply_win.html',
             pageParam: {
                 supply_id: api.pageParam.supply_id
+            }
+        });
+    }
+    // 打开图片页面
+    function openImgView(ele) {
+        api.openWin({
+            name: 'view_the_image_page_win',
+            url: '../supply/view_the_image_page_win.html',
+            bounces: false,
+            pageParam: {
+                url : $api.attr(ele, 'src'),
+                paramImg: paramImg
             }
         });
     }

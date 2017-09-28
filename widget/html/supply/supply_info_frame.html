@@ -39,7 +39,7 @@
             box-sizing: border-box;
             white-space: nowrap;
             overflow: hidden;
-            text-overflow: hidden;
+            text-overflow: ellipsis;
         }
         .titleRight h3 {
             font-size: .3rem;
@@ -108,7 +108,7 @@
             margin-left: .1rem;
             font-size: 0;
         }
-        
+
         .avg_point .avg_pointIcon {
             width: .245rem;
             height: .245rem;
@@ -231,7 +231,7 @@
         .commentName {
             width: 6.24rem;
         }
- 
+
         .commentNameLeft {
             font-size: 0;
         }
@@ -263,50 +263,50 @@
 
         }
         footer {
-            font-size: 0;       
-            height: .88rem;   
+            font-size: 0;
+            height: .88rem;
             position: fixed;
-            bottom: 0;  
-            left: 0;    
-            width: 100%;     
+            bottom: 0;
+            left: 0;
+            width: 100%;
             background-color: #fff;
             border-top: .01rem solid #F8F8F8;
          }
          footer.footer {
             color: #fff;
-            font-size: .3rem;   
-            height: .88rem;   
+            font-size: .3rem;
+            height: .88rem;
             position: fixed;
             text-align: center;
-            line-height: .88rem;    
-            bottom: 0;  
-            left: 0;    
+            line-height: .88rem;
+            bottom: 0;
+            left: 0;
             width: 100%;
             border-top: .01rem solid #F8F8F8;
-            background-color: #0ABB07;     
+            background-color: #0ABB07;
          }
          footer span {
-            font-size: .18rem;  
+            font-size: .18rem;
             color: #999;
-            text-align: center; 
+            text-align: center;
             float: left;
          }
          footer span:nth-child(1),
          footer span:nth-child(2) {
-             width: 25%;    
+             width: 25%;
          }
- 
+
          footer span:nth-child(3) {
-             font-size: .3rem;  
-             width: 50%; 
-             line-height: .88rem;  
+             font-size: .3rem;
+             width: 50%;
+             line-height: .88rem;
              background-color: #0ABB07;
              color: #fff;
          }
           footer i {
-             display: inline-block;  
-             width: 100%;    
-             height: .55rem; 
+             display: inline-block;
+             width: 100%;
+             height: .55rem;
              background: url(../../image/icon_supply/icon_chat.png)no-repeat;
             background-size: .4rem .38rem;
             background-position: center bottom;
@@ -353,7 +353,7 @@
             font-size: .65rem;
          }
     </style>
-</head>     
+</head>
 <body>
     <!-- <div id="cloaswin" onclick="api.closeWin();"></div> -->
     <header  class="header">
@@ -373,7 +373,7 @@
             <img src="http://img.taopic.com/uploads/allimg/140826/267848-140R60T34860.jpg" class="swiper-slide orange-slide"> -->
         </div>
         <div class="swiper-pagination">
-            
+
         </div>
     </div>
     <div class="resultList"></div>
@@ -444,7 +444,7 @@
                     <p>{{=it.info.description}}</p>
                     {{?it.info.image_json.length != 0}}
                         {{for(var i=0;i< it.info.image_json.length; i++){ }}
-                            <img src="{{=it.info.image_json[i]}}">
+                            <img src="{{=it.info.image_json[i]}}" tapmode onclick="openImgView(this)">
                         {{ }; }}
                     {{??it.info.image_json.length == 0}}
                     {{?}}
@@ -476,7 +476,7 @@
                         <p class="commentText">{{=it.last_comment.content}}</p>
                     </div>
                 {{?}}
-                
+
                 {{?it.info.comment_count==0}}
                 {{??}}
                     <div data-avg="{{=it.info.avg_point}}" class="btn flex-def flex-cCenter" tapmode onclick="openCommentPage(this)">
@@ -484,13 +484,13 @@
                     </div>
                 {{?}}
             </div>
-          
+
         </div>
         {{?!it.is_self_add}}
-        <footer>    
+        <footer>
             <span data-headUrl="{{=it.info.head_img_url}}" tapmode onclick="openChatPage(this)" data-rongId="{{=it.info.rongcloud_user_id}}"><i></i>聊天</span>
             {{?it.is_collect}}
-                <span id="collect" ontouchstart="supplyCollect(this)"><i class="cancelCollect"></i>取消收藏</span>
+                <span  ontouchstart="supplyCollect(this)"><i class="cancelCollect"></i>取消收藏</span>
             {{??}}
                 <span id="collect" ontouchstart="supplyCollect(this)"><i></i>收藏</span>
             {{?}}
@@ -500,8 +500,8 @@
         <footer class="footer" ontouchstart="editSupply()">编辑</footer>
         {{?}}
     </script>
-  
-    
+
+
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -509,7 +509,7 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript" src="../../script/swiper.min.js"></script>
 <script type="text/javascript">
-    var transmitData,_dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
+    var transmitData,_dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"],paramImg=[];
     apiready = function(){
         console.log(JSON.stringify(api.pageParam))
         fnInit();
@@ -540,7 +540,7 @@
         // 头像 昵称 供应名字 价格 单位
         var userHeadImg = $api.attr($api.byId('headImg'), 'src');
         var supplyName = $api.text($api.dom('.supplyName'));
-        var priceUint = $api.text($api.dom('.price')); 
+        var priceUint = $api.text($api.dom('.price'));
         api.openWin({
             name: 'chatPage',
             url: '../news/chatPage.html',
@@ -599,14 +599,14 @@
         } else {
             $api.html(ele, '<i></i>收藏');
             url = '/supply/cancelCollect';
-            
+
         }
         api.ajax({
             url: apiSite + url,
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                        supply_id: api.pageParam.supply_id
                    }
@@ -619,12 +619,12 @@
                         msg: '取消收藏成功'
                     });
                 } else {
-                    
+
                     api.toast({
                         msg: '收藏供应成功'
                     });
                 }
-               
+
             } else {
                 alert(JSON.stringify(err.msg))
             }
@@ -637,22 +637,22 @@
         //     $api.text($api.byId('compaby_name'), compaby_name);
         // } else {
         //     $api.css($api.byId('companyTtile'), 'display:none');
-        // }   
+        // }
         // 请求数据
         api.ajax({
             url: apiSite + '/supply/detail',
             method: 'post',
             headers: apiHeader,
             data: {
-               values: { 
+               values: {
                    token: $api.getStorage('userToken'),
                    supply_id: supply_id
                }
             }
         }, function(ret, err) {
-            console.log(JSON.stringify(ret))
             // 解析图片json
             ret.data.info.image_json = eval(ret.data.info.image_json);
+            paramImg = ret.data.info.image_json;
             var eleHtml='';
             for (var i = 0; i < ret.data.info.image_json.length; i++) {
                 if(i<5){
@@ -671,20 +671,20 @@
                 swiperFun();
              }
             // 处理时间显示
-            ret.data.info.create_time = initTime(ret.data.info.create_time)   
+            ret.data.info.create_time = initTime(ret.data.info.create_time)
             if (ret.data.info.unit > 0) {
                 ret.data.info.unit = _dataSource[ret.data.info.unit-1]
             } else {
                 ret.data.info.unit = '未定义'
             }
             ret.data.info.type = ret.data.info.type === 1 ? "个人" : "公司";
-            $api.css($api.dom('.loading'), 'display:none'); 
+            $api.css($api.dom('.loading'), 'display:none');
             getData(ret.data);
             // ret.data
             transmitData = ret.data.info;
         })
     }
-    function swiperFun() {  
+    function swiperFun() {
         var mySwiper = new Swiper('.swiper-container',{
             loop: true,
             autoplay: 3000,
@@ -714,6 +714,17 @@
         //     }
         // });
     }
-   
+    // 打开图片页面
+    function openImgView(ele) {
+        api.openWin({
+            name: 'view_the_image_page_win',
+            url: './view_the_image_page_win.html',
+            bounces: false,
+            pageParam: {
+                url : $api.attr(ele, 'src'),
+                paramImg: paramImg
+            }
+        });
+    }
 </script>
 </html>

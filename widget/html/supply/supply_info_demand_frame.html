@@ -444,7 +444,7 @@
                     <p>{{=it.info.description}}</p>
                     {{?it.info.image_json.length != 0}}
                         {{for(var i=0;i< it.info.image_json.length; i++){ }}
-                            <img src="{{=it.info.image_json[i]}}">
+                            <img src="{{=it.info.image_json[i]}}" tapmode onclick="openImgView(this)">
                         {{ }; }}
                     {{??it.info.image_json.length == 0}}
                     {{?}}
@@ -513,7 +513,7 @@
 <script type="text/javascript" src="../../script/swiper.min.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    var transmitData;
+    var transmitData,paramImg=[];
     apiready = function(){
         fnInit();
         window.onscroll = function() {
@@ -544,7 +544,7 @@
         // 头像 昵称 供应名字 价格 单位
         var userHeadImg = $api.attr($api.byId('headImg'), 'src');
         var supplyName = $api.text($api.dom('.demandName'));
-        var priceUint = $api.text($api.dom('.reward')); 
+        var priceUint = $api.text($api.dom('.reward'));
         api.openWin({
             name: 'chatPage',
             url: '../news/chatPage.html',
@@ -663,6 +663,7 @@
             // // // console.log(JSON.stringify(api.pageParam))
             if (ret.data.info.image_json) {
                 ret.data.info.image_json = eval(ret.data.info.image_json);
+                paramImg = ret.data.info.image_json;
                 var eleHtml='';
                 for (var i = 0; i < ret.data.info.image_json.length; i++) {
                     if(i<5) {
@@ -727,6 +728,29 @@
             }
         });
     }
-
+    // 打开图片页面
+    function openImgView(ele) {
+        api.openWin({
+            name: 'view_the_image_page_win',
+            url: './view_the_image_page_win.html',
+            bounces: false,
+            pageParam: {
+                url : $api.attr(ele, 'src'),
+                paramImg: paramImg
+            }
+        });
+    }
+    // 打开图片页面
+    function openImgView(ele) {
+        api.openWin({
+            name: 'view_the_image_page_win',
+            url: '../supply/view_the_image_page_win.html',
+            bounces: false,
+            pageParam: {
+                url : $api.attr(ele, 'src'),
+                paramImg: paramImg
+            }
+        });
+    }
 </script>
 </html>
