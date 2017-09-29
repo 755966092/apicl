@@ -342,8 +342,10 @@ var  mainH, _main = 0, scrollH;
 
         changeHeight();
         // 初始化聊天窗口
-        window.setTimeout('chatTools()', 500)
-
+        window.setTimeout(function () {
+            chatTools();
+            slideBut();
+        }, 500)
 
         // 去除头像上的消息数量
         api.sendEvent({
@@ -692,8 +694,8 @@ var  mainH, _main = 0, scrollH;
                     activeImg: 'widget://image/chatPage/album2.png'
                 }, {
                     title: '拍照',
-                    normalImg: 'widget://image/chatPage/album1.png',
-                    activeImg: 'widget://image/chatPage/album2.png'
+                    normalImg: 'widget://image/chatPage/camera1.png',
+                    activeImg: 'widget://image/chatPage/camera2.png'
                 }
                 // , {
                 //     title: '位置',
@@ -1105,10 +1107,10 @@ var  mainH, _main = 0, scrollH;
             var time = new Date(msg.receivedTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.receivedTime).toLocaleTimeString() : new Date(msg.receivedTime).toLocaleString()
             $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="'+ msg.content.imageUrl +'"> </p></div>');
         } else {
-            // // // console.log('接受到的图片'+JSON.stringify(msg))
+               console.log('接受到的图片'+JSON.stringify(msg))
             // 当前接收的消息
-            var time = new Date(msg.receivedTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.receivedTime).toLocaleTimeString() : new Date(msg.receivedTime).toLocaleString()
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" > <img class="imgNews" src="'+ msg.content.imageUrl +'"></p></div>');
+            var time = new Date(msg.message.receivedTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.message.receivedTime).toLocaleTimeString() : new Date(msg.message.receivedTime).toLocaleString()
+            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.message.messageId +'">'+ time +'</p><div data-msgId="'+ msg.message.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.message.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" > <img class="imgNews" src="'+ msg.message.content.imageUrl +'"></p></div>');
             slideBut();
         }
 
@@ -1529,6 +1531,7 @@ var  mainH, _main = 0, scrollH;
             $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.message.messageId +'">'+ time +'</p><div data-msgId="'+ msg.message.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ msg.head_img_url +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" > <img class="imgNews" src="'+ msg.filePath +'"></p></div>');
             slideBut();
         }
+        slideBut();
 
     }
      // 数据库查询 发送图片消息后新建
@@ -1549,7 +1552,7 @@ var  mainH, _main = 0, scrollH;
             $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ msg.head_img_url +'"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()"  ><img class="imgNews" src="'+ msg.filePath +'"> </p></div>');
             slideBut();
         }
-
+        slideBut();
     }
     // 数据库查询 接收语音消息后新建消息
     function sqlAddReceVoiceMessages(msg,  n) {
@@ -1572,7 +1575,7 @@ var  mainH, _main = 0, scrollH;
             $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ msg.head_img_url +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="playVoice(this)" style="width:'+ widthNum/4 +'rem" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-voivePath= "'+ msg.filePath +'"><img class="voiceMsg fl"  src="../../image/chatPage/icon_break.png"  height="20"></p><span class="voiceTime voiceTimeOther fl">'+ msg.duration +'"</span></div>');
             slideBut();
         }
-
+        slideBut();
     }
     // 数据库查询 发送语音消息后新建
     function sqlAddSendVoiceMessages(msg, n) {
@@ -1597,7 +1600,7 @@ var  mainH, _main = 0, scrollH;
             $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ msg.head_img_url +'"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)"  ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" style="width:'+ widthNum/4 +'rem" data-voivePath= "'+ msg.filePath +'" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">'+ msg.duration +'"</span></div>');
             slideBut();
         }
-
+        slideBut();
     }
     // 数据库查询 接收消息后新建消息
     function sqlAddReceMsg(msg, n) {
@@ -1614,7 +1617,7 @@ var  mainH, _main = 0, scrollH;
             var time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString();
             $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ msg.head_img_url +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg.content_text +'"> '+ transText(msg.content_text) +'</p></div>');
         }
-
+        slideBut();
     }
 
     // 数据库查询 发送消息后新建消息
@@ -1629,7 +1632,7 @@ var  mainH, _main = 0, scrollH;
             $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ msg.head_img_url +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" data-newsText= "'+ msg.content_text +'" > ' + transText(msg.content_text) + ' </p></div>');
         }
         // 滚动到底部
-
+        slideBut();
     }
 </script>
 </html>
