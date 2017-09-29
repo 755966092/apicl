@@ -114,8 +114,16 @@
         .sold_cound .count, .form{
             font-size: .24rem;
             color: #999;
-            margin-right: .2rem;
-            margin-bottom: .1rem;
+            line-height: 0.3rem;
+            /* margin-right: .2rem; */
+            /* margin-bottom: .1rem; */
+        }
+        .formbg{
+            height: 0.3rem;
+            background: url(../../image/icon_supply/icon_supplyInfoDistance.png)no-repeat;
+            background-size: .2rem .2rem;
+            padding-left: 0.3rem;
+            background-position: left center;
         }
 
         .sel {
@@ -419,9 +427,15 @@
                     </span>-->
                 </div>
                 {{?it.info.form == 1}}
-                    <div class="form">线上服务</div>
+                    <div class="form">
+                        线上服务
+                        <span class="form formbg fr">距离 {{=it.info.distance}}km</span>
+                    </div>
                 {{??}}
-                    <div class="form">线下服务</div>
+                    <div class="form">
+                        线下服务
+                        <span class="form formbg fr">距离 {{=it.info.distance}}km</span>
+                    </div>
                 {{?}}
             </div>
             <!-- <div class="sel flex-def flex-zBetween flex-cCenter">
@@ -516,6 +530,7 @@
     var transmitData,paramImg=[];
     apiready = function(){
         fnInit();
+        moduleInit();
         window.onscroll = function() {
             var opacityNum = document.body.scrollTop/145;
             if (opacityNum < 0.1 ){
@@ -646,56 +661,77 @@
         } else {
             $api.css($api.byId('companyTtile'), 'display:none');
         }
-        // 请求数据
-        api.ajax({
-            url: apiSite + '/demand/detail',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-               values: {
-                   token: $api.getStorage('userToken'),
-                   demand_id: demand_id
-               }
-            }
-        }, function(ret, err) {
-            // 解析图片json
-            // // // console.log(JSON.stringify(ret))
-            // // // console.log(JSON.stringify(api.pageParam))
-            if (ret.data.info.image_json) {
-                ret.data.info.image_json = eval(ret.data.info.image_json);
-                paramImg = ret.data.info.image_json;
-                var eleHtml='';
-                for (var i = 0; i < ret.data.info.image_json.length; i++) {
-                    if(i<5) {
-                        eleHtml += '<img src="'+ ret.data.info.image_json[i] +'?imageView2/1/w/750/h/436/format/jpg/q/100|imageslim" class="swiper-slide blue-slide">'
-                        ret.data.info.image_json[i] = ret.data.info.image_json[i] + '?imageMogr2/auto-orient/thumbnail/710x/blur/1x0/quality/100|imageslim'
+        bMap.getLocation({
+            accuracy: '100m',//10m/100m/1km/3km
+            autoStop: true,
+            filter: 1
+        }, function(retloaction, errlocation){
+            if(retloaction.status){
+                // 请求数据
+                api.ajax({
+                    url: apiSite + '/demand/detail',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                        values: {
+                            token: $api.getStorage('userToken'),
+                            demand_id: demand_id,
+                            latitude: retloaction.lat,
+                            longitude: retloaction.lon
+                        }
                     }
-                }
-
-                if (eleHtml) {
-                    $api.html($api.dom('.swiper-wrapper'), eleHtml);
-                } else {
-                    $api.css($api.dom('header.header'), 'background: rgba(58,57,62,1);position:relative;');
-                    //  $api.html($api.dom('.swiper-wrapper'), '<img class="default" src="../../image/noimage.jpg">');
-                }
-                 if (ret.data.info.image_json.length > 1) {
-                    swiperFun();
-                 }
+                }, function(ret, err) {
+                    if(ret) {
+                        if (ret.code == 200) {
+                            renderPage(ret,flag, compaby_name, demand_id)
+                        } else {
+                            alert(ret.msg)
+                        }
+                    } else {
+                        alert(err.msg)
+                    }
+                })
             }
-             // 处理时间显示
-            ret.data.info.create_time = initTime(ret.data.info.create_time)
-            if (ret.data.info.unit > 0) {
-                ret.data.info.unit = _dataSource[ret.data.info.unit-1]
-            } else {
-                ret.data.info.unit = '未定义'
-            }
-            ret.data.info.type = ret.data.info.type === 1 ? "个人" : "公司";
-            $api.css($api.dom('.loading'), 'display:none');
-            var statusArr=["求助中","帮助中","已结束","已失效","已删除"]
-            ret.data.info.status = statusArr[ret.data.info.status-1]
-            getData(ret.data);
-            transmitData = ret.data.info;
         })
+
+    }
+    // 渲染页面
+    function renderPage(ret,flag, compaby_name, demand_id) {
+          // 解析图片json
+        if (ret.data.info.image_json) {
+            ret.data.info.image_json = eval(ret.data.info.image_json);
+            paramImg = ret.data.info.image_json;
+            var eleHtml='';
+            for (var i = 0; i < ret.data.info.image_json.length; i++) {
+                if(i<5) {
+                    eleHtml += '<img src="'+ ret.data.info.image_json[i] +'?imageView2/1/w/750/h/436/format/jpg/q/100|imageslim" class="swiper-slide blue-slide">'
+                    ret.data.info.image_json[i] = ret.data.info.image_json[i] + '?imageMogr2/auto-orient/thumbnail/710x/blur/1x0/quality/100|imageslim'
+                }
+            }
+
+            if (eleHtml) {
+                $api.html($api.dom('.swiper-wrapper'), eleHtml);
+            } else {
+                $api.css($api.dom('header.header'), 'background: rgba(58,57,62,1);position:relative;');
+                //  $api.html($api.dom('.swiper-wrapper'), '<img class="default" src="../../image/noimage.jpg">');
+            }
+                if (ret.data.info.image_json.length > 1) {
+                swiperFun();
+                }
+        }
+            // 处理时间显示
+        ret.data.info.create_time = initTime(ret.data.info.create_time)
+        if (ret.data.info.unit > 0) {
+            ret.data.info.unit = _dataSource[ret.data.info.unit-1]
+        } else {
+            ret.data.info.unit = '未定义'
+        }
+        ret.data.info.type = ret.data.info.type === 1 ? "个人" : "公司";
+        $api.css($api.dom('.loading'), 'display:none');
+        var statusArr=["求助中","帮助中","已结束","已失效","已删除"]
+        ret.data.info.status = statusArr[ret.data.info.status-1]
+        getData(ret.data);
+        transmitData = ret.data.info;
     }
     // doT模版获取数据
     function getData(data) {

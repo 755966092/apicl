@@ -120,8 +120,16 @@
         .sold_cound .count, .form{
             font-size: .24rem;
             color: #999;
+            line-height: 0.3rem;
             /*margin-right: .2rem;*/
             /*margin-bottom: .1rem;*/
+        }
+        .formbg{
+            height: 0.3rem;
+            background: url(../../image/icon_supply/icon_supplyInfoDistance.png)no-repeat;
+            background-size: .2rem .2rem;
+            padding-left: 0.3rem;
+            background-position: left center;
         }
 
         .sel {
@@ -355,6 +363,7 @@
     </style>
 </head>
 <body>
+
     <!-- <div id="cloaswin" onclick="api.closeWin();"></div> -->
     <header  class="header">
         <div class="head">
@@ -419,10 +428,17 @@
                     </span>
                 </div>
                 {{?it.info.form == 1}}
-                    <div class="form">线上服务</div>
+                    <div class="form">
+                        线上服务
+                        <span class="form formbg fr">距离 {{=it.info.distance}}km</span>
+                    </div>
                 {{??}}
-                    <div class="form">线下服务</div>
+                    <div class="form">
+                        线下服务
+                        <span class="form formbg fr">距离 {{=it.info.distance}}km</span>
+                    </div>
                 {{?}}
+
             </div>
             <!-- <div class="sel flex-def flex-zBetween flex-cCenter">
                 <div>
@@ -511,8 +527,8 @@
 <script type="text/javascript">
     var transmitData,_dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"],paramImg=[];
     apiready = function(){
-        console.log(JSON.stringify(api.pageParam))
         fnInit();
+        moduleInit();
         // 初始化页面
         window.onscroll = function() {
             var opacityNum = document.body.scrollTop/145;
@@ -639,19 +655,45 @@
         //     $api.css($api.byId('companyTtile'), 'display:none');
         // }
         // 请求数据
-        api.ajax({
-            url: apiSite + '/supply/detail',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-               values: {
-                   token: $api.getStorage('userToken'),
-                   supply_id: supply_id
-               }
+        bMap.getLocation({
+            accuracy: '100m',//10m/100m/1km/3km
+            autoStop: true,
+            filter: 1
+        }, function(retloaction, errlocation){
+            if(retloaction.status){
+                api.ajax({
+                    url: apiSite + '/supply/detail',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                    values: {
+                        token: $api.getStorage('userToken'),
+                        supply_id: supply_id,
+                        latitude: retloaction.lat,
+                        longitude: retloaction.lon
+                    }
+                    }
+                }, function(ret, err) {
+                    if (ret) {
+                        if(ret.code == 200) {
+                            renderPage(ret,flag, compaby_name, supply_id)
+                        } else {
+                            alert(ret.msg)
+                        }
+                    } else {
+                        alert(err.msg)
+                    }
+                })
+            }else{
+                alert(errlocation.code);
             }
-        }, function(ret, err) {
-            // 解析图片json
-            ret.data.info.image_json = eval(ret.data.info.image_json);
+        });
+
+    }
+    function renderPage(ret,flag, compaby_name, supply_id) {
+        console.log(JSON.stringify(ret))
+         // 解析图片json
+         ret.data.info.image_json = eval(ret.data.info.image_json);
             paramImg = ret.data.info.image_json;
             var eleHtml='';
             for (var i = 0; i < ret.data.info.image_json.length; i++) {
@@ -667,9 +709,9 @@
                 $api.css($api.dom('header.header'), 'background: rgba(58,57,62,1);position:relative;');
                 //  $api.html($api.dom('.swiper-wrapper'), '<img class="default" src="../../image/noimage.jpg">');
             }
-             if (ret.data.info.image_json.length > 1) {
+                if (ret.data.info.image_json.length > 1) {
                 swiperFun();
-             }
+                }
             // 处理时间显示
             ret.data.info.create_time = initTime(ret.data.info.create_time)
             if (ret.data.info.unit > 0) {
@@ -682,7 +724,6 @@
             getData(ret.data);
             // ret.data
             transmitData = ret.data.info;
-        })
     }
     function swiperFun() {
         var mySwiper = new Swiper('.swiper-container',{
