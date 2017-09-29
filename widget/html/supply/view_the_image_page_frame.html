@@ -22,6 +22,7 @@
             <span class="callback"   tapmode   onclick="api.closeWin()"></span>
             <span class="winTitle">
             </span>
+            <span class="rightBtn" onclick="saveImg()">保存</span>
         </div>
     </header>
 </body>
@@ -36,6 +37,32 @@
         }, function(ret, err){
             $api.text($api.dom('.winTitle'), (parseInt(ret.value.key.index)+1)+' / '+imgArr.length);
         });
+    }
+    function saveImg() {
+        api.download({
+            url: api.pageParam.url,
+            // savePath: 'fs://file_name',
+            report: true,
+            cache: true,
+            allowResume: true
+        },function(ret,err){
+            if (ret) {
+                api.saveMediaToAlbum({
+                    path: ret.savePath
+                },function(ret,err){
+                    if (ret.status) {
+                        api.toast({
+                            msg: '保存成功',
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                    }
+                });
+            } else{
+                alert('保存出错')
+            }
+        });
+
     }
 
 
