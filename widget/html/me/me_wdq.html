@@ -12,6 +12,57 @@
             color: #fff;
             line-height: .7rem;
         }
+        /* 切换导航栏 */
+            .nav {
+                border-bottom: .01rem solid #E6E6E4;
+                height: .7rem;
+                text-align: center;
+                line-height: .7rem;
+                font-size: 0;
+                background-color: #fff;
+                position: relative;
+            }
+
+            .nav span.head:last-child {
+                border: 0;
+            }
+            .nav .head {
+                width:50%;
+
+            }
+            .nav .search {
+                width: 1rem;
+                background: url(../../image/icon_supply/icon_search.png)no-repeat;
+                -webkit-background-size: .338rem .35rem;
+                background-size: .338rem .35rem;
+                background-position: center center;
+            }
+            .act{
+                color: #27B24A;
+            }
+            .act .actHead {
+                border-bottom: .05rem solid #27B24A;
+            }
+            .indexbar {
+                background: url('../../image/tabLine.png') no-repeat center bottom;
+                background-size: 63px auto;
+                color: #27B24A;
+                width: 25%;
+                left: .95rem;
+                bottom: 0;
+                position: absolute;
+                height: 2px;
+            }
+            .nav .head .titleText {
+                border-left: .01rem solid #E6E6E4;
+                margin-top: .2rem;
+                width: 100%;
+                text-align: center;
+                line-height: .4rem;
+                height: .4rem;
+                font-size: .28rem;
+            }
+        /* 切换导航栏 */
     </style>
 </head>
 <body>
@@ -21,28 +72,46 @@
             <span class="winTitle">
                 圈子
             </span>
-            <span class="rightBtn"   tapmode   onclick="openShadow()">+</span> 
+            <span class="rightBtn"   tapmode   onclick="openShadow()">+</span>
         </div>
     </header>
-   
+    <div class="nav ">
+            <!-- <span class="search"></span> -->
+            <span class="head act"   tapmode   onclick="switchApr(0)">
+                <span class="titleText">
+                    <span class="actHead">我参与的</span>
+                </span>
+            </span>
+            <span class="head"   tapmode   onclick="switchApr(1)">
+                <span class="titleText">
+                    <span class="actHead">我建立的</span>
+                </span>
+            </span>
+           <!--  <span class="head"   tapmode   onclick="switchApr(2)">
+                <span class="titleText">圈</span>
+            </span> -->
+            <!-- <div class="indexbar" id="indexbar"></div> -->
+        </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
-	    fnInit()   
-        api.openFrame({
-            name: 'me_wdq_frame',
-            url: './me_wdq_frame.html',
-            rect: {
-                x: 0,
-                y: headerH,
-                w: 'auto',
-                h: 'auto'
-            },
-            bounces: true
-        });
-
+	    fnInit()
+        // api.openFrame({
+        //     name: 'me_wdq_frame',
+        //     url: './me_wdq_frame.html',
+        //     rect: {
+        //         x: 0,
+        //         y: headerH,
+        //         w: 'auto',
+        //         h: 'auto'
+        //     },
+        //     bounces: true
+        // });
+        var navH = $api.offset($api.dom('.nav')).h;
+        var frameH = navH + headerH;
+        openAprGroup(frameH)
     };
     function openShadow() {
         api.openWin({
@@ -53,6 +122,80 @@
             }
         });
     }
-   
+
+
+    // 打开frame组
+    function openAprGroup (frameH){
+        api.openFrameGroup({
+            name: 'publishGroup',
+            rect: {
+                 x: 0,
+                 y: frameH,
+                 w: 'auto',
+                 h: 'auto'
+            },
+            scrollEnabled: true,
+            index: 0,
+            frames: [{
+                name: 'publishGroup1',
+                url: './me_wdq_frame.html',
+                pageParam: {
+                    headerH: headerH
+                }
+            },{
+                name: 'publishGroup2',
+                url: './me_wdq_frame.1.html',
+                pageParam: {
+                    headerH: headerH
+                }
+            }
+            // ,{
+            //     name: 'publishGroup3',
+            //     url: './me_yfb_publish_3.html',
+            //     pageParam: {
+            //         headerH: headerH
+            //     }
+            // }
+            ]
+        }, function(ret, err) {
+            if (ret) {
+                switchAprIndex(ret.index)
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
+    }
+
+
+    // 显示的页面
+    function switchApr(index){
+            api.setFrameGroupIndex ({
+                name: 'publishGroup',
+                index: index,
+                scroll: true
+            });
+            switchAprIndex(index);
+        }
+       // 标题下面竖线
+    function sliderbarCallback(id, num) {
+        // var width = parseInt((api.frameWidth - $api.offset($api.dom('.search')).w) / 2);
+        var width = parseInt(api.frameWidth / 2);
+        var move = num * width;
+
+        $api.css($api.byId(id),
+                "-webkit-transform:translate(" + move + "px,0);-webkit-transition: 300ms;"
+        );
+    }
+
+     // 切换头部的标题颜色
+    function switchAprIndex(index){
+        sliderbarCallback('indexbar',index)
+        var aprItems = $api.domAll('.head');
+        for (var i = 0; i < aprItems.length; i++) {
+            $api.removeCls(aprItems[i], 'act');
+        }
+        $api.addCls(aprItems[index+1], 'act');
+    }
+
 </script>
 </html>
