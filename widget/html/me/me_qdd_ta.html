@@ -206,6 +206,12 @@
             line-height: .35rem;
             height: .24rem;
         }
+        .textHidden {
+            max-width: 4.5rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
     </style>
     
 </head>
@@ -220,16 +226,16 @@
             <div class="main_no1 flex-def flex-cCenter">
                 <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" data-id="{{=it[i].user_id}}" onclick="openUserId(this)">
                 <div class="flex-item flex-def flex-cCenter flex-zBetween">
-                    <div>
+                    <div class="flex-def flex-cCenter">
                         <span>{{=it[i].nickname}}</span>
                         {{?it[i].current_company == ''}}
                         {{??it[i].current_position == ''}}
-                            <span>({{=it[i].current_company}})</span>
+                        <span class="textHidden">({{=it[i].current_company}})</span>
                         {{??it[i].current_position == ''&&it[i].current_company == ''}}
                         {{??}}
-                            <span>({{=it[i].current_company}} {{=it[i].current_position}})</span>
+                        <span class="textHidden">({{=it[i].current_company}} {{=it[i].current_position}})</span>
                         {{?}}
-                        
+
                     </div>
                     <!-- <i></i> -->
                     <span class="status">{{=it[i].status}}</span>
