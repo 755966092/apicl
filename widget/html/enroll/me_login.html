@@ -432,6 +432,7 @@
          }
          sqlSyntax(data, type);
     }
+    var selectCount = 0;
     // 拼数据库语法字符串
     function sqlSyntax(data1, type) {
         // console.log(JSON.stringify(data1));
@@ -534,12 +535,22 @@
                                     sql: SQL2
                                 }, function(ret, err){
                                     if( ret.status ){
-                                        console.log( '简略表插入数据成功');
-                                        api.execScript({
-                                            name: 'main',
-                                            frameName: 'frame0',
-                                            script: 'historyNews();'
-                                        });
+                                        selectCount++;
+                                        console.log(selectCount)
+                                        if (selectCount == 4) {
+                                            console.log( '简略表插入数据成功');
+                                            api.execScript({
+                                                name: 'main',
+                                                frameName: 'frame0',
+                                                script: 'historyNews();'
+                                            });
+                                            api.execScript({
+                                                name: 'main',
+                                                frameName: 'frame1',
+                                                script: 'conso();'
+                                            });
+                                        }
+
                                     }else{
                                         alert( JSON.stringify( err ) );
                                     }
@@ -556,6 +567,8 @@
                 alert( JSON.stringify( err ) );
             }
         });
+
+
     }
 </script>
 </html>

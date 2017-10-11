@@ -91,9 +91,9 @@
             <li class="bb" tapmode onclick="openPage(this)" data-val='aboutInin'>
                 <div class="text">关于我在</div>
             </li>
-            <!-- <li class="bb" tapmode onclick="clearAllStrong()" data-val='aboutInin'>
+            <li class="bb" tapmode onclick="clearAllStrong()" data-val='aboutInin'>
                 <div class="text">清除所有缓存</div>
-            </li>-->
+            </li>
             <!-- <li class="bb" tapmode onclick="clearAllStrong()" data-val='aboutInin'>
                 <div class="text">同步赵老师通讯录</div>
             </li> -->
@@ -114,23 +114,23 @@
     };
 
     function clearAllStrong() {
-        // var tableArr = ['addressList','tb_remarks_contact','tb_remarks_other_contact','tb_remarks_address','tb_remarks_education','tb_remarks_work','tb_remarks_project','tb_remarks_user_info','tb_remarks_status', 'addressList_simplify']
-        // for (var i = 0;i < tableArr.length; i++) {
-        //     db.executeSql({
-        //         name: 'db_'+$api.getStorage('userToken'),
-        //         sql: 'DELETE FROM '+tableArr[i]
-        //     },function(ret,err){
-        //         if (ret.status) {
-        //             api.toast({
-        //                 msg: '删除成功',
-        //                 duration: 2000,
-        //                 location: 'bottom'
-        //             });
-        //         } else {
+        var tableArr = ['addressList','tb_remarks_contact','tb_remarks_other_contact','tb_remarks_address','tb_remarks_education','tb_remarks_work','tb_remarks_project','tb_remarks_user_info','tb_remarks_status', 'addressList_simplify']
+        for (var i = 0;i < tableArr.length; i++) {
+            db.executeSql({
+                name: 'db_'+$api.getStorage('userToken'),
+                sql: 'DELETE FROM '+tableArr[i]
+            },function(ret,err){
+                if (ret.status) {
+                    api.toast({
+                        msg: '删除成功',
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                } else {
 
-        //         }
-        //     })
-        // }
+                }
+            })
+        }
 
 
         // api.actionSheet({
@@ -152,12 +152,13 @@
         // setTimeout(function() {
         //     api.hideProgress();
         // }, 2000);
-        api.openWin({
-            name: 'winnkeyPsdame',
-            url: './demo/keyPsd.html',
-            bounces: false,
-            pageParam: {key : 'value'}
-        });
+
+        // api.openWin({
+        //     name: 'winnkeyPsdame',
+        //     url: './demo/keyPsd.html',
+        //     bounces: false,
+        //     pageParam: {key : 'value'}
+        // });
     }
     function openImg2() {
         api.openWin({

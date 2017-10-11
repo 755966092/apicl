@@ -505,7 +505,12 @@
     <script type="text/javascript" src="../script/pinyin4js.js"></script>
     <script type="text/javascript">
     var letterArr = [],letterObj = [];
+    function conso(params) {
+        console.log('其他页面执行函数')
+    }
     apiready = function() {
+        console.log(api.winName);
+        console.log(api.frameName)
         if (api.systemType == 'andioid') {
             $api.css($api.dom('html'), 'padding-bottom: 7.8rem');
         }
@@ -873,11 +878,13 @@
                     title: '呼叫'
                 }],
                 imgHeight: 32,
+                imgWidth: 32,
                 groupTitle: {
                     color: '#999',
                     size: 14,
                     bgColor: '#EFEFF4'
                 },
+                cellHeight: 59,
                 rightBg: '#fff',
                 // 侧滑
                 indicator: {
@@ -1039,14 +1046,13 @@
         }
         var arr = {}
         var a;
-        delete data.subTitle;
-        delete data.flag;
-        delete data.type;
-        for (var i = 0; i < data.length; i++) {
-            // data[i].subTitle = (data[i].current_company || ""+ data[i].current_position || ""+data[i].current_degree||"") ? (data[i].current_company || ""+" "+ data[i].current_position || ""+" "+data[i].current_degree||"") : ""
-            data[i].titleSize = 15;
-            // data[i].subTitleColor = '#999'
+        // delete data.subTitle;
 
+        for (var i = 0; i < data.length; i++) {
+            delete data[i].flag;
+            delete data[i].type;
+            // data[i].subTitle = (data[i].current_company || ""+ data[i].current_position || ""+data[i].current_degree||"") ? (data[i].current_company || ""+" "+ data[i].current_position || ""+" "+data[i].current_degree||"") : ""
+            data[i].subTitleColor = '#999'
             if (data[i].initial) {
                 if (data[i].initial == '#') {
                     if (arr[data[i].initial]) {
