@@ -56,7 +56,7 @@
              line-height: .33rem;
              margin-top: .1rem;
         }
-        
+
 
         .userInfo {
             height: 1rem;
@@ -135,11 +135,15 @@
          }.serverType p {
             border: 0;
         }
-        
+
         .label{
             font-size: .20rem;
+            color: #cc0019;
+            margin-right: .1rem;
+        }
+        .label1 {
+            font-size: .20rem;
             color: #0076FF;
-            /*line-height: .26rem;*/
             line-height: .35rem;
             height: .26rem;
             border-radius: .06rem;
@@ -147,7 +151,6 @@
             padding: 0 .05rem;
             border: .01rem solid #0076FF;
         }
-        
         .orderInfo {
             background-color: #fff;
             border-bottom: .01rem solid #ECECEC;
@@ -238,7 +241,7 @@
          }span {
             color: #3f3f3f;
         }
-            
+
         .appraise {
             width: 7.5rem;
             background-color: #1AAD19;
@@ -254,12 +257,12 @@
         .hull {
             display: none;
         }
-       
+
     </style>
 </head>
 <body>
     <div class="hull">
-        <div class="main resultList">  
+        <div class="main resultList">
         </div>
         <script type="text/x-dot-template" id="listT">
             <div class="state flex-def flex-cCenter">
@@ -276,7 +279,7 @@
                     <p>{{=it.status_info.description}}</p>
                 </div>
             </div>
-            {{?it.order_info.name == null}} 
+            {{?it.order_info.name == null}}
 
             {{??}}
             <div class="userPosition">
@@ -286,7 +289,7 @@
                 </div>
             </div>
             {{?}}
-            
+
             {{?it.order_info.service_time}}
             <div class="serverTime">
                 <p>服务时间：<span>{{=it.order_info.service_time}}</span></p>
@@ -304,7 +307,7 @@
                     {{?}}
                 </p>
             </div>
-            
+
              <div class="userInfo flex-def flex-cCenter">
                 {{?it.host_info}}
                 <img class="userHead_img" src="{{=it.host_info.head_img_url}}" data-id="{{=it.host_info.user_id}}" tapmode onclick="openUserInfoPage(this)">
@@ -339,7 +342,7 @@
                         <span tapmode onclick="openChatPage(this)" class="icon_chat" data-rong_id='{{=it.host_info.rongcloud_user_id}}'></span>
                         {{??}}
                         <span tapmode onclick="openChatPage(this)" class="icon_chat" data-rong_id='{{=it.helper_info.rongcloud_user_id}}'></span>
-                        {{?}}                    
+                        {{?}}
                     </div>
                 </div>
                 {{?}}
@@ -354,14 +357,14 @@
                     <div class="text flex-item">
                         <div class="title flex-def flex-zBetween">
                             <div class="flex-def flex-cCenter">
-                                <span class="label">个人</span>
+                                <span class="label">[个人]</span>
                                 <p class="supplyName">{{=it.demand_info.title}}</p>
                             </div>
                             <p class="price">{{=it.demand_info.reward}}元</p>
                         </div>
                         <div class="info flex-def flex-zBetween">
                             <p class="infoText">{{=it.demand_info.description}}</p>
-                            <p class="count">x{{=it.order_info.amount}}</p>                   
+                            <p class="count">x{{=it.order_info.amount}}</p>
                         </div>
                     </div>
                 </div>
@@ -379,11 +382,11 @@
                             {{ }; }}
                         </div>
                     </div>
-                </div>            
+                </div>
             </div>
             <div class="orderTime">
                 <p>订单编号：<span class="code" id="code">{{=it.order_info.gen_order_id}}</span>
-                    <span class="label fr" ontouchstart="copyString()"   id="copy">复制</span>
+                    <span class="label1 fr" ontouchstart="copyString()"   id="copy">复制</span>
                 </p>
                 <p>下单时间：<span class="code">{{=it.order_info.create_time}}</span></p>
                 {{?it.order_info.reason}}
@@ -395,9 +398,9 @@
                 备注：<span>{{=it.order_info.note}}</span>
             </div>
             {{?}}
-            {{?it.button_info.finish.is_show || it.button_info.confirm_finish.is_show}} 
+            {{?it.button_info.finish.is_show || it.button_info.confirm_finish.is_show}}
                 <div class="appraise" data-url="{{=it.btnurl}}" data-id='{{=it.order_info.order_id}}' ontouchstart="completeOrder(this)">完成</div>
-            
+
 
             {{??it.button_info.comment.is_show}}
                  <div class="appraise" tapmode='hover' onclick="commentSupply()">评价</div>
@@ -407,7 +410,7 @@
         </script>
     </div>
     <!-- <div class="loading"></div> -->
-    
+
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -502,14 +505,14 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                         token: $api.getStorage('userToken'),
                         order_id: api.pageParam.order_id
                    }
             }
         }, function(ret, err) {
             if(ret) {
-                // // console.log('488:::'+JSON.stringify(ret))
+                console.log('488:::'+JSON.stringify(ret))
                 // 停止下拉刷新
                 api.refreshHeaderLoadDone();
                 if (ret.code === 200){
@@ -521,23 +524,23 @@
                     //      .pay
                     //      .confirm_service    卖家确认供应订单接单操作
                     //      .refuse_service     卖家拒绝供应订单接单操作
-                    //      
-                    //      
+                    //
+                    //
                     //      .discount   卖家为买家优惠
                     //      .finish 完成订单
-                    //      
+                    //
                     //      .cancel 取消订单
                     //      .confirm_cancel 卖家同意买家取消供应订单操作
                     //      .refuse_cancel  卖家拒绝买家取消供应订单操作
                     //      .refund     卖家为买家退款
-                    //      
+                    //
                     //      .confirm_finish 买家同意买家完成供应订单操作  -- 完成订单
                     //      .extra      买家补差价操作  -- 补全差价
                     //      .again      买家购买供应操作    -- 再来一单
                     //      .comment    买家评价订单操作    -- 评价订单
                     //      .delete     买家删除订单        -- 删除订单
-                    //      
-                     //      
+                    //
+                     //
                     ret.data.button_info.buttonArr=[];
                     for(key in ret.data.button_info) {
                         for(key1 in ret.data.button_info[key]) {
@@ -552,7 +555,7 @@
                                 // // // console.log(key1 +':::'+ret.data.button_info[key][key1])
                             }
                         }
-                    } 
+                    }
                     for (var i = 0; i < ret.data.button_info.buttonArr.length; i++) {
                         switch(ret.data.button_info.buttonArr[i].key){
                             case 'cancel_order': ret.data.button_info.buttonArr[i].key = '取消订单'; break;
@@ -583,7 +586,7 @@
                                 $api.css($api.domAll('.btn')[i], 'line-height:.54rem');
                             }
                             for (var i = 0; i < $api.domAll('.label').length; i++) {
-                                
+
                                  $api.css($api.domAll('.label')[i], 'line-height:.26rem');
                             }
                         }
@@ -594,7 +597,7 @@
                         api.closeWin();
                     },500)
                 }
-                
+
             } else {
                 alert(JSON.stringify(err.msg))
             }
@@ -625,7 +628,7 @@
     }
     // 操作按钮
     function oriderOperate(ele) {
-       
+
         var url = $api.attr(ele, 'data-url');
         var orderId = $api.attr(ele, 'data-orderId');
         var demandId = $api.attr(ele, 'data-demandId');
@@ -777,7 +780,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                        order_id: id
                    }

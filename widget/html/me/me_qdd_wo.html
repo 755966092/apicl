@@ -5,7 +5,7 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
-    
+
     <style type="text/css">
          .noOrider {
             text-align: center;
@@ -29,19 +29,19 @@
         .nav {
             height: .8rem;
             border-bottom: .01rem solid #D3D3D3;
-            font-size: 0;       
+            font-size: 0;
         }
         .nav .head {
-            font-size: .28rem;  
+            font-size: .28rem;
             color: #555;
-            line-height: .8rem;  
+            line-height: .8rem;
             border-left: .01rem solid #D3D3D3;
             text-align: center;
-            width: 50%; 
+            width: 50%;
         }
         .nav .search {
             width: 1rem;
-            height: .8rem;  
+            height: .8rem;
             background: url(../../image/icon_supply/icon_search.png)no-repeat;
             background-position: center center;
             -webkit-background-size: .338rem .349rem;
@@ -53,7 +53,7 @@
             background-position: 0 0;
             width: .15rem;
             height: .1rem;
-            margin-left: .1rem;  
+            margin-left: .1rem;
         }
         .nav .head span.up {
             background-position: -.15rem -.1rem;
@@ -65,27 +65,27 @@
             /*padding: 0 .3rem;*/
         }
         .main_no1 {
-            
-            font-size: 0;  
-            height: .7rem; 
+
+            font-size: 0;
+            height: .7rem;
             padding: 0 .3rem;
         }
         .main_no1 img {
-            width: .5rem;   
-            height: .5rem;  
+            width: .5rem;
+            height: .5rem;
             border-radius: 50%;
-            margin-right: .2rem;    
+            margin-right: .2rem;
         }
         .main_no1 span:first-child {
             line-height: .7rem;
-            font-size: .3rem;   
-            line-height: .42rem;    
+            font-size: .3rem;
+            line-height: .42rem;
         }
          .main_no1 span:nth-child(2) {
             line-height: .7rem;
             color: #999;
-            font-size: .24rem;   
-            line-height: .33rem;    
+            font-size: .24rem;
+            line-height: .33rem;
         }
         .main_no1 i {
             display: inline-block;
@@ -162,10 +162,10 @@
             font-size: 0;
         }
         .main_no3 .price {
-            
+
             font-size: .34rem;
             height: .63rem;
-            line-height: .63rem;    
+            line-height: .63rem;
             text-align: right;
             /*padding: 0 .3rem;*/
             padding-left: .3rem;
@@ -184,7 +184,7 @@
             margin-top: .26rem;
             height: .8rem;
             border-bottom: .01rem solid #DFDFDF;
-        }  
+        }
         .main_no3 .appraise span {
             font-size: .28rem;
             width: 1.34rem;
@@ -198,7 +198,7 @@
             margin-right: .15rem;
 
         }
-        
+
         .shadow {
             position: fixed;
             top: 0;
@@ -237,13 +237,13 @@
         }
         .label {
             font-size: .2rem;
-            border: .01rem solid #0076FF;
-            color: #0076FF;
-            border-radius: .06rem;
+            /* border: .01rem solid #0076FF; */
+            color: #cc0019;
+            /* border-radius: .06rem; */
             margin-right: .12rem;
-            padding: 0 .02rem;
-            line-height: .35rem;
-            height: .24rem;
+            /* padding: 0 .02rem; */
+            /* line-height: .35rem; */
+            /* height: .24rem; */
         }
          .textHidden {
              max-width: 4.5rem;
@@ -252,7 +252,7 @@
              white-space: nowrap;
          }
     </style>
-    
+
 </head>
 <body>
 <p class="noOrider">暂无订单</p>
@@ -260,7 +260,7 @@
 <div class="main resultList">
 </div>
 <script type="text/x-dot-template" id="listT">
-    {{ for (var i = 0; i < it.length; i++) { }} 
+    {{ for (var i = 0; i < it.length; i++) { }}
         <div class="warp" onclick="event.stopPropagation();">
             <div class="main_no1 flex-def flex-cCenter">
                 <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" data-id="{{=it[i].user_id}}" onclick="openUserId(this)">
@@ -293,9 +293,9 @@
                         <div class="title flex-item">
                              <div class="flex-def flex-cCenter">
                                 {{?it[i].type==1}}
-                                <span class="label">个人</span>
+                                <span class="label">[个人]</span>
                                 {{??}}
-                                <span class="label">公司</span>
+                                <span class="label">[公司]</span>
                                 {{?}}
                                 <h3 class="supplyName">{{=it[i].title}}</h3>
                             </div>
@@ -330,7 +330,7 @@
 
 
 
-   
+
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -372,7 +372,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                        // token: 'b678d8a0-f0d8-c67e-50b0-4d839ea864d7',
                        type: type || undefined,
@@ -386,7 +386,7 @@
                 if (ret.code === 200) {
                     // 停止下拉刷新
                     api.refreshHeaderLoadDone();
-                    $api.css($api.dom('.loading'), 'display:none'); 
+                    $api.css($api.dom('.loading'), 'display:none');
                     if (ret.data.list.length == 0) {
                         $api.css($api.dom('.noOrider'), 'display: block');
                         getData(ret.data.list)
@@ -421,7 +421,7 @@
                                         break;
                                     }
                                 }
-                            } 
+                            }
                             for (var j = 0; j < ret.data.list[i].button.buttonArr.length; j++) {
                                 switch(ret.data.list[i].button.buttonArr[j].key){
                                     case 'cancel_order': ret.data.list[i].button.buttonArr[j].key = '取消订单'; break;
@@ -441,7 +441,7 @@
                                     $api.css($api.domAll('.btn')[i], 'line-height:.54rem');
                                 }
                                 for (var i = 0; i < $api.domAll('.label').length; i++) {
-                                    
+
                                      $api.css($api.domAll('.label')[i], 'line-height:.24rem');
                                 }
                             }
@@ -464,7 +464,7 @@
         // 替换resultList所有内容
         $api.html(list, html);
         return true;
-    } 
+    }
     function closeShadow() {
         $api.css($api.dom('.shadow'), 'display:none');
         $api.removeCls($api.dom('.up'), 'up');
@@ -747,10 +747,10 @@
             }
         })
     }
-    
+
     // 取消订单 || 拒绝接单操作
     function cacelOrder(ele) {
-    
+
     }
 </script>
 </html>

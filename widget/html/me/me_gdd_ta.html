@@ -27,29 +27,29 @@
             left: 0;
             margin: auto;
          }
-       
+
         .main_no1 {
-            font-size: 0;  
-            height: .7rem; 
+            font-size: 0;
+            height: .7rem;
             padding: 0 .3rem;
         }
         .main_no1 img {
-            width: .5rem;   
-            height: .5rem;  
+            width: .5rem;
+            height: .5rem;
             border-radius: 50%;
-            margin-right: .2rem;    
+            margin-right: .2rem;
         }
-        
+
         .main_no1 span:first-child {
             line-height: .7rem;
-            font-size: .3rem;   
-            line-height: .42rem;    
+            font-size: .3rem;
+            line-height: .42rem;
         }
          .main_no1 span:nth-child(2) {
             line-height: .7rem;
             color: #999;
-            font-size: .24rem;   
-            line-height: .33rem;    
+            font-size: .24rem;
+            line-height: .33rem;
         }
         .main_no1 i {
             display: inline-block;
@@ -123,10 +123,10 @@
             font-size: 0;
         }
         .main_no3 .price {
-            
+
             font-size: .34rem;
             height: .63rem;
-            line-height: .63rem;    
+            line-height: .63rem;
             text-align: right;
             /*padding: 0 .3rem;*/
             padding-left: .3rem;
@@ -145,7 +145,7 @@
             margin-top: .26rem;
             height: .8rem;
             border-bottom: .01rem solid #DFDFDF;
-        }  
+        }
         .main_no3 .appraise span {
             font-size: .24rem;
             width: 1.34rem;
@@ -159,7 +159,7 @@
             margin-right: .15rem;
 
         }
-        
+
         .shadow {
             position: fixed;
             top: 0;
@@ -198,13 +198,8 @@
         }
         .label {
             font-size: .2rem;
-            border: .01rem solid #0076FF;
-            color: #0076FF;
-            border-radius: .06rem;
-            margin-right: .12rem;
-            padding: 0 .02rem;
-            line-height: .35rem;
-            height: .24rem;
+            color: #cc0019;
+            margin-right: 0.1rem;
         }
         .textHidden {
             max-width: 4.5rem;
@@ -213,7 +208,7 @@
             white-space: nowrap;
         }
     </style>
-    
+
 </head>
 <body>
 <p class="noOrider">暂无订单</p>
@@ -221,7 +216,7 @@
 <div class="main resultList">
 </div>
 <script type="text/x-dot-template" id="listT">
-    {{ for (var i = 0; i < it.length; i++) { }} 
+    {{ for (var i = 0; i < it.length; i++) { }}
         <div class="warp" onclick="event.stopPropagation();">
             <div class="main_no1 flex-def flex-cCenter">
                 <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" data-id="{{=it[i].user_id}}" onclick="openUserId(this)">
@@ -254,9 +249,9 @@
                         <div class="title flex-item">
                              <div class="flex-def flex-cCenter">
                                 {{?it[i].type==1}}
-                                <span class="label">个人</span>
+                                <span class="label">[个人]</span>
                                 {{??}}
-                                <span class="label">公司</span>
+                                <span class="label">[公司]</span>
                                 {{?}}
                                 <h3 class="">{{=it[i].title}}</h3>
                             </div>
@@ -332,7 +327,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                        // token: 'b678d8a0-f0d8-c67e-50b0-4d839ea864d7',
                        type: type || undefined,
@@ -346,7 +341,7 @@
                     // // console.log('列表页'+JSON.stringify(ret))
                     // 停止下拉刷新
                     api.refreshHeaderLoadDone();
-                    $api.css($api.dom('.loading'), 'display:none'); 
+                    $api.css($api.dom('.loading'), 'display:none');
                     if (ret.data.list.length == 0) {
                         $api.css($api.dom('.noOrider'), 'display: block');
                         getData(ret.data.list)
@@ -392,7 +387,7 @@
                                         // // // console.log(key1 +':::'+ret.data.list[i].button[key][key1])
                                     }
                                 }
-                            } 
+                            }
                             for (var j = 0; j < ret.data.list[i].button.buttonArr.length; j++) {
                                 switch(ret.data.list[i].button.buttonArr[j].key){
                                     case 'confirm_finish': ret.data.list[i].button.buttonArr[j].key = '确认完成'; break;
@@ -421,7 +416,7 @@
                                     $api.css($api.domAll('.btn')[i], 'line-height:.54rem');
                                 }
                                 for (var i = 0; i < $api.domAll('.label').length; i++) {
-                                    
+
                                      $api.css($api.domAll('.label')[i], 'line-height:.24rem');
                                 }
                             }
@@ -518,7 +513,7 @@
 
     // 操作按钮
     function oriderOperate(ele) {
-        
+
         var url = $api.attr(ele, 'data-url');
         var id = $api.attr(ele, 'data-id');
         var supplyId = $api.attr(ele, 'data-supply');
@@ -675,7 +670,7 @@
             }, function(ret, err) {
                 if (ret) {
                     if (ret.eventType == 'ok') {
-                        
+
                         $api.css($api.dom('.loading'), 'display: block');
                         obj = {
                             token: $api.getStorage('userToken'),
