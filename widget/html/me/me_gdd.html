@@ -15,13 +15,13 @@
             border-radius: .05rem;
             color: #999;
         }
-       
-       
+
+
         .select span{
-           border-bottom: .05rem solid #0ABB07;
+           /* border-bottom: .05rem solid #0ABB07; */
            color: #0ABB07;
         }
-      
+
          .search {
             width: .34rem;
             height: .35rem;
@@ -34,7 +34,7 @@
             background-size: .34rem .35rem;
             background-position: 0 center;
         }
-        
+
          .filter {
             width: .57rem;
             height: .3rem;
@@ -45,6 +45,7 @@
         }
 
         .nav {
+            position: relative;
             height: .7rem;
             font-size: 0;
             box-sizing: border-box;
@@ -64,6 +65,16 @@
        /* .nav .head_center_left:last-child {
             border-left: .01rem solid #000;
         }*/
+        .indexbar {
+            background: url('../../image/tabLine.png') no-repeat center bottom;
+            background-size: 63px auto;
+            color: #27B24A;
+            width: 25%;
+            left: .7rem;
+            bottom: 0;
+            position: absolute;
+            height: 2px;
+        }
     </style>
 
 
@@ -74,7 +85,7 @@
         <div class="head">
             <span class="callback"   tapmode   onclick="api.closeWin()">返回</span>
             <span class="winTitle">供订单</span>
-           
+
         </div>
     </header>
     <div class="nav flex-def flex-cCenter">
@@ -85,7 +96,8 @@
             <span class=" head_center_left select"   tapmode   onclick="switchApr(0)"><span>Ta的供应</span></span>
             <span class=" head_center_left "   tapmode   onclick="switchApr(1)"><span>我的供应</span></span>
         </span>
-        <span ontouchstart='openShadow()'>
+        <div class="indexbar" id="indexbar"></div>
+        <span class="rightFilterBtn" ontouchstart='openShadow()'>
             <span  class="filter"></span>
         </span>
     </div>
@@ -110,28 +122,28 @@
         openAprGroup(headerH);
     };
 
-   
+
 
     // 打开frame组
     function openAprGroup (frameH){
         api.openFrameGroup({
             name: 'publishGroup',
             rect: {
-                 x: 0, 
-                 y: headerH + $api.offset($api.dom('.nav')).h, 
+                 x: 0,
+                 y: headerH + $api.offset($api.dom('.nav')).h,
                  w: 'auto',
                  h: 'auto'
             },
             scrollEnabled: true,
             index: 0,
             frames: [{
-                name: 'me_gdd_ta', 
+                name: 'me_gdd_ta',
                 url: './me_gdd_ta.html',
                 pageParam: {
                     headerH: headerH
                 }
             },{
-                name: 'me_gdd_wo', 
+                name: 'me_gdd_wo',
                 url: './me_gdd_wo.html',
                 pageParam: {
                     headerH: headerH
@@ -157,8 +169,18 @@
             switchAprIndex(index);
         }
 
+   // 标题下面竖线
+   function sliderbarCallback(id, num) {
+        var width = parseInt((api.frameWidth - $api.offset($api.dom('.rightFilterBtn')).w-6) / 2);
+        // var width = parseInt(api.frameWidth / 2);
+        var move = num * width;
+        $api.css($api.byId(id),
+                "-webkit-transform:translate(" + move + "px,0);-webkit-transition: 300ms;"
+        );
+    }
      // 切换头部的标题颜色
     function switchAprIndex(index){
+        sliderbarCallback('indexbar',index)
         var aprItems = $api.domAll('.head_center_left');
         for (var i = 0; i < aprItems.length; i++) {
             $api.removeCls(aprItems[i], 'select');
