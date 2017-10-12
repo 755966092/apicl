@@ -1,22 +1,56 @@
 {
-    "C": [{
-        "img": "http://img.iinnet.com/Fmz4QrS442UQOgkQVn2t4g25xy4t",
-        "title": "测试2",
-        "current_contact": "",
-        "user_id": 837,
-        "subTitle": "测试    ",
-        "placeholderImg": "widget://image/icon_defaultHead.png",
-        "initial": "C",
-        "subTitleColor": "#999"
-    }],
-    "Z": [{
-        "img": "http://img.iinnet.com/FnUe1oBtIUzuEJJAEypX1vsUNHkh",
-        "title": "中小18765",
-        "current_contact": "18765303417",
-        "user_id": 9969,
-        "subTitle": "第一学 前端开发 ",
-        "placeholderImg": "widget://image/icon_defaultHead.png",
-        "initial": "Z",
-        "subTitleColor": "#999"
-    }]
+    "code": 200,
+    "msg": "",
+    "time": "1507798460",
+    "data": {
+        "verify_waiting_list": [{
+            "circle_id": 16,
+            "title": "测试",
+            "description": "测试",
+            "image_url": "http://img.iinnet.com/FoX80Hya0L31VjYzoDHGTWxm0LaS",
+            "member_count": 1,
+            "topic_count": 0,
+            "circle_status": 1,
+            "verify_status": 1
+        }, {
+            "circle_id": 17,
+            "title": "测试2",
+            "description": "测试",
+            "image_url": "http://img.iinnet.com/FpuLmywnYPf_4LbtTOA4YkBQ8O9o",
+            "member_count": 1,
+            "topic_count": 0,
+            "circle_status": 1,
+            "verify_status": 1
+        }, {
+            "circle_id": 19,
+            "title": "测试",
+            "description": "测试测试",
+            "image_url": "/storage/emulated/0/UZMap/A6947696977363/imageClip/result.png",
+            "member_count": 1,
+            "topic_count": 0,
+            "circle_status": 1,
+            "verify_status": 1
+        }, {
+            "circle_id": 20,
+            "title": "收费",
+            "description": "测试",
+            "image_url": "/storage/emulated/0/UZMap/A6947696977363/imageClip/result.png",
+            "member_count": 1,
+            "topic_count": 0,
+            "circle_status": 1,
+            "verify_status": 1
+        }, {
+            "circle_id": 21,
+            "title": "测试3",
+            "description": "测试",
+            "image_url": "/storage/emulated/0/UZMap/A6947696977363/imageClip/result.png",
+            "member_count": 1,
+            "topic_count": 0,
+            "circle_status": 1,
+            "verify_status": 1
+        }],
+        "verify_fail_list": [],
+        "available_list": []
+    }
 }
+at find_circleMyCreate_frame.html: 337

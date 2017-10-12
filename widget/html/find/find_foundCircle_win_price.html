@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+   <style type="text/css">
+     input {
+            margin-top: 0.3rem;
+            width: 7.5rem;
+            padding: 0 .2rem;
+            box-sizing: border-box;
+            background-color: #fff;
+            height: 0.8rem;
+        }
+   </style>
+</head>
+<body>
+    <header  class="header">
+        <div class="head">
+            <span class="callback"   tapmode   onclick="api.closeWin()">
+                返回
+            </span>
+            <span class="winTitle">
+                入圈金额
+            </span>
+            <span class="rightBtn"   tapmode   onclick="enter()">保存</span>
+        </div>
+    </header>
+    <input type="text" placeholder="请输入圈子名称">
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/cleave.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        fnInit();
+        new Cleave('input', {
+            numeral: true,
+            numeralThousandsGroupStyle: 'wan',
+            numeralIntegerScale: 4,
+            // prefix: '¥'
+        });
+    };
+
+    function enter() {
+        api.sendEvent({
+            name: 'circleNameEdit',
+            extra: {circleName: $api.val($api.dom('input'))}
+        });
+        api.closeWin();
+    }
+</script>
+</html>

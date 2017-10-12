@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+        .circleHead {
+            width: 2.55rem;
+            height: 2.55rem;
+        }
+        .img {
+            margin-top: .52rem;
+            position: relative;
+            font-size: 0;
+        }
+        .img span {
+            display: inline-block;
+            width: .52rem;
+            height: .52rem;
+            position: absolute;
+            top: 0;
+            right: 0;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.5) url(../../image/icon_find/icon_camera.png)no-repeat;
+            -webkit-background-size: .39rem .29rem;
+            background-size: .39rem .29rem;
+            background-position: center center;
+        }
+        .circleName {
+            width: 2.55rem;
+            background-color: #fff;
+            outline: none;
+            font-size: .28rem;
+            height: 1.1rem;
+            text-align: center;
+        }
+        .warning {
+            font-size: .28rem;
+            color: #555;
+            margin-top: .5rem;
+            line-height: .4rem;
+            margin-bottom: .24rem;
+        }
+        .classify {
+            text-align: center;
+            font-size: 0;
+        }
+        .classify .item {
+            margin-top: .22rem;
+            width: 1.36rem;
+            height: .62rem;
+            border: .01rem solid #A4A4A4;
+            text-align: center;
+            line-height: .62rem;
+            font-size: .28rem;
+            color: #555;
+            margin-right: .5rem;
+            border-radius: .06rem;
+        }
+        .classify .item:nth-child(4n) {
+            margin-right: 0;
+        }
+        .addGroup {
+            height: 2.1rem;
+            background-color: #fff;
+            width: 7.5rem;
+            margin-top: .4rem;
+            text-align: center;
+            font-size: 0;
+        }
+        .addGroupType {
+            width: 4rem;
+            height: .65rem;
+            border: .01rem solid #A4A4A4;
+            border-radius: .06rem;
+            margin: .2rem auto 0;
+        }
+        .addGroupType p {
+            font-size: .28rem;
+            width: 50%;
+
+            float: left;
+            height: .65rem;
+            /*text-align: center;*/
+            line-height: .65rem;
+            box-sizing: border-box;
+        }
+        .addGroupType p:first-child span {
+            margin-left: .2rem;
+        }
+        .addGroupType p:last-child span {
+            margin-right: .2rem;
+        }
+        .addGroup input {
+            text-align: center;font-size: .42rem;
+            outline: none;
+            margin-top: .44rem;
+        }
+        .addGroupType p span {
+            display: inline-block;
+            width: .9rem;
+            line-height: .42rem;
+            border-radius: .06rem
+        }
+        .addGroupType p span.sel {
+            
+            /*height: .42rem;*/
+            background-color: #1AAD19;
+            color: #fff;
+            
+        }
+        textarea {
+            width: 7.5rem;
+            height: 1.9rem;
+            background-color: #fff;
+            font-size: .28rem;
+            margin-top: .2rem;
+            padding: .2rem .37rem;
+            box-sizing: border-box;
+            resize: none;
+        }
+        .remind {
+            box-sizing: border-box;
+            margin-top: .2rem;
+            height: .8rem;
+            width: 7.5rem;
+            padding: 0 .35rem 0 .8rem;
+            font-size: 0;
+            background: #fff url(../../image/icon_supply/icon_06.png)no-repeat;
+            background-position: .35rem center;
+            -webkit-background-size: .33rem .34rem;
+            background-size: .33rem .34rem;
+        }
+        .remind span {
+            font-size: .28rem;
+            line-height: .8rem;
+        }
+        .remind .jt {
+            display: inline-block;
+            height: .8rem;
+            width: .15rem;
+            background: url(../../image/icon_zk.png)no-repeat;
+            -webkit-background-size: .15rem .25rem;
+            background-size: .15rem .25rem;
+            background-position: 0 center;
+            float: right;
+        }
+        .btn {
+            width: 7.14rem;
+            height: .86rem;
+            border-radius: .1rem;
+            background-color: #1AAD19;
+            color: #fff;
+            font-size: .34rem;
+            text-align: center;
+            line-height: .86rem;
+            margin-top: .4rem;
+            margin-bottom: .4rem;
+        }
+        .classify .selType {
+            color: #1AAD19;
+            border: .01rem solid #1AAD19;
+        }
+        input.reason {
+            display: inline-block;
+            width: 7.5rem;
+            padding: 0 .36rem;
+            outline: none;
+            margin-top: .2rem;
+            height: .8rem;
+            background-color: #fff;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="flex-def flex-cCenter flex-zCenter flex-zTopBottom">
+            <div class="img">
+                <img id="image_url" class="circleHead" src="../../image/icon_defaultHead.png">
+                <span tapmode onclick="openCamera()"></span>
+            </div>
+            <input id="title" class="circleName" type="text" placeholder="圈子名称">
+            <!-- <p class="warning">选择所属类型（必选）</p> -->
+           <!--  <div class="classify">
+                <span tapmode onclick="selBelongType(this)" class="item selType">经济</span>
+                <span tapmode onclick="selBelongType(this)" class="item">医疗</span>
+                <span tapmode onclick="selBelongType(this)" class="item">教育</span>
+                <span tapmode onclick="selBelongType(this)" class="item">文艺</span>
+                <span tapmode onclick="selBelongType(this)" class="item">生活</span>
+                <span tapmode onclick="selBelongType(this)" class="item">娱乐</span>
+                <span tapmode onclick="selBelongType(this)" class="item">健康</span>
+                <span tapmode onclick="selBelongType(this)" class="item">时尚</span>
+            </div> -->
+            <div class="addGroup">
+                <div class="addGroupType" id="type">
+                    <p tapmode onclick ="selType(this,0)" class="flex-def flex-cCenter"><span class="sel">付费</span></p>
+                    <p tapmode onclick ="selType(this,1)" class="flex-def flex-cCenter flex-zEnd"><span>免费</span></p>
+                </div>
+                <input id="price" type="number" step="0.10" placeholder="0.00" name="">
+            </div>   
+            <textarea id="description" placeholder="圈子介绍"></textarea> 
+            <input type="text" id="reason" class="reason" placeholder="申请理由" name="">
+           <!--  <div class="remind">
+                <span>提醒谁看</span>
+                <span class="jt"></span>
+            </div> -->
+            <div class="btn" ontouchstart="foundCircle()">确认创建</div>
+        </div>
+        
+    </div>
+     
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+       moduleInit();
+       api.addEventListener({
+           name: 'saveImg'
+       }, function(ret, err) {
+           if (ret) {
+               imgSave();
+           } else {
+               alert(JSON.stringify(err));
+           }
+       });
+    };
+    function selBelongType(ele) {
+        var dom = $api.domAll('.selType');
+        for (var i = 0; i < dom.length; i++) {
+            $api.removeCls(dom[i], 'selType');
+        }
+        $api.addCls(ele, 'selType');
+    }
+    function selType(ele,n) {
+        var dom = $api.domAll('.sel');
+        for (var i = 0; i < dom.length; i++) {
+            $api.removeCls(dom[i], 'sel');
+        }
+        $api.addCls($api.dom(ele, 'span'), 'sel');
+        if (n == 0) {
+            $api.removeAttr($api.byId('price'), 'disabled');
+        }
+        if (n == 1) {
+            $api.attr($api.byId('price'), 'disabled', 'true');
+            $api.val($api.byId('price'), '0.00');
+        }
+    }
+    function foundCircle() {
+        // token       //   string  用户Token
+        // title       //   string  名称
+        // image_url       //   string  图标
+        // description     // string  简介
+        // type        //    int 类型（1-免费，2-付费）
+        // price       //   float   价格（付费时必传）
+        // apply_reason        // 理由
+        var title = $api.val($api.byId('title'));
+        var description = $api.val($api.byId('description'));
+        var image_url = $api.attr($api.byId('image_url'), 'src');
+        var price = $api.val($api.byId('price'));
+        var apply_reason = $api.val($api.byId('reason'));
+        var type = $api.text($api.dom('.sel')) == '免费' ? 1 : 2;
+        var obj = {
+            token: $api.getStorage('userToken'),
+            title: title,
+            description: description,
+            image_url: image_url,
+            type: type,
+            apply_reason: apply_reason
+        }
+        if (title == '') {
+            alert('标题不能为空')
+        } else if (description == '') {
+            alert('介绍不能为空')
+        } else if (image_url == '../../image/icon_defaultHead.png') {
+            alert('头像不能为空')
+        } else if (apply_reason == '') {
+            alert('申请理由不能为空')
+        } else {
+            if (type == 2 && price == '') {
+                alert('收费圈子加入圈子费用不能为空')
+            } else {
+                if (type == 2) {
+                    obj.price = price;
+                }
+                // obj = {
+                //     title: title,
+                //     description: description,
+                //     image_url: image_url,
+                //     price: price,
+                //     type: type
+                // };
+                // // console.log(JSON.stringify(obj));
+                api.ajax({
+                    url: apiSite + '/circle/add',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                           values: obj
+                    }
+                }, function(ret, err) {
+                    if(ret) {
+                        if(ret.code == 200) {
+                            api.sendEvent({
+                                name: 'frame4Open',
+                            });
+                            api.sendEvent({
+                                name: 'circleTopicComment'
+                            });
+                            api.toast({
+                                msg: '创建成功'
+                            });
+                            api.openWin({
+                                name: 'me_wdq',
+                                url: '../me/me_wdq.html'
+                            });
+                            api.closeWin();
+                        } else {
+                            alert(ret.msg)
+                        }
+                    } else {
+                        alert(JSON.stringify(err.msg))
+                    }
+                })
+                // // console.log(JSON.stringify(obj))
+            }
+        } 
+        
+    }
+
+    function openCamera() {
+        api.getPicture({
+            sourceType: 'library',
+            mediaValue: 'pic',
+            encodingType: 'jpg',
+            destinationType: 'url',
+            quality: 80,
+            // targetWidth: 750,
+            // targetHeight: 750
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.data) {
+                    // $api.attr($api.dom('img'),'src', ret.data);
+                    // pushImg(ret.data)
+                    api.sendEvent({
+                        name: 'editCircleHead'
+                    });
+                    clipImage(ret)
+                } 
+                
+            } else {
+                // alert(JSON.stringify(err.msg));
+            }
+        });
+    }
+    function clipImage(ret) {
+        FNImageClip.open({
+            rect: {
+                x: 0,
+                y: 0,
+                w: api.frameWidth, 
+                h: api.frameHeight
+            },
+            srcPath: ret.data,
+            mode: "image",
+            // 截图时是否截取高清图（与原图分辨率一致的图）
+            highDefinition: true,
+            style: {
+                mask: 'rgba(0,0,0,0.4)',
+                clip: {
+                    w: api.winWidth-1,
+                    h: api.winWidth,
+                    x: 1,
+                    y: api.winHeight / 2 - api.winWidth / 2,
+                    borderColor: '#0f0',
+                    borderWidth: 1,
+                    appearance: 'rectangle'
+                }
+            },
+            fixedOn: api.frameName
+        }, function(ret, err) {
+            if (ret) {
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    function enter () {
+        if (flag) {
+            imgSave();
+        } else {
+            var url = $api.attr($api.dom('img'),'src');
+            pushImg(url)
+        }
+        
+    }
+    function imgSave() {
+            FNImageClip.save({
+                destPath: 'fs://imageClip/result.png',
+                copyToAlbum: false,
+                quality: 1
+            },function(ret, err){        
+                if(ret) {
+                    $api.attr($api.dom('img'), 'src', ret.destPath);
+                    pushImg(ret.destPath)
+                    FNImageClip.close();
+                } else{
+                    alert(JSON.stringify(err));
+                }
+            });
+    }
+    function pushImg(imgUrl) {
+       //  var baseUrl = 'img.iinnet.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com
+        var obj = api.require('qiniuUpfile');
+        obj.upfile({
+            file: imgUrl,
+        }, function(retUpfile, err) {
+            if (retUpfile.status) {
+                if (retUpfile.oper == "complete") {
+                    //上传成功后组装访问路径，或直接访问文档
+                    $api.attr($api.dom('img'),'src', 'http://'+ baseUrl +'/'+ retUpfile.info.key);
+
+                } else if (retUpfile.oper == "progress") {
+                    //上传过程中获取进度数据
+                    // // // console.log(retUpfile.percent);
+                }
+            }
+        });
+    }
+</script>
+</html>
