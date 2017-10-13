@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style type="text/css">
+        #main {
+            /* width: 500px;height: 750px; */
+            width: 7.5rem;height: 12rem;
+        }
+    </style>
+</head>
+<body>
+        <div id="main" ></div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/echarts.min.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        requireData();
+    };
+    // dataProcessing(data);
+    // 处理数据
+    function dataProcessing(data) {
+        var dataY = {
+            data:[],
+            links:[]
+        };
+        for (var key in data.user_info) {
+            if (data.user_info.hasOwnProperty(key)) {
+                var element = data.user_info[key];
+                dataY.data.push({name:element.nickname,symbol:'image://'+ element.head_img_url +'?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim'})
+            }
+        }
+        for (var i = 0; i < data.relationship_info.length; i++) {
+            var element = data.relationship_info[i];
+            dataY.links.push({source:data.user_info[element[0]].nickname,target:data.user_info[element[1]].nickname})
+        }
+        initTable(dataY);
+    }
+    // 请求数据
+    function requireData() {
+        api.ajax({
+            url: apiSite + '/contact/relationshipPathGraph',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: {
+                    token: $api.getStorage('userToken'),
+                    user_id: api.pageParam.userId
+                }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    console.log(JSON.stringify(ret))
+                    dataProcessing(ret.data);
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+    // 初始化关系图
+    function initTable(dataY) {
+        var myChart = echarts.init(document.getElementById('main'));
+        var option = {
+            // title: {
+            //     text: 'asdasdas'
+            // },
+            tooltip: {},
+            // animation: false,
+            animationEasing: 'linear',
+            series : [
+                {
+                    type: 'graph',
+                    layout: 'force',
+                    force: {
+                        gravity:[0.3],
+                        repulsion:[100,500],
+                        edgeLength: [10, 500],
+                    },
+                    draggable: true,
+                    symbolSize: 50,
+                    roam: true,
+                    label: {
+                        normal: {
+                            show: true,
+                            color: "auto"
+                        }
+                    },
+                    edgeSymbol: ['circle', 'arrow'],
+                    edgeSymbolSize: [4, 10],
+                    edgeLabel: {
+                        normal: {
+                            textStyle: {
+                                fontSize: 20
+                            }
+                        }
+                    },
+                    data: dataY.data,
+                    links: dataY.links,
+                    // [
+                    // //     {
+                    // //     source: 0,
+                    // //     target: 1,
+                    // //     symbolSize: [5, 20],
+                    // //     label: {
+                    // //         normal: {
+                    // //             show: true
+                    // //         }
+                    // //     },
+                    // //     lineStyle: {
+                    // //         normal: {
+                    // //             width: 5,
+                    // //             curveness: 0.2
+                    // //         }
+                    // //     }
+                    // // },
+                    //  {
+                    //     source: '节点2',
+                    //     target: '节点1',
+
+                    // }, {
+                    //     source: '节点1',
+                    //     target: '节点3'
+                    // }, {
+                    //     source: '节点2',
+                    //     target: '节点3'
+                    // }, {
+                    //     source: '节点2',
+                    //     target: '节点4'
+                    // }, {
+                    //     source: '节点1',
+                    //     target: '节点4'
+                    // }],
+                    lineStyle: {
+                        normal: {
+                            opacity: 0.9,
+                            width: 2,
+                            curveness: 0
+                        }
+                    }
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+</script>
+</html>
+
+
+
+

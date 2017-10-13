@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <link rel="stylesheet" type="text/css" href="../../css/flex.css"/>
    <style type="text/css">
-        
+
         ul li {
             /*padding-left: .35rem;*/
             background-color: #fff;
@@ -26,14 +26,14 @@
             height: .79.7rem;
             border-bottom: .01rem solid #E0E0E0;
             background-color: #fff;
-            display: -webkit-box; 
-            display: flex; 
+            display: -webkit-box;
+            display: flex;
             -webkit-box-align:  center;
             align-items: center;
             -webkit-box-pack: justify;
             -webkit-justify-content: space-between;
             justify-content: space-between;
-        } 
+        }
         ul li:first-child {
             margin-top: .3rem;
         }
@@ -59,10 +59,10 @@
    </style>
 </head>
 <body>
-   
+
     <ul>
-       
-        <li tapmode onclick="openPage(this)" data-val="addFriendPlace"> 
+
+        <li tapmode onclick="openPage(this)" data-val="addFriendPlace">
             <div>
                 <span class="text">添加好友的时间地点</span>
                 <div class="arrowIcon"></div>
@@ -92,6 +92,12 @@
                 <div class="arrowIcon"></div>
             </div>
         </li>
+        <li tapmode onclick="openPage(this)" data-val="networkOfPeople">
+            <div>
+                <span class="text">人脉轨迹图</span>
+                <div class="arrowIcon"></div>
+            </div>
+        </li>
     </ul>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -100,12 +106,13 @@
 <script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
     apiready = function(){
+        console.log(JSON.stringify(api.pageParam))
     };
 
     function changeState (ele) {
         $api.toggleCls(ele, 'sel');
     }
-    
+
     function openPage(ele) {
         var val = $api.attr(ele, 'data-val');
         api.openWin({
@@ -113,7 +120,7 @@
             url: './txl_friendInfo_' + val + '_win.html',
 
             pageParam: {
-                name: 'value'
+                userId: api.pageParam.userId
             },
             bounces: false
         });

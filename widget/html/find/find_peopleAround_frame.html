@@ -107,16 +107,17 @@
             </li>
         </ul>
     </div>
-     
+
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
     apiready = function(){
-        eventMonitoring('ScreeningIsComplete')
+        eventMonitoring('ScreeningIsComplete');
+        requireData()
     };
-    
+
     // 事件监听
     function eventMonitoring(eventName) {
         api.addEventListener({
@@ -133,9 +134,37 @@
     // 请求数据
     function requireData(ret) {
         // 参数
-        var param = ret.value.filterParameters;
-        alert(JSON.stringify(param))
+        if(ret) {
+            var param = ret.value.filterParameters;
+        }
+        // alert(JSON.stringify(param))
+        api.ajax({
+            url: apiSite + '/location/getNearByUserList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: {
+                    token: $api.getStorage('userToken'),
+                    latitude: api.pageParam.lat,
+                    longitude: api.pageParam.lon,
+                    // sex:"",
+                    // hometown:"",
+                    // start_age:"",
+                    // end_age:"",
+                }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    console.log(JSON.stringify(ret))
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
     }
-    
+
 </script>
 </html>

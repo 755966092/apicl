@@ -14,7 +14,7 @@
             background-size: .439rem .102rem;
             color: #fff;
         }
-            
+
     </style>
 </head>
 <body>
@@ -26,7 +26,7 @@
             <span class="winTitle">
                 附近的人
             </span>
-            <span class="rightBtn"   tapmode   onclick="openFiltrare()"></span> 
+            <span class="rightBtn"   tapmode   onclick="openFiltrare()"></span>
         </div>
     </header>
 </body>
@@ -35,6 +35,73 @@
 <script type="text/javascript">
     apiready = function(){
         fnInit();
+        moduleInit();
+
+        LocationRegisterLocation()
+    };
+    function openFiltrare() {
+        api.openWin({
+            name: 'find_peopleAround_filtrate_win',
+            url: './find_peopleAround_filtrate_win.html'
+        });
+    }
+    // 附近的人注册位置信息
+    function LocationRegisterLocation() {
+        var lat,lon,address;
+        bMap.getLocation({
+            accuracy: '10m',//10m/100m/1km/3km
+            autoStop: true,
+            filter: 1
+        }, function(ret, err){
+            if(ret.status){
+                // alert(JSON.stringify(ret));
+                lon = ret.lon;
+                lat = ret.lat;
+                bMap.getNameFromCoords({
+                    lon: lon,
+                    lat: lat
+                },function(ret,err){
+                    if(ret.status){
+                        // alert(JSON.stringify(ret));
+                        address = ret.address;
+                        if ($api.getStorage('LocationRegisterLocation')) {
+                            openF(lat,lon);
+                        } else {
+                            // 未注册过
+                            api.ajax({
+                                url: apiSite + '/location/registerLocation',
+                                method: 'post',
+                                headers: apiHeader,
+                                data: {
+                                    values: {
+                                        token: $api.getStorage('userToken'),
+                                        latitude: lat,
+                                        longitude: lon,
+                                        address: address
+                                    }
+                                }
+                            }, function(ret, err) {
+                                if(ret) {
+                                    if (ret.code === 200) {
+                                        console.log('注册成功')
+                                        $api.setStorage('LocationRegisterLocation', 'true');
+                                        openF(lat,lon);
+                                    } else {
+                                        alert(ret.msg)
+                                    }
+                                } else {
+                                    alert(JSON.stringify(err))
+                                }
+                            })
+                        }
+                    }
+                });
+            }else{
+                alert(err.code);
+            }
+        });
+    }
+    function openF(lat,lon) {
         api.openFrame({
             name: 'find_peopleAround_frame',
             url: './find_peopleAround_frame.html',
@@ -44,13 +111,11 @@
                 w: 'auto',
                 h: 'auto'
             },
+            pageParam: {
+                lon: lon,
+                lat: lat
+            },
             bounces: false
-        });
-    };
-    function openFiltrare() {
-        api.openWin({
-            name: 'find_peopleAround_filtrate_win',
-            url: './find_peopleAround_filtrate_win.html'
         });
     }
 </script>
