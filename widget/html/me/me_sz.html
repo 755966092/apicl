@@ -320,16 +320,31 @@
                 // 报错addressList_simplify 已经存在
             }
         });
-
-
-
-
+    }
+    function queryContactByPage(page) {
+         if("undefined" == typeof page) {
+             var page = 0;
+        }
+        var contacts = api.require('contacts');
+        contacts.queryByPage({
+             count:300,
+             pageIndex:page
+         }, function(ret, err) {
+            //  api.alert({msg:'获取成功'+page});
+            console.log(JSON.stringify(ret));
+            console.log('获取成功'+JSON.stringify(ret.contacts.length))
+            $api.css($api.dom('.loading'), 'display: none');
+             if(page < (ret.pages-1)) {
+                setTimeout(function(){
+                        queryContactByPage(page+1);
+                },10000)
+             }
+        });
     }
     function queryContacts() {
         contacts.queryByPage({
             pageIndex: 0
         }, function(retContacts, err) {
-
             if (retContacts.status) {
                 db.executeSql({
                     name: 'db_'+$api.getStorage('userToken'),
