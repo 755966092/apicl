@@ -75,7 +75,7 @@
 <body>
     <div class="main">
         <ul class="resultList">
-            <li class="flex-def flex-cCenter">
+            <!-- <li class="flex-def flex-cCenter">
                 <img src="../../image/tx_1.jpg">
                 <div class="info flex-item flex-zLeftRight flex-def flex-zBetween">
                     <div class="title">
@@ -104,8 +104,36 @@
                         <span>个性签名个性签个性签名个性签个性签名个性签个性签名个性签</span>
                     </span>
                 </div>
-            </li>
+            </li> -->
         </ul>
+        <script type="text/x-dot-template" id="listT">
+            {{~it:value:index}}
+                <li class="flex-def flex-cCenter">
+                    <img src="{{=value.head_img_url}}">
+                    <div class="info flex-item flex-zLeftRight flex-def flex-zBetween">
+                        <div class="title">
+                            <div class="name flex-item flex-def flex-cCenter">
+                                <h3>{{=value.nickname}}</h3>
+                                {{?value.sex==1}}
+                                    <span class="icon"></span>
+                                {{??}}
+                                    <span class="icon2"></span>
+                                {{?}}
+                            </div>
+                            {{?value.distance<1}}
+                            <p>1km以内</p>
+                            {{??}}
+                            <p>{{=value.distance}}km</p>
+                            {{?}}
+                        </div>
+                        <span class="content flex-def flex-cCenter">
+                            <span>{{=value.current_company}}&nbsp;{{=value.current_position}}</span>
+                        </span>
+                    </div>
+                </li>
+            {{~}}
+        </script>
+
     </div>
 
 </body>
@@ -136,10 +164,11 @@
         // 参数
         if(ret) {
             var param = ret.value.filterParameters;
+            var sex = param[1]=='女生'?2:1;
         }
-        // alert(JSON.stringify(param))
+        console.log(JSON.stringify(param))
         api.ajax({
-            url: apiSite + '/location/getNearByUserList',
+            url: apiSite + '/location/nearByUserList',
             method: 'post',
             headers: apiHeader,
             data: {
@@ -147,8 +176,8 @@
                     token: $api.getStorage('userToken'),
                     latitude: api.pageParam.lat,
                     longitude: api.pageParam.lon,
-                    // sex:"",
-                    // hometown:"",
+                    sex:sex,
+                    // hometown:param[2],
                     // start_age:"",
                     // end_age:"",
                 }
@@ -156,12 +185,13 @@
         }, function(ret, err) {
             if(ret) {
                 if (ret.code === 200) {
-                    console.log(JSON.stringify(ret))
+                    console.log(JSON.stringify(ret));
+                    getData(ret.data.list)
                 } else {
                     alert(ret.msg)
                 }
             } else {
-                alert(JSON.stringify(err))
+                console.log(JSON.stringify(err))
             }
         })
     }
