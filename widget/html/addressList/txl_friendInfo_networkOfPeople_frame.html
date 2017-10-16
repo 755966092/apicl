@@ -25,21 +25,23 @@
     // dataProcessing(data);
     // 处理数据
     function dataProcessing(data) {
-        var dataY = {
-            data:[],
-            links:[]
-        };
-        for (var key in data.user_info) {
-            if (data.user_info.hasOwnProperty(key)) {
-                var element = data.user_info[key];
-                dataY.data.push({name:element.nickname,symbol:'image://'+ element.head_img_url +'?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim'})
+        if (data.user_info && data.relationship_info) {
+            var dataY = {
+                data:[],
+                links:[]
+            };
+            for (var key in data.user_info) {
+                if (data.user_info.hasOwnProperty(key)) {
+                    var element = data.user_info[key];
+                    dataY.data.push({name:element.nickname,symbol:'image://'+ element.head_img_url +'?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim'})
+                }
             }
+            for (var i = 0; i < data.relationship_info.length; i++) {
+                var element = data.relationship_info[i];
+                dataY.links.push({source:data.user_info[element[0]].nickname,target:data.user_info[element[1]].nickname})
+            }
+            initTable(dataY);
         }
-        for (var i = 0; i < data.relationship_info.length; i++) {
-            var element = data.relationship_info[i];
-            dataY.links.push({source:data.user_info[element[0]].nickname,target:data.user_info[element[1]].nickname})
-        }
-        initTable(dataY);
     }
     // 请求数据
     function requireData() {

@@ -344,7 +344,7 @@
             <li class="mt37"  tapmode >
                 <div class="wrap">
                     <span>赏金</span>
-                    <input type="number" name="" placeholder="必填" id="reward">
+                    <input type="text" name="" placeholder="必填" class="initPriceIpt" id="reward">
                 </div>
             </li>
             <li class='border100'  tapmode   onclick="selectType(this)" data-val="_format">
@@ -377,6 +377,7 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript" src="../../script/cleave.js"></script>
 <script type="text/javascript">
     var type = 1, province,            //string  省份
                   city,            //string  城市
@@ -394,6 +395,7 @@
                   classify_dataSource,
                   classify_dataSource2=[];
     apiready = function(){
+        initPriceIpt();
         moduleInit();
         classify();
         // // console.log('369:::'+JSON.stringify(api.pageParam))
@@ -418,6 +420,14 @@
     // 监听选择修改地址
         monitorSelAddress()
     };
+    function initPriceIpt() {
+        var cleaveNumeral = new Cleave('.initPriceIpt', {
+            numeral: true,
+            numeralIntegerScale: 6,
+            numeralPositiveOnly: true,
+            delimiter: ''
+        });
+    }
     // 打开分类页面
     function openClassify() {
         api.openWin({
