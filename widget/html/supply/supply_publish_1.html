@@ -471,7 +471,13 @@
                         }
                         fliderSupply(data,supplyCache)
                     } else {
-                        alert(err.code);
+                        api.toast({
+                            msg: '请在设置中打开定位权限',
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                        $api.css($api.dom('.loading'), 'display: none');
+                        api.refreshHeaderLoadDone()
                     }
                 });
 
@@ -538,7 +544,7 @@
                 // }
 
             } else {
-                alert(JSON.stringify(err.msg))
+                alert('545'+JSON.stringify(err.msg))
             }
         })
     }
@@ -591,7 +597,13 @@
                     }
                 })
             } else {
-                alert(err.code);
+                api.toast({
+                    msg: '请在设置中打开定位权限',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+                $api.css($api.dom('.loading'), 'display: none');
+                        api.refreshHeaderLoadDone()
             }
         });
         //     }
