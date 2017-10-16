@@ -8,14 +8,14 @@
     <style>
         html,body {
             height: 100%;
-            width: 100%;    
+            width: 100%;
             background-color: rgba(0,0,0,0);
         }
         .warp1 {
             position: relative;
             height: 100%;
-             display: -webkit-box; 
-            display: flex; 
+             display: -webkit-box;
+            display: flex;
             -webkit-box-direction: normal;
             -webkit-box-orient: vertical;
             flex-direction: column;
@@ -45,7 +45,7 @@
         }
         .footer span {
             height: .9rem;
-            width: 3rem;    
+            width: 3rem;
             font-size: .34rem;
             text-align: center;
             line-height: .9rem;
@@ -56,7 +56,7 @@
             background-color: #27B24A;
             color: #fff;
         }
-        
+
         header.header {
             opacity: 0;
         }
@@ -80,7 +80,7 @@
     </style>
 </head>
 <body   tapmode class=""   onclick="api.closeFrame()">
-   
+
     <div class="warp1 flex-def flex-zBetween">
         <header class="header">
             <div class="head"></div>
@@ -91,14 +91,14 @@
                    <p class="selected"><span>已选择：</span><span class="selectedText">请选择学校</span></p>
 
                 </div>
-            </div> 
+            </div>
             <div class="footer">
                 <span   tapmode   onclick="enter(0);event.stopPropagation();">取消</span>
                 <span   tapmode   onclick="enter(1);event.stopPropagation();">确定</span>
             </div>
         </div>
     </div>
-    
+
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -133,6 +133,32 @@
         //     requireCategory()
         // }
     }
+     // 对比版本号
+     function compareVersion() {
+        api.ajax({
+            url: apiSite + '/common/checkVersion',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: {
+                    token: $api.getStorage('userToken'),
+                }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    if (ret.data.current_version != api.appVersion) {
+                        // 如果版本号不一样  更新本地分类
+                        requireData();
+                    }
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
     // 设置文字
     function settingText () {
         $api.text($api.dom('.selectedText'), '选择分类');
@@ -145,8 +171,8 @@
             str = ''
         } else {
             // // // console.log('132行: '+JSON.stringify(selectedObj[0]))
-            str = selectedObj[0].str ||''; 
-            // $api.text($api.dom('.selectedText'), str); 
+            str = selectedObj[0].str ||'';
+            // $api.text($api.dom('.selectedText'), str);
         }
         listContact.open({
             x: -1000,
@@ -166,8 +192,8 @@
             imgHeight: 32,
             borderColor: '#d9d9d9',
             groupTitle: {
-                color: '#999',       
-                size: 14,   
+                color: '#999',
+                size: 14,
                 bgColor: '#f8f8f8'
             },
             rightBg: '#fff',
@@ -198,7 +224,7 @@
                         data: {
                             title: data[ret.key][ret.index].title,
                             titleColor: '#000',
-                            titleSize:14            
+                            titleSize:14
                         }
                     });
                     $api.text($api.dom('.selectedText'), str);
@@ -228,11 +254,11 @@
                         data: {
                             title: data[ret.key][ret.index].title,
                             titleColor: '#27B24A',
-                            titleSize:14            
+                            titleSize:14
                         }
                     });
                 }
-                
+
             } else {
                 alert(JSON.stringify(err));
             }
@@ -240,7 +266,7 @@
     }
     // 处理数据
     function handleData() {
-        
+
         var schoolList = ['自定义数据','自定义数据2','自定义数据3','北京理工大学','同济大学','南开大学','复旦大学','山东科技大学','青岛海洋大学','中石油大学'];
         var obj = {};
         for (var i = 0; i < schoolList.length; i++) {

@@ -21,11 +21,38 @@
         // $api.rmStorage('classifyList');
         var dataList = $api.getStorage('classifyDataSlide');
         if(dataList) {
-            openList(dataList,'yes')
+            openList(dataList,'yes');
+            compareVersion();
         } else {
             requireData();
         }
     };
+    // 对比版本号
+    function compareVersion() {
+        api.ajax({
+            url: apiSite + '/common/checkVersion',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: {
+                    token: $api.getStorage('userToken'),
+                }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    if (ret.data.current_version != api.appVersion) {
+                        // 如果版本号不一样  更新本地分类
+                        requireData();
+                    }
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
     function requireData() {
         api.ajax({
             url: apiSite + '/category/index',
@@ -68,8 +95,6 @@
         },function(ret,err){
         })
         listContact.close();
-        console.log(api.winHeight);
-
         listContact.open({
                 x : 0,
                 y : 0,
@@ -99,7 +124,7 @@
                 },
                 data: data1,
                 fixedOn: api.frameName,
-                fixed: false
+                // fixed: false
             }, function(ret, err) {
                 if (ret) {
                      if (ret.clickType == 0) {

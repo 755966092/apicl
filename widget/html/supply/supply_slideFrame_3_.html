@@ -8,15 +8,15 @@
     <style>
         html,body {
             height: 100%;
-            width: 100%;    
+            width: 100%;
             background-color: rgba(0,0,0,0);
         }
         .warp1 {
             box-sizing: border-box;
             position: relative;
             height: 100%;
-             display: -webkit-box; 
-            display: flex; 
+             display: -webkit-box;
+            display: flex;
             -webkit-box-direction: normal;
             -webkit-box-orient: vertical;
             flex-direction: column;
@@ -46,7 +46,7 @@
         }
         .footer span {
             height: .9rem;
-            width: 3rem;    
+            width: 3rem;
             font-size: .34rem;
             text-align: center;
             line-height: .9rem;
@@ -57,7 +57,7 @@
             background-color: #27B24A;
             color: #fff;
         }
-        
+
         header.header {
             opacity: 0;
         }
@@ -81,7 +81,7 @@
     </style>
 </head>
 <body   tapmode class=""   onclick="api.closeFrame()">
-   
+
     <div class="warp1 flex-def flex-zBetween">
         <header class="header">
             <div class="head"></div>
@@ -92,14 +92,14 @@
                    <p class="selected"><span>已选择：</span><span class="selectedText">请选择学校</span></p>
 
                 </div>
-            </div> 
+            </div>
             <div class="footer">
                 <span   tapmode   onclick="enter(0);event.stopPropagation();">取消</span>
                 <span   tapmode   onclick="enter(1);event.stopPropagation();">确定</span>
             </div>
         </div>
     </div>
-    
+
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -127,7 +127,8 @@
                     classifyDataSlide[selectedObj.school[i].key][selectedObj.school[i].index].titleColor = '#27B24A'
                 }
             }
-            openList(classifyDataSlide,'yes')
+            openList(classifyDataSlide,'yes');
+            compareVersion();
         } else {
             requireCategory()
         }
@@ -138,6 +139,32 @@
             settingText();
         }
     }
+    // 对比版本号
+    function compareVersion() {
+        api.ajax({
+            url: apiSite + '/common/checkVersion',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: {
+                    token: $api.getStorage('userToken'),
+                }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    if (ret.data.current_version != api.appVersion) {
+                        // 如果版本号不一样  更新本地分类
+                        requireData();
+                    }
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
     // 设置文字
     function settingText () {
         switch(api.pageParam.val) {
@@ -145,8 +172,8 @@
                 eventName = 'selectschool';
                 discriminate = '请选择类别'
                 break;
-           
-          
+
+
         }
         $api.text($api.dom('.selectedText'), discriminate);
     }
@@ -177,8 +204,8 @@
             imgHeight: 32,
             borderColor: '#d9d9d9',
             groupTitle: {
-                color: '#999',       
-                size: 14,   
+                color: '#999',
+                size: 14,
                 bgColor: '#f8f8f8'
             },
             rightBg: '#fff',
@@ -208,7 +235,7 @@
                         data: {
                             title: data[ret.key][ret.index].title,
                             titleColor: '#000',
-                            titleSize:15          
+                            titleSize:15
                         }
                     });
                     $api.text($api.dom('.selectedText'), str);
@@ -238,11 +265,11 @@
                         data: {
                             title: data[ret.key][ret.index].title,
                             titleColor: '#27B24A',
-                            titleSize:15            
+                            titleSize:15
                         }
                     });
                 }
-                
+
             } else {
                 alert(JSON.stringify(err));
             }
@@ -270,13 +297,13 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        type: 1
                    }
             }
         }, function(ret, err) {
             if(ret) {
-               
+
                 sortData(ret.data.list);
                 // handleData(val, ret)
             } else {
@@ -289,7 +316,7 @@
         var schoolList=[];
         for (var i = 0; i < ret.data.list.length; i++) {
             schoolList.push(ret.data.list[i].name)
-        }   
+        }
         var obj = {};
         for (var i = 0; i < schoolList.length; i++) {
             obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]] = [];
@@ -334,16 +361,16 @@
             $api.text($api.dom('.selectedText'), discriminate);
         }
     }
-    function f_check_uppercase(obj)   {          
-       if (/[A-Z]/.test(obj))    {   
-          return true;   
-       }    
-       return false;   
+    function f_check_uppercase(obj)   {
+       if (/[A-Z]/.test(obj))    {
+          return true;
+       }
+       return false;
     }
     function sortData(data) {
         for (var i = 0; i < data.length; i++) {
             data[i].letter = PinyinHelper.getShortPinyin($api.trimAll(data[i].name)).toUpperCase();
-            data[i].flag = data[i].letter[0]; 
+            data[i].flag = data[i].letter[0];
         }
         for(var i = 0;i < data.length-1; i++) {
             for(var j = 0; j < data.length-i-1; j++) {
@@ -392,9 +419,9 @@
                     arr[data[i].initial] = [];
                     a = i;
                 }
-            } 
+            }
             arr[data[a].initial].push (data[i])
-            
+
         }
         openList(arr)
     }
