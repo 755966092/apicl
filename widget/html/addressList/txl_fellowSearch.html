@@ -178,23 +178,28 @@
     $api.dom('form').onsubmit = function() {
         return false;
     };
-    $api.addEvt($api.byId('ipt'), 'keyup', function(e) {
+    var iptBox = $api.byId('ipt')
+    $api.addEvt(iptBox, 'keyup', function(e) {
         if (api.pageParam.type == 'web') {
             if (e.keyCode == 13) {
                 searchFellow();
+                iptBox.blur();
+
             }
         } else if (api.pageParam.type == 'mix') {
             if (e.keyCode == 13) {
                 searchFellow();
+                iptBox.blur();
             }
         } else {
             if (e.keyCode == 13) {
                 searchFellow();
+                iptBox.blur();
             }
         }
 
         if (api.systemType == 'ios') {
-            keyUp($api.byId('ipt'))
+            keyUp(iptBox)
         }
     });
 
