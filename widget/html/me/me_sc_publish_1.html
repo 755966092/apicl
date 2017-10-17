@@ -167,7 +167,16 @@
 <script type="text/javascript">
     var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
     apiready = function(){
-        requestData();
+        requireData();
+        api.setCustomRefreshHeaderInfo({
+            bgColor: '#EFEFF4',
+        }, function(ret, err) {
+            if (ret) {
+                requireData();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     };
     function openUserInfo(ele) {
         api.openWin({
@@ -177,7 +186,7 @@
             pageParam: {userId : $api.attr(ele, 'data-id')}
         });
     }
-    function requestData() {
+    function requireData() {
         api.ajax({
             url: apiSite + '/user_center/supplyCollect',
             method: 'post',
@@ -188,8 +197,8 @@
                    }
             }
         }, function(ret, err) {
+                api.refreshHeaderLoadDone();
             if(ret) {
-                console.log(JSON.stringify(ret))
                 for (var i = 0; i < ret.data.list.length; i++) {
                     if ( ret.data.list[i].unit > 0) {
                          ret.data.list[i].unit = _dataSource[ ret.data.list[i].unit-1]

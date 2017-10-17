@@ -562,7 +562,7 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
             filter: 1
         }, function(ret, err) {
             if (ret.status) {
-                // // console.log('540540540'+JSON.stringify(ret))
+                console.log('540540540'+JSON.stringify(ret))
                 getCoords(ret.lon, ret.lat)
             } else {
                 alert(err);
@@ -576,7 +576,8 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
             lat: lat
         }, function(ret, err) {
             if (ret.status) {
-                $api.text($api.dom('.position'), ret.address);
+                console.log(ret.address)
+                $api.text($api.byId('position'), ret.address);
                 province = ret.province//省 ret.province
                 city = ret.city//市 ret.city
                 district = ret.district//区 ret.district
