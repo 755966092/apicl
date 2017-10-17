@@ -53,31 +53,31 @@
 </head>
 <body>
     <div class="main">
-    
+
           <ul >
-            <li tapmode onclick="selType(this, 1)" class=" flex-def flex-cCenter flex-zBetween" >
-                <span class="title">关系</span>  
+            <!-- <li tapmode onclick="selType(this, 1)" class=" flex-def flex-cCenter flex-zBetween" >
+                <span class="title">关系</span>
                 <div class="flex-def flex-zEnd flex-cCenter flex-item">
                     <span class="relation">一度人脉</span>
                     <span class="icon"></span>
                 </div>
-            </li>
+            </li> -->
             <li tapmode onclick="selType(this, 2)" class=" flex-def flex-cCenter flex-zBetween">
-                <span class="title">性别</span>  
+                <span class="title">性别</span>
                 <div class="flex-def flex-zEnd flex-cCenter flex-item">
                     <span class="relation">女生</span>
                     <span class="icon"></span>
                 </div>
             </li>
             <li tapmode onclick="selType(this, 3)" class=" flex-def flex-cCenter flex-zBetween">
-                <span class="title">家乡</span>  
+                <span class="title">家乡</span>
                 <div class="flex-def flex-zEnd flex-cCenter flex-item">
                     <span class="relation">北京-东城区</span>
                     <span class="icon"></span>
                 </div>
             </li>
             <li tapmode onclick="selType(this, 4)" class=" flex-def flex-cCenter flex-zBetween">
-                <span class="title">年龄</span>  
+                <span class="title">年龄</span>
                 <div class="flex-def flex-zEnd flex-cCenter flex-item">
                     <span class="relation">不限</span>
                     <span class="icon"></span>
@@ -110,10 +110,17 @@
     // 提交数据
     function submitData () {
         var paramElement = $api.domAll('.relation');
-        var paramArr = [];
-        for (var i = 0; i < paramElement.length; i++) {
-            paramArr.push($api.text(paramElement[i]))
-        }
+        var paramArr = {
+            sex:'',
+            hometown:'',
+            start_age:'',
+            end_age:'',
+        };
+            paramArr.sex = $api.text(paramElement[0])=='男'?1:2;
+            paramArr.hometown = $api.text(paramElement[1]);
+            paramArr.start_age = $api.attr(paramElement[2],'startAge');
+            paramArr.end_age = $api.attr(paramElement[2],'endAge');
+            console.log(JSON.stringify(paramArr))
         api.sendEvent({
             name: 'ScreeningIsComplete',
             extra: {
@@ -178,7 +185,7 @@
             }
         } else if (n === 3) {
             col = 2;
-             
+
             data = city;
             data.unshift({
                   name: "不限",
@@ -204,15 +211,25 @@
                 {
                     name: '不限'
                 },{
-                    name: '18岁以下'
+                    name: '18岁以下',
+                    startAge: '0',
+                    endAge: '18'
                 },{
-                    name: '18-22岁'
+                    name: '18-22岁',
+                    startAge: '18',
+                    endAge: '22'
                 },{
-                    name: '23-26岁'
+                    name: '23-26岁',
+                    startAge: '23',
+                    endAge: '26'
                 },{
-                    name: '27-35岁'
+                    name: '27-35岁',
+                    startAge: '27',
+                    endAge: '35'
                 },{
-                    name: '35岁以上'
+                    name: '35岁以上',
+                    startAge: '35',
+                    endAge: '1000'
                 },
             ];
             dataArr = ['不限', '18岁以下','18-22岁','23-26岁','27-35岁','35岁以上'];
@@ -276,9 +293,16 @@
         }, function(ret, err) {
             if (ret) {
                 if (ret.eventType == 'ok') {
+                    console.log(JSON.stringify(ret))
                     // 编辑性别
                     if (n === 3) {
                         $api.text($api.dom(ele, '.relation'), ret.level1 + '-' + ret.level2);
+                    } else if(n === 4) {
+                        $api.text($api.dom(ele, '.relation'), ret.level1);
+                        if (ret.selectedInfo[0].startAge) {
+                            $api.attr($api.dom(ele, '.relation'), 'startAge', ret.selectedInfo[0].startAge);
+                            $api.attr($api.dom(ele, '.relation'), 'endAge', ret.selectedInfo[0].endAge);
+                        }
                     } else {
                         $api.text($api.dom(ele, '.relation'), ret.level1);
                     }
@@ -289,6 +313,6 @@
             }
         });
     }
-    
+
 </script>
 </html>

@@ -123,7 +123,7 @@
             margin-left: .02rem;
         }
         .list .text .stateContent {
-            font-size: .24rem;
+            font-size: .26rem;
             color: #333;
             /*margin-top: .2rem;*/
             display: -webkit-box;
@@ -134,6 +134,10 @@
             -webkit-line-clamp: 6;
         }
         .hideAllBtn {
+            font-size: 0.26rem;
+            color: #5d7099;
+        }
+        .discussInfo .hideAllBtn {
             font-size: 0.24rem;
             color: #5d7099;
         }
@@ -174,6 +178,7 @@
         }
         .list .text .discussInfo .discussName {
             font-size: .24rem;
+            font-weight: 700;
             color: #5D7098;
         }
         .list .text .discussInfo .text1 {
@@ -280,7 +285,7 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript" src="../../script/jquery.min.js"></script>
 <script type="text/javascript">
-    var role = ['关系人','知情人','甲方','总包单位','分包单位','设计院','销售'],isMenber='';
+    var role = ['关系人','知情人','甲方','总包单位','分包单位','设计院','销售'],isMenber='', listData;
     apiready = function(){
         moduleInit();
         requestData();
@@ -303,7 +308,7 @@
         });
         // 上啦加载
         api.addEventListener({
-            name: 'scrolltobottom'
+            name: 'scrolltobottom',
         }, function(ret, err) {
             if (isMenber) {
                 // alert('下拉加载')
@@ -346,8 +351,6 @@
     };
     // 全文
     function hideAll(ele) {
-        console.log($api.closest(ele))
-        console.log(ele)
         if ($api.text(ele) == '全文') {
             $api.text(ele, '收起');
             $api.removeCls($(ele).prev()[0], 'hideAll');
@@ -379,6 +382,7 @@
             }
         }, function(ret, err) {
             if(ret) {
+
                 for (var i = 0; i < ret.data.list.length; i++) {
                     ret.data.list[i].role = role[ret.data.list[i].role];
                     ret.data.list[i].create_time = initTime(ret.data.list[i].create_time);
@@ -389,9 +393,14 @@
                 }
                 isMenber = ret.data.is_member;
                 // 停止下拉刷新
-                api.refreshHeaderLoadDone()
-                getData(ret.data.list);
-                selfAdaption()
+                api.refreshHeaderLoadDone();
+                if (listData == ret.data.list.length) {
+                    // 第一次和第二次请求的动态条数相等不刷新页面
+                } else {
+                    listData = ret.data.list.length;
+                    getData(ret.data.list);
+                    selfAdaption()
+                }
             } else {
                 alert(JSON.stringify(err.msg))
             }
