@@ -1,0 +1,52 @@
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>底部导航</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <style>
+      p {
+          font-size: 0.28rem;
+          display: -webkit-box;
+            -webkit-box-orient: vertical;
+
+        overflow: hidden;
+      }
+      .hideAll {
+        -webkit-line-clamp: 6;
+      }
+      span {
+          font-size: 0.28rem;
+          color: #5d7099;
+      }
+    </style>
+</head>
+<body>
+    <div>
+
+            <p class="hideAll">测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试长文本测试本测试本测试本测试本测试本测试本测试本测试本测试本测试本</p><span tapmode class="hideAllBtn" onclick="hideAll(this)">全文</span>
+        </div>
+           </div>
+</body>
+
+</html>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/jquery.min.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript">
+    function hideAll(ele) {
+        console.log($api.text($api.dom('p')).length)
+        console.log($(ele).prev()[0])
+        if ($api.text(ele) == '全文') {
+            $api.text(ele, '收起');
+            $api.removeCls($(ele).prev()[0], 'hideAll');
+        } else {
+            $api.text(ele, '全文');
+            $api.addCls($(ele).prev()[0], 'hideAll');
+        }
+    }
+</script>

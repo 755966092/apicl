@@ -126,6 +126,16 @@
             font-size: .24rem;
             color: #333;
             /*margin-top: .2rem;*/
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .hideAll {
+            -webkit-line-clamp: 6;
+        }
+        .hideAllBtn {
+            font-size: 0.24rem;
+            color: #5d7099;
         }
         .list .text .stateTime {
             margin-top: .1rem;
@@ -172,6 +182,9 @@
         }
         .list .text .discussInfo .discussContent {
             font-size: .24rem;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
 
         }
         .list .text .imgContent {
@@ -214,11 +227,15 @@
                                 <span class="state">{{=it[i].start_time.substring(0,10)}}</span>
                                 {{?}}
                             </div>
-                            <p class="stateContent">{{=it[i].content}}</p>
+                            <p class="stateContent hideAll">{{=it[i].content}}</p>
+                            {{?it[i].content.length>150}}
+                                <span class="hideAllBtn" tapmode onclick="hideAll(this);event.stopPropagation()">全文</span>
+                            {{??}}
+                            {{?}}
                             {{?it[i].image_json!=null}}
                                 <div class="imgContent">
                                     {{ for (var j = 0; j < it[i].image_json.length; j++) { }}
-                                        <img class="imgCon" src="{{=it[i].image_json[j]}}" alt="">
+                                        <img class="imgCon" src="{{=it[i].image_json[j]}}?imageView2/1/w/750/h/750/interlace/1/q/100|imageslim" alt="">
                                         <!-- <img class="imgCon" src="../../image/tx_1.jpg" alt=""> -->
                                     {{ }; }}
                                 </div>
@@ -240,7 +257,10 @@
                                         {{??}}
                                             <div data-usrId='{{=it[i].comment_list[j].comment_id}}' data-id='{{=it[i].topic_id}}' tapmode onclick='addComment(this);event.stopPropagation();'>
                                                 <span class="discussName">{{=it[i].comment_list[j].nickname}}：</span>
-                                                <span class="discussContent">{{=it[i].comment_list[j].content}}</span>
+                                                <span class="discussContent hideAll">{{=it[i].comment_list[j].content}}</span>{{?it[i].comment_list[j].content.length>150}}
+                                                <span class="hideAllBtn" tapmode onclick="hideAll(this);event.stopPropagation()">全文</span>
+                                            {{??}}
+                                            {{?}}
                                             </div>
                                         {{?}}
                                     {{ }; }}
@@ -258,6 +278,7 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript" src="../../script/jquery.min.js"></script>
 <script type="text/javascript">
     var role = ['关系人','知情人','甲方','总包单位','分包单位','设计院','销售'],isMenber='';
     apiready = function(){
@@ -323,7 +344,18 @@
             }
         });
     };
-
+    // 全文
+    function hideAll(ele) {
+        console.log($api.closest(ele))
+        console.log(ele)
+        if ($api.text(ele) == '全文') {
+            $api.text(ele, '收起');
+            $api.removeCls($(ele).prev()[0], 'hideAll');
+        } else {
+            $api.text(ele, '全文');
+            $api.addCls($(ele).prev()[0], 'hideAll');
+        }
+    }
     // 用户详情页面
     function openUserInfoPage(ele){
         api.openWin({
@@ -352,6 +384,7 @@
                     ret.data.list[i].create_time = initTime(ret.data.list[i].create_time);
                     if (ret.data.list[i].image_json != null) {
                         ret.data.list[i].image_json = eval(ret.data.list[i].image_json)
+                        // ret.data.list[i].image_json += '?imageView2/1/w/750/h/750/interlace/1/q/100|imageslim'
                     }
                 }
                 isMenber = ret.data.is_member;
@@ -489,7 +522,7 @@
             var imgCount = imgArr.length
             // // console.log('::::'+imgCount)
             if (imgCount == 1) {
-                    $api.css(listContent[i].getElementsByClassName('imgCon')[0], 'width:2.86rem;height:3.26rem;margin:0');
+                    $api.css(listContent[i].getElementsByClassName('imgCon')[0], 'width:3.26rem;height:3.26rem;margin:0');
                     // // console.log('1111')
 
             }else if (imgCount == 0) {

@@ -352,7 +352,7 @@
                     <p class="textContent">{{=it.info.topic_info.content}}</p>
                     {{?it.info.topic_info.image_json!=null}}
                         {{ for(var i=0; i< it.info.topic_info.image_json.length; i++){ }}
-                            <img src="{{=it.info.topic_info.image_json[i]}}">
+                            <img src="{{=it.info.topic_info.image_json[i]}}" tapmode onclick="openImgView(this)">
                         {{ }; }}
                     {{?}}
                 </div>
@@ -422,7 +422,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    var role = ['关系人','知情人','甲方','总包单位','分包单位','设计院','销售']
+    var role = ['关系人','知情人','甲方','总包单位','分包单位','设计院','销售'],paramImg;
     apiready = function(){
         moduleInit();
        api.addEventListener({
@@ -504,7 +504,8 @@
 
                 ret.data.commmentLength = count;
                 // // console.log(JSON.stringify(ret.data))
-                ret.data.info.topic_info.image_json = eval(ret.data.info.topic_info.image_json)
+                ret.data.info.topic_info.image_json = eval(ret.data.info.topic_info.image_json);
+                paramImg = ret.data.info.topic_info.image_json;
                 getData(ret.data)
             } else {
                 alert(JSON.stringify(err.msg))
@@ -636,6 +637,18 @@
         $api.css($api.dom('.selRoleList'), 'display:none');
         $api.removeCls($api.dom('.selRole .icon'), 'icon2');
         $api.addCls($api.dom('.selRole .icon'), 'icon3');
+    }
+     // 打开图片页面
+     function openImgView(ele) {
+        api.openWin({
+            name: 'view_the_image_page_win',
+            url: '../supply/view_the_image_page_win.html',
+            bounces: false,
+            pageParam: {
+                url : $api.attr(ele, 'src'),
+                paramImg: paramImg
+            }
+        });
     }
 </script>
 </html>
