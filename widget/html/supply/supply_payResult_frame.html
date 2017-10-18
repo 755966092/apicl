@@ -83,7 +83,7 @@
             color: #555;
         }
         .btnGroup {
-            margin-top: 3.35rem; 
+            margin-top: 3.35rem;
             text-align: center;
         }
     </style>
@@ -129,11 +129,14 @@
         // $api.text($api.byId('phone'), api.pageParam.paramPhone);
         if (api.pageParam.form == 1) {
             $api.text($api.byId('serverType'), '线上');
-        } else {
+        } else if (api.pageParam.form == 2) {
+
             $api.text($api.byId('serverType'), '线下');
+        } else {
+            $api.text($api.byId('serverType'), '线下 + 线下');
         }
         // initPage();
-        
+
         // 1 线上 2 线下
     }
     function initPage() {
@@ -151,7 +154,7 @@
                     method: 'post',
                     headers: apiHeader,
                     data: {
-                           values: { 
+                           values: {
                                token: $api.getStorage('userToken'),
                                order_id: api.pageParam.obj.order_id
                            }
@@ -164,14 +167,17 @@
                         // $api.text($api.byId('phone'), ret.data.order_info.paramPhone);
                         if (ret.data.demand_info.form == 1) {
                             $api.text($api.byId('serverType'), '线上');
-                        } else {
+                        } else  if (ret.data.demand_info.form == 2) {
+
                             $api.text($api.byId('serverType'), '线下');
+                        } else {
+                            $api.text($api.byId('serverType'), '线上 + 线下');
                         }
                     } else {
                         alert(JSON.stringify(err))
                     }
                 })
-           
+
         } else {
             // 支付失败
             $api.css($api.dom('.main'), 'display: none');
@@ -183,10 +189,18 @@
         $api.text($api.byId('serverTime'), ret.data.order_info.service_time);
         $api.text($api.byId('serverPerson'), ret.data.helper_info.nickname);
         // $api.text($api.byId('phone'), ret.data.order_info.paramPhone);
+        // if (ret.demand_info.form == 1) {
+        //     $api.text($api.byId('serverType'), '线上');
+        // } else {
+        //     $api.text($api.byId('serverType'), '线下');
+        // }
         if (ret.demand_info.form == 1) {
             $api.text($api.byId('serverType'), '线上');
-        } else {
+        } else  if (ret.demand_info.form == 2) {
+
             $api.text($api.byId('serverType'), '线下');
+        } else {
+            $api.text($api.byId('serverType'), '线上 + 线下');
         }
     }
     // 打开订单详情
@@ -222,12 +236,14 @@
                     $api.text($api.byId('serverTime'), api.pageParam.obj.service_time);
                     if (api.pageParam.form == 1) {
                         $api.text($api.byId('serverType'), '线上');
+                    } else if (api.pageParam.form == 2) {
+                        $api.text($api.byId('serverType'), '线下');
                     } else {
-                        $api.text($api.byId('serverType'), '线下+地址');
+                        $api.text($api.byId('serverType'), '线上 + 线下');
                     }
             } else {
                 // alert(err.code);
-              
+
             }
         })
     }

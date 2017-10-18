@@ -8,7 +8,7 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style type="text/css">
-       
+
         .main {
             margin-bottom: 1.2rem;
         }
@@ -215,7 +215,7 @@
         .commentName {
             width: 6.24rem;
         }
- 
+
         .commentNameLeft {
             font-size: 0;
         }
@@ -247,37 +247,37 @@
 
         }
         footer {
-            font-size: 0;       
-            height: .88rem;   
+            font-size: 0;
+            height: .88rem;
             position: fixed;
-            bottom: 0;  
-            left: 0;    
-            width: 100%;     
+            bottom: 0;
+            left: 0;
+            width: 100%;
             background-color: #fff;
             border-top: .01rem solid #F8F8F8;
          }
          footer span {
-            font-size: .18rem;  
+            font-size: .18rem;
             color: #999;
-            text-align: center; 
+            text-align: center;
             float: left;
          }
          footer span:nth-child(1),
          footer span:nth-child(2) {
-             width: 25%;    
+             width: 25%;
          }
- 
+
          footer span:nth-child(3) {
-             font-size: .3rem;  
-             width: 50%; 
-             line-height: .88rem;  
+             font-size: .3rem;
+             width: 50%;
+             line-height: .88rem;
              background-color: #0ABB07;
              color: #fff;
          }
           footer i {
-             display: inline-block;  
-             width: 100%;    
-             height: .55rem; 
+             display: inline-block;
+             width: 100%;
+             height: .55rem;
              background: url(../../image/icon_supply/icon_chat.png)no-repeat;
             background-size: .4rem .38rem;
             background-position: center bottom;
@@ -300,17 +300,17 @@
             margin: auto;
          }
          #cloaswin {
-            width: .44rem;  
-            height: .44rem; 
+            width: .44rem;
+            height: .44rem;
             background: url(../../image/icon_supply/icon_callback.png)no-repeat;
             -webkit-background-size: .44rem .44rem;
             background-size: .44rem .44rem;
-            position: fixed;    
-            top: .55rem;                
-            left: .3rem;        
-         }  
+            position: fixed;
+            top: .55rem;
+            left: .3rem;
+         }
     </style>
-</head>     
+</head>
 <body>
     <div id="cloaswin" onclick="api.closeWin();"></div>
     <div class="loading" ></div>
@@ -323,7 +323,7 @@
                 {{??it.info.image_json[0]=='0'}}
                     <img src="../../image/tx_4.jpg">
                 {{?}}
-                
+
             </div>
             <div class="title flex-def flex-zLeftRight flex-cCenter">
                 <img src="{{=it.info.head_img_url}}" alt="">
@@ -365,8 +365,10 @@
                 </div>
                 {{?it.info.form == 1}}
                     <div class="form">线上服务</div>
-                {{??}}
+                {{??it.info.form == 2}}
                     <div class="form">线下服务</div>
+                {{??}}
+                    <div class="form">线上 + 线下服务</div>
                 {{?}}
             </div>
            <!--  <div class="sel flex-def flex-zBetween flex-cCenter">
@@ -393,7 +395,7 @@
                         {{ }; }}
                     {{??it.info.image_json[0]=='0'}}
                     {{?}}
-                    
+
                 </div>
             </div>
             <div class="comment">
@@ -412,7 +414,7 @@
                                     {{for(var i = 0;i < it.last_comment.point;i++){ }}
                                         <span class="avg_pointIcon"></span>
                                     {{};}}
-                                    
+
                                 </div>
                             </div>
                             <div class="commentNameRight">
@@ -423,14 +425,14 @@
                     <p class="commentText">{{=it.last_comment.content}}</p>
                 </div>
                 {{};}}
-                
+
                 {{?it.info.comment_count==0}}
                 {{??}}
                     <div class="btn flex-def flex-cCenter">
                         <div>查看全部</div>
                     </div>
                 {{?}}
-                
+
             </div>
            <!--  <div class="comment">
                 <div class="commentTitle flex-def flex-cCenter flex-zBetween">
@@ -443,7 +445,7 @@
                         <div class="commentName flex-def flex-zBetween flex-zLeftRight flex-cCenter">
                             <div class="commentNameLeft">
                                 <div class="name">王*柏</div>
-                                
+
                             </div>
                             <div class="commentNameRight">
                                 2017-02-01
@@ -458,7 +460,7 @@
                         <div class="commentName flex-def flex-zBetween flex-zLeftRight flex-cCenter">
                             <div class="commentNameLeft">
                                 <div class="name">王*柏</div>
-                                
+
                             </div>
                             <div class="commentNameRight">
                                 2017-02-01
@@ -473,8 +475,8 @@
             </div> -->
         </div>
     </script>
-  
-    <footer>    
+
+    <footer>
             <span><i></i>聊天</span>
             <span><i></i>收藏</span>
             <span tapmode onclick="immediateOrder()">立即下单</span>
@@ -527,7 +529,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-               values: { 
+               values: {
                    token: $api.getStorage('userToken'),
                    supply_id: supply_id
                }
@@ -535,20 +537,20 @@
         }, function(ret, err) {
             if (ret.data.info.image_json != 'null') {
                 // 解析图片json
-                ret.data.info.image_json = eval(ret.data.info.image_json);    
+                ret.data.info.image_json = eval(ret.data.info.image_json);
             } else {
                 ret.data.info.image_json = '0'
-            }   
+            }
             ret.data.info.unit = _dataSource[ret.data.info.unit-1]
             ret.data.info.create_time = initTime(ret.data.info.create_time)
-            $api.css($api.dom('.loading'), 'display:none');     
+            $api.css($api.dom('.loading'), 'display:none');
             getData(ret.data);
             // ret.data
             transmitData = ret.data.info;
         })
     }
     // 换算单位
-  
+
     // 切换留言和详情
     function datum(n,ele) {
         for (var i = 0; i < $api.domAll('.no5Title').length; i++) {
@@ -564,10 +566,10 @@
             $api.addCls($api.first(ele, 'span'), 'borderBottom');
         }
     }
-   
 
 
-    
+
+
     // $api.dom('.resultList').addEventListener("scroll", function(event) {
     //     // // console.log($api.dom('.resultList').scrollY)
     //     if (window.scrollY > 300) {
@@ -599,6 +601,6 @@
             }
         });
     }
-   
+
 </script>
 </html>

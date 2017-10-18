@@ -613,7 +613,7 @@
         }
 
         data.info.sub_type == 1 ? $api.text(sub_type, '自产自销') : $api.text(sub_type, '代理代销')
-        data.info.form == 1 ? $api.text(form, '线上') : $api.text(form, '线下')
+        data.info.form == 1 ? $api.text(form, '线上') : (data.info.form == 2 ? $api.text(form, '线下') : $api.text(form, '线上 + 线下'))
         base64Data.img = eval(data.info.image_json);
         getData(base64Data)
         // 编辑供应返回的相关信息
@@ -799,7 +799,7 @@
             category_id = $api.attr($api.byId('category_id'), 'data-id'),         //int 分类ID
             price = $api.val($api.byId('price')),           //float   价格
             unit = _dataSource.indexOf($api.text($api.byId('unit'))) + 1,            //string  单位
-            form = $api.text($api.byId('form')) == '线上' ? 1 : 2,            //int 形式（1-线上，2-线下）
+            form = $api.text($api.byId('form')) == '线上' ? 1 : ($api.text($api.byId('form')) == '线下' ? 2 : 3),            //int 形式（1-线上，2-线下）
             description = $api.val($api.byId('description'));        //string  详细内容
         image_json = imgArr,          //string  图片（格式：["abc.jpg","ddd.jpg"]）
             company_id = $api.attr($api.byId('company_name'), 'data-id') || '';      // 公司ID（类型为2-我公司卖时必传）
@@ -1006,6 +1006,8 @@
                     name: '线上'
                 }, {
                     name: '线下'
+                }, {
+                    name: '线上 + 线下'
                 }
             ];
             _dataSource2 = ['线上', '线下']
