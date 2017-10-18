@@ -283,6 +283,7 @@ apiready = function() {
     ajpush.getRegistrationId();
     ajpush.setListener(
         function(ret) {
+            console.log(JSON.stringify(ret))
              var id = ret.id;
              var title = ret.title;
              var content = ret.content;
@@ -299,7 +300,7 @@ apiready = function() {
             var title = ajpush.title;
             var content = ajpush.content;
             var extra = ajpush.extra;
-            // // console.log('307:::'+JSON.stringify(ret))
+            console.log('307:::'+JSON.stringify(ret))
             // alert('307:::'+JSON.stringify(ret))
             if (extra.type == 2) {
                 api.openWin({
@@ -333,7 +334,29 @@ apiready = function() {
             var ajpush = ret.value;
             var content = ajpush.content;
             var extra = ajpush.extra;
-            // // console.log('318::key: "value", '+JSON.stringify(ret))
+            console.log('318::key: "苹果", '+JSON.stringify(ret))
+            if (extra.type == 2) {
+                api.openWin({
+                    name: 'me_gdd_info',
+                    url: './me/me_gdd_info.html',
+                    pageParam: {
+                        order_id: extra.reference_id
+                    }
+                });
+            } else if (extra.type == 3) {
+                api.openWin({
+                    name: 'me_qdd_info',
+                    url: './me/me_qdd_info.html',
+                    pageParam: {
+                        order_id: extra.reference_id
+                    }
+                });
+            } else if (extra.type == 1) {
+                api.openWin({
+                    name: 'txl_addFellow_friendRequest_win',
+                    url: './addressList/txl_addFellow_friendRequest_win.html',
+                });
+            }
         }
     })
     // 监听frame2切换到圈子页面, 弹出层的按钮
