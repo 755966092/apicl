@@ -115,11 +115,12 @@
                             </div>
                             <div class="text flex-def flex-cCenter">
                                 <h3>{{=it[i].nickname}}</h3>
-                                {{?it[i].current_company == null}}
-                                {{??it[i].current_position == null}}
-                                    <p>{{=it[i].current_company}}</p>
+                                {{?it[i].current_company == ''}}
+                                {{??it[i].current_position == ''}}
+                                    <p>({{=it[i].current_company}})</p>
+                                {{??it[i].current_company != '' && it[i].current_position != ''}}
+                                    <p>({{=it[i].current_company}} {{=it[i].current_position}})</p>
                                 {{??}}
-                                    <p>{{=it[i].current_company}} {{=it[i].current_position}}</p>
                                 {{?}}
                             </div>
                         </div>
@@ -208,6 +209,7 @@
                     ret.data.list[i].image_json = eval(ret.data.list[i].image_json)
                     ret.data.list[i].create_time = initTime(ret.data.list[i].create_time)
                 }
+                // console.log(JSON.stringify(ret))
                 getData(ret.data.list);
             } else {
                 alert(JSON.stringify(err.msg))
