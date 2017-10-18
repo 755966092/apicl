@@ -240,6 +240,35 @@
                     </div>
                 {{ }; }}
             </div>
+            {{?it.verify_fail_list.length !== 0}}
+                <div class="title flex-def flex-cCenter flex-zCenter">
+                    <span class="line"></span>
+                    <span class="icon"></span>
+                    <span class="text">审核未通过</span>
+                    <span class="line"></span>
+                </div>
+            {{?}}
+            <div class="complete">
+                {{ for (var i = 0; i < it.verify_fail_list.length; i++) { }}
+                    <div class="item">
+                        <div class="wrap flex-def flex-cCenter">
+                            <div class="itemLeft">
+                                <img src="{{=it.verify_fail_list[i].image_url}}">
+                            </div>
+                            <div class="itemRight">
+                                <h3>{{=it.verify_fail_list[i].title}}</h3>
+                                <p class="circleInfo">{{=it.verify_fail_list[i].description}}</p>
+                                <div class="circleCount">
+                                    <span class="label">成员:</span>
+                                    <span class="count no1">{{=it.verify_fail_list[i].member_count}}</span>
+                                    <span class="label">发布:</span>
+                                    <span class="count">{{=it.verify_fail_list[i].topic_count}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{ }; }}
+            </div>
             {{?it.available_list.length !== 0}}
                 <div class="title des flex-def flex-cCenter flex-zCenter">
                     <span class="line"></span>
@@ -338,10 +367,12 @@
                 // 停止下拉刷新
                 api.refreshHeaderLoadDone();
                 if (ret.data.verify_waiting_list == '' && ret.data.verify_fail_list == '' && ret.data.available_list == '') {
+                    console.log(1)
                      $api.css($api.dom('.main'), 'display:none');
                      $api.css($api.dom('.loading'), 'display:none');
                      $api.removeCls($api.dom('.nomain'), 'hide');
                 } else {
+                    console.log(2)
                     $api.addCls($api.dom('.nomain'), 'hide');
                     $api.css($api.dom('.loading'), 'display:none');
                     getData(ret.data)

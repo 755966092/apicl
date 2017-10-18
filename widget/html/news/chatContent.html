@@ -368,11 +368,11 @@ var  mainH, _main = 0, scrollH;
         if (flagStr === 'sendMsg') {
             // 自己头像
             if (params.result.message.objectName == 'RC:VcMsg') {
-                SQL += '('+ params.result.message.messageId +',"'+ params.result.message.sentTime +'","'+ params.result.message.objectName+'","'+ params.result.message.messageDirection +'","'+ params.result.message.content.extra +'","'+ (params.result.message.content.text || '') +'","' + myHeadImg + '","'+ params.result.message.content.voicePath+ '","'+ params.result.message.content.duration +'","")'
+                SQL += '('+ params.result.message.messageId +',"'+ params.result.message.sentTime +'","'+ params.result.message.objectName+'","'+ params.result.message.messageDirection +'","'+ params.result.message.content.extra.replace(/"/g,'') +'","'+ (params.result.message.content.text || '') +'","' + myHeadImg + '","'+ params.result.message.content.voicePath+ '","'+ params.result.message.content.duration +'","")'
             } else if (params.result.message.objectName == 'RC:ImgMsg') {
-                SQL += '('+ params.result.message.messageId +',"'+ params.result.message.sentTime +'","'+ params.result.message.objectName+'","'+ params.result.message.messageDirection +'","'+ params.result.message.content.extra +'","'+ (params.result.message.content.text || '') +'","' + myHeadImg + '","'+ params.result.message.content.imageUrl + '","","'+ params.result.message.content.thumbPath +'")'
+                SQL += '('+ params.result.message.messageId +',"'+ params.result.message.sentTime +'","'+ params.result.message.objectName+'","'+ params.result.message.messageDirection +'","'+ params.result.message.content.extra.replace(/"/g,'') +'","'+ (params.result.message.content.text || '') +'","' + myHeadImg + '","'+ params.result.message.content.imageUrl + '","","'+ params.result.message.content.thumbPath +'")'
             } else {
-                SQL += '('+ params.result.message.messageId +',"'+ params.result.message.sentTime +'","'+ params.result.message.objectName+'","'+ params.result.message.messageDirection +'","'+ params.result.message.content.extra +'","'+ (params.result.message.content.text || '') +'","' + myHeadImg + '","","","")'
+                SQL += '('+ params.result.message.messageId +',"'+ params.result.message.sentTime +'","'+ params.result.message.objectName+'","'+ params.result.message.messageDirection +'","'+ params.result.message.content.extra.replace(/"/g,'') +'","'+ (params.result.message.content.text || '') +'","' + myHeadImg + '","","","")'
             }
         } else if (flagStr === 'receiveMsg'){
             // filePath
@@ -380,13 +380,13 @@ var  mainH, _main = 0, scrollH;
             // 对方情况
             if (params.msgContent.result.message.objectName == 'RC:VcMsg') {
                 // 语音消息
-                SQL += '('+ params.msgContent.result.message.messageId +',"'+ params.msgContent.result.message.receivedTime +'","'+ params.msgContent.result.message.objectName+'","'+ params.msgContent.result.message.messageDirection +'","'+ params.msgContent.result.message.content.extra +'","'+ (params.msgContent.result.message.content.text || '') +'","' + youHeadImg + '","'+ params.msgContent.result.message.content.voicePath +'","'+ params.msgContent.result.message.duration +'","")'
+                SQL += '('+ params.msgContent.result.message.messageId +',"'+ params.msgContent.result.message.receivedTime +'","'+ params.msgContent.result.message.objectName+'","'+ params.msgContent.result.message.messageDirection +'","'+ params.msgContent.result.message.content.extra.replace(/"/g,'') +'","'+ (params.msgContent.result.message.content.text || '') +'","' + youHeadImg + '","'+ params.msgContent.result.message.content.voicePath +'","'+ params.msgContent.result.message.duration +'","")'
             } else if (params.msgContent.result.message.objectName == 'RC:ImgMsg') {
                 // 文字消息
-                SQL += '('+ params.msgContent.result.message.messageId +',"'+ params.msgContent.result.message.receivedTime +'","'+ params.msgContent.result.message.objectName+'","'+ params.msgContent.result.message.messageDirection +'","'+ params.msgContent.result.message.content.extra +'","'+ (params.msgContent.result.message.content.text || '') +'","' + youHeadImg + '","'+ params.msgContent.result.message.content.imageUrl + '","","'+ params.msgContent.result.message.content.thumbPath +'")'
+                SQL += '('+ params.msgContent.result.message.messageId +',"'+ params.msgContent.result.message.receivedTime +'","'+ params.msgContent.result.message.objectName+'","'+ params.msgContent.result.message.messageDirection +'","'+ params.msgContent.result.message.content.extra.replace(/"/g,'') +'","'+ (params.msgContent.result.message.content.text || '') +'","' + youHeadImg + '","'+ params.msgContent.result.message.content.imageUrl + '","","'+ params.msgContent.result.message.content.thumbPath +'")'
             } else {
                 // 文字消息
-                SQL += '('+ params.msgContent.result.message.messageId +',"'+ params.msgContent.result.message.receivedTime +'","'+ params.msgContent.result.message.objectName+'","'+ params.msgContent.result.message.messageDirection +'","'+ params.msgContent.result.message.content.extra +'","'+ (params.msgContent.result.message.content.text || '') +'","' + youHeadImg + '","","","")'
+                SQL += '('+ params.msgContent.result.message.messageId +',"'+ params.msgContent.result.message.receivedTime +'","'+ params.msgContent.result.message.objectName+'","'+ params.msgContent.result.message.messageDirection +'","'+ params.msgContent.result.message.content.extra.replace(/"/g,'') +'","'+ (params.msgContent.result.message.content.text || '') +'","' + youHeadImg + '","","","")'
             }
         } else {
 
@@ -394,7 +394,7 @@ var  mainH, _main = 0, scrollH;
         SQLStatement(SQL);
     }
     function allCahtSql(ret) {
-        // console.log(JSON.stringify(ret))
+        console.log(JSON.stringify(ret))
         if (ret.length > 0) {
             // 自己头像
             var myHeadImg = $api.getStorage('imgCache');
@@ -406,25 +406,27 @@ var  mainH, _main = 0, scrollH;
                     // 发送的消息, 自己的头像
                     if (element.objectName === 'RC:VcMsg') {
                         // 录音
-                        SQL += '('+ element.messageId +',"'+ element.receivedTime +'","'+ element.objectName+'","'+ element.messageDirection +'","'+ element.content.extra +'","'+ (element.content.text || '') +'","' + myHeadImg + '","'+ element.content.voicePath +'","'+ element.content.duration +'",""),'
+                        SQL += '('+ element.messageId +',"'+ element.receivedTime +'","'+ element.objectName+'","'+ element.messageDirection +'","'+ element.content.extra.replace(/"/g,'') +'","'+ (element.content.text || '') +'","' + myHeadImg + '","'+ element.content.voicePath +'","'+ element.content.duration +'",""),'
                     } else if (element.objectName === 'RC:ImgMsg') {
                         // 图片
-                        SQL += '('+ element.messageId +',"'+ element.sentTime +'","'+ element.objectName+'","'+ element.messageDirection +'","'+ element.content.extra +'","'+ (element.content.text || '') +'","' + myHeadImg + '","'+ element.content.imageUrl + '","","'+ element.content.thumbPath +'"),'
+                        SQL += '('+ element.messageId +',"'+ element.sentTime +'","'+ element.objectName+'","'+ element.messageDirection +'","'+ element.content.extra.replace(/"/g,'') +'","'+ (element.content.text || '') +'","' + myHeadImg + '","'+ element.content.imageUrl + '","","'+ element.content.thumbPath +'"),'
                     } else {
                         // 文字
-                        SQL += '('+ element.messageId +',"'+ element.sentTime +'","'+ element.objectName+'","'+ element.messageDirection +'","'+ element.content.extra +'","'+ (element.content.text || '') +'","' + myHeadImg + '","","",""),'
+                        SQL += '('+ element.messageId +',"'+ element.sentTime +'","'+ element.objectName+'","'+ element.messageDirection +'","'+ element.content.extra.replace(/"/g,'').replace(/"/g,'') +'","'+ (element.content.text || '') +'","' + myHeadImg + '","","",""),'
                     }
                 } else {
                     // 接收的消息, 对方的头像 api.pageParam.headImg
                     if (element.objectName === 'RC:VcMsg') {
                         // 录音
-                        SQL += '('+ element.messageId +',"'+ element.receivedTime +'","'+ element.objectName+'","'+ element.messageDirection +'","'+ element.content.extra +'","'+ (element.content.text || '') +'","' + youHeadImg + '","'+ element.content.voicePath +'","'+ element.content.duration +'",""),'
+                        SQL += '('+ element.messageId +',"'+ element.receivedTime +'","'+ element.objectName+'","'+ element.messageDirection +'","'+ element.content.extra.replace(/"/g,'') +'","'+ (element.content.text || '') +'","' + youHeadImg + '","'+ element.content.voicePath +'","'+ element.content.duration +'",""),'
                     } else if (element.objectName === 'RC:ImgMsg') {
                         // 图片
-                        SQL += '('+ element.messageId +',"'+ element.sentTime +'","'+ element.objectName+'","'+ element.messageDirection +'","'+ element.content.extra +'","'+ (element.content.text || '') +'","' + youHeadImg + '","'+ element.content.imageUrl + '","","'+ element.content.thumbPath +'"),'
+                        SQL += '('+ element.messageId +',"'+ element.sentTime +'","'+ element.objectName+'","'+ element.messageDirection +'","'+ element.content.extra.replace(/"/g,'') +'","'+ (element.content.text || '') +'","' + youHeadImg + '","'+ element.content.imageUrl + '","","'+ element.content.thumbPath +'"),'
                     } else {
                         // 文字
-                        SQL += '('+ element.messageId +',"'+ element.sentTime +'","'+ element.objectName+'","'+ element.messageDirection +'","'+ element.content.extra +'","'+ (element.content.text || '') +'","' + youHeadImg + '","","",""),'
+                        console.log(element.content.extra.replace(/"/g,''))
+                        console.log(element.content.extra.replace(/"/g,'').replace(/"/g,''))
+                        SQL += '('+ element.messageId +',"'+ element.sentTime +'","'+ element.objectName+'","'+ element.messageDirection +'","'+ element.content.extra.replace(/"/g,'').replace(/"/g,'') +'","'+ (element.content.text || '') +'","' + youHeadImg + '","","",""),'
                     }
                 }
             }
@@ -433,6 +435,7 @@ var  mainH, _main = 0, scrollH;
         }
     }
     function SQLStatement(SQL) {
+        console.log(SQL)
         db.executeSql({
             name: 'db_'+$api.getStorage('userToken'),
             sql: SQL
