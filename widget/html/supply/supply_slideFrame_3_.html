@@ -128,7 +128,7 @@
                 }
             }
             openList(classifyDataSlide,'yes');
-            compareVersion();
+            requireCategory();
         } else {
             requireCategory()
         }
@@ -304,8 +304,13 @@
         }, function(ret, err) {
             if(ret) {
 
-                sortData(ret.data.list);
-                // handleData(val, ret)
+                 // handleData(ret)
+                 if (ret.data.version == $api.getStorage('classifyVersion')) {
+                    // openList($api.getStorage('classifyDataSlide'),'yes');
+                } else {
+                    $api.setStorage('classifyVersion', ret.data.version);
+                    sortData(ret.data.list);
+                }
             } else {
                 alert(JSON.stringify(err))
             }

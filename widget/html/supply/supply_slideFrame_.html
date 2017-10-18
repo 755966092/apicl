@@ -92,7 +92,7 @@
         <div class="warp flex-item"   tapmode   onclick="api.closeFrame()">
             <div class="main"   tapmode   onclick="event.cancelBubble=true;">
                 <div>
-                   <p class="selected"><span>已选择：</span><span class="selectedText">请选择学校</span></p>
+                   <p class="selected"><span>已选择：</span><span class="selectedText">请选择分类</span></p>
 
                 </div>
             </div>
@@ -133,37 +133,13 @@
                 }
             }
             openList(classifyDataSlide,'yes');
-            compareVersion();
+            requireCategory();
         } else {
-            requireCategory()
+            requireCategory();
         }
+            // requireCategory();
     }
-    // 对比版本号
-    function compareVersion() {
-        api.ajax({
-            url: apiSite + '/common/checkVersion',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: {
-                    token: $api.getStorage('userToken'),
-                }
-            }
-        }, function(ret, err) {
-            if(ret) {
-                if (ret.code === 200) {
-                    if (ret.data.current_version != api.appVersion) {
-                        // 如果版本号不一样  更新本地分类
-                        requireCategory();
-                    }
-                } else {
-                    alert(ret.msg)
-                }
-            } else {
-                alert(JSON.stringify(err))
-            }
-        })
-    }
+
     // 设置文字
     function settingText () {
         $api.text($api.dom('.selectedText'), '选择分类');
@@ -288,7 +264,12 @@
         }, function(ret, err) {
             if(ret) {
                 // handleData(ret)
-                sortData(ret.data.list)
+                if (ret.data.version == $api.getStorage('classifyVersion')) {
+                    // openList($api.getStorage('classifyDataSlide'),'yes');
+                } else {
+                    $api.setStorage('classifyVersion', ret.data.version);
+                    sortData(ret.data.list);
+                }
             } else {
                 alert(JSON.stringify(err))
             }

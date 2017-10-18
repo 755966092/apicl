@@ -22,37 +22,12 @@
         var dataList = $api.getStorage('classifyDataSlide');
         if(dataList) {
             openList(dataList,'yes');
-            compareVersion();
+            requireData();
         } else {
             requireData();
         }
     };
-    // 对比版本号
-    function compareVersion() {
-        api.ajax({
-            url: apiSite + '/common/checkVersion',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: {
-                    token: $api.getStorage('userToken'),
-                }
-            }
-        }, function(ret, err) {
-            if(ret) {
-                if (ret.code === 200) {
-                    if (ret.data.current_version != api.appVersion) {
-                        // 如果版本号不一样  更新本地分类
-                        requireData();
-                    }
-                } else {
-                    alert(ret.msg)
-                }
-            } else {
-                alert(JSON.stringify(err))
-            }
-        })
-    }
+
     function requireData() {
         api.ajax({
             url: apiSite + '/category/index',
@@ -65,7 +40,13 @@
             }
         }, function(ret, err) {
             if(ret) {
-                sortData(ret.data.list)
+                // handleData(ret)
+                if (ret.data.version == $api.getStorage('classifyVersion')) {
+                    // openList($api.getStorage('classifyDataSlide'),'yes');
+                } else {
+                    $api.setStorage('classifyVersion', ret.data.version);
+                    sortData(ret.data.list);
+                }
             } else {
                 alert(JSON.stringify(err))
             }
