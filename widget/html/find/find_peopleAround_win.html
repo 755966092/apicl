@@ -29,20 +29,44 @@
             <span class="rightBtn"   tapmode   onclick="openFiltrare()"></span>
         </div>
     </header>
+    <div class="loading"></div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
+    var paramFlitrate = '';
     apiready = function(){
         fnInit();
         moduleInit();
+        $api.css($api.dom('.loading'), 'display: block');
+        LocationRegisterLocation();
+        eventMonitoring('ScreeningIsComplete');
+        api.addEventListener({
+            name: 'hideLoading'
+        }, function(ret, err){
+            $api.css($api.dom('.loading'), 'display: none');
+        });
 
-        LocationRegisterLocation()
     };
+    // 事件监听
+    function eventMonitoring(eventName) {
+        api.addEventListener({
+            name: eventName
+        }, function(ret, err) {
+            if (ret) {
+                paramFlitrate = ret;
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
     function openFiltrare() {
         api.openWin({
             name: 'find_peopleAround_filtrate_win',
-            url: './find_peopleAround_filtrate_win.html'
+            url: './find_peopleAround_filtrate_win.html',
+            pageParam: {
+                paramFlitrate: paramFlitrate.value
+            }
         });
     }
     // 附近的人注册位置信息

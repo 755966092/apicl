@@ -107,41 +107,47 @@
             </li> -->
         </ul>
         <script type="text/x-dot-template" id="listT">
-            {{~it:value:index}}
-                <li class="flex-def flex-cCenter">
-                    <img src="{{=value.head_img_url}}">
-                    <div class="info flex-item flex-zLeftRight flex-def flex-zBetween">
-                        <div class="title">
-                            <div class="name flex-item flex-def flex-cCenter">
-                                <h3>{{=value.nickname}}</h3>
-                                {{?value.sex==1}}
-                                    <span class="icon"></span>
+            {{?it.length==0}}
+                <p class="no_data">暂无附近的人</p>
+            {{??}}
+                {{~it:value:index}}
+                    <li class="flex-def flex-cCenter" taomode onclick="openInfoPafe(this)" data-id="{{=value.user_id}}">
+                        <img src="{{=value.head_img_url}}">
+                        <div class="info flex-item flex-zLeftRight flex-def flex-zBetween">
+                            <div class="title">
+                                <div class="name flex-item flex-def flex-cCenter">
+                                    <h3>{{=value.nickname}}</h3>
+                                    {{?value.sex==1}}
+                                        <span class="icon"></span>
+                                    {{??}}
+                                        <span class="icon2"></span>
+                                    {{?}}
+                                </div>
+                                {{?value.distance<1}}
+                                <p>1km以内</p>
                                 {{??}}
-                                    <span class="icon2"></span>
+                                <p>{{=value.distance}}km</p>
                                 {{?}}
                             </div>
-                            {{?value.distance<1}}
-                            <p>1km以内</p>
-                            {{??}}
-                            <p>{{=value.distance}}km</p>
-                            {{?}}
+                            <!-- <span class="content flex-def flex-cCenter">
+                                <span>{{=value.current_company}}{{=value.current_position}}</span>
+                            </span> -->
                         </div>
-                        <span class="content flex-def flex-cCenter">
-                            <span>{{=value.current_company}}&nbsp;{{=value.current_position}}</span>
-                        </span>
-                    </div>
-                </li>
-            {{~}}
+                    </li>
+                {{~}}
+            {{?}}
         </script>
 
     </div>
-
+    <div class="loading"></div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
+    var paramFlitrate;
     apiready = function(){
+
         eventMonitoring('ScreeningIsComplete');
         requireData()
     };
@@ -152,40 +158,70 @@
             name: eventName
         }, function(ret, err) {
             if (ret) {
+                $api.css($api.dom('.loading'), 'display: block');
                 requireData(ret);
+
+                paramFlitrate = ret;
             } else {
                 alert(JSON.stringify(err));
             }
         });
     }
-
+    // 进入个人详情页
+    function openInfoPafe(ele) {
+        api.openWin({
+            name: 'txl_memberInfo_Win',
+            url: '../addressList/txl_memberInfo_Win.html',
+            bounces: false,
+            pageParam: {userId : $api.attr(ele, 'data-id')}
+        });
+    }
     // 请求数据
     function requireData(ret) {
+        var obj;
         // 参数
         if(ret) {
             var param = ret.value.filterParameters;
+            if (param.hometown == '不限-不限') {
+                param.hometown = ''
+            }
+            if (param.start_age == null) {
+                param.start_age = ''
+            }
+            if (param.end_age == null) {
+                param.end_age = ''
+            }
+            obj = {
+                token: $api.getStorage('userToken'),
+                latitude: api.pageParam.lat,
+                longitude: api.pageParam.lon,
+                sex:param.sex,
+                hometown:param.hometown,
+                start_age:param.start_age,
+                end_age:param.end_age,
+            }
+        } else {
+            obj = {
+                token: $api.getStorage('userToken'),
+                latitude: api.pageParam.lat,
+                longitude: api.pageParam.lon
+            }
         }
-        console.log(JSON.stringify(param))
         api.ajax({
             url: apiSite + '/location/nearByUserList',
             method: 'post',
             headers: apiHeader,
             data: {
-                values: {
-                    token: $api.getStorage('userToken'),
-                    latitude: api.pageParam.lat,
-                    longitude: api.pageParam.lon,
-                    sex:sex,
-                    // hometown:param[2],
-                    // start_age:"",
-                    // end_age:"",
-                }
+                values: obj
             }
         }, function(ret, err) {
             if(ret) {
                 if (ret.code === 200) {
-                    console.log(JSON.stringify(ret));
-                    getData(ret.data.list)
+                    getData(ret.data.list);
+                    $api.css($api.dom('.loading'), 'display: none');
+                    api.sendEvent({
+                        name: 'hideLoading'
+                    });
                 } else {
                     alert(ret.msg)
                 }

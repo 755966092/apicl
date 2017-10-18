@@ -65,21 +65,21 @@
             <li tapmode onclick="selType(this, 2)" class=" flex-def flex-cCenter flex-zBetween">
                 <span class="title">性别</span>
                 <div class="flex-def flex-zEnd flex-cCenter flex-item">
-                    <span class="relation">女生</span>
+                    <span class="relation" id="sex">女生</span>
                     <span class="icon"></span>
                 </div>
             </li>
             <li tapmode onclick="selType(this, 3)" class=" flex-def flex-cCenter flex-zBetween">
                 <span class="title">家乡</span>
                 <div class="flex-def flex-zEnd flex-cCenter flex-item">
-                    <span class="relation">北京-东城区</span>
+                    <span class="relation" id="hometown" >北京-东城区</span>
                     <span class="icon"></span>
                 </div>
             </li>
             <li tapmode onclick="selType(this, 4)" class=" flex-def flex-cCenter flex-zBetween">
                 <span class="title">年龄</span>
                 <div class="flex-def flex-zEnd flex-cCenter flex-item">
-                    <span class="relation">不限</span>
+                    <span class="relation" id="age">不限</span>
                     <span class="icon"></span>
                 </div>
             </li>
@@ -93,8 +93,52 @@
     apiready = function(){
         moduleInit();
         // 监听点击完成按钮事件
-        eventMonitoring('CompleteTheScreeningOfNearbyPeople')
+        eventMonitoring('CompleteTheScreeningOfNearbyPeople');
+        if (api.pageParam.paramFlitrate) {
+            // 有初识条件
+            settingParam();
+        }
     };
+    // 设置初识筛选条件
+    function settingParam() {
+        var param = api.pageParam.paramFlitrate.filterParameters;
+        console.log(JSON.stringify(param))
+        // {"filterParameters":{"sex":2,"hometown":"北京-东城区","start_age":null,"end_age":null}}
+        var sexText = $api.byId('sex');
+        if (param.sex == 1) {
+            $api.text(sexText, '男生');
+        } else if (param.sex == 2) {
+            $api.text(sexText, '女生');
+        } else {
+            $api.text(sexText, '不限');
+        }
+        $api.text($api.byId('hometown'), param.hometown);
+        var ageText = $api.byId('age');
+        if (param.start_age == 1) {
+            $api.text(ageText, '18岁以下');
+            $api.attr(ageText, 'startAge', '1');
+            $api.attr(ageText, 'endAge', '17');
+        } else if (param.start_age == 18) {
+            $api.text(ageText, '18-22岁');
+            $api.attr(ageText, 'startAge', '18');
+            $api.attr(ageText, 'endAge', '22');
+        } else if (param.start_age == 23) {
+            $api.text(ageText, '23-26岁');
+            $api.attr(ageText, 'startAge', '18');
+            $api.attr(ageText, 'endAge', '22');
+        } else if (param.start_age == 27) {
+            $api.text(ageText, '27-35岁');
+            $api.attr(ageText, 'startAge', '27');
+            $api.attr(ageText, 'endAge', '35');
+        } else if (param.start_age == 35) {
+            $api.text(ageText, '35岁以上');
+            $api.attr(ageText, 'startAge', '35');
+            $api.attr(ageText, 'endAge', '999');
+        } else {
+            $api.text(ageText, '不限');
+
+        }
+    }
     // 事件监听
     function eventMonitoring(eventName) {
         api.addEventListener({
@@ -116,7 +160,7 @@
             start_age:'',
             end_age:'',
         };
-            paramArr.sex = $api.text(paramElement[0])=='男'?1:2;
+            paramArr.sex = $api.text(paramElement[0])=='男生'?1:($api.text(paramElement[0])=='女生'?2:"");
             paramArr.hometown = $api.text(paramElement[1]);
             paramArr.start_age = $api.attr(paramElement[2],'startAge');
             paramArr.end_age = $api.attr(paramElement[2],'endAge');
@@ -212,8 +256,8 @@
                     name: '不限'
                 },{
                     name: '18岁以下',
-                    startAge: '0',
-                    endAge: '18'
+                    startAge: '1',
+                    endAge: '17'
                 },{
                     name: '18-22岁',
                     startAge: '18',
@@ -293,7 +337,6 @@
         }, function(ret, err) {
             if (ret) {
                 if (ret.eventType == 'ok') {
-                    console.log(JSON.stringify(ret))
                     // 编辑性别
                     if (n === 3) {
                         $api.text($api.dom(ele, '.relation'), ret.level1 + '-' + ret.level2);
