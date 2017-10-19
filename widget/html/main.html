@@ -228,7 +228,7 @@ var userToken, rongToken,footerH, addPublishUrl = './supply/supply_addSupply.htm
 apiready = function() {
     footerH = $api.offset($api.byId('footer')).h;
     fnInit();
-    displaySupply()
+
     // 创建缓存目录
 
     // 获取传递参数
@@ -239,6 +239,7 @@ apiready = function() {
         color: 'rbga(0,0,0,0)'
     });
     funIniGroup();
+    displaySupply();
     // 退出app
     exitApp();
     api.addEventListener({
@@ -390,24 +391,22 @@ function displaySupply() {
         console.log(JSON.stringify(ret))
         api.setFrameGroupIndex({
             name: 'group',
-            index: ret.value.index,
-            scroll: true
+            index: ret.value.index
         });
         togglesSpecifiedPage(ret.value.index)
-
     });
 }
 // 切换到指定的页面
 function togglesSpecifiedPage(n) {
     var eFootLis = $api.domAll('#footer li'),
-            eHeaderLis = $api.domAll('header li'),
-            index = 0;
-        for (var i = 0, len = eFootLis.length; i < len; i++) {
-                $api.removeCls(eFootLis[i], 'active');
-                $api.removeCls(eHeaderLis[i], 'active');
-        }
-        $api.addCls(eFootLis[n], 'active');
-        $api.addCls(eHeaderLis[n], 'active');
+        eHeaderLis = $api.domAll('header li'),
+        index = 0;
+    for (var i = 0, len = eFootLis.length; i < len; i++) {
+            $api.removeCls(eFootLis[i], 'active');
+            $api.removeCls(eHeaderLis[i], 'active');
+    }
+    $api.addCls(eFootLis[n], 'active');
+    $api.addCls(eHeaderLis[n], 'active');
 }
 // 获取所有未读消息数
 function getTotalCount() {
@@ -496,7 +495,8 @@ function funIniGroup() {
 }
 
 // 随意切换按钮
-function randomSwitchBtn(tag,n) {
+function randomSwitchBtn(tag) {
+    console.log(11)
     if (tag == $api.dom('#footer li.active')) return;
     var eFootLis = $api.domAll('#footer li'),
         eHeaderLis = $api.domAll('header li'),

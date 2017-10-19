@@ -6,31 +6,31 @@
     <title>title</title>
     <link rel="stylesheet"  type="text/css" href="../../css/api.css"/>
     <style>
-      
+
         .main .listContent {
-            height: 1.16rem;    
+            height: 1.16rem;
             border-bottom: .01rem solid #E0E0E0;
             background-color: #fff;
-            padding:  0 .3rem; 
+            padding:  0 .3rem;
         }
 
         /* 左边提现 */
         .main .listContent .jl_left {
             font-size: .28rem;
-            line-height: 1.16rem;   
+            line-height: 1.16rem;
         }
 
         /* 右边钱数 */
         .main .listContent .jl_right {
             font-size: .42rem;
-            text-align: right;  
-            height: 1.16rem;    
-            padding-top: .1rem;    
+            text-align: right;
+            height: 1.16rem;
+            padding-top: .1rem;
             box-sizing: border-box;
         }
         .main .listContent .bearFruit {
             font-size: .24rem;
-            margin-top: .05rem; 
+            margin-top: .05rem;
         }
 
         /* 添加类名 未到账.wdz 已到账.ydz */
@@ -40,17 +40,44 @@
         .ydz {
             color: #333;
         }
+        .nomain .icon {
+            width: 2.2rem;
+            height: 2.2rem;
+            background: url(../../image/iocn_addressList/icon_noInfo.png)no-repeat;
+            -webkit-background-size: 2.2rem 2.2rem;
+            background-size: 2.2rem 2.2rem;
+            margin: 0 auto;
+        }
+        .nomain {
+            position: absolute;
+            top: 0;bottom: 0;left: 0;right: 0;
+            margin: auto;
+        }
+        .hide {
+            display: none;
+        }
+        .nomain p {
+            font-size: .3rem;
+            color: #999;
+            /*width: 3.9rem;*/
+            margin: .36rem auto 0;
+            text-align: center;
+        }
+        .nomain .jump {
+            color: #999;
+            font-size: 0.34rem;
+        }
     </style>
 </head>
 <body>
-   
-    <div class="main resultList">  
+
+    <div class="main resultList">
         <!-- <div class="listContent">
-            <span class="jl_left fl">提现-<span class="way">微信</span></span>  
+            <span class="jl_left fl">提现-<span class="way">微信</span></span>
             <div class="jl_right fr">
                     <p>
                         <span>￥</span><span class="money">5</span>
-                    </p> 
+                    </p>
                     <p class="bearFruit">
                             <span class="time"></span>
                             <span class="receive wdz">未到账</span>
@@ -58,11 +85,11 @@
             </div>
         </div>
          <div class="listContent">
-            <span class="jl_left fl">提现-<span class="way">支付宝</span></span>  
+            <span class="jl_left fl">提现-<span class="way">支付宝</span></span>
             <div class="jl_right fr">
                     <p>
                         <span>￥</span><span class="money">5</span>
-                    </p> 
+                    </p>
                     <p class="bearFruit ydz">
                             <span class="time">11月23日</span>
                             <span class="receive">已到账</span>
@@ -72,13 +99,13 @@
     </div>
     <script type="text/x-dot-template" id="listT">
         {{?it.length > 0}}
-            {{ for (var i = 0; i < it.length; i++) { }} 
+            {{ for (var i = 0; i < it.length; i++) { }}
                 <div class="listContent">
-                    <span class="jl_left fl">提现-<span class="way">{{=it[i].type}}</span></span>  
+                    <span class="jl_left fl">提现-<span class="way">{{=it[i].type}}</span></span>
                     <div class="jl_right fr">
                         <p>
                             <span>￥</span><span class="money">{{=it[i].money}}</span>
-                        </p> 
+                        </p>
                         <p class="bearFruit">
                             {{?it[i].status == 1}}
                                 <span class="time"></span>
@@ -94,7 +121,14 @@
                 </div>
             {{}}}
         {{??}}
-            <p class="no_data">暂无数据</p>
+            <div class="nomain flex-def flex-cCenter flex-zCenter">
+                <div class="wrap">
+                        <div class="icon">
+                    </div>
+                        <p>空空如也 ~</p>
+                        <!-- <p class="jump">试着换个关键词吧...</p> -->
+                </div>
+            </div>
         {{?}}
     </script>
 </body>
@@ -104,7 +138,7 @@
 <script type="text/javascript">
     apiready = function(){
         requestData();
-        
+
     };
     function requestData() {
         api.ajax({
@@ -112,7 +146,7 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                    }
             }
@@ -120,7 +154,7 @@
             if(ret) {
                 for (var i = 0; i < ret.data.list.length; i++) {
                     ret.data.list[i].type = ret.data.list[i].type == 1 ? ' 支付宝' : '微信'
-                    
+
                 }
                 getData(ret.data.list)
             } else {

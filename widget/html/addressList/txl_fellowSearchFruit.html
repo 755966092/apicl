@@ -78,6 +78,33 @@
             width: 4.76rem;
             margin: 0 auto;
         }
+        .nomain .icon {
+            width: 2.2rem;
+            height: 2.2rem;
+            background: url(../../image/iocn_addressList/icon_noInfo.png)no-repeat;
+            -webkit-background-size: 2.2rem 2.2rem;
+            background-size: 2.2rem 2.2rem;
+            margin: 0 auto;
+        }
+        .nomain {
+            position: absolute;
+            top: 0;bottom: 0;left: 0;right: 0;
+            margin: auto;
+        }
+        .hide {
+            display: none;
+        }
+        .nomain p {
+            font-size: .3rem;
+            color: #999;
+            /*width: 3.9rem;*/
+            margin: .36rem auto 0;
+            text-align: center;
+        }
+        .nomain .jump {
+            color: #999;
+            font-size: 0.34rem;
+        }
     </style>
 </head>
 <body>
@@ -90,18 +117,26 @@
                     <p>上海百度网络科技 董事长</p>
                 </div>
             </li>
-            
+
         </ul>
     </div> -->
     <div class="noContent">
-        <img src="../../image/iocn_addressList/icon_noInfo.png" alt="">
+        <!-- <img src="../../image/iocn_addressList/icon_noInfo.png" alt="">
         <h3>对不起，未搜索到您想要的结果</h3>
-        <p class="textContent">建议您减小搜索范围或更换搜索关键字后重新尝试一下</p>
+        <p class="textContent">建议您减小搜索范围或更换搜索关键字后重新尝试一下</p> -->
         <!-- <p class="textContent">建议您减小搜索范围或更换搜索关键字后从新尝试一下，同时系统为您推荐了一些好友，可能会对您有所帮助。</p> -->
+        <div class="nomain flex-def flex-cCenter flex-zCenter">
+            <div class="wrap">
+                    <div class="icon">
+                </div>
+                    <p>空空如也 ~</p>
+                    <p class="jump">试着换个关键词吧...</p>
+            </div>
+        </div>
     </div>
     <ul class="resultList"></ul>
     <script type="text/x-dot-template" id="listT">
-        {{ for (var i = 0; i < it.length; i++) { }} 
+        {{ for (var i = 0; i < it.length; i++) { }}
            <li   tapmode   onclick="addFriends(this)" data-userId="{{=it[i].user_id}}" data-nickname = '{{=it[i].nickname}}' data-rongId='{{=it[i].rongcloud_user_id}}'>
                 {{?it[i].remark_head_img_url}}
                 <img src="{{=it[i].remark_head_img_url}}">
@@ -126,14 +161,14 @@
 
 <script type="text/javascript">
     apiready = function(){
-        
+
         if (api.pageParam.val.length == 0) {
             $api.css($api.dom('.noContent'), 'display:block');
         } else {
             getData(api.pageParam.val)
         }
         // // console.log(JSON.stringify(api.pageParam)+' at 127');
-        
+
         api.addEventListener({
             name: 'addf'
         }, function(ret, err){
@@ -147,11 +182,11 @@
             }
             // alert(JSON.stringify(api.pageParam.val))
         });
-        
+
     };
-   
+
     function addFriends(ele) {
-        var targetRongId = $api.attr(ele, 'data-rongId'),userId = $api.attr(ele, 'data-userId'),nickname = $api.attr(ele, 'data-nickname');  
+        var targetRongId = $api.attr(ele, 'data-rongId'),userId = $api.attr(ele, 'data-userId'),nickname = $api.attr(ele, 'data-nickname');
 
         api.openWin({
             name: 'txl_memberInfo_Win',
@@ -164,8 +199,8 @@
         });
     }
 
-   function openChat(ele) {  
-        var targetRongId = $api.attr(ele, 'data-rongId'),nickname = $api.attr(ele, 'data-nickname');  
+   function openChat(ele) {
+        var targetRongId = $api.attr(ele, 'data-rongId'),nickname = $api.attr(ele, 'data-nickname');
         api.openWin({
             name: 'chatWin',
             url: '../news/chatPage.html',

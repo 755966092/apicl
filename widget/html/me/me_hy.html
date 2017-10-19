@@ -6,7 +6,7 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-     
+
         header.header {
             /*background-color: #7ABF38;*/
             background: url(../../image/icon_my/icon_hy_3.png)no-repeat;
@@ -19,17 +19,18 @@
             -webkit-background-size: 7.5rem .8rem;
             background-size: 7.5rem .8rem;
             /*background-color: #7ABF38;*/
-            
+
         }
-        
+
         /* 加号 */
         header.header span.rightBtn {
-            display: inline-block;
+            color: #fff;
+            /* display: inline-block;
             width: .44rem;
             background: url(../../image/icon_member/icon_bz.png)no-repeat;
             -webkit-background-size: .44rem .44rem;
             background-size: .44rem .44rem;
-            background-position: 0 center;
+            background-position: 0 center; */
         }
         .main {
             height: 3.8rem;
@@ -38,8 +39,8 @@
             -webkit-background-size: 7.5rem 3.8rem;
             background-size: 7.5rem 3.8rem;
             padding-right: .3rem;
-            padding-left: .3rem;   
-            box-sizing: border-box; 
+            padding-left: .3rem;
+            box-sizing: border-box;
             color: #fff;
             text-align: center;
         }
@@ -52,17 +53,17 @@
         .main h3 {
             font-size: 1.1rem;
             margin-bottom: .2rem;
-            font-weight: 700;   
+            font-weight: 700;
         }
         /* 余额 有效期*/
-        
+
         .main .time {
             font-size: .3rem;
             margin-bottom: .4rem;
         }
         .main .remainder {
-            font-size: .3rem; 
-            margin-bottom: .4rem;  
+            font-size: .3rem;
+            margin-bottom: .4rem;
         }
         ul li {
             background: #fff url(../../image/icon_member/icon_cz.png)no-repeat;
@@ -117,7 +118,7 @@
             <span class="winTitle">
                 会员中心
             </span>
-            <!-- <span class="rightBtn"   tapmode   onclick="openShadow()"></span>  -->
+            <span class="rightBtn"   tapmode   onclick="login(this)" data-val="wdzd">我的账单</span>
         </div>
     </header>
 
@@ -128,7 +129,7 @@
         <p class="time">会员有效期至<span>2017</span>年<span>12</span>月<span>1</span>日</p> -->
     </div>
     <script type="text/x-dot-template" id="listT">
-        <p class="bill"   tapmode   onclick="login(this)" data-val="wdzd">我的账单</p>
+        <!-- <p class="bill"   tapmode   onclick="login(this)" data-val="wdzd">我的账单</p> -->
         <h3 id="available_assets">{{=it.available_assets}}</h3>
         <p class="remainder">余额（元）</p>
         <!-- <p class="time">会员有效期至<span>2017</span>年<span>12</span>月<span>1</span>日</p> -->
@@ -157,7 +158,7 @@
                 <span></span>
             </div>
         </li>
-        
+
     </ul>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -187,14 +188,14 @@
                 bounces: true
             });
     }
-    
+
     function requestData() {
-        api.ajax({      
+        api.ajax({
             url: apiSite + '/finance_center/vipCenter',
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
+                   values: {
                        token: $api.getStorage('userToken'),
                    }
             }
@@ -207,6 +208,6 @@
             }
         })
     }
-    
+
 </script>
 </html>
