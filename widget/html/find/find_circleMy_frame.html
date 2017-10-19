@@ -135,7 +135,7 @@
 <body>
     <div class="resultList"></div>
     <script type="text/x-dot-template" id="listT">
-        {{?it.length != 0}}
+        {{?it.length > 0}}
             <div class="user">
                 {{ for (var i = 0; i < it.length; i++) { }}
                     <div class="wrap" data-flag='1' data-name='{{=it[i].title}}' data-id='{{=it[i].circle_id}}' tapmode   onclick="openCircleInfo(this)">
@@ -157,16 +157,18 @@
                     </div>
                 {{ }; }}
             </div>
+        {{??}}
+            <div class="nomain hide flex-def flex-cCenter flex-zCenter">
+                <div class="wrap">
+                        <div class="icon">
+                    </div>
+                        <p>空空如也 ~</p>
+                        <p class="jump" tapmode onclick="openCreateCirclePage()">快去参与喜欢的圈子吧...</p>
+                </div>
+            </div>
         {{?}}
     </script>
-    <div class="nomain hide flex-def flex-cCenter flex-zCenter">
-        <div class="wrap">
-                <div class="icon">
-            </div>
-                <p>空空如也 ~</p>
-                <p class="jump" tapmode onclick="openCreateCirclePage()">快去参与喜欢的圈子吧...</p>
-        </div>
-    </div>
+
     <p class="bbottomLoading">正在加载...</p>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
