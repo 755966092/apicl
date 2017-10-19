@@ -251,81 +251,119 @@
              text-overflow: ellipsis;
              white-space: nowrap;
          }
+        .nomain .icon {
+            width: 2.2rem;
+            height: 2.2rem;
+            background: url(../../image/iocn_addressList/icon_noInfo.png)no-repeat;
+            -webkit-background-size: 2.2rem 2.2rem;
+            background-size: 2.2rem 2.2rem;
+            margin: 0 auto;
+        }
+        .nomain {
+            position: absolute;
+            top: 0;bottom: 0;left: 0;right: 0;
+            margin: auto;
+        }
+        .nomain p {
+            font-size: .3rem;
+            color: #999;
+            /*width: 3.9rem;*/
+            margin: .36rem auto 0;
+            text-align: center;
+        }
+        .nomain .jump {
+            color: #89B2EF;
+            font-size: 0.34rem;
+        }
+        .nomain .wrap {
+            background-color: rgba(0, 0, 0, 0)
+        }
     </style>
 
 </head>
 <body>
-<p class="noOrider">暂无订单</p>
+<!-- <p class="noOrider">暂无订单</p> -->
 <div class="loading"></div>
 <div class="main resultList">
 </div>
 <script type="text/x-dot-template" id="listT">
-    {{ for (var i = 0; i < it.length; i++) { }}
-        <div class="warp" onclick="event.stopPropagation();">
-            <div class="main_no1 flex-def flex-cCenter">
-                <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" data-id="{{=it[i].user_id}}" onclick="openUserId(this)">
-                <div class="flex-item flex-def flex-cCenter flex-zBetween">
-                    <div class="flex-def flex-cCenter">
-                        <span>{{=it[i].nickname}}</span>
-                        {{?it[i].current_company == ''}}
-                        {{??it[i].current_position == ''}}
-                        <span class="textHidden">({{=it[i].current_company}})</span>
-                        {{??it[i].current_position == ''&&it[i].current_company == ''}}
-                        {{??}}
-                        <span class="textHidden">({{=it[i].current_company}} {{=it[i].current_position}})</span>
-                        {{?}}
-
-                    </div>
-                    <!-- <i></i> -->
-                    <span class="status">{{=it[i].status}}</span>
-                </div>
-            </div>
-            <div class="list"  >
-                <div class="borderb" tapmode onclick="openInfo(this)" data-id="{{=it[i].order_id}}"  data-val='info'>
-                    <div class="main_no2 flex-def flex-cCenter">
-                        <div class="img">
-                            {{?it[i].image_json[0] == null}}
-                            <img src="../../image/noimage.jpg">
+    {{?it.length>0}}
+        {{ for (var i = 0; i < it.length; i++) { }}
+            <div class="warp" onclick="event.stopPropagation();">
+                <div class="main_no1 flex-def flex-cCenter">
+                    <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" data-id="{{=it[i].user_id}}" onclick="openUserId(this)">
+                    <div class="flex-item flex-def flex-cCenter flex-zBetween">
+                        <div class="flex-def flex-cCenter">
+                            <span>{{=it[i].nickname}}</span>
+                            {{?it[i].current_company == ''}}
+                            {{??it[i].current_position == ''}}
+                            <span class="textHidden">({{=it[i].current_company}})</span>
+                            {{??it[i].current_position == ''&&it[i].current_company == ''}}
                             {{??}}
-                            <img src="{{=it[i].image_json[0]}}?imageView2/1/w/200/h/200/q/75|imageslim">
+                            <span class="textHidden">({{=it[i].current_company}} {{=it[i].current_position}})</span>
                             {{?}}
+
                         </div>
-                        <div class="title flex-item">
-                             <div class="flex-def flex-cCenter">
-                                {{?it[i].type==1}}
-                                <span class="label">[个人]</span>
-                                {{??}}
-                                <span class="label">[公司]</span>
-                                {{?}}
-                                <h3 class="supplyName">{{=it[i].title}}</h3>
-                            </div>
-                            <p>{{=it[i].description}}</p>
-                        </div>
-                        <div class="jl_right flex-cEnd flex-zTopBottom flex-def">
-                            <p>
-                                <span class="money">{{=it[i].reward}}元</span>
-                            </p>
-                            <!-- <p class="bearFruit ydz">
-                                <span class="count">x{{=it[i].amount}}</span>
-                            </p> -->
-                        </div>
+                        <!-- <i></i> -->
+                        <span class="status">{{=it[i].status}}</span>
                     </div>
                 </div>
-                <div class="main_no3">
-                    <div class="price">
-                        <p class="wrap">
-                            <span>合计: </span>￥{{=it[i].reward}}元
+                <div class="list"  >
+                    <div class="borderb" tapmode onclick="openInfo(this)" data-id="{{=it[i].order_id}}"  data-val='info'>
+                        <div class="main_no2 flex-def flex-cCenter">
+                            <div class="img">
+                                {{?it[i].image_json[0] == null}}
+                                <img src="../../image/noimage.jpg">
+                                {{??}}
+                                <img src="{{=it[i].image_json[0]}}?imageView2/1/w/200/h/200/q/75|imageslim">
+                                {{?}}
+                            </div>
+                            <div class="title flex-item">
+                                <div class="flex-def flex-cCenter">
+                                    {{?it[i].type==1}}
+                                    <span class="label">[个人]</span>
+                                    {{??}}
+                                    <span class="label">[公司]</span>
+                                    {{?}}
+                                    <h3 class="supplyName">{{=it[i].title}}</h3>
+                                </div>
+                                <p>{{=it[i].description}}</p>
+                            </div>
+                            <div class="jl_right flex-cEnd flex-zTopBottom flex-def">
+                                <p>
+                                    <span class="money">{{=it[i].reward}}元</span>
+                                </p>
+                                <!-- <p class="bearFruit ydz">
+                                    <span class="count">x{{=it[i].amount}}</span>
+                                </p> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main_no3">
+                        <div class="price">
+                            <p class="wrap">
+                                <span>合计: </span>￥{{=it[i].reward}}元
+                            </p>
+                        </div>
+                        <p class="appraise flex-def flex-cCenter flex-zEnd" tapmode='hover' onclick="event.stopPropagation();">
+                            {{for(var j = 0; j < it[i].button.buttonArr.length; j++){ }}
+                                    <span data-title="{{=it[i].title}}" data-reasonList='{{=JSON.stringify(it[i].reason_list)}}' data-moeny='{{=it[i].reward}}' data-id='{{=it[i].order_id}}' tapmode='hover' onclick="oriderOperate(this)" class="btn" data-url='{{=it[i].button.buttonArr[j].url}}'>{{=it[i].button.buttonArr[j].key}}</span>
+                            {{ }; }}
                         </p>
                     </div>
-                    <p class="appraise flex-def flex-cCenter flex-zEnd" tapmode='hover' onclick="event.stopPropagation();">
-                        {{for(var j = 0; j < it[i].button.buttonArr.length; j++){ }}
-                                <span data-title="{{=it[i].title}}" data-reasonList='{{=JSON.stringify(it[i].reason_list)}}' data-moeny='{{=it[i].reward}}' data-id='{{=it[i].order_id}}' tapmode='hover' onclick="oriderOperate(this)" class="btn" data-url='{{=it[i].button.buttonArr[j].url}}'>{{=it[i].button.buttonArr[j].key}}</span>
-                        {{ }; }}
-                    </p>
                 </div>
             </div>
+        {{ }; }}
+    {{??}}
+        <div class="nomain flex-def flex-cCenter flex-zCenter">
+            <div class="wrap">
+                    <div class="icon">
+                </div>
+                    <p>空空如也 ~</p>
+                    <!-- <p class="jump" tapmode onclick="openCreateCirclePage()">快去参与喜欢的圈子吧...</p> -->
+            </div>
         </div>
-    {{ }; }}
+    {{?}}
 </script>
 
 
@@ -388,10 +426,10 @@
                     api.refreshHeaderLoadDone();
                     $api.css($api.dom('.loading'), 'display:none');
                     if (ret.data.list.length == 0) {
-                        $api.css($api.dom('.noOrider'), 'display: block');
+                        // $api.css($api.dom('.noOrider'), 'display: block');
                         getData(ret.data.list)
                     } else {
-                        $api.css($api.dom('.noOrider'), 'display: none');
+                        // $api.css($api.dom('.noOrider'), 'display: none');
                         for (var i = 0; i < ret.data.list.length; i++) {
                             ret.data.list[i].image_json = eval(ret.data.list[i].image_json)
 

@@ -106,11 +106,11 @@
 
 
         .icon {
-            width: 2.42rem;
-            height: 2.36rem;
+            width: 2.2rem;
+            height: 2.2rem;
             background: url(../../image/iocn_addressList/icon_noInfo.png)no-repeat;
-            -webkit-background-size: 2.42rem 2.36rem;
-            background-size: 2.42rem 2.36rem;
+            -webkit-background-size: 2.2rem 2.2rem;
+            background-size: 2.2rem 2.2rem;
             margin: 0 auto;
         }
         .nomain {
@@ -123,10 +123,14 @@
         }
         .nomain p {
             font-size: .3rem;
-            color: #555;
+            color: #999;
             /*width: 3.9rem;*/
-            margin: .8rem auto 0;
+            margin: .36rem auto 0;
             text-align: center;
+        }
+        .nomain .jump {
+            color: #89B2EF;
+            font-size: 0.34rem;
         }
         .des .icon {
             background: url(../../image/icon_my/icon_myCircle_2.png)no-repeat;
@@ -304,7 +308,8 @@
        <div class="wrap">
             <div class="icon">
         </div>
-            <p>您还没有创建过圈子，<br>您可以点击屏幕右上角的加号<br>创建属于自己的圈子</p>
+            <p>空空如也 ~</p>
+            <p class="jump" tapmode onclick="openCreateCirclePage()">快去创建圈子吧...</p>
        </div>
     </div>
     <div class="loading "></div>
@@ -326,6 +331,14 @@
         })
 
     };
+     // 打开创建圈子页面
+     function openCreateCirclePage() {
+        api.openWin({
+            name: 'find_foundCircle_win',
+            url: './find_foundCircle_win.html',
+            bounces: false,
+        });
+    }
     // 进入圈子详情
     function openCircleInfo(ele) {
         api.openWin({

@@ -96,6 +96,33 @@
             border-bottom: .01rem solid #ececec;
             margin-bottom: .2rem;
         }
+        .nomain .icon {
+            width: 2.2rem;
+            height: 2.2rem;
+            background: url(../../image/iocn_addressList/icon_noInfo.png)no-repeat;
+            -webkit-background-size: 2.2rem 2.2rem;
+            background-size: 2.2rem 2.2rem;
+            margin: 0 auto;
+        }
+        .nomain {
+            position: absolute;
+            top: 0;bottom: 0;left: 0;right: 0;
+            margin: auto;
+        }
+        .nomain p {
+            font-size: .3rem;
+            color: #999;
+            /*width: 3.9rem;*/
+            margin: .36rem auto 0;
+            text-align: center;
+        }
+        .nomain .jump {
+            color: #89B2EF;
+            font-size: 0.34rem;
+        }
+        .nomain .wrap {
+            background-color: rgba(0, 0, 0, 0)
+        }
     </style>
 </head>
 <body>
@@ -158,7 +185,14 @@
                 </div>
             {{ }; }}
         {{??}}
-        <p class="no_data">暂无数据</p>
+            <div class="nomain flex-def flex-cCenter flex-zCenter">
+                <div class="wrap">
+                        <div class="icon">
+                    </div>
+                        <p>空空如也 ~</p>
+                        <p class="jump" tapmode onclick="openCreateCirclePage()">快去看看吧...</p>
+                </div>
+            </div>
         {{?}}
     </script>
 </body>
@@ -179,6 +213,14 @@
             }
         });
     };
+    function openCreateCirclePage() {
+        api.openWin({
+            name: 'main',
+            url: '../main.html',
+            bounces: false,
+            pageParam: {index : 2}
+        });
+    }
     function openUserInfo(ele) {
         api.openWin({
             name: 'txl_memberInfo_Win',
