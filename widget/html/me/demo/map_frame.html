@@ -1,43 +1,49 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../css/api.css" />
     <style>
         .main {
             margin-top: 7.6rem;
             border: 1px solid #f00;
         }
+        
         li {
             padding: .05rem .16rem;
             border-bottom: 1px solid #000;
         }
+        
         .name {
             font-size: .3rem;
         }
+        
         .address {
             font-size: .24rem;
             color: #999;
         }
     </style>
 </head>
+
 <body>
     <div class="main">
         <ul class="resultList">
-             <!-- <li>
+            <!-- <li>
                 <p class="name">{{=it[i].name}}</p>
                 <p class="address">{{=it[i].address}}</p>
             </li> -->
-        </ul>   
+        </ul>
         <script type="text/x-dot-template" id="listT">
-        {{ for(var i = 0; i < it.length; i++){ }}
-            <li>
+            {{ for(var i = 0; i
+            < it.length; i++){ }} <li>
                 <p class="name">{{=it[i].name}}</p>
                 <p class="address">{{=it[i].address}}</p>
-            </li>
-        {{ } }}
+                </li>
+                {{ } }}
         </script>
     </div>
 </body>
@@ -45,23 +51,25 @@
 <script type="text/javascript" src="../../../script/common.js"></script>
 <script type="text/javascript" src="../../../script/doT.min.js"></script>
 <script type="text/javascript">
-    apiready = function(){
+    apiready = function() {
         moduleInit();
         initMap();
     }
+
     function initMap() {
-         if (api.systemType === 'ios') {
+        if (api.systemType === 'ios') {
             bMap.initMapSDK(function(ret) {
                 if (ret.status) {
                     // alert('地图初始化成功，可以从百度地图服务器检索信息了！');
                     startPositioning();
                 }
             });
-         } else {
+        } else {
             startPositioning();
-         }
-     } 
-     function startPositioning() {
+        }
+    }
+
+    function startPositioning() {
         bMap.getLocation({
             accuracy: '100m',
             autoStop: true,
@@ -74,26 +82,27 @@
                 alert(err.code);
             }
         });
-     }
-     function openMap(lon,lat) {
-         bMap.open({
-             rect: {
-                 x: 0,
-                 y: 0,
-                 w: api.frameWidth,
-                 h: api.frameWidth
-             },
-             center: {
-                 lon: lon,
-                 lat: lat
-             },
-             zoomLevel: 14,
-             showUserLocation: true,
-             fixedOn: api.frameName,
-             fixed: true
-         }, function(ret){
-             if(ret.status){
-                 // alert('地图打开成功');
+    }
+
+    function openMap(lon, lat) {
+        bMap.open({
+            rect: {
+                x: 0,
+                y: 0,
+                w: api.frameWidth,
+                h: api.frameWidth
+            },
+            center: {
+                lon: lon,
+                lat: lat
+            },
+            zoomLevel: 14,
+            showUserLocation: true,
+            fixedOn: api.frameName,
+            fixed: true
+        }, function(ret) {
+            if (ret.status) {
+                // alert('地图打开成功');
                 //  bMap.getCenter(function(ret) {
                 //     // nearHotSpotLocation(ret.lon, ret.lat)
                 //     // alert(ret.lon + '*' + ret.lat);
@@ -102,43 +111,44 @@
                 openIconFrame();
                 bMap.addEventListener({
                     name: 'viewChange'
-                },function(ret){
-                    if(ret.status){
+                }, function(ret) {
+                    if (ret.status) {
                         // // console.log(JSON.stringify(ret));
                         nearHotSpotLocation(ret.lon, ret.lat)
                     }
                 });
-             }
-         });
-     }
-     // 附近热点位置
-     function nearHotSpotLocation(lon, lat) {
+            }
+        });
+    }
+    // 附近热点位置
+    function nearHotSpotLocation(lon, lat) {
         bMap.getNameFromCoords({
             lon: lon,
             lat: lat
         }, function(ret, err) {
             if (ret.status) {
-                // // console.log(JSON.stringify(ret));
+                console.log(JSON.stringify(ret));
                 getData(ret.poiList)
             }
         });
-     }
-     // 打开frame
-     function openIconFrame() {
-         api.openFrame({
-             name: 'frameName',
-             url: './map_frame_icon.html',
-             rect: {
-                 x: api.frameWidth / 2,
-                 y: api.frameWidth / 2 + api.pageParam.headerH,
-                 w: 20,
-                 h: 20
-             },
-             pageParam: {
-                 name: 'value'
-             },
-             bounces: false
-         });
-     }
+    }
+    // 打开frame
+    function openIconFrame() {
+        api.openFrame({
+            name: 'frameName',
+            url: './map_frame_icon.html',
+            rect: {
+                x: api.frameWidth / 2,
+                y: api.frameWidth / 2 + api.pageParam.headerH,
+                w: 20,
+                h: 20
+            },
+            pageParam: {
+                name: 'value'
+            },
+            bounces: false
+        });
+    }
 </script>
+
 </html>

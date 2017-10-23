@@ -1,40 +1,123 @@
-Could not create a template
-function: var out = ' ';
+{
+	"status": true,
+	"lon": 116.32842254638665,
+	"lat": 39.99800116878293,
+	"address": "北京市海淀区成府路286号",
+	"province": "北京市",
+	"city": "北京市",
+	"district": "海淀区",
+	"streetName": "成府路",
+	"streetNumber": "286号",
+	"poiList": [{
+		"name": "北京大学",
+		"uid": "ddfd7c2d8db36cf39ee3219e",
+		"address": "北京市海淀区颐和园路5号",
+		"city": "北京市",
+		"phone": "",
+		"postcode": "",
+		"coord": {
+			"lat": 39.99774108567984,
+			"lon": 116.31617266805532
+		}
+	}, {
+		"name": "墨盒子绘本书馆",
+		"uid": "7c5e480b17bb66adadb22a4d",
+		"address": "海淀区成府路289号(近豆瓣书店)",
+		"city": "北京市",
+		"phone": "",
+		"postcode": "",
+		"coord": {
+			"lat": 39.99786545060943,
+			"lon": 116.32830877549513
+		}
+	}, {
+		"name": "仪器耗材橡胶五金",
+		"uid": "7913cd2ef4c654eb373a713a",
+		"address": "北京市成府路276号(清华大学南门西侧)",
+		"city": "北京市",
+		"phone": "",
+		"postcode": "",
+		"coord": {
+			"lat": 39.9978861780755,
+			"lon": 116.32880284352561
+		}
+	}, {
+		"name": "中科科仪大厦",
+		"uid": "c778ece24776113e0c0a7020",
+		"address": "北京市海淀区成府路270号",
+		"city": "北京市",
+		"phone": "",
+		"postcode": "",
+		"coord": {
+			"lat": 39.99780326817318,
+			"lon": 116.32902741990311
+		}
+	}, {
+		"name": "北大东门中关园学生公寓",
+		"uid": "2193d92a4cf3f2c5f7e73be0",
+		"address": "北京市海淀区北大东门中关园",
+		"city": "北京市",
+		"phone": "",
+		"postcode": "",
+		"coord": {
+			"lat": 39.99774799484858,
+			"lon": 116.32716792749746
+		}
+	}, {
+		"name": "北京大学学生公寓",
+		"uid": "1512c5765ce62b0be812e49e",
+		"address": "北京市海淀区北京大学中关新园9号楼北100米",
+		"city": "北京市",
+		"phone": "",
+		"postcode": "",
+		"coord": {
+			"lat": 39.997754904016624,
+			"lon": 116.32706911389135
+		}
+	}, {
+		"name": "北京大学-技术物理系",
+		"uid": "f9fd6062ebdd8d1e0e0e6b83",
+		"address": "北京市海淀区成府路201号北京大学加速器楼",
+		"city": "北京市", 
+		"phone": "按时 ", 
+		"postcode": "",
+		"coord": {
+			"lat": 39.9986323626305,
+			"lon": 116.32699724945054
+		}
+	}, {
+		"name": "北京大学中关新园北区",
+		"uid": "64c0aee88f273ffe047ce804",
+		"address": "北京市海淀区",
+		"city": "北京市",
+		"phone": "",
+		"postcode": "",
+		"coord": {
+			"lat": 39.99676688583297,
+			"lon": 116.32755419886674
+		}
+	}, {
+		"name": "五方院五道口店",
+		"uid": "53cebd502b7a5d782a02e16a",
+		"address": "成府路248号(近清华南路)",
+		"city": "北京市",
+		"phone": "",
+		"postcode": "",
+		"coord": {
+			"lat": 39.99792763298861,
+			"lon": 116.33029403067218
+		}
+	}, {
+		"name": "金泰超市(蓝旗店)",
+		"uid": "eb3675031278261b00ec0157",
+		"address": "北京市海淀区成府路113",
+		"city": "北京市",
+		"phone": "",
+		"postcode": "",
+		"coord": {
+			"lat": 39.998549453641374,
+			"lon": 116.33024013234157
+		}
+	}]
 }
-else if (it.length > 0) {
-	out += ' ';
-	for (var i = 0; i < it.length; i++) {
-		out += ' <div class="warp" onclick="event.stopPropagation();"> <div class="main_no1 flex-def flex-cCenter"> <img src="' + (it[i].head_img_url) + '?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" data-id="' + (it[i].user_id) + '" onclick="openUserId(this)"> <div class="flex-item flex-def flex-cCenter flex-zBetween"> <div class="flex-def flex-cCenter"> <span>' + (it[i].nickname) + '</span> ';
-		if (it[i].current_company == '') {
-			out += ' ';
-		} else if (it[i].current_position == '') {
-			out += ' <span class="textHidden">(' + (it[i].current_company) + ')</span> ';
-		} else if (it[i].current_position == '' && it[i].current_company == '') {
-			out += ' ';
-		} else {
-			out += ' <span class="textHidden">(' + (it[i].current_company) + ' ' + (it[i].current_position) + ')</span> ';
-		}
-		out += ' </div> <!-- <i></i> --> <span class="status">' + (it[i].status) + '</span> </div> </div> <div class="list"  > <div class="borderb" data-id="' + (it[i].order_id) + '" tapmode onclick="openInfo(this)" data-val=\'info\'> <div class="main_no2 flex-def flex-cCenter"> <div class="img"> ';
-		if (it[i].image_json[0] == null) {
-			out += ' <img src="../../image/noimage.jpg"> ';
-		} else {
-			out += ' <img src="' + (it[i].image_json[0]) + '?imageView2/1/w/200/h/200/q/75|imageslim"> ';
-		}
-		out += ' </div> <div class="title flex-item"> <div class="flex-def flex-cCenter"> ';
-		if (it[i].type == 1) {
-			out += ' <span class="label">[个人]</span> ';
-		} else {
-			out += ' <span class="label">[公司]</span> ';
-		}
-		out += ' <h3 class="">' + (it[i].title) + '</h3> </div> <p>' + (it[i].description) + '</p> </div> <div class="jl_right flex-cEnd flex-zTopBottom flex-def"> <p> <span class="money">' + (it[i].price) + '元/' + (it[i].unit) + '</span> </p> <p class="bearFruit ydz"> <span class="count">x' + (it[i].amount) + '</span> </p> </div> </div> </div> <div class="main_no3"> <div class="price"> <p class="wrap"> <span>合计: </span>￥' + (it[i].total_money) + '元 </p> </div> <p class="appraise flex-def flex-cCenter flex-zEnd" tapmode=\'hover\' onclick="event.stopPropagation();"> ';
-		for (var j = 0; j < it[i].button.buttonArr.length; j++) {
-			out += ' <span data-title="' + (it[i].title) + '" data-reasonList=\'' + (JSON.stringify(it[i].reason_list)) + '\' data-moeny=\'' + (it[i].total_money) + '\' data-id=\'' + (it[i].order_id) + '\' data-supply=\'' + (it[i].supply_id) + '\'  tapmode=\'hover\' onclick="oriderOperate(this)" class="btn" data-url=\'' + (it[i].button.buttonArr[j].url) + '\'>' + (it[i].button.buttonArr[j].key) + '</span> ';
-		};
-		out += ' </p> </div> </div> </div> ';
-	};
-	out += ' ';
-} else {
-	out += ' <div class="nomain flex-def flex-cCenter flex-zCenter"> <div class="wrap"> <div class="icon"> </div> <p>空空如也 ~</p> <!-- <p class="jump" tapmode onclick="openCreateCirclePage()">快去参与喜欢的圈子吧...</p> --> </div> </div> ';
-}
-return out;
-at doT.min.js: 109
+at map_frame.html: 130
