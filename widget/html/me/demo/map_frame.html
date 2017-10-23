@@ -39,11 +39,12 @@
         </ul>
         <script type="text/x-dot-template" id="listT">
             {{ for(var i = 0; i
-            < it.length; i++){ }} <li>
+            < it.length; i++){ }} 
+            <li data-lat="{{=it[i].coord.lat}}" data-lon="{{=it[i].coord.lon}}" tapmode onclick="addLabel(this)">
                 <p class="name">{{=it[i].name}}</p>
                 <p class="address">{{=it[i].address}}</p>
-                </li>
-                {{ } }}
+            </li>
+            {{ } }}
         </script>
     </div>
 </body>
@@ -51,11 +52,20 @@
 <script type="text/javascript" src="../../../script/common.js"></script>
 <script type="text/javascript" src="../../../script/doT.min.js"></script>
 <script type="text/javascript">
+    var lon,lat,dataArr=[];
     apiready = function() {
         moduleInit();
         initMap();
+        scrollBottom();
     }
-
+    function scrollBottom() {
+        api.addEventListener({
+            name: 'scrolltobottom'
+        }, function(ret, err){
+            console.log(lon)
+            console.log(typeof lon)
+        });
+    }
     function initMap() {
         if (api.systemType === 'ios') {
             bMap.initMapSDK(function(ret) {
@@ -108,13 +118,25 @@
                 //     // alert(ret.lon + '*' + ret.lat);
                 //     // // console.log(ret.lon + '*' + ret.lat)
                 // });
-                openIconFrame();
+                // openIconFrame();
                 bMap.addEventListener({
                     name: 'viewChange'
                 }, function(ret) {
                     if (ret.status) {
-                        // // console.log(JSON.stringify(ret));
-                        nearHotSpotLocation(ret.lon, ret.lat)
+                       bMap.addAnnotations({
+                           annotations: [{
+                               id: 1, lon: ret.lon, lat: ret.lat
+                           }],
+                           icon: 'widget://',
+                           draggable: true
+                       }, function(ret){
+                           if(ret){
+                           }
+                       });
+                       lon = ret.lon;
+                       lat = ret.lat;
+                       console.log(lon+'---'+lat)
+                        nearHotSpotLocation(lon, lat)
                     }
                 });
             }
@@ -127,8 +149,9 @@
             lat: lat
         }, function(ret, err) {
             if (ret.status) {
-                console.log(JSON.stringify(ret));
-                getData(ret.poiList)
+                // console.log(JSON.stringify(ret));
+                dataArr = dataArr.concat(ret.poiList);
+                getData(dataArr)
             }
         });
     }
@@ -147,6 +170,22 @@
                 name: 'value'
             },
             bounces: false
+        });
+    }
+    // 添加标注
+    function addLabel(ele) {
+        bMap.addAnnotations({
+            annotations: [{
+                id: 2,
+                lon: $api.attr(ele, 'data-lon'),
+                lat: $api.attr(ele, 'data-lat')
+            }],
+            icon: 'widget://image/icon_my/icon_add.png',
+            draggable: true
+        }, function(ret) {
+            if (ret) {
+                alert(ret.id);
+            }
         });
     }
 </script>
