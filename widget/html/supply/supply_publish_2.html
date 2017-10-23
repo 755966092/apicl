@@ -4,8 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
-    />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <style>
@@ -16,7 +15,7 @@
             font-size: .3rem;
             margin-top: .5rem;
         }
-
+        
         .bbottomLoading {
             text-align: center;
             font-size: .24rem;
@@ -24,7 +23,7 @@
             line-height: .8rem;
             display: none;
         }
-
+        
         .item {
             width: 7.5rem;
             /* height: 5.7rem; */
@@ -34,7 +33,7 @@
             margin-bottom: 0.1rem;
             border-bottom: .01rem solid #d9d9d9;
         }
-
+        
         .firstImg {
             display: inline-block;
             width: 100%;
@@ -43,7 +42,7 @@
             border-radius: .1rem;
             position: relative;
         }
-
+        
         .price {
             display: inline-block;
             border-bottom-left-radius: .1rem;
@@ -61,27 +60,27 @@
             color: #fff;
             text-align: right
         }
-
+        
         .price span {
             font-size: 0.24rem;
         }
-
+        
         .name,
         .user {
             height: 0.48rem;
             font-size: 0;
             margin-bottom: 0.2rem;
         }
-
+        
         .user {
             margin: 0;
             padding: 0.02rem 0;
         }
-
+        
         .createTime {
             margin-bottom: 0.24rem;
         }
-
+        
         .title {
             font-weight: bolder;
             font-size: 0.3rem;
@@ -90,19 +89,17 @@
             white-space: nowrap;
             overflow: hidden;
         }
-
+        
         .announcer {
             font-size: 0.26rem;
         }
-
+        
         .announcerHead {
             width: 0.72rem;
             height: 0.72rem;
             border-radius: 50%;
         }
-
-
-
+        
         .name .icon {
             width: 1rem;
             height: 0.48rem;
@@ -110,13 +107,13 @@
             background-size: .36rem .31rem;
             background-position: right center;
         }
-
+        
         .name .collect {
             background: url(../../image/icon_supply/icon_collecr04.png)no-repeat;
             background-size: .36rem .31rem;
             background-position: right center;
         }
-
+        
         .user .icon {
             padding-left: 0.35rem;
             height: 0.48rem;
@@ -125,36 +122,36 @@
             background-position: left center;
             font-size: 0rem;
         }
-
+        
         .icon .count {
             font-size: 0.18rem;
             color: #999;
         }
-
+        
         .company {
             color: #999;
             font-size: 0.22rem;
         }
-
+        
         .price2 {
             font-weight: 500;
             font-size: 0.28rem;
             color: #CC0019;
         }
-
+        
         .username {
             margin-left: 0.2rem;
         }
-
+        
         .label {
             font-size: 0.2rem;
             color: #CC0019;
         }
-
+        
         .createTime {
             font-size: 0.24rem;
         }
-
+        
         .classifyLabel {
             border: .01rem solid #0ABB07;
             color: #0ABB07;
@@ -162,17 +159,16 @@
             border-radius: .17rem;
             padding: 0 .12rem;
         }
-
+        
         .position {
             padding-left: 0.3rem;
             background: url(../../image/icon_supply/icon_position.png)no-repeat;
             background-size: .18rem .24rem;
             background-position: left center
         }
-
+        
         .distance {
             padding-left: 0.3rem;
-
             background: url(../../image/icon_supply/icon_distance.png)no-repeat;
             background-size: .2rem .2rem;
             background-position: left center
@@ -192,8 +188,7 @@
         {{?it.length === 0}}
         <p class="no_data">暂无数据</p>
         {{??}} {{ for (var i = 0; i
-        < it.length; i++) { }} <div class="item" data-id="{{=it[i].demand_id}}" data-company="{{=it[i].company_name}}"
-            tapmode onclick="info(this)">
+        < it.length; i++) { }} <div class="item" data-id="{{=it[i].demand_id}}" data-company="{{=it[i].company_name}}" tapmode onclick="info(this)">
             <div class="userLeft flex-def flex-cCenter flex-zBetween" tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation(); ">
                 <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" class="announcerHead">
                 <div class="username flex-item">
@@ -203,15 +198,16 @@
                 <p class="price2">{{=it[i].reward}}元</p>
             </div>
             <span class="firstImg" style="background: url({{=it[i].image_json[0]?it[i].image_json[0]:'../../image/icon_supply/supply_noImg.png'}})no-repeat;background-size: 7.1rem auto;background-position: center center;">
-                           <span class="price ">
+                    {{?it[i].distance}}
+                    <span class="price ">
                                     <!-- <span class="position fl">清华大学</span> -->
-                        <span class="distance">距离我{{=it[i].distance}}km</span>
+            <span class="distance">距离我{{=it[i].distance}}km</span>
             </span>
+            {{?}}
             </span>
             <div class="name flex-def flex-cCenter flex-zBetween ">
                 <span class="title  flex-def flex-cCenter"><span>{{=it[i].title}}</span>&nbsp;<span class="label">[{{=it[i].type == 2?'公司':'个人'}}]</span></span>
-                <span tapmode data-id="{{=it[i].demand_id}}" onclick="collect(this);event.stopPropagation();" class=" {{=it[i].is_collect==true?"
-                    collect icon ":"icon "}} "></span>
+                <span tapmode data-id="{{=it[i].demand_id}}" onclick="collect(this);event.stopPropagation();" class=" {{=it[i].is_collect==true?" collect icon ":"icon "}} "></span>
             </div>
             <p class="createTime">{{=it[i].create_time}}</p>
             <div class="user flex-def flex-cCenter flex-zBetween ">
@@ -235,8 +231,11 @@
 
 <script type="text/javascript">
     var _dataSource = ["次", "幅", "单", "小时", "分钟", "天", "周", "月", "份", "个", "扇", "课时", "面议", "其他"];
-    var dataList = [], page_num = 1, dataListFlag = [], selectedObj, condition, parameter, flag;
-    apiready = function () {
+    var dataList = [],
+        page_num = 1,
+        dataListFlag = [],
+        selectedObj, condition, parameter, flag;
+    apiready = function() {
         moduleInit();
         api.execScript({
             name: 'winName',
@@ -250,14 +249,14 @@
         // 下拉刷新
         api.setCustomRefreshHeaderInfo({
             bgColor: '#EFEFF4',
-        }, function (ret, err) {
+        }, function(ret, err) {
             page_num = 1;
             //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
             requireData(condition);
         });
         api.addEventListener({
             name: 'editSupplyAfter'
-        }, function (ret, err) {
+        }, function(ret, err) {
             if (ret) {
                 page_num = 1;
                 requireData();
@@ -286,9 +285,9 @@
         api.addEventListener({
             name: 'scrolltobottom',
             extra: {
-                threshold: 0            //设置距离底部多少距离时触发，默认值为0，数字类型
+                threshold: 0 //设置距离底部多少距离时触发，默认值为0，数字类型
             }
-        }, function (ret, err) {
+        }, function(ret, err) {
             // alert('已滚动到底部');
             if ($api.text($api.dom('.bbottomLoading')) == '暂无更多供求') {
                 // // console.log('已滚动到底部, 不继续请求')
@@ -328,7 +327,7 @@
                     demand_id: $api.attr(ele, 'data-id')
                 }
             }
-        }, function (ret, err) {
+        }, function(ret, err) {
             if (ret) {
                 if ($api.hasCls(ele, 'collect')) {
                     // 已收藏
@@ -348,6 +347,7 @@
             }
         })
     }
+
     function requireData2(data) {
         var data = data || {};
         var latitude, longitude;
@@ -357,7 +357,7 @@
             accuracy: '100m',
             autoStop: true,
             filter: 1
-        }, function (ret, err) {
+        }, function(ret, err) {
             if (ret.status) {
                 data.latitude = ret.lat;
                 data.longitude = ret.lon;
@@ -378,7 +378,7 @@
                             page_num: page_num
                         }
                     }
-                }, function (ret, err) {
+                }, function(ret, err) {
                     if (ret) {
                         if (ret.code == 200) {
                             scrollFlag = 1;
@@ -403,7 +403,7 @@
                     location: 'bottom'
                 });
                 $api.css($api.dom('.loading'), 'display: none');
-                        api.refreshHeaderLoadDone()
+                api.refreshHeaderLoadDone()
             }
         });
         //     }
@@ -452,7 +452,7 @@
     function bySelect() {
         api.addEventListener({
             name: 'screeningResults1'
-        }, function (ret, err) {
+        }, function(ret, err) {
 
             if (ret.value.flag) {
                 // $api.css($api.dom('.title1'), 'display:block');
@@ -466,7 +466,7 @@
 
         api.addEventListener({
             name: 'addPublish'
-        }, function (ret, err) {
+        }, function(ret, err) {
             api.openFrame({
                 name: 'supply_addSupply',
                 url: 'supply_addSupply.html',
@@ -512,7 +512,7 @@
             accuracy: '100m',
             autoStop: true,
             filter: 1
-        }, function (ret, err) {
+        }, function(ret, err) {
             if (ret.status) {
                 data.latitude = ret.lat;
                 data.longitude = ret.lon;
@@ -522,70 +522,18 @@
                     getData(supplyCache);
                     selfAdaption();
                 }
-                api.ajax({
-                    url: apiSite + '/demand/index',
-                    method: 'post',
-                    headers: apiHeader,
-                    data: {
-                        values: {
-                            token: $api.getStorage('userToken'),
-                            // keyword: '',
-                            type: data.type || '',
-                            // sub_type: data.sub_type || '',
-                            category_ids: data.category_ids || '',
-                            order: data.order || '',
-                            latitude: data.latitude || '',
-                            longitude: data.longitude || '',
-                            page_num: page_num
-                        }
-                    }
-                }, function (ret, err) {
-                    // 停止下拉刷新
-                    api.refreshHeaderLoadDone()
-                    if (ret) {
-                        // // // console.log('数据:::'+JSON.stringify(ret.data.list.length))
-                        // // // console.log('页数:::'+JSON.stringify(page_num))
-                        if (supplyCache === ret.data.list) {
-
-                        } else {
-                            for (var i = 0; i < ret.data.list.length; i++) {
-                                // 解析图片json
-                                var element = ret.data.list[i];
-                                element.image_json = eval(element.image_json);
-                                for (var j = 0; j < element.image_json.length; j++) {
-                                    element.image_json[j] = element.image_json[j] + '?imageView2/1/w/310/h/190/interlace/1/q/80|imageslim'
-                                }
-                                if (element.unit == 0) {
-                                    element.unit = _dataSource[_dataSource.length - 1]
-                                } else {
-                                    element.unit = _dataSource[element.unit - 1]
-                                }
-                                element.company_name = element.company_name == null ? '' : element.company_name;
-                                // 处理时间
-                                element.create_time = initTime(element.create_time);
-                            }
-                            // console.log(JSON.stringify(ret.data.list))
-                            getData(ret.data.list);
-                            dataList = ret.data.list;
-                            $api.setStorage('supply_publish_2', ret.data.list);
-                            selfAdaption();
-                            if (ret.data.list.length < 15) {
-                                $api.css($api.dom('.bbottomLoading'), 'display: none');
-                            }
-                        }
-                    } else {
-                        alert(JSON.stringify(err.msg))
-                    }
-                })
+                renderData(data, supplyCache);
 
             } else {
-                api.toast({
-                    msg: '请在设置中打开定位权限',
-                    duration: 2000,
-                    location: 'bottom'
-                });
+                var supplyCache = $api.getStorage('supply_publish_2');
+                if (supplyCache) {
+                    // console.log(JSON.stringify(supplyCache))
+                    getData(supplyCache);
+                    selfAdaption();
+                }
+                renderData(data, supplyCache);
                 $api.css($api.dom('.loading'), 'display: none');
-                        api.refreshHeaderLoadDone()
+                api.refreshHeaderLoadDone()
             }
         });
         //     }
@@ -593,6 +541,63 @@
 
     }
 
+    function renderData(data, supplyCache) {
+        api.ajax({
+            url: apiSite + '/demand/index',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: {
+                    token: $api.getStorage('userToken'),
+                    // keyword: '',
+                    type: data.type || '',
+                    // sub_type: data.sub_type || '',
+                    category_ids: data.category_ids || '',
+                    order: data.order || '',
+                    latitude: data.latitude || '',
+                    longitude: data.longitude || '',
+                    page_num: page_num
+                }
+            }
+        }, function(ret, err) {
+            // 停止下拉刷新
+            api.refreshHeaderLoadDone()
+            if (ret) {
+                // // // console.log('数据:::'+JSON.stringify(ret.data.list.length))
+                // // // console.log('页数:::'+JSON.stringify(page_num))
+                if (supplyCache === ret.data.list) {
+
+                } else {
+                    for (var i = 0; i < ret.data.list.length; i++) {
+                        // 解析图片json
+                        var element = ret.data.list[i];
+                        element.image_json = eval(element.image_json);
+                        for (var j = 0; j < element.image_json.length; j++) {
+                            element.image_json[j] = element.image_json[j] + '?imageView2/1/w/310/h/190/interlace/1/q/80|imageslim'
+                        }
+                        if (element.unit == 0) {
+                            element.unit = _dataSource[_dataSource.length - 1]
+                        } else {
+                            element.unit = _dataSource[element.unit - 1]
+                        }
+                        element.company_name = element.company_name == null ? '' : element.company_name;
+                        // 处理时间
+                        element.create_time = initTime(element.create_time);
+                    }
+                    // console.log(JSON.stringify(ret.data.list))
+                    getData(ret.data.list);
+                    dataList = ret.data.list;
+                    $api.setStorage('supply_publish_2', ret.data.list);
+                    selfAdaption();
+                    if (ret.data.list.length < 15) {
+                        $api.css($api.dom('.bbottomLoading'), 'display: none');
+                    }
+                }
+            } else {
+                alert(JSON.stringify(err.msg))
+            }
+        })
+    }
     // 进入详情
     function info(ele) {
         var flag = 0;
@@ -613,7 +618,6 @@
         });
 
     }
-
 </script>
 
 </html>

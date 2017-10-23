@@ -8,56 +8,62 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <style>
-
-    ul {
-
-        margin-top: .2rem;
-    }
-    ul li {
-        font-size: .3rem;
-        line-height: .8rem;
-        height: .8rem;
-        background-color: #fff;
-        background: #fff url(../../image/icon_zk.png)no-repeat;
-        -webkit-background-size: .15rem .25rem;
-        background-size: .15rem .25rem;
-        background-position: 7.05rem center;
-        padding-left: .3rem;
-        margin-top: .01rem;
-    }
-    .text {
-        padding-right: .3rem;
-        border-bottom: .01rem solid #E1E1E1;
-    }
-    .mt30 {
-        margin-top: .3rem;
-    }
-    .bb {
-        border-bottom: .01rem solid #E1E1E1;
-    }
-    .bb .text {
-        border: 0;
-    }
-    .btn {
-        width: 7.14rem;
-        height: .86rem;
-        background-color: #1AAD19;
-        margin: 0 auto;
-        border-radius: .1rem;
-        color: #fff;font-size: .34rem;
-        line-height: .86rem;
-        text-align: center;
-        margin-top: .57rem;
-    }
-    .loading {
-        width: 7.5rem;
-        height: 13.34rem;
-        background: rgba(0,0,0,0.3) url(../../image/loading_more.gif)no-repeat;
-        -webkit-background-size: .8rem .8rem;
-        background-size: .8rem .8rem;
-        background-position: center center;
-        display: none;
-    }
+        ul {
+            margin-top: .2rem;
+        }
+        
+        ul li {
+            font-size: .3rem;
+            line-height: .8rem;
+            height: .8rem;
+            background-color: #fff;
+            background: #fff url(../../image/icon_zk.png)no-repeat;
+            -webkit-background-size: .15rem .25rem;
+            background-size: .15rem .25rem;
+            background-position: 7.05rem center;
+            padding-left: .3rem;
+            margin-top: .01rem;
+        }
+        
+        .text {
+            padding-right: .3rem;
+            border-bottom: .01rem solid #E1E1E1;
+        }
+        
+        .mt30 {
+            margin-top: .3rem;
+        }
+        
+        .bb {
+            border-bottom: .01rem solid #E1E1E1;
+        }
+        
+        .bb .text {
+            border: 0;
+        }
+        
+        .btn {
+            width: 7.14rem;
+            height: .86rem;
+            background-color: #1AAD19;
+            margin: 0 auto;
+            border-radius: .1rem;
+            color: #fff;
+            font-size: .34rem;
+            line-height: .86rem;
+            text-align: center;
+            margin-top: .57rem;
+        }
+        
+        .loading {
+            width: 7.5rem;
+            height: 13.34rem;
+            background: rgba(0, 0, 0, 0.3) url(../../image/loading_more.gif)no-repeat;
+            -webkit-background-size: .8rem .8rem;
+            background-size: .8rem .8rem;
+            background-position: center center;
+            display: none;
+        }
     </style>
 </head>
 
@@ -72,14 +78,14 @@
     </header>
     <div class="loading"></div>
     <div class="main">
-       <ul class="mt30">
+        <ul class="mt30">
             <li class="bb" tapmode onclick="openPage(this)" data-val='codeSafe'>
                 <div class="text">帐号与安全</div>
             </li>
             <li class="bb" tapmode onclick="updateAddressList()">
                 <div class="text">更新通讯录</div>
             </li>
-           <!--  <li class="mt30" onclick="openImg()">
+            <!--  <li class="mt30" onclick="openImg()">
                 <div class="text">隐私</div>
             </li> -->
             <!-- <li class="bb" onclick="openImg2()">
@@ -91,22 +97,23 @@
             <li class="bb" tapmode onclick="openPage(this)" data-val='aboutInin'>
                 <div class="text">关于我在</div>
             </li>
-            <!-- <li class="bb" tapmode onclick="clearAllStrong()" data-val='aboutInin'>
+            <li class="bb" tapmode onclick="clearAllStrong()" data-val='aboutInin'>
                 <div class="text">清除所有缓存</div>
-            </li> -->
+            </li>
             <!-- <li class="bb" tapmode onclick="clearAllStrong()" data-val='aboutInin'>
                 <div class="text">同步赵老师通讯录</div>
             </li> -->
-       </ul>
-       <div class="btn" tapmode onclick="dropOut()">安全退出</div>
-       <!-- <div class="btn" tapmode onclick="openList()">打开地图</div> -->
+        </ul>
+        <div class="btn" tapmode onclick="dropOut()">安全退出</div>
+        <!-- <div class="btn" tapmode onclick="openList()">打开地图</div> -->
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
-    var flag = 0,flagFlag = 0;
+    var flag = 0,
+        flagFlag = 0;
     apiready = function() {
         fnInit();
         moduleInit();
@@ -114,23 +121,23 @@
     };
 
     function clearAllStrong() {
-        var tableArr = ['addressList','tb_remarks_contact','tb_remarks_other_contact','tb_remarks_address','tb_remarks_education','tb_remarks_work','tb_remarks_project','tb_remarks_user_info','tb_remarks_status', 'addressList_simplify']
-        for (var i = 0;i < tableArr.length; i++) {
-            db.executeSql({
-                name: 'db_'+$api.getStorage('userToken'),
-                sql: 'DELETE FROM '+tableArr[i]
-            },function(ret,err){
-                if (ret.status) {
-                    api.toast({
-                        msg: '删除成功',
-                        duration: 2000,
-                        location: 'bottom'
-                    });
-                } else {
+        // var tableArr = ['addressList','tb_remarks_contact','tb_remarks_other_contact','tb_remarks_address','tb_remarks_education','tb_remarks_work','tb_remarks_project','tb_remarks_user_info','tb_remarks_status', 'addressList_simplify']
+        // for (var i = 0;i < tableArr.length; i++) {
+        //     db.executeSql({
+        //         name: 'db_'+$api.getStorage('userToken'),
+        //         sql: 'DELETE FROM '+tableArr[i]
+        //     },function(ret,err){
+        //         if (ret.status) {
+        //             api.toast({
+        //                 msg: '删除成功',
+        //                 duration: 2000,
+        //                 location: 'bottom'
+        //             });
+        //         } else {
 
-                }
-            })
-        }
+        //         }
+        //     })
+        // }
 
 
         // api.actionSheet({
@@ -152,6 +159,14 @@
         // setTimeout(function() {
         //     api.hideProgress();
         // }, 2000);
+        api.openWin({
+            name: 'winname',
+            url: './demo/map_win.html',
+            bounces: false,
+            pageParam: {
+                key: 'value'
+            }
+        });
 
         // api.openWin({
         //     name: 'winnkeyPsdame',
@@ -160,6 +175,7 @@
         //     pageParam: {key : 'value'}
         // });
     }
+
     function openImg2() {
         api.openWin({
             name: 'openImg',
@@ -169,6 +185,7 @@
             }
         });
     }
+
     function openList() {
         api.openWin({
             name: 'map_win',
@@ -178,12 +195,14 @@
             }
         });
     }
+
     function openImg() {
         api.openWin({
             name: 'winName',
             url: './openImg.html'
         });
     }
+
     function openPage1() {
         api.openWin({
             name: 'me_aaaaaaaaaaa',
@@ -193,6 +212,7 @@
             }
         });
     }
+
     function dropOut() {
         // 退出戎云
         rong.disconnect({
@@ -203,82 +223,82 @@
             }
         });
         api.ajax({
-            url: apiSite + '/settings/logout',
-            method: 'post',
-            headers: apiHeader,
-            data: {
+                url: apiSite + '/settings/logout',
+                method: 'post',
+                headers: apiHeader,
+                data: {
                     values: {
                         token: $api.getStorage('userToken'),
                     }
-            }
-        }, function(ret, err) {
-            if(ret) {
-                $api.clearStorage();
-                $api.setStorage('guidePages', api.appVersion);
-                // $api.rmStorage('userToken');
-                // $api.rmStorage('rongToken');
-                // api.closeToWin({
-                //     name: 'loginPage'
-                // });
-                api.openWin({
-                    name: 'winName',
-                    url: '../enroll/me_login.html'
-                });
-            } else {
-                alert(JSON.stringify(err))
-            }
-        })
-        // db.openDatabase({
-        //     name: 'db_'+$api.getStorage('userToken'),
-        // }, function(ret, err){
-        //     if( ret.status ){
-        //         var tableArr = ['addressList','tb_remarks_contact','tb_remarks_other_contact','tb_remarks_address','tb_remarks_education','tb_remarks_work','tb_remarks_project','tb_remarks_user_info','tb_remarks_status', 'addressList_simplify']
-        //         for (var i = 0;i < tableArr.length; i++) {
-        //             db.executeSql({
-        //                 name: 'db_'+$api.getStorage('userToken'),
-        //                 sql: 'DROP TABLE IF EXISTS '+tableArr[i]
-        //             },function(ret,err){
-        //                 if (ret.status) {
-        //                         // // // console.log('执行成功'+i)
-        //                         api.ajax({
-        //                             url: apiSite + '/settings/logout',
-        //                             method: 'post',
-        //                             headers: apiHeader,
-        //                             data: {
-        //                                    values: {
-        //                                        token: $api.getStorage('userToken'),
-        //                                    }
-        //                             }
-        //                         }, function(ret, err) {
-        //                             if(ret) {
-        //                                 $api.clearStorage();
-        //                                 // api.closeToWin({
-        //                                 //     name: 'loginPage'
-        //                                 // });
-        //                                 api.openWin({
-        //                                     name: 'winName',
-        //                                     url: '../enroll/me_login.html'
-        //                                 });
-        //                             } else {
-        //                                 alert(JSON.stringify(err))
-        //                             }
-        //                         })
-        //                 }else {
-        //                     alert(JSON.stringify(err))
-        //                 }
-        //             });
-        //         }
-        //     }else{
-        //         alert( JSON.stringify( err ) );
-        //     }
-        // });
+                }
+            }, function(ret, err) {
+                if (ret) {
+                    $api.clearStorage();
+                    $api.setStorage('guidePages', api.appVersion);
+                    // $api.rmStorage('userToken');
+                    // $api.rmStorage('rongToken');
+                    // api.closeToWin({
+                    //     name: 'loginPage'
+                    // });
+                    api.openWin({
+                        name: 'winName',
+                        url: '../enroll/me_login.html'
+                    });
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
+            // db.openDatabase({
+            //     name: 'db_'+$api.getStorage('userToken'),
+            // }, function(ret, err){
+            //     if( ret.status ){
+            //         var tableArr = ['addressList','tb_remarks_contact','tb_remarks_other_contact','tb_remarks_address','tb_remarks_education','tb_remarks_work','tb_remarks_project','tb_remarks_user_info','tb_remarks_status', 'addressList_simplify']
+            //         for (var i = 0;i < tableArr.length; i++) {
+            //             db.executeSql({
+            //                 name: 'db_'+$api.getStorage('userToken'),
+            //                 sql: 'DROP TABLE IF EXISTS '+tableArr[i]
+            //             },function(ret,err){
+            //                 if (ret.status) {
+            //                         // // // console.log('执行成功'+i)
+            //                         api.ajax({
+            //                             url: apiSite + '/settings/logout',
+            //                             method: 'post',
+            //                             headers: apiHeader,
+            //                             data: {
+            //                                    values: {
+            //                                        token: $api.getStorage('userToken'),
+            //                                    }
+            //                             }
+            //                         }, function(ret, err) {
+            //                             if(ret) {
+            //                                 $api.clearStorage();
+            //                                 // api.closeToWin({
+            //                                 //     name: 'loginPage'
+            //                                 // });
+            //                                 api.openWin({
+            //                                     name: 'winName',
+            //                                     url: '../enroll/me_login.html'
+            //                                 });
+            //                             } else {
+            //                                 alert(JSON.stringify(err))
+            //                             }
+            //                         })
+            //                 }else {
+            //                     alert(JSON.stringify(err))
+            //                 }
+            //             });
+            //         }
+            //     }else{
+            //         alert( JSON.stringify( err ) );
+            //     }
+            // });
     }
 
     function openPage(ele) {
         var val = $api.attr(ele, 'data-val');
         api.openWin({
-            name: 'winName'+val,
-            url: './me_sz_'+ val +'.html',
+            name: 'winName' + val,
+            url: './me_sz_' + val + '.html',
             pageParam: {
                 name: 'value'
             }
@@ -295,60 +315,62 @@
         db.executeSql({
             name: SQLName,
             sql: 'CREATE TABLE IF NOT EXISTS addressList_simplify(user_id int PRIMARY KEY NOT NULL, title varchar(255),img varchar(255), subTitle varchar(255), current_contact varchar(255), flag varchar(255), type int)'
-        }, function(ret, err){
-            if( ret.status ){
+        }, function(ret, err) {
+            if (ret.status) {
                 db.executeSql({
-                    name: 'db_'+$api.getStorage('userToken'),
+                    name: 'db_' + $api.getStorage('userToken'),
                     sql: 'CREATE INDEX  IF NOT EXISTS  type_idx ON addressList_simplify (type);'
-                }, function(ret, err){
-                    if( ret.status ){
+                }, function(ret, err) {
+                    if (ret.status) {
                         db.executeSql({
-                            name: 'db_'+$api.getStorage('userToken'),
+                            name: 'db_' + $api.getStorage('userToken'),
                             sql: 'CREATE INDEX  IF NOT EXISTS  flag_idx ON addressList_simplify (flag);'
-                        }, function(ret, err){
-                            if( ret.status ){
+                        }, function(ret, err) {
+                            if (ret.status) {
                                 queryContacts();
-                            }else{
-                                alert( JSON.stringify( err ) );
+                            } else {
+                                alert(JSON.stringify(err));
                             }
                         });
-                    }else{
-                        alert( JSON.stringify( err ) );
+                    } else {
+                        alert(JSON.stringify(err));
                     }
                 });
-            }else{
+            } else {
                 // 报错addressList_simplify 已经存在
             }
         });
     }
+
     function queryContactByPage(page) {
-         if("undefined" == typeof page) {
-             var page = 0;
+        if ("undefined" == typeof page) {
+            var page = 0;
         }
         var contacts = api.require('contacts');
         contacts.queryByPage({
-             count:300,
-             pageIndex:page
-         }, function(ret, err) {
+            count: 300,
+            pageIndex: page
+        }, function(ret, err) {
             //  api.alert({msg:'获取成功'+page});
             console.log(JSON.stringify(ret));
-            console.log('获取成功'+JSON.stringify(ret.contacts.length))
+            console.log('获取成功' + JSON.stringify(ret.contacts.length))
             $api.css($api.dom('.loading'), 'display: none');
-             if(page < (ret.pages-1)) {
-                setTimeout(function(){
-                        queryContactByPage(page+1);
-                },10000)
-             }
+            if (page < (ret.pages - 1)) {
+                setTimeout(function() {
+                    queryContactByPage(page + 1);
+                }, 10000)
+            }
         });
     }
+
     function queryContacts() {
         contacts.queryByPage({
             pageIndex: 0
         }, function(retContacts, err) {
             if (retContacts.status) {
-                console.log('获取成功'+JSON.stringify(retContacts.contacts.length))
+                console.log('获取成功' + JSON.stringify(retContacts.contacts.length))
                 db.executeSql({
-                    name: 'db_'+$api.getStorage('userToken'),
+                    name: 'db_' + $api.getStorage('userToken'),
                     sql: 'CREATE TABLE IF NOT EXISTS addressList(user_id int PRIMARY KEY NOT NULL, nickname varchar(255),real_name varchar(255), head_img_url varchar(255), current_position varchar(255), current_company varchar(255), current_degree varchar(255), current_contact varchar(255), titleSize int, title varchar(255), img varchar(255), flag varchar(255), litter varchar(255), type int, sex varchat(10), remark_nickname varchar(255),  remark_real_name varchar(255) , remark_head_img_url varchar(255) , remark_sex varchar(255) , remark_birthday varchar(255) , remark_hometown varchar(255) , remark_current_company varchar(255) , remark_current_position varchar(255) , remark_current_degree varchar(255), remark_current_contact varchar(255), current_status varchar(255))'
                 }, function(ret, err) {
                     // ;CREATE UNIQUE INDEX user_id_idx on addressList (user_id);
@@ -356,26 +378,30 @@
                         // // // console.log(JSON.stringify(ret));
                         // alert('执行成功')
                         db.executeSql({
-                            name: 'db_'+$api.getStorage('userToken'),
+                            name: 'db_' + $api.getStorage('userToken'),
                             sql: 'DELETE FROM addressList'
-                        },function(retData,err){
+                        }, function(retData, err) {
                             if (retData.status) {
                                 db.executeSql({
-                                    name: 'db_'+$api.getStorage('userToken'),
+                                    name: 'db_' + $api.getStorage('userToken'),
                                     sql: 'DELETE FROM addressList_simplify'
-                                },function(retDataList,err){
+                                }, function(retDataList, err) {
                                     if (retDataList.status) {
                                         contactUpdate(retContacts);
-                                    }else {
-                                        api.alert({msg:err.msg});
+                                    } else {
+                                        api.alert({
+                                            msg: err.msg
+                                        });
                                     }
                                 });
-                            }else {
-                                api.alert({msg:err.msg});
+                            } else {
+                                api.alert({
+                                    msg: err.msg
+                                });
                             }
                         });
                     } else {
-                        alert('新建表错误:'+JSON.stringify(err));
+                        alert('新建表错误:' + JSON.stringify(err));
                     }
                 });
 
@@ -398,15 +424,15 @@
             data: {
                 values: {
                     token: $api.getStorage('userToken'),
-                    contact_json:retData
+                    contact_json: retData
                 }
             }
         }, function(ret, err) {
 
             // 同步通讯录成功
-            if(ret) {
+            if (ret) {
                 // 请求同步的数据，存到本地数据库
-                if(ret.code == 200) {
+                if (ret.code == 200) {
                     requestData();
                 } else {
                     alert(ret.msg)
@@ -424,26 +450,26 @@
             method: 'post',
             headers: apiHeader,
             data: {
-               values: {
-                  token: $api.getStorage('userToken'),
-               }
+                values: {
+                    token: $api.getStorage('userToken'),
+                }
             }
-       }, function(ret, err) {
+        }, function(ret, err) {
 
-            if(ret) {
+            if (ret) {
                 if (ret.code == 200) {
                     api.ajax({
                         url: apiSite + '/contact/friend',
                         method: 'post',
                         headers: apiHeader,
                         data: {
-                               values: {
-                                   token: $api.getStorage('userToken'),
-                               }
+                            values: {
+                                token: $api.getStorage('userToken'),
+                            }
                         }
                     }, function(retFriend, err) {
                         // // console.log('搜索'+JSON.stringify(retFriend))
-                        if(retFriend) {
+                        if (retFriend) {
                             if (retFriend.code == 200) {
                                 flagFlag = 1;
                                 disData(ret.data.friend_list.concat(retFriend.data.list), 4)
@@ -463,17 +489,18 @@
             } else {
                 alert(JSON.stringify(err))
             }
-       })
+        })
 
     }
-    function f_check_uppercase(obj)   {
-       if (/[A-Za-z]/.test(obj))    {
-          return true;
-       }
-       return false;
+
+    function f_check_uppercase(obj) {
+        if (/[A-Za-z]/.test(obj)) {
+            return true;
+        }
+        return false;
     }
     // 同步通讯录4 处理数据
-    function disData (data, type) {
+    function disData(data, type) {
         flag += 1;
         // // // console.log('第四步'+JSON.stringify(data))
         if (data != '') {
@@ -492,7 +519,7 @@
                 } else {
                     if (f_check_uppercase(PinyinHelper.getShortPinyin(data[i].nickname))) {
 
-                    data[i].litter = PinyinHelper.getShortPinyin(data[i].nickname).toUpperCase();
+                        data[i].litter = PinyinHelper.getShortPinyin(data[i].nickname).toUpperCase();
                     } else {
                         data[i].litter = "#"
                     }
@@ -513,7 +540,7 @@
         }
     }
     // 同步通讯录5 排序
-    function litterSort(data,type) {
+    function litterSort(data, type) {
         for (var i = 0; i < data.length; i++) {
             for (var j = 0; j < data.length; j++) {
                 if (data[i].litter < data[j].litter) {
@@ -522,91 +549,90 @@
                     data[j] = temp;
                 }
             }
-         }
-         sqlSyntax(data, type);
+        }
+        sqlSyntax(data, type);
     }
     var a = 0;
     // 同步通讯录6 拼数据库语法字符串
     function sqlSyntax(data1, type) {
         // console.log('第六版'+JSON.stringify(data1))
-            for (var i = 0; i < data1.length; i++) {
-                data1[i].flag = data1[i].litter[0];
+        for (var i = 0; i < data1.length; i++) {
+            data1[i].flag = data1[i].litter[0];
+        }
+        // // // console.log('数据库语法字符串:'+data1);
+        var SQLName = 'db_' + $api.getStorage('userToken');
+        var SQL = 'INSERT OR REPLACE INTO addressList(user_id,nickname,head_img_url,current_company,current_position,current_contact,current_degree, titleSize,title,img,flag,litter,type, sex, remark_nickname, remark_real_name, remark_head_img_url, remark_sex, remark_birthday, remark_hometown, remark_current_company, remark_current_position, remark_current_degree, remark_current_contact) VALUES '
+        var SQL2 = 'INSERT OR REPLACE INTO addressList_simplify(user_id,title,img,subTitle,current_contact, flag,type) VALUES ';
+        for (var i = 0; i < data1.length; i++) {
+            var subTitleStr = '',
+                contactStr = '';
+            SQL += '(' + data1[i].user_id + ',"' + data1[i].nickname + '","' + data1[i].head_img_url + '","' + (data1[i].current_company || "") + '","' + (data1[i].current_position || "") + '","' + (data1[i].current_contact || "") + '","' + (data1[i].current_degree || "") + '","' + data1[i].titleSize + '","' + data1[i].title + '","' + data1[i].img + '","' + data1[i].flag + '","' + data1[i].litter + '","' + type + '","' + (data1[i].sex || 1) + '","' + (data1[i].remark_nickname || "") + '","' + (data1[i].remark_real_name || "") + '","' + (data1[i].remark_head_img_url || "") + '","' + (data1[i].remark_sex || "") + '","' + (data1[i].remark_birthday || "") + '","' + (data1[i].remark_hometown || "") + '","' + (data1[i].remark_current_company || "") + '","' + (data1[i].remark_current_position || "") + '","' + (data1[i].remark_current_degree || "") + '","' + (data1[i].remark_current_contact || "") + '"),';
+            if (data1[i].remark_current_company) {
+                subTitleStr += data1[i].remark_current_company + " "
+            } else if (data1[i].current_company) {
+                subTitleStr += data1[i].current_company + " "
+            } else {
+
             }
-            // // // console.log('数据库语法字符串:'+data1);
-            var SQLName = 'db_'+$api.getStorage('userToken');
-            var SQL = 'INSERT OR REPLACE INTO addressList(user_id,nickname,head_img_url,current_company,current_position,current_contact,current_degree, titleSize,title,img,flag,litter,type, sex, remark_nickname, remark_real_name, remark_head_img_url, remark_sex, remark_birthday, remark_hometown, remark_current_company, remark_current_position, remark_current_degree, remark_current_contact) VALUES '
-            var SQL2 = 'INSERT OR REPLACE INTO addressList_simplify(user_id,title,img,subTitle,current_contact, flag,type) VALUES ';
-            for (var i = 0; i < data1.length; i++) {
-                var subTitleStr= '',contactStr = '';
-                SQL += '('+data1[i].user_id+',"'+ data1[i].nickname +'","'+ data1[i].head_img_url +'","'+ (data1[i].current_company || "") +'","'+ (data1[i].current_position || "")+'","'+ (data1[i].current_contact || "") +'","'+ (data1[i].current_degree || "") +'","'+ data1[i].titleSize +'","'+ data1[i].title +'","'+ data1[i].img+'","'+ data1[i].flag +'","'+ data1[i].litter +'","'+ type +'","'+ (data1[i].sex || 1) +'","'+ (data1[i].remark_nickname || "") +'","'+ (data1[i].remark_real_name || "") +'","'+ (data1[i].remark_head_img_url || "") +'","'+ (data1[i].remark_sex || "") +'","'+ (data1[i].remark_birthday || "") +'","'+ (data1[i].remark_hometown || "") +'","'+ (data1[i].remark_current_company || "") +'","'+ (data1[i].remark_current_position || "") +'","'+ (data1[i].remark_current_degree || "") +'","'+ (data1[i].remark_current_contact || "") +'"),';
-                if (data1[i].remark_current_company) {
-                    subTitleStr += data1[i].remark_current_company+" "
-                } else if(data1[i].current_company){
-                    subTitleStr += data1[i].current_company+" "
-                } else {
+            if (data1[i].remark_current_position) {
+                subTitleStr += data1[i].remark_current_position + " "
+            } else if (data1[i].current_position) {
+                subTitleStr += data1[i].current_position + " "
+            } else {
 
-                }
-                if (data1[i].remark_current_position) {
-                    subTitleStr += data1[i].remark_current_position + " "
-                } else if (data1[i].current_position) {
-                    subTitleStr += data1[i].current_position + " "
-                } else {
-
-                }
-                if (data1[i].remark_current_degree) {
-                    subTitleStr += data1[i].remark_current_degree+" "
-                } else if (data1[i].current_degree) {
-                    subTitleStr += data1[i].current_degree+" "
-                } else {
-
-                }
-                if (data1[i].remark_current_contact) {
-                    contactStr = data1[i].remark_current_contact;
-                } else if(data1[i].current_contact) {
-                    contactStr = data1[i].current_contact
-                } else {
-
-                }
-                // subTitleStr
-                SQL2 += '('+data1[i].user_id+',"'+ (data1[i].remark_nickname || data1[i].nickname) +'","'+ (data1[i].remark_head_img_url || data1[i].head_img_url) +'","'+ subTitleStr+'","'+ contactStr +'","'+  data1[i].flag  +'","'+ type  +'"),';
             }
-            SQL = SQL.substring(0,SQL.length-1) + ';'
-            SQL2 = SQL2.substring(0,SQL2.length-1) + ';'
+            if (data1[i].remark_current_degree) {
+                subTitleStr += data1[i].remark_current_degree + " "
+            } else if (data1[i].current_degree) {
+                subTitleStr += data1[i].current_degree + " "
+            } else {
+
+            }
+            if (data1[i].remark_current_contact) {
+                contactStr = data1[i].remark_current_contact;
+            } else if (data1[i].current_contact) {
+                contactStr = data1[i].current_contact
+            } else {
+
+            }
+            // subTitleStr
+            SQL2 += '(' + data1[i].user_id + ',"' + (data1[i].remark_nickname || data1[i].nickname) + '","' + (data1[i].remark_head_img_url || data1[i].head_img_url) + '","' + subTitleStr + '","' + contactStr + '","' + data1[i].flag + '","' + type + '"),';
+        }
+        SQL = SQL.substring(0, SQL.length - 1) + ';'
+        SQL2 = SQL2.substring(0, SQL2.length - 1) + ';'
             //         sql: 'CREATE TABLE IF NOT EXISTS addressList_simplify(user_id int PRIMARY KEY NOT NULL, nickname varchar(255),head_img_url varchar(255), current_position varchar(255), current_company varchar(255), current_degree varchar(255), flag varchar(255), type int)'
 
-            db.executeSql({
-                name: SQLName,
-                sql: SQL2
-            }, function(ret, err){
-                if( ret.status ){
-                }else{
-                    alert( JSON.stringify( err ) );
+        db.executeSql({
+            name: SQLName,
+            sql: SQL2
+        }, function(ret, err) {
+            if (ret.status) {} else {
+                alert(JSON.stringify(err));
+            }
+        });
+
+        db.executeSql({
+            name: SQLName,
+            sql: SQL
+        }, function(ret, err) {
+            if (ret.status) {
+                // // console.log(flag)
+                if (flag == 4) {
+                    $api.rmStorage('noAccessToContacts');
+                    $api.css($api.dom('.loading'), 'display: none');
+                    api.toast({
+                        msg: '同步通讯录成功'
+                    });
+                    api.sendEvent({
+                        name: 'editUserInfoUpdateList'
+                    });
+                    flag = 0;
                 }
-            });
-
-                db.executeSql({
-                    name: SQLName,
-                    sql: SQL
-                }, function(ret, err) {
-                    if (ret.status) {
-                    // // console.log(flag)
-                        if (flag == 4) {
-                            $api.rmStorage('noAccessToContacts');
-                            $api.css($api.dom('.loading'), 'display: none');
-                            api.toast({
-                                msg: '同步通讯录成功'
-                            });
-                            api.sendEvent({
-                                name: 'editUserInfoUpdateList'
-                            });
-                            flag = 0;
-                        }
-                    } else {
-                        console.log('执行语句错误:' + JSON.stringify(err))
-                    }
-                });
+            } else {
+                console.log('执行语句错误:' + JSON.stringify(err))
+            }
+        });
     }
-
 </script>
 
 </html>
