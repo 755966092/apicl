@@ -8,23 +8,22 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <style>
-
-    /* 加号 */
-
-    header.header span.rightBtn {
-        display: inline-block;
-        /*width: .3rem;*/
-        /*height: .39rem;*/
-        background: url(../../image/icon_other/icon_datum.png)no-repeat;
-        background-size: .3rem .3rem;
-        background-position: right center;
-    }
-
-    #title {
-        width: 3rem;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+        /* 加号 */
+        
+        header.header span.rightBtn {
+            display: inline-block;
+            /*width: .3rem;*/
+            /*height: .39rem;*/
+            background: url(../../image/icon_other/icon_datum.png)no-repeat;
+            background-size: .3rem .3rem;
+            background-position: right center;
+        }
+        
+        #title {
+            width: 3rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     </style>
 </head>
 
@@ -42,111 +41,119 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
-	var name, targetRongId, userId;
-	apiready = function() {
+    var name, targetRongId, userId;
+    apiready = function() {
         console.log(JSON.stringify(api.pageParam))
-    // 初始化模块
-    moduleInit()
-    targetRongId = api.pageParam.targetRongId;
-    nickname = api.pageParam.nickname;
-    clearState(targetRongId)
-        // 获取参数
-    var title = document.getElementById('title')
-    $api.html(title, nickname);
-    // 初始化界面
-    fnInit();
-    api.setWinAttr({
-        softInputMode: 'resize',
-        slidBackEnabled: false
-    });
-    // 新建表格
-    createSqlTable();
-    // 聊天内容
-    api.openFrame({
-        name: 'chattContent',
-        url: './chatContent.html',
-        softInputMode: 'resize',
-        rect: {
-            x: 0,
-            y: headerH,
-            w: 'auto',
-            h: 'auto'
-        },
-        pageParam: {
-            nickname: nickname,
-            targetRongId: targetRongId,
-            headImg: api.pageParam.headImg,
-            supplyName: api.pageParam.supplyName,
-            priceUint: api.pageParam.priceUint,
-            type: api.pageParam.type,
-            targetUserId: userId,
-            order_id: api.pageParam.order_id,
-            userId: userId || api.pageParam.userId,
+            // 初始化模块
+        moduleInit()
+        targetRongId = api.pageParam.targetRongId;
+        nickname = api.pageParam.nickname;
+        clearState(targetRongId)
+            // 获取参数
+        var title = document.getElementById('title')
+        $api.html(title, nickname);
+        // 初始化界面
+        fnInit();
+        api.setWinAttr({
+            softInputMode: 'resize',
+            slidBackEnabled: false
+        });
+        // 新建表格
+        createSqlTable();
+        // 聊天内容
+        api.openFrame({
+            name: 'chattContent',
+            url: './chatContent.html',
+            softInputMode: 'resize',
+            rect: {
+                x: 0,
+                y: headerH,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                nickname: nickname,
+                targetRongId: targetRongId,
+                headImg: api.pageParam.headImg,
+                supplyName: api.pageParam.supplyName,
+                priceUint: api.pageParam.priceUint,
+                type: api.pageParam.type,
+                targetUserId: userId,
+                order_id: api.pageParam.order_id,
+                userId: userId || api.pageParam.userId,
 
-        },
-        bounces: true,
+            },
+            bounces: true,
 
-    });
-    api.execScript({
-        name: 'main',
-        // frameName: 'fram0',
-        script: 'getTotalCount();'
-    });
+        });
+        api.execScript({
+            name: 'main',
+            // frameName: 'fram0',
+            script: 'getTotalCount();'
+        });
 
 
-    api.addEventListener({
-        name: 'getUserId'
-    }, function(ret, err) {
-        if (ret) {
-            // // alert(JSON.stringify(ret));
-            userId = ret.value.userId
-        } else {
-            alert(JSON.stringify(err));
-        }
-    });
-};
-function openMemberInfo() {
-    api.openWin({
-        name: 'txl_memberInfo_Win',
-        url: '../addressList/txl_memberInfo_Win.html',
-        pageParam: {
-            userId: userId
-        }
-    });
-}
-function clearState(targetRongId) {
-    rong.clearMessagesUnreadStatus({
-        conversationType: 'PRIVATE',
-        targetId: targetRongId
-    }, function(ret, err) {
+        api.addEventListener({
+            name: 'getUserId'
+        }, function(ret, err) {
+            if (ret) {
+                // // alert(JSON.stringify(ret));
+                userId = ret.value.userId
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+        api.addEventListener({
+            name:'editUserInfoList'
+        },function (ret,err) {
+            console.log(JSON.stringify(ret))
+            $api.text($api.byId('title'), ret.value.title);
+        })
+    };
 
-    })
-}
+    function openMemberInfo() {
+        api.openWin({
+            name: 'txl_memberInfo_Win',
+            url: '../addressList/txl_memberInfo_Win.html',
+            pageParam: {
+                userId: userId
+            }
+        });
+    }
 
-// 新建数据库表格
-function createSqlTable() {
-    // db.executeSql({
-    //      name: SQLName,
-    //      sql: 'DROP TABLE tb_chat_'+ api.pageParam.targetRongId
-    //  }, function(ret, err){
-    //      if( ret.status ){
-    //          alert('1'+ JSON.stringify( ret ) );
-    //      }else{
-    //          alert( JSON.stringify( err ) );
-    //      }
-    //  });
-    db.executeSql({
-        name: 'db_'+$api.getStorage('userToken'),
-        sql: 'CREATE TABLE IF NOT EXISTS tb_chat_'+ api.pageParam.targetRongId +'(messageId int PRIMARY KEY NOT NULL, receivedTime char(13), user_id int DEFAULT '+ api.pageParam.userId +', objectName varchar(255), messageDirection varchar(255), content_extra varchar(255), content_text text, head_img_url varchar(255), filePath varchar(255), duration varchar(255), thumbPath varchar(255))'
-    }, function(ret, err){
-        if( ret.status ){
-            // alert( JSON.stringify( ret ) );
-        }else{
-            alert('473'+ JSON.stringify( err ) );
-            // // console.log('473'+ JSON.stringify( err ) );
-        }
-    });
-}
+    function clearState(targetRongId) {
+        rong.clearMessagesUnreadStatus({
+            conversationType: 'PRIVATE',
+            targetId: targetRongId
+        }, function(ret, err) {
+
+        })
+    }
+
+    // 新建数据库表格
+    function createSqlTable() {
+        //     db.executeSql({
+        //          name: SQLName,
+        //          sql: 'DROP TABLE tb_chat_'+ api.pageParam.userId
+        //      }, function(ret, err){
+        //          if( ret.status ){
+        //              alert('1'+ JSON.stringify( ret ) );
+        //          }else{
+        //              alert( JSON.stringify( err ) );
+        //          }
+        //      });
+        db.executeSql({
+            name: 'db_' + $api.getStorage('userToken'),
+            sql: 'CREATE TABLE IF NOT EXISTS tb_chat_' + api.pageParam.userId + '(messageId int PRIMARY KEY NOT NULL, receivedTime char(13), user_id int DEFAULT ' + api.pageParam.userId + ', objectName varchar(255), messageDirection varchar(255), content_extra varchar(255), content_text text, head_img_url varchar(255), filePath varchar(255), duration varchar(255), thumbPath varchar(255))'
+        }, function(ret, err) {
+            if (ret.status) {
+                // alert( JSON.stringify( ret ) );
+            } else {
+                alert('473' + JSON.stringify(err));
+                // // console.log('473'+ JSON.stringify( err ) );
+            }
+        });
+    }
 </script>
 
 </html>

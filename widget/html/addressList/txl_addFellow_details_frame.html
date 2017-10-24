@@ -1,29 +1,35 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
-    <link rel="stylesheet" type="text/css" href="../../css/flex.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/flex.css" />
     <style type="text/css">
         .main {
             margin-top: .36rem;
         }
+        
         .headImg {
             height: 1.42rem;
             background-color: #fff;
             font-size: 0;
             padding: 0 .36rem;
         }
+        
         .headImg span {
             font-size: .3rem;
         }
+        
         .headImg img {
             width: 1.07rem;
             height: 1.07rem;
             border-radius: .08rem;
         }
+        
         .icon {
             width: .15rem;
             height: .25rem;
@@ -32,6 +38,7 @@
             background-size: .15rem .25rem;
             margin-left: .2rem;
         }
+        
         .sex {
             box-sizing: border-box;
             width: 7.5rem;
@@ -44,9 +51,11 @@
             background-size: .15rem .25rem;
             background-position: 6.94rem center;
         }
+        
         .name {
             font-size: 0;
         }
+        
         p {
             font-size: .24rem;
             color: #999;
@@ -54,6 +63,7 @@
             padding: 0 .36rem;
             line-height: .6rem;
         }
+        
         input {
             box-sizing: border-box;
             width: 7.5rem;
@@ -63,6 +73,7 @@
             outline: none;
             font-size: .3rem;
         }
+        
         .btn {
             width: 6.785rem;
             height: .841rem;
@@ -77,38 +88,39 @@
             margin-top: 1rem;
             margin-bottom: 1rem;
         }
-    </style>   
+    </style>
 </head>
+
 <body>
     <div class="main">
-       <div class="headImg flex-def flex-cCenter flex-zBetween" tapmode onclick="openHeadPage()">
-           <span class="text">头像</span>
-           <div class="flex-def flex-cCenter">
-               <img id="headImg" src="../../image/tx_1.jpg">
+        <div class="headImg flex-def flex-cCenter flex-zBetween" tapmode onclick="openHeadPage()">
+            <span class="text">头像</span>
+            <div class="flex-def flex-cCenter">
+                <img id="headImg" src="../../image/tx_1.jpg">
                 <span class="icon"></span>
-           </div>
-       </div>
-       <div class="name">
-           <p>真实姓名</p>
-           <input class="realName" type="text" name="">
-       </div>
-       <div class="name">
-           <p>昵称</p>
-           <input class="nickName" type="text" name="">
-       </div>
-       <div class="name" tapmode onclick="selectList(this)">
+            </div>
+        </div>
+        <div class="name">
+            <p>真实姓名</p>
+            <input class="realName" type="text" name="">
+        </div>
+        <div class="name">
+            <p>昵称</p>
+            <input class="nickName" type="text" name="">
+        </div>
+        <div class="name" tapmode onclick="selectList(this)">
             <p>性别</p>
             <span class="sex"></span>
-       </div>
-       <div class="btn" tapmode onclick="conserve()">保存</div>
+        </div>
+        <div class="btn" tapmode onclick="conserve()">保存</div>
     </div>
-  
+
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
-    apiready = function(){
+    apiready = function() {
         moduleInit();
         initPage();
         // // console.log('参数:::'+JSON.stringify(api.pageParam))
@@ -121,31 +133,31 @@
             } else {
                 alert(JSON.stringify(err));
             }
-        }); 
-        
+        });
+
     };
     // 初始化页面
     function initPage() {
         db.selectSql({
-            name: 'db_'+$api.getStorage('userToken'),
+            name: 'db_' + $api.getStorage('userToken'),
             sql: 'SELECT * FROM addressList where user_id=' + api.pageParam.userId
-        }, function(ret, err){        
-            if( ret.status ){
+        }, function(ret, err) {
+            if (ret.status) {
                 // // console.log('134:::'+JSON.stringify(ret))
-                if(ret.data.length != 0){
+                if (ret.data.length != 0) {
                     // 优先备注头像,其次备注头像
-                    $api.attr($api.dom('img'), 'src', ret.data[0].remark_head_img_url||ret.data[0].head_img_url);
+                    $api.attr($api.dom('img'), 'src', ret.data[0].remark_head_img_url || ret.data[0].head_img_url);
 
                     // 优先备注姓名
-                    if (!ret.data[0].remark_real_name && ret.data[0].real_name=='null') {
-                         $api.val($api.dom('.realName'),'')
+                    if (!ret.data[0].remark_real_name && ret.data[0].real_name == 'null') {
+                        $api.val($api.dom('.realName'), '')
                     } else {
-                        $api.val($api.dom('.realName'), ret.data[0].remark_real_name|| ret.data[0].real_name);
+                        $api.val($api.dom('.realName'), ret.data[0].remark_real_name || ret.data[0].real_name);
                     }
 
                     // 优先备注昵称, 其次自己昵称
-                    $api.val($api.dom('.nickName'), ret.data[0].remark_nickname||ret.data[0].nickname);
-                    $api.text($api.dom('.sex'), ret.data[0].remark_sex == '' ? (api.pageParam.paramSex) :(ret.data[0].remark_sex == 1 ? '男' : '女'));
+                    $api.val($api.dom('.nickName'), ret.data[0].remark_nickname || ret.data[0].nickname);
+                    $api.text($api.dom('.sex'), ret.data[0].remark_sex == '' ? (api.pageParam.paramSex) : (ret.data[0].remark_sex == 1 ? '男' : '女'));
                 } else {
                     // // console.log(2222)
                     $api.attr($api.dom('img'), 'src', api.pageParam.paramHeadImg);
@@ -178,7 +190,7 @@
         var head_img_url = $api.attr($api.dom('img'), 'src'),
             real_name = $api.val($api.dom('.realName')),
             nickname = $api.val($api.dom('.nickName')),
-            sex = $api.text($api.dom('.sex')) == '男'? 1 : 2;
+            sex = $api.text($api.dom('.sex')) == '男' ? 1 : 2;
         if ((head_img_url == api.pageParam.paramHeadImg) && (real_name === api.pageParam.paramRealName) && (nickname === api.pageParam.paramNickname) && (sex == api.pageParam.paramSex)) {
             // 没修改不提交
         } else {
@@ -187,124 +199,142 @@
                 method: 'post',
                 headers: apiHeader,
                 data: {
-                       values: { 
-                            token: $api.getStorage('userToken'),
-                            remark_user_id: api.pageParam.userId,
-                            head_img_url: head_img_url,
-                            real_name: real_name,
-                            nickname: nickname,
-                            sex: sex
-                       }
+                    values: {
+                        token: $api.getStorage('userToken'),
+                        remark_user_id: api.pageParam.userId,
+                        head_img_url: head_img_url,
+                        real_name: real_name,
+                        nickname: nickname,
+                        sex: sex
+                    }
                 }
             }, function(ret, err) {
-            if(ret) {
-                if(ret.code == 200) {
+                if (ret) {
+                    if (ret.code == 200) {
                         api.sendEvent({
                             name: 'editNonFriendsInfo',
                             extra: {
-                                flag: api.pageParam.flag, 
+                                flag: api.pageParam.flag,
                             }
                         });
-                    api.ajax({
-                        url: apiSite + '/remark_user/fullInfo',
-                        method: 'post',
-                        headers: apiHeader,
-                        data: {
-                              values: { 
-                                  token: $api.getStorage('userToken'),
-                                  remark_user_id: api.pageParam.userId
-                              }
-                        }
-                    }, function(retWeb, err) {
-                        if(retWeb) {
-                            var litter =  PinyinHelper.getShortPinyin(retWeb.data.info.nickname).toUpperCase();
-                            undateSqlAddressListSimplify(retWeb.data.info.nickname, retWeb.data.info.head_img_url, litter[0])
-                            db.selectSql({
-                                name: 'db_'+$api.getStorage('userToken'),
-                                sql: 'SELECT * FROM addressList where user_id=' + api.pageParam.userId
-                            }, function(ret, err){        
-                                if( ret.status ){
-                                    // 备注后的昵称姓名, 转换为拼音
-                                    db.executeSql({ 
-                                        name: 'db_'+$api.getStorage('userToken'),
-                                        sql: 'UPDATE addressList SET remark_nickname = "'+ retWeb.data.info.nickname +'",remark_head_img_url = "'+ retWeb.data.info.head_img_url +'", title = "'+ retWeb.data.info.nickname+'", flag = "'+ litter[0]+'", litter = "'+ litter +'",remark_real_name = "'+ retWeb.data.info.real_name +'", remark_sex = "'+ retWeb.data.info.sex  +'" WHERE user_id = ' + api.pageParam.userId
-                                    }, function(ret, err){        
-                                        if( ret.status ){
-                                            // api.execScript({
-                                            //     name: 'main',
-                                            //     frameName: 'frame1',
-                                            //     script: 'query();'
-                                            // });
-                                            api.execScript({
-                                                name: 'listWin',
-                                                frameName: 'txl_listWin_frame',
-                                                script: 'query();'
-                                            });
-                                            // db.selectSql({
-                                            //     name: 'db_'+$api.getStorage('userToken'),
-                                            //     sql: 'SELECT * FROM addressList WHERE user_id = ' + api.pageParam.userId
-                                            // }, function(ret, err){        
-                                            //     if( ret.status ){
-                                            //         // // console.log('236:::::::::'+ JSON.stringify( ret ) );
-                                            //     }else{
-                                            //         alert( JSON.stringify( err ) );
-                                            //     }
-                                            // });
-                                            api.sendEvent({
-                                                name: 'editUserInfo',
-                                                extra: {
-                                                    flag: api.pageParam.flag                                     }
-                                            });
-                                            api.closeWin();
-                                            
-                                        }else{
-                                            alert('690:' + JSON.stringify( err ) );
-                                        }
-                                    });
-                                }else{
-                                    alert( JSON.stringify( err ) );
-                                }
-                            });
-                        } else {
-                           alert(JSON.stringify(err))
-                        }
-                    })
+                        uodateRemarkSql();
+                    } else {
+                        alert(ret.msg)
+                    }
                 } else {
-                    alert(ret.msg)
+                    alert(JSON.stringify(err))
                 }
-            } else {
-                alert(JSON.stringify(err))
-            }
             });
         }
     }
+    // 提交完成后更新数据库
+    function uodateRemarkSql() {
+        api.ajax({
+            url: apiSite + '/remark_user/fullInfo',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: {
+                    token: $api.getStorage('userToken'),
+                    remark_user_id: api.pageParam.userId
+                }
+            }
+        }, function(retWeb, err) {
+            if (retWeb) {
+                var litter = PinyinHelper.getShortPinyin(retWeb.data.info.nickname).toUpperCase();
+                undateSqlAddressListSimplify(retWeb.data.info.nickname, retWeb.data.info.head_img_url, litter[0])
+                db.selectSql({
+                    name: 'db_' + $api.getStorage('userToken'),
+                    sql: 'SELECT * FROM addressList where user_id=' + api.pageParam.userId
+                }, function(ret, err) {
+                    if (ret.status) {
+                        // 备注后的昵称姓名, 转换为拼音
+                        db.executeSql({
+                            name: 'db_' + $api.getStorage('userToken'),
+                            sql: 'UPDATE addressList SET remark_nickname = "' + retWeb.data.info.nickname + '",remark_head_img_url = "' + retWeb.data.info.head_img_url + '", title = "' + retWeb.data.info.nickname + '", flag = "' + litter[0] + '", litter = "' + litter + '",remark_real_name = "' + retWeb.data.info.real_name + '", remark_sex = "' + retWeb.data.info.sex + '" WHERE user_id = ' + api.pageParam.userId
+                        }, function(ret, err) {
+                            if (ret.status) {
+                                api.execScript({
+                                    name: 'listWin',
+                                    frameName: 'txl_listWin_frame',
+                                    script: 'query();'
+                                });
+                                api.sendEvent({
+                                    name: 'editUserInfo',
+                                    extra: {
+                                        flag: api.pageParam.flag
+                                    }
+                                });
+                                api.closeWin();
+                            } else {
+                                alert('690:' + JSON.stringify(err));
+                            }
+                        });
+                    } else {
+                        alert(JSON.stringify(err));
+                    }
+                });
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+
     function undateSqlAddressListSimplify(title, head_img_url, flag) {
         db.executeSql({
             name: SQLName,
-            sql: 'UPDATE addressList_simplify SET title = "'+ title +'",img="'+head_img_url+'",flag="'+flag+'" WHERE user_id =' + api.pageParam.userId
-        }, function(ret, err){        
-            if( ret.status ){
-              api.sendEvent({
-                  name: 'editUserInfo'
-              });
-            }else{
-                alert( JSON.stringify( err ) );
+            sql: 'UPDATE addressList_simplify SET title = "' + title + '",img="' + head_img_url + '",flag="' + flag + '" WHERE user_id =' + api.pageParam.userId
+        }, function(ret, err) {
+            if (ret.status) {
+                api.sendEvent({
+                    name: 'editUserInfo',
+                });
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+        // 更新聊天记录数据库
+        db.executeSql({
+            name: SQLName,
+            sql: 'UPDATE tb_chat_' + api.pageParam.userId + ' SET head_img_url="' + head_img_url + '" WHERE user_id =' + api.pageParam.userId
+        }, function(ret, err) {
+            if (ret.status) {
+                api.sendEvent({
+                    name: 'editUserInfoList',
+                    extra: {title: title}
+                });
+            } else {
+                alert('111' + JSON.stringify(err));
+            }
+        });
+        // 更新聊天列表数据库
+        db.executeSql({
+            name: SQLName,
+            sql: 'UPDATE tb_chat_list SET remark_head_img_url="' + head_img_url + '",remark_nickname="'+ title +'" WHERE user_id =' + api.pageParam.userId
+        }, function(ret, err) {
+            if (ret.status) {
+                api.sendEvent({
+                    name: 'updateChatList'
+                });
+            } else {
+                alert('111' + JSON.stringify(err));
             }
         });
     }
+
     function requireData() {
         api.ajax({
             url: apiSite + '/remark_user/detail',
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
-                       token: $api.getStorage('userToken'),
-                       remark_user_id: api.pageParam.userId
-                   }
+                values: {
+                    token: $api.getStorage('userToken'),
+                    remark_user_id: api.pageParam.userId
+                }
             }
         }, function(ret, err) {
-            if(ret) {
+            if (ret) {
                 // // console.log(JSON.stringify(ret))
             } else {
                 alert(JSON.stringify(err.msg))
@@ -312,37 +342,36 @@
         })
     }
 
-     // 打开选择器
+    // 打开选择器
     function selectList(ele) {
         var selText = $api.text($api.dom('.sex'));
         var active = [];
-            _dataSource2 = ['男','女']
-            if (_dataSource2.indexOf(selText) == -1) {
-                active = [1]
-            } else {
-                active.push(_dataSource2.indexOf(selText))
-            }
-            
-        var fontsize = 16,rowLength = 5;
+        _dataSource2 = ['男', '女']
+        if (_dataSource2.indexOf(selText) == -1) {
+            active = [1]
+        } else {
+            active.push(_dataSource2.indexOf(selText))
+        }
+
+        var fontsize = 16,
+            rowLength = 5;
         if (api.systemType === 'ios') {
             fontsize = 20;
             rowLength = 7;
         }
         UIActionSelector.open({
-            datas: [ 
-                {
-                    name: '男'
-                },{
-                    name: '女'
-                }
-            ],
+            datas: [{
+                name: '男'
+            }, {
+                name: '女'
+            }],
             actives: active,
             layout: {
                 row: rowLength,
                 col: 1,
                 height: 30,
                 size: fontsize,
-                sizeActive: fontsize+2,
+                sizeActive: fontsize + 2,
                 rowSpacing: 5,
                 colSpacing: 5,
                 maskBg: 'rgba(0,0,0,0.5)',
@@ -390,8 +419,5 @@
         });
     }
 </script>
+
 </html>
-
-
-
-

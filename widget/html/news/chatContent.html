@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <style>
         .newsTime {
             font-size: .2rem;
             text-align: center;
             color: #999;
         }
+        
         .main {
             margin: .3rem .3rem;
             padding-bottom: 1.6rem;
         }
+        
         .main .time {
             width: 1.1rem;
             height: .36rem;
@@ -27,16 +30,18 @@
             border-radius: .05rem;
             margin-bottom: .3rem;
         }
+        
         .main .oneself,
         .main .other {
             margin-bottom: .3rem;
         }
+        
         .main .oneself img.oneselfImg,
         .main .other img.otherImg {
             width: .72rem;
             height: .72rem;
-
         }
+        
         .main .oneself p,
         .main .other p {
             background-color: #A0E75A;
@@ -52,14 +57,14 @@
             /*height: .72rem;*/
             border-radius: .1rem;
             position: relative;
-            word-break:break-all;
+            word-break: break-all;
             z-index: 2;
-
         }
+        
         .main .oneself p {
             border: .02rem solid #A0E75A;
         }
-
+        
         .main .oneself p:after {
             content: "";
             display: inline-block;
@@ -73,6 +78,7 @@
             right: -.20rem;
             z-index: 3
         }
+        
         .main .oneself p:before {
             content: "";
             display: inline-block;
@@ -86,6 +92,7 @@
             right: -.22rem;
             z-index: 1;
         }
+        
         .main .other p:after {
             content: "";
             display: inline-block;
@@ -98,6 +105,7 @@
             top: .25rem;
             left: -.20rem;
         }
+        
         .main .other p:before {
             content: "";
             display: inline-block;
@@ -110,14 +118,18 @@
             top: .25rem;
             left: -.22rem;
         }
+        
         .main .other p {
             background-color: #fff;
             margin-right: 0;
             margin-left: .3rem;
             border: .02rem solid #E3E3E3;
         }
+        
         .supply_info {
-            position: fixed; top: 0;left: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
             z-index: 999;
             margin-bottom: .2rem;
             width: 7.5rem;
@@ -132,22 +144,25 @@
             background-color: #fff;
             border-bottom: .01rem solid #d9d9d9;
         }
+        
         .hide {
             display: none;
         }
+        
         .supply_info img {
             width: .5rem;
             height: .5rem;
             border-radius: 50%;
             margin-right: .1rem;
         }
-         img.imgNews {
+        
+        img.imgNews {
             width: 3rem;
             height: auto;
             max-height: 5rem;
             margin: .2rem 0;
-
         }
+        
         .supply_info .zk {
             width: .15rem;
             height: .7rem;
@@ -156,26 +171,30 @@
             background-size: .15rem .25rem;
             background-position: 0 center;
         }
+        
         .supply_info div.div {
             color: #3f3f3f;
             font-size: .26rem;
             overflow: hidden;
             box-sizing: border-box;
         }
+        
         .supply_info div.div span.label {
             width: .1rem;
         }
+        
         .supply_info div.div span {
             line-height: .47rem;
-            max-width:1.8rem;
+            max-width: 1.8rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
+        
         .promptText {
             display: none;
             width: 4.463rem;
-            height: .6rem ;
+            height: .6rem;
             background-color: #CFCFCF;
             font-size: .22rem;
             color: #fff;
@@ -184,6 +203,7 @@
             margin-top: .2rem;
             border-radius: .1rem;
         }
+        
         .shadow {
             background-color: #fff;
             border: .01rem solid #d9d9d9;
@@ -193,26 +213,29 @@
             padding: .2rem .3rem;
             display: none;
             z-index: 1000;
-             box-shadow: 2px 2px 20px #888888;
+            box-shadow: 2px 2px 20px #888888;
         }
+        
         .shadow p {
             font-size: .3rem;
         }
+        
         .voiceTime {
             font-size: .2rem;
             color: #999;
             line-height: .8rem;
             margin-right: .1rem;
         }
+        
         .voiceTimeOther {
             margin-left: .1rem;
         }
-
     </style>
 </head>
+
 <body id="body" ontouchstart="closeDiv1();">
     <div class="supply_info hide flex-def flex-cCenter" tapmode onclick="openSupplyPage(this)">
-        <img id="userImgUrl"  src="../../image/noimage.jpg">
+        <img id="userImgUrl" src="../../image/noimage.jpg">
         <div class="flex-item flex-def">
             <div class="div flex-def flex-item flex-cCenter">
                 <span id="userName"></span>
@@ -226,7 +249,7 @@
     </div>
     <p class="promptText">请勿发布违法违规内容，共同营造文明和谐的聊天环境</p>
     <div class="main">
-       <!--  <p class="time">04:19</p>
+        <!--  <p class="time">04:19</p>
         <div class="oneself clearfix">
             <img class="fr oneselfImg" src="../../image/tx_2.jpg">
             <p class="fr flex-def flex-cCenter flex-zEnd" style="width:5rem"   ontouchstart="gtouchstart()" ontouchmove="gtouchmove()" ontouchend="gtouchend()"> <img class="fr" src="../../image/chatPage/icon_play1.gif"  height="20"> </p>
@@ -238,7 +261,7 @@
             <span class="voiceTime voiceTimeOther fl">20"</span>
         </div> -->
     </div>
-    <div class="shadow" >
+    <div class="shadow">
         <p tapmode onclick="closeDiv(0);event.stopPropagation();">复制</p>
         <!-- <p tapmode onclick="closeDiv(1);event.stopPropagation();">发送给朋友</p> -->
         <!-- <p tapmode onclick="closeDiv(2);event.stopPropagation();">收藏</p> -->
@@ -252,14 +275,14 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 
 <script type="text/javascript">
-// var rongToken, userToken;
-var name,headImg = $api.getStorage('imgCache'),youHeadImg;
-var messageId,targetRongId,emotionData,userId,newsText,msgId;
-var  mainH, _main = 0, scrollH;
-    apiready = function(){
-        // console.log(JSON.stringify(api.pageParam))
+    // var rongToken, userToken;
+    var name, headImg = $api.getStorage('imgCache'),
+        youHeadImg;
+    var messageId, targetRongId, emotionData, userId, newsText, msgId;
+    var mainH, _main = 0,
+        scrollH;
+    apiready = function() {
         moduleInit();
-        // // // console.log('参数内容:'+JSON.stringify(api.pageParam))
         if (api.pageParam.supplyName) {
             // // // console.log(JSON.stringify(api.pageParam))
             $api.removeCls($api.dom('.supply_info'), 'hide');
@@ -271,27 +294,14 @@ var  mainH, _main = 0, scrollH;
             $api.css($api.dom('.promptText'), 'margin-top: .9rem');
         }
         targetRongId = api.pageParam.targetRongId
-        nickname = api.pageParam.nickname;
-        var sourcePath = "widget://image/chatPage/emotion";//表情存放目录
-        if ($api.getStorage('youHeadImg_'+targetRongId)) {
-            userId = $api.getStorage('userId_'+targetRongId);
-            youHeadImg = $api.getStorage('youHeadImg_'+targetRongId);
-            api.sendEvent({
-                    name: 'getUserId',
-                    extra: {
-                        userId: userId
-                    }
-                });
-            getImgsPaths(sourcePath, function (emotion) {
-                emotionData = emotion;
-                getNews();
-            });
-        } else {
-            getImgsPaths(sourcePath, function (emotion) {
-                emotionData = emotion;
-                getSideInfo(targetRongId)
-            });
-        }
+        // editUserInfo
+        updatePage();
+        api.addEventListener({
+            name:"editUserInfoList"
+        },function(){
+            updatePage();
+            console.log('更新成功更新成功')
+        })
 
 
         // 调整页面到输入框的后面
@@ -302,9 +312,9 @@ var  mainH, _main = 0, scrollH;
             name: 'sendMsg'
         }, function(ret, err) {
             // console.log('发送消息后:'+JSON.stringify(ret))
-            chatRecordingSql(ret.value.msg,'sendMsg',headImg)
-            // 发送消息后, 添加消息内容到页面
-            addSendMsg(ret.value.msg.result.message.content.text, headImg,0);
+            chatRecordingSql(ret.value.msg, 'sendMsg', headImg)
+                // 发送消息后, 添加消息内容到页面
+            addSendMsg(ret.value.msg.result.message.content.text, headImg, 0);
             // 聊天列表获取
             var news = historicalNews();
             api.execScript({
@@ -320,14 +330,14 @@ var  mainH, _main = 0, scrollH;
             chatRecordingSql(ret.value, 'receiveMsg', youHeadImg)
             var value = ret.value
             if (value.targetId == targetRongId) {
-                 // addReceMsg(ret.value.msg, youHeadImg,0);
-                 if (value.msgContent.result.message.objectName == 'RC:VcMsg') {
-                    addReceVoiceMessages(value.msgContent.result,youHeadImg,0)
-                 } else if (value.msgContent.result.message.objectName == 'RC:TxtMsg') {
-                    addReceMsg(value.msg, youHeadImg,0);
-                 } else if (value.msgContent.result.message.objectName == 'RC:ImgMsg'){
-                    addReceImgMessages(value.msgContent.result,youHeadImg,0)
-                 }
+                // addReceMsg(ret.value.msg, youHeadImg,0);
+                if (value.msgContent.result.message.objectName == 'RC:VcMsg') {
+                    addReceVoiceMessages(value.msgContent.result, youHeadImg, 0)
+                } else if (value.msgContent.result.message.objectName == 'RC:TxtMsg') {
+                    addReceMsg(value.msg, youHeadImg, 0);
+                } else if (value.msgContent.result.message.objectName == 'RC:ImgMsg') {
+                    addReceImgMessages(value.msgContent.result, youHeadImg, 0)
+                }
             }
             // 收到消息后, 添加消息内容到页面
 
@@ -335,14 +345,14 @@ var  mainH, _main = 0, scrollH;
         xiala(messageId);
 
         // 最新聊天记录
-       api.setFrameAttr({
-           softInputMode: 'resize',
-       });
+        api.setFrameAttr({
+            softInputMode: 'resize'
+        });
 
 
         changeHeight();
         // 初始化聊天窗口
-        window.setTimeout(function () {
+        window.setTimeout(function() {
             chatTools();
             slideBut();
         }, 500)
@@ -353,6 +363,29 @@ var  mainH, _main = 0, scrollH;
         });
 
     };
+    function updatePage() {
+        nickname = api.pageParam.nickname;
+        var sourcePath = "widget://image/chatPage/emotion"; //表情存放目录
+        if ($api.getStorage('youHeadImg_' + targetRongId)) {
+            userId = $api.getStorage('userId_' + targetRongId);
+            youHeadImg = $api.getStorage('youHeadImg_' + targetRongId);
+            api.sendEvent({
+                name: 'getUserId',
+                extra: {
+                    userId: userId
+                }
+            });
+            getImgsPaths(sourcePath, function(emotion) {
+                emotionData = emotion;
+                getNews();
+            });
+        } else {
+            getImgsPaths(sourcePath, function(emotion) {
+                emotionData = emotion;
+                getSideInfo(targetRongId)
+            });
+        }
+    }
     // 查询数据库
     // 查询网络
     // 聊天记录插入到数据库
@@ -364,96 +397,98 @@ var  mainH, _main = 0, scrollH;
         // console.log(JSON.stringify(params)+headImgUrl);
         var myHeadImg = $api.getStorage('imgCache');
         var youHeadImg = api.pageParam.headImg;
-        var SQL = 'INSERT OR REPLACE INTO tb_chat_'+ api.pageParam.targetRongId +'(messageId, receivedTime, objectName, messageDirection, content_extra, content_text, head_img_url, filePath, duration, thumbPath) VALUES '
+        var SQL = 'INSERT OR REPLACE INTO tb_chat_' + api.pageParam.userId + '(messageId, receivedTime, objectName, messageDirection, content_extra, content_text, head_img_url, filePath, duration, thumbPath) VALUES '
         if (flagStr === 'sendMsg') {
             // 自己头像
             if (params.result.message.objectName == 'RC:VcMsg') {
-                SQL += '('+ params.result.message.messageId +',"'+ params.result.message.sentTime +'","'+ params.result.message.objectName+'","'+ params.result.message.messageDirection +'","'+ params.result.message.content.extra.replace(/"/g,'') +'","'+ (params.result.message.content.text || '') +'","' + myHeadImg + '","'+ params.result.message.content.voicePath+ '","'+ params.result.message.content.duration +'","")'
+                SQL += '(' + params.result.message.messageId + ',"' + params.result.message.sentTime + '","' + params.result.message.objectName + '","' + params.result.message.messageDirection + '","' + params.result.message.content.extra.replace(/"/g, '') + '","' + (params.result.message.content.text || '') + '","' + myHeadImg + '","' + params.result.message.content.voicePath + '","' + params.result.message.content.duration + '","")'
             } else if (params.result.message.objectName == 'RC:ImgMsg') {
-                SQL += '('+ params.result.message.messageId +',"'+ params.result.message.sentTime +'","'+ params.result.message.objectName+'","'+ params.result.message.messageDirection +'","'+ params.result.message.content.extra.replace(/"/g,'') +'","'+ (params.result.message.content.text || '') +'","' + myHeadImg + '","'+ params.result.message.content.imageUrl + '","","'+ params.result.message.content.thumbPath +'")'
+                SQL += '(' + params.result.message.messageId + ',"' + params.result.message.sentTime + '","' + params.result.message.objectName + '","' + params.result.message.messageDirection + '","' + params.result.message.content.extra.replace(/"/g, '') + '","' + (params.result.message.content.text || '') + '","' + myHeadImg + '","' + params.result.message.content.imageUrl + '","","' + params.result.message.content.thumbPath + '")'
             } else {
-                SQL += '('+ params.result.message.messageId +',"'+ params.result.message.sentTime +'","'+ params.result.message.objectName+'","'+ params.result.message.messageDirection +'","'+ params.result.message.content.extra.replace(/"/g,'') +'","'+ (params.result.message.content.text || '') +'","' + myHeadImg + '","","","")'
+                SQL += '(' + params.result.message.messageId + ',"' + params.result.message.sentTime + '","' + params.result.message.objectName + '","' + params.result.message.messageDirection + '","' + params.result.message.content.extra.replace(/"/g, '') + '","' + (params.result.message.content.text || '') + '","' + myHeadImg + '","","","")'
             }
-        } else if (flagStr === 'receiveMsg'){
+        } else if (flagStr === 'receiveMsg') {
             // filePath
             // duration
             // 对方情况
             if (params.msgContent.result.message.objectName == 'RC:VcMsg') {
                 // 语音消息
-                SQL += '('+ params.msgContent.result.message.messageId +',"'+ params.msgContent.result.message.receivedTime +'","'+ params.msgContent.result.message.objectName+'","'+ params.msgContent.result.message.messageDirection +'","'+ params.msgContent.result.message.content.extra.replace(/"/g,'') +'","'+ (params.msgContent.result.message.content.text || '') +'","' + youHeadImg + '","'+ params.msgContent.result.message.content.voicePath +'","'+ params.msgContent.result.message.duration +'","")'
+                SQL += '(' + params.msgContent.result.message.messageId + ',"' + params.msgContent.result.message.receivedTime + '","' + params.msgContent.result.message.objectName + '","' + params.msgContent.result.message.messageDirection + '","' + params.msgContent.result.message.content.extra.replace(/"/g, '') + '","' + (params.msgContent.result.message.content.text || '') + '","' + youHeadImg + '","' + params.msgContent.result.message.content.voicePath + '","' + params.msgContent.result.message.duration + '","")'
             } else if (params.msgContent.result.message.objectName == 'RC:ImgMsg') {
                 // 文字消息
-                SQL += '('+ params.msgContent.result.message.messageId +',"'+ params.msgContent.result.message.receivedTime +'","'+ params.msgContent.result.message.objectName+'","'+ params.msgContent.result.message.messageDirection +'","'+ params.msgContent.result.message.content.extra.replace(/"/g,'') +'","'+ (params.msgContent.result.message.content.text || '') +'","' + youHeadImg + '","'+ params.msgContent.result.message.content.imageUrl + '","","'+ params.msgContent.result.message.content.thumbPath +'")'
+                SQL += '(' + params.msgContent.result.message.messageId + ',"' + params.msgContent.result.message.receivedTime + '","' + params.msgContent.result.message.objectName + '","' + params.msgContent.result.message.messageDirection + '","' + params.msgContent.result.message.content.extra.replace(/"/g, '') + '","' + (params.msgContent.result.message.content.text || '') + '","' + youHeadImg + '","' + params.msgContent.result.message.content.imageUrl + '","","' + params.msgContent.result.message.content.thumbPath + '")'
             } else {
                 // 文字消息
-                SQL += '('+ params.msgContent.result.message.messageId +',"'+ params.msgContent.result.message.receivedTime +'","'+ params.msgContent.result.message.objectName+'","'+ params.msgContent.result.message.messageDirection +'","'+ params.msgContent.result.message.content.extra.replace(/"/g,'') +'","'+ (params.msgContent.result.message.content.text || '') +'","' + youHeadImg + '","","","")'
+                SQL += '(' + params.msgContent.result.message.messageId + ',"' + params.msgContent.result.message.receivedTime + '","' + params.msgContent.result.message.objectName + '","' + params.msgContent.result.message.messageDirection + '","' + params.msgContent.result.message.content.extra.replace(/"/g, '') + '","' + (params.msgContent.result.message.content.text || '') + '","' + youHeadImg + '","","","")'
             }
         } else {
 
         }
         SQLStatement(SQL);
     }
+
     function allCahtSql(ret) {
         console.log(JSON.stringify(ret))
         if (ret.length > 0) {
             // 自己头像
             var myHeadImg = $api.getStorage('imgCache');
             var youHeadImg = api.pageParam.headImg;
-            var SQL = 'INSERT OR REPLACE INTO tb_chat_'+ api.pageParam.targetRongId +'(messageId, receivedTime, objectName, messageDirection, content_extra, content_text, head_img_url, filePath, duration, thumbPath) VALUES '
+            var SQL = 'INSERT OR REPLACE INTO tb_chat_' + api.pageParam.userId + '(messageId, receivedTime, objectName, messageDirection, content_extra, content_text, head_img_url, filePath, duration, thumbPath) VALUES '
             for (var i = 0; i < ret.length; i++) {
                 var element = ret[i];
                 if (element.messageDirection == 'SEND') {
                     // 发送的消息, 自己的头像
                     if (element.objectName === 'RC:VcMsg') {
                         // 录音
-                        SQL += '('+ element.messageId +',"'+ element.receivedTime +'","'+ element.objectName+'","'+ element.messageDirection +'","'+ element.content.extra.replace(/"/g,'') +'","'+ (element.content.text || '') +'","' + myHeadImg + '","'+ element.content.voicePath +'","'+ element.content.duration +'",""),'
+                        SQL += '(' + element.messageId + ',"' + element.receivedTime + '","' + element.objectName + '","' + element.messageDirection + '","' + element.content.extra.replace(/"/g, '') + '","' + (element.content.text || '') + '","' + myHeadImg + '","' + element.content.voicePath + '","' + element.content.duration + '",""),'
                     } else if (element.objectName === 'RC:ImgMsg') {
                         // 图片
-                        SQL += '('+ element.messageId +',"'+ element.sentTime +'","'+ element.objectName+'","'+ element.messageDirection +'","'+ element.content.extra.replace(/"/g,'') +'","'+ (element.content.text || '') +'","' + myHeadImg + '","'+ element.content.imageUrl + '","","'+ element.content.thumbPath +'"),'
+                        SQL += '(' + element.messageId + ',"' + element.sentTime + '","' + element.objectName + '","' + element.messageDirection + '","' + element.content.extra.replace(/"/g, '') + '","' + (element.content.text || '') + '","' + myHeadImg + '","' + element.content.imageUrl + '","","' + element.content.thumbPath + '"),'
                     } else {
                         // 文字
-                        SQL += '('+ element.messageId +',"'+ element.sentTime +'","'+ element.objectName+'","'+ element.messageDirection +'","'+ element.content.extra.replace(/"/g,'').replace(/"/g,'') +'","'+ (element.content.text || '') +'","' + myHeadImg + '","","",""),'
+                        SQL += '(' + element.messageId + ',"' + element.sentTime + '","' + element.objectName + '","' + element.messageDirection + '","' + element.content.extra.replace(/"/g, '').replace(/"/g, '') + '","' + (element.content.text || '') + '","' + myHeadImg + '","","",""),'
                     }
                 } else {
                     // 接收的消息, 对方的头像 api.pageParam.headImg
                     if (element.objectName === 'RC:VcMsg') {
                         // 录音
-                        SQL += '('+ element.messageId +',"'+ element.receivedTime +'","'+ element.objectName+'","'+ element.messageDirection +'","'+ element.content.extra.replace(/"/g,'') +'","'+ (element.content.text || '') +'","' + youHeadImg + '","'+ element.content.voicePath +'","'+ element.content.duration +'",""),'
+                        SQL += '(' + element.messageId + ',"' + element.receivedTime + '","' + element.objectName + '","' + element.messageDirection + '","' + element.content.extra.replace(/"/g, '') + '","' + (element.content.text || '') + '","' + youHeadImg + '","' + element.content.voicePath + '","' + element.content.duration + '",""),'
                     } else if (element.objectName === 'RC:ImgMsg') {
                         // 图片
-                        SQL += '('+ element.messageId +',"'+ element.sentTime +'","'+ element.objectName+'","'+ element.messageDirection +'","'+ element.content.extra.replace(/"/g,'') +'","'+ (element.content.text || '') +'","' + youHeadImg + '","'+ element.content.imageUrl + '","","'+ element.content.thumbPath +'"),'
+                        SQL += '(' + element.messageId + ',"' + element.sentTime + '","' + element.objectName + '","' + element.messageDirection + '","' + element.content.extra.replace(/"/g, '') + '","' + (element.content.text || '') + '","' + youHeadImg + '","' + element.content.imageUrl + '","","' + element.content.thumbPath + '"),'
                     } else {
                         // 文字
-                        console.log(element.content.extra.replace(/"/g,''))
-                        console.log(element.content.extra.replace(/"/g,'').replace(/"/g,''))
-                        SQL += '('+ element.messageId +',"'+ element.sentTime +'","'+ element.objectName+'","'+ element.messageDirection +'","'+ element.content.extra.replace(/"/g,'').replace(/"/g,'') +'","'+ (element.content.text || '') +'","' + youHeadImg + '","","",""),'
+                        console.log(element.content.extra.replace(/"/g, ''))
+                        console.log(element.content.extra.replace(/"/g, '').replace(/"/g, ''))
+                        SQL += '(' + element.messageId + ',"' + element.sentTime + '","' + element.objectName + '","' + element.messageDirection + '","' + element.content.extra.replace(/"/g, '').replace(/"/g, '') + '","' + (element.content.text || '') + '","' + youHeadImg + '","","",""),'
                     }
                 }
             }
-            SQL = SQL.substring(0,SQL.length-1);
+            SQL = SQL.substring(0, SQL.length - 1);
             SQLStatement(SQL);
         }
     }
+
     function SQLStatement(SQL) {
         console.log(SQL)
         db.executeSql({
-            name: 'db_'+$api.getStorage('userToken'),
+            name: 'db_' + $api.getStorage('userToken'),
             sql: SQL
-        },function(ret,err){
+        }, function(ret, err) {
             if (ret.status) {
                 console.log("存入聊天记录表格成功")
-                // db.selectSql({
-                //     name: 'db_'+$api.getStorage('userToken'),
-                //     sql: 'SELECT * FROM tb_chat_'+ api.pageParam.targetRongId
-                // },function(ret,err){
-                //     if (ret.status) {
-                //         console.log('查询到的结果'+JSON.stringify(ret))
-                //     }else {
-                //         alert('386');
-                //     }
-                // });
-            }else {
-                alert('390'+JSON.stringify(err)+JSON.stringify(ret));
+                    // db.selectSql({
+                    //     name: 'db_'+$api.getStorage('userToken'),
+                    //     sql: 'SELECT * FROM tb_chat_'+ api.pageParam.userId
+                    // },function(ret,err){
+                    //     if (ret.status) {
+                    //         console.log('查询到的结果'+JSON.stringify(ret))
+                    //     }else {
+                    //         alert('386');
+                    //     }
+                    // });
+            } else {
+                alert('390' + JSON.stringify(err) + JSON.stringify(ret));
             }
         });
     }
@@ -469,7 +504,7 @@ var  mainH, _main = 0, scrollH;
                 url = '../me/me_qdd_info.html'
             }
             api.openWin({
-                name: 'winName'+url,
+                name: 'winName' + url,
                 url: url,
                 pageParam: {
                     order_id: api.pageParam.order_id
@@ -477,15 +512,17 @@ var  mainH, _main = 0, scrollH;
             });
         }
     }
+
     function closeDiv1() {
         $api.css($api.dom('.shadow'), 'display:none');
     }
+
     function closeDiv(n) {
         $api.css($api.dom('.shadow'), 'display:none');
         // alert('292'+newsText)
         if (n === 4) {
-            var domRem = $api.dom('div[data-msgId="'+ msgId +'"]');
-            var domRemTime = $api.dom('.newsTime[data-msgId="'+ msgId +'"]');
+            var domRem = $api.dom('div[data-msgId="' + msgId + '"]');
+            var domRemTime = $api.dom('.newsTime[data-msgId="' + msgId + '"]');
             $api.remove(domRemTime);
             $api.remove(domRem);
             var arrid = [];
@@ -493,9 +530,11 @@ var  mainH, _main = 0, scrollH;
             rong.deleteMessages({
                 messageIds: arrid
             }, function(ret, err) {
-                if (ret.status){
-                    api.toast({ msg: '刪除成功' });
-                    $api.rmStorage('chatRecord_'+targetRongId);
+                if (ret.status) {
+                    api.toast({
+                        msg: '刪除成功'
+                    });
+                    $api.rmStorage('chatRecord_' + targetRongId);
                     var news = historicalNews();
                     // 删除数据库内容
                     delSql(msgId)
@@ -505,7 +544,9 @@ var  mainH, _main = 0, scrollH;
                         script: news
                     });
                 } else {
-                    api.toast({ msg: '刪除失败' });
+                    api.toast({
+                        msg: '刪除失败'
+                    });
 
                 }
 
@@ -528,22 +569,20 @@ var  mainH, _main = 0, scrollH;
     // 删除数据库内容
     function delSql(msgId) {
         db.executeSql({
-            name: 'db_'+$api.getStorage('userToken'),
-            sql: 'DELETE FROM tb_chat_'+ api.pageParam.targetRongId +' WHERE messageId=' + msgId
-        },function(ret,err){
-            if (ret.status) {
-            }else {
-            }
+            name: 'db_' + $api.getStorage('userToken'),
+            sql: 'DELETE FROM tb_chat_' + api.pageParam.userId + ' WHERE messageId=' + msgId
+        }, function(ret, err) {
+            if (ret.status) {} else {}
         });
     }
     // 用户详情
     function openMemberInfo(ele) {
         var flag = $api.attr(ele, 'data-id');
-        console.log('执行用户详情'+flag)
+        console.log('执行用户详情' + flag)
         api.closeWin({
             name: 'txl_memberInfo_Win'
         });
-        if (flag == 1 ) {
+        if (flag == 1) {
             api.openWin({
                 name: 'txl_memberInfo_Win',
                 url: '../addressList/txl_memberInfo_Win.html',
@@ -563,39 +602,39 @@ var  mainH, _main = 0, scrollH;
         // alert(userId +'--'+ api.pageParam.userId)
     }
     // 再加上
-    function getImgsPaths(sourcePathOfChatBox, callback){
-        var jsonPath = "widget://image/chatPage/emotion/emotion.json";//表情的JSON数组
+    function getImgsPaths(sourcePathOfChatBox, callback) {
+        var jsonPath = "widget://image/chatPage/emotion/emotion.json"; //表情的JSON数组
         api.readFile({
-                path: jsonPath
-        },function(ret,err){
-            if(ret.status){
+            path: jsonPath
+        }, function(ret, err) {
+            if (ret.status) {
                 var emotionArray = JSON.parse(ret.data);
                 var emotion = {};
-                for(var idx in emotionArray){
-                        var emotionItem = emotionArray[idx];
-                        var emotionText = emotionItem["text"];
-                        var emotionUrl = "../../image/chatPage/emotion/"+emotionItem["name"]+".png";
-                        emotion[emotionText] = emotionUrl;
+                for (var idx in emotionArray) {
+                    var emotionItem = emotionArray[idx];
+                    var emotionText = emotionItem["text"];
+                    var emotionUrl = "../../image/chatPage/emotion/" + emotionItem["name"] + ".png";
+                    emotion[emotionText] = emotionUrl;
                 }
                 /*把emotion对象 回调出去*/
-                if("function" === typeof(callback)){
-                        callback(emotion);
+                if ("function" === typeof(callback)) {
+                    callback(emotion);
                 }
             }
         });
     }
     // 表情转换
-    function transText(text, imgWidth, imgHeight){
+    function transText(text, imgWidth, imgHeight) {
         var imgWidth = imgWidth || 20;
         var imgHeight = imgHeight || 20;
         var regx = /\[(.*?)\]/gm;
-        var textTransed = text.replace(regx,function(match){
+        var textTransed = text.replace(regx, function(match) {
             var imgSrc = emotionData[match];
-            if(!imgSrc){
-                    //说明不对应任何表情，直接返回
-                    return match;
+            if (!imgSrc) {
+                //说明不对应任何表情，直接返回
+                return match;
             }
-            var img = '<img src="'+imgSrc+'" width="'+imgWidth+'" height="'+imgHeight+'">';
+            var img = '<img src="' + imgSrc + '" width="' + imgWidth + '" height="' + imgHeight + '">';
             return img;
         });
         return textTransed;
@@ -606,8 +645,8 @@ var  mainH, _main = 0, scrollH;
             target: 'inputBar',
             name: 'move'
         }, function(ret, err) {
-             pushPageMove(ret.panelHeight, ret.inputBarHeight);
-             window.setTimeout('slideBut()', 300)
+            pushPageMove(ret.panelHeight, ret.inputBarHeight);
+            window.setTimeout('slideBut()', 300)
         });
         UIChatBox.addEventListener({
             target: 'inputBar',
@@ -618,7 +657,7 @@ var  mainH, _main = 0, scrollH;
         });
     }
     // 修改聊天内容高度
-    function pushPageMove (panelHeight, inputBarHeight) {
+    function pushPageMove(panelHeight, inputBarHeight) {
         var inputHeight = api.winHeight - (panelHeight + inputBarHeight);
         setTimeout(function() {
             api.setFrameAttr({
@@ -630,7 +669,7 @@ var  mainH, _main = 0, scrollH;
                 }
             });
 
-        },10)
+        }, 10)
     }
     // 聊天界面
     function chatTools() {
@@ -693,19 +732,19 @@ var  mainH, _main = 0, scrollH;
                 titleSize: 10,
                 titleColor: '#a3a3a3',
                 btns: [{
-                    title: '图片',
-                    normalImg: 'widget://image/chatPage/album1.png',
-                    activeImg: 'widget://image/chatPage/album2.png'
-                }, {
-                    title: '拍照',
-                    normalImg: 'widget://image/chatPage/camera1.png',
-                    activeImg: 'widget://image/chatPage/camera2.png'
-                }
-                // , {
-                //     title: '位置',
-                //     normalImg: 'widget://image/chatPage/loc1.png',
-                //     activeImg: 'widget://image/chatPage/loc2.png'
-                // }
+                        title: '图片',
+                        normalImg: 'widget://image/chatPage/album1.png',
+                        activeImg: 'widget://image/chatPage/album2.png'
+                    }, {
+                        title: '拍照',
+                        normalImg: 'widget://image/chatPage/camera1.png',
+                        activeImg: 'widget://image/chatPage/camera2.png'
+                    }
+                    // , {
+                    //     title: '位置',
+                    //     normalImg: 'widget://image/chatPage/loc1.png',
+                    //     activeImg: 'widget://image/chatPage/loc2.png'
+                    // }
                 ]
             }
         }, function(ret, err) {
@@ -713,7 +752,7 @@ var  mainH, _main = 0, scrollH;
                 boxChatEventListener();
                 changeHeight();
                 if (ret.eventType == 'send') {
-                     // msg: 发送的消息
+                    // msg: 发送的消息
                     if (ret.msg == '') {
                         // ios下输入框为空的时候不发送消息
                     } else {
@@ -723,16 +762,16 @@ var  mainH, _main = 0, scrollH;
                     // 把聊天内容滑动到最下面
                 }
                 if (ret.eventType === 'clickExtras') {
-                      if (ret.index === 0) {
+                    if (ret.index === 0) {
                         // 打开相册
                         openPicture('album');
-                      } else if (ret.index === 1) {
+                    } else if (ret.index === 1) {
                         // 打开相机
                         openPicture('camera');
-                      } else if (ret.index === 2) {
+                    } else if (ret.index === 2) {
                         // 发送位置
 
-                      }
+                    }
                 }
             } else {
                 alert(JSON.stringify(err.msg))
@@ -770,18 +809,15 @@ var  mainH, _main = 0, scrollH;
         }, function(ret, err) {
             if (ret.status == 'prepare') {
                 // // // console.log('发送准备::'+ JSON.stringify(ret.result.message) );
-                addSendImgMessages(ret.result.message,headImg,1);
+                addSendImgMessages(ret.result.message, headImg, 1);
                 retprepare = ret;
-            }
-            else if (ret.status == 'progress') {
+            } else if (ret.status == 'progress') {
                 // // // console.log( '发送中::'+ret.result.progress );
-            }
-            else if (ret.status == 'success') {
-                chatRecordingSql(retprepare,'sendMsg', headImg);
+            } else if (ret.status == 'success') {
+                chatRecordingSql(retprepare, 'sendMsg', headImg);
                 // // // console.log( '发送成功::'+ret.result.message.messageId );
                 // // // console.log( '发送成功::'+JSON.stringify(prepare) );
-            }
-            else if (ret.status == 'error') {
+            } else if (ret.status == 'error') {
                 // // // console.log( err.code );
             } else {
 
@@ -833,53 +869,52 @@ var  mainH, _main = 0, scrollH;
             extra: ''
         }, function(ret, err) {
 
-            if (ret.status == 'prepare'){
+            if (ret.status == 'prepare') {
                 // 发送准备
                 retprepare = ret;
             } else if (ret.status == 'success') {
                 // 发送成功
                 addSendVoiceMessages(retData, headImg, 0);
                 // 存储到表中
-                chatRecordingSql(retprepare,'sendMsg', headImg);
-            } else if (ret.status == 'error') {
-            }
+                chatRecordingSql(retprepare, 'sendMsg', headImg);
+            } else if (ret.status == 'error') {}
         });
     }
-     //文字表情转换
+    //文字表情转换
     function transEmo(emoMsg) {
-            var emoPath, transMsg;
-            var reg = /\[(.*?)\]/gm;
-            transMsg = emoMsg.replace(reg, function(match) {
-                    for (var i = 0, len = emoData.length; i < len; i++) {
-                            if (emoData[i].text === match) {
-                                    emoPath = 'image/emotion/' + emoData[i].name + '.png';
-                                    return '<img width="20" height="20" src="' + emoPath + '" />'
-                            }
-                    }
-                    return match;
-            });
-            return transMsg;
+        var emoPath, transMsg;
+        var reg = /\[(.*?)\]/gm;
+        transMsg = emoMsg.replace(reg, function(match) {
+            for (var i = 0, len = emoData.length; i < len; i++) {
+                if (emoData[i].text === match) {
+                    emoPath = 'image/emotion/' + emoData[i].name + '.png';
+                    return '<img width="20" height="20" src="' + emoPath + '" />'
+                }
+            }
+            return match;
+        });
+        return transMsg;
     }
     // 获取聊天对方信息
     function getSideInfo(rongUserId) {
         // // console.log('第一步')
         rongUserIdArr = rongUserId.split();
         api.ajax({
-           url: apiSite + '/user/chatUserInfo',
-           method: 'post',
-           headers: apiHeader,
-           data: {
-              values: {
-                  token: $api.getStorage('userToken'),
-                  id_json: rongUserIdArr
-              }
-           }
-       }, function(ret, err) {
-           if(ret) {
-                youHeadImg = ret.data.list[rongUserId].head_img_url+'?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim';
+            url: apiSite + '/user/chatUserInfo',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: {
+                    token: $api.getStorage('userToken'),
+                    id_json: rongUserIdArr
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                youHeadImg = ret.data.list[rongUserId].head_img_url + '?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim';
                 userId = ret.data.list[rongUserId].user_id;
-                $api.setStorage('youHeadImg_'+targetRongId, youHeadImg);
-                $api.setStorage('userId_'+targetRongId, userId);
+                $api.setStorage('youHeadImg_' + targetRongId, youHeadImg);
+                $api.setStorage('userId_' + targetRongId, userId);
                 api.sendEvent({
                     name: 'getUserId',
                     extra: {
@@ -889,18 +924,18 @@ var  mainH, _main = 0, scrollH;
                 // 获取最新消息
                 getNews()
 
-           } else {
-               alert(JSON.stringify(err.msg))
-           }
-       })
+            } else {
+                alert(JSON.stringify(err.msg))
+            }
+        })
     }
 
     // 获取最新消息
     function getNews() {
         db.selectSql({
-            name: 'db_'+$api.getStorage('userToken'),
-            sql: 'SELECT * FROM tb_chat_'+ api.pageParam.targetRongId +'  ORDER BY receivedTime DESC  LIMIT 20'
-        },function(ret,err){
+            name: 'db_' + $api.getStorage('userToken'),
+            sql: 'SELECT * FROM tb_chat_' + api.pageParam.userId + '  ORDER BY receivedTime DESC  LIMIT 20'
+        }, function(ret, err) {
             if (ret.status) {
                 if (ret.data.length > 0) {
                     renderPageSql(ret.data, 1);
@@ -909,7 +944,7 @@ var  mainH, _main = 0, scrollH;
                 } else {
                     contrastMessage()
                 }
-            }else {
+            } else {
                 // alert('386');
             }
         });
@@ -923,35 +958,36 @@ var  mainH, _main = 0, scrollH;
         // }
 
     }
-    function contrastMessage(argument) {
-            rong.getLatestMessages({
-                conversationType: 'PRIVATE',
-                // 目标rongyun用户名
-                targetId: targetRongId,
-                count: 20
-            }, function(ret, err) {
-                if (argument) {
-                    if(argument.length>0){
-                        if (argument[0].messageId == ret.result[0].messageId) {
-                            // 无更新
-                        } else {
-                            // 有更新
-                            $api.html($api.dom('.main'), '');
-                            allCahtSql(ret.result)
-                            renderPage(ret);
 
-                        }
+    function contrastMessage(argument) {
+        rong.getLatestMessages({
+            conversationType: 'PRIVATE',
+            // 目标rongyun用户名
+            targetId: targetRongId,
+            count: 20
+        }, function(ret, err) {
+            if (argument) {
+                if (argument.length > 0) {
+                    if (argument[0].messageId == ret.result[0].messageId) {
+                        // 无更新
                     } else {
+                        // 有更新
                         $api.html($api.dom('.main'), '');
                         allCahtSql(ret.result)
                         renderPage(ret);
+
                     }
                 } else {
-                        $api.html($api.dom('.main'), '');
-                        allCahtSql(ret.result)
-                        renderPage(ret);
+                    $api.html($api.dom('.main'), '');
+                    allCahtSql(ret.result)
+                    renderPage(ret);
                 }
-            })
+            } else {
+                $api.html($api.dom('.main'), '');
+                allCahtSql(ret.result)
+                renderPage(ret);
+            }
+        })
 
     }
     // 渲染页面
@@ -963,10 +999,10 @@ var  mainH, _main = 0, scrollH;
                     if (ret[i].objectName == 'RC:VcMsg') {
                         // 语音
                         sqlAddReceVoiceMessages(ret[i], n)
-                    } else if (ret[i].objectName == 'RC:TxtMsg'){
+                    } else if (ret[i].objectName == 'RC:TxtMsg') {
                         // 文字
                         sqlAddReceMsg(ret[i], n)
-                    } else if (ret[i].objectName == 'RC:ImgMsg'){
+                    } else if (ret[i].objectName == 'RC:ImgMsg') {
                         // 图片
                         sqlAddReceImgMessages(ret[i], n)
                     } else {
@@ -976,10 +1012,10 @@ var  mainH, _main = 0, scrollH;
                     if (ret[i].objectName == 'RC:VcMsg') {
                         // 语音
                         sqlAddSendVoiceMessages(ret[i], n)
-                    } else if (ret[i].objectName == 'RC:TxtMsg'){
+                    } else if (ret[i].objectName == 'RC:TxtMsg') {
                         // 文字
                         sqlAddSendMsg(ret[i], n);
-                    } else if (ret[i].objectName == 'RC:ImgMsg'){
+                    } else if (ret[i].objectName == 'RC:ImgMsg') {
                         // 图片
                         sqlAddSendImgMessages(ret[i], n)
                     } else {
@@ -988,21 +1024,21 @@ var  mainH, _main = 0, scrollH;
                 }
                 messageId = ret[0].messageId;
             }
-            if(api.systemType=='ios') {
+            if (api.systemType == 'ios') {
                 scrollTopPage();
             }
         } else {
-            for (var i = ret.length - 1; i >= 0 ; i--) {
+            for (var i = ret.length - 1; i >= 0; i--) {
                 // console.log(ret[i].messageId)
                 if (ret[i].messageDirection == 'RECEIVE') {
                     // 消息方向：SEND(发送) 或者 RECEIVE(接受)
                     if (ret[i].objectName == 'RC:VcMsg') {
                         // 语音
                         sqlAddReceVoiceMessages(ret[i], n)
-                    } else if (ret[i].objectName == 'RC:TxtMsg'){
+                    } else if (ret[i].objectName == 'RC:TxtMsg') {
                         // 文字
                         sqlAddReceMsg(ret[i], n)
-                    } else if (ret[i].objectName == 'RC:ImgMsg'){
+                    } else if (ret[i].objectName == 'RC:ImgMsg') {
                         // 图片
                         sqlAddReceImgMessages(ret[i], n)
                     } else {
@@ -1012,10 +1048,10 @@ var  mainH, _main = 0, scrollH;
                     if (ret[i].objectName == 'RC:VcMsg') {
                         // 语音
                         sqlAddSendVoiceMessages(ret[i], n)
-                    } else if (ret[i].objectName == 'RC:TxtMsg'){
+                    } else if (ret[i].objectName == 'RC:TxtMsg') {
                         // 文字
                         sqlAddSendMsg(ret[i], n);
-                    } else if (ret[i].objectName == 'RC:ImgMsg'){
+                    } else if (ret[i].objectName == 'RC:ImgMsg') {
                         // 图片
                         sqlAddSendImgMessages(ret[i], n)
                     } else {
@@ -1023,7 +1059,7 @@ var  mainH, _main = 0, scrollH;
                     }
                 }
             }
-            messageId = ret[ret.length-1].messageId;
+            messageId = ret[ret.length - 1].messageId;
         }
 
         // 获取历史聊天记录后 页面不想上滚动
@@ -1035,32 +1071,32 @@ var  mainH, _main = 0, scrollH;
     }
     // 渲染页面
     function renderPage(ret) {
-        for (var i = ret.result.length-1; i >= 0 ; i--) {
+        for (var i = ret.result.length - 1; i >= 0; i--) {
             if (ret.result[i].messageDirection == 'RECEIVE') {
                 // chatRecordingSql(ret, 'receiveMsg', youHeadImg)
                 // 消息方向：SEND(发送) 或者 RECEIVE(接受)
                 if (ret.result[i].objectName == 'RC:VcMsg') {
                     // 语音
-                    addReceVoiceMessages(ret.result[i], youHeadImg,1)
-                } else if (ret.result[i].objectName == 'RC:TxtMsg'){
+                    addReceVoiceMessages(ret.result[i], youHeadImg, 1)
+                } else if (ret.result[i].objectName == 'RC:TxtMsg') {
                     // 文字
-                    addReceMsg(ret.result[i], youHeadImg,1)
-                } else if (ret.result[i].objectName == 'RC:ImgMsg'){
+                    addReceMsg(ret.result[i], youHeadImg, 1)
+                } else if (ret.result[i].objectName == 'RC:ImgMsg') {
                     // 图片
-                    addReceImgMessages(ret.result[i], youHeadImg,1)
+                    addReceImgMessages(ret.result[i], youHeadImg, 1)
                 } else {
 
                 }
             } else {
                 if (ret.result[i].objectName == 'RC:VcMsg') {
                     // 语音
-                    addSendVoiceMessages(ret.result[i], headImg,1)
-                } else if (ret.result[i].objectName == 'RC:TxtMsg'){
+                    addSendVoiceMessages(ret.result[i], headImg, 1)
+                } else if (ret.result[i].objectName == 'RC:TxtMsg') {
                     // 文字
-                    addSendMsg(ret.result[i], headImg,1);
-                } else if (ret.result[i].objectName == 'RC:ImgMsg'){
+                    addSendMsg(ret.result[i], headImg, 1);
+                } else if (ret.result[i].objectName == 'RC:ImgMsg') {
                     // 图片
-                    addSendImgMessages(ret.result[i], headImg,1)
+                    addSendImgMessages(ret.result[i], headImg, 1)
                 } else {
 
                 }
@@ -1070,7 +1106,7 @@ var  mainH, _main = 0, scrollH;
             // mainH=$api.offset($api.dom('.main')).h;
             // _main = mainH
             // 最新的消息的messageId,获取历史记录函数内部-20处理
-            messageId = ret.result[ret.result.length-1].messageId;
+            messageId = ret.result[ret.result.length - 1].messageId;
             slideBut();
         }
     }
@@ -1101,7 +1137,7 @@ var  mainH, _main = 0, scrollH;
             // // 当天显示时间
             // 不是当天显示年月日 时分秒
             var time = new Date(msg.receivedTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.receivedTime).toLocaleTimeString() : new Date(msg.receivedTime).toLocaleString()
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="'+ msg.content.imageUrl +'"> </p></div>');
+            $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId + '" class="fl otherImg" src="' + api.pageParam.headImg + '"><p data-msgId="' + msg.messageId + '" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="' + msg.content.imageUrl + '"> </p></div>');
             slideBut();
         } else if (n == 2) {
             // // // console.log('历史消息::'+JSON.stringify(msg))
@@ -1109,31 +1145,31 @@ var  mainH, _main = 0, scrollH;
             // // 当天显示时间
             // 不是当天显示年月日 时分秒
             var time = new Date(msg.receivedTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.receivedTime).toLocaleTimeString() : new Date(msg.receivedTime).toLocaleString()
-            $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="'+ msg.content.imageUrl +'"> </p></div>');
+            $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId + '" class="fl otherImg" src="' + api.pageParam.headImg + '"><p data-msgId="' + msg.messageId + '" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="' + msg.content.imageUrl + '"> </p></div>');
         } else {
-               console.log('接受到的图片'+JSON.stringify(msg))
-            // 当前接收的消息
+            console.log('接受到的图片' + JSON.stringify(msg))
+                // 当前接收的消息
             var time = new Date(msg.message.receivedTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.message.receivedTime).toLocaleTimeString() : new Date(msg.message.receivedTime).toLocaleString()
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.message.messageId +'">'+ time +'</p><div data-msgId="'+ msg.message.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.message.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" > <img class="imgNews" src="'+ msg.message.content.imageUrl +'"></p></div>');
+            $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.message.messageId + '">' + time + '</p><div data-msgId="' + msg.message.messageId + '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId + '" class="fl otherImg" src="' + api.pageParam.headImg + '"><p data-msgId="' + msg.message.messageId + '" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" > <img class="imgNews" src="' + msg.message.content.imageUrl + '"></p></div>');
             slideBut();
         }
 
     }
-     // 发送图片消息后新建
+    // 发送图片消息后新建
     function addSendImgMessages(msg, headImg, n) {
         if (n == 1) {
             // 历史消息
             var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()"  ><img class="imgNews" src="'+ msg.content.imageUrl +'"> </p></div>');
+            $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' + headImg + '"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' + msg.messageId + '" ontouchend="gtouchend()"  ><img class="imgNews" src="' + msg.content.imageUrl + '"> </p></div>');
             slideBut();
-        }else if (n == 2) {
+        } else if (n == 2) {
             // 历史消息
             var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
-            $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()"  ><img class="imgNews" src="'+ msg.content.imageUrl +'"> </p></div>');
+            $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' + headImg + '"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' + msg.messageId + '" ontouchend="gtouchend()"  ><img class="imgNews" src="' + msg.content.imageUrl + '"> </p></div>');
         } else {
             // // // console.log(JSON.stringify(msg))
             // 当前发送的消息
-            $api.append($api.dom('.main'),'<p class="newsTime" >'+ new Date().toLocaleTimeString() +'</p><div data-msgId="" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="" ontouchend="gtouchend()" d><img class="imgNews" src="../../image/tx_1.jpg"> </p></div>');
+            $api.append($api.dom('.main'), '<p class="newsTime" >' + new Date().toLocaleTimeString() + '</p><div data-msgId="" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' + headImg + '"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="" ontouchend="gtouchend()" d><img class="imgNews" src="../../image/tx_1.jpg"> </p></div>');
             slideBut();
 
         }
@@ -1150,19 +1186,19 @@ var  mainH, _main = 0, scrollH;
             var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString();
             var widthNum = msg.content.duration;
             // widthNum = widthNum > 7 ? widthNum : 7;
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" style="width:'+ widthNum/4  +'rem" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-voivePath= "'+ msg.content.voicePath +'"><img class="voiceMsg fl"  src="../../image/chatPage/icon_break.png"  height="20"></p><span class="voiceTime voiceTimeOther fl">'+ msg.content.duration +'"</span></div>');
+            $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId + '" class="fl otherImg" src="' + api.pageParam.headImg + '"><p data-msgId="' + msg.messageId + '" class="fl flex-def flex-cCenter" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" style="width:' + widthNum / 4 + 'rem" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-voivePath= "' + msg.content.voicePath + '"><img class="voiceMsg fl"  src="../../image/chatPage/icon_break.png"  height="20"></p><span class="voiceTime voiceTimeOther fl">' + msg.content.duration + '"</span></div>');
             slideBut();
-        } else if(n==2) {
+        } else if (n == 2) {
             var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString();
             var widthNum = msg.content.duration;
-             // widthNum = widthNum > 7 ? widthNum : 7;
-            $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" style="width:'+ widthNum/4 +'rem" data-voivePath= "'+ msg.content.voicePath +'" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">'+ msg.content.duration +'"</span></div>');
+            // widthNum = widthNum > 7 ? widthNum : 7;
+            $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' + headImg + '"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' + msg.messageId + '" ontouchend="gtouchend()" style="width:' + widthNum / 4 + 'rem" data-voivePath= "' + msg.content.voicePath + '" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">' + msg.content.duration + '"</span></div>');
         } else {
             // 当前接收的消息
             var time = new Date(msg.message.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.message.sentTime).toLocaleTimeString() : new Date(msg.message.sentTime).toLocaleString();
             var widthNum = msg.message.content.duration;
             // widthNum = widthNum > 7 ? widthNum : 7;
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.message.messageId +'">'+ time +'</p><div data-msgId="'+ msg.message.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.message.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="playVoice(this)" style="width:'+ widthNum/4 +'rem" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-voivePath= "'+ msg.message.content.voicePath +'"><img class="voiceMsg fl"  src="../../image/chatPage/icon_break.png"  height="20"></p><span class="voiceTime voiceTimeOther fl">'+ msg.message.content.duration +'"</span></div>');
+            $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.message.messageId + '">' + time + '</p><div data-msgId="' + msg.message.messageId + '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId + '" class="fl otherImg" src="' + api.pageParam.headImg + '"><p data-msgId="' + msg.message.messageId + '" class="fl flex-def flex-cCenter" tapmode onclick="playVoice(this)" style="width:' + widthNum / 4 + 'rem" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-voivePath= "' + msg.message.content.voicePath + '"><img class="voiceMsg fl"  src="../../image/chatPage/icon_break.png"  height="20"></p><span class="voiceTime voiceTimeOther fl">' + msg.message.content.duration + '"</span></div>');
             slideBut();
         }
 
@@ -1173,20 +1209,20 @@ var  mainH, _main = 0, scrollH;
             // 历史消息
             var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString();
             var widthNum = msg.content.duration;
-             // widthNum = widthNum > 7 ? widthNum : 7;
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" style="width:'+ widthNum/4 +'rem" data-voivePath= "'+ msg.content.voicePath +'" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">'+ msg.content.duration +'"</span></div>');
+            // widthNum = widthNum > 7 ? widthNum : 7;
+            $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' + headImg + '"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' + msg.messageId + '" ontouchend="gtouchend()" style="width:' + widthNum / 4 + 'rem" data-voivePath= "' + msg.content.voicePath + '" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">' + msg.content.duration + '"</span></div>');
             slideBut();
-        } else if(n==2) {
+        } else if (n == 2) {
             var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString();
             var widthNum = msg.content.duration;
-             // widthNum = widthNum > 7 ? widthNum : 7;
-            $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" style="width:'+ widthNum/4 +'rem" data-voivePath= "'+ msg.content.voicePath +'" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">'+ msg.content.duration +'"</span></div>');
+            // widthNum = widthNum > 7 ? widthNum : 7;
+            $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' + headImg + '"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' + msg.messageId + '" ontouchend="gtouchend()" style="width:' + widthNum / 4 + 'rem" data-voivePath= "' + msg.content.voicePath + '" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">' + msg.content.duration + '"</span></div>');
         } else {
             var widthNum = msg.duration;
-             // widthNum = widthNum > 7 ? widthNum : 7;
+            // widthNum = widthNum > 7 ? widthNum : 7;
             // // // console.log(JSON.stringify(msg))
             // 当前发送的消息
-            $api.append($api.dom('.main'),'<p class="newsTime" >'+ new Date().toLocaleTimeString() +'</p><div data-msgId="" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" style="width:'+ widthNum/4 +'rem" ontouchmove="gtouchmove()" data-msgId="" ontouchend="gtouchend()" data-voivePath= "'+ msg.path +'" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">'+ msg.duration +'"</span></div>');
+            $api.append($api.dom('.main'), '<p class="newsTime" >' + new Date().toLocaleTimeString() + '</p><div data-msgId="" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' + headImg + '"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" style="width:' + widthNum / 4 + 'rem" ontouchmove="gtouchmove()" data-msgId="" ontouchend="gtouchend()" data-voivePath= "' + msg.path + '" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">' + msg.duration + '"</span></div>');
             slideBut();
         }
 
@@ -1200,7 +1236,7 @@ var  mainH, _main = 0, scrollH;
             // 自己
             if ($api.attr($api.dom(ele, '.voiceMsg'), 'src') == '../../image/chatPage/icon_play1.gif') {
                 api.stopPlay();
-                $api.attr($api.dom(ele, '.voiceMsg'), 'src','../../image/chatPage/icon_break1.png');
+                $api.attr($api.dom(ele, '.voiceMsg'), 'src', '../../image/chatPage/icon_break1.png');
             } else {
                 playVoice2(ele)
             }
@@ -1209,13 +1245,14 @@ var  mainH, _main = 0, scrollH;
             // other
             if ($api.attr($api.dom(ele, '.voiceMsg'), 'src') == '../../image/chatPage/icon_play.gif') {
                 api.stopPlay();
-                $api.attr($api.dom(ele, '.voiceMsg'), 'src','../../image/chatPage/icon_break.png');
+                $api.attr($api.dom(ele, '.voiceMsg'), 'src', '../../image/chatPage/icon_break.png');
             } else {
                 playVoice2(ele)
             }
         }
 
     }
+
     function playVoice2(ele) {
         // 暂停其他正在播放的语音
         var currentPlay = $api.dom('.voiceMsg[src="../../image/chatPage/icon_play1.gif"]');
@@ -1223,20 +1260,20 @@ var  mainH, _main = 0, scrollH;
         if (currentPlay) {
             api.stopPlay();
             // 自己
-            $api.attr(currentPlay, 'src','../../image/chatPage/icon_break1.png');
+            $api.attr(currentPlay, 'src', '../../image/chatPage/icon_break1.png');
         }
         if (currentPlay1) {
             api.stopPlay();
             // other
-            $api.attr(currentPlay1, 'src','../../image/chatPage/icon_break.png');
+            $api.attr(currentPlay1, 'src', '../../image/chatPage/icon_break.png');
         }
         // 更换播放图标
         if ($api.hasCls($api.closest(ele, 'div'), 'oneself')) {
             // 自己
-            $api.attr($api.dom(ele, '.voiceMsg'), 'src','../../image/chatPage/icon_play1.gif');
+            $api.attr($api.dom(ele, '.voiceMsg'), 'src', '../../image/chatPage/icon_play1.gif');
         } else {
             // other
-            $api.attr($api.dom(ele, '.voiceMsg'), 'src','../../image/chatPage/icon_play.gif');
+            $api.attr($api.dom(ele, '.voiceMsg'), 'src', '../../image/chatPage/icon_play.gif');
         }
         // 播放语音
         api.startPlay({
@@ -1245,10 +1282,10 @@ var  mainH, _main = 0, scrollH;
             if (ret) {
                 if ($api.hasCls($api.closest(ele, 'div'), 'oneself')) {
                     // 自己
-                    $api.attr($api.dom(ele, '.voiceMsg'), 'src','../../image/chatPage/icon_break1.png');
+                    $api.attr($api.dom(ele, '.voiceMsg'), 'src', '../../image/chatPage/icon_break1.png');
                 } else {
                     // other
-                    $api.attr($api.dom(ele, '.voiceMsg'), 'src','../../image/chatPage/icon_break.png');
+                    $api.attr($api.dom(ele, '.voiceMsg'), 'src', '../../image/chatPage/icon_break.png');
                 }
             } else {
                 alert(JSON.stringify(err));
@@ -1265,12 +1302,12 @@ var  mainH, _main = 0, scrollH;
             // // 当天显示时间
             // 不是当天显示年月日 时分秒
             var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg.content.text +'"> '+ transText(msg.content.text) +'</p></div>');
+            $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId + '" class="fl otherImg" src="' + api.pageParam.headImg + '"><p data-msgId="' + msg.messageId + '" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "' + msg.content.text + '"> ' + transText(msg.content.text) + '</p></div>');
         } else {
             // 当前发送的消息
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ new Date().toLocaleTimeString() +'</p><div data-msgId="" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg +'"> '+ transText(msg) +'</p></div>');
+            $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + new Date().toLocaleTimeString() + '</p><div data-msgId="" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId + '" class="fl otherImg" src="' + api.pageParam.headImg + '"><p data-msgId="" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "' + msg + '"> ' + transText(msg) + '</p></div>');
         }
-            slideBut();
+        slideBut();
     }
 
     // 发送消息后新建消息
@@ -1278,24 +1315,25 @@ var  mainH, _main = 0, scrollH;
         if (n == 1) {
             // 历史消息
             var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" data-newsText= "'+ msg.content.text +'" > ' + transText(msg.content.text) + ' </p></div>');
+            $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' + headImg + '"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' + msg.messageId + '" ontouchend="gtouchend()" data-newsText= "' + msg.content.text + '" > ' + transText(msg.content.text) + ' </p></div>');
         } else {
             // 当前发送的消息
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ new Date().toLocaleTimeString() +'</p><div data-msgId="" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="" ontouchend="gtouchend()" data-newsText= "'+ msg +'" > ' + transText(msg) + ' </p></div>');
+            $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + new Date().toLocaleTimeString() + '</p><div data-msgId="" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' + headImg + '"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="" ontouchend="gtouchend()" data-newsText= "' + msg + '" > ' + transText(msg) + ' </p></div>');
 
         }
-            slideBut();
+        slideBut();
     }
     // 查看历史记录 往上面添加消息
     function addSendMsgTop(msg, headImg) {
         // // console.log('历史消息1'+JSON.stringify(msg))
         var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
-        $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img class="fr oneselfImg" src="'+ headImg +'" tapmode data-id="1" onclick="openMemberInfo(this)"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-msgId="'+ msg.messageId +'" data-newsText= "'+ msg.content.text +'"> ' + transText(msg.content.text) + ' </p></div>');
+        $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="oneself clearfix"><img class="fr oneselfImg" src="' + headImg + '" tapmode data-id="1" onclick="openMemberInfo(this)"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-msgId="' + msg.messageId + '" data-newsText= "' + msg.content.text + '"> ' + transText(msg.content.text) + ' </p></div>');
     }
+
     function addReceMsgTop(msg, youHeadImg) {
         // // console.log('历史消息2'+JSON.stringify(msg))
         var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
-        $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img class="fl otherImg" tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" src="'+ api.pageParam.headImg +'"><p class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-msgId="'+ msg.messageId +'" data-newsText= "'+ msg.content.text +'">' + transText(msg.content.text) + '</p></div>');
+        $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="other clearfix"><img class="fl otherImg" tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId + '" src="' + api.pageParam.headImg + '"><p class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-msgId="' + msg.messageId + '" data-newsText= "' + msg.content.text + '">' + transText(msg.content.text) + '</p></div>');
     }
 
     // 滚动到页面底部
@@ -1309,12 +1347,12 @@ var  mainH, _main = 0, scrollH;
     // 查看历史记录
     function chatHis() {
         // messageId -= 20;
-        var count = messageId>20?20:messageId;
+        var count = messageId > 20 ? 20 : messageId;
         if (messageId > 0) {
             db.selectSql({
-                name: 'db_'+$api.getStorage('userToken'),
-                sql: 'SELECT * FROM tb_chat_'+ api.pageParam.targetRongId +'  ORDER BY receivedTime DESC LIMIT '+ (countId) +',20'
-            },function(ret,err){
+                name: 'db_' + $api.getStorage('userToken'),
+                sql: 'SELECT * FROM tb_chat_' + api.pageParam.userId + '  ORDER BY receivedTime DESC LIMIT ' + (countId) + ',20'
+            }, function(ret, err) {
                 if (ret.status) {
                     countId += 20;
                     if (ret.data.length > 0) {
@@ -1329,41 +1367,41 @@ var  mainH, _main = 0, scrollH;
                             count: count
                         }, function(ret, err) {
                             allCahtSql(ret.result)
-                            for (var i = 0; i < ret.result.length ; i++) {
+                            for (var i = 0; i < ret.result.length; i++) {
                                 if (ret.result[i].messageDirection == 'RECEIVE') {
                                     // 消息方向：SEND(发送) 或者 RECEIVE(接受)
                                     if (ret.result[i].objectName == 'RC:VcMsg') {
                                         // 语音
-                                        addReceVoiceMessages(ret.result[i], youHeadImg,2)
-                                    } else if (ret.result[i].objectName == 'RC:TxtMsg'){
+                                        addReceVoiceMessages(ret.result[i], youHeadImg, 2)
+                                    } else if (ret.result[i].objectName == 'RC:TxtMsg') {
                                         // 文字
-                                        addReceMsgTop(ret.result[i], youHeadImg,2)
-                                    } else if (ret.result[i].objectName == 'RC:ImgMsg'){
-                                        addReceImgMessages(ret.result[i], youHeadImg,2)
+                                        addReceMsgTop(ret.result[i], youHeadImg, 2)
+                                    } else if (ret.result[i].objectName == 'RC:ImgMsg') {
+                                        addReceImgMessages(ret.result[i], youHeadImg, 2)
                                     } else {
 
                                     }
                                 } else {
                                     if (ret.result[i].objectName == 'RC:VcMsg') {
                                         // 语音
-                                        addSendVoiceMessages(ret.result[i], headImg,2)
-                                    } else if (ret.result[i].objectName == 'RC:TxtMsg'){
+                                        addSendVoiceMessages(ret.result[i], headImg, 2)
+                                    } else if (ret.result[i].objectName == 'RC:TxtMsg') {
                                         // 文字
-                                        addSendMsgTop(ret.result[i], headImg,2);
-                                    } else if (ret.result[i].objectName == 'RC:ImgMsg'){
-                                        addSendImgMessages(ret.result[i], headImg,2)
+                                        addSendMsgTop(ret.result[i], headImg, 2);
+                                    } else if (ret.result[i].objectName == 'RC:ImgMsg') {
+                                        addSendImgMessages(ret.result[i], headImg, 2)
                                     } else {
 
                                     }
                                 }
                             }
                             messageId = ret.result[ret.result.length - 1].messageId
-                            if(api.systemType=='ios') {
+                            if (api.systemType == 'ios') {
                                 scrollTopPage()
                             }
                         })
                     }
-                }else {
+                } else {
                     // api.alert({msg:err.msg});
                 }
             });
@@ -1371,24 +1409,25 @@ var  mainH, _main = 0, scrollH;
             // mainH = $api.offset($api.dom('.main')).h;
             // scrollH = mainH - _main;
             // _main =  mainH;
-            if(api.systemType !== 'ios') {
+            if (api.systemType !== 'ios') {
                 console.log('安卓')
-                window.scrollTo(0,1);
+                window.scrollTo(0, 1);
             }
 
             return 1
-         } else {
+        } else {
             api.toast({
                 msg: '无更多记录'
             });
             return 1
-         }
+        }
     }
+
     function scrollTopPage() {
-            mainH = $api.offset($api.dom('.main')).h;
-            scrollH = mainH - _main;
-            _main =  mainH;
-            window.scrollTo(0,scrollH);
+        mainH = $api.offset($api.dom('.main')).h;
+        scrollH = mainH - _main;
+        _main = mainH;
+        window.scrollTo(0, scrollH);
     }
     // 下拉刷新后 执行函数chatHis(messageId)
 
@@ -1425,11 +1464,11 @@ var  mainH, _main = 0, scrollH;
         });
     }
 
-      /**
-  * 发送消息
-  * sendMsg(msg)
-  * msg: 发送的消息
-  */
+    /**
+     * 发送消息
+     * sendMsg(msg)
+     * msg: 发送的消息
+     */
     function sendMsg(msg) {
         var sendMsg;
         rong.sendTextMessage({
@@ -1441,11 +1480,9 @@ var  mainH, _main = 0, scrollH;
             extra: ''
         }, function(ret, err) {
             if (ret.status == 'prepare') {
-              sendMsg = ret;
-              // alert(JSON.stringify(ret));
-            }
-
-            else if (ret.status == 'success') {
+                sendMsg = ret;
+                // alert(JSON.stringify(ret));
+            } else if (ret.status == 'success') {
 
                 api.sendEvent({
                     name: 'sendMsg',
@@ -1455,9 +1492,7 @@ var  mainH, _main = 0, scrollH;
                 });
 
 
-            }
-
-            else if (ret.status == 'error') {
+            } else if (ret.status == 'error') {
                 // api.alert({
                 //     title: 'title',
                 //     msg: '第三个message' + err.code,
@@ -1473,9 +1508,9 @@ var  mainH, _main = 0, scrollH;
         });
     }
 
-    var timeOutEvent=0;//定时器
+    var timeOutEvent = 0; //定时器
     //开始按
-    function gtouchstart(ele){
+    function gtouchstart(ele) {
         newsText = $api.attr(ele, 'data-newsText');
         msgId = $api.attr(ele, 'data-msgId');
         // // console.log($api.text(ele))
@@ -1483,100 +1518,101 @@ var  mainH, _main = 0, scrollH;
 
         // // console.log('id::'+msgId+'text::'+ newsText)
         var e = window.event
-        var x = e.touches[0].clientX ,y=e.touches[0].clientY
-        timeOutEvent = setTimeout("longPress("+x+","+y+")",500);
+        var x = e.touches[0].clientX,
+            y = e.touches[0].clientY
+        timeOutEvent = setTimeout("longPress(" + x + "," + y + ")", 500);
         //这里设置定时器，定义长按500毫秒触发长按事件，时间可以自己改，个人感觉500毫秒非常合适
         return false;
     };
     //手释放，如果在500毫秒内就释放，则取消长按事件，此时可以执行onclick应该执行的事件
-    function gtouchend(){
-        clearTimeout(timeOutEvent);//清除定时器
-        if(timeOutEvent!=0){
+    function gtouchend() {
+        clearTimeout(timeOutEvent); //清除定时器
+        if (timeOutEvent != 0) {
             //这里写要执行的内容（尤如onclick事件）
         }
         return false;
     };
     //如果手指有移动，则取消所有事件，此时说明用户只是要移动而不是长按
-    function gtouchmove(){
-        clearTimeout(timeOutEvent);//清除定时器
+    function gtouchmove() {
+        clearTimeout(timeOutEvent); //清除定时器
         timeOutEvent = 0;
     };
     //真正长按后应该执行的内容
-    function longPress(x,y){
-        if (api.frameWidth - (x+10) < api.frameWidth/2) {
+    function longPress(x, y) {
+        if (api.frameWidth - (x + 10) < api.frameWidth / 2) {
             x = x - 70
         }
-        if (api.winHeight - (y+10) < api.winHeight/2) {
+        if (api.winHeight - (y + 10) < api.winHeight / 2) {
             y = y - 110
         }
         // // // console.log('坐标:'+x+','+y)
         timeOutEvent = 0;
-        $api.css($api.dom('.shadow'), 'display:inline-block;top:' + 2*y/100 + 'rem;left:' + 2*x/100 + 'rem;');
+        $api.css($api.dom('.shadow'), 'display:inline-block;top:' + 2 * y / 100 + 'rem;left:' + 2 * x / 100 + 'rem;');
         // // // console.log(JSON.stringify($api.offset($api.dom('.shadow'))))
         //执行长按要执行的内容，如弹出菜单
     }
     // 数据库查询 接受图片消息后新建
-    function sqlAddReceImgMessages(msg,  n) {
+    function sqlAddReceImgMessages(msg, n) {
         if (n == 1) {
             // // 当天显示时间
             // 不是当天显示年月日 时分秒
             var time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString()
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ msg.head_img_url +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="'+ msg.filePath +'"> </p></div>');
+            $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId + '" class="fl otherImg" src="' + msg.head_img_url + '"><p data-msgId="' + msg.messageId + '" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="' + msg.filePath + '"> </p></div>');
             slideBut();
         } else if (n == 2) {
             // 历史消息
             // // 当天显示时间
             // 不是当天显示年月日 时分秒
             var time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString()
-            $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ msg.head_img_url +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="'+ msg.filePath +'"> </p></div>');
+            $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId + '" class="fl otherImg" src="' + msg.head_img_url + '"><p data-msgId="' + msg.messageId + '" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="' + msg.filePath + '"> </p></div>');
         } else {
             // 当前接收的消息
             var time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString()
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.message.messageId +'">'+ time +'</p><div data-msgId="'+ msg.message.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ msg.head_img_url +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" > <img class="imgNews" src="'+ msg.filePath +'"></p></div>');
+            $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.message.messageId + '">' + time + '</p><div data-msgId="' + msg.message.messageId + '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId + '" class="fl otherImg" src="' + msg.head_img_url + '"><p data-msgId="' + msg.messageId + '" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" > <img class="imgNews" src="' + msg.filePath + '"></p></div>');
             slideBut();
         }
         slideBut();
 
     }
-     // 数据库查询 发送图片消息后新建
+    // 数据库查询 发送图片消息后新建
     function sqlAddSendImgMessages(msg, n) {
         if (n == 1) {
             // 历史消息
             var time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString()
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ msg.head_img_url +'"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()"  ><img class="imgNews" src="'+ msg.filePath +'"> </p></div>');
+            $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' + msg.head_img_url + '"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' + msg.messageId + '" ontouchend="gtouchend()"  ><img class="imgNews" src="' + msg.filePath + '"> </p></div>');
             slideBut();
-        }else if (n == 2) {
+        } else if (n == 2) {
             // 历史消息
             var time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString()
-            $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ msg.head_img_url +'"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()"  ><img class="imgNews" src="'+ msg.filePath +'"> </p></div>');
+            $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' + msg.head_img_url + '"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' + msg.messageId + '" ontouchend="gtouchend()"  ><img class="imgNews" src="' + msg.filePath + '"> </p></div>');
         } else {
             // // // console.log(JSON.stringify(msg))
             // 当前发送的消息
             var time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString()
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ msg.head_img_url +'"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()"  ><img class="imgNews" src="'+ msg.filePath +'"> </p></div>');
+            $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' + msg.head_img_url + '"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' + msg.messageId + '" ontouchend="gtouchend()"  ><img class="imgNews" src="' + msg.filePath + '"> </p></div>');
             slideBut();
         }
         slideBut();
     }
     // 数据库查询 接收语音消息后新建消息
-    function sqlAddReceVoiceMessages(msg,  n) {
+    function sqlAddReceVoiceMessages(msg, n) {
         // 当天显示时间
         // 不是当天显示年月日 时分秒
         if (n == 1) {
             var time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString();
             var widthNum = msg.duration;
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ msg.head_img_url +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" style="width:'+ widthNum/4  +'rem" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-voivePath= "'+ msg.filePath +'"><img class="voiceMsg fl"  src="../../image/chatPage/icon_break.png"  height="20"></p><span class="voiceTime voiceTimeOther fl">'+ msg.duration +'"</span></div>');
+            $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId + '" class="fl otherImg" src="' + msg.head_img_url + '"><p data-msgId="' + msg.messageId + '" class="fl flex-def flex-cCenter" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" style="width:' + widthNum / 4 + 'rem" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-voivePath= "' + msg.filePath + '"><img class="voiceMsg fl"  src="../../image/chatPage/icon_break.png"  height="20"></p><span class="voiceTime voiceTimeOther fl">' + msg.duration + '"</span></div>');
             slideBut();
-        } else if(n==2) {
+        } else if (n == 2) {
             var time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString();
             var widthNum = msg.duration;
-            $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ msg.head_img_url +'"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" style="width:'+ widthNum/4 +'rem" data-voivePath= "'+ msg.filePath +'" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">'+ msg.duration +'"</span></div>');
+            $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' + msg.head_img_url + '"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' + msg.messageId + '" ontouchend="gtouchend()" style="width:' + widthNum / 4 + 'rem" data-voivePath= "' + msg.filePath + '" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">' + msg.duration + '"</span></div>');
         } else {
             // 当前接收的消息
             var time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString();
             var widthNum = msg.duration;
             // widthNum = widthNum > 7 ? widthNum : 7;
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ msg.head_img_url +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="playVoice(this)" style="width:'+ widthNum/4 +'rem" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-voivePath= "'+ msg.filePath +'"><img class="voiceMsg fl"  src="../../image/chatPage/icon_break.png"  height="20"></p><span class="voiceTime voiceTimeOther fl">'+ msg.duration +'"</span></div>');
+            $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId + '" class="fl otherImg" src="' + msg.head_img_url + '"><p data-msgId="' + msg.messageId + '" class="fl flex-def flex-cCenter" tapmode onclick="playVoice(this)" style="width:' + widthNum / 4 + 'rem" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-voivePath= "' + msg.filePath + '"><img class="voiceMsg fl"  src="../../image/chatPage/icon_break.png"  height="20"></p><span class="voiceTime voiceTimeOther fl">' + msg.duration + '"</span></div>');
             slideBut();
         }
         slideBut();
@@ -1587,21 +1623,21 @@ var  mainH, _main = 0, scrollH;
             // 历史消息
             var time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString();
             var widthNum = msg.duration;
-             // widthNum = widthNum > 7 ? widthNum : 7;
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ msg.head_img_url +'"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" style="width:'+ widthNum/4 +'rem" data-voivePath= "'+ msg.filePath +'" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">'+ msg.duration +'"</span></div>');
+            // widthNum = widthNum > 7 ? widthNum : 7;
+            $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' + msg.head_img_url + '"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' + msg.messageId + '" ontouchend="gtouchend()" style="width:' + widthNum / 4 + 'rem" data-voivePath= "' + msg.filePath + '" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">' + msg.duration + '"</span></div>');
             slideBut();
-        } else if(n==2) {
+        } else if (n == 2) {
             var time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString();
             var widthNum = msg.duration;
-             // widthNum = widthNum > 7 ? widthNum : 7;
-            $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ msg.head_img_url +'"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" style="width:'+ widthNum/4 +'rem" data-voivePath= "'+ msg.filePath +'" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">'+ msg.duration +'"</span></div>');
+            // widthNum = widthNum > 7 ? widthNum : 7;
+            $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' + msg.head_img_url + '"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' + msg.messageId + '" ontouchend="gtouchend()" style="width:' + widthNum / 4 + 'rem" data-voivePath= "' + msg.filePath + '" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">' + msg.duration + '"</span></div>');
         } else {
             var time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString();
             var widthNum = msg.duration;
-             // widthNum = widthNum > 7 ? widthNum : 7;
+            // widthNum = widthNum > 7 ? widthNum : 7;
             // // // console.log(JSON.stringify(msg))
             // 当前发送的消息
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ msg.head_img_url +'"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)"  ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" style="width:'+ widthNum/4 +'rem" data-voivePath= "'+ msg.filePath +'" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">'+ msg.duration +'"</span></div>');
+            $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' + msg.head_img_url + '"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)"  ontouchmove="gtouchmove()" data-msgId="' + msg.messageId + '" ontouchend="gtouchend()" style="width:' + widthNum / 4 + 'rem" data-voivePath= "' + msg.filePath + '" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">' + msg.duration + '"</span></div>');
             slideBut();
         }
         slideBut();
@@ -1615,11 +1651,11 @@ var  mainH, _main = 0, scrollH;
         // 不是当天显示年月日 时分秒
         if (n == 1) {
             var time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString();
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ msg.head_img_url +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg.content_text +'"> '+ transText(msg.content_text) +'</p></div>');
+            $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId + '" class="fl otherImg" src="' + msg.head_img_url + '"><p data-msgId="' + msg.messageId + '" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "' + msg.content_text + '"> ' + transText(msg.content_text) + '</p></div>');
             slideBut();
         } else {
             var time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString();
-            $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ msg.head_img_url +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg.content_text +'"> '+ transText(msg.content_text) +'</p></div>');
+            $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId + '" class="fl otherImg" src="' + msg.head_img_url + '"><p data-msgId="' + msg.messageId + '" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "' + msg.content_text + '"> ' + transText(msg.content_text) + '</p></div>');
         }
         slideBut();
     }
@@ -1629,16 +1665,15 @@ var  mainH, _main = 0, scrollH;
         // 历史消息
         if (n == 1) {
             var time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString();
-            $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ msg.head_img_url +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" data-newsText= "'+ msg.content_text +'" > ' + transText(msg.content_text) + ' </p></div>');
+            $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' + msg.head_img_url + '"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' + msg.messageId + '" ontouchend="gtouchend()" data-newsText= "' + msg.content_text + '" > ' + transText(msg.content_text) + ' </p></div>');
             slideBut();
         } else {
             var time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString();
-            $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ msg.head_img_url +'"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()" data-newsText= "'+ msg.content_text +'" > ' + transText(msg.content_text) + ' </p></div>');
+            $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '</p><div data-msgId="' + msg.messageId + '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' + msg.head_img_url + '"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' + msg.messageId + '" ontouchend="gtouchend()" data-newsText= "' + msg.content_text + '" > ' + transText(msg.content_text) + ' </p></div>');
         }
         // 滚动到底部
         slideBut();
     }
 </script>
+
 </html>
-
-
