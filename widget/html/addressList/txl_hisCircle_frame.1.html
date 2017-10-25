@@ -205,14 +205,6 @@
             background-color: rgba(0, 0, 0, 0)
         }
         /* 无数据是的样式 */
-
-        /* 收藏图标 */
-        .name .collect {
-            background: url(../../image/icon_supply/icon_collecr04.png) no-repeat;
-            background-size: .36rem .31rem;
-            background-position: right center;
-        }
-        /* 收藏图标 */
     </style>
 </head>
 
@@ -253,15 +245,14 @@
             </div>
         {{??}}
             {{~it:value:index}}
-            <li class="item" data-id="{{=value.supply_id}}" data-company="{{=value.company_name}}" tapmode
-            onclick="info(this)">
+            <li class="item" data-id="{{=value.demand_id}}" data-company="{{=value.company_name}}" tapmode onclick="info(this)">
                 <div class="userLeft flex-def flex-cCenter flex-zBetween" tapmode data-id="{{=value.user_id}}" onclick="openUserInfoPage(this);event.stopPropagation(); ">
                     <img src="{{=value.head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" class="announcerHead">
                     <div class="username flex-item">
                         <p class="announcer">{{=value.nickname}}</p>
                         <p class="company">{{=value.company_name}}</p>
                     </div>
-                    <p class="price2">{{=value.price}}元/{{=value.unit}}</p>
+                    <p class="price2">{{=value.reward}}元</p>
                 </div>
                 <span class="firstImg" style="background: url({{=value.image_json[0]?value.image_json[0]:'../../image/icon_supply/supply_noImg.png'}})no-repeat;background-size: 7.1rem auto;background-position: center center;">
                     {{?value.distance}}
@@ -273,7 +264,7 @@
                 </span>
                 <div class="name flex-def flex-cCenter flex-zBetween ">
                     <span class="title  flex-def flex-cCenter"><span>{{=value.title}}</span>&nbsp;<span class="label">[{{=value.type == 2?'公司':'个人'}}]</span></span>
-                    <span tapmode data-id="{{=value.supply_id}}" onclick="collect(this);event.stopPropagation();" class=" {{=value.is_collect==true?" collect icon ":"icon "}}"></span>
+                    <span tapmode data-id="{{=value.demand_id}}" onclick="collect(this);event.stopPropagation();" class=" {{=value.is_collect==true?" collect icon ":"icon "}}"></span>
                 </div>
                 <p class="createTime">{{=value.create_time}}</p>
                 <div class="user flex-def flex-cCenter flex-zBetween ">
@@ -320,7 +311,7 @@
 
     function requireData(ret, remarkInfo) {
         api.ajax({
-            url: apiSite + '/user/supplyList',
+            url: apiSite + '/user/demandList',
             method: 'post',
             headers: apiHeader,
             data: {
@@ -375,23 +366,22 @@
             }
         });
     }
-
-    // 进入详情
-    function info(ele) {
+     // 进入详情
+     function info(ele) {
         var flag = 0;
         var compaby_name = $api.attr(ele, 'data-company'),
-            supply_id = $api.attr(ele, 'data-id');
+            demand_id = $api.attr(ele, 'data-id');
         if (compaby_name != '') {
             flag = 1;
         }
         // alert(flag +'---'+ compaby_name)
         api.openWin({
-            name: 'supply_info',
-            url: '../supply/supply_info.html',
+            name: 'supply_info_demand_win',
+            url: '../supply/supply_info_demand_win.html',
             pageParam: {
                 flag: flag,
                 compaby_name: compaby_name,
-                supply_id: supply_id
+                demand_id: demand_id
             }
         });
     }
@@ -401,11 +391,11 @@
         if ($api.hasCls(ele, 'collect')) {
             // 已收藏
             // $api.removeCls(ele, 'collect');
-            url = '/supply/cancelCollect';
+            url = '/demand/cancelCollect';
         } else {
             // 未收藏
             // $api.addCls(ele, 'collect');
-            url = '/supply/collect';
+            url = '/demand/collect';
         }
         api.ajax({
             url: apiSite + url,
@@ -414,10 +404,10 @@
             data: {
                 values: {
                     token: $api.getStorage('userToken'),
-                    supply_id: $api.attr(ele, 'data-id')
+                    demand_id: $api.attr(ele, 'data-id')
                 }
             }
-        }, function (ret, err) {
+        }, function(ret, err) {
             if (ret) {
                 if ($api.hasCls(ele, 'collect')) {
                     // 已收藏

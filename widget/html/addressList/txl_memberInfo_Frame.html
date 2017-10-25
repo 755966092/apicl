@@ -132,7 +132,6 @@
         }
         
         .business {
-            margin-top: .37rem;
             height: 1.2rem;
             font-size: 0;
             display: -webkit-box;
@@ -376,17 +375,17 @@
         <div class="business">
             <div class="supply" tapmode onclick="openSupplyPage(0)">
                 <span class="supplyIcon"></span>
-                <p class="text">供订单</p>
+                <p class="text">供应</p>
             </div>
-            <div class="ask">
+            <div class="ask" tapmode onclick="openSupplyPage(1)">
                 <div></div>
                 <span class="askIcon"></span>
-                <p class="text">求订单</p>
+                <p class="text">需求</p>
 
             </div>
-            <div class="circle">
+            <div class="circle" tapmode onclick="openSupplyPage(2)">
                 <span class="circleIcon"></span>
-                <p class="text">参与的圈</p>
+                <p class="text">圈子</p>
             </div>
         </div>
         <ul class="mt20">
@@ -555,11 +554,14 @@
     function openSupplyPage(flag) {
         var url;
         if (flag == 0) {
+            // 她的供应
             url = "./txl_hisCircle_win.html"
         } else if (flag == 1) {
-            url = ""
+            // 他的求组
+            url = "./txl_hisCircle_win.1.html"
         } else {
-
+            // 她的圈子
+            url = "./txl_hisCircle_win.2.html"
         }
         api.openWin({
             name: 'winname_' + url,
