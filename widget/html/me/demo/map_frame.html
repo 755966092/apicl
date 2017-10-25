@@ -62,8 +62,6 @@
         api.addEventListener({
             name: 'scrolltobottom'
         }, function(ret, err){
-            console.log(lon)
-            console.log(typeof lon)
         });
     }
     function initMap() {
@@ -106,19 +104,12 @@
                 lon: lon,
                 lat: lat
             },
-            zoomLevel: 14,
+            zoomLevel: 17,
             showUserLocation: true,
             fixedOn: api.frameName,
             fixed: true
         }, function(ret) {
             if (ret.status) {
-                // alert('地图打开成功');
-                //  bMap.getCenter(function(ret) {
-                //     // nearHotSpotLocation(ret.lon, ret.lat)
-                //     // alert(ret.lon + '*' + ret.lat);
-                //     // // console.log(ret.lon + '*' + ret.lat)
-                // });
-                // openIconFrame();
                 bMap.addEventListener({
                     name: 'viewChange'
                 }, function(ret) {
@@ -135,7 +126,6 @@
                        });
                        lon = ret.lon;
                        lat = ret.lat;
-                       console.log(lon+'---'+lat)
                         nearHotSpotLocation(lon, lat)
                     }
                 });
@@ -149,9 +139,8 @@
             lat: lat
         }, function(ret, err) {
             if (ret.status) {
-                // console.log(JSON.stringify(ret));
                 dataArr = dataArr.concat(ret.poiList);
-                getData(dataArr)
+                getData(ret.poiList)
             }
         });
     }
@@ -174,19 +163,45 @@
     }
     // 添加标注
     function addLabel(ele) {
+        var lon = $api.attr(ele, 'data-lon'),
+            lat = $api.attr(ele, 'data-lat'),
+            name = $api.text($api.dom(ele, '.name')),
+            address = $api.text($api.dom(ele, '.address'));
+        api.sendEvent({
+            name: 'selectPosition',
+            extra: {
+                lon:lon,
+                lat:lat,
+                name:name,
+                address:address
+            }
+        });
         bMap.addAnnotations({
             annotations: [{
                 id: 2,
-                lon: $api.attr(ele, 'data-lon'),
-                lat: $api.attr(ele, 'data-lat')
+                lon: lon,
+                lat: lat
             }],
-            icon: 'widget://image/icon_my/icon_add.png',
+            icon: 'widget://image/icon_my/icon_sc.png',
             draggable: true
-        }, function(ret) {
-            if (ret) {
-                alert(ret.id);
-            }
+        }, function(ret,err) {
         });
+        setTimeout(function() {
+            bMap.addAnnotations({
+                annotations: [{
+                    id: 1, lon: lon, lat: lat
+                }],
+                icon: 'widget://',
+                draggable: true
+            }, function(ret){
+            });
+            bMap.setCenter({
+                coords: {
+                    lon: $api.attr(ele, 'data-lon'),
+                    lat: $api.attr(ele, 'data-lat')
+                }
+            });
+        }, 500);
     }
 </script>
 

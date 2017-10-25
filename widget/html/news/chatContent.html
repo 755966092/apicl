@@ -230,6 +230,13 @@
         .voiceTimeOther {
             margin-left: .1rem;
         }
+        /* 位置消息气泡 */
+        .positionNews {
+            width: 3rem;
+            height: 2rem;
+            
+        }
+        /* 位置消息气泡 */
     </style>
 </head>
 
@@ -249,7 +256,7 @@
     </div>
     <p class="promptText">请勿发布违法违规内容，共同营造文明和谐的聊天环境</p>
     <div class="main">
-        <!--  <p class="time">04:19</p>
+         <p class="time">04:19</p>
         <div class="oneself clearfix">
             <img class="fr oneselfImg" src="../../image/tx_2.jpg">
             <p class="fr flex-def flex-cCenter flex-zEnd" style="width:5rem"   ontouchstart="gtouchstart()" ontouchmove="gtouchmove()" ontouchend="gtouchend()"> <img class="fr" src="../../image/chatPage/icon_play1.gif"  height="20"> </p>
@@ -259,7 +266,14 @@
             <img class="fl otherImg" src="../../image/tx_2.jpg">
             <p class="fl flex-def flex-cCenter"><img  src="../../image/chatPage/icon_play.gif"  height="20"></p>
             <span class="voiceTime voiceTimeOther fl">20"</span>
-        </div> -->
+        </div>
+        <div class="other clearfix">
+            <img class="fl otherImg" src="../../image/tx_2.jpg">
+            <p class="positionNews fl flex-def flex-zTopBottom" style="background:url(../../image/tx_1.jpg)no-repeat;background-size: 100% 100%;background-position: 0 0.5rem;">
+                <span style="font-size:.24rem;">清华大学</span> 
+                <span style="font-size:.18rem;">清华大学</span> 
+            </p>
+        </div>
     </div>
     <div class="shadow">
         <p tapmode onclick="closeDiv(0);event.stopPropagation();">复制</p>
@@ -362,7 +376,35 @@
             name: 'refurbish'
         });
 
+        // 箭头发送位置
+        api.addEventListener({
+            name: 'sendPosition'
+        }, function(ret, err){
+            sendPosition(ret.value.positionObj)
+            console.log(JSON.stringify(ret.value.positionObj));
+            
+        });
     };
+    function sendPosition(ret) {
+        rong.sendLocationMessage({
+            conversationType: 'PRIVATE',
+            targetId: '9527',
+            latitude: ret.lat,
+            longitude: ret.lon,
+            poi: ret.name+ret.address,
+            imagePath: 'widget://image/tx_1.jpg',
+            extra: ''
+        }, function(ret, err) {
+            if (ret.status == 'prepare')
+                api.toast({ msg: JSON.stringify(ret.result.message) });
+            else if (ret.status == 'progress')
+                api.toast({ msg: ret.result.progress });
+            else if (ret.status == 'success')
+                api.toast({ msg: ret.result.message.messageId });
+            else if (ret.status == 'error')
+                api.toast({ msg: err.code });
+        });
+    }
     function updatePage() {
         nickname = api.pageParam.nickname;
         var sourcePath = "widget://image/chatPage/emotion"; //表情存放目录
@@ -740,11 +782,11 @@
                         normalImg: 'widget://image/chatPage/camera1.png',
                         activeImg: 'widget://image/chatPage/camera2.png'
                     }
-                    // , {
-                    //     title: '位置',
-                    //     normalImg: 'widget://image/chatPage/loc1.png',
-                    //     activeImg: 'widget://image/chatPage/loc2.png'
-                    // }
+                    , {
+                        title: '位置',
+                        normalImg: 'widget://image/chatPage/loc1.png',
+                        activeImg: 'widget://image/chatPage/loc2.png'
+                    }
                 ]
             }
         }, function(ret, err) {
@@ -770,7 +812,12 @@
                         openPicture('camera');
                     } else if (ret.index === 2) {
                         // 发送位置
-
+                        api.openWin({
+                            name: 'winnmap_winame',
+                            url: '../me/demo/map_win.html',
+                            bounces: false,
+                            pageParam: {key : 'value'}
+                        });
                     }
                 }
             } else {

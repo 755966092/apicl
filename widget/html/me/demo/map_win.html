@@ -14,7 +14,10 @@
         <div class="head">
             <span class="callback"   tapmode   onclick="api.closeWin()">返回</span>
             <span class="winTitle">供订单</span>
-            <span class="rightBtn" tapmode onclick="openSearchPage()">搜索</span>   
+            <span class="rightBtn" >
+                <span tapmode onclick="openSearchPage()">搜索</span>    
+                <span tapmode onclick="sendPosition()">发送</span>    
+            </span>   
         </div>
     </header>
    
@@ -22,6 +25,7 @@
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
 <script type="text/javascript">
+    var positionObj = {};
     apiready = function(){
         fnInit();
         api.openFrame({
@@ -38,6 +42,11 @@
             },
             bounces: false
         });
+        api.addEventListener({
+            name: 'selectPosition'
+        }, function(ret, err){
+            positionObj = ret.value;
+        });
     }
     function openSearchPage() {
         api.openWin({
@@ -45,6 +54,14 @@
             url: './map_frame_search.html',
             bounces: false
         });
+    }
+    function sendPosition() {
+        console.log(JSON.stringify(positionObj))
+        api.sendEvent({
+            name: 'sendPosition',
+            extra: {positionObj: positionObj}
+        });
+        api.closeWin();
     }
         
 </script>
