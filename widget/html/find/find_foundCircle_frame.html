@@ -77,6 +77,9 @@
             background-position: .36rem;
             padding-left: 0.78rem;
         }
+        .hide {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -173,12 +176,14 @@
             if (ret.buttonIndex === 1) {
                 // 免费
                 $api.text($api.byId('priceSetting'),'免费');
-                $api.removeAttr($api.byId('priceBtn'), 'onclick');
+//                $api.removeAttr($api.byId('priceBtn'), 'onclick');
+//                $api.css($api.byId('priceBtn'), 'display: none');
+                $api.addCls($api.byId('priceBtn'), 'hide');
             } else if (ret.buttonIndex === 2) {
                 // 收费
                 $api.text($api.byId('priceSetting'),'收费');
-                $api.attr($api.byId('priceBtn'), 'onclick', 'openPage(2)');
-
+//                $api.attr($api.byId('priceBtn'), 'onclick', 'openPage(2)');
+                $api.removeCls($api.byId('priceBtn'), 'hide');
             }else {
                 //
             }
