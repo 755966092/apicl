@@ -687,22 +687,20 @@
             } else {
                 ret.data.list[i].unit = _dataSource[ret.data.list[i].unit - 1]
             }
-//            db.selectSql({
-//                name: 'db_' + $api.getStorage('userToken'),
-//                sql: 'SELECT * FROM addressList_simplify WHERE user_id = ' + ret.data.list[i].user_id
-//            }, function(retSql, err) {
-//                if (retSql.status) {
-//                    // 如果有备注返回备注
-//                    if (retSql.data.length == 1) {
-////                        console.log(JSON.stringify((i)))
-//                        ret.data.list[i].company_name = retSql.data[0].subTitle;
-//                        ret.data.list[i].head_img_url = retSql.data[0].img;
-//                        ret.data.list[i].nickname = retSql.data[0].title;
-//                    }
-//                } else {
-//                    alert('292' + JSON.stringify(err));
-//                }
-//            });
+            var retSql = db.selectSqlSync({
+                name: 'db_' + $api.getStorage('userToken'),
+                sql: 'SELECT * FROM addressList_simplify WHERE user_id = ' + ret.data.list[i].user_id
+            });
+            if (retSql.status) {
+                // 如果有备注返回备注
+                if (retSql.data.length == 1) {
+                    ret.data.list[i].company_name = retSql.data[0].subTitle;
+                    ret.data.list[i].head_img_url = retSql.data[0].img;
+                    ret.data.list[i].nickname = retSql.data[0].title;
+                }
+            } else {
+                alert('292' + JSON.stringify(err));
+            }
         }
         for (var i = 0; i < ret.data.list.length; i++) {
             dataList.push(ret.data.list[i])
