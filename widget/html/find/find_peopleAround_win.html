@@ -69,62 +69,7 @@
             }
         });
     }
-    // 附近的人注册位置信息
-    function LocationRegisterLocation() {
-        var lat,lon,address;
-        bMap.getLocation({
-            accuracy: '10m',//10m/100m/1km/3km
-            autoStop: true,
-            filter: 1
-        }, function(ret, err){
-            if(ret.status){
-                // alert(JSON.stringify(ret));
-                lon = ret.lon;
-                lat = ret.lat;
-                bMap.getNameFromCoords({
-                    lon: lon,
-                    lat: lat
-                },function(ret,err){
-                    if(ret.status){
-                        // alert(JSON.stringify(ret));
-                        address = ret.address;
-                        if ($api.getStorage('LocationRegisterLocation')) {
-                            openF(lat,lon);
-                        } else {
-                            // 未注册过
-                            api.ajax({
-                                url: apiSite + '/location/registerLocation',
-                                method: 'post',
-                                headers: apiHeader,
-                                data: {
-                                    values: {
-                                        token: $api.getStorage('userToken'),
-                                        latitude: lat,
-                                        longitude: lon,
-                                        address: address
-                                    }
-                                }
-                            }, function(ret, err) {
-                                if(ret) {
-                                    if (ret.code === 200) {
-                                        console.log('注册成功')
-                                        $api.setStorage('LocationRegisterLocation', 'true');
-                                        openF(lat,lon);
-                                    } else {
-                                        alert(ret.msg)
-                                    }
-                                } else {
-                                    alert(JSON.stringify(err))
-                                }
-                            })
-                        }
-                    }
-                });
-            }else{
-                alert(err.code);
-            }
-        });
-    }
+
     function openF(lat,lon) {
         api.openFrame({
             name: 'find_peopleAround_frame',

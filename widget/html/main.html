@@ -233,10 +233,9 @@
         footerH = $api.offset($api.byId('footer')).h;
         fnInit();
 
-        // 创建缓存目录
-
-        // 获取传递参数
         moduleInit();
+        // 注册附近的人
+        LocationRegisterLocation();
         $api.fixStatusBar($api.dom('header'));
         api.setStatusBarStyle({
             style: 'light',
@@ -875,5 +874,58 @@
             }
         });
 
+    }
+    // 附近的人注册位置信息
+    function LocationRegisterLocation() {
+        var lat,lon,address;
+        bMap.getLocation({
+            accuracy: '10m',//10m/100m/1km/3km
+            autoStop: true,
+            filter: 1
+        }, function(ret, err){
+            if(ret.status){
+                // alert(JSON.stringify(ret));
+                lon = ret.lon;
+                lat = ret.lat;
+                bMap.getNameFromCoords({
+                    lon: lon,
+                    lat: lat
+                },function(ret,err){
+                    if(ret.status){
+                        // alert(JSON.stringify(ret));
+                        address = ret.address;
+                        if ($api.getStorage('LocationRegisterLocation')) {
+                        } else {
+                            // 未注册过
+                            api.ajax({
+                                url: apiSite + '/location/registerLocation',
+                                method: 'post',
+                                headers: apiHeader,
+                                data: {
+                                    values: {
+                                        token: $api.getStorage('userToken'),
+                                        latitude: lat,
+                                        longitude: lon,
+                                        address: address
+                                    }
+                                }
+                            }, function(ret, err) {
+                                if(ret) {
+                                    if (ret.code === 200) {
+                                        $api.setStorage('LocationRegisterLocation', 'true');
+                                    } else {
+                                        alert(ret.msg)
+                                    }
+                                } else {
+                                    alert(err.msg)
+                                }
+                            })
+                        }
+                    }
+                });
+            }else{
+                alert(err.code);
+            }
+        });
     }
 </script>
