@@ -29,7 +29,6 @@
             <span class="rightBtn"   tapmode   onclick="openFiltrare()"></span>
         </div>
     </header>
-    <div class="loading"></div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -38,13 +37,11 @@
     apiready = function(){
         fnInit();
         moduleInit();
-        $api.css($api.dom('.loading'), 'display: block');
         LocationRegisterLocation();
         eventMonitoring('ScreeningIsComplete');
         api.addEventListener({
             name: 'hideLoading'
         }, function(ret, err){
-            $api.css($api.dom('.loading'), 'display: none');
         });
 
     };
@@ -69,7 +66,20 @@
             }
         });
     }
-
+    function LocationRegisterLocation() {
+        var lat,lon,address;
+        bMap.getLocation({
+            accuracy: '10m',//10m/100m/1km/3km
+            autoStop: true,
+            filter: 1
+        }, function(ret, err){
+            if(ret.status){
+                // alert(JSON.stringify(ret));
+               
+                openF(ret.lat,ret.lon)
+            }
+        })
+    }
     function openF(lat,lon) {
         api.openFrame({
             name: 'find_peopleAround_frame',
