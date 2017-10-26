@@ -110,6 +110,18 @@
         },function(ret,err){
            if (ret.status) {
             //    api.alert({msg:'执行SQL成功'});
+            db.executeSql({
+                name: 'db_'+$api.getStorage('userToken'),
+                sql: 'CREATE TABLE IF NOT EXISTS db_second_contactst_table2(user_id int PRIMARY KEY NOT NULL, nickname varchar(255), remark_nickname varchar(255), head_img_url varchar(255), remark_head_img_url varchar(255), type int, status int)'
+                // type 几度人脉
+                // status 是否加入我在
+                },function(ret,err){
+                if (ret.status) {
+                    //    api.alert({msg:'执行SQL成功'});
+                }else {
+                    api.alert({msg:err.msg});
+                }
+            });
            }else {
                api.alert({msg:err.msg});
            }

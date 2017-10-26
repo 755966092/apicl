@@ -128,10 +128,13 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    var selVal = 0, selectedObj, pageNum = 0, dataArr = [],webFlag = 1;
+    var selVal = 0, selectedObj, pageNum = 0, dataArr = [],webFlag = 1, tableName,tableName2;
     apiready = function () {
         moduleInit();
         // requireData(api.pageParam.flag)
+        // 切换表格
+        switchTable();
+        // 初始化页面
         initPage();
         scrollToBottom();
         api.addEventListener({
@@ -156,16 +159,17 @@
             name: 'scrolltobottom'
         }, function (ret, err) {
             if (webFlag == 1) {
-                // initPage();
+                initPage();
                 webFlag = 0;
-                requireData(api.pageParam.flag)
+                // requireData(api.pageParam.flag)
             } else {
-                requireData(api.pageParam.flag)
+                // requireData(api.pageParam.flag)
             }
         });
     }
     // 网络获取数据
     function requireData(classify) {
+        console.log('web获取')
         var url;
         if (classify === 1) {
             url = '/contact/levelTwoAvailable';
@@ -280,21 +284,49 @@
             searchSQL();
         }
     }
+    function switchTable() {
+          // 两个数据库表格交替使用
+        // db_second_contactst_table   db_second_contactst_table2
+        // 第一次进来先使用db_second_contactst_table, 做缓存字段db_second_contactst_table, 清空db_second_contactst_table2的数据
+        // 下次进来如果有db_second_contactst_table缓存字段, 使用db_second_contactst_table2这个表格, 删除db_second_contactst_table缓存字段, 清空db_second_contactst_table2的数据
+        
+        if ($api.getStorage('db_second_contactst_table')) {
+            console.log('使用第一标')
+            // 有缓存字段, 使用db_second_contactst_table2表格
+            tableName = 'db_second_contactst_table2';
+            // 往db_second_contactst_table里存储数据
+            tableName2 = 'db_second_contactst_table';
+            // 删除缓存字段
+            $api.rmStorage('db_second_contactst_table');
+            // 删除表中事件
+            deleteTable(tableName2)
+        } else {
+            console.log('使用第二标')
+             // 无缓存字段, 使用db_second_contactst_table表格
+             tableName = 'db_second_contactst_table';
+            // 往db_second_contactst_table里存储数据
+            tableName2 = 'db_second_contactst_table2'
+            // 做缓存字段
+            $api.setStorage('db_second_contactst_table', 'true');
+            deleteTable(tableName2)
+        }
+    }
     function initPage() {
         // api.pageParam.flag == 1; 二度好友
         // api.pageParam.flag == 1; 二度未加入
-        if (api.pageParam.flag == 1) {
+      
+        if (api.pageParam.flag == 1) { 
             $api.setStorage('Once-the-network-cache-tag', 'true');
-            selectSQL = 'SELECT * FROM db_second_contactst_table WHERE status = 1 AND type=2 LIMIT '+ (pageNum * 15 - 1) +',15';
+            selectSQL = 'SELECT * FROM '+ tableName +' WHERE status = 1 AND type=2 LIMIT '+ (pageNum * 15 - 1) +',15';
         } else if (api.pageParam.flag == 2) {
             $api.setStorage('second-degree-population-cache', 'true');
-            selectSQL = 'SELECT * FROM db_second_contactst_table WHERE status = 2 AND type=2 LIMIT '+ (pageNum * 15 - 1) +',15';
+            selectSQL = 'SELECT * FROM '+ tableName +' WHERE status = 2 AND type=2 LIMIT '+ (pageNum * 15 - 1) +',15';
         } else {
 
             if ($api.getStorage('Once-the-network-cache-tag') && $api.getStorage('second-degree-population-cache')) {
-                selectSQL = 'SELECT * FROM db_second_contactst_table WHERE type=2 LIMIT '+ (pageNum * 15 - 1) +',15';
+                selectSQL = 'SELECT * FROM '+ tableName +' WHERE type=2 LIMIT '+ (pageNum * 15 - 1) +',15';
             } else {
-                selectSQL = 'SELECT * FROM db_second_contactst_table WHERE type=200 LIMIT '+ (pageNum * 15 - 1) +',15';
+                selectSQL = 'SELECT * FROM '+ tableName +' WHERE type=200 LIMIT '+ (pageNum * 15 - 1) +',15';
                 $api.setStorage('Once-the-network-cache-tag', 'true');
                 $api.setStorage('second-degree-population-cache', 'true');
             }
@@ -304,12 +336,13 @@
             sql: selectSQL
         }, function (ret, err) {
             if (ret.status) {
-                pageNum++;
+                // pageNum++;
+                console.log(pageNum)
                 if (ret.data.length > 0) {
                     dataArr = dataArr.concat(ret.data);
                     getData(dataArr);
                     $api.css($api.dom('.loading'), 'display: none');
-                    // requireData(api.pageParam.flag)
+                    requireData(api.pageParam.flag)
                 } else {
                     if(webFlag == 1) {
                         requireData(api.pageParam.flag)
@@ -325,6 +358,20 @@
         //     }
         //     webFlag = 0;
     }
+    // 清空数据库表格
+
+    function deleteTable(tabName) {
+        db.executeSql({
+            name: 'db_'+$api.getStorage('userToken'),
+            sql: 'DELETE FROM ' + tabName + " WHERE type = 2"
+        },function(ret,err){
+            if (ret.status) {
+                // api.alert({msg:'执行SQL成功'});
+            }else {
+                api.alert({msg:err.msg});
+            }
+        });
+    }
     // 表中插入数据
     function insertData(data, status) {
         // db.executeSql({
@@ -338,7 +385,7 @@
         //     }
         // });
         if (data.length > 0) {
-            var SQL = 'INSERT OR REPLACE INTO db_second_contactst_table(user_id, nickname, remark_nickname, head_img_url, remark_head_img_url, type, status) VALUES '
+            var SQL = 'INSERT OR REPLACE INTO '+ tableName2 +'(user_id, nickname, remark_nickname, head_img_url, remark_head_img_url, type, status) VALUES '
             for (var i = 0; i < data.length; i++) {
                 var element = data[i];
                 SQL += '(' + element.user_id + ',"' + element.nickname + '","' + (element.remark_nickname == null ? '' : element.remark_nickname) + '","' + element.head_img_url + '","' + (element.remark_head_img_url == null ? '' : element.remark_head_img_url) + '",2,' + (status || 0) + '),'
@@ -349,6 +396,7 @@
                 sql: SQL
             }, function (ret, err) {
                 if (ret.status) {
+                    console.log('存储数据成功')
                 } else {
                     api.alert({ msg: err.msg });
                 }

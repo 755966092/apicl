@@ -154,6 +154,8 @@
    }
     // 新建表格存二度三度人脉
     function secondContactsTable() {
+        // 第一张表格
+        // 两张表格交替使用
        db.executeSql({
            name: 'db_'+$api.getStorage('userToken'),
            sql: 'CREATE TABLE IF NOT EXISTS db_second_contactst_table(user_id int PRIMARY KEY NOT NULL, nickname varchar(255), remark_nickname varchar(255), head_img_url varchar(255), remark_head_img_url varchar(255), type int, status int)'   
@@ -161,6 +163,22 @@
            // status 是否加入我在
         },function(ret,err){
            if (ret.status) {
+            db.executeSql({
+                name: 'db_'+$api.getStorage('userToken'),
+                sql: 'CREATE TABLE IF NOT EXISTS db_second_contactst_table2(user_id int PRIMARY KEY NOT NULL, nickname varchar(255), remark_nickname varchar(255), head_img_url varchar(255), remark_head_img_url varchar(255), type int, status int)'   
+                // type 几度人脉
+                // status 是否加入我在
+                },function(ret,err){
+                if (ret.status) {
+                    
+                }else {
+                    api.toast({
+                        msg: '数据库异常',
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                }
+            });
            }else {
                api.toast({
                    msg: '数据库异常',
