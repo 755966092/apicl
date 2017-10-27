@@ -132,19 +132,22 @@
 
     // 新建数据库表格
     function createSqlTable() {
-        //     db.executeSql({
-        //          name: SQLName,
-        //          sql: 'DROP TABLE tb_chat_'+ api.pageParam.userId
-        //      }, function(ret, err){
-        //          if( ret.status ){
-        //              alert('1'+ JSON.stringify( ret ) );
-        //          }else{
-        //              alert( JSON.stringify( err ) );
-        //          }
-        //      });
+        // if ($api.getStorage('tb_chat_chat_record')) {
+        if (1) {
+            db.executeSql({
+                 name: SQLName,
+                 sql: 'DROP TABLE tb_chat_'+ api.pageParam.userId
+             }, function(ret, err){
+                 if( ret.status ){
+                     $api.setStorage('tb_chat_chat_record', 'true');
+                 }else{
+                     alert( JSON.stringify( err ) );
+                 }
+             });
+        }
         db.executeSql({
             name: 'db_' + $api.getStorage('userToken'),
-            sql: 'CREATE TABLE IF NOT EXISTS tb_chat_' + api.pageParam.userId + '(messageId int PRIMARY KEY NOT NULL, receivedTime char(13), user_id int DEFAULT ' + api.pageParam.userId + ', objectName varchar(255), messageDirection varchar(255), content_extra varchar(255), content_text text, head_img_url varchar(255), filePath varchar(255), duration varchar(255), thumbPath varchar(255))'
+            sql: 'CREATE TABLE IF NOT EXISTS tb_chat_' + api.pageParam.userId + '(messageId int PRIMARY KEY NOT NULL, receivedTime char(13), user_id int DEFAULT ' + api.pageParam.userId + ', objectName varchar(255), messageDirection varchar(255), content_extra varchar(255), content_text text,content_lat float default 0, content_lon float default 0, content_imagePath varchar(255), head_img_url varchar(255), filePath varchar(255), duration varchar(255), thumbPath varchar(255))'
         }, function(ret, err) {
             if (ret.status) {
                 // alert( JSON.stringify( ret ) );

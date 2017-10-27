@@ -212,7 +212,6 @@
 
 
 
-
         <ul class="resultList"></ul>
         <script type="text/x-dot-template" id="listT">
             {{?it.length > 0}}
@@ -247,6 +246,7 @@
                             <span class="del" data-targetId="{{=it[i].targetId}}" tapmode onclick="delNesItem(this,0);event.stopPropagation()">删除</span>
                         </span>
                     </li>
+                    <img src="/var/mobile/Containers/Data/Application/556D8ADB-E1B3-4AE6-87DE-39C46F90CB3A/Documents/da39a3ee5e6b4b0d3255bfef95601890afd80709">
                 {{ }; }}
             {{??}}
                 <!-- <p class="noNews">暂无消息</p> -->
@@ -630,9 +630,11 @@
                     if (data[i].objectName == 'RC:VcMsg') {
                         // 语音消息
                         data[i].latestMessage_text = '[语音]'
-                    } else if (data[i].objectName == 'RC:ImgMsg')
-                        data[i].latestMessage_text = '[图片]'
-
+                    } else if (data[i].objectName == 'RC:ImgMsg'){
+                            data[i].latestMessage_text = '[图片]'
+                    } else if (data[i].objectName == 'RC:LBSMsg'){
+                            data[i].latestMessage_text = '[位置]'
+                    } 
                     if (data[i].latestMessage.extra) {
                         if ($api.strToJson(data[i].latestMessage.extra).type === 4) {
                             if ($api.getStorage(data[i].latestMessage.extra) == 'value') {

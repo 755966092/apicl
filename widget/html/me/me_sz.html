@@ -159,15 +159,21 @@
         // setTimeout(function() {
         //     api.hideProgress();
         // }, 2000);
+        // 打开地图
+        // api.openWin({
+        //     name: 'winname',
+        //     url: './demo/map_win.html',
+        //     bounces: false,
+        //     pageParam: {
+        //         key: 'value'
+        //     }
+        // });
         api.openWin({
             name: 'winname',
-            url: './demo/map_win.html',
+            url: '../me/demo/contactDemo.html',
             bounces: false,
-            pageParam: {
-                key: 'value'
-            }
+            pageParam: {key : 'value'}
         });
-
         // api.openWin({
         //     name: 'winnkeyPsdame',
         //     url: './demo/keyPsd.html',
@@ -309,6 +315,7 @@
 
     }
     // 更新通讯录
+    var tt1,tt2
     function updateAddressList() {
 
         $api.css($api.dom('.loading'), 'display: block');
@@ -343,6 +350,7 @@
     }
 
     function queryContactByPage(page) {
+        tt1 = new Date().getTime();
         if ("undefined" == typeof page) {
             var page = 0;
         }
@@ -353,6 +361,8 @@
         }, function(ret, err) {
             //  api.alert({msg:'获取成功'+page});
             console.log(JSON.stringify(ret));
+            tt2 = new Date().getTime();
+            console.log('获取用时:'+(tt2-tt1)/1000)
             console.log('获取成功' + JSON.stringify(ret.contacts.length))
             $api.css($api.dom('.loading'), 'display: none');
             if (page < (ret.pages - 1)) {
@@ -387,7 +397,7 @@
                                     sql: 'DELETE FROM addressList_simplify'
                                 }, function(retDataList, err) {
                                     if (retDataList.status) {
-                                        contactUpdate(retContacts);
+                                        // contactUpdate(retContacts);
                                     } else {
                                         api.alert({
                                             msg: err.msg

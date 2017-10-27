@@ -22,7 +22,7 @@
 <script type="text/javascript">
     apiready = function () {
 
-        initPage();
+        getContact();
     }
 
     function initPage() {
@@ -43,18 +43,60 @@
             }
         })
     }
-
-    function openList(dataList) {
-        var listContact = api.require('listContact');
-        listContact.open({
-            h: api.frameHeight,
-            data: dataList,
-            fixedOn: api.frameName
-        }, function (ret, err) {
-            if (ret) {
-                alert(JSON.stringify(ret));
+    var t1,t2,t3,t4;
+    function getContact() {
+        t1 = new Date().getTime();
+        api.ajax({
+            url: apiSite + '/contact/getBossContact',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: $api.getStorage('userToken'),
+                }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    t2 = new Date().getTime();
+                    console.log('请求数据用时:'+(t2-t1)/1000)
+                    var dataContact=[];
+                    console.log(ret.data.unavailable_list.length)
+                    for (var i = 0; i < ret.data.unavailable_list.length; i++) {
+                        var element = ret.data.unavailable_list[i];
+                        dataContact.push({
+                            imgPath : 'widget://image/tx_1.jpg',
+                            title : element.nickname,
+                            subTitle : '副标题'
+                        })
+                    }
+                    t3 = new Date().getTime();
+                    console.log('处理数据用时:'+(t3-t1)/1000)
+                    openList(dataContact)
+                } else {
+                    alert(ret.msg)
+                }
             } else {
-                alert(JSON.stringify(err));
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+    function openList(dataList) {
+        var UIListContactsPlus = api.require('UIListContactsPlus');
+        UIListContactsPlus.open({
+            rect: {
+                x: 0,
+                y: 44,
+                w: api.frameWidth,
+                h: api.frameHeight - 104
+            },
+            contacts: dataList,
+            fixedOn: api.frameName
+        }, function (ret) {
+            if (ret) {
+                t4 = new Date().getTime();
+                console.log('打开用时:'+(t4-t3)/1000)
+                alert(JSON.stringify(ret));
             }
         });
     }
