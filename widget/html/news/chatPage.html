@@ -132,16 +132,17 @@
 
     // 新建数据库表格
     function createSqlTable() {
-        // if ($api.getStorage('tb_chat_chat_record')) {
-        if (1) {
+        if (!$api.getStorage('tb_chat_chat_record'+ api.pageParam.userId)) {
+        // if (1) {
             db.executeSql({
                  name: SQLName,
                  sql: 'DROP TABLE tb_chat_'+ api.pageParam.userId
              }, function(ret, err){
                  if( ret.status ){
-                     $api.setStorage('tb_chat_chat_record', 'true');
-                 }else{
-                     alert( JSON.stringify( err ) );
+                        $api.setStorage('tb_chat_chat_record'+ api.pageParam.userId, 'true');
+                    }else{
+                        $api.setStorage('tb_chat_chat_record'+ api.pageParam.userId, 'true');
+                    //  alert( JSON.stringify( err ) );
                  }
              });
         }

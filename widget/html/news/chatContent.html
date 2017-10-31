@@ -534,22 +534,7 @@
         var time = new Date(msg.result.message.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(
             msg.result.message.sentTime).toLocaleTimeString() : new Date(msg.result.message.sentTime).toLocaleString();
         var positionCount = msg.result.message.content.poi.indexOf(',');
-        var str = `<div class="oneself clearfix" data-lat="` + msg.result.message.content.lat + ` data-lon="` + msg.result
-            .message.content.lon + `" >
-                        <div class="time">` + time +
-            `</div>
-                        <img class="fr oneselfImg" src="` + headImg +
-            `">
-                        <p class="positionNews fr flex-def flex-zTopBottom" >
-                            <span class="posName">` +
-            msg.result.message.content.poi.substring(0, positionCount) +
-            `</span> 
-                            <span class="posiDes">` + msg.result.message.content.poi.substring(
-                positionCount + 1) + `</span> 
-                            <img src="` + msg.result.message.content.imagePath +
-            `" alt="1111">
-                        </p>
-                    </div>`;
+        var str = '<div class="oneself clearfix" data-lat="' + msg.result.message.content.lat + ' data-lon="' + msg.result.message.content.lon + '" ><div class="time">' + time +'</div><img class="fr oneselfImg" src="' + headImg +'"><p class="positionNews fr flex-def flex-zTopBottom" ><span class="posName">' + msg.result.message.content.poi.substring(0, positionCount) + '</span><span class="posiDes">' + msg.result.message.content.poi.substring(positionCount + 1) + '</span> <img src="' + msg.result.message.content.imagePath +'" alt="1111"></p></div>';
         $api.append($api.dom('.main'), str);
         slideBut();
     }
@@ -560,21 +545,7 @@
             new Date(msg.msgContent.result.message.receivedTime).toLocaleTimeString() : new Date(msg.msgContent.result.message
                 .receivedTime).toLocaleString();
         var positionCount = msg.msgContent.result.message.content.poi.indexOf(',');
-        var str = `<div class="other clearfix">
-                        <div class="time">` + time +
-            `</div>
-                        <img class="fl otherImg" src="` + youHeadImg +
-            `">
-                        <p class="positionNews fl flex-def flex-zTopBottom" >
-                            <span class="posName">` +
-            msg.msgContent.result.message.content.poi.substring(0, positionCount) +
-            `</span> 
-                            <span class="posiDes">` + msg.msgContent.result.message.content.poi.substring(
-                positionCount + 1) + `</span> 
-                            <img src="` + msg.msgContent.result.message.content
-            .imagePath + `" alt="">
-                        </p>
-                    </div>`;
+        var str = '<div class="other clearfix"><div class="time">' + time +'</div><img class="fl otherImg" src="' + youHeadImg +'"><p class="positionNews fl flex-def flex-zTopBottom" ><span class="posName">' + msg.msgContent.result.message.content.poi.substring(0, positionCount) +'</span> <span class="posiDes">' + msg.msgContent.result.message.content.poi.substring(positionCount + 1) + '</span> <img src="' + msg.msgContent.result.message.content.imagePath + '" alt=""></p></div>';
         $api.append($api.dom('.main'), str);
         slideBut();
     }
@@ -585,45 +556,21 @@
         var positionCount;
         var str;
         if (flag == "sql") {
+            console.log(JSON.stringify(msg))
             positionCount = msg.content_text.indexOf(',');
-            time = new Date(msg.receivedTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.receivedTime)
-                .toLocaleTimeString() : new Date(msg.receivedTime).toLocaleString();
-            str = `<div class="oneself clearfix" data-lat="` + msg.content_lat + ` data-lon="` + msg.content_lon +
-                `" >
-                        <div class="time">` + time +
-                `</div>
-                        <img class="fr oneselfImg" src="` + headImg +
-                `">
-                        <p class="positionNews fr flex-def flex-zTopBottom" >
-                            <span class="posName">` +
-                msg.content_text.substring(0, positionCount) +
-                `</span> 
-                            <span class="posiDes">` + msg.content_text.substring(
-                    positionCount + 1) + `</span> 
-                            <img src="` + msg.content_imagePath +
-                `" alt="1111">
-                        </p>
-                    </div>`;
+            console.log(typeof msg.receivedTime)
+            console.log(new Date(parseInt(msg.receivedTime)))
+            time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString();
+            str = '<div class="oneself clearfix" data-lat="' + msg.content_lat + ' data-lon="' + msg.content_lon +
+                '" ><div class="time">' + time + '</div><img class="fr oneselfImg" src="' + headImg +
+                '"><p class="positionNews fr flex-def flex-zTopBottom" ><span class="posName">'+msg.content_text.substring(0, positionCount) +'</span> <span class="posiDes">' + msg.content_text.substring(positionCount + 1) + '</span> <img src="' + msg.content_imagePath +'" alt="1111"></p></div>';
         } else {
-            time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime)
-                .toLocaleTimeString() : new Date(msg.sentTime).toLocaleString();
+            time = new Date(parseInt(msg.sentTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.sentTime))
+                .toLocaleTimeString() : new Date(parseInt(msg.sentTime)).toLocaleString();
             positionCount = msg.content.poi.indexOf(',');
-            str = `<div class="oneself clearfix" data-lat="` + msg.content.lat + ` data-lon="` + msg.content.lon +
-                `" >
-                        <div class="time">` + time +
-                `</div>
-                        <img class="fr oneselfImg" src="` + headImg +
-                `">
-                        <p class="positionNews fr flex-def flex-zTopBottom" >
-                            <span class="posName">` +
-                msg.content.poi.substring(0, positionCount) +
-                `</span> 
-                            <span class="posiDes">` + msg.content.poi.substring(positionCount +
-                    1) + `</span> 
-                            <img src="` + msg.content.imagePath +
-                `" alt="1111">
-                        </p>
-                    </div>`;
+            str = '<div class="oneself clearfix" data-lat="' + msg.content.lat + ' data-lon="' + msg.content.lon +'" ><div class="time">' + time +
+                '</div><img class="fr oneselfImg" src="' + headImg +'"><p class="positionNews fr flex-def flex-zTopBottom" ><span class="posName">' +
+                msg.content.poi.substring(0, positionCount) +'</span> <span class="posiDes">' + msg.content.poi.substring(positionCount +1) + '</span><img src="' + msg.content.imagePath +'" alt="1111"></p>x</div>';
         }
         $api.append($api.dom('.main'), str);
         slideBut();
@@ -635,44 +582,16 @@
         var positionCount;
         var str;
         if (flag == 'sql') {
-            console.log(JSON.stringify(msg))
+            
             positionCount = msg.content_text.indexOf(',');
-            time = new Date(msg.receivedTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.receivedTime)
-                .toLocaleTimeString() : new Date(msg.receivedTime).toLocaleString();
-            str = `<div class="other clearfix">
-                        <div class="time">` + time +
-                `</div>
-                        <img class="fl otherImg" src="` + youHeadImg +
-                `">
-                        <p class="positionNews fl flex-def flex-zTopBottom" >
-                            <span class="posName">` +
-                msg.conten_text.substring(0, positionCount) +
-                `</span> 
-                            <span class="posiDes">` + msg.conten_text.substring(positionCount +
-                    1) + `</span> 
-                            <img src="` + msg.conten_imagePath +
-                `" alt="">
-                        </p>
-                    </div>`;
+            time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime))
+                .toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString();
+            str = '<div class="other clearfix"><div class="time">' + time +'</div><img class="fl otherImg" src="' + youHeadImg +'"><p class="positionNews fl flex-def flex-zTopBottom" ><span class="posName">' +msg.conten_text.substring(0, positionCount) +'</span> <span class="posiDes">'+msg.conten_text.substring(positionCount +1) + '</span><img src="' + msg.conten_imagePath +'" alt=""></p></div>';
         } else {
-            time = new Date(msg.receivedTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.receivedTime)
-                .toLocaleTimeString() : new Date(msg.receivedTime).toLocaleString();
+            time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime))
+                .toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString();
             positionCount = msg.content.poi.indexOf(',');
-            str = `<div class="other clearfix">
-                        <div class="time">` + time +
-                `</div>
-                        <img class="fl otherImg" src="` + youHeadImg +
-                `">
-                        <p class="positionNews fl flex-def flex-zTopBottom" >
-                            <span class="posName">` +
-                msg.content.poi.substring(0, positionCount) +
-                `</span> 
-                            <span class="posiDes">` + msg.content.poi.substring(positionCount +
-                    1) + `</span> 
-                            <img src="` + msg.content.imagePath +
-                `" alt="">
-                        </p>
-                    </div>`;
+            str = '<div class="other clearfix"><div class="time">' + time +'</div><img class="fl otherImg" src="' + youHeadImg +'"><p class="positionNews fl flex-def flex-zTopBottom" ><span class="posName">' +msg.content.poi.substring(0, positionCount) +'</span> <span class="posiDes">'+msg.content.poi.substring(positionCount +1) + '</span> <img src="' + msg.content.imagePath +'" alt=""></p></div>';
         }
         $api.append($api.dom('.main'), str);
         slideBut();
@@ -729,10 +648,10 @@
                     '",0,0,"","' + myHeadImg + '","' + params.result.message.content.imageUrl + '","","' + params.result
                     .message.content.thumbPath + '")'
             } else if (params.result.message.objectName == 'RC:LBSMsg') {
-                // console.log(JSON.stringify(params))
+                console.log(JSON.stringify(params))
                 SQL += '(' + params.result.message.messageId + ',"' + params.result.message.sentTime + '","' + params.result
                     .message.objectName + '","' + params.result.message.messageDirection + '","' + params.result.message
-                    .content.extra.replace(/"/g, '') + '","' + (params.result.message.content.text || '') + '",' +
+                    .content.extra.replace(/"/g, '') + '","' + (params.result.message.content.poi || '') + '",' +
                     params.result.message.content.latitude + ',' + params.result.message.content.longitude + ',"' +
                     params.result.message.content.imagePath + '","' + myHeadImg + '","' + params.result.message.content
                     .imageUrl + '","","' + params.result.message.content.thumbPath + '")'
@@ -762,6 +681,8 @@
                     .message.content.imageUrl + '","","' + params.msgContent.result.message.content.thumbPath + '")'
             } else if (params.msgContent.result.message.objectName == 'RC:LBSMsg') {
                 // 位置消息
+                
+                
                 SQL += '(' + params.msgContent.result.message.messageId + ',"' + params.msgContent.result.message.receivedTime +
                     '","' + params.msgContent.result.message.objectName + '","' + params.msgContent.result.message.messageDirection +
                     '","' + params.msgContent.result.message.content.extra.replace(/"/g, '') + '","' + (params.msgContent
@@ -807,7 +728,7 @@
                             '","","' + element.content.thumbPath + '"),'
                     } else if (element.objectName === 'RC:LBSMsg') {
                         // 位置
-
+                        console.log(JSON.stringify(element))
                         SQL += '(' + element.messageId + ',"' + element.sentTime + '","' + element.objectName + '","' +
                             element.messageDirection + '","' + element.content.extra.replace(/"/g, '') + '","' + (
                                 element.content.text || '') + '",' + element.content.latitude + ',' + element.content.longitude +
@@ -856,7 +777,7 @@
     }
 
     function SQLStatement(SQL) {
-        // console.log(SQL)
+        console.log(SQL)
         db.executeSql({
             name: 'db_' + $api.getStorage('userToken'),
             sql: SQL
@@ -1549,8 +1470,8 @@
             // 历史消息
             // // 当天显示时间
             // 不是当天显示年月日 时分秒
-            var time = new Date(msg.receivedTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(
-                msg.receivedTime).toLocaleTimeString() : new Date(msg.receivedTime).toLocaleString()
+            var time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(
+                msg.receivedTime).toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString()
             $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
                 '</p><div data-msgId="' + msg.messageId +
                 '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
@@ -1563,8 +1484,8 @@
             // 历史消息
             // // 当天显示时间
             // 不是当天显示年月日 时分秒
-            var time = new Date(msg.receivedTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(
-                msg.receivedTime).toLocaleTimeString() : new Date(msg.receivedTime).toLocaleString()
+            var time = new Date(parseInt(msg.receivedTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(
+                msg.receivedTime).toLocaleTimeString() : new Date(parseInt(msg.receivedTime)).toLocaleString()
             $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
                 '</p><div data-msgId="' + msg.messageId +
                 '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
@@ -1590,8 +1511,8 @@
     function addSendImgMessages(msg, headImg, n) {
         if (n == 1) {
             // 历史消息
-            var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime)
-                .toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
+            var time = new Date(parseInt(msg.sentTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.sentTime))
+                .toLocaleTimeString() : new Date(parseInt(msg.sentTime)).toLocaleString()
             $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
                 '</p><div data-msgId="' + msg.messageId +
                 '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' +
@@ -1602,8 +1523,8 @@
             slideBut();
         } else if (n == 2) {
             // 历史消息
-            var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime)
-                .toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
+            var time = new Date(parseInt(msg.sentTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.sentTime))
+                .toLocaleTimeString() : new Date(parseInt(msg.sentTime)).toLocaleString()
             $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
                 '</p><div data-msgId="' + msg.messageId +
                 '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' +
@@ -1632,8 +1553,8 @@
             // 历史消息
             // // 当天显示时间
             // 不是当天显示年月日 时分秒
-            var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime)
-                .toLocaleTimeString() : new Date(msg.sentTime).toLocaleString();
+            var time = new Date(parseInt(msg.sentTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.sentTime))
+                .toLocaleTimeString() : new Date(parseInt(msg.sentTime)).toLocaleString();
             var widthNum = msg.content.duration;
             // widthNum = widthNum > 7 ? widthNum : 7;
             $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
@@ -1647,8 +1568,8 @@
                 msg.content.duration + '"</span></div>');
             slideBut();
         } else if (n == 2) {
-            var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime)
-                .toLocaleTimeString() : new Date(msg.sentTime).toLocaleString();
+            var time = new Date(parseInt(msg.sentTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.sentTime))
+                .toLocaleTimeString() : new Date(parseInt(msg.sentTime)).toLocaleString();
             var widthNum = msg.content.duration;
             // widthNum = widthNum > 7 ? widthNum : 7;
             $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
@@ -1683,8 +1604,8 @@
     function addSendVoiceMessages(msg, headImg, n) {
         if (n == 1) {
             // 历史消息
-            var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime)
-                .toLocaleTimeString() : new Date(msg.sentTime).toLocaleString();
+            var time = new Date(parseInt(msg.sentTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.sentTime))
+                .toLocaleTimeString() : new Date(parseInt(msg.sentTime)).toLocaleString();
             var widthNum = msg.content.duration;
             // widthNum = widthNum > 7 ? widthNum : 7;
             $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
@@ -1698,8 +1619,8 @@
                 msg.content.duration + '"</span></div>');
             slideBut();
         } else if (n == 2) {
-            var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime)
-                .toLocaleTimeString() : new Date(msg.sentTime).toLocaleString();
+            var time = new Date(parseInt(msg.sentTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.sentTime))
+                .toLocaleTimeString() : new Date(parseInt(msg.sentTime)).toLocaleString();
             var widthNum = msg.content.duration;
             // widthNum = widthNum > 7 ? widthNum : 7;
             $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
@@ -1802,8 +1723,8 @@
             // 历史消息
             // // 当天显示时间
             // 不是当天显示年月日 时分秒
-            var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime)
-                .toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
+            var time = new Date(parseInt(msg.sentTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.sentTime))
+                .toLocaleTimeString() : new Date(parseInt(msg.sentTime)).toLocaleString()
             $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
                 '</p><div data-msgId="' + msg.messageId +
                 '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
@@ -1825,8 +1746,8 @@
     function addSendMsg(msg, headImg, n) {
         if (n == 1) {
             // 历史消息
-            var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime)
-                .toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
+            var time = new Date(parseInt(msg.sentTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.sentTime))
+                .toLocaleTimeString() : new Date(parseInt(msg.sentTime)).toLocaleString()
             $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
                 '</p><div data-msgId="' + msg.messageId +
                 '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' +
@@ -1848,8 +1769,8 @@
     // 查看历史记录 往上面添加消息
     function addSendMsgTop(msg, headImg) {
         // // // console.log('历史消息1'+JSON.stringify(msg))
-        var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime)
-            .toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
+        var time = new Date(parseInt(msg.sentTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.sentTime))
+            .toLocaleTimeString() : new Date(parseInt(msg.sentTime)).toLocaleString()
         $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
             '</p><div data-msgId="' + msg.messageId + '" class="oneself clearfix"><img class="fr oneselfImg" src="' +
             headImg +
@@ -1860,8 +1781,8 @@
 
     function addReceMsgTop(msg, youHeadImg) {
         // // // console.log('历史消息2'+JSON.stringify(msg))
-        var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime)
-            .toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
+        var time = new Date(parseInt(msg.sentTime)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.sentTime))
+            .toLocaleTimeString() : new Date(parseInt(msg.sentTime)).toLocaleString()
         $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
             '</p><div data-msgId="' + msg.messageId +
             '" class="other clearfix"><img class="fl otherImg" tapmode onclick="openMemberInfo(this)" data-id="' +
