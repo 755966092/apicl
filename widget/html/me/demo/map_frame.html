@@ -26,11 +26,26 @@
             font-size: .24rem;
             color: #999;
         }
+        .select {
+            background: url(../../../image/icon_my/icon_wdq.png)no-repeat;
+            background-size: .3rem .3rem;
+            background-position: right center;
+        }
+        #currentPosi {
+            height: 0.8em;
+        }
     </style>
 </head>
 
 <body>
     <div class="main">
+        
+        <ul>
+            <li  class="select flex-def flex-cCenter" id="currentPosi" tapmode onclick="addLabel(this)">
+                <p class="name">  </p>
+                <!-- <p class="address"></p> -->
+            </li>
+        </ul>
         <ul class="resultList">
             <!-- <li>
                 <p class="name">{{=it[i].name}}</p>
@@ -38,12 +53,11 @@
             </li> -->
         </ul>
         <script type="text/x-dot-template" id="listT">
-            {{ for(var i = 0; i
-            < it.length; i++){ }} 
-            <li data-lat="{{=it[i].coord.lat}}" data-lon="{{=it[i].coord.lon}}" tapmode onclick="addLabel(this)">
-                <p class="name">{{=it[i].name}}</p>
-                <p class="address">{{=it[i].address}}</p>
-            </li>
+            {{ for(var i = 0; i < it.length; i++){ }} 
+                    <li data-address="{{=it[i].address}}" data-name="{{=it[i].name}}" data-lat="{{=it[i].coord.lat}}" data-lon="{{=it[i].coord.lon}}" tapmode onclick="addLabel(this)">
+                        <p class="name">{{=it[i].name}}</p>
+                        <p class="address">{{=it[i].address}}</p>
+                    </li>
             {{ } }}
         </script>
     </div>
@@ -52,7 +66,7 @@
 <script type="text/javascript" src="../../../script/common.js"></script>
 <script type="text/javascript" src="../../../script/doT.min.js"></script>
 <script type="text/javascript">
-    var lon,lat,dataArr=[];
+    var lon,lat,dataArr=[],viewChange = 1;
     apiready = function() {
         moduleInit();
         initMap();
@@ -85,9 +99,37 @@
         }, function(ret, err) {
             if (ret.status) {
                 nearHotSpotLocation(ret.lon, ret.lat)
-                openMap(ret.lon, ret.lat)
+                openMap(ret.lon, ret.lat);
+                getNameFromCoords(ret.lon, ret.lat);
             } else {
                 alert(err.code);
+            }
+        });
+    }
+    function getNameFromCoords(lon,lat) {
+        var dom = $api.dom('#currentPosi');
+        bMap.getNameFromCoords({
+            lon: lon,
+            lat: lat
+        }, function(ret, err) {
+            if (ret.status) {
+                console.log(JSON.stringify(ret));
+                $api.text($api.dom('#currentPosi .name'), ret.poiList[0].name);
+                $api.addCls(dom, 'select');
+                $api.attr(dom, 'data-lon', ret.poiList[0].coord.lon);
+                $api.attr(dom, 'data-lat', ret.poiList[0].coord.lat);
+                $api.attr(dom, 'data-name', ret.poiList[0].name);
+                $api.attr(dom, 'data-address', ret.poiList[0].address);
+                // $api.text($api.dom('#currentPosi .address'), ret.poiList[0].address);
+                api.sendEvent({
+                    name: 'selectPosition',
+                    extra: {
+                        lon: ret.poiList[0].coord.lon,
+                        lat: ret.poiList[0].coord.lat,
+                        name: ret.poiList[0].name,
+                        address: ret.poiList[0].address
+                    }
+                });
             }
         });
     }
@@ -126,7 +168,15 @@
                        });
                        lon = ret.lon;
                        lat = ret.lat;
-                        nearHotSpotLocation(lon, lat)
+                       if (viewChange) {
+                           // 点击列表地点, 重新设置地图中心, 不刷新列表
+                           // 手滑移动地图视图, 刷新列表数据
+                           // 仿微信
+                           nearHotSpotLocation(lon, lat);
+                           getNameFromCoords(lon, lat);
+                        } else {
+                            viewChange = 1;
+                        }
                     }
                 });
             }
@@ -140,7 +190,9 @@
         }, function(ret, err) {
             if (ret.status) {
                 dataArr = dataArr.concat(ret.poiList);
-                getData(ret.poiList)
+                // $api.text($api.dom('#currentPosi .name'), ret.poiList[0].name);
+                // $api.text($api.dom('#currentPosi .address'), ret.poiList[0].address);
+                getData(ret.poiList);
             }
         });
     }
@@ -163,10 +215,18 @@
     }
     // 添加标注
     function addLabel(ele) {
+        var liDom = $api.domAll('li');
+        for (var i = 0; i < liDom.length; i++) {
+            var element = liDom[i];
+            $api.removeCls(element, 'select');
+        }
+        $api.addCls(ele, 'select');
+
         var lon = $api.attr(ele, 'data-lon'),
             lat = $api.attr(ele, 'data-lat'),
-            name = $api.text($api.dom(ele, '.name')),
-            address = $api.text($api.dom(ele, '.address'));
+            name = $api.attr(ele, 'data-name'),
+            address = $api.attr(ele, 'data-address');
+        
         api.sendEvent({
             name: 'selectPosition',
             extra: {
@@ -195,6 +255,7 @@
                 draggable: true
             }, function(ret){
             });
+            viewChange = 0;
             bMap.setCenter({
                 coords: {
                     lon: $api.attr(ele, 'data-lon'),
