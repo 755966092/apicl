@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>通讯录</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css"/>
+    <style>
+        #name {
+            font-size: .4rem;
+
+        }
+        #address {
+            font-size: .24rem;
+            color: #999;
+        }
+        div {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 0 .36rem;
+            height: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="flex-def flex-zCenter flex-zTopBottom">
+        <p id="name"></p>
+        <p id="address"></p>
+    </div>
+    <script type="text/javascript" src="../../script/api.js"></script>
+    <script type="text/javascript" src="../../script/common.js"></script>
+    <script type="text/javascript">
+        apiready = function(){
+            moduleInit();
+            initMap();
+            $api.text($api.byId('name'), api.pageParam.obj.name);
+            $api.text($api.byId('address'), api.pageParam.obj.address);
+        }
+        function initMap() {
+            if (api.systemType === 'ios') {
+                map.initMapSDK(function(ret) {
+                    if (ret.status) {
+                        openbMap();
+                    }
+                });
+            } else {
+                openbMap();
+            }
+        }
+        // 打开百度地图
+        function openbMap() {
+            bMap.open({
+                rect: {
+                    x: 0,
+                    y: 0,
+                    w: api.frameWidth,
+                    h: api.frameHeight-100
+                },
+                center: {
+                    lon: api.pageParam.obj.lon,
+                    lat: api.pageParam.obj.lat
+                },
+                zoomLevel: 16,
+                showUserLocation: true,
+                fixedOn: api.frameName,
+                fixed: true
+            }, function(ret){
+                if(ret.status){
+                    addAnnotations(api.pageParam.obj.lat,api.pageParam.obj.lon)
+                }
+            });
+        }
+        // 添加图标
+        function addAnnotations(lat,lon) {
+            bMap.addAnnotations({
+               annotations: [{
+                   id: 1, lon: lon, lat: lat
+               }],
+               icon: 'widget://',
+               draggable: true
+           }, function(ret){
+               if(ret){
+               }
+           });
+        }
+    </script>
+</body>
+</html>
