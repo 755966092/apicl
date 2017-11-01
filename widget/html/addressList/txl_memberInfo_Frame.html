@@ -507,7 +507,7 @@
     var targetRongId;
     apiready = function() {
         $api.css($api.dom('.shadow'), 'height:' + $api.offset($api.dom('.main')).h + 'px;');
-        console.log(JSON.stringify(api.pageParam))
+        // console.log(JSON.stringify(api.pageParam))
         if (api.pageParam.userId == 0) {
             // 进入自己的详情页
             api.ajax({
@@ -521,10 +521,10 @@
                 }
             }, function(ret, err) {
                 if (ret) {
-                    // // // console.log('499:::'+JSON.stringify(ret))
+                    // // // // console.log('499:::'+JSON.stringify(ret))
                     api.pageParam.userId = ret.data.info.user_id;
                     moduleInit();
-                    console.log('540')
+                    // console.log('540')
                     initPage();
                     initStatus();
                 } else {
@@ -533,7 +533,7 @@
             })
         } else {
             moduleInit();
-            console.log('549')
+            // console.log('549')
             initPage();
             initStatus();
         }
@@ -544,7 +544,7 @@
             name: 'editUserInfo'
         }, function(ret, err) {
             if (ret) {
-                console.log('监听到事件')
+                // console.log('监听到事件')
                 initPage();
             } else {
                 alert(JSON.stringify(err));
@@ -600,7 +600,7 @@
                     // $api.text($api.byId('current_company'), $api.text($api.dom(ele, '.statusText')));
                     // $api.text($api.byId('current_company'), $api.text($api.dom(ele, '.statusText')));
                     // // alert(JSON.stringify(ret))
-                    // // // console.log('修改当前状态成功')
+                    // // // // console.log('修改当前状态成功')
                     // 更新数据库
                     updateStatusSql(status_id, ele)
                 } else {
@@ -624,7 +624,7 @@
                 }, function(ret, err) {
                     if (ret.status) {
                         // alert( JSON.stringify( ret ) );
-                        // // // console.log('更新成功')
+                        // // // // console.log('更新成功')
                         // initStatus();
                         // reviseText()
 
@@ -636,14 +636,14 @@
                 alert(JSON.stringify(err));
             }
         });
-        console.log($api.text($api.dom(ele, '.statusText')))
+        // console.log($api.text($api.dom(ele, '.statusText')))
             // 更新列表数据库
         db.executeSql({
             name: SQLName,
             sql: ' UPDATE addressList_simplify SET subTitle = "' + $api.text($api.dom(ele, '.statusText')) + '" WHERE user_id =' + api.pageParam.userId
         }, function(ret, err) {
             if (ret.status) {
-                console.log('执行成功')
+                // console.log('执行成功')
                 api.sendEvent({
                     name: 'editUserInfoUpdateList'
                 });
@@ -655,7 +655,7 @@
     }
     // 获取会员信息
     function requireData(flag, data) {
-        console.log('执行了')
+        // console.log('执行了')
         var current_company = $api.byId('current_company');
         var current_position = $api.byId('current_position');
         var current_degree = $api.byId('current_degree');
@@ -679,7 +679,7 @@
         }, function(ret, err) {
             if (ret) {
                 if (ret.code == 200) {
-                    console.log('获取线上备注信息:::' + JSON.stringify(ret))
+                    // console.log('获取线上备注信息:::' + JSON.stringify(ret))
                     api.ajax({
                         url: apiSite + '/user/detail',
                         method: 'post',
@@ -692,7 +692,7 @@
                         }
                     }, function(retDetail, errDetail) {
                         if (retDetail) {
-                            console.log('线上原始信息:::' + JSON.stringify(data))
+                            // console.log('线上原始信息:::' + JSON.stringify(data))
                             infoComparison(data, retDetail.data.info);
                             infoComparison2(ret.data.info, retDetail.data.info);
                             relationship_level_flag = retDetail.data.relationship_level;
@@ -764,10 +764,10 @@
 
                                 // 电话
                                 if (ret.data.info.current_contact) {
-                                    // // console.log('11111111')
+                                    // // // console.log('11111111')
                                     $api.text(phone, ret.data.info.current_contact);
                                 } else {
-                                    // // console.log('22222222')
+                                    // // // console.log('22222222')
                                     $api.text(phone, retDetail.data.info.current_contact);
                                 }
 
@@ -914,7 +914,7 @@
     }
 
     function infoComparison2(remarkInfo, obj) {
-        // // // console.log('网络信息'+JSON.stringify(obj))
+        // // // // console.log('网络信息'+JSON.stringify(obj))
         db.selectSql({
             name: 'db_' + $api.getStorage('userToken'),
             sql: 'SELECT * FROM addressList_simplify WHERE user_id = ' + api.pageParam.userId
@@ -923,12 +923,12 @@
                 // 网络信息 obj
                 // 备注信息 remarkInfo
                 // 本地信息 ret
-                // console.log('本地信息'+JSON.stringify( ret ) );
+                // // console.log('本地信息'+JSON.stringify( ret ) );
                 if (ret.data.length != 0) {
                     if (!remarkInfo.nickname) {
                         if (obj.nickname != ret.data[0].title) {
                             updateListSql('title', obj.nickname);
-                            // // console.log('nickname')
+                            // // // console.log('nickname')
                         }
                     }
                     if (!remarkInfo.head_img_url) {
@@ -940,13 +940,13 @@
                     if (!remarkInfo.current_company || !remarkInfo.current_position || !remarkInfo.current_degree) {
                         if ($api.trimAll(subTitle) != $api.trimAll(ret.data[0].subTitle)) {
                             updateListSql('subTitle', subTitle)
-                                // // console.log('subTitle' + subTitle)
+                                // // // console.log('subTitle' + subTitle)
                         }
                     }
                     if (!remarkInfo.current_contact) {
                         if (obj.current_contact != ret.data[0].current_contact) {
                             updateListSql('current_contact', obj.current_contact)
-                                // // console.log('current_contact')
+                                // // // console.log('current_contact')
                         }
                     }
                 }
@@ -969,7 +969,7 @@
             sql: ' UPDATE addressList_simplify SET ' + key + '= "' + data + '" WHERE user_id = ' + api.pageParam.userId
         }, function(ret, err) {
             if (ret.status) {
-                console.log('发送时间')
+                // console.log('发送时间')
                 api.sendEvent({
                     name: 'editUserInfo',
                     extra: {
@@ -1001,7 +1001,7 @@
             sql: ' UPDATE addressList SET ' + key + '= "' + data + '" WHERE user_id = ' + api.pageParam.userId
         }, function(ret, err) {
             if (ret.status) {
-                console.log('992')
+                // console.log('992')
                 initPage();
             } else {
                 alert(JSON.stringify(err));
@@ -1023,7 +1023,7 @@
             }
         }, function(ret, err) {
             if (ret) {
-                // // // console.log('用户自己的'+JSON.stringify(ret.data.list));
+                // // // // console.log('用户自己的'+JSON.stringify(ret.data.list));
                 for (var i = 0; i < ret.data.list.length; i++) {
                     if (ret.data.list[i].is_default == 1) {
                         $api.text(phone, ret.data.list[i].phone || '');
@@ -1042,13 +1042,13 @@
             sql: 'SELECT * FROM tb_remarks_status WHERE remark_user_id = ' + api.pageParam.userId
         }, function(ret, err) {
             if (ret.status) {
-                // // // console.log( '626::::' + JSON.stringify( ret ) );
+                // // // // console.log( '626::::' + JSON.stringify( ret ) );
                 if (ret.data.length != 0) {
-                    // // // console.log('本地数据库')
+                    // // // // console.log('本地数据库')
                     for (var i = 0; i < ret.data.length; i++) {
                         if (ret.data[i].type == 2) {
                             // 學習
-                            // // // console.log(ret.data[i].degree)
+                            // // // // console.log(ret.data[i].degree)
                             switch (ret.data[i].degree) {
                                 case '0':
                                     ret.data[i].degree = '';
@@ -1072,18 +1072,18 @@
                         }
 
                     }
-                    // // // console.log('本地数据库tb_remarks_status内容')
+                    // // // // console.log('本地数据库tb_remarks_status内容')
                     reviseText(ret.data);
                     getData(ret.data);
                     statusRemarks(ret.data, 1)
                 } else {
-                    // // // console.log('获取网络信息')
+                    // // // // console.log('获取网络信息')
                     statusRemarks();
                 }
             } else {
                 statusRemarks();
                 // alert( '629'+JSON.stringify( err ) );
-                // // // console.log( '629'+JSON.stringify( err ) );
+                // // // // console.log( '629'+JSON.stringify( err ) );
 
             }
         });
@@ -1137,12 +1137,12 @@
                         statusUser();
                     }
                 } else {
-                    console.log('对比')
+                    // console.log('对比')
                         // 对比
                     if (data.length != ret.data.status.length) {
                         // 更新数据库
                         handData(ret)
-                        console.log('更新数据库')
+                        // console.log('更新数据库')
                     }
                 }
             } else {
@@ -1165,7 +1165,7 @@
         }, function(ret, err) {
             if (ret) {
                 if (ret.data.status.length != 0) {
-                    // // // console.log('原始信息')
+                    // // // // console.log('原始信息')
                 }
                 handData(ret)
             }
@@ -1173,14 +1173,14 @@
     }
 
     function handData(ret) {
-        console.log('707:::' + JSON.stringify(ret))
+        // console.log('707:::' + JSON.stringify(ret))
         if (ret.data.status != '') {
             var sql = 'INSERT OR REPLACE INTO tb_remarks_status(remark_user_id, status_id, name, position, degree, start_date, is_default, type) VALUES ';
             for (var i = 0; i < ret.data.status.length; i++) {
                 sql += '(' + api.pageParam.userId + ',' + ret.data.status[i].status_id + ',"' + ret.data.status[i].name + '","' + ret.data.status[i].position + '","' + ret.data.status[i].degree + '","' + ret.data.status[i].start_date + '",' + ret.data.status[i].is_default + ',' + ret.data.status[i].type + '),';
                 if (ret.data.status[i].type == 2) {
                     // 學習
-                    // // // console.log(ret.data.status[i].degree)
+                    // // // // console.log(ret.data.status[i].degree)
                     switch (ret.data.status[i].degree) {
                         case '0':
                             ret.data.status[i].degree = '';
@@ -1204,7 +1204,7 @@
                 }
             }
             sql = sql.substring(0, sql.length - 1);
-            // // // console.log(sql)
+            // // // // console.log(sql)
             db.executeSql({
                 name: 'db_' + $api.getStorage('userToken'),
                 sql: sql
@@ -1249,7 +1249,7 @@
         }, function(ret, err) {
             if (ret.status) {
                 if (ret.data.length != 0) {
-                    console.log('数据库:::' + JSON.stringify(ret))
+                    // console.log('数据库:::' + JSON.stringify(ret))
                         // 电话
                     if (ret.data[0].remark_current_contact) {
                         $api.text(phone, ret.data[0].remark_current_contact);
@@ -1317,7 +1317,7 @@
             sql: 'SELECT * FROM tb_remarks_user_info WHERE remark_user_id = ' + api.pageParam.userId
         }, function(ret, err) {
             if (ret.status) {
-                // // // console.log('902'+JSON.stringify(ret.data))
+                // // // // console.log('902'+JSON.stringify(ret.data))
                 if (ret.data.length != 0) {
                     if (ret.data[0].extra_image_url) {
                         $api.css(liRightIcon, 'background: url(' + ret.data[0].extra_image_url + '?imageView2/3/w/200/h/200/q/75|imageslim);-webkit-background-size: .749rem auto;background-size: .749rem auto;background-position: 0 center;');
@@ -1610,7 +1610,7 @@
             date = current[0];
             date1 = current[1];
             date2 = current[2];
-            // // // console.log(current)
+            // // // // console.log(current)
         } else {
             date = new Date().getFullYear();
             date1 = new Date().getMonth();
@@ -1645,7 +1645,7 @@
                 birthday: data
             }
         }
-        // // // console.log(JSON.stringify(data))
+        // // // // console.log(JSON.stringify(data))
         api.ajax({
             url: apiSite + '/remark_user/editBasicInfo',
             method: 'post',
@@ -1656,7 +1656,7 @@
         }, function(ret, err) {
             if (ret) {
                 if (ret.code === 200) {
-                    // // // console.log('663:' + JSON.stringify(ret))
+                    // // // // console.log('663:' + JSON.stringify(ret))
                     if (relationship_level_flag == 2 || relationship_level_flag == 3 || relationship_level_flag == 4) {
                         api.ajax({
                             url: apiSite + '/remark_user/fullInfo',
@@ -1677,27 +1677,27 @@
                                 }, function(retSql, err1) {
                                     if (retSql.status) {
                                         if (retSql.data.length !== 0) {
-                                            // // // console.log('有数据,更新')
+                                            // // // // console.log('有数据,更新')
                                             // 有数据 更新
                                             db.executeSql({
                                                 name: 'db_' + $api.getStorage('userToken'),
                                                 sql: 'UPDATE addressList SET remark_birthday = "' + ret.data.info.birthday + '", remark_hometown = "' + ret.data.info.hometown + '" WHERE user_id = ' + api.pageParam.userId
                                             }, function(ret, err) {
                                                 if (ret.status) {
-                                                    // // // console.log('688:' + JSON.stringify(ret));
+                                                    // // // // console.log('688:' + JSON.stringify(ret));
                                                 } else {
                                                     alert('690:' + JSON.stringify(err));
                                                 }
                                             });
                                         } else {
-                                            // // // console.log('没有数据,插入')
+                                            // // // // console.log('没有数据,插入')
                                             // 没数据 插入新数据
                                             db.executeSql({
                                                 name: 'db_' + $api.getStorage('userToken'),
                                                 sql: SQL
                                             }, function(ret, err) {
                                                 if (ret.status) {
-                                                    // // // console.log('684:::' + JSON.stringify(ret));
+                                                    // // // // console.log('684:::' + JSON.stringify(ret));
                                                 } else {
                                                     alert(JSON.stringify(err));
                                                 }

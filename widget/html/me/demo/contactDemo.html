@@ -32,12 +32,12 @@
             sql: 'SELECT * FROM addressList_simplify WHERE type=3 order by flag asc'
         }, function (ret, err) {
             if (ret.status) {
-                console.log(ret.data.length)
+                // console.log(ret.data.length)
                 if (ret.data.length > 500) {
-                    console.log('本地数据库')
+                    // console.log('本地数据库')
                     openList(paixv(ret.data))
                 } else {
-                    console.log('网络数据')
+                    // console.log('网络数据')
                     requireData();
                 }
             }
@@ -59,9 +59,9 @@
             if(ret) {
                 if (ret.code === 200) {
                     t2 = new Date().getTime();
-                    console.log('请求数据用时:'+(t2-t1)/1000)
+                    // console.log('请求数据用时:'+(t2-t1)/1000)
                     var dataContact=[];
-                    console.log(ret.data.unavailable_list.length)
+                    // console.log(ret.data.unavailable_list.length)
                     for (var i = 0; i < ret.data.unavailable_list.length; i++) {
                         var element = ret.data.unavailable_list[i];
                         dataContact.push({
@@ -71,7 +71,7 @@
                         })
                     }
                     t3 = new Date().getTime();
-                    console.log('处理数据用时:'+(t3-t1)/1000)
+                    // console.log('处理数据用时:'+(t3-t1)/1000)
                     openList(dataContact)
                 } else {
                     alert(ret.msg)
@@ -95,7 +95,7 @@
         }, function (ret) {
             if (ret) {
                 t4 = new Date().getTime();
-                console.log('打开用时:'+(t4-t3)/1000)
+                // console.log('打开用时:'+(t4-t3)/1000)
                 alert(JSON.stringify(ret));
             }
         });
@@ -114,7 +114,7 @@
         }, function (ret, err) {
             if (ret) {
                 if (ret.code === 200) {
-                    console.log(ret.data.unavailable_list.length)
+                    // console.log(ret.data.unavailable_list.length)
                     disData(ret.data.unavailable_list, 3)
                 }
             } else {
@@ -124,8 +124,8 @@
     }
 
     function disData(data, type) {
-        // // // console.log('disData'+type)
-        // // // console.log('disData'+data)
+        // // // // console.log('disData'+type)
+        // // // // console.log('disData'+data)
         if (data != '') {
             for (var i = 0; i < data.length; i++) {
                 // single_list
@@ -213,16 +213,16 @@
                 data1[i].flag + '","' + type + '"),';
         }
         SQL2 = SQL2.substring(0, SQL2.length - 1) + ';'
-        // // // console.log(SQL)
+        // // // // console.log(SQL)
         db.executeSql({
             name: SQLName,
             sql: SQL2
         }, function (ret, err) {
             if (ret.status) {
-                console.log('插入数据成功')
+                // console.log('插入数据成功')
                 initPage();
             } else {
-                console.log('执行语句错误:' + JSON.stringify(err))
+                // console.log('执行语句错误:' + JSON.stringify(err))
             }
         });
 

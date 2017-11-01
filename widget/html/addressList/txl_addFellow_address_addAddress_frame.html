@@ -109,7 +109,7 @@
     var url, provinces, cities,  address, zipcode;
     apiready = function(){
         moduleInit();
-        // // // console.log(JSON.stringify(api.pageParam))
+        // // // // console.log(JSON.stringify(api.pageParam))
         if (api.pageParam.flag) {
             // 1 编辑
             getCityList();
@@ -198,7 +198,7 @@
                 for (var j = 0; j < cityLevel3[i].sub.length; j++) {
                     if (cityLevel3[i].sub[j].name == homeText[1]) {
                         active.push(j);
-                        // // console.log(JSON.stringify(cityLevel3[i].sub[j]))
+                        // // // console.log(JSON.stringify(cityLevel3[i].sub[j]))
                         for (var p = 0; p < cityLevel3[i].sub[j].sub.length; p++) {
                             if (cityLevel3[i].sub[j].sub[p].name == homeText[2]) {
                                 active.push(p);
@@ -305,7 +305,7 @@
             }
         }, function(ret, err) {
             if (ret) {
-                // // console.log(JSON.stringify(ret))
+                // // // console.log(JSON.stringify(ret))
                 $api.text($api.dom('.provinces'), ret.data.info.province);
                 $api.text($api.dom('.cities'), ret.data.info.city);
                 $api.text($api.dom('.city'), ret.data.info.district);
@@ -346,7 +346,7 @@
             }
         }, function(ret, err) {
             if(ret) {
-                // // console.log('334ret:'+JSON.stringify(ret.code))
+                // // // console.log('334ret:'+JSON.stringify(ret.code))
                 if (api.pageParam.flag) {
                     // 更新数据库
                     for (var i = 0; i < ret.data.list.length; i++) {
@@ -378,8 +378,8 @@
                         name: SQLName,
                         sql: sql   
                     }, function(ret, err){  
-                        // // console.log('334ret:'+JSON.stringify(ret))
-                        // // console.log('335err:'+JSON.stringify(err))
+                        // // // console.log('334ret:'+JSON.stringify(ret))
+                        // // // console.log('335err:'+JSON.stringify(err))
                         if( ret.status ){
                             api.sendEvent({
                                 name: 'addRemarkCity'

@@ -157,7 +157,7 @@
         }, function(ret, err) {
             // // alert(JSON.stringify(ret));
             if (webFlag == 1) {
-                console.log('下拉刷新')
+                // console.log('下拉刷新')
                 initPage();
                 webFlag = 0;
                 // requireData(api.pageParam.flag);
@@ -173,7 +173,7 @@
         // 下次进来如果有db_second_contactst_table缓存字段, 使用db_second_contactst_table2这个表格, 删除db_second_contactst_table缓存字段, 清空db_second_contactst_table2的数据
         
         if ($api.getStorage('db_second_contactst_table')) {
-            console.log('使用第一标')
+            // console.log('使用第一标')
             // 有缓存字段, 使用db_second_contactst_table2表格
             tableName = 'db_second_contactst_table2';
             // 往db_second_contactst_table里存储数据
@@ -183,7 +183,7 @@
             // 删除表中事件
             deleteTable(tableName2)
         } else {
-            console.log('使用第二标')
+            // console.log('使用第二标')
              // 无缓存字段, 使用db_second_contactst_table表格
              tableName = 'db_second_contactst_table';
             // 往db_second_contactst_table里存储数据
@@ -239,14 +239,14 @@
             if (ret.status) {
                 pageNum++;
                 if (ret.data.length > 0) {
-                    // console.log('查询本地数据库ß');
+                    // // console.log('查询本地数据库ß');
                     dataArr = dataArr.concat(ret.data);
                     getData(dataArr);
                     $api.css($api.dom('.loading'), 'display: none');
                     webFlag = 1;
                     requireData(api.pageParam.flag)
                 } else {
-                    // console.log('查询网络')
+                    // // console.log('查询网络')
                     requireData(api.pageParam.flag)
                 }
             } else {
@@ -284,7 +284,7 @@
                 sql: SQL
             }, function(ret, err) {
                 if (ret.status) {
-                    console.log('执行SQL成功')
+                    // console.log('执行SQL成功')
                 } else {
                     api.alert({
                         msg: err.msg
@@ -333,7 +333,7 @@
             }
         }, function(ret, err) {
             if (ret) {
-                // // console.log('网络数据'+JSON.stringify(ret))
+                // // // console.log('网络数据'+JSON.stringify(ret))
                 $api.css($api.dom('.loading'), 'display:none');
                 if (ret.code == 200) {
                     pageNum++;

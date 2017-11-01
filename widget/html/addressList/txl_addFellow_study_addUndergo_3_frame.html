@@ -322,7 +322,7 @@
                 }
             }, function(ret, err) {
                 if (ret) {
-                    // // console.log('添加成功')
+                    // // // console.log('添加成功')
                     if(ret.code == 200) {
                         if (time_2 = '0000-00-00') {
                             api.execScript({
@@ -375,7 +375,7 @@
                         sql: 'UPDATE addressList_simplify SET subTitle = "'+ subTitle +'" WHERE user_id =' + api.pageParam.userId
                     }, function(ret, err){
                         if( ret.status ){
-                            // // console.log('更新成功:'+subTitle)
+                            // // // console.log('更新成功:'+subTitle)
                           api.sendEvent({
                               name: 'editUserInfo'
                           });
@@ -401,7 +401,7 @@
             }
         }, function(ret, err) {
             if(ret) {
-                // // console.log(JSON.stringify(ret))
+                // // // console.log(JSON.stringify(ret))
                 if (api.pageParam.flag) {
                     for (var i = 0; i < ret.data.list.length; i++) {
                         if (ret.data.list[i].education_id == api.pageParam.education_id) {
@@ -410,7 +410,7 @@
                                 sql: 'UPDATE tb_remarks_education SET type = ' + ret.data.list[i].type + ',school = "' + ret.data.list[i].school+ '",major = "' + ret.data.list[i].major+ '",degree = "' + ret.data.list[i].degree+ '",description = "' + ret.data.list[i].description+ '",start_date = "' + ret.data.list[i].start_date+ '",end_date = "' + ret.data.list[i].end_date + '" WHERE education_id =' + api.pageParam.education_id
                             }, function(ret, err){
                                 if( ret.status ){
-                                    // // console.log( '更新成功'+JSON.stringify( ret ) );
+                                    // // // console.log( '更新成功'+JSON.stringify( ret ) );
                                     api.sendEvent({
                                          name: 'addRemarksStudy'
                                     });
@@ -422,7 +422,7 @@
                         }
                    }
                 } else {
-                    // // console.log('334ret:'+JSON.stringify(ret))
+                    // // // console.log('334ret:'+JSON.stringify(ret))
                     var sql = 'INSERT OR REPLACE INTO tb_remarks_education(list_id,user_id,education_id,type,school,major, degree, description, start_date, end_date) VALUES '
                     for (var i = 0; i < ret.data.list.length; i++) {
                         sql += '("'+api.pageParam.userId+'_'+ret.data.list[i].education_id  +'",'+api.pageParam.userId+','+ret.data.list[i].education_id+','+ret.data.list[i].type+',"'+ret.data.list[i].school+'","'+ret.data.list[i].major+'",'+ret.data.list[i].degree+',"'+ret.data.list[i].description+'","'+ret.data.list[i].start_date+'","'+ret.data.list[i].end_date+'"),'
@@ -433,8 +433,8 @@
                         sql: sql
                     }, function(ret, err){
                         if( ret.status ){
-                            // // console.log('334ret:'+JSON.stringify(ret))
-                            // // console.log('335err:'+JSON.stringify(err));
+                            // // // console.log('334ret:'+JSON.stringify(ret))
+                            // // // console.log('335err:'+JSON.stringify(err));
                             api.sendEvent({
                                 name: 'addRemarksStudy'
                             });

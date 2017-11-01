@@ -108,9 +108,9 @@
              name:  'db_'+$api.getStorage('userToken'),
              sql: 'SELECT * FROM tb_remarks_user_info WHERE remark_user_id = ' + api.pageParam.userId
          }, function(ret, err){ 
-            // // console.log(JSON.stringify(ret))
+            // // // console.log(JSON.stringify(ret))
             if( ret.status ){
-                    // // console.log( JSON.stringify( ret ) );
+                    // // // console.log( JSON.stringify( ret ) );
                     if (ret.data.length != 0 && ret.data[0].extra_id) {
                         if (ret.data[0].extra_content != null) {
                             $api.val($api.byId('text'), ret.data[0].extra_content != null ? ret.data[0].extra_content : '');
@@ -138,7 +138,7 @@
                         }, function(retAjax, err) {
                             if(retAjax) {
                                 if (retAjax.code == 200) {
-                                    // // console.log('120:::'+JSON.stringify(retAjax))
+                                    // // // console.log('120:::'+JSON.stringify(retAjax))
                                     $api.val($api.byId('text'), retAjax.extra.content);
                                     $api.attr($api.byId('img'), 'src', retAjax.extra.image_url);
                                 }
@@ -181,7 +181,7 @@
                                
                             } else if (ret.oper == "progress") {
                                 //上传过程中获取进度数据
-                                // // // console.log(ret.percent);
+                                // // // // console.log(ret.percent);
                             }
                         } else {
                             // alert(JSON.stringify(ret))
@@ -197,7 +197,7 @@
         }
     }
     function submitAjax(argument,text) {
-        // // console.log(argument+'+++'+text)
+        // // // console.log(argument+'+++'+text)
         api.ajax({
             url: apiSite + '/remark_user/editBasicInfo',
             method: 'post',
@@ -240,15 +240,15 @@
                 }, function(ret1, err1){        
                     if( ret1.status ){
                         if (ret1.data.length !== 0) {
-                            // // console.log(JSON.stringify(ret1))
-                            // // console.log('有数据,更新')
+                            // // // console.log(JSON.stringify(ret1))
+                            // // // console.log('有数据,更新')
                             // 有数据 更新
                             db.executeSql({
                                 name: 'db_'+$api.getStorage('userToken'),
                                 sql: 'UPDATE tb_remarks_user_info SET extra_id = '+ ret.data.extra.extra_id +', extra_image_url = "'+ ret.data.extra.image_url +'", extra_content = "'+ ret.data.extra.content +'" WHERE remark_user_id = ' + api.pageParam.userId
                             }, function(ret, err){        
                                 if( ret.status ){
-                                    // // console.log('688:' + JSON.stringify( ret ) );
+                                    // // // console.log('688:' + JSON.stringify( ret ) );
                                     api.execScript({
                                         name: 'txl_memberInfo_Win',
                                         frameName: 'txl_memberInfo_Frame',
@@ -260,14 +260,14 @@
                                 }
                             });
                         } else {
-                            // // console.log('没有数据,插入')
+                            // // // console.log('没有数据,插入')
                             // 没数据 插入新数据
                             db.executeSql({
                                 name: 'db_'+$api.getStorage('userToken'),
                                 sql: sql  
                             }, function(ret, err){        
                                 if( ret.status ){
-                                   // // console.log( '684:::'+JSON.stringify( ret ) );
+                                   // // // console.log( '684:::'+JSON.stringify( ret ) );
                                    api.execScript({
                                        name: 'txl_memberInfo_Win',
                                        frameName: 'txl_memberInfo_Frame',

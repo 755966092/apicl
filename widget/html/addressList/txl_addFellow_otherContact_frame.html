@@ -223,7 +223,7 @@
         }, function(ret, err){        
             if( ret.status ){
                 //本地备注数据库
-                // // console.log('234' + JSON.stringify( ret ) );
+                // // // console.log('234' + JSON.stringify( ret ) );
                 if (ret.data.length != 0) {
                     flag = 0;
                     editFlag2 = 1;
@@ -244,7 +244,7 @@
                         if (ret) {
                             flag = 0;
                             editFlag2 = 1;
-                            // // console.log('245::::'+JSON.stringify(ret))
+                            // // // console.log('245::::'+JSON.stringify(ret))
                             if (ret.data.list.length != 0) {
                                 handleData(litterSort(ret.data.list))
                             } else {
@@ -286,7 +286,7 @@
 
     // 处理数据
     function handleData(data) {
-        // // console.log('290行')
+        // // // console.log('290行')
         for (var i = 0; i < data.length; i++) {
             if (data[i].sub_type == 1) {
                 data[i].sub_type = '微信'
@@ -294,11 +294,11 @@
                 data[i].sub_type = 'QQ'
             }
         }
-        // // console.log('298行:::'+JSON.stringify(data))
+        // // // console.log('298行:::'+JSON.stringify(data))
         getData(data);
     }
     function litterSort(data) {
-        // // console.log('301行')
+        // // // console.log('301行')
         for (var i = 0; i < data.length; i++) {
             for (var j = 0; j < data.length; j++) {
                 if (data[i].type < data[j].type) {
@@ -348,13 +348,13 @@
                 
                 if(ret) {
                     if (ret.code == 200) {
-                        // // console.log(JSON.stringify(ret));
+                        // // // console.log(JSON.stringify(ret));
                         db.executeSql({
                             name: 'db_'+$api.getStorage('userToken'),
                             sql: ' DELETE FROM tb_remarks_other_contact WHERE contact_id = ' + id  
                         }, function(ret, err){        
                             if( ret.status ){
-                                // // console.log(JSON.stringify(ret))
+                                // // // console.log(JSON.stringify(ret))
                             }else{
                                 alert( JSON.stringify( err ) );
                             }
