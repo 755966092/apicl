@@ -237,6 +237,7 @@
 
     .main .oneself p.positionNews,
     .main .other p.positionNews {
+        position: relative;
         width: 4.43rem;
         height: 2.62rem;
         padding: .2rem 0 0 0;
@@ -301,6 +302,8 @@
         height: 1.7rem;
         border-bottom-right-radius: .1rem;
         border-bottom-left-radius: .1rem;
+        position: absolute;
+        bottom: 0;
     }
     /* 位置消息气泡 */
     </style>
@@ -377,16 +380,16 @@
                 <span class="posiDes">清华大学清华大学清华大学清华大学清华大学清华大学清华大学清华大学清华大学</span>
                 <img src="../../image/tx_1.jpg" alt="">
             </p>
-        </div>
-        <div class="oneself clearfix">
+        </div>-->
+        <!-- <div class="oneself clearfix">
             <div class="time">04:19</div>
             <img class="fr oneselfImg" src="../../image/tx_2.jpg">
             <p class="positionNews fr flex-def flex-zTopBottom">
-                <span class="posName">清华大学清华大学清华大学清华大学清华大学清华大学清华大学清华大学清华大学</span>
+                 <span class="posName">清华大学清华大学清华大学清华大学清华大学清华大学清华大学清华大学清华大学</span>
                 <span class="posiDes">清华大学清华大学清华大学清华大学清华大学清华大学清华大学清华大学清华大学</span>
-                <img src="../../image/tx_1.jpg" alt="">
+                <img class="" src="../../image/tx_1.jpg" alt="">
             </p>
-        </div> -->
+        </div>  -->
     </div>
     <div class="shadow">
         <p tapmode="" onclick="closeDiv(0);event.stopPropagation();">
@@ -555,12 +558,12 @@ function createSendPositionLabel(msg) {
 }
 
 function createReceivePositionLabel(msg) {
-    // console.log('接受标签参数:'+JSON.stringify(msg));
+    console.log('接受标签参数:'+JSON.stringify(msg));
     var time = new Date(msg.msgContent.result.message.receivedTime).toLocaleDateString() == new Date().toLocaleDateString() ?
         new Date(msg.msgContent.result.message.receivedTime).toLocaleTimeString() : new Date(msg.msgContent.result.message
             .receivedTime).toLocaleString();
     var positionCount = msg.msgContent.result.message.content.poi.indexOf(',');
-    var str = '<div  tapmode onclick="openPosiPage(this)" data-address="' + msg.result.message.content.poi.substring(positionCount + 1) + '" data-name="' + msg.result.message.content.poi.substring(0, positionCount) + '" data-lat="' + msg.result.message.content.latitude + '" data-lon="' + msg.result.message.content.longitude + '" class="other clearfix"><div class="time">' + time + '</div><img class="fl otherImg" src="' + youHeadImg + '"><p class="positionNews fl flex-def flex-zTopBottom" ><span class="posName">' + msg.msgContent.result.message.content.poi.substring(0, positionCount) + '</span> <span class="posiDes">' + msg.msgContent.result.message.content.poi.substring(positionCount + 1) + '</span> <img src="' + msg.msgContent.result.message.content.imagePath + '" alt=""></p></div>';
+    var str = '<div  tapmode onclick="openPosiPage(this)" data-address="' + msg.msgContent.result.message.content.poi.substring(positionCount + 1) + '" data-name="' + msg.msgContent.result.message.content.poi.substring(0, positionCount) + '" data-lat="' + msg.msgContent.result.message.content.latitude + '" data-lon="' + msg.msgContent.result.message.content.longitude + '" class="other clearfix"><div class="time">' + time + '</div><img class="fl otherImg" src="' + youHeadImg + '"><p class="positionNews fl flex-def flex-zTopBottom" ><span class="posName">' + msg.msgContent.result.message.content.poi.substring(0, positionCount) + '</span> <span class="posiDes">' + msg.msgContent.result.message.content.poi.substring(positionCount + 1) + '</span> <img src="' + msg.msgContent.result.message.content.imagePath + '" alt=""></p></div>';
     $api.append($api.dom('.main'), str);
     slideBut();
 }
@@ -571,7 +574,6 @@ function createSendPositionLabelSql(msg, flag) {
     var positionCount;
     var str;
     if (flag == 'sql') {
-        console.log(JSON.stringify(msg));
         positionCount = msg.content_text.indexOf(',');
         time = new Date(parseInt(msg.receivedTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10)).toLocaleString();
         str = '<div class="oneself clearfix"  tapmode onclick="openPosiPage(this)" data-lat="' + msg.content_lat + '" data-lon="' + msg.content_lon + '" data-name="' + msg.content_text.substring(0, positionCount) + '" data-address="' + msg.content_text.substring(positionCount + 1) + '" ><div class="time">' + time + '</div><img class="fr oneselfImg" src="' + headImg + '"><p class="positionNews fr flex-def flex-zTopBottom" ><span class="posName">' + msg.content_text.substring(0, positionCount) + '</span> <span class="posiDes">' + msg.content_text.substring(positionCount + 1) + '</span> <img src="' + msg.content_imagePath + '" alt="1111"></p></div>';
@@ -580,23 +582,23 @@ function createSendPositionLabelSql(msg, flag) {
         time = new Date(parseInt(msg.sentTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.sentTime, 10))
             .toLocaleTimeString() : new Date(parseInt(msg.sentTime, 10)).toLocaleString();
         positionCount = msg.content.poi.indexOf(',');
-        str = '<div class="oneself clearfix"  tapmode onclick="openPosiPage(this)" data-lat="' + msg.content.lat + '" data-lon="' + msg.content.lon + '" data-name="' + msg.content.poi.substring(0, positionCount) + '" data-address="' + msg.content.poi.substring(positionCount + 1) + '" ><div class="time">' + time + '</div><img class="fr oneselfImg" src="' + headImg + '"><p class="positionNews fr flex-def flex-zTopBottom" ><span class="posName">' + msg.content.poi.substring(0, positionCount) + '</span> <span class="posiDes">' + msg.content.poi.substring(positionCount + 1) + '</span><img src="' + msg.content.imagePath + '" alt="1111"></p>x</div>';
+        str = '<div class="oneself clearfix"  tapmode onclick="openPosiPage(this)" data-lat="' + msg.content.lat + '" data-lon="' + msg.content.lon + '" data-name="' + msg.content.poi.substring(0, positionCount) + '" data-address="' + msg.content.poi.substring(positionCount + 1) + '" ><div class="time">' + time + '</div><img class="fr oneselfImg" src="' + headImg + '"><p class="positionNews fr flex-def flex-zTopBottom" ><span class="posName">' + msg.content.poi.substring(0, positionCount) + '</span> <span class="posiDes">' + msg.content.poi.substring(positionCount + 1) + '</span><img src="' + msg.content.imagePath + '" alt="1111"></p></div>';
     }
+    
     $api.append($api.dom('.main'), str);
     slideBut();
 }
 
 function createReceivePositionLabelSql(msg, flag) {
-    // console.log('接受标签参数:'+JSON.stringify(msg));
     var time;
     var positionCount;
     var str;
     if (flag == 'sql') {
-
         positionCount = msg.content_text.indexOf(',');
         time = new Date(parseInt(msg.receivedTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime, 10))
             .toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10)).toLocaleString();
-        str = '<div class="other clearfix"  tapmode onclick="openPosiPage(this)" data-lat="' + msg.content_lat + '" data-lon="' + msg.content_lon + '" data-name="' + msg.content_text.substring(0, positionCount) + '" data-address="' + msg.content_text.substring(positionCount + 1) + '"><div class="time">' + time + '</div><img class="fl otherImg" src="' + youHeadImg + '"><p class="positionNews fl flex-def flex-zTopBottom" ><span class="posName">' + msg.conten_text.substring(0, positionCount) + '</span> <span class="posiDes">' + msg.conten_text.substring(positionCount + 1) + '</span><img src="' + msg.conten_imagePath + '" alt=""></p></div>';
+        // str = '<div class="other clearfix"  tapmode onclick="openPosiPage(this)" data-lat="' + msg.content_lat + '" data-lon="' + msg.content_lon + '" data-name="实打实" data-address="安达市"><div class="time">' + time + '</div><img class="fl otherImg" src="' + youHeadImg + '"><p class="positionNews fl flex-def flex-zTopBottom" ><span class="posName">名字</span> <span class="posiDes">按时 </span><img src="' + msg.conten_imagePath + '" alt=""></p></div>';
+        str = '<div class="other clearfix"  tapmode onclick="openPosiPage(this)" data-lat="' + msg.content_lat + '" data-lon="' + msg.content_lon + '" data-name="' + msg.content_text.substring(0, positionCount) + '" data-address="' + msg.content_text.substring(positionCount + 1) + '"><div class="time">' + time + '</div><img class="fl otherImg" src="' + youHeadImg + '"><p class="positionNews fl flex-def flex-zTopBottom" ><span class="posName">' + msg.content_text.substring(0, positionCount) + '</span> <span class="posiDes">' + msg.content_text.substring(positionCount + 1) + '</span><img src="' + msg.content_imagePath + '" alt=""></p></div>';
     }
     else {
         time = new Date(parseInt(msg.receivedTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime, 10))
@@ -659,7 +661,7 @@ function updatePage() {
     */
 
 function chatRecordingSql(params, flagStr, headImgUrl) {
-    // // console.log(JSON.stringify(params)+headImgUrl);
+    console.log('接受消息'+JSON.stringify(params)+headImgUrl);
     var myHeadImg = $api.getStorage('imgCache');
     var youHeadImg = api.pageParam.headImg;
     var SQL = 'INSERT OR REPLACE INTO tb_chat_' + api.pageParam.userId +
@@ -671,7 +673,7 @@ function chatRecordingSql(params, flagStr, headImgUrl) {
                     .message.objectName + '","' + params.result.message.messageDirection + '","' + params.result.message
                     .content.extra.replace(/"/g, '') + '","' + (params.result.message.content.text || '') +
                 '",0,0,"","' + myHeadImg + '","' + params.result.message.content.voicePath + '","' + params.result.message
-                    .content.duration + '","")';
+                    .content.duration + '","")';;
         }
         else if (params.result.message.objectName == 'RC:ImgMsg') {
             SQL += '(' + params.result.message.messageId + ',"' + params.result.message.sentTime + '","' + params.result
@@ -681,13 +683,13 @@ function chatRecordingSql(params, flagStr, headImgUrl) {
                     .message.content.thumbPath + '")';
         }
         else if (params.result.message.objectName == 'RC:LBSMsg') {
-            console.log(JSON.stringify(params));
             SQL += '(' + params.result.message.messageId + ',"' + params.result.message.sentTime + '","' + params.result
                     .message.objectName + '","' + params.result.message.messageDirection + '","' + params.result.message
                     .content.extra.replace(/"/g, '') + '","' + (params.result.message.content.poi || '') + '",' +
                 params.result.message.content.latitude + ',' + params.result.message.content.longitude + ',"' +
                 params.result.message.content.imagePath + '","' + myHeadImg + '","' + params.result.message.content
                     .imageUrl + '","","' + params.result.message.content.thumbPath + '")';
+                    console.log(SQL)
         }
         else {
             SQL += '(' + params.result.message.messageId + ',"' + params.result.message.sentTime + '","' + params.result
@@ -726,6 +728,7 @@ function chatRecordingSql(params, flagStr, headImgUrl) {
                 ',' + params.msgContent.result.message.content.longitude + ',"' + params.msgContent.result.message.content
                     .imagePath + '","' + youHeadImg + '","' + params.msgContent.result.message.content.imageUrl +
                 '","","' + params.msgContent.result.message.content.thumbPath + '")';
+                console.log(SQL)
         }
         else {
             // 文字消息
@@ -767,12 +770,12 @@ function allCahtSql(ret) {
                 }
                 else if (element.objectName === 'RC:LBSMsg') {
                     // 位置
-                    console.log(JSON.stringify(element));
                     SQL += '(' + element.messageId + ',"' + element.sentTime + '","' + element.objectName + '","' +
                         element.messageDirection + '","' + element.content.extra.replace(/"/g, '') + '","' + (
                         element.content.text || '') + '",' + element.content.latitude + ',' + element.content.longitude +
                         ',"' + element.content.imagePath + '","' + myHeadImg + '","' + element.content.imageUrl +
                         '","","' + element.content.thumbPath + '"),';
+                    console.log(SQL)
                 }
                 else {
                     // 文字
@@ -804,7 +807,9 @@ function allCahtSql(ret) {
                         element.content.text || '') + '",' + element.content.latitude + ',' + element.content.longitude +
                         ',"' + element.content.imagePath + '","' + youHeadImg + '","' + element.content.imageUrl +
                         '","","' + element.content.thumbPath + '"),';
-                }
+            console.log(JSON.stringify(params));
+                        
+                }   
                 else {
                     // 文字
                     // console.log(element.content.extra.replace(/"/g, ''))
@@ -828,16 +833,16 @@ function SQLStatement(SQL) {
     }, function (ret, err) {
         if (ret.status) {
             console.log('存入聊天记录表格成功');
-        // db.selectSql({
-        //     name: 'db_'+$api.getStorage('userToken'),
-        //     sql: 'SELECT * FROM tb_chat_'+ api.pageParam.userId
-        // },function(ret,err){
-        //     if (ret.status) {
-        //         // console.log('查询到的结果'+JSON.stringify(ret))
-        //     }else {
-        //         alert('386');
-        //     }
-        // });
+            db.selectSql({
+                name: 'db_'+$api.getStorage('userToken'),
+                sql: 'SELECT * FROM tb_chat_'+ api.pageParam.userId
+            },function(ret,err){
+                if (ret.status) {
+                    console.log('查询到的结果'+JSON.stringify(ret))
+                }else {
+                    alert('386');
+                }
+            });
         }
         else {
             alert('390' + JSON.stringify(err) + JSON.stringify(ret));
@@ -1443,7 +1448,7 @@ function renderPageSql(ret, n) {
                 }
                 else if (ret[i].objectName == 'RC:LBSMsg') {
                     // 图片
-                    // console.log(JSON.stringify(ret[i]));
+                    console.log(JSON.stringify(ret[i]));
                     createReceivePositionLabelSql(ret[i], 'sql');
                 }
                 else {

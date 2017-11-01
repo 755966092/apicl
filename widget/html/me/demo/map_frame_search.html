@@ -37,7 +37,7 @@
     <ul class="resultList"></ul> 
     <script type="text/x-dot-template" id="listT">
         {{~it:value:index}}
-        <li>
+        <li tapmode onclick="closeCurrentPage(this)" data-lon="{{=value.lon}}" data-lat="{{=value.lat}}" data-name="{{=value.name}}" data-address="{{=value.address}}">
             <p class="nameText">{{=value.name}}</p>
             <p class="addressText">{{=value.address}}</p>
         </li>
@@ -75,12 +75,30 @@
             if(ret.status){
                 num = ret.pageIndex + 1;
                 dataArr = dataArr.concat(ret.results);
-                console.log(JSON.stringify(dataArr))
                 getData(dataArr);
             }else{
                 alert(JSON.stringify(err));
             }
         });
+    }
+    // 关闭页面
+    function closeCurrentPage(ele) {
+      var name = $api.attr(ele, 'data-name');
+      var address = $api.attr(ele, 'data-address');
+      var lon = $api.attr(ele, 'data-lon');
+      var lat = $api.attr(ele, 'data-lat');
+      api.sendEvent({
+          name: 'addEventListenerSearch',
+          extra: {
+              obj: {
+                name: name,
+                address: address,
+                lon: lon,
+                lat: lat
+              }
+          }
+      });
+      api.closeWin();
     }
         
 </script>

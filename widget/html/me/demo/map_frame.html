@@ -10,12 +10,13 @@
     <style>
         .main {
             margin-top: 7.6rem;
-            border: 1px solid #f00;
+            /*border: 1px solid #f00;*/
         }
         
         li {
             padding: .05rem .16rem;
-            border-bottom: 1px solid #000;
+            border-bottom: 1px solid #d9d9d9;
+            height: 0.8em;
         }
         
         .name {
@@ -31,26 +32,24 @@
             background-size: .3rem .3rem;
             background-position: right center;
         }
-        #currentPosi {
-            height: 0.8em;
-        }
+       
     </style>
 </head>
 
 <body>
     <div class="main">
         
-        <ul>
+      <!--   <ul>
             <li  class="select flex-def flex-cCenter" id="currentPosi" tapmode onclick="addLabel(this)">
                 <p class="name">  </p>
-                <!-- <p class="address"></p> -->
             </li>
-        </ul>
+        </ul> -->
         <ul class="resultList">
             <!-- <li>
                 <p class="name">{{=it[i].name}}</p>
                 <p class="address">{{=it[i].address}}</p>
             </li> -->
+           
         </ul>
         <script type="text/x-dot-template" id="listT">
             {{ for(var i = 0; i < it.length; i++){ }} 
@@ -71,6 +70,7 @@
         moduleInit();
         initMap();
         scrollBottom();
+        addEventListenerSearch()
     }
     function scrollBottom() {
         api.addEventListener({
@@ -78,11 +78,49 @@
         }, function(ret, err){
         });
     }
+    // 监听搜索返回数据
+    function addEventListenerSearch() {
+        api.addEventListener({
+            name: 'addEventListenerSearch'
+        }, function(ret, err) {
+            if (ret) {
+                nearHotSpotLocation(ret.value.obj.lon, ret.value.obj.lat, ret.value.obj);
+                bMap.addAnnotations({
+                    annotations: [{
+                        id: 2, lon: ret.value.obj.lon, lat: ret.value.obj.lat
+                    }],
+                    icon: 'widget://',
+                    draggable: true
+                }, function(ret){
+                    bMap.addAnnotations({
+                        annotations: [{
+                            id: 1,
+                            lon: lon,
+                            lat: lat
+                        }],
+                        icon: 'widget://image/icon_my/icon_sc.png',
+                        draggable: true
+                    }, function (ret, err) {
+                    });
+                });
+                viewChange = 0;
+                bMap.setCenter({
+                    coords: {
+                        lon: ret.value.obj.lon,
+                        lat: ret.value.obj.lat
+                    }
+                });
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    // ios下需先初始化才可以打开地图
     function initMap() {
         if (api.systemType === 'ios') {
             bMap.initMapSDK(function(ret) {
                 if (ret.status) {
-                    // alert('地图初始化成功，可以从百度地图服务器检索信息了！');
+                    alert('地图初始化成功，可以从百度地图服务器检索信息了！');
                     startPositioning();
                 }
             });
@@ -90,7 +128,7 @@
             startPositioning();
         }
     }
-
+    // 开始定位
     function startPositioning() {
         bMap.getLocation({
             accuracy: '100m',
@@ -107,20 +145,11 @@
         });
     }
     function getNameFromCoords(lon,lat) {
-        var dom = $api.dom('#currentPosi');
         bMap.getNameFromCoords({
             lon: lon,
             lat: lat
         }, function(ret, err) {
             if (ret.status) {
-                console.log(JSON.stringify(ret));
-                $api.text($api.dom('#currentPosi .name'), ret.poiList[0].name);
-                $api.addCls(dom, 'select');
-                $api.attr(dom, 'data-lon', ret.poiList[0].coord.lon);
-                $api.attr(dom, 'data-lat', ret.poiList[0].coord.lat);
-                $api.attr(dom, 'data-name', ret.poiList[0].name);
-                $api.attr(dom, 'data-address', ret.poiList[0].address);
-                // $api.text($api.dom('#currentPosi .address'), ret.poiList[0].address);
                 api.sendEvent({
                     name: 'selectPosition',
                     extra: {
@@ -158,7 +187,7 @@
                     if (ret.status) {
                        bMap.addAnnotations({
                            annotations: [{
-                               id: 1, lon: ret.lon, lat: ret.lat
+                               id: 2, lon: ret.lon, lat: ret.lat
                            }],
                            icon: 'widget://',
                            draggable: true
@@ -183,34 +212,39 @@
         });
     }
     // 附近热点位置
-    function nearHotSpotLocation(lon, lat) {
+    function nearHotSpotLocation(lon, lat, addEventListenerSearch) {
         bMap.getNameFromCoords({
             lon: lon,
             lat: lat
         }, function(ret, err) {
             if (ret.status) {
+                var obj;
                 dataArr = dataArr.concat(ret.poiList);
-                // $api.text($api.dom('#currentPosi .name'), ret.poiList[0].name);
-                // $api.text($api.dom('#currentPosi .address'), ret.poiList[0].address);
                 getData(ret.poiList);
+                if(addEventListenerSearch) {
+                    var str = '<li data-address="'+ addEventListenerSearch.address +'" data-name="'+ addEventListenerSearch.name +'" data-lat="'+ addEventListenerSearch.lat +'" data-lon="'+ addEventListenerSearch.lon +'" tapmode onclick="addLabel(this)"><p class="name" >'+ addEventListenerSearch.name +'</p><p class="address">'+ addEventListenerSearch.address +'</p></li >';
+                    $api.prepend($api.dom('ul'), str);
+                    obj = {
+                            lon: addEventListenerSearch.lon,
+                            lat: addEventListenerSearch.lat,
+                            name: addEventListenerSearch.name,
+                            address: addEventListenerSearch.address
+                        }
+                }
+                $api.addCls($api.domAll('ul li')[0], 'select');
+                if (!addEventListenerSearch) {
+                    obj = {
+                        lon: $api.attr($api.dom('.select'), 'data-lon'),
+                        lat: $api.attr($api.dom('.select'), 'data-lat'),
+                        name: $api.attr($api.dom('.select'), 'data-name'),
+                        address: $api.attr($api.dom('.select'), 'data-address'),
+                    }
+                }
+                api.sendEvent({
+                    name: 'selectPosition',
+                    extra: obj
+                });
             }
-        });
-    }
-    // 打开frame
-    function openIconFrame() {
-        api.openFrame({
-            name: 'frameName',
-            url: './map_frame_icon.html',
-            rect: {
-                x: api.frameWidth / 2,
-                y: api.frameWidth / 2 + api.pageParam.headerH,
-                w: 20,
-                h: 20
-            },
-            pageParam: {
-                name: 'value'
-            },
-            bounces: false
         });
     }
     // 添加标注
@@ -226,7 +260,7 @@
             lat = $api.attr(ele, 'data-lat'),
             name = $api.attr(ele, 'data-name'),
             address = $api.attr(ele, 'data-address');
-        
+        // 发送事件, 把选择的位置信息传递给win
         api.sendEvent({
             name: 'selectPosition',
             extra: {
@@ -238,7 +272,7 @@
         });
         bMap.addAnnotations({
             annotations: [{
-                id: 2,
+                id: 1,
                 lon: lon,
                 lat: lat
             }],
@@ -249,7 +283,7 @@
         setTimeout(function() {
             bMap.addAnnotations({
                 annotations: [{
-                    id: 1, lon: lon, lat: lat
+                    id: 2, lon: lon, lat: lat
                 }],
                 icon: 'widget://',
                 draggable: true
