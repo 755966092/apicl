@@ -118,27 +118,37 @@
     // ios下需先初始化才可以打开地图
     function initMap() {
         if (api.systemType === 'ios') {
-            console.log(api.systemType)
-            bMap.initMapSDK(function(ret) {
-                if (ret.status) {
-                    alert('地图初始化成功，可以从百度地图服务器检索信息了！');
-                    startPositioning();
-                }
-            });
+            startPositioning();
+            // bMap.initMapSDK(function(ret,err) {
+            //     console.log(JSON.stringify(ret))
+            //     console.log(JSON.stringify(err))
+            //     if (ret.status) {
+            //         alert('地图初始化成功，可以从百度地图服务器检索信息了！');
+            //         startPositioning();
+            //     }
+            // });
         } else {
             startPositioning();
         }
     }
     // 开始定位
     function startPositioning() {
+         // bMap.initMapSDK(function(ret,err) {
+            //     console.log(JSON.stringify(ret))
+            //     console.log(JSON.stringify(err))
+            //     if (ret.status) {
+            //         alert('地图初始化成功，可以从百度地图服务器检索信息了！');
+            //         startPositioning();
+            //     }
+            // });
         bMap.getLocation({
             accuracy: '100m',
             autoStop: true,
             filter: 1
         }, function(ret, err) {
             if (ret.status) {
-                nearHotSpotLocation(ret.lon, ret.lat)
                 openMap(ret.lon, ret.lat);
+               
                 getNameFromCoords(ret.lon, ret.lat);
             } else {
                 alert(err.code);
@@ -182,6 +192,7 @@
             fixed: true
         }, function(ret) {
             if (ret.status) {
+                nearHotSpotLocation(lon, lat)
                 bMap.addEventListener({
                     name: 'viewChange'
                 }, function(ret) {
@@ -218,6 +229,7 @@
             lon: lon,
             lat: lat
         }, function(ret, err) {
+            console.log(JSON.stringify(ret))
             if (ret.status) {
                 var obj;
                 dataArr = dataArr.concat(ret.poiList);

@@ -77,7 +77,38 @@
                 dataArr = dataArr.concat(ret.results);
                 getData(dataArr);
             }else{
-                alert(JSON.stringify(err));
+                 //1（检索词有岐义）
+                      //2（检索地址有岐义）
+                      //3（没有找到检索结果）
+                      //4（key错误）
+                      //5（网络连接错误）
+                      //6（网络连接超时）
+                      //7（还未完成鉴权，请在鉴权通过后重试）
+                switch (err.code) {
+                    case 1:
+                        alert('检索词有岐义')
+                        break;
+                    case 2:
+                        alert('检索地址有岐义')
+                        break;
+                    case 3:
+                        alert('没有找到检索结果')
+                        break;
+                    case 4:
+                        alert('key错误')
+                        break;
+                    case 5:
+                        alert('网络连接错误')
+                        break;
+                    case 6:
+                        alert('网络连接超时')
+                        break;
+                    case 7:
+                        alert('还未完成鉴权，请在鉴权通过后重试')
+                        break;
+                    default:
+                        break;
+                }
             }
         });
     }

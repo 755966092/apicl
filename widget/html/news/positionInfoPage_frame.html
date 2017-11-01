@@ -34,21 +34,11 @@
     <script type="text/javascript">
         apiready = function(){
             moduleInit();
-            initMap();
+            openbMap();
             $api.text($api.byId('name'), api.pageParam.obj.name);
             $api.text($api.byId('address'), api.pageParam.obj.address);
         }
-        function initMap() {
-            if (api.systemType === 'ios') {
-                map.initMapSDK(function(ret) {
-                    if (ret.status) {
-                        openbMap();
-                    }
-                });
-            } else {
-                openbMap();
-            }
-        }
+        
         // 打开百度地图
         function openbMap() {
             bMap.open({
