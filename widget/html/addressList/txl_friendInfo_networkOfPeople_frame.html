@@ -20,10 +20,12 @@
 <script type="text/javascript" src="../../script/echarts.min.js"></script>
 <script type="text/javascript">
     apiready = function(){
+        moduleInit();
         requireData();
     };
     // dataProcessing(data);
     // 处理数据
+    var nameIndex = 1;
     function dataProcessing(data) {
         var frameW = api.frameWidth;
         var frameH = api.frameHeight;
@@ -34,6 +36,30 @@
                 data:[],
                 links:[] 
             };
+            // 本地缓存替换线上昵称
+            
+            for (var key in data.user_info) {
+                if (data.user_info.hasOwnProperty(key)) {
+                    var element = data.user_info[key];
+                    // 本地缓存有数据, 替换为本地缓存
+                    var ret = db.selectSqlSync({
+                            name: 'db_' + $api.getStorage('userToken'),
+                            sql: 'SELECT * FROM addressList_simplify WHERE user_id = ' + element.user_id
+                        });
+                        if (ret.data.length > 0) {
+                            element.nickname = ret.data[0].title
+                        }
+                    for (var keyX in data.user_info) {
+                        if (data.user_info.hasOwnProperty(keyX)) {
+                            var elementX = data.user_info[keyX];
+                            if (element.nickname == elementX.nickname && key != keyX) {
+                                element.nickname = element.nickname + '-' + nameIndex;
+                                nameIndex += 1;
+                            }
+                        }
+                    }
+                }
+            }
             for (var key in data.user_info) {
                 if (data.user_info.hasOwnProperty(key)) {
                     var element = data.user_info[key];
@@ -88,7 +114,6 @@
     }
     // 初始化关系图
     function initTable(dataY, size, edgeLength) {
-        console.log(JSON.stringify(dataY))
         var myChart = echarts.init(document.getElementById('main'));
         var option = {
             // title: {

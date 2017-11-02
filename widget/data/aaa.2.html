@@ -36,16 +36,75 @@
 //        // console.log('失败:'+value)
 //    });
 
-    var func = function (i) {
-        return new Promise(function (resolve, reject) {
-            setTimeout(function () {
-                // console.log(i)
-            },10000)
-        })
-    }
-for (var i = 0; i < 10; i++) {
-    func(i)
+//     var func = function (i) {
+//         return new Promise(function (resolve, reject) {
+//             setTimeout(function () {
+//                 // console.log(i)
+//             },10000)
+//         })
+//     }
+// for (var i = 0; i < 10; i++) {
+//     func(i)
 
+// }
+
+var obj = {
+    'a': {
+        name:'aaa'
+    },
+    'b': {
+        name: 'bbb'
+    },
+    'c': {
+        name: 'ccc'
+    }, 
+    'd': {
+        name: 'aaa'
+    }, 
+    'e': {
+            name: 'ccc'
+        },
+         'f': {
+                name: 'aaa'
+            }, 
+             'g': {
+                    name: 'aaa'
+                }, 
 }
+var nameIndex = 1;
+for (var key in obj) {
+    if (obj.hasOwnProperty(key)) {
+        var element = obj[key];
+        for (var keyX in obj) {
+            if (obj.hasOwnProperty(keyX)) {
+                var elementX = obj[keyX];
+                if (element.name == elementX.name&& key != keyX) {
+                    console.log('相同:'+ element.name)
+                    console.log('相同key:'+ key)
+                    console.log('相同:'+ elementX.name)
+                    console.log('相同key:'+ keyX)
+                    console.log('------------')
+                    element.name = element.name+'-'+ nameIndex;
+                    nameIndex += 1;
+                    console.log(obj)
+                }
+            }
+        }
+    }
+}
+    for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            var element = obj[key];
+            for (var keyX in obj) {
+                if (obj.hasOwnProperty(keyX)) {
+                    var elementX = obj[keyX];
+                    if (element.name == elementX.name && key != keyX) {
+                        element.name = element.name + '-' + nameIndex;
+                        nameIndex += 1;
+                    }
+                }
+            }
+        }
+    }
 </script>
 </html>
