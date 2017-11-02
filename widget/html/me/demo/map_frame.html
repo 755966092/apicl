@@ -26,6 +26,9 @@
         .address {
             font-size: .24rem;
             color: #999;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
         }
         .select {
             background: url(../../../image/icon_my/icon_wdq.png)no-repeat;
@@ -84,8 +87,9 @@
             name: 'addEventListenerSearch'
         }, function(ret, err) {
             if (ret) {
+                // 附近热点位置
                 nearHotSpotLocation(ret.value.obj.lon, ret.value.obj.lat, ret.value.obj);
-                bMap.addAnnotations({
+                 bMap.addAnnotations({
                     annotations: [{
                         id: 2, lon: ret.value.obj.lon, lat: ret.value.obj.lat
                     }],
@@ -101,15 +105,19 @@
                         icon: 'widget://image/icon_my/icon_sc.png',
                         draggable: true
                     }, function (ret, err) {
+                        
                     });
                 });
                 viewChange = 0;
-                bMap.setCenter({
-                    coords: {
-                        lon: ret.value.obj.lon,
-                        lat: ret.value.obj.lat
-                    }
-                });
+                setTimeout(function() {
+                    bMap.setCenter({
+                            coords: {
+                                lon: parseFloat(ret.value.obj.lon),
+                                lat: parseFloat(ret.value.obj.lat)
+                            },
+                            animation: true
+                        });
+                }, 1000);
             } else {
                 alert(JSON.stringify(err));
             }
@@ -197,6 +205,7 @@
                     name: 'viewChange'
                 }, function(ret) {
                     if (ret.status) {
+                        delAnno([2]);
                        bMap.addAnnotations({
                            annotations: [{
                                id: 2, lon: ret.lon, lat: ret.lat
@@ -229,7 +238,6 @@
             lon: lon,
             lat: lat
         }, function(ret, err) {
-            console.log(JSON.stringify(ret))
             if (ret.status) {
                 var obj;
                 dataArr = dataArr.concat(ret.poiList);
@@ -283,6 +291,7 @@
                 address:address
             }
         });
+        delAnno([1,2]);
         bMap.addAnnotations({
             annotations: [{
                 id: 1,
@@ -310,6 +319,12 @@
                 }
             });
         }, 500);
+    }
+    // 删除标注
+    function delAnno(ids) {
+        bMap.removeAnnotations({
+            ids: ids
+        });
     }
 </script>
 
