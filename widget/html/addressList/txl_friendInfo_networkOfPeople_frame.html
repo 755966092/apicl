@@ -25,23 +25,41 @@
     // dataProcessing(data);
     // 处理数据
     function dataProcessing(data) {
+        var frameW = api.frameWidth;
+        var frameH = api.frameHeight;
+        var size = 60;
+        var edgeLength = [10,200];
         if (data.user_info && data.relationship_info) {
             var dataY = {
                 data:[],
-                links:[]
+                links:[] 
             };
             for (var key in data.user_info) {
                 if (data.user_info.hasOwnProperty(key)) {
                     var element = data.user_info[key];
-                    dataY.data.push({name:element.nickname,symbol:'image://'+ element.head_img_url +'?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim'})
+                    if (element.user_id === data.self_user_id) {
+                        // 自己, 头像变大, 固定在顶部
+                        dataY.data.push({ fixed:true,y:55,x: frameW/2,symbolSize :80,name:element.nickname,symbol:'image://'+ element.head_img_url +'?roundPic/radius/!50p'})
+                    } else if (element.user_id == api.pageParam.userId) {
+                        // 目标用户, 头像变大, 固定在底部
+                        dataY.data.push({ fixed:true,y: frameH-70, x: frameW / 2, symbolSize: 80, name: element.nickname, symbol: 'image://' + element.head_img_url + '?roundPic/radius/!50p' })
+                    } else {
+                        // 中间人
+                        dataY.data.push({ name: element.nickname, symbol: 'image://' + element.head_img_url + '?roundPic/radius/!50p' })
+                    }
                 }
             }
             for (var i = 0; i < data.relationship_info.length; i++) {
                 var element = data.relationship_info[i];
                 dataY.links.push({source:data.user_info[element[0]].nickname,target:data.user_info[element[1]].nickname})
             }
-            // console.log(JSON.stringify(dataY))
-            initTable(dataY);
+            if (data.relationship_info.length>3) {
+                // 头像大小
+                size = 30;
+                // 链接线长度
+                edgeLength = [100, 200];
+            }
+            initTable(dataY,size, edgeLength);
         }
     }
     // 请求数据
@@ -59,7 +77,6 @@
         }, function(ret, err) {
             if(ret) {
                 if (ret.code === 200) {
-                    // console.log(JSON.stringify(ret))
                     dataProcessing(ret.data);
                 } else {
                     alert(ret.msg)
@@ -70,13 +87,16 @@
         })
     }
     // 初始化关系图
-    function initTable(dataY) {
+    function initTable(dataY, size, edgeLength) {
+        console.log(JSON.stringify(dataY))
         var myChart = echarts.init(document.getElementById('main'));
         var option = {
             // title: {
             //     text: 'asdasdas'
             // },
-            tooltip: {},
+            tooltip: {
+                show: false
+            },
             // animation: false,
             animationEasing: 'linear',
             series : [
@@ -84,20 +104,24 @@
                     type: 'graph',
                     layout: 'force',
                     force: {
-                        gravity:[0.3],
-                        repulsion:[100,500],
-                        edgeLength: [10, 500],
+                        // gravity:[0.3],
+                        repulsion:[200,350],
+                        edgeLength: edgeLength,
                     },
-                    draggable: true,
-                    symbolSize: 50,
-                    roam: true,
+                    // layout: 'circular',
+                    focusNodeAdjacency: true,
+                    hoverAnimation: true,
+                    draggable: false,
+                    symbolSize: size,
+                    roam: false,
                     label: {
                         normal: {
                             show: true,
-                            color: "auto"
+                            color: "#000",
+                            position: 'bottom'
                         }
                     },
-                    edgeSymbol: ['circle', 'arrow'],
+                    // edgeSymbol: ['circle', 'arrow'],
                     edgeSymbolSize: [4, 10],
                     edgeLabel: {
                         normal: {
@@ -145,9 +169,16 @@
                     lineStyle: {
                         normal: {
                             opacity: 0.9,
-                            width: 2,
-                            curveness: 0
-                        }
+                            width: 1,
+                            curveness: 0,
+                            color: '#d9d9d9'
+                        },
+                        emphasis: {
+                                opacity: 0.9,
+                                width: 1,
+                                curveness: 0,
+                                color: '#d9d9d9'
+                            }
                     }
                 }
             ]
