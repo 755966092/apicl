@@ -5,77 +5,32 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css"/>
     <style>
-      
-        .main ul li {
-            height: .82rem;
-            line-height: .82rem;
-            padding-left: .3rem;
-            font-size: .28rem;
-            
-            background: #fff;
-            position: relative;
+        img {
+            width: 1.1rem;
+            height: 1.1rem;
         }
-        .main ul li .wrap {
-            padding-right: .3rem;
-            border-bottom: .01rem solid #EDEDED;
+        .m30 {
+            margin: 0.3rem 0; 
         }
-         .main ul li:last-child {
-            border-bottom: .01rem solid #EDEDED;
-         }
-         .main ul li:last-child .wrfap {
-            border: 0;
-         }
-        .icon_zk {
-            display: inline-block;
-            padding-right: .15rem;
-            height: .8rem;
-            background: url(../../image/icon_member/icon_zk.png)no-repeat;
-            -webkit-background-size: .15rem .25rem;
-            background-size: .15rem .25rem;
-            background-position: 0 .3rem;
-            float: right;
+        .mt20 {
+            margin-top: 0.2rem;
         }
-        
-        .title {
+        .btn {
+            margin-top: 0.4rem;
+            padding: 0.36rem;
+        }
+         .title {
             height: .98rem;
             font-size: .34rem;
             color: #439422;
             border-bottom: .01rem solid #d9d9d9;
+            border-top: .01rem solid #d9d9d9;
+            margin-top: .2rem;
             text-align: center;
             line-height: .98rem;
             background-color: #fff;
-            margin-top: .2rem;
-        }
-        .gs_icon {
-            font-size: .32rem;
-            background-color: #fff;
-            border-bottom: .01rem solid #d9d9d9;
-            margin-top: .2rem;
-            height: 1.6rem;
-            line-height: 1.6rem;
-            padding: 0 .3rem;
-            position: relative;
-            margin-bottom: .2rem;
-        }
-        
-        .gs_icon img {
-            width: 1.19rem;
-            height: 1.19rem;
-            vertical-align: middle;
-            position: absolute;
-            top: .21rem;
-            right: .65rem;
-        }
-        .gs_icon .icon_zk {
-            height: 1.6rem;
-            background: url(../../image/icon_member/icon_zk.png)no-repeat;
-            -webkit-background-size: .15rem .25rem;
-            background-size: .15rem .25rem;
-            background-position: 0 center;
-        }
-        ul li:last-child {
-            margin-top: .2rem;
         }
     </style>
 </head>
@@ -86,63 +41,102 @@
             <span class="winTitle">
                 公司主页
             </span>
+            <span class="rightBtn" tapmode onclick="openHomePage()">进入主页</span>
         </div>
     </header>
-    <div class="main">  
-        <h3 class="title"></h3>
-        <div class="gs_icon">
-            公司图标
-            <img src="../../image/tx_4.jpg">
-            <span class="icon_zk"></span>
-        </div>
-        <ul>
-            <li   tapmode   onclick="login(this)" data-val="gsjc">
-                <div class="wrap">
-                    <span>公司简称</span>
-                    <span class="icon_zk"></span>
-                </div>
-            </li>
-            <li   tapmode   onclick="login(this)" data-val="schy">
-                <div class="wrap">
-                    <span>所处行业</span>
-                    <span class="icon_zk"></span>
-                </div>
-            </li>
-            <li   tapmode   onclick="login(this)" data-val="ygrs">
-                <div class="wrap">
-                    <span>员工人数</span>
-                    <span class="icon_zk"></span>
-                </div>
-            </li>
-            <li   tapmode   onclick="login(this)" data-val="gsdz">
-                <div class="wrap">
-                    <span>公司地址</span>
-                    <span class="icon_zk"></span>
-                </div>
-            </li>
-            <li   tapmode   onclick="login(this)" data-val="gsjj">
-                <div class="wrap">
-                    <span>公司简介</span>
-                    <span class="icon_zk"></span>
-                </div>
-            </li>
-            <li   tapmode   onclick="login(this)" data-val="gsgw">
-                <div class="wrap">
-                    <span>公司官网</span>
-                    <span class="icon_zk"></span>
-                </div>
-            </li>
-       </ul>
+    <h3 class="title"></h3>
+    <div class="weui-cells m30">
+        <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openImgPage()">
+            <div class="weui-cell__bd">
+                <p>公司图标</p>
+            </div>
+            <img id="companyIcon" src="../../image/tx_5.jpg">
+            <div class="weui-cell__ft">
+            </div>
+        </a>
     </div>
-  
+   
+    <div class="weui-cells">
+        <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openInputPage(this)" data-type="shortName">
+            <div class="weui-cell__bd">
+                <p>公司简称</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+        <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openInputPage(this)" data-type="industry">
+            <div class="weui-cell__bd">
+                <p>所属行业</p>
+            </div>
+            <div class="weui-cell__ft" id="industry">
+            </div>
+        </a>
+        <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openInputPage(this)" data-type="peopleNumber">
+            <div class="weui-cell__bd">
+                <p>员工人数</p>
+            </div>
+            <div class="weui-cell__ft" id="peopleNumber">
+            </div>
+        </a>
+        <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openInputPage(this)" data-type="companyAddress">
+            <div class="weui-cell__bd">
+                <p>公司地址</p>
+            </div>
+            <div class="weui-cell__ft" id="companyAddress">
+            </div>
+        </a>
+        <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openInputPage(this)" data-type="introduction">
+            <div class="weui-cell__bd">
+                <p>公司简介</p>
+            </div>
+            <div class="weui-cell__ft" id="introduction">
+            </div>
+        </a>
+    </div>
+    <div class="weui-cells mt20">
+        <a  class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openInputPage(this)" data-type="officialWebsite">
+            <div class="weui-cell__bd">
+                <p>公司官网</p>
+            </div>
+            <div class="weui-cell__ft" id="officialWebsite">
+            </div>
+        </a>
+    </div>
+    <div class="btn">
+        <button tapmode onclick="editCompany()" class=" weui-btn weui-btn_primary">提交</button>
+    </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
         fnInit();
-        requireData();
+        initPage();
+        addImgEventListener();
     };
+    // 监听事件
+    function addImgEventListener() {
+        api.addEventListener({
+            name: 'sendEvent_companyIcon'
+        }, function(ret, err){
+            $api.attr($api.byId('companyIcon'), 'src', ret.value.selDate);
+        });
+    }
+    // 打开输入页面
+    function openInputPage(ele) {
+        api.openWin({
+            name: 'me_gs_input',
+            url: './me_gs_input.html',
+            bounces: false,
+            pageParam: { 
+                type : $api.attr(ele, 'data-type')
+            }
+        });
+    }
+    // 初始化页面
+    function initPage() {
+        $api.text($api.dom('h3'), api.pageParam.name);
+    }
    function login (ele) {
         var val = $api.attr(ele, 'data-val');
         api.openWin({
@@ -178,6 +172,35 @@
                 alert(JSON.stringify(err))
             }
         })
+    }
+    // 编辑公司页面
+    function editCompany() {
+        
+    }
+    // 进入公司主页
+    function openHomePage() {
+        api.openWin({
+            name: 'me_gs_homePage',
+            url: './me_gs_homePage.html',
+            bounces: false,
+            pageParam: {
+                companyId: api.pageParam.companyId,
+                statu: api.pageParam.statu,
+                name: api.pageParam.name
+            }
+        });
+    }
+    // 上传公司图标
+    function openImgPage() {
+        api.openWin({
+            name: 'me_info_tx',
+            url: './me_info/me_info_tx.html',
+            bounces: false,
+            pageParam: {
+                name: $api.attr($api.byId('companyIcon'), 'src'),
+                type:'sendEvent_companyIcon'
+            }
+        });
     }
 </script>
 </html>

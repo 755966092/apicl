@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css"/>
+    <style>
+       .btn {
+           margin-top: 0.2rem;
+           padding: 0 .36rem;
+       }
+       .mt20 {
+           margin-top: .2rem;
+       }
+       .weui-cells {
+           display: none;
+       }
+    </style>
+</head>
+<body>
+     <header  class="header">
+        <div class="head">
+            <span class="callback"   tapmode   onclick="api.closeWin()">返回</span>
+            <span class="winTitle">
+                公司主页
+            </span>
+        </div>
+    </header>
+    <div class="weui-cells mt20" id="input">
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="请输入文本">
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells weui-cells_form mt20" id="textarea">
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <textarea class="weui-textarea" maxlength="200" oninput="wordCount(this)" placeholder="请输入文本" rows="3"></textarea>
+                <div class="weui-textarea-counter">
+                    <span id="fontCount">0</span>/200
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="btn">
+        <button tapmode onclick="editCompany()" class=" weui-btn weui-btn_primary">确定</button>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        fnInit();
+        initPage();
+    };
+    function initPage() {
+        if (api.pageParam.type === 'introduction') {
+            $api.css($api.byId('textarea'), 'display: block');
+        } else {
+            $api.css($api.byId('input'), 'display: block');
+        }
+    }
+    function wordCount(ele) {
+        var count = $api.val(ele).length;
+        if (count == 200) {
+            $api.text($api.byId('fontCount'), count);
+            $api.css($api.dom('.weui-textarea-counter'), 'color:#f00');
+        } else {
+            $api.css($api.dom('.weui-textarea-counter'), 'color:#999');
+            $api.text($api.byId('fontCount'), count);
+        }
+    }
+</script>
+</html>

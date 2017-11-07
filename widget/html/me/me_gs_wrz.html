@@ -5,7 +5,7 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
-    <link rel="stylesheet" type="text/css" href="../../css/weui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css"/>
     <style>
         body,html{
             background-color: #fff;
@@ -114,7 +114,7 @@
         </div>
     </div>
     <div class="btn">
-        <button tapmode onclick="uploadCertificationInformation()" class=" weui_btn weui_btn_primary">提交</button>
+        <button tapmode onclick="uploadCertificationInformation()" class=" weui-btn weui-btn_primary">提交</button>
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -127,28 +127,7 @@
     };
     // 初始化页面
     function initPage() {
-        api.ajax({
-            url: apiSite + '/userCenter/workDetails',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: $api.getStorage('userToken'),
-                    statu: 2,
-                    company_id: api.pageParam.companyId
-                }
-            }
-        }, function(ret, err) {
-            if(ret) {
-                if (ret.code === 200) {
-                    console.log(JSON.stringify(ret))
-                } else {
-                    alert(ret.msg)
-                }
-            } else {
-                alert(JSON.stringify(err))
-            }
-        })
+         $api.text($api.dom('h3'), api.pageParam.name);
     }
     var imgUrlArr = {
         identity:'',

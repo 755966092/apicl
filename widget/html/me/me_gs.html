@@ -7,6 +7,7 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
     <style>
    
     
@@ -82,7 +83,7 @@
         </div>
     </header>
     <div class="main">
-        <ul class="resultList">
+        <div class="resultList">
             <!-- <p class="workCertification">已认证</p>
             <li tapmode onclick="openCompanyInfoPage(this)" data-val="zy">
                <div class="wrap">
@@ -97,29 +98,35 @@
                     <span class="icon_zk"></span>   
                 </div>
             </li> -->
-        </ul>
+        </div>
         <script type="text/x-dot-template" id="listT">
             {{?it.is_verify.length!=0}}
                 <p class="workCertification">已认证</p>
             {{?}}
-            {{~it.is_verify:value:index}}
-                <li tapmode onclick="openCompanyInfoPage(this)" data-statu='1' data-val="zy" data-id="{{=value.company_id}}">
-                <div class="wrap">
-                        <span>{{=value.company_name}}</span>
-                        <span class="icon_zk"></span>
-                </div>
-                </li>
-            {{~}}
+            <div class="weui-cells">
+                {{~it.is_verify:value:index}}
+                    <a class="weui-cell weui-cell_access" href="javascript:;" data-adminId="{{=value.admin_id}}" data-name="{{=value.company_name}}" tapmode onclick="openCompanyInfoPage(this)" data-statu='1' data-val="zy" data-id="{{=value.company_id}}">
+                        <div class="weui-cell__bd">
+                            <p>{{=value.company_name}}</p>
+                        </div>
+                        <div class="weui-cell__ft">
+                        </div>
+                    </a>
+                {{~}}
+            </div>
             {{?it.no_verify.length!=0}}
                 <p class="workCertification">未认证</p>
             {{?}}
             {{~it.no_verify:value:index}}
-                <li tapmode onclick="openCompanyInfoPage(this)" data-id="{{=value.company_id}}" data-statu='2' data-val="wrz">
-                <div class="wrap">
-                        <span>{{=value.company_name}}</span>
-                        <span class="icon_zk"></span>
+                <div class="weui-cells">
+                    <a class="weui-cell weui-cell_access" href="javascript:;" data-adminId="{{=value.admin_id}}" data-name="{{=value.company_name}}" tapmode onclick="openCompanyInfoPage(this)" data-id="{{=value.company_id}}" data-statu='2' data-val="wrz">
+                        <div class="weui-cell__bd">
+                            <p>{{=value.company_name}}</p>
+                        </div>
+                        <div class="weui-cell__ft">
+                        </div>
+                    </a>
                 </div>
-                </li>
             {{~}}
             
         </script>
@@ -133,6 +140,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
+var userId;
 apiready = function() {
     fnInit();
     requireData();
@@ -155,6 +163,8 @@ function requireData() {
     }, function(ret, err) {
         if(ret) {
             if (ret.code === 200) {
+                userId = ret.data.list[0].user_id;
+                console.log(JSON.stringify(ret))
                 for (var i = 0; i < ret.data.list.length; i++) {
                     var element = ret.data.list[i];
                     if (element.is_verify !== -1) {
@@ -175,12 +185,21 @@ function requireData() {
 }
 function openCompanyInfoPage(ele) {
     var val = $api.attr(ele, 'data-val');
+    var adminId = $api.attr(ele, 'data-adminId');
+    // 普通用户 statu 进入公司主页
+    // 公司管理员进入公司信息编辑页面
+    // 未认证公司进入公司认证页面
+    if (adminId != userId) {
+        // 非管理员
+        val = 'homePage'
+    }
     api.openWin({
         name: val + 'Win',
         url: './me_gs_' + val + '.html',
         pageParam: {
             companyId: $api.attr(ele, 'data-id'),
-            statu: $api.attr(ele, 'data-statu')
+            statu: $api.attr(ele, 'data-statu'),
+            name: $api.attr(ele, 'data-name'),
         },
         bounces: false
     });

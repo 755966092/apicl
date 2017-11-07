@@ -348,9 +348,8 @@
             }
         });
     }
-
+    var contactArr=[];
     function queryContactByPage(page) {
-        console.log('开始获取')
         api.toast({
             msg: '开始获取',
             duration: 2000,
@@ -367,14 +366,19 @@
         }, function(ret, err) {
             //  api.alert({msg:'获取成功'+page});
             // console.log(JSON.stringify(ret));
-            tt2 = new Date().getTime();
-           alert('获取用时:'+(tt2-tt1)/1000)
-           alert('获取成功' + JSON.stringify(ret.contacts.length))
+            contactArr = contactArr.concat(ret.contacts);
+
+            
+           
             $api.css($api.dom('.loading'), 'display: none');
             if (page < (ret.pages - 1)) {
                 setTimeout(function() {
                     queryContactByPage(page + 1);
                 }, 2000)
+            } else {
+                tt2 = new Date().getTime();
+                console.log('获取用时:' + (tt2 - tt1) / 1000)
+                console.log('获取条数-----' + contactArr.length)
             }
         });
     }
