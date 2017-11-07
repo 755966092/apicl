@@ -14,10 +14,14 @@
         .main {
             text-align: center;
         }
-        .main img {
+        .main img,
+        #img {
             margin-top: 1.64rem;
             width: 7.5rem;
             height: 7.5rem;
+        }
+        #img {
+            background: url(../../image/tx_5.jpg)no-repeat;background-size: auto 7.5rem;background-position: center;
         }
         .main span {
             color: #fff;
@@ -39,25 +43,35 @@
             background-size: .63rem .52rem;
             background-position: center 0;
         }
+        .loading {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, .5) url(../../image/loading_more.gif)no-repeat;
+            background-size: .8rem .8rem;
+            background-position: center
+        }
     </style>
 </head>
 <body>
+    
       <header  class="header">
         <div class="head">
             <span class="callback"   tapmode   onclick="api.closeWin()">返回</span>
             <span class="winTitle">
                 选择头像
             </span>
-            <span class="rightBtn"   tapmode   onclick="openShadow()">完成</span> 
+            <span class="rightBtn"   tapmode   onclick="updateFile()">完成</span> 
         </div>
     </header>
-
+    <div class="loading"></div>
     <div class="main">
-        <img src="../../image/tx_5.jpg">
+        <!-- <img src="../../image/tx_5.jpg"> -->
+        <div id="img"></div>
         <!-- <img src="../../image/tx_5.jpg"> -->
         <div>
-            <span data-str="camear"   tapmode   onclick="upload(this)">拍照上传</span>
-            <span data-str="photo"   tapmode   onclick="upload(this)">相册上传</span>
+            <span data-str="camera"   tapmode   onclick="upload(this)">拍照上传</span>
+            <span data-str="album"   tapmode   onclick="upload(this)">相册上传</span>
         </div>
     </div>
 </body>
@@ -65,54 +79,60 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
-	    fnInit();
+        fnInit();
+        initPage();
     };
-
-    function upload(str) {
-        var val = $api.attr(str, 'data-str')
-        if (val === 'camear') {
-             api.getPicture({
-                    sourceType: 'camera',
-                    mediaValue: 'pic',
-                    encodingType: 'jpg',
-                    destinationType: 'base64',
-                    quality: 70,
-                    // targetWidth: 750,
-                    // targetHeight: 750,
-                    saveToPhotoAlbum: false // 拍照后是否保存照片到相册
-                }, function(ret, err) {
-                    if (ret) {
-                       if (!ret.base64Data) {
-                        
-                    } else {    
-                        $api.attr($api.dom('img'),'src', ret.base64Data)
-                    }
-                    } else {
-                        // alert(JSON.stringify(err.msg));
-                    }
-                });
-        } else {
-            api.getPicture({
-                sourceType: 'library',
-                mediaValue: 'pic',
-                encodingType: 'jpg',
-                destinationType: 'base64',
-                quality: 70,
-                // targetWidth: 750,
-                // targetHeight: 750
-            }, function(ret, err) {
-                if (ret) {
-                    if (!ret.base64Data) {
-                        
-                    } else {    
-                        $api.attr($api.dom('img'),'src', ret.base64Data)
-                    }
-                } else {
-                    // alert(JSON.stringify(err.msg));
-                }
-            });
+    // 初始化页面
+    function initPage() {
+        if (api.pageParam.imgUrl) {
+            $api.attr($api.byId('img'), 'style', 'background: url(' + api.pageParam.imgUrl + ')no-repeat;background-size: auto 7.5rem;background-position: center;');
+            $api.attr($api.byId('img'), 'data-url', api.pageParam.imgUrl)
         }
     }
-  
+    function upload(str) {
+        api.getPicture({
+            sourceType: $api.attr(str, 'data-str'),
+            mediaValue: 'pic',
+            encodingType: 'jpg',
+            destinationType: 'url',
+            quality: 70,
+            saveToPhotoAlbum: false // 拍照后是否保存照片到相册
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.data) {
+                    $api.attr($api.byId('img'), 'style', 'background: url('+ ret.data +')no-repeat;background-size: auto 7.5rem;background-position: center;');
+                    $api.attr($api.byId('img'),'data-url',ret.data)
+                }
+            } else {
+                // alert(JSON.stringify(err.msg));
+            }
+        });
+    }
+    // 上传图片
+    function updateFile() {
+        $api.css($api.dom('.loading'), 'display:block');
+        var obj = api.require('qiniuUpfile');
+        var imgUrl =  $api.attr($api.byId('img'), 'data-url');
+        obj.upfile({
+            file: imgUrl,
+        }, function (ret, err) {
+            if (ret.status) {
+                if (ret.oper == "complete") {
+                    //上传成功后组装访问路径，或直接访问文档
+                    api.sendEvent({
+                        name: 'sendEvent_'+api.pageParam.type,
+                        extra: { 
+                            imgUrl: imgUrl,
+                            imgWebUrl : 'http://' + baseUrl + '/' + ret.info.key
+                        }
+                    });
+                    $api.css($api.dom('.loading'), 'display:none');
+                    api.closeWin();
+                } else if (ret.oper == "progress") {
+                    //上传过程中获取进度数据
+                }
+            }
+        });
+    }
 </script>
 </html>

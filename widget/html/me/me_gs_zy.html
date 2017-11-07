@@ -89,7 +89,7 @@
         </div>
     </header>
     <div class="main">  
-        <h3 class="title">第一学教育科技（北京）有限公司</h3>
+        <h3 class="title"></h3>
         <div class="gs_icon">
             公司图标
             <img src="../../image/tx_4.jpg">
@@ -134,12 +134,14 @@
             </li>
        </ul>
     </div>
+  
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     apiready = function(){
         fnInit();
+        requireData();
     };
    function login (ele) {
         var val = $api.attr(ele, 'data-val');
@@ -152,6 +154,30 @@
             bounces: false
         });
    }
-   
+   // 获取公司详情
+    function requireData() {
+        api.ajax({
+            url: apiSite + '/userCenter/workDetails',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: {
+                    token: $api.getStorage('userToken'),
+                    company_id: api.pageParam.companyId,
+                    statu: 2
+                }
+            }
+        }, function (ret, err) {
+            if (ret) {
+                if (ret.code === 200) {
+                    $api.text($api.dom('h3'), ret.data.list.name);
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
 </script>
 </html>

@@ -82,7 +82,7 @@
             <li class="bb" tapmode onclick="openPage(this)" data-val='codeSafe'>
                 <div class="text">帐号与安全</div>
             </li>
-            <li class="bb" tapmode onclick="updateAddressList()">
+            <li class="bb" tapmode onclick="queryContactByPage()">
                 <div class="text">更新通讯录</div>
             </li>
             <!--  <li class="mt30" onclick="openImg()">
@@ -350,6 +350,12 @@
     }
 
     function queryContactByPage(page) {
+        console.log('开始获取')
+        api.toast({
+            msg: '开始获取',
+            duration: 2000,
+            location: 'bottom'
+        });
         tt1 = new Date().getTime();
         if ("undefined" == typeof page) {
             var page = 0;
@@ -362,57 +368,69 @@
             //  api.alert({msg:'获取成功'+page});
             // console.log(JSON.stringify(ret));
             tt2 = new Date().getTime();
-            // console.log('获取用时:'+(tt2-tt1)/1000)
-            // console.log('获取成功' + JSON.stringify(ret.contacts.length))
+           alert('获取用时:'+(tt2-tt1)/1000)
+           alert('获取成功' + JSON.stringify(ret.contacts.length))
             $api.css($api.dom('.loading'), 'display: none');
             if (page < (ret.pages - 1)) {
                 setTimeout(function() {
                     queryContactByPage(page + 1);
-                }, 10000)
+                }, 2000)
             }
         });
     }
 
+      
     function queryContacts() {
+       api.toast({
+           msg: '开始获取',
+           duration: 2000,
+           location: 'bottom'
+       });
+        $api.css($api.dom('.loading'), 'display: block');
+        var start = new Date().getTime();
         contacts.queryByPage({
             pageIndex: 0
         }, function(retContacts, err) {
             if (retContacts.status) {
-                db.executeSql({
-                    name: 'db_' + $api.getStorage('userToken'),
-                    sql: 'CREATE TABLE IF NOT EXISTS addressList(user_id int PRIMARY KEY NOT NULL, nickname varchar(255),real_name varchar(255), head_img_url varchar(255), current_position varchar(255), current_company varchar(255), current_degree varchar(255), current_contact varchar(255), titleSize int, title varchar(255), img varchar(255), flag varchar(255), litter varchar(255), type int, sex varchat(10), remark_nickname varchar(255),  remark_real_name varchar(255) , remark_head_img_url varchar(255) , remark_sex varchar(255) , remark_birthday varchar(255) , remark_hometown varchar(255) , remark_current_company varchar(255) , remark_current_position varchar(255) , remark_current_degree varchar(255), remark_current_contact varchar(255), current_status varchar(255))'
-                }, function(ret, err) {
-                    // ;CREATE UNIQUE INDEX user_id_idx on addressList (user_id);
-                    if (ret.status) {
-                        // // // // console.log(JSON.stringify(ret));
-                        // alert('执行成功')
-                        db.executeSql({
-                            name: 'db_' + $api.getStorage('userToken'),
-                            sql: 'DELETE FROM addressList'
-                        }, function(retData, err) {
-                            if (retData.status) {
-                                db.executeSql({
-                                    name: 'db_' + $api.getStorage('userToken'),
-                                    sql: 'DELETE FROM addressList_simplify'
-                                }, function(retDataList, err) {
-                                    if (retDataList.status) {
-                                        contactUpdate(retContacts);
-                                    } else {
-                                        api.alert({
-                                            msg: err.msg
-                                        });
-                                    }
-                                });
-                            } else {
-                                api.alert({
-                                    msg: err.msg
-                                });
-                            }
-                        });
-                    } else {
-                        alert('新建表错误:' + JSON.stringify(err));
-                    }
-                });
+                var end = new Date().getTime();
+                alert('时间:'+(end-start)/1000)
+                alert('获取成功:'+retContacts.contacts.length)
+                $api.css($api.dom('.loading'), 'display: none');
+                // db.executeSql({
+                //     name: 'db_' + $api.getStorage('userToken'),
+                //     sql: 'CREATE TABLE IF NOT EXISTS addressList(user_id int PRIMARY KEY NOT NULL, nickname varchar(255),real_name varchar(255), head_img_url varchar(255), current_position varchar(255), current_company varchar(255), current_degree varchar(255), current_contact varchar(255), titleSize int, title varchar(255), img varchar(255), flag varchar(255), litter varchar(255), type int, sex varchat(10), remark_nickname varchar(255),  remark_real_name varchar(255) , remark_head_img_url varchar(255) , remark_sex varchar(255) , remark_birthday varchar(255) , remark_hometown varchar(255) , remark_current_company varchar(255) , remark_current_position varchar(255) , remark_current_degree varchar(255), remark_current_contact varchar(255), current_status varchar(255))'
+                // }, function(ret, err) {
+                //     // ;CREATE UNIQUE INDEX user_id_idx on addressList (user_id);
+                //     if (ret.status) {
+                //         // // // // console.log(JSON.stringify(ret));
+                //         // alert('执行成功')
+                //         db.executeSql({
+                //             name: 'db_' + $api.getStorage('userToken'),
+                //             sql: 'DELETE FROM addressList'
+                //         }, function(retData, err) {
+                //             if (retData.status) {
+                //                 db.executeSql({
+                //                     name: 'db_' + $api.getStorage('userToken'),
+                //                     sql: 'DELETE FROM addressList_simplify'
+                //                 }, function(retDataList, err) {
+                //                     if (retDataList.status) {
+                //                         contactUpdate(retContacts);
+                //                     } else {
+                //                         api.alert({
+                //                             msg: err.msg
+                //                         });
+                //                     }
+                //                 });
+                //             } else {
+                //                 api.alert({
+                //                     msg: err.msg
+                //                 });
+                //             }
+                //         });
+                //     } else {
+                //         alert('新建表错误:' + JSON.stringify(err));
+                //     }
+                // });
 
             } else {
                 $api.css($api.dom('.loading'), 'display: none');
