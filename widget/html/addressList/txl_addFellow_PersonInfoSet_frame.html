@@ -6,9 +6,10 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <link rel="stylesheet" type="text/css" href="../../css/flex.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css"/>
    <style type="text/css">
        
-        .stateBtn {
+        /* .stateBtn {
             box-sizing: border-box;
             width: .935rem;
             height: .571rem;
@@ -62,7 +63,6 @@
             -webkit-box-flex: 1.0;
             -webkit-flex-grow: 1;
             flex-grow: 1;
-            /*margin-left: .2rem;*/
             font-size: .28rem;
             line-height: .8rem;
         }
@@ -88,31 +88,88 @@
         }
         ul li:last-child>div {
             border-bottom: 0;
-        }
+        } */
 
         .btn {
-            background-color: #E53933;
-            width: 7.14rem;
-            height: .86rem;
-            line-height: .86rem;
-            text-align: center;
-            color: #fff;
-            font-size: .34rem;
-            margin: 0 auto;
-            border-radius: .08rem;
-            margin-top: .35rem;
+            padding: 0 .36rem;
         }
-        .arrowIcon {
+        .mt20 {
+            margin-top: 0.2rem;
+        }
+        /* .arrowIcon {
             width: .15rem;
             height: .25rem;
             background: url(../../image/icon_zk.png)no-repeat;
             -webkit-background-size: .15rem .25rem;
             background-size: .15rem .25rem;
             margin-right: .33rem;
-        }
+        } */
    </style>
 </head>
 <body>
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell weui-cell_switch">
+            <div class="weui-cell__bd">关注对方</div>
+            <div class="weui-cell__ft">
+                <label for="attention" class="weui-switch-cp">
+                    <input value="attention" onchange="changeState(this)" id="attention" class="weui-switch-cp__input" type="checkbox" checked="false">
+                    <div class="weui-switch-cp__box"></div>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells weui-cells_form mt20">
+        <div class="weui-cell weui-cell_switch">
+            <div class="weui-cell__bd">不让他看我供的</div>
+            <div class="weui-cell__ft">
+                <label for="noMySupply" class="weui-switch-cp">
+                    <input value="noMySupply" onchange="changeState(this)" id="noMySupply" class="weui-switch-cp__input" type="checkbox" checked="checked">
+                    <div class="weui-switch-cp__box"></div>
+                </label>
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_switch">
+            <div class="weui-cell__bd">不让他看我求的</div>
+            <div class="weui-cell__ft">
+                <label for="noMyDemand" class="weui-switch-cp">
+                    <input value="noMyDemand" onchange="changeState(this)" id="noMyDemand" class="weui-switch-cp__input" type="checkbox" checked="checked">
+                    <div class="weui-switch-cp__box"></div>
+                </label>
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_switch">
+            <div class="weui-cell__bd">不让他看我的项目</div>
+            <div class="weui-cell__ft">
+                <label for="noMyProject" class="weui-switch-cp">
+                    <input value="noMyProject" onchange="changeState(this)" id="noMyProject" class="weui-switch-cp__input" type="checkbox" checked="checked">
+                    <div class="weui-switch-cp__box"></div>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells weui-cells_form mt20">
+        <div class="weui-cell weui-cell_switch">
+            <div class="weui-cell__bd">加入黑名单</div>
+            <div class="weui-cell__ft">
+                <label for="pullBlack" class="weui-switch-cp">
+                    <input value="pullBlack" onchange="changeState(this)" id="pullBlack" class="weui-switch-cp__input" type="checkbox" checked="checked">
+                    <div class="weui-switch-cp__box"></div>
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells">
+        <a class="weui-cell weui-cell_access" href="javascript:;">
+            <div class="weui-cell__bd">
+                <p>投诉</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+    </div>
+    <div class="btn mt20">
+        <a href="javascript:;" tapmode onclick="delectFell()" class="weui-btn weui-btn_warn">删除</a>
+    </div>
     <!-- <ul>
         <li>
             <div>
@@ -151,14 +208,13 @@
             </div>
         </li>
     </ul> -->
-    <div class="btn" tapmode onclick="delectFell()">
+    <!-- <div class="btn" tapmode onclick="delectFell()">
         删除
-    </div>
+    </div> -->
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
-<script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
     apiready = function(){
         moduleInit();
@@ -170,7 +226,16 @@
     };
 
     function changeState (ele) {
-        $api.toggleCls(ele, 'sel');
+        // if ($api.attr(ele, 'checked')) {
+        if(ele.checked){
+            // $api.removeAttr(ele, 'checked');
+             ele.removeAttribute('checked')
+            console.log('选中')
+        } else {
+            // $api.attr(ele, 'checked', 'checked');
+            ele.setAttribute('checked','checked')
+            console.log('未选中')
+        }
     }
     function delectFell() {
         if (api.pageParam.oneselfPageFlag) {

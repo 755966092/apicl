@@ -7,54 +7,11 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
     <style>
-        ul {
-            margin-top: .2rem;
-        }
-        
-        ul li {
-            font-size: .3rem;
-            line-height: .8rem;
-            height: .8rem;
-            background-color: #fff;
-            background: #fff url(../../image/icon_zk.png)no-repeat;
-            -webkit-background-size: .15rem .25rem;
-            background-size: .15rem .25rem;
-            background-position: 7.05rem center;
-            padding-left: .3rem;
-            margin-top: .01rem;
-        }
-        
-        .text {
-            padding-right: .3rem;
-            border-bottom: .01rem solid #E1E1E1;
-        }
-        
-        .mt30 {
-            margin-top: .3rem;
-        }
-        
-        .bb {
-            border-bottom: .01rem solid #E1E1E1;
-        }
-        
-        .bb .text {
-            border: 0;
-        }
-        
         .btn {
-            width: 7.14rem;
-            height: .86rem;
-            background-color: #1AAD19;
-            margin: 0 auto;
-            border-radius: .1rem;
-            color: #fff;
-            font-size: .34rem;
-            line-height: .86rem;
-            text-align: center;
-            margin-top: .57rem;
+            padding: 0 .36rem;;
         }
-        
         .loading {
             width: 7.5rem;
             height: 13.34rem;
@@ -63,6 +20,9 @@
             background-size: .8rem .8rem;
             background-position: center center;
             display: none;
+        }
+        .mt20 {
+            margin-top: 0.2rem;
         }
     </style>
 </head>
@@ -77,35 +37,58 @@
         </div>
     </header>
     <div class="loading"></div>
-    <div class="main">
-        <ul class="mt30">
-            <li class="bb" tapmode onclick="openPage(this)" data-val='codeSafe'>
-                <div class="text">帐号与安全</div>
-            </li>
-            <li class="bb" tapmode onclick="getContacts()">
-                <div class="text">更新通讯录</div>
-            </li>
-            <!--  <li class="mt30" onclick="openImg()">
-                <div class="text">隐私</div>
-            </li> -->
-            <!-- <li class="bb" onclick="openImg2()">
-                <div class="text">通用</div>
-            </li> -->
-            <li class="mt30" tapmode onclick="openPage(this)" data-val="helpAndFeedback">
-                <div class="text">帮助与反馈</div>
-            </li>
-            <li class="bb" tapmode onclick="openPage(this)" data-val='aboutInin'>
-                <div class="text">关于我在</div>
-            </li>
-            <li class="bb" tapmode onclick="clearAllStrong()" data-val='aboutInin'>
-                <div class="text">清除所有缓存</div>
-            </li>
-            <!-- <li class="bb" tapmode onclick="clearAllStrong()" data-val='aboutInin'>
-                <div class="text">同步赵老师通讯录</div>
-            </li> -->
-        </ul>
-        <div class="btn" tapmode onclick="dropOut()">安全退出</div>
-        <!-- <div class="btn" tapmode onclick="openList()">打开地图</div> -->
+    <div class="weui-cells">
+        <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openPage(this)" data-val='codeSafe'>
+            <div class="weui-cell__bd">
+                <p>账号与安全</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+        <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="getContacts()">
+            <div class="weui-cell__bd">
+                <p>更新通讯录</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+    </div>
+    <div class="weui-cells mt20">
+        <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openPage(this)" data-val="privacy">
+            <div class="weui-cell__bd">
+                <p>隐私</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+        <a class="weui-cell weui-cell_access" href="javascript:;">
+            <div class="weui-cell__bd">
+                <p>通用</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+    </div>
+    <div class="weui-cells mt20">
+        <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openPage(this)" data-val="helpAndFeedback">
+            <div class="weui-cell__bd">
+                <p>帮助与反馈</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+        <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openPage(this)" data-val='aboutInin'>
+            <div class="weui-cell__bd">
+                <p>关于我在</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+    </div>
+    <div class='btn mt20'>
+        <a href="javascript:;" class="weui-btn weui-btn_primary" tapmode onclick="dropOut()">安全退出</a>
+        <!-- <a href="javascript:;" class="weui-btn weui-btn_primary"  tapmode onclick="clearAllStrong()" data-val='aboutInin'>清除所有缓存</a> -->
+        <!-- <a href="javascript:;" class="weui-btn weui-btn_primary"  tapmode onclick="openList()">打开地图</a> -->
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -218,7 +201,7 @@
             }
         });
     }
-
+    // 退出
     function dropOut() {
         // 退出戎云
         rong.disconnect({

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
+</head>
+
+<body>
+    <header class="header">
+        <div class="head">
+            <span class="callback" tapmode onclick="api.closeWin()">返回</span>
+            <span class="winTitle">
+                联系人
+            </span>
+        </div>
+    </header>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script>
+    var selectedArr = [];
+    apiready = function(){
+        fnInit();
+        moduleInit();
+        initPage();
+        openList();
+    }
+    // 初始化页面
+    function initPage() {
+       alert(JSON.stringify(api.pageParam))
+    }
+    // 打开列表
+        function openList(data, yes) {
+            data =  {
+                A: [{
+                    placeholderImg: 'widget://res/img/ic/listContact.png',
+                    img: 'http://img1.3lian.com/gif/more/11/201206/a5194ba8c27b17def4a7c5495aba5e32.jpg',
+                    title: 'a标题'
+                }],
+                B: [{
+                    placeholderImg: 'widget://res/img/ic/listContact.png',
+                    img: 'http://img1.3lian.com/gif/more/11/201206/a5194ba8c27b17def4a7c5495aba5e32.jpg',
+                    title: 'b标题'
+                }],
+                C:[{
+                    placeholderImg: 'widget://res/img/ic/listContact.png',
+                    img: 'http://img1.3lian.com/gif/more/11/201206/a5194ba8c27b17def4a7c5495aba5e32.jpg',
+                    title: 'c标题'
+                }],
+                D:[{
+                    placeholderImg: 'widget://res/img/ic/listContact.png',
+                    img: 'http://img1.3lian.com/gif/more/11/201206/a5194ba8c27b17def4a7c5495aba5e32.jpg',
+                    title: 'd标题'
+                }],
+                E:[{
+                    placeholderImg: 'widget://res/img/ic/listContact.png',
+                    img: 'http://img1.3lian.com/gif/more/11/201206/a5194ba8c27b17def4a7c5495aba5e32.jpg',
+                    title: 'e标题'
+                }],
+                F:[{
+                    placeholderImg: 'widget://res/img/ic/listContact.png',
+                    img: 'http://img1.3lian.com/gif/more/11/201206/a5194ba8c27b17def4a7c5495aba5e32.jpg',
+                    title: 'f标题'
+                }],
+                G:[{
+                    placeholderImg: 'widget://res/img/ic/listContact.png',
+                    img: 'http://img1.3lian.com/gif/more/11/201206/a5194ba8c27b17def4a7c5495aba5e32.jpg',
+                    title: 'g标题'
+                }],
+                H:[{
+                    placeholderImg: 'widget://res/img/ic/listContact.png',
+                    img: 'http://img1.3lian.com/gif/more/11/201206/a5194ba8c27b17def4a7c5495aba5e32.jpg',
+                    title: 'h标题'
+                }],
+                I:[{
+                    placeholderImg: 'widget://res/img/ic/listContact.png',
+                    img: 'http://img1.3lian.com/gif/more/11/201206/a5194ba8c27b17def4a7c5495aba5e32.jpg',
+                    title: 'i标题'
+                }],
+                J:[{
+                    placeholderImg: 'widget://res/img/ic/listContact.png',
+                    img: 'http://img1.3lian.com/gif/more/11/201206/a5194ba8c27b17def4a7c5495aba5e32.jpg',
+                    title: 'j标题'
+                }]
+            }
+            var str = '';
+            listContact.open({
+                x: -1000,
+                y: -1000,
+                w: 5,
+                h: 5,
+                data: [],
+                fixedOn: api.frameName
+            }, function (ret, err) {
+            })
+            listContact.close();
+            listContact.open({
+                x: 0,
+                y: headerH,
+                w: api.winWidth,
+                h: api.winHeight - headerH,
+                imgHeight: 32,
+                borderColor: '#d9d9d9',
+                groupTitle: {
+                    color: '#999',
+                    size: 14,
+                    bgColor: '#f8f8f8'
+                },
+                rightBg: '#fff',
+                indicator: {
+                    bgColor: 'rgba(0,0,0,0)',
+                    color: '#5A5A5A'
+                },
+                cellBgColor: '#fff',
+                // 搜索框
+                searchBar: {
+                    h: 50,
+                    bgColor: '#F8F8F8',         //（可选项）搜索条背景色，字符串，默认透明，支持 rgb，rgba，#
+                    placeholder: '搜索',      //（可选项）搜索条提示文字，字符串类型，默认空，不传则不显示提示文字
+                    textFieldBgColor: '#fff'
+                },
+                data: data,
+                fixedOn: api.frameName
+            }, function (ret, err) {
+                if (ret) {
+                    if (str.indexOf(data[ret.key][ret.index].title) != -1) {
+                        // 已选
+                        str = str.replace(data[ret.key][ret.index].title, '')
+                        listContact.refreshItem({
+                            index: ret.index,
+                            key: ret.key,
+                            data: {
+                                titleColor: '#000',
+                                titleSize: 14
+                            }
+                        });
+                        for (var i = 0; i < selectedArr.length; i++) {
+                            if (selectedArr[i].title === data[ret.key][ret.index].title) {
+                                selectedArr.splice(i, 1);
+                                break;
+                            }
+                        }
+                        console.log('删除后:'+JSON.stringify(selectedArr));
+                    } else {
+                        // 未选
+                        str += data[ret.key][ret.index].title + ' ';
+                        selectedArr.push({
+                            title: data[ret.key][ret.index].title,
+                            key: ret.key,
+                            index: ret.index,
+                        });
+                        console.log('删除前:'+JSON.stringify(selectedArr));
+                        listContact.refreshItem({
+                            index: ret.index,
+                            key: ret.key,
+                            data: {
+                                titleColor: '#27B24A',
+                                titleSize: 14
+                            }
+                        });
+                    }
+                } else {
+                    alert(JSON.stringify(err));
+                }
+            });
+        }
+</script>
+
+</html>
