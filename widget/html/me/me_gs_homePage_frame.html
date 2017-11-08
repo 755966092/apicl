@@ -75,18 +75,18 @@
             font-size: .28rem;
         }
         .icon {
-            width: .44rem;
-            height: .44rem;
-            background: url(../../image/icon_txl/icon_gong.png)no-repeat;
-            background-size: .44rem .44rem;
+            width: .42rem;
+            height: .41rem;
+            background: url(../../image/icon_my/icon_gdd.png)no-repeat;
+            background-size: .42rem .41rem;
             vertical-align: bottom;
             margin-right: .1rem;
         }
         .icon2 {
-            width: .44rem;
-            height: .44rem;
-            background: url(../../image/icon_txl/icon_qiu.png)no-repeat;
-            background-size: .44rem .44rem;
+            width: .48rem;
+            height: .35rem;
+            background: url(../../image/icon_my/icon_qdd.png)no-repeat;
+            background-size: .48rem .35rem;
              vertical-align: bottom;
             margin-right: .1rem;
         }
@@ -112,7 +112,7 @@
     <div class="main">
       <div class="companyInfo">
             <div class="topImg">
-              <img src="../../image/tx_3.jpg">
+              <img src="../../image/tx_5.jpg">
               <h3>上海策赢网络科技</h3>
             </div>
             <div class="centerText">
@@ -143,9 +143,39 @@
 <script type="text/javascript">
     apiready = function(){
         openGroup();
+        requireData();
     };
+    // 请求数据
+    function requireData(params) {
+        api.ajax({
+            url: apiSite + '/userCenter/workDetails',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: $api.getStorage('userToken'),
+                    statu: 1,
+                    company_id: api.pageParam.companyId
+                }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    $api.text($api.dom('h3'), ret.data.list.name);
+                    if (ret.data.list.image_url) {
+                        $api.attr($api.dom('img'), 'src', ret.data.list.image_url);
+                    }
+                    $api.text($api.dom('.url'), ret.data.list.website);
+                    $api.text($api.dom('.address'), ret.data.list.name+'-'+ ret.data.list.size+'人');
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
     function openGroup() {
-
         api.openFrameGroup({
             name: 'me_gs_companyPage_frame',
             index: 0,

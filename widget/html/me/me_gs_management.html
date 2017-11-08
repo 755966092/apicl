@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
-    <link rel="stylesheet" type="text/css" href="../../css/weui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
 </head>
+
 <body>
-     <header  class="header">
+    <header class="header">
         <div class="head">
-            <span class="callback"   tapmode   onclick="api.closeWin()">返回</span>
+            <span class="callback" tapmode onclick="api.closeWin()">返回</span>
             <span class="winTitle">
                 行业分类
             </span>
@@ -22,18 +26,24 @@
 <script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
     var arr = [{ "industry_id": 8, "name": "建筑" }, { "industry_id": 8, "name": "啊建筑" }, { "industry_id": 8, "name": "吧建筑" }, { "industry_id": 8, "name": "吃建筑" }]
-    apiready = function(){
+    apiready = function () {
         fnInit();
         moduleInit();
         requireListData();
     };
     function requireListData() {
         api.ajax({
-            url: apiSite + '/category/industry',
+            url: apiSite + '/userCenter/companyUser',
             method: 'post',
-            headers: apiHeader
-        }, function(ret, err) {
-            if(ret) {
+            headers: apiHeader,
+            data: {
+                values: {
+                     token: $api.getStorage('userToken'),
+                     company_id: api.pageParam.companyId
+                }
+            }
+        }, function (ret, err) {
+            if (ret) {
                 if (ret.code === 200) {
                     console.log(JSON.stringify(ret))
                     sortData(ret.data.list)
@@ -45,7 +55,7 @@
             }
         })
     }
-    
+
     // 格式化列表数据
     function sortData(data) {
         for (var i = 0; i < data.length; i++) {
@@ -83,9 +93,12 @@
         var arr = {}
         var a;
         for (var i = 0; i < data.length; i++) {
-            data[i].title = data[i].name;
-            data[i].industry_id = data[i].industry_id;
-            delete data[i].name;
+            data[i].title = data[i].nickname;
+            data[i].industry_id = data[i].user_id;
+            data[i].subTitle = data[i].name+data[i].position;
+            data[i].subTitle = data[i].name+' '+data[i].position;
+            data[i].subTitleColor = '#999';
+            delete data[i].nickname;
             delete data[i].letter;
             delete data[i].flag;
             data[i].titleSize = 15;
@@ -117,36 +130,65 @@
             x: 0,
             y: headerH,
             w: api.frameWidth,
-            h: api.winHeight-headerH,
+            h: api.winHeight - headerH,
             bgColor: '#EFEFF4',
             // 分割线颜色
             borderColor: '#EDEDED',
-            groupTitle: {
-                    color: '#999',
-                    size: 14,
-                    bgColor: '#EFEFF4'
-                },
             cellBgColor: '#fff',
+            groupTitle: {
+                color: '#999',
+                size: 14,
+                bgColor: '#EFEFF4'
+            },
+            cellHeight: 50,
+            data: data,
             indicator: {
                 bgColor: 'rgba(0,0,0,0)',
                 color: '#5A5A5A'
             },
-            cellHeight: 50,
-            data: data, 
-        }, function(ret, err) {
+        }, function (ret, err) {
             console.log(JSON.stringify(data[ret.key][ret.index]))
-            // 发送时间
-            api.sendEvent({
-                name: 'industry',
-                extra: {
-                    value: data[ret.key][ret.index].title,
-                    industryId: data[ret.key][ret.index].industry_id
-                }
-            });
-            api.closeWin();
+           setManagement(data[ret.key][ret.index].user_id)
         });
     }
-
+    // 设置新的管理员
+    function setManagement(id) {
+        api.ajax({
+            url: apiSite + '/userCenter/companyTransfer',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: $api.getStorage('userToken'),
+                    company_id: api.pageParam.companyId,
+                    admin_new: id
+                }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    api.toast({
+                        msg: '设置成功',
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                    api.closeToWin({
+                        name: 'winName_gs',
+                        animation: {
+                            type: 'flip',
+                            subType: 'from_bottom',
+                            duration: 500
+                        }
+                    });
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
 
 </script>
+
 </html>

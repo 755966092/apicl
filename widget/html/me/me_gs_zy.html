@@ -116,6 +116,16 @@
             </div>
         </a>
     </div>
+    <div class="weui-cells mt20">
+        <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openTranferPage(this)" data-type="officialWebsite">
+            <div class="weui-cell__bd">
+                <p>公司管理权转让</p>
+            </div>
+            <div class="weui-cell__ft">
+                <p id="officialWebsite" class="rightText"></p>
+            </div>
+        </a>
+    </div>
     <div class="btn">
         <button tapmode onclick="editCompany()" class=" weui-btn weui-btn_primary">提交</button>
     </div>
@@ -128,6 +138,15 @@
         initPage();
         addImgEventListener();
     };
+    // 公司管理权转让
+    function openTranferPage() {
+      api.openWin({
+          name: 'me_gs_management',
+          url: './me_gs_management.html',
+          bounces: false,
+          pageParam: {companyId : api.pageParam.companyId}
+      });  
+    }
     // 监听事件
     function addImgEventListener() {
         api.addEventListener({
@@ -205,7 +224,9 @@
         }, function(ret, err) {
             if(ret) {
                 if (ret.code === 200) {
-                    $api.attr($api.byId('companyIcon'), 'src', ret.data.list.image_url);
+                    if (ret.data.list.image_url) {
+                        $api.attr($api.byId('companyIcon'), 'src', ret.data.list.image_url);
+                    }
                     $api.text($api.byId('industry'), ret.data.list.industry_name);
                     $api.attr($api.byId('industry'), 'data-id' ,ret.data.list.industry_id);
                     $api.text($api.byId('introduction'), ret.data.list.introduction);
