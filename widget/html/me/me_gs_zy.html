@@ -32,6 +32,14 @@
             line-height: .98rem;
             background-color: #fff;
         }
+        .rightText {
+             /* 不换行 */
+            max-width: 4.5rem;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            line-height: 1.47058824;
+         }
     </style>
 </head>
 <body>
@@ -62,34 +70,39 @@
                 <p>公司简称</p>
             </div>
             <div class="weui-cell__ft">
+                <p class="rightText" id="shortName"></p>
             </div>
         </a>
-        <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openInputPage(this)" data-type="industry">
+        <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openListPage(this)" data-type="industry">
             <div class="weui-cell__bd">
                 <p>所属行业</p>
             </div>
-            <div class="weui-cell__ft" id="industry">
+            <div class="weui-cell__ft">
+                <p id="industry" class="rightText"></p>
             </div>
         </a>
         <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openInputPage(this)" data-type="peopleNumber">
             <div class="weui-cell__bd">
                 <p>员工人数</p>
             </div>
-            <div class="weui-cell__ft" id="peopleNumber">
+            <div class="weui-cell__ft">
+                <p id="peopleNumber" class="rightText"></p>
             </div>
         </a>
         <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openInputPage(this)" data-type="companyAddress">
             <div class="weui-cell__bd">
                 <p>公司地址</p>
             </div>
-            <div class="weui-cell__ft" id="companyAddress">
+            <div class="weui-cell__ft">
+                <p id="companyAddress" class="rightText"></p>
             </div>
         </a>
         <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openInputPage(this)" data-type="introduction">
             <div class="weui-cell__bd">
                 <p>公司简介</p>
             </div>
-            <div class="weui-cell__ft" id="introduction">
+            <div class="weui-cell__ft">
+                <p id="introduction" class="rightText"></p>
             </div>
         </a>
     </div>
@@ -98,7 +111,8 @@
             <div class="weui-cell__bd">
                 <p>公司官网</p>
             </div>
-            <div class="weui-cell__ft" id="officialWebsite">
+            <div class="weui-cell__ft">
+                <p id="officialWebsite" class="rightText"></p>
             </div>
         </a>
     </div>
@@ -121,6 +135,38 @@
         }, function(ret, err){
             $api.attr($api.byId('companyIcon'), 'src', ret.value.selDate);
         });
+        api.addEventListener({
+            name: 'shortName'
+        }, function(ret, err){
+            $api.text($api.byId('shortName'), ret.value.value);
+        });
+        api.addEventListener({
+            name: 'industry'
+        }, function(ret, err){
+            // industry
+            $api.text($api.byId('industry'), ret.value.value);
+            $api.attr($api.byId('industry'), 'data-id',ret.value.industryId);
+        });
+        api.addEventListener({
+            name: 'peopleNumber'
+        }, function(ret, err){
+            $api.text($api.byId('peopleNumber'), ret.value.value);
+        });
+        api.addEventListener({
+            name: 'companyAddress'
+        }, function(ret, err){
+            $api.text($api.byId('companyAddress'), ret.value.value);
+        });
+        api.addEventListener({
+            name: 'introduction'
+        }, function(ret, err){
+            $api.text($api.byId('introduction'), ret.value.value);
+        });
+        api.addEventListener({
+            name: 'officialWebsite'
+        }, function(ret, err){
+            $api.text($api.byId('officialWebsite'), ret.value.value);
+        });
     }
     // 打开输入页面
     function openInputPage(ele) {
@@ -129,13 +175,51 @@
             url: './me_gs_input.html',
             bounces: false,
             pageParam: { 
-                type : $api.attr(ele, 'data-type')
+                type : $api.attr(ele, 'data-type'),
+                text: $api.text($api.dom(ele, '.rightText'))
             }
+        });
+    }
+    // 打开行业列表页面
+    function openListPage(ele) {
+        api.openWin({
+            name: 'me_gs_industry',
+            url: './me_gs_industry.html',
+            bounces: false,
         });
     }
     // 初始化页面
     function initPage() {
         $api.text($api.dom('h3'), api.pageParam.name);
+        api.ajax({
+            url: apiSite + '/userCenter/workDetails',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: $api.getStorage('userToken'),
+                    company_id: api.pageParam.companyId,
+                    statu: 1
+                }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    $api.attr($api.byId('companyIcon'), 'src', ret.data.list.image_url);
+                    $api.text($api.byId('industry'), ret.data.list.industry_name);
+                    $api.attr($api.byId('industry'), 'data-id' ,ret.data.list.industry_id);
+                    $api.text($api.byId('introduction'), ret.data.list.introduction);
+                    $api.text($api.byId('peopleNumber'), ret.data.list.size);
+                    $api.text($api.byId('officialWebsite'), ret.data.list.website);
+                    $api.text($api.byId('shortName'), ret.data.list.name);
+                    $api.text($api.byId('companyAddress'), ret.data.list.address);
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
     }
    function login (ele) {
         var val = $api.attr(ele, 'data-val');
@@ -175,6 +259,62 @@
     }
     // 编辑公司页面
     function editCompany() {
+        // 获取公司信息提交
+        var companyIcon = $api.attr($api.byId('companyIcon'), 'src');
+        var industry = $api.attr($api.byId('industry'), 'data-id');
+        var introduction = $api.text($api.byId('introduction'));
+        var peopleNumber = $api.text($api.byId('peopleNumber'));
+        var officialWebsite = $api.text($api.byId('officialWebsite'));
+        var shortName = $api.text($api.byId('shortName'));
+        var address = $api.text($api.byId('companyAddress'));
+        if (companyIcon == '../../image/tx_5.jpg') {
+            alert('请选择公司图标');
+        } else if (shortName == '') {
+            alert('请输入公司简称')
+        } else if (industry == null) {
+            alert('请选择行业')
+        } else if (peopleNumber == '') {
+            alert('请输入公司人数')
+        } else if (address == '') {
+            alert('请输入公司地址')
+        } else if (introduction == '') {
+            alert('请填写公司简介')
+        }  else if (officialWebsite == '') {
+            alert('请输入公司官网')
+        } else {
+            api.ajax({
+                url: apiSite + '/userCenter/companyEdit',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: { 
+                        token: $api.getStorage('userToken'),
+                        company_id: api.pageParam.companyId,
+                        address: address,
+                        image_url: companyIcon,
+                        industry_id: industry,
+                        introduction: introduction,
+                        size: peopleNumber,
+                        website: officialWebsite,
+                        name: shortName,
+                    }
+                }
+            }, function(ret, err) {
+                if(ret) {
+                    if (ret.code === 200) {
+                        api.toast({
+                            msg: '提交成功',
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                    } else {
+                        alert(ret.msg)
+                    }
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
+        }
         
     }
     // 进入公司主页

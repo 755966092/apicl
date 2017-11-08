@@ -82,7 +82,7 @@
             <li class="bb" tapmode onclick="openPage(this)" data-val='codeSafe'>
                 <div class="text">帐号与安全</div>
             </li>
-            <li class="bb" tapmode onclick="queryContactByPage()">
+            <li class="bb" tapmode onclick="getContacts()">
                 <div class="text">更新通讯录</div>
             </li>
             <!--  <li class="mt30" onclick="openImg()">
@@ -383,7 +383,23 @@
         });
     }
 
-      
+    function getContacts() {
+        api.toast({
+            msg: '开始获取',
+            duration: 2000,
+            location: 'bottom'
+        });
+        var start = new Date().getTime();
+        contacts.queryByPage({
+            pageIndex: 0
+        }, function(ret){
+            if(ret.status){
+                var end = new Date().getTime();
+                alert('时间:' + (end - start) / 1000)
+                alert('获取成功:' + retContacts.contacts.length)
+            }
+        });
+    }
     function queryContacts() {
        api.toast({
            msg: '开始获取',

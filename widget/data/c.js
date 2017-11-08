@@ -1,45 +1,39 @@
 {
-    "code": 200,
-    "msg": "",
-    "time": "1510040083",
-    "data": {
-        "list": [{
-            "work_id": 31,
-            "user_id": 18989,
-            "company_id": 20,
-            "company_name": "跨考",
-            "position": "前端",
-            "description": "测试",
-            "start_date": "2017-10-01",
-            "end_date": "0000-00-00",
-            "is_default": -1,
-            "is_verify": -1,
-            "admin_id": null
-        }, {
-            "work_id": 30,
-            "user_id": 18989,
-            "company_id": 19,
-            "company_name": "第一学",
-            "position": "前端",
-            "description": "测试开发",
-            "start_date": "2017-09-04",
-            "end_date": "0000-00-00",
-            "is_default": -1,
-            "is_verify": 0,
-            "admin_id": 18989
-        }, {
-            "work_id": 25,
-            "user_id": 18989,
-            "company_id": 0,
-            "company_name": "第一学教育科技有限公司",
-            "position": "前端工程师",
-            "description": "开发我在",
-            "start_date": "2017-04-15",
-            "end_date": "0000-00-00",
-            "is_default": 1,
-            "is_verify": null,
-            "admin_id": null
-        }]
-    }
+    "A": [{
+        "industry_id": 8,
+        "name": "啊建筑",
+        "letter": "AJZ",
+        "flag": "A",
+        "initial": "A",
+        "title": "啊建筑",
+        "titleSize": 15
+    }],
+    "B": [{
+        "industry_id": 8,
+        "name": "吧建筑",
+        "letter": "BJZ",
+        "flag": "B",
+        "initial": "B",
+        "title": "吧建筑",
+        "titleSize": 15
+    }],
+    "C": [{
+        "industry_id": 8,
+        "name": "吃建筑",
+        "letter": "CJZ",
+        "flag": "C",
+        "initial": "C",
+        "title": "吃建筑",
+        "titleSize": 15
+    }],
+    "J": [{
+        "industry_id": 8,
+        "name": "建筑",
+        "letter": "JZ",
+        "flag": "J",
+        "initial": "J",
+        "title": "建筑",
+        "titleSize": 15
+    }]
 }
-at me_gs.html: 165
+at me_gs_industry.html: 105

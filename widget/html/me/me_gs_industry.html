@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css"/>
+</head>
+<body>
+     <header  class="header">
+        <div class="head">
+            <span class="callback"   tapmode   onclick="api.closeWin()">返回</span>
+            <span class="winTitle">
+                行业分类
+            </span>
+        </div>
+    </header>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/pinyin4js.js"></script>
+<script type="text/javascript">
+    var arr = [{ "industry_id": 8, "name": "建筑" }, { "industry_id": 8, "name": "啊建筑" }, { "industry_id": 8, "name": "吧建筑" }, { "industry_id": 8, "name": "吃建筑" }]
+    apiready = function(){
+        fnInit();
+        moduleInit();
+        requireListData();
+    };
+    function requireListData() {
+        api.ajax({
+            url: apiSite + '/category/industry',
+            method: 'post',
+            headers: apiHeader
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    console.log(JSON.stringify(ret))
+                    sortData(ret.data.list)
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+    
+    // 格式化列表数据
+    function sortData(data) {
+        for (var i = 0; i < data.length; i++) {
+            data[i].letter = PinyinHelper.getShortPinyin($api.trimAll(data[i].name)).toUpperCase();
+            data[i].flag = data[i].letter[0];
+        }
+        for (var i = 0; i < data.length - 1; i++) {
+            for (var j = 0; j < data.length - i - 1; j++) {
+                if (data[j].letter > data[j + 1].letter) {
+                    var temp = data[j];
+                    data[j] = data[j + 1];
+                    data[j + 1] = temp;
+                }
+            }
+        }
+        paixv(data);
+    }
+    function paixv(data) {
+        for (var i = 0; i < data.length; i++) {
+            if (f_check_uppercase(data[0].flag)) {
+                data[0].initial = data[0].flag;
+            } else {
+                data[0].initial = '#';
+            }
+            if (i > 0) {
+                if (data[i].flag !== data[i - 1].flag) {
+                    if (f_check_uppercase(data[i].flag)) {
+                        data[i].initial = data[i].flag;
+                    } else {
+                        data[i].initial = '#';
+                    }
+                }
+            }
+        }
+        var arr = {}
+        var a;
+        for (var i = 0; i < data.length; i++) {
+            data[i].title = data[i].name;
+            data[i].industry_id = data[i].industry_id;
+            delete data[i].name;
+            delete data[i].letter;
+            delete data[i].flag;
+            data[i].titleSize = 15;
+            if (data[i].initial) {
+                if (data[i].initial == '#') {
+                    if (arr[data[i].initial]) {
+                    } else {
+                        arr[data[i].initial] = [];
+                    }
+                    a = i;
+                } else {
+                    arr[data[i].initial] = [];
+                    a = i;
+                }
+            }
+            arr[data[a].initial].push(data[i])
+
+        };
+        initList(arr);
+    }
+    function f_check_uppercase(obj) {
+        if (/[A-Z]/.test(obj)) {
+            return true;
+        }
+        return false;
+    }
+    function initList(data) {
+        listContact.open({
+            x: 0,
+            y: headerH,
+            w: api.frameWidth,
+            h: api.winHeight-headerH,
+            bgColor: '#EFEFF4',
+            // 分割线颜色
+            borderColor: '#EDEDED',
+            groupTitle: {
+                    color: '#999',
+                    size: 14,
+                    bgColor: '#EFEFF4'
+                },
+            cellHeight: 50,
+            data: data, 
+        }, function(ret, err) {
+            console.log(JSON.stringify(data[ret.key][ret.index]))
+            // 发送时间
+            api.sendEvent({
+                name: 'industry',
+                extra: {
+                    value: data[ret.key][ret.index].title,
+                    industryId: data[ret.key][ret.index].industry_id
+                }
+            });
+            api.closeWin();
+        });
+    }
+
+
+</script>
+</html>

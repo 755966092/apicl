@@ -186,10 +186,11 @@ function requireData() {
 function openCompanyInfoPage(ele) {
     var val = $api.attr(ele, 'data-val');
     var adminId = $api.attr(ele, 'data-adminId');
+    var statu = $api.attr(ele, 'data-statu');
     // 普通用户 statu 进入公司主页
     // 公司管理员进入公司信息编辑页面
     // 未认证公司进入公司认证页面
-    if (adminId != userId) {
+    if (adminId != userId && statu==1) {
         // 非管理员
         val = 'homePage'
     }
@@ -198,7 +199,7 @@ function openCompanyInfoPage(ele) {
         url: './me_gs_' + val + '.html',
         pageParam: {
             companyId: $api.attr(ele, 'data-id'),
-            statu: $api.attr(ele, 'data-statu'),
+            statu: statu,
             name: $api.attr(ele, 'data-name'),
         },
         bounces: false

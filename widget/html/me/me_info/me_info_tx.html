@@ -83,12 +83,14 @@
     apiready = function() {
         FNImageClip = api.require('FNImageClip');
         fnInit();
-        console.log(JSON.stringify(api.pageParam))
         // 修改成自己的头像
         if (api.pageParam.name[0] == 'h') {
             $api.attr($api.dom('.headImg'), 'src', api.pageParam.name);
         }
-
+        // 上传公司图标
+        if(api.pageParam.type == 'sendEvent_companyIcon') {
+            $api.text($api.dom('.winTitle'), '上传公司图标');
+        }
     };
 
     function upload(str) {

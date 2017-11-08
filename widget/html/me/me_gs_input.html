@@ -46,7 +46,7 @@
         </div>
     </div>
     <div class="btn">
-        <button tapmode onclick="editCompany()" class=" weui-btn weui-btn_primary">确定</button>
+        <button tapmode onclick="sendEvent()" class=" weui-btn weui-btn_primary">确定</button>
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -55,14 +55,33 @@
     apiready = function(){
         fnInit();
         initPage();
+        console.log(JSON.stringify(api.pageParam))
     };
+    // 发送事件
+    function sendEvent() {
+        var value;
+        if (api.pageParam.type === 'introduction') {
+            value = $api.val($api.dom('textarea'));
+        } else {
+            value = $api.val($api.dom('input'));
+        }
+        api.sendEvent({
+            name: api.pageParam.type,
+            extra: {value: value}
+        });
+        api.closeWin();
+    }
+    // 初始化页面
     function initPage() {
         if (api.pageParam.type === 'introduction') {
             $api.css($api.byId('textarea'), 'display: block');
+            $api.val($api.dom('textarea'), api.pageParam.text);
         } else {
             $api.css($api.byId('input'), 'display: block');
+            $api.val($api.dom('input'), api.pageParam.text);
         }
     }
+    // textarea输入字数
     function wordCount(ele) {
         var count = $api.val(ele).length;
         if (count == 200) {
