@@ -68,10 +68,10 @@
                         dataY.data.push({ fixed:true,y:55,x: frameW/2,symbolSize :80,name:element.nickname,symbol:'image://'+ element.head_img_url +'?roundPic/radius/!50p'})
                     } else if (element.user_id == api.pageParam.userId) {
                         // 目标用户, 头像变大, 固定在底部
-                        dataY.data.push({ fixed:true,y: frameH-70, x: frameW / 2, symbolSize: 80, name: element.nickname, symbol: 'image://' + element.head_img_url + '?roundPic/radius/!50p' })
+                        dataY.data.push({ fixed:true,y: frameH-70, x: frameW / 2, symbolSize: 80, name: element.nickname, symbol: 'image://' + (element.remark_head_img_url || element.head_img_url) + '?roundPic/radius/!50p' })
                     } else {
                         // 中间人
-                        dataY.data.push({ name: element.nickname, symbol: 'image://' + element.head_img_url + '?roundPic/radius/!50p' })
+                        dataY.data.push({ name: element.nickname, symbol: 'image://' + (element.remark_head_img_url || element.head_img_url) + '?roundPic/radius/!50p' })
                     }
                 }
             }
@@ -103,6 +103,7 @@
         }, function(ret, err) {
             if(ret) {
                 if (ret.code === 200) {
+                    console.log(JSON.stringify(ret))
                     dataProcessing(ret.data);
                 } else {
                     alert(ret.msg)
