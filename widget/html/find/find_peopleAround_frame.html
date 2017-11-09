@@ -217,11 +217,8 @@
         }, function(ret, err) {
             if(ret) {
                 if (ret.code === 200) {
-                    getData(ret.data.list);
-                    $api.css($api.dom('.loading'), 'display: none');
-                    api.sendEvent({
-                        name: 'hideLoading'
-                    });
+                    selectSql(ret.data.list)
+                    // 
                 } else {
                     alert(ret.msg)
                 }
@@ -230,6 +227,30 @@
             }
         })
     }
-
+    // 查询数据库替换头像昵称
+    function selectSql(data) {
+        moduleInit();
+        for (var i = 0; i < data.length; i++) {
+            var element = data[i];
+            var ret = db.selectSqlSync({
+                name: 'db_' + $api.getStorage('userToken'),
+                sql: 'SELECT * FROM addressList_simplify WHERE user_id=' + element.user_id
+            });
+            if (ret.status) {
+                if(ret.data.length>0) {
+                    var elementSmall = ret.data[0];
+                    element.nickname = elementSmall.title;
+                    element.head_img_url = elementSmall.img;
+                }
+            } else {
+                api.alert({ msg: err.msg });
+            }
+        }
+        getData(data);
+        $api.css($api.dom('.loading'), 'display: none');
+        api.sendEvent({
+            name: 'hideLoading'
+        });
+    }
 </script>
 </html>
