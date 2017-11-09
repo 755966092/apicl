@@ -315,8 +315,8 @@
                                 }, function(ret1, err1) {
                                     // 同步通讯录成功
                                     // 请求同步的数据，存到本地数据库
-                                    // // // // console.log('上传通讯录数据'+JSON.stringify(ret.contacts))
-                                    // // // console.log('上传结果')
+                                    // console.log('上传通讯录数据'+JSON.stringify(ret.contacts))
+                                    //console.log('上传结果')
                                     if (ret1.code == 200) {
                                         requestData(userToken);
                                     }
@@ -341,9 +341,9 @@
             name: 'db_'+userToken
         }, function(ret, err) {
             if (ret.status) {
-                // // // // console.log("打开数据库成功")
+                // console.log("打开数据库成功")
             } else {
-                // // // console.log('新建库错误:'+JSON.stringify(err));
+                //console.log('新建库错误:'+JSON.stringify(err));
             }
         });
     }
@@ -371,7 +371,7 @@
                 }
             }, function(retFriend, err) {
                 if(retFriend) {
-                    // // // console.log('360:::')
+                    //console.log('360:::')
                     disData(ret.data.single_list, 1)
                     disData(ret.data.both_list, 2)
                     disData(ret.data.unavailable_list, 3)
@@ -392,7 +392,7 @@
     // 处理数据
     function disData (data, type) {
 
-        // // // // console.log('disData'+JSON.stringify(data))
+        // console.log('disData'+JSON.stringify(data))
         if (data != '' ) {
             for (var i = 0; i < data.length; i++) {
                 // single_list
@@ -435,7 +435,7 @@
     var selectCount = 0;
     // 拼数据库语法字符串
     function sqlSyntax(data1, type) {
-        // // console.log(JSON.stringify(data1));
+        // console.log(JSON.stringify(data1));
 
         for (var i = 0; i < data1.length; i++) {
             data1[i].flag = data1[i].litter[0];
@@ -443,7 +443,7 @@
         var SQLName = 'db_'+$api.getStorage('userToken');
         var SQL = 'INSERT OR REPLACE INTO addressList(user_id,nickname,head_img_url,current_company,current_position,current_contact,current_degree, titleSize,title,img,flag,litter,type, sex, remark_nickname, remark_real_name, remark_head_img_url, remark_sex, remark_birthday, remark_hometown, remark_current_company, remark_current_position, remark_current_degree, remark_current_contact) VALUES '
         var SQL2 = 'INSERT OR REPLACE INTO addressList_simplify(user_id,title,img,subTitle,current_contact, flag,type) VALUES ';
-        // // // console.log(JSON.stringify(data1))
+        //console.log(JSON.stringify(data1))
         for (var i = 0; i < data1.length; i++) {
                 var subTitleStr= '',contactStr = '';
                 SQL += '('+data1[i].user_id+',"'+ data1[i].nickname +'","'+ data1[i].head_img_url +'","'+ (data1[i].current_company || "") +'","'+ (data1[i].current_position || "")+'","'+ (data1[i].current_contact || "") +'","'+ (data1[i].current_degree || "") +'","'+ data1[i].titleSize +'","'+ data1[i].title +'","'+ data1[i].img+'","'+ data1[i].flag +'","'+ data1[i].litter +'","'+ type +'","'+ (data1[i].sex || 1) +'","'+ (data1[i].remark_nickname || "") +'","'+ (data1[i].remark_real_name || "") +'","'+ (data1[i].remark_head_img_url || "") +'","'+ (data1[i].remark_sex || "") +'","'+ (data1[i].remark_birthday || "") +'","'+ (data1[i].remark_hometown || "") +'","'+ (data1[i].remark_current_company || "") +'","'+ (data1[i].remark_current_position || "") +'","'+ (data1[i].remark_current_degree || "") +'","'+ (data1[i].remark_current_contact || "") +'"),';
@@ -494,13 +494,13 @@
                      sql: 'CREATE UNIQUE INDEX IF NOT EXISTS user_id_idx ON addressList (user_id)'
                  }, function(ret, err){
                      if( ret.status ){
-                        // // console.log( '设置唯一索引成功');
+                        // console.log( '设置唯一索引成功');
                         db.executeSql({
                             name: SQLName,
                             sql: SQL
                         }, function(ret, err){
                             if( ret.status ){
-                                // // console.log( 'addressList插入数据成功');
+                                // console.log( 'addressList插入数据成功');
                             }else{
                                 // console.log( '插入数据:' + JSON.stringify( err ) );
 
@@ -519,7 +519,7 @@
             sql: 'CREATE TABLE IF NOT EXISTS addressList_simplify(user_id int PRIMARY KEY NOT NULL, title varchar(255),img varchar(255), subTitle varchar(255),current_contact varchar(255), flag varchar(255), type int)'
         }, function(ret, err){
             if( ret.status ){
-                // // // console.log('新建表成功')
+                //console.log('新建表成功')
                 db.executeSql({
                     name: 'db_'+$api.getStorage('userToken'),
                     sql: 'CREATE INDEX IF NOT EXISTS type_idx ON addressList_simplify (type);'

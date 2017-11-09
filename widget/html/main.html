@@ -413,11 +413,11 @@
     }
     // 获取所有未读消息数
     function getTotalCount() {
-        // // // // console.log('获取所有未读消息数')
+        // console.log('获取所有未读消息数')
         rong.getTotalUnreadCount(function(ret, err) {
-            // // // // console.log('295:::'+JSON.stringify(ret))
+            // console.log('295:::'+JSON.stringify(ret))
             if (ret.result == 0 || !ret.result) {
-                // // // // console.log('295295消息')
+                // console.log('295295消息')
                 $api.html($api.byId('title'), '我在<span class="rightBtn"   tapmode   onclick="addFellow()">+</span> ');
                 $api.css($api.byId('newsCount'), 'display: none');
                 api.setAppIconBadge({
@@ -425,23 +425,23 @@
                         // 清除角标
                 });
             } else {
-                // // // // console.log('重新设置消息输了1')
+                // console.log('重新设置消息输了1')
                 api.setAppIconBadge({
                     badge: ret.result
                         // 清除角标
                 });
-                // // // // console.log('重新设置消息数量2'+JSON.stringify(ret))
+                // console.log('重新设置消息数量2'+JSON.stringify(ret))
                 if (ret.result > 0) {
-                    // // // // console.log('重新设置消息数量3'+JSON.stringify(ret))
+                    // console.log('重新设置消息数量3'+JSON.stringify(ret))
                     $api.html($api.byId('title'), '我在(' + ret.result + ')<span class="rightBtn"   tapmode   onclick="addFellow()">+</span> ');
-                    // // // // console.log('重新设置消息数量3.1'+JSON.stringify(ret))
+                    // console.log('重新设置消息数量3.1'+JSON.stringify(ret))
                     $api.css($api.byId('newsCount'), 'display: inline-block');
-                    // // // // console.log('重新设置消息数量3.2'+JSON.stringify(ret))
+                    // console.log('重新设置消息数量3.2'+JSON.stringify(ret))
                     $api.html($api.byId('newsCount'), ret.result);
-                    // // // // console.log('重新设置消息数量3.3'+JSON.stringify(ret))
+                    // console.log('重新设置消息数量3.3'+JSON.stringify(ret))
                 } else {
                     $api.css($api.byId('newsCount'), 'display: none');
-                    // // // // console.log('重新设置消息数量3-1'+JSON.stringify(ret))
+                    // console.log('重新设置消息数量3-1'+JSON.stringify(ret))
 
                 }
             }
@@ -540,7 +540,7 @@
     }
     // 点击发布按钮
     function addPublish() {
-        // // // // console.log('点到加号')
+        // console.log('点到加号')
         // api.sendEvent({
         //     name: 'addPublish'
         // });
@@ -612,7 +612,7 @@
                 // alert( JSON.stringify( ret ) );
             } else {
                 alert('473' + JSON.stringify(err));
-                // // // console.log('473'+ JSON.stringify( err ) );
+                //console.log('473'+ JSON.stringify( err ) );
             }
         });
         // db.executeSql({
@@ -636,7 +636,7 @@
 
             } else {
                 alert('473' + JSON.stringify(err));
-                // // // console.log('473'+ JSON.stringify( err ) );
+                //console.log('473'+ JSON.stringify( err ) );
             }
         });
 
@@ -693,7 +693,7 @@
     }
 
     function synchronousAddressBook() {
-        // // console.log('synchronousAddressBook')
+        // console.log('synchronousAddressBook')
         setTimeout(function() {
             contacts.queryByPage({
                 pageIndex: 0
@@ -732,7 +732,7 @@
     }
     // 请求数据
     function requestData() {
-        // // // // console.log('请求数据')
+        // console.log('请求数据')
         api.ajax({
             url: apiSite + '/contact/index',
             method: 'post',
@@ -771,8 +771,8 @@
     }
 
     function disData(data, type) {
-        // // // // console.log('disData'+type)
-        // // // // console.log('disData'+data)
+        // console.log('disData'+type)
+        // console.log('disData'+data)
         if (data != '') {
             for (var i = 0; i < data.length; i++) {
                 // single_list
@@ -816,12 +816,12 @@
     }
     // 拼数据库语法字符串
     function sqlSyntax(data1, type) {
-        // // // // console.log('数据库'+ type)
-        // // // // console.log('数据库'+ data1)
+        // console.log('数据库'+ type)
+        // console.log('数据库'+ data1)
         for (var i = 0; i < data1.length; i++) {
             data1[i].flag = data1[i].litter[0];
         }
-        // // // // console.log('数据库语法字符串:'+data1);
+        // console.log('数据库语法字符串:'+data1);
         var SQLName = 'db_' + $api.getStorage('userToken');
         var SQL = 'INSERT OR REPLACE INTO addressList(user_id,nickname,real_name,head_img_url,current_company,current_position,current_contact,current_degree, titleSize,title,img,flag,litter,type, sex, remark_nickname, remark_real_name, remark_head_img_url, remark_sex, remark_birthday, remark_hometown, remark_current_company, remark_current_position, remark_current_degree, remark_current_contact) VALUES '
 
@@ -862,7 +862,7 @@
             SQL2 += '(' + data1[i].user_id + ',"' + (data1[i].remark_nickname || data1[i].nickname) + '","' + (data1[i].remark_head_img_url || data1[i].head_img_url) + '","' + subTitleStr + '","' + contactStr + '","' + data1[i].flag + '","' + type + '"),';
         }
         SQL2 = SQL2.substring(0, SQL2.length - 1) + ';'
-            // // // // console.log(SQL)
+            // console.log(SQL)
         db.executeSql({
             name: SQLName,
             sql: SQL2
@@ -870,7 +870,7 @@
             if (ret.status) {
 
             } else {
-                // // // console.log('执行语句错误:' + JSON.stringify(err))
+                //console.log('执行语句错误:' + JSON.stringify(err))
             }
         });
 

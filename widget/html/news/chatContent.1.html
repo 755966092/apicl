@@ -261,11 +261,11 @@ var name,headImg = $api.getStorage('imgCache'),youHeadImg;
 var messageId,targetRongId,emotionData,userId,newsText,msgId;
 var  mainH, _main, scrollH;
     apiready = function(){
-        // // // console.log(JSON.stringify(api.pageParam))
+        //console.log(JSON.stringify(api.pageParam))
         moduleInit();
-        // // // // console.log('参数内容:'+JSON.stringify(api.pageParam))
+        // console.log('参数内容:'+JSON.stringify(api.pageParam))
         if (api.pageParam.supplyName) {
-            // // // // console.log(JSON.stringify(api.pageParam))
+            // console.log(JSON.stringify(api.pageParam))
             $api.removeCls($api.dom('.supply_info'), 'hide');
             $api.text($api.byId('userName'), api.pageParam.nickname);
             $api.text($api.byId('supplyName'), api.pageParam.supplyName);
@@ -652,19 +652,19 @@ var  mainH, _main, scrollH;
             extra: ''
         }, function(ret, err) {
             if (ret.status == 'prepare') {
-                // // // // console.log('发送准备::'+ JSON.stringify(ret.result.message) );
+                // console.log('发送准备::'+ JSON.stringify(ret.result.message) );
                 addSendImgMessages(ret.result.message,headImg,1)
             }
             else if (ret.status == 'progress') {
-                // // // // console.log( '发送中::'+ret.result.progress );
+                // console.log( '发送中::'+ret.result.progress );
             }
             else if (ret.status == 'success') {
 
-                // // // // console.log( '发送成功::'+ret.result.message.messageId );
-                // // // // console.log( '发送成功::'+JSON.stringify(prepare) );
+                // console.log( '发送成功::'+ret.result.message.messageId );
+                // console.log( '发送成功::'+JSON.stringify(prepare) );
             }
             else if (ret.status == 'error') {
-                // // // // console.log( err.code );
+                // console.log( err.code );
             } else {
 
             }
@@ -719,7 +719,7 @@ var  mainH, _main, scrollH;
                 retprepare = ret.result.message
             } else if (ret.status == 'success') {
                 // 发送成功
-                // // // // console.log('success::'+ret.result.message.messageId);
+                // console.log('success::'+ret.result.message.messageId);
                 // 
                 addSendVoiceMessages(retData, headImg, 0)
             } else if (ret.status == 'error') {
@@ -743,7 +743,7 @@ var  mainH, _main, scrollH;
     }
     // 获取聊天对方信息
     function getSideInfo(rongUserId) {
-        // // // console.log('第一步')
+        //console.log('第一步')
         rongUserIdArr = rongUserId.split();
         api.ajax({
            url: apiSite + '/user/chatUserInfo',
@@ -798,9 +798,9 @@ var  mainH, _main, scrollH;
                     if(argument.result.length>0){
                         if (argument.result[0].sentTime == ret.result[0].sentTime) {
                             // 无更新
-                            // // // console.log('无更新')
+                            //console.log('无更新')
                         } else {
-                            // // // console.log('有更新')
+                            //console.log('有更新')
                             // 有更新
                             $api.html($api.dom('.main'), '');
                             $api.setStorage('chatRecord_'+targetRongId, ret)
@@ -822,7 +822,7 @@ var  mainH, _main, scrollH;
     }
     // 渲染页面
     function renderPage(ret) {
-        // // // // console.log('559:::::'+JSON.stringify(ret))
+        // console.log('559:::::'+JSON.stringify(ret))
         for (var i = ret.result.length-1; i >= 0 ; i--) {
             if (ret.result[i].messageDirection == 'RECEIVE') {
                 
@@ -882,21 +882,21 @@ var  mainH, _main, scrollH;
     // 接收图片消息后新建消息
     function addReceImgMessages(msg, youHeadImg, n) {
         if (n == 1) {
-            // // // // console.log('历史消息::'+JSON.stringify(msg))
+            // console.log('历史消息::'+JSON.stringify(msg))
             // 历史消息
-            // // 当天显示时间
+            // 当天显示时间
             // 不是当天显示年月日 时分秒
             var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
             $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="'+ msg.content.imageUrl +'"> </p></div>');
         } else if (n == 2) {
-            // // // // console.log('历史消息::'+JSON.stringify(msg))
+            // console.log('历史消息::'+JSON.stringify(msg))
             // 历史消息
-            // // 当天显示时间
+            // 当天显示时间
             // 不是当天显示年月日 时分秒
             var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
             $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="'+ msg.content.imageUrl +'"> </p></div>');
         } else {
-            // // // // console.log('接受到的图片'+JSON.stringify(msg))
+            // console.log('接受到的图片'+JSON.stringify(msg))
             // 当前接收的消息
             var time = new Date(msg.message.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.message.sentTime).toLocaleTimeString() : new Date(msg.message.sentTime).toLocaleString()
             $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.message.messageId +'">'+ time +'</p><div data-msgId="'+ msg.message.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.message.messageId +'" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" > <img class="imgNews" src="'+ msg.message.content.imageUrl +'"></p></div>');
@@ -914,7 +914,7 @@ var  mainH, _main, scrollH;
             var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
             $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="'+ msg.messageId +'" ontouchend="gtouchend()"  ><img class="imgNews" src="'+ msg.content.imageUrl +'"> </p></div>');
         } else {
-            // // // // console.log(JSON.stringify(msg))
+            // console.log(JSON.stringify(msg))
             // 当前发送的消息
             $api.append($api.dom('.main'),'<p class="newsTime" >'+ new Date().toLocaleTimeString() +'</p><div data-msgId="" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="" ontouchend="gtouchend()" d><img class="imgNews" src="../../image/tx_5.jpg"> </p></div>');
             
@@ -927,7 +927,7 @@ var  mainH, _main, scrollH;
         // 不是当天显示年月日 时分秒
         if (n == 1) {
             // 历史消息
-            // // 当天显示时间
+            // 当天显示时间
             // 不是当天显示年月日 时分秒
             var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString();
             var widthNum = msg.content.duration;
@@ -963,7 +963,7 @@ var  mainH, _main, scrollH;
         } else {
             var widthNum = msg.duration;
              // widthNum = widthNum > 7 ? widthNum : 7;
-            // // // // console.log(JSON.stringify(msg))
+            // console.log(JSON.stringify(msg))
             // 当前发送的消息
             $api.append($api.dom('.main'),'<p class="newsTime" >'+ new Date().toLocaleTimeString() +'</p><div data-msgId="" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="'+ headImg +'"><p class="fr flex-def flex-cCenter flex-zEnd" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" style="width:'+ widthNum/4 +'rem" ontouchmove="gtouchmove()" data-msgId="" ontouchend="gtouchend()" data-voivePath= "'+ msg.path +'" ><img class="voiceMsg fr"  src="../../image/chatPage/icon_break1.png"  height="20"></p><span class="voiceTime fr">'+ msg.duration +'"</span></div>');
         }
@@ -1040,7 +1040,7 @@ var  mainH, _main, scrollH;
         
         if (n == 1) {
             // 历史消息
-            // // 当天显示时间
+            // 当天显示时间
             // 不是当天显示年月日 时分秒
             var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
             $api.append($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" class="fl otherImg" src="'+ api.pageParam.headImg +'"><p data-msgId="'+ msg.messageId +'" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "'+ msg.content.text +'"> '+ transText(msg.content.text) +'</p></div>');
@@ -1066,12 +1066,12 @@ var  mainH, _main, scrollH;
     }
     // 查看历史记录 往上面添加消息
     function addSendMsgTop(msg, headImg) {
-        // // // console.log('历史消息1'+JSON.stringify(msg))
+        //console.log('历史消息1'+JSON.stringify(msg))
         var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
         $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="oneself clearfix"><img class="fr oneselfImg" src="'+ headImg +'" tapmode data-id="1" onclick="openMemberInfo(this)"><p class="fr flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-msgId="'+ msg.messageId +'" data-newsText= "'+ msg.content.text +'"> ' + transText(msg.content.text) + ' </p></div>');
     }
     function addReceMsgTop(msg, youHeadImg) {
-        // // // console.log('历史消息2'+JSON.stringify(msg))
+        //console.log('历史消息2'+JSON.stringify(msg))
         var time = new Date(msg.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(msg.sentTime).toLocaleTimeString() : new Date(msg.sentTime).toLocaleString()
         $api.prepend($api.dom('.main'),'<p class="newsTime" data-msgId="'+ msg.messageId +'">'+ time +'</p><div data-msgId="'+ msg.messageId +'" class="other clearfix"><img class="fl otherImg" tapmode onclick="openMemberInfo(this)" data-id="'+ api.pageParam.targetUserId +'" src="'+ api.pageParam.headImg +'"><p class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-msgId="'+ msg.messageId +'" data-newsText= "'+ msg.content.text +'">' + transText(msg.content.text) + '</p></div>');
     }
@@ -1096,7 +1096,7 @@ var  mainH, _main, scrollH;
                 oldestMessageId: messageId,
                 count: count
             }, function(ret, err) {
-                // // // // console.log('482:'+JSON.stringify(ret))
+                // console.log('482:'+JSON.stringify(ret))
                 // alert(JSON.stringify(ret))
                 for (var i = 0; i < ret.result.length ; i++) {
                     // if (ret.result[i].messageDirection == 'RECEIVE') {
@@ -1106,7 +1106,7 @@ var  mainH, _main, scrollH;
                     //     addSendMsgTop(ret.result[i], headImg);
                     // }
                     if (ret.result[i].messageDirection == 'RECEIVE') {
-                        // // // // console.log('559:::::'+JSON.stringify(ret))
+                        // console.log('559:::::'+JSON.stringify(ret))
                         // 消息方向：SEND(发送) 或者 RECEIVE(接受)
                         if (ret.result[i].objectName == 'RC:VcMsg') {
                             // 语音
@@ -1200,7 +1200,7 @@ var  mainH, _main, scrollH;
             text: msg,
             extra: ''
         }, function(ret, err) {
-            // // // console.log('558:'+JSON.stringify(ret))
+            //console.log('558:'+JSON.stringify(ret))
             if (ret.status == 'prepare') {
               sendMsg = ret.result.message.content.text;
               // alert(JSON.stringify(ret));
@@ -1239,10 +1239,10 @@ var  mainH, _main, scrollH;
     function gtouchstart(ele){   
         newsText = $api.attr(ele, 'data-newsText');
         msgId = $api.attr(ele, 'data-msgId');
-        // // // console.log($api.text(ele))
-        // // // console.log($api.html(ele))
+        //console.log($api.text(ele))
+        //console.log($api.html(ele))
 
-        // // // console.log('id::'+msgId+'text::'+ newsText)
+        //console.log('id::'+msgId+'text::'+ newsText)
         var e = window.event
         var x = e.touches[0].clientX ,y=e.touches[0].clientY 
         timeOutEvent = setTimeout("longPress("+x+","+y+")",500);
@@ -1270,10 +1270,10 @@ var  mainH, _main, scrollH;
         if (api.winHeight - (y+10) < api.winHeight/2) {
             y = y - 110
         }
-        // // // // console.log('坐标:'+x+','+y)
+        // console.log('坐标:'+x+','+y)
         timeOutEvent = 0; 
         $api.css($api.dom('.shadow'), 'display:inline-block;top:' + 2*y/100 + 'rem;left:' + 2*x/100 + 'rem;');
-        // // // // console.log(JSON.stringify($api.offset($api.dom('.shadow'))))
+        // console.log(JSON.stringify($api.offset($api.dom('.shadow'))))
         //执行长按要执行的内容，如弹出菜单   
     }  
 </script>

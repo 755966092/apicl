@@ -50,7 +50,7 @@ function exitApp() {
                 name: 'db_' + $api.getStorage('userToken')
             }, function(ret, err) {
                 if (ret.status) {
-                    // // alert(JSON.stringify(ret));
+                    // alert(JSON.stringify(ret));
                 } else {
                     alert(JSON.stringify(err.msg));
                 }
@@ -230,7 +230,7 @@ function dropOut() {
                     sql: 'DROP TABLE IF EXISTS ' + tableArr[i]
                 }, function(ret, err) {
                     if (ret.status) {
-                        // // // console.log('执行成功'+i)
+                        //console.log('执行成功'+i)
                         api.ajax({
                             url: apiSite + '/settings/logout',
                             method: 'post',
@@ -295,19 +295,19 @@ function changeTime(time) {
 function getData(data) {
     // 原生方法
     //  document.getElementsByClassName('resultList')[0].innerHTML = doT.template(document.getElementById('listT').innerHTML)(data)
-    // // // console.log('渲染模版111')
+    //console.log('渲染模版111')
     var listTText = $api.byId('listT').text;
-    // // // console.log('渲染模版222')
+    //console.log('渲染模版222')
     var fnListT = doT.template(listTText);
-    // // // console.log('渲染模版333')
+    //console.log('渲染模版333')
     var html = fnListT(data);
-    // // // console.log('渲染模版444')
-    // // // console.log(html+' at 304')
+    //console.log('渲染模版444')
+    //console.log(html+' at 304')
     var list = $api.dom('.resultList');
-    // // // console.log('渲染模版555')
+    //console.log('渲染模版555')
     // 替换resultList所有内容
     $api.html(list, html);
-    // // // console.log('渲染完成')
+    //console.log('渲染完成')
     // alert('getData:' + JSON.stringify(data))
 }
 
@@ -327,7 +327,7 @@ function initTime(time) {
             return nowTime.getHours() - pageTime.getHours() + '小时之前'
         } else {
             var timeText = nowTime.getMinutes() - pageTime.getMinutes() == 0 ? '刚刚' : nowTime.getMinutes() - pageTime.getMinutes() + '分钟之前'
-            // // // console.log(timeText)
+            //console.log(timeText)
             return nowTime.getMinutes() - pageTime.getMinutes() == 0 ? '刚刚' : nowTime.getMinutes() - pageTime.getMinutes() + '分钟之前'
         }
     }

@@ -393,7 +393,7 @@
                 threshold: 0 //设置距离底部多少距离时触发，默认值为0，数字类型
             }
         }, function (ret, err) {
-            // // // console.log('已滚动到底部')
+            //console.log('已滚动到底部')
             // alert('已滚动到底部');
             if ($api.text($api.dom('.bbottomLoading')) == '暂无更多供求') {
 
@@ -437,7 +437,7 @@
         }, function (ret, err) {
             if (ret.value.flag) {
                 $api.css($api.dom('.loading'), 'display: block');
-                // // // console.log('监听结果::'+JSON.stringify(ret))
+                //console.log('监听结果::'+JSON.stringify(ret))
                 // $api.css($api.dom('.title1'), 'display:block');
                 // parameter = ret.value.parameter
             }
@@ -488,7 +488,7 @@
 
     // 请求数据
     function requireData(data) {
-        // // // // console.log('参数:::'+JSON.stringify(data))
+        // console.log('参数:::'+JSON.stringify(data))
         var data = data || {};
         var latitude, longitude;
         if (data !== {}) {
@@ -503,20 +503,20 @@
                     // 缓存字段  supply_publish_1
                     var supplyCache = $api.getStorage('supply_publish_1');
                     if (supplyCache) {
-                        // // console.log(JSON.stringify(supplyCache))
+                        // console.log(JSON.stringify(supplyCache))
                         getData(supplyCache);
                         $api.css($api.dom('.loading'), 'display: none');
-                        // // console.log($api.attr($api.dom('.firstImg'), 'style'))
+                        // console.log($api.attr($api.dom('.firstImg'), 'style'))
                         // selfAdaption();
                     }
                     fliderSupply(data, supplyCache)
                 } else {
                     var supplyCache = $api.getStorage('supply_publish_1');
                     if (supplyCache) {
-                        // // console.log(JSON.stringify(supplyCache))
+                        // console.log(JSON.stringify(supplyCache))
                         getData(supplyCache);
                         $api.css($api.dom('.loading'), 'display: none');
-                        // // console.log($api.attr($api.dom('.firstImg'), 'style'))
+                        // console.log($api.attr($api.dom('.firstImg'), 'style'))
                         // selfAdaption();
                     }
                     fliderSupply(data, supplyCache)
@@ -535,7 +535,7 @@
     }
 
     function fliderSupply(data, supplyCache) {
-        // // console.log('参数2:::'+JSON.stringify(data))
+        // console.log('参数2:::'+JSON.stringify(data))
         api.ajax({
             url: apiSite + '/supply/index',
             method: 'post',
@@ -556,9 +556,9 @@
         }, function (ret, err) {
             if (ret) {
                 $api.css($api.dom('.loading'), 'display: none');
-                // // // // console.log(page_num)
-                // // console.log('数据:::'+JSON.stringify(ret.data.list))
-                // // // // console.log('页数:::'+JSON.stringify(page_num))
+                // console.log(page_num)
+                // console.log('数据:::'+JSON.stringify(ret.data.list))
+                // console.log('页数:::'+JSON.stringify(page_num))
                 // $api.css($api.dom('.loading'), 'display: none');
                 // 停止下拉刷新
                 api.refreshHeaderLoadDone()
@@ -585,7 +585,7 @@
                 $api.setStorage('supply_publish_1', ret.data.list);
 //                dataList = ret.data.list;
                 renderPage(ret);
-                // // // // console.log('447:::'+JSON.stringify(ret.data.list))
+                // console.log('447:::'+JSON.stringify(ret.data.list))
 
 //                getData(ret.data.list);
                 if (ret.data.list.length < 15) {

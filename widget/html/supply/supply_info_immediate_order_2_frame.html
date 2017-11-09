@@ -339,7 +339,7 @@
     var price=0;
     apiready = function(){
         getData(api.pageParam.transmitData)
-        // // // console.log(JSON.stringify(api.pageParam.transmitData))
+        //console.log(JSON.stringify(api.pageParam.transmitData))
         computeTatol();
         // 初始化页面
         // 判断是否是新用户
@@ -356,7 +356,7 @@
                 if (ret) {
                     $api.attr($api.byId('address'), 'data-id', ret.value.addressId);
                     $api.text($api.byId('address'), ret.value.province +' '+ ret.value.city+ ' ' + ret.value.district+ ' ' +ret.value.callbackAddress);
-                    // // // console.log('360:::'+$api.attr($api.byId('address'), 'data-id'))
+                    //console.log('360:::'+$api.attr($api.byId('address'), 'data-id'))
                 } else {
                     alert(JSON.stringify(err));
                 }
@@ -366,7 +366,7 @@
             name: 'callbackPhone'
         }, function(ret, err) {
             if (ret) {
-                // // // console.log(JSON.stringify(ret))
+                //console.log(JSON.stringify(ret))
                 $api.text($api.byId('defaultPhone'), ret.value.phone);
                 $api.attr($api.byId('defaultPhone'), ret.value.id);
             } else {
@@ -412,7 +412,7 @@
                 url: './supply_getStroagePhone.html'
             });
         } else {
-            // // // console.log('403:::'+$api.attr($api.byId('address'), 'data-id'))
+            //console.log('403:::'+$api.attr($api.byId('address'), 'data-id'))
             var id = $api.attr($api.byId('address'), 'data-id');
             api.openWin({
                 name: 'supply_getStroageAddress',
@@ -427,21 +427,21 @@
     function enterPay() {
         // 获取表单数据
          var supply_id = api.pageParam.transmitData.supply_id;        //   int 供应ID
-         // // // // console.log(supply_id)
+         // console.log(supply_id)
          var amount = $api.val($api.byId('buyCount'));        //  int 数量
          var note = $api.val($api.byId('note'));        //  int 数量
-         // // // // console.log(amount)
+         // console.log(amount)
          var service_time = $api.text($api.byId('serverTime'));        //    string  服务时间
          var paramPhone = $api.text($api.byId('defaultPhone'));        //    string  服务时间
-         // // // // console.log(service_time)
+         // console.log(service_time)
          // var pay_method = ;        //  string  支付方式（仅限付费圈子：balance-余额，wechat-微信支付，alipay-支付宝）
          var name = $api.text($api.byId('real_name'));        //    string  姓名（线下供应必传）
          var title = $api.text($api.dom('.title'));        //    string  姓名（线下供应必传）
-         // // // // console.log(name)
+         // console.log(name)
          var contact_id = $api.attr($api.byId('defaultPhone'), 'data-id');        //  float   用户联系方式ID（线下供应必传）
-         // // // // console.log(contact_id)
+         // console.log(contact_id)
          var address_id = $api.attr($api.byId('address'), 'data-id');        //
-         // // // // console.log(address_id)
+         // console.log(address_id)
          if (api.pageParam.transmitData.form === 1) {
             // 线上 服务时间
             if (service_time == '请选择交易时间') {
@@ -461,7 +461,7 @@
                     note: note
                 }
 
-                // // // console.log("429:::"+JSON.stringify(obj))
+                //console.log("429:::"+JSON.stringify(obj))
                 api.openFrame({
                     name: 'supply_modeOfPayment',
                     url: './supply_modeOfPayment.html',
@@ -503,7 +503,7 @@
                     note: note
                 }
 
-                // // // console.log("429:::"+JSON.stringify(obj))
+                //console.log("429:::"+JSON.stringify(obj))
                 api.openFrame({
                     name: 'supply_modeOfPayment',
                     url: './supply_modeOfPayment.html',
@@ -541,7 +541,7 @@
             if(ret) {
                 if (ret.code == 200) {
                     if (ret.data.list.length != 0) {
-                        // // // console.log(JSON.stringify(ret))
+                        //console.log(JSON.stringify(ret))
                                 $api.text($api.byId('address'),ret.data.list[0].city +' '+ret.data.list[0].district +' '+ret.data.list[0].address);
                                 $api.attr($api.byId('address'), 'data-id', ret.data.list[0].address_id);
                     } else {

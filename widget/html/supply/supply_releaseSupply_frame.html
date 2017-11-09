@@ -472,9 +472,9 @@
             // 获取位置
             getPos();
         }
-        // // 公司|个人 显示不同的页面
+        // 公司|个人 显示不同的页面
         // showDifPage()
-        // // 选择类别478402
+        // 选择类别478402
         // monitorEvent('_genre','_genre');
         // monitorEvent('_format','_format');
         // monitorEvent('_classify','_classify');
@@ -518,7 +518,7 @@
         }, function (ret, err) {
             if (ret) {
                 $api.text($api.byId('position'), ret.value.name + '-' + ret.value.address);
-                // // // console.log(JSON.stringify(ret))
+                //console.log(JSON.stringify(ret))
                 province = ret.value.province;
                 city = ret.value.city;
                 address = ret.value.address;
@@ -534,7 +534,7 @@
             name: 'selCompany'
         }, function (ret, err) {
             if (ret) {
-                // // // console.log(JSON.stringify(ret))
+                //console.log(JSON.stringify(ret))
                 $api.text($api.byId('company_name'), ret.value.company_name);
                 $api.attr($api.byId('company_name'), 'data-id', ret.value.company_id);
             } else {
@@ -725,7 +725,7 @@
                                 // duibi($api.domAll('.imgpage').length,imgArr.length)
                             } else if (retUpfile.oper == "progress") {
                                 //上传过程中获取进度数据
-                                // // // // console.log(retUpfile.percent);
+                                // console.log(retUpfile.percent);
                             }
                         }
                     });
@@ -751,7 +751,7 @@
     }
 
     function selImg() {
-        // // // console.log('selimg')
+        //console.log('selimg')
         var imgArr = [];
         //  var baseUrl = 'img.iinnet.com'; //七牛给你的测试域名，也可使用自己捆绑的域名youe.xxx.com
         var obj = api.require('qiniuUpfile');
@@ -768,7 +768,7 @@
                             duibi($api.domAll('.imgpage').length, imgArr)
                         } else if (ret.oper == "progress") {
                             //上传过程中获取进度数据
-                            // // // console.log(ret.percent);
+                            //console.log(ret.percent);
                         }
                     }
                 });
@@ -781,7 +781,7 @@
     var releaseFlag = 0;
     function duibi(a, b) {
         if (a == b) {
-            // // // // console.log(b)
+            // console.log(b)
             releaseFlag = 1;
         }
     }
@@ -790,8 +790,8 @@
         // if (openImgFlag == 0) {
         //     releaseFlag = 1;
         // }
-        // // // // // console.log('addsupply')
-        // // 获取页面内容
+        // console.log('addsupply')
+        // 获取页面内容
         // if (releaseFlag == 1) {
         var token = $api.getStorage('userToken'),            //string  用户Token
             title = $api.val($api.byId('title')),           //string  标题
@@ -835,7 +835,7 @@
                 image_json: image_json,
                 company_id: company_id
             }
-            // // // console.log(JSON.stringify(obj))
+            //console.log(JSON.stringify(obj))
         } else {
             // 发布新供应
             url = '/supply/add';
@@ -869,7 +869,7 @@
         }, function (ret, err) {
             if (ret) {
                 if (ret.code == 200) {
-                    // // // console.log(JSON.stringify(ret))
+                    //console.log(JSON.stringify(ret))
                     if (api.pageParam.supply_id) {
                         // 编辑应用返回我发布的页面
                         api.sendEvent({
@@ -960,11 +960,11 @@
         }, function (ret, err) {
             if (ret) {
                 classify_dataSource = ret.data.list;
-                // // // // console.log(JSON.stringify(ret))
+                // console.log(JSON.stringify(ret))
                 for (var i = 0; i < ret.data.list.length; i++) {
                     classify_dataSource2.push(ret.data.list[i].name)
                     categoryArr.push(ret.data.list[i].name)
-                    // // // // console.log(categoryArr)
+                    // console.log(categoryArr)
                 }
             } else {
                 alert(JSON.stringify(err))
@@ -1136,7 +1136,7 @@
         }, function (ret, err) {
             if (ret) {
                 if (ret.eventType == 'ok') {
-                    // // // console.log(JSON.stringify(ret))
+                    //console.log(JSON.stringify(ret))
                     $api.text($api.dom('.' + _data + ''), ret.level1);
                     // 选择分类
                     if (ret.selectedInfo[0].category_id) {
@@ -1181,34 +1181,34 @@
     }
     // 获取位置
     function getPos() {
-        // // // console.log('getPos')
+        //console.log('getPos')
         if (api.systemType === 'ios') {
             bMap.initMapSDK(function (ret) {
                 if (ret.status) {
-                    // // // console.log('苹果')
+                    //console.log('苹果')
                     getLocation();
                 } else {
                     alert(JSON.stringify(err.msg))
                 }
             });
         } else {
-            // // // console.log('安卓')
+            //console.log('安卓')
             getLocation();
         }
 
     }
     // 获取经纬度
     function getLocation() {
-        // // // console.log('getLocation')
+        //console.log('getLocation')
         bMap.getLocation({
             accuracy: '100m',
             autoStop: true,
             filter: 1
         }, function (ret, err) {
             if (ret.status) {
-                // // alert(JSON.stringify(ret));
+                // alert(JSON.stringify(ret));
                 getCoords(ret.lon, ret.lat)
-                // // // console.log('经度：' + ret.lon + '----' +'纬度:'+ret.lat)
+                //console.log('经度：' + ret.lon + '----' +'纬度:'+ret.lat)
                 latitude = ret.lat;
                 longitude = ret.lon;
             } else {
@@ -1221,20 +1221,20 @@
     }
     // 根据经纬度获取地址
     function getCoords(lon, lat) {
-        // // // console.log(lon + 'getCoords'+lat)
+        //console.log(lon + 'getCoords'+lat)
         bMap.getNameFromCoords({
             lon: lon,
             lat: lat
         }, function (ret, err) {
-            // // // console.log(JSON.stringify(ret))
-            // // // console.log(JSON.stringify(err))
+            //console.log(JSON.stringify(ret))
+            //console.log(JSON.stringify(err))
             if (ret.status) {
-                // // // console.log(JSON.stringify(ret))
+                //console.log(JSON.stringify(ret))
                 province = ret.province;
                 city = ret.city;
                 district = ret.district;
                 address = ret.address;
-                // // // console.log(JSON.stringify(ret))
+                //console.log(JSON.stringify(ret))
                 // alert('地区'+ret.district + '省份'+ret.city +'地址'+ret.address )
                 $api.text($api.byId('position'), address);
                 // ret.district // 地区
@@ -1258,7 +1258,7 @@
             }
         }, function (ret, err) {
             if (ret) {
-                // // // console.log(JSON.stringify(ret))
+                //console.log(JSON.stringify(ret))
                 imgArr = eval(ret.data.info.image_json)
                 editSupply(ret.data)
             } else {

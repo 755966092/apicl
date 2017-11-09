@@ -294,7 +294,7 @@
             }
         }, function(ret, err) {
             if(ret) {
-                // // // console.log('285::::'+JSON.stringify(ret))
+                //console.log('285::::'+JSON.stringify(ret))
                 for (var i = 0; i < ret.data.list.length; i++) {
                     switch(ret.data.list[i].status) {
                         case 2 : ret.data.list[i].status = '已通过'; break;
@@ -325,7 +325,7 @@
             }
         }, function(ret, err) {
             if(ret) {
-                // // // console.log(JSON.stringify(ret))
+                //console.log(JSON.stringify(ret))
                 requireData();
                 selectSql(userId);
             } else {
@@ -345,17 +345,17 @@
             }
         }, function(ret, err) {
             if(ret) {
-                // // // console.log('329::::'+JSON.stringify(ret))
+                //console.log('329::::'+JSON.stringify(ret))
                 // 新添加好友插入数据库
                 var SQLName = 'db_'+$api.getStorage('userToken');
                 var SQL = 'INSERT OR REPLACE INTO addressList(user_id,nickname,head_img_url,current_company,current_position,current_degree, titleSize,title,img,flag,litter,type, sex, remark_nickname, remark_real_name, remark_head_img_url, remark_sex, remark_birthday, remark_hometown, remark_current_company, remark_current_position, remark_current_degree, remark_current_contact) VALUES '
-                // // // console.log(userId)
+                //console.log(userId)
                 db.executeSql({
                     name: SQLName,
                     sql: ' DELETE FROM addressList WHERE user_id = ' + userId
                 }, function(ret, err){
                     if( ret.status ){
-                        // // // console.log('删除成功'+ JSON.stringify( ret ) );
+                        //console.log('删除成功'+ JSON.stringify( ret ) );
                     }else{
                         alert( JSON.stringify( err ) );
                     }
@@ -368,18 +368,18 @@
                         } else {
                             litter =  PinyinHelper.getShortPinyin(ret.data.list[i].nickname).toUpperCase();
                         }
-                        // // // console.log(litter)
+                        //console.log(litter)
                         SQL += '('+ret.data.list[i].user_id+',"'+ ret.data.list[i].nickname +'","'+ ret.data.list[i].head_img_url +'","'+ (ret.data.list[i].current_company || "") +'","'+ (ret.data.list[i].current_position || "") +'","'+ (ret.data.list[i].current_degree || "") +'","'+ 15 +'","'+ ret.data.list[i].nickname +'","'+ ret.data.list[i].head_img_url+'","'+ litter[0] +'","'+ litter +'","'+ 4 +'","'+ (ret.data.list[i].sex || 1) +'","'+ (ret.data.list[i].remark_nickname || "") +'","'+ (ret.data.list[i].remark_real_name || "") +'","'+ (ret.data.list[i].remark_head_img_url || "") +'","'+ (ret.data.list[i].remark_sex || "") +'","'+ (ret.data.list[i].remark_birthday || "") +'","'+ (ret.data.list[i].remark_hometown || "") +'","'+ (ret.data.list[i].remark_current_company || "") +'","'+ (ret.data.list[i].remark_current_position || "") +'","'+ (ret.data.list[i].remark_current_degree || "") +'","'+ (ret.data.list[i].remark_current_contact || "") +'"),';
                     }
                 }
                 SQL = SQL.substring(0,SQL.length-1)
-                // // // console.log(SQL+'000')
+                //console.log(SQL+'000')
                 db.executeSql({
                     name: SQLName,
                     sql: SQL
                 }, function(ret, err){
                     if( ret.status ){
-                        // // // console.log('执行成功')
+                        //console.log('执行成功')
                         api.execScript({
                             name: 'main',
                             frameName: 'frame1',

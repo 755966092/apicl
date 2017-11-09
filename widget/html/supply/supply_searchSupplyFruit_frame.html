@@ -272,13 +272,13 @@
         api.addEventListener({
            name: 'searchSupply3'
         }, function(ret, err) {
-           // // alert(JSON.stringify(ret))
+           // alert(JSON.stringify(ret))
                 obj.type = ret.value.parameter.type;
                 obj.sub_type = ret.value.parameter.sub_type;
                 obj.category_ids = ret.value.parameter.category_ids;
                 obj.order = ret.value.parameter.order;
-                // // // console.log(keyword)
-                // // // console.log('筛选'+JSON.stringify(obj))
+                //console.log(keyword)
+                //console.log('筛选'+JSON.stringify(obj))
                 // alert('33333:::'+JSON.stringify(obj));
                 if (ret.value.type == 1) {
                     // 供
@@ -296,7 +296,7 @@
         }, function(ret, err) {
             keyword = ret.value.keyword
             obj.keyword = ret.value.keyword;
-            // // // console.log('搜索'+JSON.stringify(obj))
+            //console.log('搜索'+JSON.stringify(obj))
             requireData({keyword : ret.value.keyword});
             // alert('22222:::'+JSON.stringify(obj));
         });
@@ -316,7 +316,7 @@
           });
        });
     }
-    // // 筛选后页面变化
+    // 筛选后页面变化
     // function viewResults(ele) {
 
     //     $api.css($api.dom('.results'), 'background: #fff url(../../image/icon_zk.png)no-repeat;background-position: right center;-webkit-background-size: .15rem .25rem;background-size: .15rem .25rem;');
@@ -335,8 +335,8 @@
 
     // 请求数据
     function requireData (data) {
-        // // // console.log('函数内:'+JSON.stringify(data))
-        // // // console.log('函数内:'+JSON.stringify(url))
+        //console.log('函数内:'+JSON.stringify(data))
+        //console.log('函数内:'+JSON.stringify(url))
         var data = data || 1;
         var latitude,longitude;
         if (data !== 1) {
@@ -348,7 +348,7 @@
                     if (ret.status) {
                         latitude = ret.lat;
                         longitude = ret.lon;
-                        // // // console.log(latitude+'--------'+longitude)
+                        //console.log(latitude+'--------'+longitude)
                         api.ajax({
                             url: apiSite + url,
                             method: 'post',
@@ -367,7 +367,7 @@
                             }
                         }, function(ret, err) {
                             if(ret) {
-                                // // // console.log(JSON.stringify(ret))
+                                //console.log(JSON.stringify(ret))
                                 // 停止下拉刷新
                                 api.refreshHeaderLoadDone()
                                 for (var i = 0; i < ret.data.list.length; i++) {

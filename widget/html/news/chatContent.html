@@ -306,6 +306,18 @@
         bottom: 0;
     }
     /* 位置消息气泡 */
+
+    /* 拖消息气泡 */
+    .main .imgwrap p {
+        padding: 0;
+        border: 0;
+        background-color: transparent;
+    }
+    .main .imgwrap .imgNews {
+        border-radius: .1rem;
+    }
+    /* 拖消息气泡 */
+
     </style>
 </head>
 <body id="body" ontouchstart="closeDiv1();">
@@ -326,7 +338,7 @@
         请勿发布违法违规内容，共同营造文明和谐的聊天环境
     </p>
     <div class="main">
-        <!-- <div class="oneself clearfix">
+        <div class="oneself clearfix">
             <div class="time">04:19</div>
             <img class="fr oneselfImg" src="../../image/tx_5.jpg">
             <p class="fr flex-def flex-cCenter flex-zEnd" style="width:5rem" ontouchstart="gtouchstart()" ontouchmove="gtouchmove()"
@@ -362,25 +374,20 @@
                 <img src="../../image/tx_5.jpg" alt="">
             </p>
         </div>
-        <div class="oneself clearfix">
-            <div class="time">04:19</div>
-            <img class="fr oneselfImg" src="../../image/tx_5.jpg">
-            <p class="positionNews fr flex-def flex-zTopBottom">
-                <span class="posName">清华大学清华大学清华大学清华大学清华大学清华大学清华大学清华大学清华大学</span>
-                <span class="posiDes">清华大学清华大学清华大学清华大学清华大学清华大学清华大学清华大学清华大学</span>
-                <img src="../../image/tx_5.jpg" alt="">
-            </p>
+        <p class="newsTime" data-msgId="' + msg.messageId + '">' + time + '
+        </p>
+        <div data-msgId="" class="other clearfix imgwrap">
+            <img class="fl otherImg"  src="../../image/tx_1.jpg">
+            <p data-msgId="" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()"
+                ontouchend="gtouchend()">
+                <img class="imgNews" src="../../image/tx_1.jpg"> </p>
         </div>
-
-        <div class="other clearfix">
-            <div class="time">04:19</div>
-            <img class="fl otherImg" src="../../image/tx_5.jpg">
-            <p class="positionNews fl flex-def flex-zTopBottom">
-                <span class="posName">清华大学清华大学清华大学清华大学清华大学清华大学清华大学清华大学清华大学</span>
-                <span class="posiDes">清华大学清华大学清华大学清华大学清华大学清华大学清华大学清华大学清华大学</span>
-                <img src="../../image/tx_5.jpg" alt="">
-            </p>
-        </div>-->
+        <div data-msgId="" class="oneself clearfix imgwrap">
+            <img class="fr oneselfImg" src="../../image/tx_1.jpg">
+            <p data-msgId="" class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()"
+                ontouchend="gtouchend()">
+                <img class="imgNews" src="../../image/tx_1.jpg"> </p>
+        </div>
         <!-- <div class="oneself clearfix">
             <div class="time">04:19</div>
             <img class="fr oneselfImg" src="../../image/tx_5.jpg">
@@ -389,7 +396,7 @@
                 <span class="posiDes">清华大学清华大学清华大学清华大学清华大学清华大学清华大学清华大学清华大学</span>
                 <img class="" src="../../image/tx_5.jpg" alt="">
             </p>
-        </div>  -->
+        </div> 
     </div>
     <div class="shadow">
         <p tapmode="" onclick="closeDiv(0);event.stopPropagation();">
@@ -424,7 +431,7 @@ var scrollH;
 apiready = function () {
     moduleInit();
     if (api.pageParam.supplyName) {
-        // // // // // console.log(JSON.stringify(api.pageParam))
+        // console.log(JSON.stringify(api.pageParam))
         $api.removeCls($api.dom('.supply_info'), 'hide');
         $api.text($api.byId('userName'), api.pageParam.nickname);
         $api.text($api.byId('supplyName'), api.pageParam.supplyName);
@@ -441,7 +448,7 @@ apiready = function () {
         name: 'editUserInfoList'
     }, function () {
         updatePage();
-        // // console.log('更新成功更新成功')
+        // console.log('更新成功更新成功')
     });
 
     // 调整页面到输入框的后面
@@ -451,7 +458,7 @@ apiready = function () {
     api.addEventListener({
         name: 'sendMsg'
     }, function (ret, err) {
-        // // // console.log('发送消息后:'+JSON.stringify(ret))
+        //console.log('发送消息后:'+JSON.stringify(ret))
         chatRecordingSql(ret.value.msg, 'sendMsg', headImg);
         // 发送消息后, 添加消息内容到页面
         addSendMsg(ret.value.msg.result.message.content.text, headImg, 0);
@@ -466,7 +473,7 @@ apiready = function () {
     api.addEventListener({
         name: 'receiveMsg'
     }, function (ret, err) {
-        // // console.log('接受消息后:'+JSON.stringify(ret))
+        // console.log('接受消息后:'+JSON.stringify(ret))
 
         var value = ret.value;
         if (value.targetId == targetRongId) {
@@ -529,26 +536,26 @@ function sendPosition(ret) {
 
         if (ret.status == 'prepare') {
             paramData = ret;
-        // // console.log('发送准备:'+JSON.stringify(ret))
+        // console.log('发送准备:'+JSON.stringify(ret))
         }
         else if (ret.status == 'progress') {
-        // // // console.log('发送准备222:'+JSON.stringify(ret))
+        //console.log('发送准备222:'+JSON.stringify(ret))
         }
         else if (ret.status == 'success') {
-            // // // console.log( JSON.stringify(ret));
+            //console.log( JSON.stringify(ret));
             createSendPositionLabel(paramData);
             // 存入数据库
             chatRecordingSql(paramData, 'sendMsg', headImg);
         }
         else if (ret.status == 'error') {
-            // // console.log( err.code);
+            // console.log( err.code);
         }
 
     });
 }
 
 function createSendPositionLabel(msg) {
-    // // console.log('新建标签参数:'+JSON.stringify(msg));
+    // console.log('新建标签参数:'+JSON.stringify(msg));
     var time = new Date(msg.result.message.sentTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(
         msg.result.message.sentTime).toLocaleTimeString() : new Date(msg.result.message.sentTime).toLocaleString();
     var positionCount = msg.result.message.content.poi.indexOf(',');
@@ -569,7 +576,7 @@ function createReceivePositionLabel(msg) {
 }
 
 function createSendPositionLabelSql(msg, flag) {
-    // // console.log('新建标签参数:'+JSON.stringify(msg));
+    // console.log('新建标签参数:'+JSON.stringify(msg));
     var time;
     var positionCount;
     var str;
@@ -812,8 +819,8 @@ function allCahtSql(ret) {
                 }   
                 else {
                     // 文字
-                    // // console.log(element.content.extra.replace(/"/g, ''))
-                    // // console.log(element.content.extra.replace(/"/g, '').replace(/"/g, ''))
+                    // console.log(element.content.extra.replace(/"/g, ''))
+                    // console.log(element.content.extra.replace(/"/g, '').replace(/"/g, ''))
                     SQL += '(' + element.messageId + ',"' + element.sentTime + '","' + element.objectName + '","' +
                         element.messageDirection + '","' + element.content.extra.replace(/"/g, '').replace(/"/g, '') +
                         '","' + (element.content.text || '') + '",0,0,"","' + youHeadImg + '","","",""),';
@@ -942,7 +949,7 @@ function delSql(msgId) {
 // 用户详情
 function openMemberInfo(ele) {
     var flag = $api.attr(ele, 'data-id');
-    // // console.log('执行用户详情' + flag)
+    // console.log('执行用户详情' + flag)
     api.closeWin({
         name: 'txl_memberInfo_Win'
     });
@@ -1186,20 +1193,20 @@ function sendImg(ret) {
         extra: ''
     }, function (ret, err) {
         if (ret.status == 'prepare') {
-            // // // // // console.log('发送准备::'+ JSON.stringify(ret.result.message) );
+            // console.log('发送准备::'+ JSON.stringify(ret.result.message) );
             addSendImgMessages(ret.result.message, headImg, 1);
             retprepare = ret;
         }
         else if (ret.status == 'progress') {
-        // // // // // console.log( '发送中::'+ret.result.progress );
+        // console.log( '发送中::'+ret.result.progress );
         }
         else if (ret.status == 'success') {
             chatRecordingSql(retprepare, 'sendMsg', headImg);
-        // // // // // console.log( '发送成功::'+ret.result.message.messageId );
-        // // // // // console.log( '发送成功::'+JSON.stringify(prepare) );
+        // console.log( '发送成功::'+ret.result.message.messageId );
+        // console.log( '发送成功::'+JSON.stringify(prepare) );
         }
         else if (ret.status == 'error') {
-        // // // // // console.log( err.code );
+        // console.log( err.code );
         }
         else {
         }
@@ -1287,7 +1294,7 @@ function transEmo(emoMsg) {
 }
 // 获取聊天对方信息
 function getSideInfo(rongUserId) {
-    // // // // console.log('第一步')
+    // console.log('第一步')
     rongUserIdArr = rongUserId.split();
     api.ajax({
         url: apiSite + '/user/chatUserInfo',
@@ -1431,7 +1438,7 @@ function renderPageSql(ret, n) {
     else {
         // 最新消息
         for (var i = ret.length - 1; i >= 0; i--) {
-            // // // console.log(ret[i].messageId)
+            //console.log(ret[i].messageId)
             if (ret[i].messageDirection == 'RECEIVE') {
                 // 消息方向：SEND(发送) 或者 RECEIVE(接受)
                 if (ret[i].objectName == 'RC:VcMsg') {
@@ -1469,7 +1476,7 @@ function renderPageSql(ret, n) {
                 }
                 else if (ret[i].objectName == 'RC:LBSMsg') {
                     // 图片
-                    // // console.log(JSON.stringify(ret[i]));
+                    // console.log(JSON.stringify(ret[i]));
                     createSendPositionLabelSql(ret[i], 'sql');
                 }
                 else {
@@ -1507,7 +1514,7 @@ function renderPage(ret) {
             else if (ret.result[i].objectName == 'RC:LBSMsg') {
                 // 位置
                 // addReceImgMessages(ret.result[i], youHeadImg, 1)
-                // // console.log('接收消息的JSON:'+JSON.stringify(ret));
+                // console.log('接收消息的JSON:'+JSON.stringify(ret));
                 createReceivePositionLabelSql(ret.result[i]);
             }
             else {
@@ -1530,7 +1537,7 @@ function renderPage(ret) {
             else if (ret.result[i].objectName == 'RC:LBSMsg') {
                 // 位置
                 // addSendImgMessages(ret.result[i], headImg, 1)
-                // // console.log('发送消息的JSON:'+JSON.stringify(ret));
+                // console.log('发送消息的JSON:'+JSON.stringify(ret));
                 createSendPositionLabelSql(ret.result[i]);
             }
             else {
@@ -1566,9 +1573,9 @@ function previewImg(ele) {
 // 接收图片消息后新建消息
 function addReceImgMessages(msg, youHeadImg, n) {
     if (n == 1) {
-        // // // // // console.log('历史消息::'+JSON.stringify(msg))
+        // console.log('历史消息::'+JSON.stringify(msg))
         // 历史消息
-        // // 当天显示时间
+        // 当天显示时间
         // 不是当天显示年月日 时分秒
         var time = new Date(parseInt(msg.receivedTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(
             msg.receivedTime).toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10)).toLocaleString();
@@ -1581,9 +1588,9 @@ function addReceImgMessages(msg, youHeadImg, n) {
         slideBut();
     }
     else if (n == 2) {
-        // // // // // console.log('历史消息::'+JSON.stringify(msg))
+        // console.log('历史消息::'+JSON.stringify(msg))
         // 历史消息
-        // // 当天显示时间
+        // 当天显示时间
         // 不是当天显示年月日 时分秒
         var time = new Date(parseInt(msg.receivedTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(
             msg.receivedTime).toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10)).toLocaleString();
@@ -1595,7 +1602,7 @@ function addReceImgMessages(msg, youHeadImg, n) {
             msg.content.imageUrl + '"> </p></div>');
     }
     else {
-        // // console.log('接受到的图片' + JSON.stringify(msg))
+        // console.log('接受到的图片' + JSON.stringify(msg))
         // 当前接收的消息
         var time = new Date(msg.message.receivedTime).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(
             msg.message.receivedTime).toLocaleTimeString() : new Date(msg.message.receivedTime).toLocaleString();
@@ -1636,7 +1643,7 @@ function addSendImgMessages(msg, headImg, n) {
             '"> </p></div>');
     }
     else {
-        // // // // // console.log(JSON.stringify(msg))
+        // console.log(JSON.stringify(msg))
         // 当前发送的消息
         $api.append($api.dom('.main'), '<p class="newsTime" >' + new Date().toLocaleTimeString() +
             '</p><div data-msgId="" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' +
@@ -1652,7 +1659,7 @@ function addReceVoiceMessages(msg, youHeadImg, n) {
     // 不是当天显示年月日 时分秒
     if (n == 1) {
         // 历史消息
-        // // 当天显示时间
+        // 当天显示时间
         // 不是当天显示年月日 时分秒
         var time = new Date(parseInt(msg.sentTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.sentTime, 10))
             .toLocaleTimeString() : new Date(parseInt(msg.sentTime, 10)).toLocaleString();
@@ -1739,7 +1746,7 @@ function addSendVoiceMessages(msg, headImg, n) {
     else {
         var widthNum = msg.duration;
         // widthNum = widthNum > 7 ? widthNum : 7;
-        // // // // // console.log(JSON.stringify(msg))
+        // console.log(JSON.stringify(msg))
         // 当前发送的消息
         $api.append($api.dom('.main'), '<p class="newsTime" >' + new Date().toLocaleTimeString() +
             '</p><div data-msgId="" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' +
@@ -1830,7 +1837,7 @@ function addReceMsg(msg, youHeadImg, n) {
 
     if (n == 1) {
         // 历史消息
-        // // 当天显示时间
+        // 当天显示时间
         // 不是当天显示年月日 时分秒
         var time = new Date(parseInt(msg.sentTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.sentTime, 10))
             .toLocaleTimeString() : new Date(parseInt(msg.sentTime, 10)).toLocaleString();
@@ -1878,7 +1885,7 @@ function addSendMsg(msg, headImg, n) {
 }
 // 查看历史记录 往上面添加消息
 function addSendMsgTop(msg, headImg) {
-    // // // // console.log('历史消息1'+JSON.stringify(msg))
+    // console.log('历史消息1'+JSON.stringify(msg))
     var time = new Date(parseInt(msg.sentTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.sentTime, 10))
         .toLocaleTimeString() : new Date(parseInt(msg.sentTime, 10)).toLocaleString();
     $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
@@ -1890,7 +1897,7 @@ function addSendMsgTop(msg, headImg) {
 }
 
 function addReceMsgTop(msg, youHeadImg) {
-    // // // // console.log('历史消息2'+JSON.stringify(msg))
+    // console.log('历史消息2'+JSON.stringify(msg))
     var time = new Date(parseInt(msg.sentTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.sentTime, 10))
         .toLocaleTimeString() : new Date(parseInt(msg.sentTime, 10)).toLocaleString();
     $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
@@ -1986,7 +1993,7 @@ function chatHis() {
         // scrollH = mainH - _main;
         // _main =  mainH;
         if (api.systemType !== 'ios') {
-            // // console.log('安卓')
+            // console.log('安卓')
             window.scrollTo(0, 1);
         }
 
@@ -2088,10 +2095,10 @@ var timeOutEvent = 0; // 定时器
 function gtouchstart(ele) {
     newsText = $api.attr(ele, 'data-newsText');
     msgId = $api.attr(ele, 'data-msgId');
-    // // // // console.log($api.text(ele))
-    // // // // console.log($api.html(ele))
+    // console.log($api.text(ele))
+    // console.log($api.html(ele))
 
-    // // // // console.log('id::'+msgId+'text::'+ newsText)
+    // console.log('id::'+msgId+'text::'+ newsText)
     var e = window.event;
     var x = e.touches[0].clientX;
     var y = e.touches[0].clientY;
@@ -2123,16 +2130,16 @@ function longPress(x, y) {
         y = y - 110;
     }
 
-    // // // // // console.log('坐标:'+x+','+y)
+    // console.log('坐标:'+x+','+y)
     timeOutEvent = 0;
     $api.css($api.dom('.shadow'), 'display:inline-block;top:' + 2 * y / 100 + 'rem;left:' + 2 * x / 100 + 'rem;');
-    // // // // // console.log(JSON.stringify($api.offset($api.dom('.shadow'))))
+    // console.log(JSON.stringify($api.offset($api.dom('.shadow'))))
     // 执行长按要执行的内容，如弹出菜单
 }
 // 数据库查询 接受图片消息后新建
 function sqlAddReceImgMessages(msg, n) {
     if (n == 1) {
-        // // 当天显示时间
+        // 当天显示时间
         // 不是当天显示年月日 时分秒
         var time = new Date(parseInt(msg.receivedTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ?
             new Date(parseInt(msg.receivedTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10)).toLocaleString();
@@ -2146,7 +2153,7 @@ function sqlAddReceImgMessages(msg, n) {
     }
     else if (n == 2) {
         // 历史消息
-        // // 当天显示时间
+        // 当天显示时间
         // 不是当天显示年月日 时分秒
         var time = new Date(parseInt(msg.receivedTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ?
             new Date(parseInt(msg.receivedTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10)).toLocaleString();
@@ -2199,7 +2206,7 @@ function sqlAddSendImgMessages(msg, n) {
             '"> </p></div>');
     }
     else {
-        // // // // // console.log(JSON.stringify(msg))
+        // console.log(JSON.stringify(msg))
         // 当前发送的消息
         var time = new Date(parseInt(msg.receivedTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ?
             new Date(parseInt(msg.receivedTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10)).toLocaleString();
@@ -2304,7 +2311,7 @@ function sqlAddSendVoiceMessages(msg, n) {
             new Date(parseInt(msg.receivedTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10)).toLocaleString();
         var widthNum = msg.duration;
         // widthNum = widthNum > 7 ? widthNum : 7;
-        // // // // // console.log(JSON.stringify(msg))
+        // console.log(JSON.stringify(msg))
         // 当前发送的消息
         $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
             '</p><div data-msgId="' + msg.messageId +
@@ -2324,7 +2331,7 @@ function sqlAddReceMsg(msg, n) {
     // 当天显示时间
     // 不是当天显示年月日 时分秒
     // 历史消息
-    // // 当天显示时间
+    // 当天显示时间
     // 不是当天显示年月日 时分秒
     if (n == 1) {
         var time = new Date(parseInt(msg.receivedTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ?

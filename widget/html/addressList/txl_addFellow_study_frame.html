@@ -495,10 +495,10 @@
                 // 删除的是默认的状态, 更新列表内容
                 // 删除的不是默认的状态, 无操作
                 if (ret.data[0].is_default) {
-                    // // // // console.log('删除默认状态');
+                    // console.log('删除默认状态');
                     updateStatus();
                 } else {
-                    // // // // console.log('删除非默认状态')
+                    // console.log('删除非默认状态')
                 }
             }else{
                 alert( JSON.stringify( err ) );
@@ -615,7 +615,7 @@
                 sql +=  '(' + api.pageParam.userId + ',' + ret.data.status[i].status_id + ',"' + ret.data.status[i].name+ '","' + ret.data.status[i].position+ '","' + ret.data.status[i].degree+ '","' + ret.data.status[i].start_date+ '",' + ret.data.status[i].is_default+ ',' + ret.data.status[i].type + '),';
                 if (ret.data.status[i].type == 2) {
                     // 學習
-                    // // // // console.log(ret.data.status[i].degree)
+                    // console.log(ret.data.status[i].degree)
                     switch(ret.data.status[i].degree) {
                         case '0': ret.data.status[i].degree = ''; break;
                         case '1': ret.data.status[i].degree = '专科'; break;
@@ -627,7 +627,7 @@
                 }
             }
             sql = sql.substring(0,sql.length-1);
-            // // // // console.log(sql)
+            // console.log(sql)
             db.executeSql({
                 name: 'db_' + $api.getStorage('userToken'),
                 sql: sql  

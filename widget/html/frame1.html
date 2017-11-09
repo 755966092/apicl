@@ -543,7 +543,7 @@
             path: 'widget://html/frame1.html'
         }, function(ret, err) {
             if (ret.exist) {
-                    // // // console.log(JSON.stringify(ret))
+                    //console.log(JSON.stringify(ret))
                     // 存在打开
                     openFile();
             } else {
@@ -557,10 +557,10 @@
             path: 'widget://html/frame1.html'
         }, function(ret, err) {
             if (ret.status) {
-                // // // console.log('518:::'+JSON.stringify(ret));
+                //console.log('518:::'+JSON.stringify(ret));
                 openFile();
             } else {
-                // // // console.log('541:::'+JSON.stringify(err));
+                //console.log('541:::'+JSON.stringify(err));
             }
         });
     }
@@ -577,13 +577,13 @@
                         data: '<html>'+ htmlStr +'</html>',
                     }, function(ret, err){
                         if( ret.status ){
-                            // // // console.log('531:::'+ JSON.stringify( ret ) );
+                            //console.log('531:::'+ JSON.stringify( ret ) );
                         }else{
-                            // // // console.log('533:::'+ JSON.stringify( err ) );
+                            //console.log('533:::'+ JSON.stringify( err ) );
                         }
                     });
                 } else {
-                    // // // console.log('537:::'+JSON.stringify(err));
+                    //console.log('537:::'+JSON.stringify(err));
                 }
             });
     }
@@ -677,7 +677,7 @@
             $api.setStorage('frame1SlideBar', str);
             // getData(data)
             // dakai(data)
-            // // // console.log('703:::'+data.length)
+            //console.log('703:::'+data.length)
     }
     function insertOneSql(type,str) {
         str = $api.jsonToStr(str);
@@ -686,7 +686,7 @@
             sql: "INSERT OR REPLACE INTO addressList_one (type, str) VALUES ("+ type +",'"+ str +"')"
         }, function(ret, err){
             if( ret.status ){
-                // // // console.log('缓存成功')
+                //console.log('缓存成功')
             }else{
                 // alert('756:'+ JSON.stringify( err ) );
             }
@@ -808,7 +808,7 @@
         } else if (n == 4){
             url = 'txl_listWin_4'
         }
-        // // // console.log(url)
+        //console.log(url)
         api.openWin({
             name: 'listWin_' + url,
             url: './addressList/'+ url +'.html',
@@ -834,7 +834,7 @@
     }
 
     function dakai(data1) {
-        // // console.log(JSON.stringify(data1))
+        // console.log(JSON.stringify(data1))
         var listContactHeight = 455;
         if (api.systemType=='ios') {
             listContactHeight = 505;
@@ -842,7 +842,7 @@
         var dataArr = [];
         var dataKeyArr = [];
         for(key in data1) {
-            // // // // console.log(data1[key])
+            // console.log(data1[key])
             dataArr = dataArr.concat(data1[key]);
             dataKeyArr.push(key)
         }
@@ -971,7 +971,7 @@
             name: SQLName,
             sql: 'SELECT * FROM addressList_simplify order by flag asc'
         }, function(ret, err) {
-            // // // // console.log('查询到的数据:' + JSON.stringify(ret))
+            // console.log('查询到的数据:' + JSON.stringify(ret))
             if (ret.status) {
                 // setTimeout(function(){
                 //     if (ret.data=='') {
@@ -979,19 +979,19 @@
                 //     }
                 // },1)
                 //
-                // // // // console.log('frame1::::::'+JSON.stringify(ret))
+                // console.log('frame1::::::'+JSON.stringify(ret))
                 // if (ret.data.length === 0) {
-                //     // // // // console.log('暂无数据')
+                //     // console.log('暂无数据')
                 //     query();
                 // } else {
-                    // // // // console.log('有数据')
+                    // console.log('有数据')
                     // dakai(paixv(ret.data))
                     setTimeout(function () {
                         sortData(ret.data);
                     },1)
                 // }
             } else {
-                // // // // console.log(JSON.stringify(err));
+                // console.log(JSON.stringify(err));
             }
         });
     }

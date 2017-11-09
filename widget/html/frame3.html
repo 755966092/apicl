@@ -200,7 +200,7 @@
     }
     // 请求数据
     function requestData() {
-        // // // // console.log('请求数据')
+        // console.log('请求数据')
         api.ajax({
             url: apiSite + '/contact/index',
             method: 'post',
@@ -211,7 +211,7 @@
                }
             }
        }, function(ret, err) {
-            // // // console.log('请求数据2222222')
+            //console.log('请求数据2222222')
             disData(ret.data.single_list, 1)
             disData(ret.data.both_list, 2)
             disData(ret.data.unavailable_list, 3)
@@ -220,8 +220,8 @@
 
     }
     function disData (data, type) {
-        // // // // console.log('disData'+type)
-        // // // console.log('disData'+data)
+        // console.log('disData'+type)
+        //console.log('disData'+data)
         if (data != '') {
             for (var i = 0; i < data.length; i++) {
                 // single_list
@@ -247,7 +247,7 @@
     }
     // 排序
     function litterSort(data,type) {
-        // // // console.log(JSON.stringify(data))
+        //console.log(JSON.stringify(data))
         for (var i = 0; i < data.length; i++) {
             for (var j = 0; j < data.length; j++) {
                 if (data[i].litter < data[j].litter) {
@@ -259,19 +259,19 @@
          }
          sqlSyntax(data, type);
         //  for (var i = 0; i < data.length; i++) {
-        //     // // // // console.log("letter+++:"+data[i].litter)
+        //     // console.log("letter+++:"+data[i].litter)
         //      data[0].flag = data[0].litter[0]
         //      // data[i].flag = data[i].litter[0]
 
         //     if (i>0) {
         //         if (data[i].litter[0] !== data[i-1].litter[0]) {
-        //             // // // // console.log("letter+++:"+data[i].litter)
+        //             // console.log("letter+++:"+data[i].litter)
         //             data[i].flag = data[i].litter[0];
-        //             // // // // console.log("flag+++:"+data[i].flag)
+        //             // console.log("flag+++:"+data[i].flag)
         //         }
         //     }
         //  }
-        // // // // // console.log('数据：'+JSON.stringify(data))
+        // console.log('数据：'+JSON.stringify(data))
         // var arr = {}
         // var a;
         // for (var i = 0; i < data.length; i++) {
@@ -285,33 +285,33 @@
         //     // }
         //     arr[data[a].flag].push (data[i])
         // }
-        // // // // console.log(JSON.stringify(arr))
+        // console.log(JSON.stringify(arr))
         // return arr;
     }
     // 拼数据库语法字符串
     function sqlSyntax(data1, type) {
-        // // // // console.log('数据库'+ type)
-        // // // console.log('数据库'+ data1)
+        // console.log('数据库'+ type)
+        //console.log('数据库'+ data1)
         for (var i = 0; i < data1.length; i++) {
             data1[i].flag = data1[i].litter[0];
         }
 
-        // // // // console.log('数据库语法字符串:'+data1);
+        // console.log('数据库语法字符串:'+data1);
         var SQLName = 'db_'+$api.getStorage('userToken');
         var SQL = 'INSERT OR REPLACE INTO addressList(user_id,nickname,head_img_url,current_company,current_position,titleSize,title,img,flag,litter,type) VALUES '
         for (var i = 0; i < data1.length; i++) {
             SQL += '("'+ data1[i].user_id +'","'+ data1[i].nickname +'","'+ data1[i].head_img_url +'","'+ data1[i].current_company +'","'+ data1[i].current_position+'","'+ data1[i].titleSize +'","'+ data1[i].title +'","'+ data1[i].img+'","'+ data1[i].flag +'","'+ data1[i].litter +'",'+ type +'),'
         }
         SQL = SQL.substring(0,SQL.length-1) + ';'
-        // // // // console.log(SQL)
+        // console.log(SQL)
         db.executeSql({
             name: SQLName,
             sql: SQL
         }, function(ret, err) {
             if (ret.status) {
-                // // // console.log('执行语句正确'+JSON.stringify(ret));
+                //console.log('执行语句正确'+JSON.stringify(ret));
             } else {
-                // // // console.log('执行语句错误:' + JSON.stringify(err))
+                //console.log('执行语句错误:' + JSON.stringify(err))
             }
         });
     }
