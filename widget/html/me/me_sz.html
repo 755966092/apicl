@@ -349,81 +349,41 @@
             count: 3000,
             pageIndex: page
         }, function(ret, err) {
-            contactArr.contacts = contactArr.contacts.concat(ret.contacts);
-            // $api.css($api.dom('.loading'), 'display: none');
-            if (page < (ret.pages - 1)) {
+            if (ret.status) {
+                contactArr.contacts = contactArr.contacts.concat(ret.contacts);
+                if (page < (ret.pages - 1)) {
                     queryContactByPage(page + 1);
+                } else {
+                    queryContacts(contactArr)
+                }
             } else {
-                // console.log('获取条数-----' + JSON.stringify(contactArr))
-                queryContacts(contactArr)
+                api.toast({
+                    msg: '请在系统的设置-隐私-通讯录界面允许我在访问您的通讯录'
+                });
             }
         });
-    }
-
-    function getContacts() {
-        api.toast({
-            msg: '开始获取',
-            duration: 2000,
-            location: 'bottom'
-        });
-        var start = new Date().getTime();
-        contacts.queryByPage({
-            pageIndex: 0,
-        }, function(ret){
-            if(ret.status){
-                var end = new Date().getTime();
-                alert('时间:' + (end - start) / 1000)
-                alert('获取成功:' + ret.contacts.length)
-            }
-        });
-        // contacts.allContacts({}, function (ret, err) {
-        //     if (ret) {
-        //         var end = new Date().getTime();
-        //         // alert('时间:' + (end - start) / 1000)
-        //         // alert('获取成功:' + ret.contacts.length)
-        //         // console.log(JSON.stringify(ret))
-        //     } else {
-        //         alert(JSON.stringify(err));
-        //     }
-        // });
     }
     function queryContacts(retContacts) {
-        
-        // var start = new Date().getTime();
-        // contacts.queryByPage({
-        //     pageIndex: 0
-        // }, function(retContacts, err) {
-        //     if (retContacts.status) {
-        //         var end = new Date().getTime();
-        //         alert('时间:'+(end-start)/1000)
-        //         alert('获取成功:'+retContacts.contacts.length)
-                // console.log('数据库炒作')
+        db.executeSql({
+            name: 'db_' + $api.getStorage('userToken'),
+            sql: 'CREATE TABLE IF NOT EXISTS addressList(user_id int PRIMARY KEY NOT NULL, nickname varchar(255),real_name varchar(255), head_img_url varchar(255), current_position varchar(255), current_company varchar(255), current_degree varchar(255), current_contact varchar(255), titleSize int, title varchar(255), img varchar(255), flag varchar(255), litter varchar(255), type int, sex varchat(10), remark_nickname varchar(255),  remark_real_name varchar(255) , remark_head_img_url varchar(255) , remark_sex varchar(255) , remark_birthday varchar(255) , remark_hometown varchar(255) , remark_current_company varchar(255) , remark_current_position varchar(255) , remark_current_degree varchar(255), remark_current_contact varchar(255), current_status varchar(255))'
+        }, function(ret, err) {
+            // ;CREATE UNIQUE INDEX user_id_idx on addressList (user_id);
+            if (ret.status) {
+                // console.log(JSON.stringify(ret));
+                // alert('执行成功')
                 db.executeSql({
                     name: 'db_' + $api.getStorage('userToken'),
-                    sql: 'CREATE TABLE IF NOT EXISTS addressList(user_id int PRIMARY KEY NOT NULL, nickname varchar(255),real_name varchar(255), head_img_url varchar(255), current_position varchar(255), current_company varchar(255), current_degree varchar(255), current_contact varchar(255), titleSize int, title varchar(255), img varchar(255), flag varchar(255), litter varchar(255), type int, sex varchat(10), remark_nickname varchar(255),  remark_real_name varchar(255) , remark_head_img_url varchar(255) , remark_sex varchar(255) , remark_birthday varchar(255) , remark_hometown varchar(255) , remark_current_company varchar(255) , remark_current_position varchar(255) , remark_current_degree varchar(255), remark_current_contact varchar(255), current_status varchar(255))'
-                }, function(ret, err) {
-                    // ;CREATE UNIQUE INDEX user_id_idx on addressList (user_id);
-                    if (ret.status) {
-                        // console.log(JSON.stringify(ret));
-                        // alert('执行成功')
+                    sql: 'DELETE FROM addressList'
+                }, function(retData, err) {
+                    if (retData.status) {
                         db.executeSql({
                             name: 'db_' + $api.getStorage('userToken'),
-                            sql: 'DELETE FROM addressList'
-                        }, function(retData, err) {
-                            if (retData.status) {
-                                db.executeSql({
-                                    name: 'db_' + $api.getStorage('userToken'),
-                                    sql: 'DELETE FROM addressList_simplify'
-                                }, function(retDataList, err) {
-                                    if (retDataList.status) {
-                                        // console.log('数据库炒作完成')
-                                        contactUpdate(retContacts);
-                                    } else {
-                                        api.alert({
-                                            msg: err.msg
-                                        });
-                                    }
-                                });
+                            sql: 'DELETE FROM addressList_simplify'
+                        }, function(retDataList, err) {
+                            if (retDataList.status) {
+                                // console.log('数据库炒作完成')
+                                contactUpdate(retContacts);
                             } else {
                                 api.alert({
                                     msg: err.msg
@@ -431,17 +391,15 @@
                             }
                         });
                     } else {
-                        alert('新建表错误:' + JSON.stringify(err));
+                        api.alert({
+                            msg: err.msg
+                        });
                     }
                 });
-
-        //     } else {
-        //         $api.css($api.dom('.loading'), 'display: none');
-        //         api.toast({
-        //             msg: '请在系统的设置-隐私-通讯录界面允许我在访问您的通讯录'
-        //         });
-        //     }
-        // })
+            } else {
+                alert('新建表错误:' + JSON.stringify(err));
+            }
+        });
     }
     // 同步通讯录2 上传数据
     function contactUpdate(retData) {
@@ -458,7 +416,6 @@
                 }
             }
         }, function(ret, err) {
-
             // 同步通讯录成功
             if (ret) {
                 // 请求同步的数据，存到本地数据库

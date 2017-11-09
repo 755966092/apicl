@@ -280,58 +280,58 @@
             bounces: false
         });
     }
-
-    function syncContacts(userToken, rongToken) {
-            // api.confirm({
-            //     title: '查找你的我在朋友',
-            //     msg: '我在将上传手机通讯录至我在服务器以匹配及推荐朋友。（上传通讯录仅用于匹配朋友，不会保存任何资料，亦不会作它用）',
-            //     buttons:['不允许', '好']
-            // },function(ret,err){
-            //      // 打开数据库， 新建表格
-
-
-            // });
-                openDb(userToken);
-                // if(ret.buttonIndex == 1){
-                //     loginSuccess(userToken, rongToken);
-                //     rongyun(rongToken);
-                // } else {
-                     // setTimeout(function(){
-                         contacts.queryByPage({
-                            pageIndex: 0
-                        }, function(ret, err) {
-                            if (ret.status) {
-                                api.ajax({
-                                    url: apiSite + '/contact/sync',
-                                    method: 'post',
-                                    headers: apiHeader,
-                                    // timeout: 10000,
-                                    data: {
-                                        values: {
-                                            token: userToken,
-                                            contact_json:ret
-                                        }
-                                    }
-                                }, function(ret1, err1) {
-                                    // 同步通讯录成功
-                                    // 请求同步的数据，存到本地数据库
-                                    // console.log('上传通讯录数据'+JSON.stringify(ret.contacts))
-                                    //console.log('上传结果')
-                                    if (ret1.code == 200) {
-                                        requestData(userToken);
-                                    }
-                                })
-                            } else {
-                                api.toast({
-                                    msg: '请在系统的设置-隐私-通讯录界面允许我在访问您的通讯录'
-                                });
-                            }
-                        });
-                    // },100)
-                    loginSuccess(userToken, rongToken);
-
-
-                // }
+    var contactArr = {
+        "status": true,
+        "pages": 3,
+        "contacts": [],
+        "total": 6987
+    };
+    function queryContactByPage(page) {
+        if ("undefined" == typeof page) {
+            var page = 0;
+        }
+        var contacts = api.require('contacts');
+        contacts.queryByPage({
+            count: 3000,
+            pageIndex: page
+        }, function (ret, err) {
+            if (ret.status) {
+                contactArr.contacts = contactArr.contacts.concat(ret.contacts);
+                if (page < (ret.pages - 1)) {
+                    queryContactByPage(page + 1);
+                } else {
+                    updateContact(contactArr)
+                }
+            } else {
+                api.toast({
+                    msg: '请在系统的设置-隐私-通讯录界面允许我在访问您的通讯录'
+                });
+            }
+        });
+    }
+    function syncContacts(userToken, rongToken, contactArr) {
+        openDb(userToken);
+        api.ajax({
+            url: apiSite + '/contact/sync',
+            method: 'post',
+            headers: apiHeader,
+            // timeout: 10000,
+            data: {
+                values: {
+                    token: userToken,
+                    contact_json: contactArr
+                }
+            }
+        }, function(ret1, err1) {
+            // 同步通讯录成功
+            // 请求同步的数据，存到本地数据库
+            // console.log('上传通讯录数据'+JSON.stringify(ret.contacts))
+            //console.log('上传结果')
+            if (ret1.code == 200) {
+                requestData(userToken);
+            }
+        })
+        loginSuccess(userToken, rongToken);
     }
 
     // 打开数据库

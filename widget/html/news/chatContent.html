@@ -316,6 +316,21 @@
     .main .imgwrap .imgNews {
         border-radius: .1rem;
     }
+    .main .imgwrap p:before,
+    .main .imgwrap p:after {
+        content: "";
+        position: absolute;
+        z-index: 3;
+        top: .25rem;
+        right: -.20rem;
+        display: inline-block;
+        width: 0;
+        height: 0;
+        /* border-top: .15rem solid transparent;
+        border-bottom: .15rem solid transparent;
+        border-left: .22rem solid #a0e75a; */
+        border: 0;
+    }
     /* 拖消息气泡 */
 
     </style>
@@ -338,7 +353,7 @@
         请勿发布违法违规内容，共同营造文明和谐的聊天环境
     </p>
     <div class="main">
-        <div class="oneself clearfix">
+        <!-- <div class="oneself clearfix">
             <div class="time">04:19</div>
             <img class="fr oneselfImg" src="../../image/tx_5.jpg">
             <p class="fr flex-def flex-cCenter flex-zEnd" style="width:5rem" ontouchstart="gtouchstart()" ontouchmove="gtouchmove()"
@@ -387,7 +402,7 @@
             <p data-msgId="" class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()"
                 ontouchend="gtouchend()">
                 <img class="imgNews" src="../../image/tx_1.jpg"> </p>
-        </div>
+        </div> -->
         <!-- <div class="oneself clearfix">
             <div class="time">04:19</div>
             <img class="fr oneselfImg" src="../../image/tx_5.jpg">
@@ -401,13 +416,13 @@
     <div class="shadow">
         <p tapmode="" onclick="closeDiv(0);event.stopPropagation();">
             复制
-        </p>
+        </p>-->
         <!-- <p tapmode onclick="closeDiv(1);event.stopPropagation();">发送给朋友</p> -->
         <!-- <p tapmode onclick="closeDiv(2);event.stopPropagation();">收藏</p> -->
         <!-- <p tapmode onclick="closeDiv(3);event.stopPropagation();">翻译</p> -->
-        <p tapmode="" onclick="closeDiv(4);event.stopPropagation();">
+        <!-- <p tapmode="" onclick="closeDiv(4);event.stopPropagation();">
             删除
-        </p>
+        </p> -->
         <!-- <p tapmode onclick="closeDiv(5);event.stopPropagation();">更多</p> -->
     </div>
 </body>
@@ -1185,6 +1200,7 @@ function openPicture(type) {
 }
 // 发送图片消息
 function sendImg(ret) {
+    console.log(JSON.stringify(ret))
     var retprepare;
     rong.sendImageMessage({
         conversationType: 'PRIVATE',
@@ -1193,22 +1209,17 @@ function sendImg(ret) {
         extra: ''
     }, function (ret, err) {
         if (ret.status == 'prepare') {
-            // console.log('发送准备::'+ JSON.stringify(ret.result.message) );
-            addSendImgMessages(ret.result.message, headImg, 1);
             retprepare = ret;
-        }
-        else if (ret.status == 'progress') {
+        } else if (ret.status == 'progress') {
         // console.log( '发送中::'+ret.result.progress );
-        }
-        else if (ret.status == 'success') {
+        } else if (ret.status == 'success') {
+            addSendImgMessages(retprepare.result.message, headImg, 1);
             chatRecordingSql(retprepare, 'sendMsg', headImg);
-        // console.log( '发送成功::'+ret.result.message.messageId );
-        // console.log( '发送成功::'+JSON.stringify(prepare) );
-        }
-        else if (ret.status == 'error') {
+        console.log( '发送成功::'+JSON.stringify(retprepare) );
+        console.log( '发送成功::'+JSON.stringify(ret) );
+        } else if (ret.status == 'error') {
         // console.log( err.code );
-        }
-        else {
+        } else {
         }
     });
 }
@@ -1581,7 +1592,7 @@ function addReceImgMessages(msg, youHeadImg, n) {
             msg.receivedTime).toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10)).toLocaleString();
         $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
             '</p><div data-msgId="' + msg.messageId +
-            '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
+            '" class="other imgwrap clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
             '" class="fl otherImg" src="' + api.pageParam.headImg + '"><p data-msgId="' + msg.messageId +
             '" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="' +
             msg.content.imageUrl + '"> </p></div>');
@@ -1596,7 +1607,7 @@ function addReceImgMessages(msg, youHeadImg, n) {
             msg.receivedTime).toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10)).toLocaleString();
         $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
             '</p><div data-msgId="' + msg.messageId +
-            '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
+            '" class="other imgwrap clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
             '" class="fl otherImg" src="' + api.pageParam.headImg + '"><p data-msgId="' + msg.messageId +
             '" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="' +
             msg.content.imageUrl + '"> </p></div>');
@@ -1608,7 +1619,7 @@ function addReceImgMessages(msg, youHeadImg, n) {
             msg.message.receivedTime).toLocaleTimeString() : new Date(msg.message.receivedTime).toLocaleString();
         $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.message.messageId + '">' + time +
             '</p><div data-msgId="' + msg.message.messageId +
-            '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
+            '" class="other imgwrap clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
             '" class="fl otherImg" src="' + api.pageParam.headImg + '"><p data-msgId="' + msg.message.messageId +
             '" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" > <img class="imgNews" src="' +
             msg.message.content.imageUrl + '"></p></div>');
@@ -1617,13 +1628,14 @@ function addReceImgMessages(msg, youHeadImg, n) {
 }
 // 发送图片消息后新建
 function addSendImgMessages(msg, headImg, n) {
+    console.log(JSON.stringify(msg)+'at 1631')
     if (n == 1) {
         // 历史消息
         var time = new Date(parseInt(msg.sentTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.sentTime, 10))
             .toLocaleTimeString() : new Date(parseInt(msg.sentTime, 10)).toLocaleString();
         $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
             '</p><div data-msgId="' + msg.messageId +
-            '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' +
+            '" class="oneself imgwrap clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' +
             headImg +
             '"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' +
             msg.messageId + '" ontouchend="gtouchend()"  ><img class="imgNews" src="' + msg.content.imageUrl +
@@ -1636,7 +1648,7 @@ function addSendImgMessages(msg, headImg, n) {
             .toLocaleTimeString() : new Date(parseInt(msg.sentTime, 10)).toLocaleString();
         $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
             '</p><div data-msgId="' + msg.messageId +
-            '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' +
+            '" class="oneself imgwrap clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' +
             headImg +
             '"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' +
             msg.messageId + '" ontouchend="gtouchend()"  ><img class="imgNews" src="' + msg.content.imageUrl +
@@ -1646,7 +1658,7 @@ function addSendImgMessages(msg, headImg, n) {
         // console.log(JSON.stringify(msg))
         // 当前发送的消息
         $api.append($api.dom('.main'), '<p class="newsTime" >' + new Date().toLocaleTimeString() +
-            '</p><div data-msgId="" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' +
+            '</p><div data-msgId="" class="oneself imgwrap clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' +
             headImg +
             '"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="" ontouchend="gtouchend()" d><img class="imgNews" src="../../image/tx_5.jpg"> </p></div>'
         );
@@ -2145,7 +2157,7 @@ function sqlAddReceImgMessages(msg, n) {
             new Date(parseInt(msg.receivedTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10)).toLocaleString();
         $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
             '</p><div data-msgId="' + msg.messageId +
-            '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
+            '" class="other imgwrap clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
             '" class="fl otherImg" src="' + msg.head_img_url + '"><p data-msgId="' + msg.messageId +
             '" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="' +
             msg.filePath + '"> </p></div>');
@@ -2159,7 +2171,7 @@ function sqlAddReceImgMessages(msg, n) {
             new Date(parseInt(msg.receivedTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10)).toLocaleString();
         $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
             '</p><div data-msgId="' + msg.messageId +
-            '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
+            '" class="other imgwrap clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
             '" class="fl otherImg" src="' + msg.head_img_url + '"><p data-msgId="' + msg.messageId +
             '" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="' +
             msg.filePath + '"> </p></div>');
@@ -2170,7 +2182,7 @@ function sqlAddReceImgMessages(msg, n) {
             new Date(parseInt(msg.receivedTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10)).toLocaleString();
         $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.message.messageId + '">' + time +
             '</p><div data-msgId="' + msg.message.messageId +
-            '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
+            '" class="other imgwrap clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
             '" class="fl otherImg" src="' + msg.head_img_url + '"><p data-msgId="' + msg.messageId +
             '" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" > <img class="imgNews" src="' +
             msg.filePath + '"></p></div>');
@@ -2186,7 +2198,7 @@ function sqlAddSendImgMessages(msg, n) {
             new Date(parseInt(msg.receivedTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10)).toLocaleString();
         $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
             '</p><div data-msgId="' + msg.messageId +
-            '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' +
+            '" class="oneself imgwrap clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' +
             msg.head_img_url +
             '"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' +
             msg.messageId + '" ontouchend="gtouchend()"  ><img class="imgNews" src="' + msg.filePath +
@@ -2199,7 +2211,7 @@ function sqlAddSendImgMessages(msg, n) {
             new Date(parseInt(msg.receivedTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10)).toLocaleString();
         $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
             '</p><div data-msgId="' + msg.messageId +
-            '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' +
+            '" class="oneself imgwrap clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' +
             msg.head_img_url +
             '"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' +
             msg.messageId + '" ontouchend="gtouchend()"  ><img class="imgNews" src="' + msg.filePath +
@@ -2212,7 +2224,7 @@ function sqlAddSendImgMessages(msg, n) {
             new Date(parseInt(msg.receivedTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10)).toLocaleString();
         $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
             '</p><div data-msgId="' + msg.messageId +
-            '" class="oneself clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' +
+            '" class="oneself imgwrap clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' +
             msg.head_img_url +
             '"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' +
             msg.messageId + '" ontouchend="gtouchend()"  ><img class="imgNews" src="' + msg.filePath +

@@ -311,42 +311,7 @@
                                         }
                                     });
                                 } else {
-                                     setTimeout(function(){
-                                         contacts.queryByPage({
-                                            pageIndex: 0
-                                        }, function(ret, err) {
-                                            if (ret.status) {
-                                                api.ajax({
-                                                    url: apiSite + '/contact/sync',
-                                                    method: 'post',
-                                                    headers: apiHeader,
-                                                    data: {
-                                                        values: { 
-                                                            token: userToken,
-                                                            contact_json:ret
-                                                        }
-                                                    }
-                                                }, function(ret, err) {
-                                                    // 同步通讯录成功
-                                                    if(ret) {
-                                                        // 请求同步的数据，存到本地数据库
-                                                        if(ret.code == 200) {
-                                                            //console.log('同步通讯录成功')
-                                                            requestData();
-                                                        } else {
-                                                            alert(ret.msg)
-                                                        }
-                                                    } else {
-                                                        alert(JSON.stringify(err.msg))
-                                                    }
-                                                })
-                                            } else {
-                                                api.toast({
-                                                    msg: '请在系统的设置-隐私-通讯录界面允许我在访问您的通讯录'
-                                                });
-                                            }
-                                        });
-                                     },100)
+                                     
                                       // 获得极光推送
                                     ajpush.getRegistrationId(function(ret) {
                                         var registrationId = ret.id;
@@ -396,7 +361,62 @@
 
             });
         }
-
+    }
+    var contactArr = {
+            "status": true,
+            "pages": 3,
+            "contacts": [],
+            "total": 6987
+        };
+    function queryContactByPage(page) {
+        $api.css($api.dom('.loading'), 'display: block');
+        if ("undefined" == typeof page) {
+            var page = 0;
+        }
+        var contacts = api.require('contacts');
+        contacts.queryByPage({
+            count: 3000,
+            pageIndex: page
+        }, function (ret, err) {
+            if (ret.status) {
+                contactArr.contacts = contactArr.contacts.concat(ret.contacts);
+                if (page < (ret.pages - 1)) {
+                    queryContactByPage(page + 1);
+                } else {
+                    updateContact(contactArr)
+                }
+            } else {
+                api.toast({
+                    msg: '请在系统的设置-隐私-通讯录界面允许我在访问您的通讯录'
+                });
+            }
+        });
+    }
+    function updateContact(contactArr) {
+        api.ajax({
+            url: apiSite + '/contact/sync',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: {
+                    token: userToken,
+                    contact_json: contactArr
+                }
+            }
+        }, function (ret, err) {
+            // 同步通讯录成功
+            if (ret) {
+                // 请求同步的数据，存到本地数据库
+                if (ret.code == 200) {
+                    //console.log('同步通讯录成功')
+                    requestData();
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err.msg))
+            }
+        })
     }
     function openImg() {
         api.getPicture({
@@ -700,6 +720,9 @@
                     sql: SQL
                 }, function(ret, err) {
                     if (ret.status) {
+                        api.sendEvent({
+                            name: 'editUserInfoUpdateList'
+                        });
                         //console.log('执行语句正确'+JSON.stringify(ret));
                         api.closeWin({
                             name: 'login_enroll1'
