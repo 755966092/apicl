@@ -7,6 +7,7 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css//weui.css" />
     <style>
         .title {
             margin-top: .37rem;
@@ -391,13 +392,17 @@
         </div>
         <ul class="mt20">
             <!-- <li tapmode onclick="openInfo(this)" data-val="friendContact"> -->
-            <li data-val="friendContact">
-                <span id="relationship_level"></span>
-                <!-- <span class="icon"></span> -->
+            <li  class="wrap1" data-val="friendContact">
+                <div class="wrap">
+                    <span id="relationship_level"></span>
+                    <!-- <span class="icon"></span> -->
+                </div>
             </li>
-            <li tapmode onclick="openInfo(this)" data-val="friendContact">
-                <span >和我的交集</span>
-                <span class="icon"></span>
+            <!-- <li tapmode onclick="openInfo(this)" data-val="friendContact"> -->
+            <li tapmode onclick="openNetworkOfPeople()">
+                
+                    <span >和我的交集</span>
+                    <span class="icon"></span>
             </li>
             <li class="mt20" tapmode onclick="openInfo(this)" data-val="mainPhone">
                 <div class="wrap">
@@ -1719,6 +1724,17 @@
                 alert(JSON.stringify(err))
             }
         })
+    }
+    // 打开人脉轨迹图
+    function openNetworkOfPeople() {
+        api.openWin({
+            name: 'txl_friendInfo_networkOfPeople_win',
+            url: './txl_friendInfo_networkOfPeople_win.html',
+            bounces: false,
+            pageParam: {
+                userId: api.pageParam.userId
+            }
+        });
     }
 </script>
 
