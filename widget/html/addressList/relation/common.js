@@ -186,11 +186,29 @@ function receiveMsg() {
     rong.setConnectionStatusListener(function(ret, err) {
         // alert(JSON.stringify(ret.result.connectionStatus))
         if (ret.result.connectionStatus === 'KICKED') {
-            alert('您已在另一台设备登录');
+            
             api.openWin({
                 name: 'me_login',
                 url: 'widget://html/enroll/me_login.html'
             });
+            api.ajax({
+                url: apiSite + '/settings/logout',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: {
+                        token: $api.getStorage('userToken'),
+                    }
+                }
+            }, function (ret, err) {
+                if (ret) {
+                    $api.clearStorage();
+                    $api.setStorage('guidePages', api.appVersion);
+                    alert('您已在另一台设备登录');
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
             api.closeWin({
                 name: 'main'
             });
