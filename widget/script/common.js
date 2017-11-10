@@ -191,6 +191,8 @@ function receiveMsg() {
 				name: "me_login",
 				url: "widget://html/enroll/me_login.html"
 			});
+			$api.clearStorage();
+			$api.setStorage('guidePages', api.appVersion);
 			api.closeWin({
 				name: "main"
 			});
