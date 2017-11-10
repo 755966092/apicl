@@ -168,7 +168,7 @@
         });
     }
     // 网络获取数据
-    function requireData(classify) {
+    function requireData(classify,n) {
         // console.log('web获取')
         var url;
         if (classify === 1) {
@@ -201,7 +201,9 @@
                     } else if (ret.data.list.length == 0) {
                         $api.css($api.dom('p.no3'), 'display:block');
                     }
-                    getData(dataArr);
+                    if (!n) {
+                        getData(dataArr);
+                    }
                     webFlag = 1;
                     $api.css($api.dom('.loading'), 'display:none');
                 } else {
@@ -342,7 +344,7 @@
                     dataArr = dataArr.concat(ret.data);
                     getData(dataArr);
                     $api.css($api.dom('.loading'), 'display: none');
-                    requireData(api.pageParam.flag)
+                    requireData(api.pageParam.flag,1)
                 } else {
                     if(webFlag == 1) {
                         requireData(api.pageParam.flag)

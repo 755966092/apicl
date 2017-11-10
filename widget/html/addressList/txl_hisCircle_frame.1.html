@@ -336,9 +336,11 @@
                         } else {
                             ret.data.list[i].unit = _dataSource[ret.data.list[i].unit - 1]
                         }
-                        ret.data.list[i].company_name = remarkInfo.subTitle;
-                        ret.data.list[i].head_img_url = remarkInfo.img;
-                        ret.data.list[i].nickname = remarkInfo.title;
+                        if (remarkInfo) {
+                            ret.data.list[i].company_name = remarkInfo.subTitle;
+                            ret.data.list[i].head_img_url = remarkInfo.img;
+                            ret.data.list[i].nickname = remarkInfo.title;
+                        }
                     }
                     dataArr = dataArr.concat(ret.data.list);
                     getData(dataArr);
@@ -362,6 +364,9 @@
                 if (ret.data.length == 1) {
                     // console.log(JSON.stringify((ret)))
                     requireData(retParam, ret.data[0])
+                } else {
+                    requireData(retParam)
+
                 }
             } else {
                 alert('292' + JSON.stringify(err));

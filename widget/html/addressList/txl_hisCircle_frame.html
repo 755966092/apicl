@@ -310,11 +310,15 @@
             filter: 1
         }, function(ret, err) {
             if (ret.status) {
-                // console.log(JSON.stringify(ret))
                     // requireData(ret);
                 selectSql(ret);
             } else {
                 // requireData()
+                api.toast({
+                    msg: '未获取手机定位权限',
+                    duration: 2000,
+                    location: 'bottom'
+                });
             }
         });
     }
@@ -345,9 +349,11 @@
                         } else {
                             ret.data.list[i].unit = _dataSource[ret.data.list[i].unit - 1]
                         }
-                        ret.data.list[i].company_name = remarkInfo.subTitle;
-                        ret.data.list[i].head_img_url = remarkInfo.img;
-                        ret.data.list[i].nickname = remarkInfo.title;
+                        if (remarkInfo) {
+                            ret.data.list[i].company_name = remarkInfo.subTitle;
+                            ret.data.list[i].head_img_url = remarkInfo.img;
+                            ret.data.list[i].nickname = remarkInfo.title;
+                        }
                     }
                     dataArr = dataArr.concat(ret.data.list);
                     getData(dataArr);
@@ -362,6 +368,7 @@
     }
 
     function selectSql(retParam) {
+        console.log(1)
         db.selectSql({
             name: 'db_' + $api.getStorage('userToken'),
             sql: 'SELECT * FROM addressList_simplify WHERE user_id = ' + api.pageParam.userId
@@ -369,8 +376,10 @@
             if (ret.status) {
                 // 如果有备注返回备注
                 if (ret.data.length == 1) {
-                    // console.log(JSON.stringify((ret)))
                     requireData(retParam, ret.data[0])
+                } else {
+                    requireData(retParam)
+
                 }
             } else {
                 alert('292' + JSON.stringify(err));

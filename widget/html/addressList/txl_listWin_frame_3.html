@@ -244,7 +244,7 @@
                     getData(dataArr);
                     $api.css($api.dom('.loading'), 'display: none');
                     webFlag = 1;
-                    requireData(api.pageParam.flag)
+                    requireData(api.pageParam.flag,1)
                 } else {
                     // console.log('查询网络')
                     requireData(api.pageParam.flag)
@@ -308,7 +308,7 @@
         }
     }
     // 网络获取数据
-    function requireData(classify) {
+    function requireData(classify,n) {
         var url;
         if (classify === 1) {
             url = '/contact/levelThreeAvailable';
@@ -353,7 +353,9 @@
                     } else if (ret.data.list.length == 0) {
                         $api.css($api.dom('p.no3'), 'display:block');
                     }
-                    getData(dataArr);
+                    if (!n) {
+                        getData(dataArr);
+                    }
                     webFlag = 1;
                 } else {
                     alert(ret.msg)
