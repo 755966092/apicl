@@ -391,17 +391,21 @@
         api.addEventListener({
             name: 'displaySupply'
         }, function(ret, err) {
-            // console.log(JSON.stringify(ret))
-            api.setFrameGroupIndex({
-                name: 'group',
-                index: ret.value.index,
-                scroll: true
-            });
+            togglesSpecifiedPage(ret.value.index)
+        });
+        api.addEventListener({
+            name: 'displayChat'
+        }, function (ret, err) {
             togglesSpecifiedPage(ret.value.index)
         });
     }
     // 切换到指定的页面
     function togglesSpecifiedPage(n) {
+        api.setFrameGroupIndex({
+            name: 'group',
+            index: n,
+            scroll: true
+        });
         var eFootLis = $api.domAll('#footer li'),
             eHeaderLis = $api.domAll('header li'),
             index = 0;
