@@ -134,7 +134,7 @@
 </head>
 
 <body>
-   
+    <div class="loading"></div>
     <div class="resultList"></div>
     <script type="text/x-dot-template" id="listT">
         {{?it.length == 0}}
@@ -176,6 +176,7 @@
         dataArr = [];
     var _dataSource = ["次 ", "幅 ", "单 ", "小时 ", "分钟 ", "天 ", "周 ", "月 ", "份 ", "个 ", "扇 ", "课时 ", "面议 ", "其他", "未定义 "];
     apiready = function() {
+        $api.css($api.dom('.loading'), 'block');
         moduleInit();
         requireData();
     }
@@ -196,7 +197,7 @@
                 if (ret.code === 200) {
                     dataArr = dataArr.concat(ret.data.list);
                     getData(dataArr);
-                    // console.log(JSON.stringify(dataArr))
+                    $api.css($api.dom('.loading'), 'display:none');
                 } else {
                     alert(ret.msg)
                 }
