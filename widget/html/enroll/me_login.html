@@ -226,11 +226,13 @@
                         rongToken = ret.data.rongcloud_token;
                     $api.setStorage('userToken', userToken);
                     $api.setStorage('rongToken', rongToken);
-
+                    
 
                     // 把当前的usertoken和rongtoken广播出去
                     // sendToken (userToken,rongToken)
-                    syncContacts(userToken, rongToken)
+                    console.log('开始获取');
+                    loginSuccess(userToken, rongToken);
+                    queryContactByPage(userToken, rongToken)
                 } else {
                     api.toast({
                         msg: ret.msg
@@ -245,8 +247,8 @@
 
     }
 
+    // 登陆完成
     function loginSuccess () {
-        // 登陆完成
         rongyun(rongToken);
          api.openWin({
             name: 'mainPage',
@@ -286,10 +288,11 @@
         "contacts": [],
         "total": 6987
     };
-    function queryContactByPage(page) {
+    function queryContactByPage(userToken, rongToken, page) {
         if ("undefined" == typeof page) {
             var page = 0;
         }
+        console.log('开始获取2');
         var contacts = api.require('contacts');
         contacts.queryByPage({
             count: 3000,
@@ -298,9 +301,13 @@
             if (ret.status) {
                 contactArr.contacts = contactArr.contacts.concat(ret.contacts);
                 if (page < (ret.pages - 1)) {
-                    queryContactByPage(page + 1);
+                    console.log('页数'+ page);
+                    
+                    console.log('获取数据完毕'+ret.pages+'--'+ contactArr.contacts.length)
+                    queryContactByPage(userToken, rongToken,page + 1);
                 } else {
-                    updateContact(contactArr)
+                    console.log('上传' + contactArr.contacts.length);
+                    syncContacts(userToken, rongToken, contactArr)
                 }
             } else {
                 api.toast({
@@ -331,7 +338,6 @@
                 requestData(userToken);
             }
         })
-        loginSuccess(userToken, rongToken);
     }
 
     // 打开数据库
@@ -538,7 +544,10 @@
                                         selectCount++;
                                         // console.log(selectCount)
                                         if (selectCount == 4) {
-                                            // console.log( '简略表插入数据成功');
+                                            console.log( '简略表插入数据成功');
+                                            api.sendEvent({
+                                                name: 'editUserInfoUpdateList'
+                                            });
                                             api.execScript({
                                                 name: 'main',
                                                 frameName: 'frame0',
@@ -546,7 +555,6 @@
                                             });
                                            
                                         }
-
                                     }else{
                                         alert( JSON.stringify( err ) );
                                     }
