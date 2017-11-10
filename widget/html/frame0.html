@@ -181,6 +181,7 @@
             margin: 0 auto;
         }
         .nomain {
+            z-index: 9999;
             position: absolute;
             top: 0;bottom: 0;left: 0;right: 0;
             margin: auto;
@@ -202,16 +203,13 @@
     </style>
 </head>
 
-<body id="body" tapmode onclick="closeNews()">
-    <div id="news_wrap" class="clearfix" tapmode onclick="closeNews()">
+<body id="body" >
+    <div id="news_wrap" class="clearfix" >
        <!-- 搜索框 -->
        <!--  <div class="search"   tapmode   onclick="openS()">
             <span class="searchIcon"></span>
             <span class="searchText">搜索</span>
         </div> -->
-
-
-
         <ul class="resultList"></ul>
         <script type="text/x-dot-template" id="listT">
             {{?it.length > 0}}
@@ -254,13 +252,11 @@
                             <div class="icon">
                         </div>
                             <p>空空如也 ~</p>
-                            <p class="jump" tapmode onclick="openCreateCirclePage()">快去找好友聊天吧...</p>
+                            <p class="jump" tapmode onclick="openCreateCirclePage();event.stopPropagation()">快去找好友聊天吧...</p>
                     </div>
                 </div>
             {{?}}
-
         </script>
-
     </div>
     <script type="text/javascript" src="../script/common.js"></script>
     <script type="text/javascript" src="../script/api.js"></script>
@@ -290,11 +286,11 @@
 
     }
     function openCreateCirclePage() {
-        api.setFrameGroupIndex({
-            name: 'group',
-            index: 1,
-            scroll: true
-        });
+        // api.setFrameGroupIndex({
+        //     name: 'group',
+        //     index: 1,
+        //     scroll: true
+        // });
         api.sendEvent({
             name: 'displaySupply',
             extra: {index:1}
