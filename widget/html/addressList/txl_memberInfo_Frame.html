@@ -392,14 +392,14 @@
         </div>
         <ul class="mt20">
             <!-- <li tapmode onclick="openInfo(this)" data-val="friendContact"> -->
-            <li  class="wrap1" data-val="friendContact">
+            <li  class="wrap1" id="relationship_level_wrap" data-val="friendContact">
                 <div class="wrap">
                     <span id="relationship_level"></span>
                     <!-- <span class="icon"></span> -->
                 </div>
             </li>
             <!-- <li tapmode onclick="openInfo(this)" data-val="friendContact"> -->
-            <li tapmode onclick="openNetworkOfPeople()">
+            <li id="openNetworkOfPeople" tapmode onclick="openNetworkOfPeople()">
                 
                     <span >和我的交集</span>
                     <span class="icon"></span>
@@ -513,7 +513,10 @@
     apiready = function() {
         $api.css($api.dom('.shadow'), 'height:' + $api.offset($api.dom('.main')).h + 'px;');
         // console.log(JSON.stringify(api.pageParam))
+        // 初始好友和自己不显示人脉轨迹图按钮
+        hideNetworkOfPeople();
         if (api.pageParam.userId == 0) {
+           
             // 进入自己的详情页
             api.ajax({
                 url: apiSite + '/user/detail',
@@ -542,7 +545,15 @@
             initPage();
             initStatus();
         }
-
+        // 初始好友不显示人脉轨迹图
+        function hideNetworkOfPeople() {
+            // openNetworkOfPeople
+            if(api.pageParam.flag == 4 || api.pageParam.userId == 0) {
+                $api.css($api.byId('openNetworkOfPeople'), 'display:none');
+                $api.removeCls($api.byId('relationship_level_wrap'), 'wrap1');
+                $api.removeCls($api.dom($api.byId('relationship_level_wrap'), '.wrap'), 'wrap');
+            }
+        }
 
         // requireDetailData();
         api.addEventListener({
