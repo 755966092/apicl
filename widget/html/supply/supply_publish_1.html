@@ -234,7 +234,7 @@
         </div>
         <span class="firstImg"
               style="background: url({{=it[i].image_json[0]?it[i].image_json[0]:'../../image/icon_supply/supply_noImg.png'}})no-repeat;background-size: 7.1rem auto;background-position: center center;">
-                {{?it[i].distance}}
+                {{?it[i].distance || it[i].distance==0}}
                 <span class="price ">
                                 <!-- <span class="position fl">清华大学</span> -->
             <span class="distance">距离我{{=it[i].distance}}km</span>
@@ -276,53 +276,12 @@
         moduleInit();
         // 请求数据
         requireData();
+          // 上啦加载
+        scrollBotton();
         // 筛选后的结果
         bySelect();
-        // 下拉刷新
-        api.setCustomRefreshHeaderInfo({
-            bgColor: '#EFEFF4',
-            images: {
-                pull: 'widget://image/loading/1.png',
-                transform: [
-                    'widget://image/loading/1.png',
-                    'widget://image/loading/2.png',
-                    'widget://image/loading/3.png',
-                    'widget://image/loading/4.png',
-                    'widget://image/loading/5.png',
-
-                ],
-                load: [
-                    'widget://image/loading/1.png',
-                    'widget://image/loading/2.png',
-                    'widget://image/loading/3.png',
-                    'widget://image/loading/4.png',
-                    'widget://image/loading/5.png',
-                ]
-            }
-        }, function (ret, err) {
-            page_num = 1;
-            $api.css($api.dom('.loading'), 'display: none');
-            $api.text($api.dom('.bbottomLoading'), '正在加载...');
-            //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
-            if (flag) {
-                requireData(condition);
-            } else {
-                requireData();
-            }
-        });
        
-        api.addEventListener({
-            name: 'editSupplyAfter'
-        }, function (ret, err) {
-            if (ret) {
-                page_num = 1;
-                requireData();
-            } else {
-                alert(JSON.stringify(err));
-            }
-        });
-        // 上啦加载
-        scrollBotton()
+      
 
     };
 
@@ -382,10 +341,8 @@
     }
 
     var scrollFlag = 1;
-
     // 滚动到底部触发的事件
     function scrollBotton() {
-
         // 滚动到底部触发的事件
         api.addEventListener({
             name: 'scrolltobottom',
@@ -393,41 +350,63 @@
                 threshold: 0 //设置距离底部多少距离时触发，默认值为0，数字类型
             }
         }, function (ret, err) {
-            //console.log('已滚动到底部')
-            // alert('已滚动到底部');
-            if ($api.text($api.dom('.bbottomLoading')) == '暂无更多供求') {
-
-            } else {
+            // if ($api.text($api.dom('.bbottomLoading')) == '暂无更多供求') {
+            // } else {
                 if (scrollFlag) {
                     scrollFlag = 0;
                     $api.css($api.dom('.bbottomLoading'), 'display: block');
-                    if (page_num == 1) {
-                        page_num = 2;
-                    }
+                    // if (page_num == 1) {
+                    //     page_num = 2;
+                    // }
                     requireData2(condition);
                 }
-            }
+            // }
 
         });
-    }
+         // 下拉刷新
+        api.setCustomRefreshHeaderInfo({
+            bgColor: '#EFEFF4',
+            images: {
+                pull: 'widget://image/loading/1.png',
+                transform: [
+                    'widget://image/loading/1.png',
+                    'widget://image/loading/2.png',
+                    'widget://image/loading/3.png',
+                    'widget://image/loading/4.png',
+                    'widget://image/loading/5.png',
 
-
-    // 根据上传图片的多少自适应图片的大小
-    function selfAdaption() {
-        var listContent = $api.domAll('.item');
-
-        for (var i = 0; i < listContent.length; i++) {
-            var imgArr = listContent[i].getElementsByClassName('content_img');
-            var imgCount = imgArr.length;
-            if (imgCount == 1) {
-                $api.css(listContent[i].getElementsByClassName('content_img')[0], 'width:3.26rem;height:2.86rem;margin-top:.1rem');
-
-            } else {
-                for (var j = 0; j < imgCount; j++) {
-                    $api.css(listContent[i].getElementsByClassName('content_img')[j], 'width:1.56rem;height:1.56rem');
-                }
+                ],
+                load: [
+                    'widget://image/loading/1.png',
+                    'widget://image/loading/2.png',
+                    'widget://image/loading/3.png',
+                    'widget://image/loading/4.png',
+                    'widget://image/loading/5.png',
+                ]
             }
-        }
+        }, function (ret, err) {
+            page_num = 1;
+            $api.css($api.dom('.loading'), 'display: none');
+            $api.text($api.dom('.bbottomLoading'), '正在加载...');
+            //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
+            if (flag) {
+                requireData(condition);
+            } else {
+                requireData();
+            }
+        });
+       
+        api.addEventListener({
+            name: 'editSupplyAfter'
+        }, function (ret, err) {
+            if (ret) {
+                dataList=[];
+                page_num = 1;
+                requireData();
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     }
 
     // 筛选后结果
@@ -435,11 +414,10 @@
         api.addEventListener({
             name: 'screeningResults'
         }, function (ret, err) {
+            dataList=[];
+            // $api.html($api.dom('.resultList'), '');
             if (ret.value.flag) {
                 $api.css($api.dom('.loading'), 'display: block');
-                //console.log('监听结果::'+JSON.stringify(ret))
-                // $api.css($api.dom('.title1'), 'display:block');
-                // parameter = ret.value.parameter
             }
             if (ret.value.condition) {
                 flag = 1
@@ -447,7 +425,9 @@
             condition = ret.value.condition;
             page_num = 1;
             requireData(ret.value.condition)
-            // selfAdaption();
+            api.pageUp({
+                top:true
+            },function(ret,err){});
         })
         api.addEventListener({
             name: 'addPublish'
@@ -469,9 +449,6 @@
     // 筛选后页面变化
     function viewResults(ele) {
         $api.css($api.dom('.results'), 'background: #fff url(../../image/icon_zk.png)no-repeat;background-position: right center;-webkit-background-size: .15rem .25rem;background-size: .15rem .25rem;');
-        // $api.css(ele, 'b');
-        // getData(data2);
-        // selfAdaption();
         if ($api.text(ele) == '查看订阅的筛选结果') {
             // getData(data3);
             // selfAdaption();
@@ -488,7 +465,6 @@
 
     // 请求数据
     function requireData(data) {
-        // console.log('参数:::'+JSON.stringify(data))
         var data = data || {};
         var latitude, longitude;
         if (data !== {}) {
@@ -503,39 +479,23 @@
                     // 缓存字段  supply_publish_1
                     var supplyCache = $api.getStorage('supply_publish_1');
                     if (supplyCache) {
-                        // console.log(JSON.stringify(supplyCache))
                         getData(supplyCache);
-                        $api.css($api.dom('.loading'), 'display: none');
-                        // console.log($api.attr($api.dom('.firstImg'), 'style'))
-                        // selfAdaption();
                     }
+                    $api.css($api.dom('.loading'), 'display: none');
                     fliderSupply(data, supplyCache)
                 } else {
                     var supplyCache = $api.getStorage('supply_publish_1');
                     if (supplyCache) {
-                        // console.log(JSON.stringify(supplyCache))
                         getData(supplyCache);
-                        $api.css($api.dom('.loading'), 'display: none');
-                        // console.log($api.attr($api.dom('.firstImg'), 'style'))
-                        // selfAdaption();
                     }
-                    fliderSupply(data, supplyCache)
-                    // api.toast({
-                    //     msg: '请在设置中打开定位权限',
-                    //     duration: 2000,
-                    //     location: 'bottom'
-                    // });
                     $api.css($api.dom('.loading'), 'display: none');
-                    api.refreshHeaderLoadDone()
+                    fliderSupply(data, supplyCache)
                 }
             });
-
         }
-
     }
 
     function fliderSupply(data, supplyCache) {
-        // console.log('参数2:::'+JSON.stringify(data))
         api.ajax({
             url: apiSite + '/supply/index',
             method: 'post',
@@ -556,43 +516,13 @@
         }, function (ret, err) {
             if (ret) {
                 $api.css($api.dom('.loading'), 'display: none');
-                // console.log(page_num)
-                // console.log('数据:::'+JSON.stringify(ret.data.list))
-                // console.log('页数:::'+JSON.stringify(page_num))
-                // $api.css($api.dom('.loading'), 'display: none');
                 // 停止下拉刷新
                 api.refreshHeaderLoadDone()
-                // if (supplyCache === ret.data.list) {
-
-                // } else {
-//                for (var i = 0; i < ret.data.list.length; i++) {
-//                    // 解析图片json
-//                    ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
-//                    // 处理七牛云返回的url, 加参数是返回的缩略图
-//                    for (var j = 0; j < ret.data.list[i].image_json.length; j++) {
-//                        ret.data.list[i].image_json[j] = ret.data.list[i].image_json[j] + '?imageView2/0/interlace/1/q/100|imageslim'
-//                    }
-//                    // 处理时间显示
-//                    ret.data.list[i].create_time = initTime(ret.data.list[i].create_time)
-//                    if (ret.data.list[i].unit == 0) {
-//                        ret.data.list[i].unit = _dataSource[_dataSource.length - 1]
-//                    } else {
-//                        ret.data.list[i].unit = _dataSource[ret.data.list[i].unit - 1]
-//                    }
-//                    ret.data.list[i].company_name = ret.data.list[i].company_name == null ? '' : ret.data.list[i].company_name;
-//
-//                }
                 $api.setStorage('supply_publish_1', ret.data.list);
-//                dataList = ret.data.list;
                 renderPage(ret);
-                // console.log('447:::'+JSON.stringify(ret.data.list))
-
-//                getData(ret.data.list);
                 if (ret.data.list.length < 15) {
                     $api.css($api.dom('.bbottomLoading'), 'display: none');
                 }
-
-
             } else {
                 alert('545' + JSON.stringify(err.msg))
             }
@@ -602,6 +532,7 @@
     function requireData2(data) {
         var data = data || {};
         var latitude, longitude;
+        page_num++;
         // if (data !== {}) {
         //     if (data.order == 'distance') {
         bMap.getLocation({
@@ -619,7 +550,6 @@
                     data: {
                         values: {
                             token: $api.getStorage('userToken'),
-                            // keyword: '',
                             type: data.type || '',
                             sub_type: data.sub_type || '',
                             category_ids: data.category_ids || '',
@@ -632,8 +562,9 @@
                 }, function (ret, err) {
                     if (ret) {
                         if (ret.code == 200) {
+                            $api.css($api.dom('.loading'), 'display: none');
                             scrollFlag = 1;
-                            page_num++;
+                            
                             if (ret.data.list < 20) {
                                 $api.text($api.dom('.bbottomLoading'), '暂无更多供求');
                             } else {
@@ -706,7 +637,6 @@
             dataList.push(ret.data.list[i])
         }
         getData(dataList);
-        selfAdaption();
     }
 
     // 进入详情

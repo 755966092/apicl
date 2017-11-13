@@ -177,7 +177,7 @@
                              <p>排序</p>
                              <span   tapmode   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 " data-type="all">全部</span>
                              <span   tapmode data-type="distance"  onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4">距离最近</span>
-                             <span   tapmode  data-type="price" onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4">价格最低</span>
+                             <span   tapmode id="price"  data-type="price" onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4">价格最低</span>
                              <span   tapmode  data-type="create_time" onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4">最新发布</span>
                         </li>
                      </ul>
@@ -210,6 +210,9 @@
             // 求
             // 不显示no22
             $api.css($api.dom('.no22'), 'display: none');
+            // reward
+            $api.attr($api.byId('price'), 'data-type', 'reward');
+            $api.text($api.byId('price'), '价格最高');
         }
         api.addEventListener({
             name: 'selClass'
@@ -300,12 +303,16 @@
             } else {
 
             }
+            console.log(JSON.stringify(parameter))
             if (parameter.order == 'distance') {
                 // 距离
                 $api.addCls($api.dom('span[data-type="distance"]'), 'sel');
             } else if (parameter.order == 'price') {
                 // 价格
-                $api.addCls($api.dom('span[data-type="price"]'), 'sel');
+                    $api.addCls($api.dom('span[data-type="price"]'), 'sel');
+            } else if (parameter.order == 'reward') {
+                // 价格
+                    $api.addCls($api.dom('span[data-type="reward"]'), 'sel');
             } else if (parameter.order == 'create_time') {
                 // 时间
                 $api.addCls($api.dom('span[data-type="create_time"]'), 'sel');
@@ -373,13 +380,14 @@
                 break;
                 case '距离最近': parameter.order = 'distance';
                 break;
+                case '价格最高': parameter.order = 'reward';
+                break;
                 case '价格最低': parameter.order = 'price';
                 break;
                 case '最新发布': parameter.order = 'create_time';
                 break;
 
             }
-            //console.log('发送事件:::'+JSON.stringify(parameter))
             // 发送事件, 刷新筛选结果
             // 0 供赛选
             // 1 求赛选

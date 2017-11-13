@@ -119,14 +119,16 @@
                 // TODO
                 if (ret.code == 200) {
                     // 添加成功
+                    api.sendEvent({
+                        name: 'addFriendsSuccess'
+                    });
                     api.closeWin();
                 }  else {
-                    alert(ret.msg)
+                    alert(ret.msg);
+                    api.closeWin();
                 }
             } else {
-                api.alert({
-                    msg:('错误码：'+err.code+'；错误信息：'+err.msg+'网络状态码：'+err.statusCode)
-                });
+                
             };
         });
     }

@@ -198,7 +198,7 @@
                 <p class="price2">{{=it[i].reward}}元</p>
             </div>
             <span class="firstImg" style="background: url({{=it[i].image_json[0]?it[i].image_json[0]:'../../image/icon_supply/supply_noImg.png'}})no-repeat;background-size: 7.1rem auto;background-position: center center;">
-                    {{?it[i].distance}}
+                    {{?it[i].distance  || it[i].distance==0}}
                     <span class="price ">
                                     <!-- <span class="position fl">清华大学</span> -->
             <span class="distance">距离我{{=it[i].distance}}km</span>
@@ -258,6 +258,7 @@
             name: 'editSupplyAfter'
         }, function(ret, err) {
             if (ret) {
+                dataList = [];
                 page_num = 1;
                 requireData();
             } else {
@@ -289,9 +290,9 @@
             }
         }, function(ret, err) {
             // alert('已滚动到底部');
-            if ($api.text($api.dom('.bbottomLoading')) == '暂无更多供求') {
+            // if ($api.text($api.dom('.bbottomLoading')) == '暂无更多供求') {
                 //console.log('已滚动到底部, 不继续请求')
-            } else {
+            // } else {
                 if (scrollFlag) {
                     //console.log('继续请求')
                     scrollFlag = 0;
@@ -301,7 +302,7 @@
                     }
                     requireData2(condition);
                 }
-            }
+            // }
 
         });
     }
@@ -351,6 +352,7 @@
     function requireData2(data) {
         var data = data || {};
         var latitude, longitude;
+        page_num++;
         // if (data !== {}) {
         //     if (data.order == 'distance') {
         bMap.getLocation({
@@ -382,7 +384,7 @@
                     if (ret) {
                         if (ret.code == 200) {
                             scrollFlag = 1;
-                            page_num++;
+                            
                             if (ret.data.list < 20) {
                                 $api.text($api.dom('.bbottomLoading'), '暂无更多供求');
                             } else {
@@ -440,7 +442,6 @@
             dataList.push(ret.data.list[i])
         }
         getData(dataList);
-        selfAdaption();
     }
     // 根据上传图片的多少自适应图片的大小
     function selfAdaption() {
@@ -458,23 +459,22 @@
             }
         }
     }
-
-
-
     // 筛选后结果
     function bySelect() {
         api.addEventListener({
             name: 'screeningResults1'
         }, function(ret, err) {
-
+            dataList=[];
             if (ret.value.flag) {
                 // $api.css($api.dom('.title1'), 'display:block');
                 parameter = ret.value.parameter
             }
             condition = ret.value.condition
             page_num = 1;
-            requireData(ret.value.condition)
-            selfAdaption();
+            requireData(ret.value.condition);
+            api.pageUp({
+                top: true
+            }, function (ret, err) { });
         })
 
         api.addEventListener({
@@ -533,10 +533,8 @@
                 if (supplyCache) {
                     // console.log(JSON.stringify(supplyCache))
                     getData(supplyCache);
-                    selfAdaption();
                 }
                 renderData(data, supplyCache);
-
             } else {
                 var supplyCache = $api.getStorage('supply_publish_2');
                 if (supplyCache) {
@@ -551,9 +549,7 @@
         });
         //     }
         // }
-
     }
-
     function renderData(data, supplyCache) {
         api.ajax({
             url: apiSite + '/demand/index',
@@ -574,10 +570,9 @@
             }
         }, function(ret, err) {
             // 停止下拉刷新
+            // console.log(JSON.stringify(ret));
             api.refreshHeaderLoadDone()
             if (ret) {
-                // console.log('数据:::'+JSON.stringify(ret.data.list.length))
-                // console.log('页数:::'+JSON.stringify(page_num))
                 if (supplyCache === ret.data.list) {
 
                 } else {
