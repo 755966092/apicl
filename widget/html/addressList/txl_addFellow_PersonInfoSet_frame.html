@@ -112,7 +112,7 @@
             <div class="weui-cell__bd">关注对方</div>
             <div class="weui-cell__ft">
                 <label for="attention" class="weui-switch-cp">
-                    <input value="attention" onchange="changeState(this)" id="attention" class="weui-switch-cp__input" type="checkbox" checked="false">
+                    <input value="attention" onchange="changeState(this)" id="attention" class="weui-switch-cp__input" type="checkbox" >
                     <div class="weui-switch-cp__box"></div>
                 </label>
             </div>
@@ -122,8 +122,8 @@
         <div class="weui-cell weui-cell_switch">
             <div class="weui-cell__bd">不让他看我供的</div>
             <div class="weui-cell__ft">
-                <label for="noMySupply" class="weui-switch-cp">
-                    <input value="noMySupply" onchange="changeState(this)" id="noMySupply" class="weui-switch-cp__input" type="checkbox" checked="checked">
+                <label for="is_gong" class="weui-switch-cp">
+                    <input value="is_gong" onchange="changeState(this)" id="is_gong" class="weui-switch-cp__input" type="checkbox" >
                     <div class="weui-switch-cp__box"></div>
                 </label>
             </div>
@@ -131,8 +131,8 @@
         <div class="weui-cell weui-cell_switch">
             <div class="weui-cell__bd">不让他看我求的</div>
             <div class="weui-cell__ft">
-                <label for="noMyDemand" class="weui-switch-cp">
-                    <input value="noMyDemand" onchange="changeState(this)" id="noMyDemand" class="weui-switch-cp__input" type="checkbox" checked="checked">
+                <label for="is_qiu" class="weui-switch-cp">
+                    <input value="is_qiu" onchange="changeState(this)" id="is_qiu" class="weui-switch-cp__input" type="checkbox" >
                     <div class="weui-switch-cp__box"></div>
                 </label>
             </div>
@@ -140,8 +140,8 @@
         <div class="weui-cell weui-cell_switch">
             <div class="weui-cell__bd">不让他看我的项目</div>
             <div class="weui-cell__ft">
-                <label for="noMyProject" class="weui-switch-cp">
-                    <input value="noMyProject" onchange="changeState(this)" id="noMyProject" class="weui-switch-cp__input" type="checkbox" checked="checked">
+                <label for="is_project" class="weui-switch-cp">
+                    <input value="is_project" onchange="changeState(this)" id="is_project" class="weui-switch-cp__input" type="checkbox" >
                     <div class="weui-switch-cp__box"></div>
                 </label>
             </div>
@@ -151,8 +151,8 @@
         <div class="weui-cell weui-cell_switch">
             <div class="weui-cell__bd">加入黑名单</div>
             <div class="weui-cell__ft">
-                <label for="pullBlack" class="weui-switch-cp">
-                    <input value="pullBlack" onchange="changeState(this)" id="pullBlack" class="weui-switch-cp__input" type="checkbox" checked="checked">
+                <label for="is_blacklist" class="weui-switch-cp">
+                    <input value="is_blacklist" onchange="changeState(this)" id="is_blacklist" class="weui-switch-cp__input" type="checkbox" >
                     <div class="weui-switch-cp__box"></div>
                 </label>
             </div>
@@ -223,19 +223,110 @@
             $api.css($api.dom('.btn'), 'background-color: #1AAD19');
             $api.text($api.dom('.btn'), '编辑资料');
         }
+        requireData();
     };
-
+    // 请求数据
+    function requireData() {
+        api.ajax({
+            url: apiSite + '/friendAuth/authUser',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: $api.getStorage('userToken'),
+                    to_user: api.pageParam.userId
+                }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    // 1 是 2 否
+                    console.log(JSON.stringify(ret));
+                    initPage(ret)
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+    // 初始化页面
+    function initPage(ret) {
+        for (var key in ret.data.list) {
+            if (ret.data.list.hasOwnProperty(key)) {
+                var element = ret.data.list[key];
+                if (element == 1) {
+                    // 是
+                    if(key === 'is_blacklist') {
+                        // 黑名单单独处理
+                        $api.attr($api.byId(key), 'checked', 'checked');
+                    } else {
+                        $api.removeAttr($api.byId(key), 'checked');
+                    }
+                } else {
+                    // 否
+                    if (key === 'is_blacklist') {
+                        // 黑名单单独处理
+                        $api.removeAttr($api.byId(key), 'checked');
+                    } else {
+                        $api.attr($api.byId(key), 'checked', 'checked');
+                    }
+                }
+            }
+        }
+    }
     function changeState (ele) {
+        console.log($api.attr(ele, 'value'));
+        var paramType = $api.attr(ele, 'value');
+        var obj = {
+            token: $api.getStorage('userToken'),
+            to_user: api.pageParam.userId,
+            type: paramType
+        }
         // if ($api.attr(ele, 'checked')) {
         if(ele.checked){
             // $api.removeAttr(ele, 'checked');
              ele.removeAttribute('checked')
-            console.log('选中')
+            // 选中时不让他看
+            if (paramType == 'is_blacklist') {
+                obj.value = 1
+            } else {
+                obj.value = 2;
+            }
         } else {
             // $api.attr(ele, 'checked', 'checked');
             ele.setAttribute('checked','checked')
-            console.log('未选中')
+            // 未选中时让他看
+            if (paramType == 'is_blacklist') {
+                obj.value = 2
+            } else {
+                obj.value = 1
+            }
         }
+
+        api.ajax({
+            url: apiSite + '/friendAuth/makeAuth',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: obj
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    api.toast({
+                        msg: '设置成功',
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
     }
     function delectFell() {
         if (api.pageParam.oneselfPageFlag) {
