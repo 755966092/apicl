@@ -46,100 +46,31 @@
 </body>
 <script src="../script/common.js"></script>
 <script>
-//    for (var i = 0; i < 10; i++) {
-//        setTimeout(function () {
-//            // console.log(i)
-//        },1000)
-//
-//    }
-//    var promise = new Promise(function(resolve, reject) {
-//        if (0){
-////            resolve(value);
-//            setTimeout(function () {
-//                // console.log(1)
-//            },1000)
-//        } else {
-//            var aaaa = 2;
-//            // console.log(222)
-//        }
-//    });
-//    promise.then(function(value) {
-//        // success
-//        // console.log('成功:'+value)
-//    }, function(value) {
-//        // failure
-//        // console.log('失败:'+value)
-//    });
+    // function timeout(ms) {
+    //     return new Promise((resolve, reject) => {
+    //         setTimeout(resolve, ms, 'done');
+    //     });
+    // }
 
-//     var func = function (i) {
-//         return new Promise(function (resolve, reject) {
-//             setTimeout(function () {
-//                 // console.log(i)
-//             },10000)
-//         })
-//     }
-// for (var i = 0; i < 10; i++) {
-//     func(i)
+    // timeout(100).then((value) => {
+    //     console.log(value);
+    // });
 
-// }
-
-var obj = {
-    'a': {
-        name:'aaa'
-    },
-    'b': {
-        name: 'bbb'
-    },
-    'c': {
-        name: 'ccc'
-    }, 
-    'd': {
-        name: 'aaa'
-    }, 
-    'e': {
-            name: 'ccc'
-        },
-         'f': {
-                name: 'aaa'
-            }, 
-             'g': {
-                    name: 'aaa'
-                }, 
-}
-var nameIndex = 1;
-for (var key in obj) {
-    if (obj.hasOwnProperty(key)) {
-        var element = obj[key];
-        for (var keyX in obj) {
-            if (obj.hasOwnProperty(keyX)) {
-                var elementX = obj[keyX];
-                if (element.name == elementX.name&& key != keyX) {
-                    console.log('相同:'+ element.name)
-                    console.log('相同key:'+ key)
-                    console.log('相同:'+ elementX.name)
-                    console.log('相同key:'+ keyX)
-                    console.log('------------')
-                    element.name = element.name+'-'+ nameIndex;
-                    nameIndex += 1;
-                    console.log(obj)
-                }
-            }
+    let promise = new Promise(function (resolve, reject) {
+        console.log('Promise');
+        if (0) {
+            resolve();
+        } else {
+            reject();
         }
-    }
-}
-    for (var key in obj) {
-        if (obj.hasOwnProperty(key)) {
-            var element = obj[key];
-            for (var keyX in obj) {
-                if (obj.hasOwnProperty(keyX)) {
-                    var elementX = obj[keyX];
-                    if (element.name == elementX.name && key != keyX) {
-                        element.name = element.name + '-' + nameIndex;
-                        nameIndex += 1;
-                    }
-                }
-            }
-        }
-    }
+    });
+
+    promise.then(function () {
+        console.log('resolved.');
+    },function () {
+        console.log('reject')
+    });
+
+    console.log('Hi!');
 </script>
 </html>

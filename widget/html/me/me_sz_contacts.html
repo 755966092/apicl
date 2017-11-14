@@ -22,6 +22,7 @@
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script>
     var selectedArr = [];
     apiready = function(){
@@ -32,147 +33,236 @@
     }
     // 初始化页面
     function initPage() {
-       alert(JSON.stringify(api.pageParam))
+        //    alert(JSON.stringify(api.pageParam))
+        var url;
+        if (api.pageParam.type === 'blacklist') {
+           // 黑名单列表
+            url = '/friendAuth/blackLists'
+        }
+        api.ajax({
+            url: apiSite + url,
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: $api.getStorage('userToken'),
+                }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    formatTheData(ret.data.list)
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
     }
     // 打开列表
-        function openList(data, yes) {
-            data =  {
-                A: [{
-                    placeholderImg: 'widget://res/img/ic/listContact.png',
-                    img: 'http://img1.3lian.com/gif/more/11/201206/a5194ba8c27b17def4a7c5495aba5e32.jpg',
-                    title: 'a标题'
-                }],
-                B: [{
-                    placeholderImg: 'widget://res/img/ic/listContact.png',
-                    img: 'http://img1.3lian.com/gif/more/11/201206/a5194ba8c27b17def4a7c5495aba5e32.jpg',
-                    title: 'b标题'
-                }],
-                C:[{
-                    placeholderImg: 'widget://res/img/ic/listContact.png',
-                    img: 'http://img1.3lian.com/gif/more/11/201206/a5194ba8c27b17def4a7c5495aba5e32.jpg',
-                    title: 'c标题'
-                }],
-                D:[{
-                    placeholderImg: 'widget://res/img/ic/listContact.png',
-                    img: 'http://img1.3lian.com/gif/more/11/201206/a5194ba8c27b17def4a7c5495aba5e32.jpg',
-                    title: 'd标题'
-                }],
-                E:[{
-                    placeholderImg: 'widget://res/img/ic/listContact.png',
-                    img: 'http://img1.3lian.com/gif/more/11/201206/a5194ba8c27b17def4a7c5495aba5e32.jpg',
-                    title: 'e标题'
-                }],
-                F:[{
-                    placeholderImg: 'widget://res/img/ic/listContact.png',
-                    img: 'http://img1.3lian.com/gif/more/11/201206/a5194ba8c27b17def4a7c5495aba5e32.jpg',
-                    title: 'f标题'
-                }],
-                G:[{
-                    placeholderImg: 'widget://res/img/ic/listContact.png',
-                    img: 'http://img1.3lian.com/gif/more/11/201206/a5194ba8c27b17def4a7c5495aba5e32.jpg',
-                    title: 'g标题'
-                }],
-                H:[{
-                    placeholderImg: 'widget://res/img/ic/listContact.png',
-                    img: 'http://img1.3lian.com/gif/more/11/201206/a5194ba8c27b17def4a7c5495aba5e32.jpg',
-                    title: 'h标题'
-                }],
-                I:[{
-                    placeholderImg: 'widget://res/img/ic/listContact.png',
-                    img: 'http://img1.3lian.com/gif/more/11/201206/a5194ba8c27b17def4a7c5495aba5e32.jpg',
-                    title: 'i标题'
-                }],
-                J:[{
-                    placeholderImg: 'widget://res/img/ic/listContact.png',
-                    img: 'http://img1.3lian.com/gif/more/11/201206/a5194ba8c27b17def4a7c5495aba5e32.jpg',
-                    title: 'j标题'
-                }]
+    function openList(data, yes) {
+        var str = '';
+        listContact.open({
+            x: -1000,
+            y: -1000,
+            w: 5,
+            h: 5,
+            data: [],
+            fixedOn: api.frameName
+        }, function (ret, err) {
+        })
+        listContact.close();
+        listContact.open({
+            x: 0,
+            y: headerH,
+            w: api.winWidth,
+            h: api.winHeight - headerH,
+            bgColor: '#EDECF3',
+            imgHeight: 32,
+            borderColor: '#d9d9d9',
+            groupTitle: {
+                color: '#999',
+                size: 14,
+                bgColor: '#f8f8f8'
+            },
+            rightBg: '#fff',
+            indicator: {
+                bgColor: 'rgba(0,0,0,0)',
+                color: '#5A5A5A'
+            },
+            cellBgColor: '#fff',
+            // 搜索框
+            searchBar: {
+                h: 50,
+                bgColor: '#F8F8F8',         //（可选项）搜索条背景色，字符串，默认透明，支持 rgb，rgba，#
+                placeholder: '搜索',      //（可选项）搜索条提示文字，字符串类型，默认空，不传则不显示提示文字
+                textFieldBgColor: '#fff'
+            },
+            data: data,
+            fixedOn: api.frameName
+        }, function (ret, err) {
+            if (ret) {
+                // data[ret.key][ret.index].user_id
+                api.openWin({
+                    name: 'winname',
+                    url: '../addressList/txl_memberInfo_Win.html',
+                    bounces: false,
+                    pageParam: {userId : data[ret.key][ret.index].user_id}
+                });
+
+                // if (str.indexOf(data[ret.key][ret.index].title) != -1) {
+                //     // 已选
+                //     str = str.replace(data[ret.key][ret.index].title, '')
+                //     listContact.refreshItem({
+                //         index: ret.index,
+                //         key: ret.key,
+                //         data: {
+                //             titleColor: '#000',
+                //             titleSize: 14,
+                //             title: data[ret.key][ret.index].title,
+                //             img: data[ret.key][ret.index].img
+                //         }
+                //     });
+                //     for (var i = 0; i < selectedArr.length; i++) {
+                //         if (selectedArr[i].title === data[ret.key][ret.index].title) {
+                //             selectedArr.splice(i, 1);
+                //             break;
+                //         }
+                //     }
+                //     console.log('删除后:'+JSON.stringify(selectedArr));
+                // } else {
+                //     // 未选
+                //     str += data[ret.key][ret.index].title + ' ';
+                //     selectedArr.push({
+                //         title: data[ret.key][ret.index].title,
+                //         key: ret.key,
+                //         index: ret.index,
+                //     });
+                //     console.log('删除前:'+JSON.stringify(selectedArr));
+                //     listContact.refreshItem({
+                //         index: ret.index,
+                //         key: ret.key,
+                //         data: {
+                //             titleColor: '#27B24A',
+                //             titleSize: 14,
+                //             title: data[ret.key][ret.index].title,
+                //             img: data[ret.key][ret.index].img
+                //         }
+                //     });
+                // }
+            } else {
+                alert(JSON.stringify(err));
             }
-            var str = '';
-            listContact.open({
-                x: -1000,
-                y: -1000,
-                w: 5,
-                h: 5,
-                data: [],
-                fixedOn: api.frameName
-            }, function (ret, err) {
-            })
-            listContact.close();
-            listContact.open({
-                x: 0,
-                y: headerH,
-                w: api.winWidth,
-                h: api.winHeight - headerH,
-                imgHeight: 32,
-                borderColor: '#d9d9d9',
-                groupTitle: {
-                    color: '#999',
-                    size: 14,
-                    bgColor: '#f8f8f8'
-                },
-                rightBg: '#fff',
-                indicator: {
-                    bgColor: 'rgba(0,0,0,0)',
-                    color: '#5A5A5A'
-                },
-                cellBgColor: '#fff',
-                // 搜索框
-                searchBar: {
-                    h: 50,
-                    bgColor: '#F8F8F8',         //（可选项）搜索条背景色，字符串，默认透明，支持 rgb，rgba，#
-                    placeholder: '搜索',      //（可选项）搜索条提示文字，字符串类型，默认空，不传则不显示提示文字
-                    textFieldBgColor: '#fff'
-                },
-                data: data,
-                fixedOn: api.frameName
-            }, function (ret, err) {
-                if (ret) {
-                    if (str.indexOf(data[ret.key][ret.index].title) != -1) {
-                        // 已选
-                        str = str.replace(data[ret.key][ret.index].title, '')
-                        listContact.refreshItem({
-                            index: ret.index,
-                            key: ret.key,
-                            data: {
-                                titleColor: '#000',
-                                titleSize: 14,
-                                title: data[ret.key][ret.index].title,
-                                img: data[ret.key][ret.index].img
-                            }
-                        });
-                        for (var i = 0; i < selectedArr.length; i++) {
-                            if (selectedArr[i].title === data[ret.key][ret.index].title) {
-                                selectedArr.splice(i, 1);
-                                break;
-                            }
-                        }
-                        console.log('删除后:'+JSON.stringify(selectedArr));
-                    } else {
-                        // 未选
-                        str += data[ret.key][ret.index].title + ' ';
-                        selectedArr.push({
-                            title: data[ret.key][ret.index].title,
-                            key: ret.key,
-                            index: ret.index,
-                        });
-                        console.log('删除前:'+JSON.stringify(selectedArr));
-                        listContact.refreshItem({
-                            index: ret.index,
-                            key: ret.key,
-                            data: {
-                                titleColor: '#27B24A',
-                                titleSize: 14,
-                                title: data[ret.key][ret.index].title,
-                                img: data[ret.key][ret.index].img
-                            }
-                        });
-                    }
-                } else {
-                    alert(JSON.stringify(err));
-                }
-            });
+        });
+    }
+    // 是否是大写字母
+    function f_check_uppercase(obj) {
+        if (/[A-Z]/.test(obj)) {
+            return true;
         }
+        return false;
+    }
+     // 格式化数据
+    function formatTheData(userArr) {
+        var userArr = eval(userArr);
+        var data = [];
+        // 电话, 昵称, 头像, id
+        for (var i = 0; i < userArr.length; i++) {
+            data[i] = {};
+            // data[i].current_contact = userArr[i].remark_current_contact == '' ? userArr[i].current_contact : userArr[i].remark_current_contact;
+            // data[i].position = userArr[i].remark_position == '' ? userArr[i].position : userArr[i].remark_position;
+            // data[i].title = userArr[i].remark_nickname == '' ? userArr[i].nickname : userArr[i].remark_nickname;
+            // data[i].img = userArr[i].remark_head_img_url == '' ? userArr[i].head_img_url : userArr[i].remark_head_img_url;
+            // var flagText = ((userArr[i].remark_current_company || "" + userArr[i].remark_current_position || "" + userArr[i].remark_current_degree || "") == 'undefined' ? (userArr[i].current_company || "" + userArr[i].current_position || "" + userArr[i].current_degree || "") : (userArr[i].remark_current_company || "" + userArr[i].remark_current_position || "" + userArr[i].remark_current_degree || "")) == 'undefined' ? '000' : (userArr[i].remark_current_company || "" + userArr[i].remark_current_position || "" + userArr[i].remark_current_degree || "") == 'undefined' ? (userArr[i].current_company || "" + userArr[i].current_position || "" + userArr[i].current_degree || "") : (userArr[i].remark_current_company || "" + userArr[i].remark_current_position || "" + userArr[i].remark_current_degree || "");
+            // if (flagText != 'null') {
+                // data[i].subTitle = ((userArr[i].remark_current_company || "" + userArr[i].remark_current_position || "" + userArr[i].remark_current_degree || "") == 'undefined' ? (userArr[i].current_company || "" + userArr[i].current_position || "" + userArr[i].current_degree || "") : (userArr[i].remark_current_company || "" + userArr[i].remark_current_position || "" + userArr[i].remark_current_degree || "")) == 'undefined' ? '000' : (userArr[i].remark_current_company || "" + userArr[i].remark_current_position || "" + userArr[i].remark_current_degree || "") == 'undefined' ? (userArr[i].current_company || "" + userArr[i].current_position || "" + userArr[i].current_degree || "") : (userArr[i].remark_current_company || "" + userArr[i].remark_current_position || "" + userArr[i].remark_current_degree || "")
+            // }
+            data[i].current_contact =  userArr[i].company_name;
+            data[i].position = userArr[i].position;
+            data[i].title = userArr[i].ur_nickname? userArr[i].ur_nickname : userArr[i].nickname;
+            data[i].img = userArr[i].head_img_url;
+            data[i].subTitle = (data[i].current_contact || "") +' '+ (data[i].position || "");
+            data[i].user_id = userArr[i].user_id;
+            data[i].litter = PinyinHelper.getShortPinyin(data[i].title).toUpperCase();
+            data[i].titleSize = 15;
+            data[i].flag = data[i].litter[0];
+        }
+        for (var i = 0; i < data.length; i++) {
+            for (var j = 0; j < data.length; j++) {
+                if (data[i].litter < data[j].litter) {
+                    var temp = data[i];
+                    data[i] = data[j];
+                    data[j] = temp;
+                }
+            }
+        }
+        paixv(data)
+    }
+    // 排序数据
+    function paixv(data) {
+        if (api.systemType == 'ios') {
+            for (var i = 0; i < data.length; i++) {
+                data[i].placeholderImg = "widget://image/icon_defaultHead.png";
+                if (f_check_uppercase(data[0].flag)) {
+                    data[0].initial = data[0].flag;
+                } else {
+                    data[0].initial = '#';
+                }
+                if (i > 0) {
+                    if (data[i].flag !== data[i - 1].flag) {
+                        if (f_check_uppercase(data[i].flag)) {
+                            data[i].initial = data[i].flag;
+                        } else {
+                            data[i].initial = '#';
+                        }
+                    }
+                }
+            }
+        } else {
+            for (var i = 0; i < data.length; i++) {
+                // data[i].placeholderImg = "widget://image/icon_defaultHead.png";
+                if (f_check_uppercase(data[0].flag)) {
+                    data[0].initial = data[0].flag;
+                } else {
+                    data[0].initial = '#';
+                }
+                if (i > 0) {
+                    if (data[i].flag !== data[i - 1].flag) {
+                        if (f_check_uppercase(data[i].flag)) {
+                            data[i].initial = data[i].flag;
+                        } else {
+                            data[i].initial = '#';
+                        }
+                    }
+                }
+            }
+        }
+        var arr = {}
+        var a;
+        for (var i = 0; i < data.length; i++) {
+            delete data[i].flag;
+            delete data[i].type;
+            data[i].subTitleColor = '#999'
+            data[i].titleSize = 15;
+
+            if (data[i].initial) {
+                if (data[i].initial == '#') {
+                    if (arr[data[i].initial]) {
+                    } else {
+                        arr[data[i].initial] = [];
+                    }
+                    a = i;
+                } else {
+                    arr[data[i].initial] = [];
+                    a = i;
+                }
+            }
+
+            arr[data[a].initial].push(data[i])
+        }
+        openList(arr);
+    }
 </script>
 
 </html>
