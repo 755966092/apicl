@@ -107,7 +107,7 @@
    </style>
 </head>
 <body>
-    <div class="weui-cells weui-cells_form">
+    <!-- <div class="weui-cells weui-cells_form">
         <div class="weui-cell weui-cell_switch">
             <div class="weui-cell__bd">关注对方</div>
             <div class="weui-cell__ft">
@@ -166,7 +166,7 @@
             <div class="weui-cell__ft">
             </div>
         </a>
-    </div>
+    </div> -->
     <div class="btn mt20">
         <a href="javascript:;" tapmode onclick="delectFell()" class="weui-btn weui-btn_warn">删除</a>
     </div>
@@ -218,7 +218,7 @@
 <script type="text/javascript">
     apiready = function(){
         moduleInit();
-        //console.log(JSON.stringify(api.pageParam));
+        console.log(JSON.stringify(api.pageParam));
         if (api.pageParam.oneselfPageFlag) {
             $api.css($api.dom('.btn'), 'background-color: #1AAD19');
             $api.text($api.dom('.btn'), '编辑资料');
@@ -234,7 +234,7 @@
             data: {
                 values: { 
                     token: $api.getStorage('userToken'),
-                    to_user: api.pageParam.userId
+                    to_user: api.pageParam.user_id
                 }
             }
         }, function(ret, err) {
@@ -256,6 +256,7 @@
         for (var key in ret.data.list) {
             if (ret.data.list.hasOwnProperty(key)) {
                 var element = ret.data.list[key];
+                console.log('key:'+key)
                 if (element == 1) {
                     // 是
                     if(key === 'is_blacklist') {
@@ -277,11 +278,10 @@
         }
     }
     function changeState (ele) {
-        console.log($api.attr(ele, 'value'));
         var paramType = $api.attr(ele, 'value');
         var obj = {
             token: $api.getStorage('userToken'),
-            to_user: api.pageParam.userId,
+            to_user: api.pageParam.user_id,
             type: paramType
         }
         // if ($api.attr(ele, 'checked')) {
