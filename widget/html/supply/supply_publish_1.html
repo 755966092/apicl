@@ -280,11 +280,7 @@
         scrollBotton();
         // 筛选后的结果
         bySelect();
-       
-      
-
     };
-
     // 收藏
     function collect(ele) {
         var url;
@@ -465,6 +461,7 @@
 
     // 请求数据
     function requireData(data) {
+        
         var data = data || {};
         var latitude, longitude;
         if (data !== {}) {
@@ -478,12 +475,13 @@
                     data.longitude = ret.lon;
                     // 缓存字段  supply_publish_1
                     var supplyCache = $api.getStorage('supply_publish_1');
-                    if (supplyCache) {
+                    if ($api.getStorage('supply_publish_1')) {
                         getData(supplyCache);
                     }
                     $api.css($api.dom('.loading'), 'display: none');
                     fliderSupply(data, supplyCache)
                 } else {
+                    
                     var supplyCache = $api.getStorage('supply_publish_1');
                     if (supplyCache) {
                         getData(supplyCache);
@@ -515,14 +513,18 @@
             }
         }, function (ret, err) {
             if (ret) {
-                $api.css($api.dom('.loading'), 'display: none');
-                // 停止下拉刷新
-                api.refreshHeaderLoadDone()
-                $api.setStorage('supply_publish_1', ret.data.list);
-                renderPage(ret);
-                if (ret.data.list.length < 15) {
-                    $api.css($api.dom('.bbottomLoading'), 'display: none');
-                }
+               if(ret.code==200) {
+                    $api.css($api.dom('.loading'), 'display: none');
+                    // 停止下拉刷新
+                    api.refreshHeaderLoadDone()
+                    $api.setStorage('supply_publish_1', ret.data.list);
+                    renderPage(ret);
+                    if (ret.data.list.length < 15) {
+                        $api.css($api.dom('.bbottomLoading'), 'display: none');
+                    }
+               } else{
+                   alert(ret.msg)
+               }
             } else {
                 alert('545' + JSON.stringify(err.msg))
             }
@@ -609,6 +611,7 @@
     }
     // 渲染页面
     function renderPage(ret) {
+        console.log(JSON.stringify(ret))
         for (var i = 0; i < ret.data.list.length; i++) {
             // 解析图片json
             ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
