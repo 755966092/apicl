@@ -117,8 +117,10 @@
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
     apiready = function(){
+        moduleInit();
         requireData();
     };
     // 请求数据
@@ -136,7 +138,7 @@
         }, function(ret, err) {
             if(ret) {
                 if (ret.code === 200) {
-                    
+                    formatTheData(ret.data.list)
                 } else {
                     alert(ret.msg)
                 }
@@ -144,6 +146,157 @@
                 alert(JSON.stringify(err))
             }
         })
+    }
+
+    // 打开列表
+    function openList(data, yes) {
+        var str = '';
+        listContact.open({
+            x: -1000,
+            y: -1000,
+            w: 5,
+            h: 5,
+            data: [],
+            fixedOn: api.frameName
+        }, function (ret, err) {
+        })
+        listContact.close();
+        listContact.open({
+            x: 0,
+            y: 0,
+            w: api.winWidth,
+            h: api.pageParam.startY,
+            bgColor: '#EDECF3',
+            imgHeight: 32,
+            imgWidth:32,
+            borderColor: '#d9d9d9',
+            groupTitle: {
+                color: '#999',
+                size: 14,
+                bgColor: '#f8f8f8'
+            },
+            rightBg: '#fff',
+            indicator: {
+                bgColor: 'rgba(0,0,0,0)',
+                color: '#5A5A5A'
+            },
+            cellBgColor: '#fff',
+            // 搜索框
+            data: data,
+            fixedOn: api.frameName
+        }, function (ret, err) {
+            if (ret) {
+                // data[ret.key][ret.index].user_id
+                api.openWin({
+                    name: 'winname',
+                    url: '../addressList/txl_memberInfo_Win.html',
+                    bounces: false,
+                    pageParam: { userId: data[ret.key][ret.index].user_id }
+                });
+
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    // 是否是大写字母
+    function f_check_uppercase(obj) {
+        if (/[A-Z]/.test(obj)) {
+            return true;
+        }
+        return false;
+    }
+    // 格式化数据
+    function formatTheData(userArr) {
+        var userArr = eval(userArr);
+        var data = [];
+        // 电话, 昵称, 头像, id
+        for (var i = 0; i < userArr.length; i++) {
+            data[i] = {};
+            data[i].current_contact = userArr[i].name;
+            data[i].position = userArr[i].position;
+            data[i].title = userArr[i].ur_nickname ? userArr[i].ur_nickname : userArr[i].nickname;
+            data[i].img = userArr[i].head_img_url;
+            data[i].subTitle = (data[i].current_contact || "") + ' ' + (data[i].position || "");
+            data[i].user_id = userArr[i].user_id;
+            data[i].litter = PinyinHelper.getShortPinyin(data[i].title).toUpperCase();
+            data[i].titleSize = 15;
+            data[i].flag = data[i].litter[0];
+        }
+        for (var i = 0; i < data.length; i++) {
+            for (var j = 0; j < data.length; j++) {
+                if (data[i].litter < data[j].litter) {
+                    var temp = data[i];
+                    data[i] = data[j];
+                    data[j] = temp;
+                }
+            }
+        }
+        paixv(data)
+    }
+    // 排序数据
+    function paixv(data) {
+        if (api.systemType == 'ios') {
+            for (var i = 0; i < data.length; i++) {
+                data[i].placeholderImg = "widget://image/icon_defaultHead.png";
+                if (f_check_uppercase(data[0].flag)) {
+                    data[0].initial = data[0].flag;
+                } else {
+                    data[0].initial = '#';
+                }
+                if (i > 0) {
+                    if (data[i].flag !== data[i - 1].flag) {
+                        if (f_check_uppercase(data[i].flag)) {
+                            data[i].initial = data[i].flag;
+                        } else {
+                            data[i].initial = '#';
+                        }
+                    }
+                }
+            }
+        } else {
+            for (var i = 0; i < data.length; i++) {
+                // data[i].placeholderImg = "widget://image/icon_defaultHead.png";
+                if (f_check_uppercase(data[0].flag)) {
+                    data[0].initial = data[0].flag;
+                } else {
+                    data[0].initial = '#';
+                }
+                if (i > 0) {
+                    if (data[i].flag !== data[i - 1].flag) {
+                        if (f_check_uppercase(data[i].flag)) {
+                            data[i].initial = data[i].flag;
+                        } else {
+                            data[i].initial = '#';
+                        }
+                    }
+                }
+            }
+        }
+        var arr = {}
+        var a;
+        for (var i = 0; i < data.length; i++) {
+            delete data[i].flag;
+            delete data[i].type;
+            data[i].subTitleColor = '#999'
+            data[i].titleSize = 15;
+
+            if (data[i].initial) {
+                if (data[i].initial == '#') {
+                    if (arr[data[i].initial]) {
+                    } else {
+                        arr[data[i].initial] = [];
+                    }
+                    a = i;
+                } else {
+                    arr[data[i].initial] = [];
+                    a = i;
+                }
+            }
+
+            arr[data[a].initial].push(data[i])
+        }
+        openList(arr);
     }
 </script>
 </html>

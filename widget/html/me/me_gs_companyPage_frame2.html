@@ -178,6 +178,34 @@
             background-size: .2rem .2rem;
             background-position: left center
         }
+
+        .nomain .icon {
+            width: 2.2rem;
+            height: 2.2rem;
+            background: url(../../image/iocn_addressList/icon_noInfo.png)no-repeat;
+            -webkit-background-size: 2.2rem 2.2rem;
+            background-size: 2.2rem 2.2rem;
+            margin: 0 auto;
+        }
+        .nomain {
+            position: absolute;
+            top: 0;bottom: 0;left: 0;right: 0;
+            margin: auto;
+        }
+        .nomain p {
+            font-size: .3rem;
+            color: #999;
+            /*width: 3.9rem;*/
+            margin: .36rem auto 0;
+            text-align: center;
+        }
+        .nomain .jump {
+            color: #89B2EF;
+            font-size: 0.34rem;
+        }
+        .nomain .wrap {
+            background-color: rgba(0, 0, 0, 0)
+        }
     </style>
 </head>
 
@@ -215,9 +243,9 @@
     <script type="text/x-dot-template" id="listT">
         {{?it.length>0}}
             {{~it:value:index}}
-            <div class="item">
+            <div class="item" data-id="{{=value.demand_id}}" onclick="openInfoPage(this)" tapmode>
                 <div class="userLeft flex-def flex-cCenter flex-zBetween">
-                    <img src="{{=value.head_img_url}}" class="announcerHead">
+                    <img src="{{=value.head_img_url}}" data-userId="{{=value.user_id}}" onclick="openUserInfoPage(this);event.stopPropagation()" class="announcerHead">
                     <div class="username flex-item">
                         <p class="announcer">{{=value.nickname}}</p>
                         <p class="company">{{=value.company_name}}</p>
@@ -238,9 +266,9 @@
                         <span class="label">&nbsp;[{{=value.type==2?'公司':'个人'}}]</span>
                     </span>
                     {{?value.is_collect}}
-                    <span tapmode onclick="collect(this)" class="collect"></span>
+                    <span tapmode data-id="{{=value.demand_id}}" tapmode onclick="collect(this);event.stopPropagation()" class="collect"></span>
                     {{??}}
-                    <span tapmode onclick="collect(this)" class="icon"></span>
+                    <span tapmode data-id="{{=value.demand_id}}" tapmode onclick="collect(this);event.stopPropagation()" class="icon"></span>
                     {{?}}
                 </div>
                 <p class="createTime">{{=value.create_time}}</p>
@@ -251,6 +279,14 @@
             </div>
             {{~}}
         {{??}}
+            <div class="nomain flex-def flex-cCenter flex-zCenter">
+                <div class="wrap">
+                        <div class="icon">
+                    </div>
+                        <p>空空如也 ~</p>
+                        <!-- <p class="jump" tapmode onclick="openCreateCirclePage()">快去参与喜欢的圈子吧...</p> -->
+                </div>
+            </div>
         {{?}}
     </script>
 </body>
@@ -276,6 +312,8 @@
         }, function (ret, err) {
             if (ret) {
                 if (ret.code === 200) {
+                    console.log(JSON.stringify(ret.data.list));
+                    
                     getData(ret.data.list)
                 } else {
                     alert(ret.msg)
@@ -284,6 +322,70 @@
                 alert(JSON.stringify(err))
             }
         })
+    }
+    // 收藏
+    function collect(ele) {
+        var url;
+        if ($api.hasCls(ele, 'collect')) {
+            // 已收藏
+            // $api.removeCls(ele, 'collect');
+            url = '/demand/cancelCollect';
+        } else {
+            // 未收藏
+            // $api.addCls(ele, 'collect');
+            url = '/demand/collect';
+        }
+        api.ajax({
+            url: apiSite + url,
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: {
+                    token: $api.getStorage('userToken'),
+                    demand_id: $api.attr(ele, 'data-id')
+                }
+            }
+        }, function (ret, err) {
+            if (ret) {
+                if (ret.code == 200) {
+                    if ($api.hasCls(ele, 'collect')) {
+                        // 已收藏
+                        $api.removeCls(ele, 'collect');
+                        api.toast({
+                            msg: '取消收藏成功'
+                        });
+                    } else {
+                        // 未收藏
+                        $api.addCls(ele, 'collect');
+                        api.toast({
+                            msg: '收藏供应成功'
+                        });
+                    }
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err.msg))
+            }
+        })
+    }
+    // 打开供求详情
+    function openInfoPage(ele) {
+        api.openWin({
+            name: 'supply_info_demand_win',
+            url: '../supply/supply_info_demand_win.html',
+            bounces: false,
+            pageParam: { demand_id: $api.attr(ele, 'data-id') }
+        });
+    }
+    // 进入用户详情页面
+    function openUserInfoPage(ele) {
+        api.openWin({
+            name: 'txl_memberInfo_Win',
+            url: '../addressList/txl_memberInfo_Win.html',
+            bounces: false,
+            pageParam: {userId : $api.attr(ele, 'data-userId')}
+        });
     }
 </script>
 
