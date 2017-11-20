@@ -794,10 +794,10 @@ function allCahtSql(ret) {
                     // 位置
                     SQL += '(' + element.messageId + ',"' + element.sentTime + '","' + element.objectName + '","' +
                         element.messageDirection + '","' + element.content.extra.replace(/"/g, '') + '","' + (
-                        element.content.text || '') + '",' + element.content.latitude + ',' + element.content.longitude +
+                        element.content.poi || '') + '",' + element.content.latitude + ',' + element.content.longitude +
                         ',"' + element.content.imagePath + '","' + myHeadImg + '","' + element.content.imageUrl +
                         '","","' + element.content.thumbPath + '"),';
-                    // console.log(SQL)
+                    console.log(SQL)
                 }
                 else {
                     // 文字
@@ -826,7 +826,7 @@ function allCahtSql(ret) {
                     // 位置
                     SQL += '(' + element.messageId + ',"' + element.sentTime + '","' + element.objectName + '","' +
                         element.messageDirection + '","' + element.content.extra.replace(/"/g, '') + '","' + (
-                        element.content.text || '') + '",' + element.content.latitude + ',' + element.content.longitude +
+                        element.content.poi || '') + '",' + element.content.latitude + ',' + element.content.longitude +
                         ',"' + element.content.imagePath + '","' + youHeadImg + '","' + element.content.imageUrl +
                         '","","' + element.content.thumbPath + '"),';
             // console.log(JSON.stringify(params));
@@ -1344,6 +1344,7 @@ function getNews() {
         sql: 'SELECT * FROM tb_chat_' + api.pageParam.userId + '  ORDER BY receivedTime DESC  LIMIT 20'
     }, function (ret, err) {
         if (ret.status) {
+            console.log(JSON.stringify(ret))
             if (ret.data.length > 0) {
                 renderPageSql(ret.data, 1);
                 contrastMessage(ret.data);
@@ -1375,13 +1376,19 @@ function contrastMessage(argument) {
         targetId: targetRongId,
         count: 20
     }, function (ret, err) {
-        if (argument) {
-            if (argument.length > 0) {
-                if (argument[0].messageId == ret.result[0].messageId) {
-                // 无更新
+        if (ret) {
+            if (argument) {
+                if (argument.length > 0) {
+                    if (argument[0].messageId == ret.result[0].messageId) {
+                        // 无更新
+                    } else {
+                        // 有更新
+                        $api.html($api.dom('.main'), '');
+                        allCahtSql(ret.result);
+                        renderPage(ret);
+                    }
                 }
                 else {
-                    // 有更新
                     $api.html($api.dom('.main'), '');
                     allCahtSql(ret.result);
                     renderPage(ret);
@@ -1392,11 +1399,8 @@ function contrastMessage(argument) {
                 allCahtSql(ret.result);
                 renderPage(ret);
             }
-        }
-        else {
-            $api.html($api.dom('.main'), '');
-            allCahtSql(ret.result);
-            renderPage(ret);
+        } else {
+            // err
         }
     });
 }
@@ -1523,7 +1527,6 @@ function renderPage(ret) {
             else if (ret.result[i].objectName == 'RC:LBSMsg') {
                 // 位置
                 // addReceImgMessages(ret.result[i], youHeadImg, 1)
-                // console.log('接收消息的JSON:'+JSON.stringify(ret));
                 createReceivePositionLabelSql(ret.result[i]);
             }
             else {
