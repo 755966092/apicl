@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+       input {
+           border-bottom: .02rem solid #fff;
+           width: 100%;
+           margin-left: 1rem;
+           color: #fff;
+           font-size: 0.3rem;
+       }
+       .nameText {
+           font-size: 0.3rem;
+
+       }
+       .addressText {
+           font-size: 0.24rem;
+           color: #999;
+           white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+       }
+       li {
+           padding: .1rem .3rem;
+            border-bottom: .01rem solid #9d9d9d;
+       }
+    </style>
+</head>
+<body>
+    <header  class="header">
+        <div class="head flex-def flex-cCenter">
+                <span class="callback"   tapmode   onclick="api.closeWin()">返回</span>
+            <input type="type" id="input"  placeholder="输入地址">
+        </div>
+    </header>
+    <ul class="resultList"></ul> 
+    <script type="text/x-dot-template" id="listT">
+        {{~it:value:index}}
+        <li tapmode onclick="closeCurrentPage(this)" data-lon="{{=value.lon}}" data-lat="{{=value.lat}}" data-name="{{=value.name}}" data-address="{{=value.address}}">
+            <p class="nameText">{{=value.name}}</p>
+            <p class="addressText">{{=value.address}}</p>
+        </li>
+        {{~}}
+    </script>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/jquery.min.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+<script>
+    var keyword,dataArr=[],num = 0;
+    apiready = function(){
+        fnInit();
+        moduleInit();
+        scrollBottom();
+        bindEvent();
+    }
+    function bindEvent() {
+        if (api.systemType == 'ios') {
+            $('#input').on("compositionend", function () {
+                searchKeyword(this);
+            })
+        } else {
+            $('#input').on("input", function () {
+                searchKeyword(this);
+            })
+        }
+    }
+    function scrollBottom() {
+        api.addEventListener({
+            name: 'scrolltobottom'
+        }, function(ret, err){
+            searchKeyword2(keyword);
+        });
+    }
+    function searchKeyword(ele) {
+        keyword = $api.val(ele);
+        searchKeyword2(keyword);
+    }
+    function searchKeyword2(keyword) {
+        if (keyword.length > 0) {
+            bMap.searchInCity({
+                city: '北京',
+                keyword: keyword,
+                pageIndex: num,
+                pageCapacity: 20//1~50
+            }, function(ret,err){
+                if(ret.status){
+                    num = ret.pageIndex + 1;
+                    dataArr = dataArr.concat(ret.results);
+                    getData(ret.results);
+                }else{
+                    //1（检索词有岐义）
+                        //2（检索地址有岐义）
+                        //3（没有找到检索结果）
+                        //4（key错误）
+                        //5（网络连接错误）
+                        //6（网络连接超时）
+                        //7（还未完成鉴权，请在鉴权通过后重试）
+                    switch (err.code) {
+                        case 1:
+                            alert('检索词有岐义')
+                            break;
+                        case 2:
+                            alert('检索地址有岐义')
+                            break;
+                        case 3:
+                            alert('没有找到检索结果')
+                            break;
+                        case 4:
+                            alert('key错误')
+                            break;
+                        case 5:
+                            alert('网络连接错误')
+                            break;
+                        case 6:
+                            alert('网络连接超时')
+                            break;
+                        case 7:
+                            alert('还未完成鉴权，请在鉴权通过后重试')
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            });
+        }
+    }
+    // 关闭页面
+    function closeCurrentPage(ele) {
+      var name = $api.attr(ele, 'data-name');
+      var address = $api.attr(ele, 'data-address');
+      var lon = $api.attr(ele, 'data-lon');
+      var lat = $api.attr(ele, 'data-lat');
+      api.sendEvent({
+          name: 'addEventListenerSearch',
+          extra: {
+              obj: {
+                name: name,
+                address: address,
+                lon: lon,
+                lat: lat
+              }
+          }
+      });
+      api.closeWin();
+    }
+        
+</script>
+</html>

@@ -78,10 +78,10 @@ var baseUrl = "img.iinnet.com";
 //接口地址
 
 // 测试环境
-var apiSite = 'https://wozai.tonyliangli.cn/api';
+// var apiSite = 'https://wozai.tonyliangli.cn/api';
 //
 // 正式环境
-// var apiSite = "https://api.iinnet.com";
+var apiSite = "https://api.iinnet.com";
 
 var apiHeader = {
 	"api.version": "1",
