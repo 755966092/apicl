@@ -5,6 +5,7 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../css/weui.css"/>
     <style>
 
          .main_no1 .wrap{
@@ -113,12 +114,36 @@
         display: none;
         color: #129F13;
        }
+       .wrap {
+           position: relative;
+       }
+       .dropDownList {
+           position: absolute;
+           background-color: #fff;
+           z-index: 9999;
+           width: 100%;
+           top: .73rem;
+           text-align: right;
+       }
+       .dropDownList p {
+           font-size: 0.28rem;
+           /* padding: .1rem .45rem; */
+           /* box-sizing: border-box; */
+           padding-right: 0.2rem;
+       }
+
+       .weui-cell {
+           font-size: 0.28rem;
+       }
+       .weui-cell {
+           position: relative;
+       }
     </style>
 </head>
 <body>
 
     <div class="wrap">
-        <div class="main clearfix">
+        <!-- <div class="main clearfix">
             <p class="mobile ">工作经历</p>
             <div class="main_no1 .wrapyd">
             <pl class="36r"></pl>
@@ -127,6 +152,8 @@
                         公司
                         <input  type="text" id="company_name" class="telIpt" name="" placeholder ="必填" >
                    </p>
+                   <div class="dropDownList">
+                   </div>
                </div>
                <div class="wrap">
                <p>
@@ -137,7 +164,7 @@
                <p class="time">
                     开始时间
                     <span class="telIpt" >
-                        <span   tapmode data-val='startTime'   onclick="selectTime(this,1)" id="time_1">请选择</span >
+                        <span tapmode data-val='startTime'   onclick="selectTime(this,1)" id="time_1">请选择</span >
                     </span>
                </p>
                <p class="time">
@@ -148,9 +175,56 @@
                </p>
 
            </div>
+        </div> -->
+        <div>
+            <div class="weui-cells__title">工作经历</div>
+            <div class="weui-cells">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <p>公司</p>
+                    </div>
+                    <input type="text" name=""  id="company_name" class="weui-cell__ft" placeholder="必填">
+                    <div class="dropDownList resultList" >
+                        <!-- <div class="weui-cell weui-cell_access">
+                            <div class="weui-cell__bd weui-cell_primary">
+                                <p>实时搜索文本</p>
+                            </div>
+                        </div> -->
+                    </div>
+                    <script type="text/x-dot-template" id="listT">
+                        {{?it.length>0}}
+                            {{~it:value:index}}
+                                <div tapmode onclick="selCompany(this)" data-comp="{{=value.company_name}}" class="weui-cell weui-cell_access">
+                                    <div class="weui-cell__bd weui-cell_primary">
+                                        <p>{{=value.company_name}}</p>
+                                    </div>
+                                </div>
+                            {{~}}
+                        {{?}}
+                    </script>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <p>职务</p>
+                    </div>
+                    <input type="text" name="" id="company_position" class="weui-cell__ft" placeholder="必填">
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <p >开始时间</p>
+                    </div>
+                    <p class="weui-cell__ft" tapmode data-val='startTime' onclick="selectTime(this,1)" id="time_1">请选择</p>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <p >结束时间</p>
+                    </div>
+                    <p class="weui-cell__ft" tapmode data-val='endTime' onclick="selectTime(this,2)" id="time_2">请选择</p>
+                </div>
+            </div>
         </div>
         <div class="main clearfix" style="font-size: 0">
-            <p class="mobile ">经历描述</p>
+            <div class="weui-cells__title">经历描述</div>
             <textarea rows="6" placeholder="主要经历" id="textarea" maxlength="300" onkeyup="changeText(this)"></textarea>
             <p class="mobile fr" id="textLength"> 0/300</p>
         </div>
@@ -161,10 +235,13 @@
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
+<script type="text/javascript" src="../../../script/jquery.min.js"></script>
+<script type="text/javascript" src="../../../script/doT.min.js"></script>
 <script type="text/javascript">
     var url;
     apiready = function(){
-
+        // 绑定输入事件
+        bindEvent();
         if (api.pageParam.flag == 1) {
             url = '/user_center/editWork';
             // 获取数据
@@ -340,6 +417,54 @@
                 alert(JSON.stringify(err.msg));
             }
         });
+    }
+
+    function bindEvent() {
+        // $('#company_name').on("focus", function () {
+        //     $api.css($api.dom('.dropDownList'), 'display:block');
+        // })
+        // $('#company_name').on("blur", function () {
+        //     $api.css($api.dom('.dropDownList'), 'display:none');
+        // })
+        if (api.systemType == 'ios') {
+            $('#company_name').on("compositionend", function () {
+                searchKeyword(this);
+            })
+        } else {
+            $('#company_name').on("input", function () {
+                searchKeyword(this);
+            })
+        }
+    }
+    function searchKeyword(ele) {
+        var keyword = $api.val(ele);
+        api.ajax({
+            url: apiSite + '/userCenter/addCompanyLike',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: $api.getStorage('userToken'),
+                    name: keyword
+                }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    getData(ret.data.list)
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+    // 下拉列表选择公司
+    function selCompany(ele) {
+        var company = $api.attr(ele, 'data-comp');
+        $api.val($api.byId('company_name'), company);
+        $api.html($api.dom('.dropDownList'), '');
     }
 </script>
 </html>

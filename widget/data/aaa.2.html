@@ -1,24 +1,138 @@
-<p class="weixinAudio">
-    <video src="http://bb5.babyhome.com.tw/UPLOAD7/124804/bbh-loveparadise.mp3" autoplay id="media" width="1" height="1" preload></video>
-    <span id="audio_area" class="db audio_area">
-        <span class="audio_wrp db">
-            <span class="audio_play_area">
-                <i class="icon_audiodefault">
-                    <img src="./images/shengyin.png" alt="">
-                </i>
-                <i class="icon_audioplaying">
-                    <img src="./images/shengyin.gif" alt="">
-                </i>
-            </span>
-            <span id="audio_length" class="audio_length tips_global"></span>
-            <span id="curent_time">0:00</span>
-            <span class="db audio_info_area">
-                <strong class="db audio_title">名称</strong>
-            </span>
-            <span id="int_c"></span>
-            <span class="progress_bar_box" style="width: 3.45rem;">
-                <span id="audio_progress" class="progress_bar" style="width: 0%;"></span>
-            </span>
-        </span>
-    </span>
-</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/weui.css">
+</head>
+<body>
+    <div class="page__bd">
+        <!--<a href="javascript:;" class="weui-btn weui-btn_primary">点击展现searchBar</a>-->
+        <div class="weui-search-bar weui-search-bar_focusing" id="searchBar">
+            <form class="weui-search-bar__form">
+                <div class="weui-search-bar__box">
+                    <i class="weui-icon-search"></i>
+                    <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
+                    <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+                </div>
+                <label class="weui-search-bar__label" id="searchText" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">
+                    <i class="weui-icon-search"></i>
+                    <span>搜索</span>
+                </label>
+            </form>
+            <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+        </div>
+        <div class="weui-cells searchbar-result" id="searchResult" style="display: block; transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd weui-cell_primary">
+                    <p>实时搜索文本</p>
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd weui-cell_primary">
+                    <p>实时搜索文本</p>
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd weui-cell_primary">
+                    <p>实时搜索文本</p>
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__bd weui-cell_primary">
+                    <p>实时搜索文本</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../script/jquery.min.js"></script>
+    <script type="text/javascript" class="home js_show">
+        $(function () {
+            var winH = $(window).height();
+            var categorySpace = 10;
+
+            $('.js_item').on('click', function () {
+                var id = $(this).data('id');
+                window.pageManager.go(id);
+            });
+            $('.js_category').on('click', function () {
+                var $this = $(this),
+                    $inner = $this.next('.js_categoryInner'),
+                    $page = $this.parents('.page'),
+                    $parent = $(this).parent('li');
+                var innerH = $inner.data('height');
+                bear = $page;
+
+                if (!innerH) {
+                    $inner.css('height', 'auto');
+                    innerH = $inner.height();
+                    $inner.removeAttr('style');
+                    $inner.data('height', innerH);
+                }
+
+                if ($parent.hasClass('js_show')) {
+                    $parent.removeClass('js_show');
+                } else {
+                    $parent.siblings().removeClass('js_show');
+
+                    $parent.addClass('js_show');
+                    if (this.offsetTop + this.offsetHeight + innerH > $page.scrollTop() + winH) {
+                        var scrollTop = this.offsetTop + this.offsetHeight + innerH - winH + categorySpace;
+
+                        if (scrollTop > this.offsetTop) {
+                            scrollTop = this.offsetTop - categorySpace;
+                        }
+
+                        $page.scrollTop(scrollTop);
+                    }
+                }
+            });
+        });</script>
+    <script type="text/javascript" class="searchbar js_show">
+        $(function () {
+            var $searchBar = $('#searchBar'),
+                $searchResult = $('#searchResult'),
+                $searchText = $('#searchText'),
+                $searchInput = $('#searchInput'),
+                $searchClear = $('#searchClear'),
+                $searchCancel = $('#searchCancel');
+
+            function hideSearchResult() {
+                $searchResult.hide();
+                $searchInput.val('');
+            }
+            function cancelSearch() {
+                hideSearchResult();
+                $searchBar.removeClass('weui-search-bar_focusing');
+                $searchText.show();
+            }
+
+            $searchText.on('click', function () {
+                $searchBar.addClass('weui-search-bar_focusing');
+                $searchInput.focus();
+            });
+            $searchInput
+                .on('blur', function () {
+                    if (!this.value.length) cancelSearch();
+                })
+                .on('input', function () {
+                    if (this.value.length) {
+                        $searchResult.show();
+                    } else {
+                        $searchResult.hide();
+                    }
+                })
+                ;
+            $searchClear.on('click', function () {
+                hideSearchResult();
+                $searchInput.focus();
+            });
+            $searchCancel.on('click', function () {
+                cancelSearch();
+                $searchInput.blur();
+            });
+        });</script>
+</body>
+</html>
