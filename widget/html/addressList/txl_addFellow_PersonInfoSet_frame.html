@@ -123,7 +123,7 @@
 </head>
 <body>
     <div class="loading"></div>
-    <div class="weui-cells weui-cells_form">
+    <!-- <div class="weui-cells weui-cells_form">
         <div class="weui-cell weui-cell_switch">
             <div class="weui-cell__bd">关注对方</div>
             <div class="weui-cell__ft">
@@ -133,7 +133,7 @@
                 </label>
             </div>
         </div>
-    </div>
+    </div> -->
     <div class="weui-cells weui-cells_form mt20">
         <div class="weui-cell weui-cell_switch">
             <div class="weui-cell__bd">不让他看我供的</div>
@@ -153,7 +153,7 @@
                 </label>
             </div>
         </div>
-        <div class="weui-cell weui-cell_switch">
+        <!-- <div class="weui-cell weui-cell_switch">
             <div class="weui-cell__bd">不让他看我的项目</div>
             <div class="weui-cell__ft">
                 <label for="is_project" class="weui-switch-cp">
@@ -161,9 +161,9 @@
                     <div class="weui-switch-cp__box"></div>
                 </label>
             </div>
-        </div>
+        </div> -->
     </div>
-    <div class="weui-cells weui-cells_form mt20">
+    <div id="blockList" class="weui-cells weui-cells_form mt20">
         <div class="weui-cell weui-cell_switch">
             <div class="weui-cell__bd">加入黑名单</div>
             <div class="weui-cell__ft">
@@ -174,7 +174,7 @@
             </div>
         </div>
     </div>
-    <div class="weui-cells">
+    <!-- <div class="weui-cells">
         <a class="weui-cell weui-cell_access" href="javascript:;">
             <div class="weui-cell__bd">
                 <p>投诉</p>
@@ -182,7 +182,7 @@
             <div class="weui-cell__ft">
             </div>
         </a>
-    </div>
+    </div> -->
     <div class="btn mt20">
         <a href="javascript:;" tapmode onclick="delectFell()" class="weui-btn weui-btn_warn">删除</a>
     </div>
@@ -237,6 +237,9 @@
         if (api.pageParam.oneselfPageFlag) {
             $api.css($api.dom('.btn'), 'background-color: #1AAD19');
             $api.text($api.dom('.btn'), '编辑资料');
+        }
+        if (api.pageParam.userFlag) {
+            $api.css($api.byId('blockList'), 'display:none');
         }
         requireData();
     };

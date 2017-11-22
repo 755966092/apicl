@@ -33,11 +33,23 @@
     }
     // 初始化页面
     function initPage() {
-        //    alert(JSON.stringify(api.pageParam))
+           console.log(JSON.stringify(api.pageParam))
         var url;
         if (api.pageParam.type === 'blacklist') {
            // 黑名单列表
             url = '/friendAuth/blackLists'
+        } else if (api.pageParam.type === 'noSupply') {
+            // 不看共
+            url = "/friendAuth/gongLists"
+        } else if (api.pageParam.type === 'noDemand') {
+            // 不看求
+            url = "/friendAuth/qiuLists"
+        } else if (api.pageParam.type === 'noProject') {
+            // 不看项目
+        } else if (api.pageParam.type === 'noCircle') {
+            // 不看圈子
+        } else {
+            // 不看共
         }
         api.ajax({
             url: apiSite + url,
@@ -50,7 +62,6 @@
             }
         }, function(ret, err) {
             console.log(JSON.stringify(ret));
-            console.log(JSON.stringify(err));
             
             if(ret) {
                 if (ret.code === 200) {
@@ -96,12 +107,12 @@
             },
             cellBgColor: '#fff',
             // 搜索框
-            searchBar: {
-                h: 50,
-                bgColor: '#F8F8F8',         //（可选项）搜索条背景色，字符串，默认透明，支持 rgb，rgba，#
-                placeholder: '搜索',      //（可选项）搜索条提示文字，字符串类型，默认空，不传则不显示提示文字
-                textFieldBgColor: '#fff'
-            },
+            // searchBar: {
+            //     h: 50,
+            //     bgColor: '#F8F8F8',         //（可选项）搜索条背景色，字符串，默认透明，支持 rgb，rgba，#
+            //     placeholder: '搜索',      //（可选项）搜索条提示文字，字符串类型，默认空，不传则不显示提示文字
+            //     textFieldBgColor: '#fff'
+            // },
             data: data,
             fixedOn: api.frameName
         }, function (ret, err) {
