@@ -157,6 +157,16 @@
                 //console.log('473'+ JSON.stringify( err ) );
             }
         });
+        db.selectSql({
+            name: 'db_' + $api.getStorage('userToken'),
+            sql: 'SELECT * FROM  tb_chat_' + api.pageParam.userId
+        },function(ret,err){
+            if (ret.status) {
+                console.log(JSON.stringify(ret));
+            }else {
+                api.alert({msg:err.msg});
+            }
+        });
     }
 </script>
 

@@ -296,12 +296,15 @@
         // 更新聊天记录数据库
         db.executeSql({
             name: SQLName,
-            sql: 'UPDATE tb_chat_' + api.pageParam.userId + ' SET head_img_url="' + head_img_url + '" WHERE user_id =' + api.pageParam.userId
+            sql: 'UPDATE tb_chat_' + api.pageParam.userId + ' SET head_img_url="' + head_img_url + '" WHERE messageDirection = "RECEIVE"'
         }, function(ret, err) {
             if (ret.status) {
                 api.sendEvent({
                     name: 'editUserInfoList',
-                    extra: {title: title}
+                    extra: {
+                        title: title,
+                        you_head_img: $api.attr($api.byId('headImg'), 'src') 
+                    }
                 });
             } else {
                 // 没有聊天记录表格的时候

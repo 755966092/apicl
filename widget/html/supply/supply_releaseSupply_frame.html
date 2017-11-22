@@ -339,17 +339,14 @@
         </div>
 
         <script type="text/x-dot-template" id="listT">
-            {{ for (var i = 0; i
-            < it.img.length; i++) { }} <span class="fl imgpage" onclick="openImgPage(this)" data-id='{{=i}}'
-                data-src="{{=it.img[i]}}" style="background: url({{=it.img[i]}})no-repeat;background-size: 1.6rem auto;background-position: center center">
-                </span>
-                {{ }; }} {{?it.img.length==0&&it.video.length==0}}
+            {{ for (var i = 0; i < it.img.length; i++) { }} 
+                <span class="fl imgpage" onclick="openImgPage(this)" data-id='{{=i}}' data-src="{{=it.img[i]}}" style="background: url({{=it.img[i]}})no-repeat;background-size: 1.6rem auto;background-position: center center"></span>
+            {{ }; }} 
+            {{?it.img.length==0&&it.video.length==0}}
                 <img src="../../image/icon_supply/icon_addMedia_1.png" class="addImg" onclick="openImg()" tapmode>
-                <!-- <img  src="../../image/icon_supply/icon_addMedia_2.png"> -->
-                {{??it.video.length==0}}
+            {{??it.video.length==0}}
                 <img src="../../image/icon_supply/icon_addMedia_1.png" class="addImg" onclick="openImg()" tapmode> {{??it.img.length==0}}
-                <!-- <img  src="../../image/icon_supply/icon_addMedia_2.png"> -->
-                {{?}}
+            {{?}}
         </script>
 
 
@@ -736,7 +733,7 @@
         });
     }
     function openImgPage(ele) {
-        var data = $api.attr(ele, 'data-url'),
+        var data = $api.attr(ele, 'data-src'),
             n = parseInt($api.attr(ele, 'data-id'));
         api.openWin({
             name: 'supply_releaseSupply_imgPage_win',

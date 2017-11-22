@@ -5,134 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    <link rel="stylesheet" href="../css/weui.css">
 </head>
 <body>
-    <div class="page__bd">
-        <!--<a href="javascript:;" class="weui-btn weui-btn_primary">点击展现searchBar</a>-->
-        <div class="weui-search-bar weui-search-bar_focusing" id="searchBar">
-            <form class="weui-search-bar__form">
-                <div class="weui-search-bar__box">
-                    <i class="weui-icon-search"></i>
-                    <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
-                    <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
-                </div>
-                <label class="weui-search-bar__label" id="searchText" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">
-                    <i class="weui-icon-search"></i>
-                    <span>搜索</span>
-                </label>
-            </form>
-            <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
-        </div>
-        <div class="weui-cells searchbar-result" id="searchResult" style="display: block; transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">
-            <div class="weui-cell weui-cell_access">
-                <div class="weui-cell__bd weui-cell_primary">
-                    <p>实时搜索文本</p>
-                </div>
-            </div>
-            <div class="weui-cell weui-cell_access">
-                <div class="weui-cell__bd weui-cell_primary">
-                    <p>实时搜索文本</p>
-                </div>
-            </div>
-            <div class="weui-cell weui-cell_access">
-                <div class="weui-cell__bd weui-cell_primary">
-                    <p>实时搜索文本</p>
-                </div>
-            </div>
-            <div class="weui-cell weui-cell_access">
-                <div class="weui-cell__bd weui-cell_primary">
-                    <p>实时搜索文本</p>
-                </div>
-            </div>
-        </div>
+    <p class="newsTime" data-msgId="undefined">下午1:37:30</p>
+    <div data-msgId="" class="other clearfix">
+        <img tapmode onclick="openMemberInfo(this)" data-id="undefined" class="fl otherImg" src="http://img.iinnet.com/Flc1O2g3Rmdcf6Lu6nDbSzb5hw0K?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim">
+        <p data-msgId="" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"
+            data-newsText="[调皮]">
+            <img src="../../image/chatPage/emotion/Expression_13.png" width="20" height="20">
+        </p>
     </div>
-    <script src="../script/jquery.min.js"></script>
-    <script type="text/javascript" class="home js_show">
-        $(function () {
-            var winH = $(window).height();
-            var categorySpace = 10;
 
-            $('.js_item').on('click', function () {
-                var id = $(this).data('id');
-                window.pageManager.go(id);
-            });
-            $('.js_category').on('click', function () {
-                var $this = $(this),
-                    $inner = $this.next('.js_categoryInner'),
-                    $page = $this.parents('.page'),
-                    $parent = $(this).parent('li');
-                var innerH = $inner.data('height');
-                bear = $page;
-
-                if (!innerH) {
-                    $inner.css('height', 'auto');
-                    innerH = $inner.height();
-                    $inner.removeAttr('style');
-                    $inner.data('height', innerH);
-                }
-
-                if ($parent.hasClass('js_show')) {
-                    $parent.removeClass('js_show');
-                } else {
-                    $parent.siblings().removeClass('js_show');
-
-                    $parent.addClass('js_show');
-                    if (this.offsetTop + this.offsetHeight + innerH > $page.scrollTop() + winH) {
-                        var scrollTop = this.offsetTop + this.offsetHeight + innerH - winH + categorySpace;
-
-                        if (scrollTop > this.offsetTop) {
-                            scrollTop = this.offsetTop - categorySpace;
-                        }
-
-                        $page.scrollTop(scrollTop);
-                    }
-                }
-            });
-        });</script>
-    <script type="text/javascript" class="searchbar js_show">
-        $(function () {
-            var $searchBar = $('#searchBar'),
-                $searchResult = $('#searchResult'),
-                $searchText = $('#searchText'),
-                $searchInput = $('#searchInput'),
-                $searchClear = $('#searchClear'),
-                $searchCancel = $('#searchCancel');
-
-            function hideSearchResult() {
-                $searchResult.hide();
-                $searchInput.val('');
-            }
-            function cancelSearch() {
-                hideSearchResult();
-                $searchBar.removeClass('weui-search-bar_focusing');
-                $searchText.show();
-            }
-
-            $searchText.on('click', function () {
-                $searchBar.addClass('weui-search-bar_focusing');
-                $searchInput.focus();
-            });
-            $searchInput
-                .on('blur', function () {
-                    if (!this.value.length) cancelSearch();
-                })
-                .on('input', function () {
-                    if (this.value.length) {
-                        $searchResult.show();
-                    } else {
-                        $searchResult.hide();
-                    }
-                })
-                ;
-            $searchClear.on('click', function () {
-                hideSearchResult();
-                $searchInput.focus();
-            });
-            $searchCancel.on('click', function () {
-                cancelSearch();
-                $searchInput.blur();
-            });
-        });</script>
+    
 </body>
 </html>

@@ -93,6 +93,7 @@
             <span class="winTitle">
                 公司主页
             </span>
+            <span class="rightBtn" tapmode onclick="uploadCertificationInformation()">保存</span>
         </div>
     </header>
     <div class="main">  
@@ -113,9 +114,9 @@
             </div>
         </div>
     </div>
-    <div class="btn">
+    <!-- <div class="btn">
         <button tapmode onclick="uploadCertificationInformation()" class=" weui-btn weui-btn_primary">提交</button>
-    </div>
+    </div> -->
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -162,15 +163,18 @@
     }
     // 上传认证资料
     function uploadCertificationInformation() {
-        // for (var key in imgUrlArr) {
-        //     if (imgUrlArr.hasOwnProperty(key)) {
-        //         var element = imgUrlArr[key];
-        //         if(!element) {
-        //             alert('请完善公司资料');
-        //             break;
-        //         }
-        //     }
-        // }
+        var count = 0
+        for (var key in imgUrlArr) {
+            if (imgUrlArr.hasOwnProperty(key)) {
+                var element = imgUrlArr[key];
+                if(!element) {
+                    count++
+                }
+            }
+        }
+        if (count === 3) {
+            alert('请完善公司资料');
+        }
         var obj = {
             token: $api.getStorage('userToken'),
             company_id: parseInt(api.pageParam.companyId),

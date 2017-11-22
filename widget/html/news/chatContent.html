@@ -461,7 +461,21 @@ apiready = function () {
     updatePage();
     api.addEventListener({
         name: 'editUserInfoList'
-    }, function () {
+    }, function (ret,err) {
+        // db.selectSql({
+        //     name: 'db_' + $api.getStorage('userToken'),
+        //     sql: 'SELECT * FROM  tb_chat_' + api.pageParam.userId
+        // }, function (ret, err) {
+        //     if (ret.status) {
+        //     // console.log('修改默认头像');
+        //     // console.log(JSON.stringify(ret));
+        //     } else {
+        //         api.alert({ msg: err.msg });
+        //     }
+        // });
+    // console.log(JSON.stringify(ret));
+        
+        // youHeadImg = ret.value.you_head_img;
         updatePage();
         // console.log('更新成功更新成功')
     });
@@ -485,22 +499,21 @@ apiready = function () {
             script: news
         });
     });
+    // 接收消息
     api.addEventListener({
         name: 'receiveMsg'
     }, function (ret, err) {
-        // console.log('接受消息后:'+JSON.stringify(ret))
-
         var value = ret.value;
         if (value.targetId == targetRongId) {
             // addReceMsg(ret.value.msg, youHeadImg,0);
             if (value.msgContent.result.message.objectName == 'RC:VcMsg') {
-                addReceVoiceMessages(value.msgContent.result, youHeadImg, 0);
+                addReceVoiceMessages(value.msgContent.result, 0);
             }
             else if (value.msgContent.result.message.objectName == 'RC:TxtMsg') {
-                addReceMsg(value.msg, youHeadImg, 0);
+                addReceMsg(value.msg, 0);
             }
             else if (value.msgContent.result.message.objectName == 'RC:ImgMsg') {
-                addReceImgMessages(value.msgContent.result, youHeadImg, 0);
+                addReceImgMessages(value.msgContent.result, 0);
             }
             else if (value.msgContent.result.message.objectName == 'RC:LBSMsg') {
                 createReceivePositionLabel(value);
@@ -580,7 +593,6 @@ function createSendPositionLabel(msg) {
 }
 
 function createReceivePositionLabel(msg) {
-    // console.log('接受标签参数:'+JSON.stringify(msg));
     var time = new Date(msg.msgContent.result.message.receivedTime).toLocaleDateString() == new Date().toLocaleDateString() ?
         new Date(msg.msgContent.result.message.receivedTime).toLocaleTimeString() : new Date(msg.msgContent.result.message
             .receivedTime).toLocaleString();
@@ -653,26 +665,26 @@ function openPosiPage(ele) {
 function updatePage() {
     nickname = api.pageParam.nickname;
     var sourcePath = 'widget://image/chatPage/emotion'; // 表情存放目录
-    if ($api.getStorage('youHeadImg_' + targetRongId)) {
-        userId = $api.getStorage('userId_' + targetRongId);
-        youHeadImg = $api.getStorage('youHeadImg_' + targetRongId);
-        api.sendEvent({
-            name: 'getUserId',
-            extra: {
-                userId: userId
-            }
-        });
-        getImgsPaths(sourcePath, function (emotion) {
-            emotionData = emotion;
-            getNews();
-        });
-    }
-    else {
+    // if ($api.getStorage('youHeadImg_' + targetRongId)) {
+    //     // userId = $api.getStorage('userId_' + targetRongId);
+    //     // youHeadImg = $api.getStorage('youHeadImg_' + targetRongId);
+    //     api.sendEvent({
+    //         name: 'getUserId',
+    //         extra: {
+    //             userId: userId
+    //         }
+    //     });
+    //     getImgsPaths(sourcePath, function (emotion) {
+    //         emotionData = emotion;
+    //         getNews();
+    //     });
+    // }
+    // else {
         getImgsPaths(sourcePath, function (emotion) {
             emotionData = emotion;
             getSideInfo(targetRongId);
         });
-    }
+    // }
 }
 // 查询数据库
 // 查询网络
@@ -683,30 +695,31 @@ function updatePage() {
     */
 
 function chatRecordingSql(params, flagStr, headImgUrl) {
-    // console.log('接受消息'+JSON.stringify(params)+headImgUrl);
+console.log('接受消息'+JSON.stringify(params)+headImgUrl);
+    var user_id = flagStr === 'sendMsg' ? 1 : api.pageParam.userId
     var myHeadImg = $api.getStorage('imgCache');
-    var youHeadImg = api.pageParam.headImg;
+    // var youHeadImg = api.pageParam.headImg;
     var SQL = 'INSERT OR REPLACE INTO tb_chat_' + api.pageParam.userId +
-        '(messageId, receivedTime, objectName, messageDirection, content_extra, content_text, content_lat, content_lon, content_imagePath, head_img_url, filePath, duration, thumbPath) VALUES ';
+        '(messageId, receivedTime, user_id, objectName, messageDirection, content_extra, content_text, content_lat, content_lon, content_imagePath, head_img_url, filePath, duration, thumbPath) VALUES ';
     if (flagStr === 'sendMsg') {
         // 自己头像
         if (params.result.message.objectName == 'RC:VcMsg') {
-            SQL += '(' + params.result.message.messageId + ',"' + params.result.message.sentTime + '","' + params.result
-                    .message.objectName + '","' + params.result.message.messageDirection + '","' + params.result.message
+            SQL += '(' + params.result.message.messageId + ',"' + params.result.message.sentTime + '","' + user_id + '","' + params.result
+                    .message.objectName   + '","' + params.result.message.messageDirection + '","' + params.result.message
                     .content.extra.replace(/"/g, '') + '","' + (params.result.message.content.text || '') +
                 '",0,0,"","' + myHeadImg + '","' + params.result.message.content.voicePath + '","' + params.result.message
                     .content.duration + '","")';;
         }
         else if (params.result.message.objectName == 'RC:ImgMsg') {
-            SQL += '(' + params.result.message.messageId + ',"' + params.result.message.sentTime + '","' + params.result
-                    .message.objectName + '","' + params.result.message.messageDirection + '","' + params.result.message
+            SQL += '(' + params.result.message.messageId + ',"' + params.result.message.sentTime + '","' + user_id + '","' + params.result
+                    .message.objectName  + '","' + params.result.message.messageDirection + '","' + params.result.message
                     .content.extra.replace(/"/g, '') + '","' + (params.result.message.content.text || '') +
                 '",0,0,"","' + myHeadImg + '","' + params.result.message.content.imageUrl + '","","' + params.result
                     .message.content.thumbPath + '")';
         }
         else if (params.result.message.objectName == 'RC:LBSMsg') {
-            SQL += '(' + params.result.message.messageId + ',"' + params.result.message.sentTime + '","' + params.result
-                    .message.objectName + '","' + params.result.message.messageDirection + '","' + params.result.message
+            SQL += '(' + params.result.message.messageId + ',"' + params.result.message.sentTime + '","' + user_id + '","' + params.result
+                    .message.objectName  + '","' + params.result.message.messageDirection + '","' + params.result.message
                     .content.extra.replace(/"/g, '') + '","' + (params.result.message.content.poi || '') + '",' +
                 params.result.message.content.latitude + ',' + params.result.message.content.longitude + ',"' +
                 params.result.message.content.imagePath + '","' + myHeadImg + '","' + params.result.message.content
@@ -714,8 +727,8 @@ function chatRecordingSql(params, flagStr, headImgUrl) {
                     // console.log(SQL)
         }
         else {
-            SQL += '(' + params.result.message.messageId + ',"' + params.result.message.sentTime + '","' + params.result
-                    .message.objectName + '","' + params.result.message.messageDirection + '","' + params.result.message
+            SQL += '(' + params.result.message.messageId + ',"' + params.result.message.sentTime + '","' + user_id + '","' + params.result
+                    .message.objectName  + '","' + params.result.message.messageDirection + '","' + params.result.message
                     .content.extra.replace(/"/g, '') + '","' + (params.result.message.content.text || '') +
                 '",0,0,"","' + myHeadImg + '","","","")';
         }
@@ -727,15 +740,15 @@ function chatRecordingSql(params, flagStr, headImgUrl) {
         if (params.msgContent.result.message.objectName == 'RC:VcMsg') {
             // 语音消息
             SQL += '(' + params.msgContent.result.message.messageId + ',"' + params.msgContent.result.message.receivedTime +
-                '","' + params.msgContent.result.message.objectName + '","' + params.msgContent.result.message.messageDirection +
+                '","' + user_id + '","' + params.msgContent.result.message.objectName + '","' +  params.msgContent.result.message.messageDirection +
                 '","' + params.msgContent.result.message.content.extra.replace(/"/g, '') + '","' + (params.msgContent
                     .result.message.content.text || '') + '",0,0,"","' + youHeadImg + '","' + params.msgContent.result
-                    .message.content.voicePath + '","' + params.msgContent.result.message.duration + '","")';
+                    .message.content.voicePath + '","' + params.msgContent.result.message.content.duration + '","")';
         }
         else if (params.msgContent.result.message.objectName == 'RC:ImgMsg') {
             // 图片消息
             SQL += '(' + params.msgContent.result.message.messageId + ',"' + params.msgContent.result.message.receivedTime +
-                '","' + params.msgContent.result.message.objectName + '","' + params.msgContent.result.message.messageDirection +
+                '","' + user_id + '","' + params.msgContent.result.message.objectName + '","' +  params.msgContent.result.message.messageDirection +
                 '","' + params.msgContent.result.message.content.extra.replace(/"/g, '') + '","' + (params.msgContent
                     .result.message.content.text || '') + '",0,0,"","' + youHeadImg + '","' + params.msgContent.result
                     .message.content.imageUrl + '","","' + params.msgContent.result.message.content.thumbPath + '")';
@@ -744,7 +757,7 @@ function chatRecordingSql(params, flagStr, headImgUrl) {
             // 位置消息
 
             SQL += '(' + params.msgContent.result.message.messageId + ',"' + params.msgContent.result.message.receivedTime +
-                '","' + params.msgContent.result.message.objectName + '","' + params.msgContent.result.message.messageDirection +
+                '","' + user_id + '","' + params.msgContent.result.message.objectName + '","' +  params.msgContent.result.message.messageDirection +
                 '","' + params.msgContent.result.message.content.extra.replace(/"/g, '') + '","' + (params.msgContent
                     .result.message.content.poi || '') + '",' + params.msgContent.result.message.content.longitude +
                 ',' + params.msgContent.result.message.content.longitude + ',"' + params.msgContent.result.message.content
@@ -755,13 +768,14 @@ function chatRecordingSql(params, flagStr, headImgUrl) {
         else {
             // 文字消息
             SQL += '(' + params.msgContent.result.message.messageId + ',"' + params.msgContent.result.message.receivedTime +
-                '","' + params.msgContent.result.message.objectName + '","' + params.msgContent.result.message.messageDirection +
+                '","' + user_id + '","' + params.msgContent.result.message.objectName + '","' +  params.msgContent.result.message.messageDirection +
                 '","' + params.msgContent.result.message.content.extra.replace(/"/g, '') + '","' + (params.msgContent
                     .result.message.content.text || '') + '",0,0,"","' + youHeadImg + '","","","")';
         }
     }
     else {
     }
+    console.log(SQL)
     SQLStatement(SQL);
 }
 
@@ -769,7 +783,7 @@ function allCahtSql(ret) {
     if (ret.length > 0) {
         // 自己头像
         var myHeadImg = $api.getStorage('imgCache');
-        var youHeadImg = api.pageParam.headImg;
+        // var youHeadImg = api.pageParam.headImg;
         var SQL = 'INSERT OR REPLACE INTO tb_chat_' + api.pageParam.userId +
             '(messageId, receivedTime, objectName, messageDirection, content_extra, content_text, content_lat, content_lon, content_imagePath, head_img_url, filePath, duration, thumbPath) VALUES ';
         for (var i = 0; i < ret.length; i++) {
@@ -797,7 +811,7 @@ function allCahtSql(ret) {
                         element.content.poi || '') + '",' + element.content.latitude + ',' + element.content.longitude +
                         ',"' + element.content.imagePath + '","' + myHeadImg + '","' + element.content.imageUrl +
                         '","","' + element.content.thumbPath + '"),';
-                    console.log(SQL)
+                // console.log(SQL)
                 }
                 else {
                     // 文字
@@ -854,17 +868,17 @@ function SQLStatement(SQL) {
         sql: SQL
     }, function (ret, err) {
         if (ret.status) {
-            // console.log('存入聊天记录表格成功');
-            db.selectSql({
-                name: 'db_'+$api.getStorage('userToken'),
-                sql: 'SELECT * FROM tb_chat_'+ api.pageParam.userId
-            },function(ret,err){
-                if (ret.status) {
-                    // console.log('查询到的结果'+JSON.stringify(ret))
-                }else {
-                    alert('386');
-                }
-            });
+        // console.log('存入聊天记录表格成功');
+            // db.selectSql({
+            //     name: 'db_'+$api.getStorage('userToken'),
+            //     sql: 'SELECT * FROM tb_chat_'+ api.pageParam.userId
+            // },function(ret,err){
+            //     if (ret.status) {
+            //         // console.log('查询到的结果'+JSON.stringify(ret))
+            //     }else {
+            //         alert('386');
+            //     }
+            // });
         }
         else {
             alert('390' + JSON.stringify(err) + JSON.stringify(ret));
@@ -988,7 +1002,7 @@ function openMemberInfo(ele) {
     }
     // alert(userId +'--'+ api.pageParam.userId)
 }
-// 再加上
+// 表情转换
 function getImgsPaths(sourcePathOfChatBox, callback) {
     var jsonPath = 'widget://image/chatPage/emotion/emotion.json'; // 表情的JSON数组
     api.readFile({
@@ -1317,10 +1331,11 @@ function getSideInfo(rongUserId) {
         }
     }, function (ret, err) {
         if (ret) {
-            youHeadImg = ret.data.list[rongUserId].head_img_url +
+            youHeadImg = (ret.data.list[rongUserId].remark_head_img_url === "" ? ret.data.list[rongUserId].head_img_url : ret.data.list[rongUserId].remark_head_img_url ) + 
                 '?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim';
+            
             userId = ret.data.list[rongUserId].user_id;
-            $api.setStorage('youHeadImg_' + targetRongId, youHeadImg);
+            // $api.setStorage('youHeadImg_' + targetRongId, youHeadImg);
             $api.setStorage('userId_' + targetRongId, userId);
             api.sendEvent({
                 name: 'getUserId',
@@ -1344,7 +1359,7 @@ function getNews() {
         sql: 'SELECT * FROM tb_chat_' + api.pageParam.userId + '  ORDER BY receivedTime DESC  LIMIT 20'
     }, function (ret, err) {
         if (ret.status) {
-            console.log(JSON.stringify(ret))
+        console.log(JSON.stringify(ret))
             if (ret.data.length > 0) {
                 renderPageSql(ret.data, 1);
                 contrastMessage(ret.data);
@@ -1514,15 +1529,15 @@ function renderPage(ret) {
             // 消息方向：SEND(发送) 或者 RECEIVE(接受)
             if (ret.result[i].objectName == 'RC:VcMsg') {
                 // 语音
-                addReceVoiceMessages(ret.result[i], youHeadImg, 1);
+                addReceVoiceMessages(ret.result[i], 1);
             }
             else if (ret.result[i].objectName == 'RC:TxtMsg') {
                 // 文字
-                addReceMsg(ret.result[i], youHeadImg, 1);
+                addReceMsg(ret.result[i], 1);
             }
             else if (ret.result[i].objectName == 'RC:ImgMsg') {
                 // 图片
-                addReceImgMessages(ret.result[i], youHeadImg, 1);
+                addReceImgMessages(ret.result[i], 1);
             }
             else if (ret.result[i].objectName == 'RC:LBSMsg') {
                 // 位置
@@ -1565,7 +1580,6 @@ function renderPage(ret) {
 }
 // 预览图片
 function previewImg(ele) {
-    var imgUrl = $api.attr($api.dom(ele, 'img'), 'src');
     api.openFrame({
         name: 'chat_previewImg',
         url: './chat_previewImg.html',
@@ -1576,14 +1590,15 @@ function previewImg(ele) {
             h: 'auto'
         },
         pageParam: {
-            imgUrl: imgUrl
+            imgUrl: $api.attr(ele, 'data-img')
         },
         bounces: false,
         scaleEnabled: true
     });
 }
 // 接收图片消息后新建消息
-function addReceImgMessages(msg, youHeadImg, n) {
+function addReceImgMessages(msg, n) {
+// function addReceImgMessages(msg, youHeadImg, n) {
     if (n == 1) {
         // console.log('历史消息::'+JSON.stringify(msg))
         // 历史消息
@@ -1594,8 +1609,8 @@ function addReceImgMessages(msg, youHeadImg, n) {
         $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
             '</p><div data-msgId="' + msg.messageId +
             '" class="other imgwrap clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
-            '" class="fl otherImg" src="' + api.pageParam.headImg + '"><p data-msgId="' + msg.messageId +
-            '" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="' +
+            '" class="fl otherImg" src="' + youHeadImg + '"><p data-msgId="' + msg.messageId +
+            '" class="fl flex-def flex-cCenter" data-img="'+ msg.content.imageUrl +'" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="' +
             msg.content.imageUrl + '"> </p></div>');
         slideBut();
     }
@@ -1609,8 +1624,8 @@ function addReceImgMessages(msg, youHeadImg, n) {
         $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
             '</p><div data-msgId="' + msg.messageId +
             '" class="other imgwrap clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
-            '" class="fl otherImg" src="' + api.pageParam.headImg + '"><p data-msgId="' + msg.messageId +
-            '" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="' +
+            '" class="fl otherImg" src="' + youHeadImg + '"><p data-msgId="' + msg.messageId +
+            '" class="fl flex-def flex-cCenter" tapmode data-img="' + msg.content.imageUrl +'" onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="' +
             msg.content.imageUrl + '"> </p></div>');
             slideBut()
     }
@@ -1622,15 +1637,17 @@ function addReceImgMessages(msg, youHeadImg, n) {
         $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.message.messageId + '">' + time +
             '</p><div data-msgId="' + msg.message.messageId +
             '" class="other imgwrap clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
-            '" class="fl otherImg" src="' + api.pageParam.headImg + '"><p data-msgId="' + msg.message.messageId +
-            '" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" > <img class="imgNews" src="' +
+            '" class="fl otherImg" src="' + youHeadImg+ '"><p data-msgId="' + msg.message.messageId +
+            '" class="fl flex-def flex-cCenter" data-img="' + msg.message.content.imageUrl +'" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" > <img class="imgNews" src="' +
             msg.message.content.imageUrl + '"></p></div>');
         slideBut();
     }
 }
 // 发送图片消息后新建
 function addSendImgMessages(msg, headImg, n) {
-    msg.content.imageUrl = msg.content.thumbPath;
+    
+    // msg.content.imageUrl = msg.content.thumbPath 缩略图;
+    // thumbPath 缩略图
     if (n == 1) {
         // 历史消息
         var time = new Date(parseInt(msg.sentTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.sentTime, 10))
@@ -1639,7 +1656,7 @@ function addSendImgMessages(msg, headImg, n) {
             '</p><div data-msgId="' + msg.messageId +
             '" class="oneself imgwrap clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' +
             headImg +
-            '"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' +
+            '"><p class="fr flex-def flex-cCenter" tapmode data-img="'+ msg.content.imageUrl +'" onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' +
             msg.messageId + '" ontouchend="gtouchend()"  ><img class="imgNews" src="' + msg.content.imageUrl +
             '"> </p></div>');
         slideBut();
@@ -1652,7 +1669,7 @@ function addSendImgMessages(msg, headImg, n) {
             '</p><div data-msgId="' + msg.messageId +
             '" class="oneself imgwrap clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' +
             headImg +
-            '"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' +
+            '"><p class="fr flex-def flex-cCenter" data-img="'+ msg.content.imageUrl +'" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' +
             msg.messageId + '" ontouchend="gtouchend()"  ><img class="imgNews" src="' + msg.content.imageUrl +
             '"> </p></div>');
             slideBut()
@@ -1669,7 +1686,7 @@ function addSendImgMessages(msg, headImg, n) {
     }
 }
 // 接收语音消息后新建消息
-function addReceVoiceMessages(msg, youHeadImg, n) {
+function addReceVoiceMessages(msg, n) {
     // 当天显示时间
     // 不是当天显示年月日 时分秒
     if (n == 1) {
@@ -1683,7 +1700,7 @@ function addReceVoiceMessages(msg, youHeadImg, n) {
         $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
             '</p><div data-msgId="' + msg.messageId +
             '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
-            '" class="fl otherImg" src="' + api.pageParam.headImg + '"><p data-msgId="' + msg.messageId +
+            '" class="fl otherImg" src="' + youHeadImg + '"><p data-msgId="' + msg.messageId +
             '" class="fl flex-def flex-cCenter" tapmode onclick="playVoice(this)" ontouchstart="gtouchstart(this)" style="width:' +
             widthNum / 4 + 'rem" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-voivePath= "' + msg.content
                 .voicePath +
@@ -1715,7 +1732,7 @@ function addReceVoiceMessages(msg, youHeadImg, n) {
         $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.message.messageId + '">' + time +
             '</p><div data-msgId="' + msg.message.messageId +
             '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
-            '" class="fl otherImg" src="' + api.pageParam.headImg + '"><p data-msgId="' + msg.message.messageId +
+            '" class="fl otherImg" src="' + youHeadImg + '"><p data-msgId="' + msg.message.messageId +
             '" class="fl flex-def flex-cCenter" tapmode onclick="playVoice(this)" style="width:' + widthNum / 4 +
             'rem" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-voivePath= "' +
             msg.message.content.voicePath +
@@ -1846,30 +1863,35 @@ function playVoice2(ele) {
     });
 }
 // 接收消息后新建消息
-function addReceMsg(msg, youHeadImg, n) {
+function addReceMsg(msg, n) {
     // 当天显示时间
     // 不是当天显示年月日 时分秒
-
+    console.log('新建文字消息:'+youHeadImg)
     if (n == 1) {
         // 历史消息
         // 当天显示时间
         // 不是当天显示年月日 时分秒
         var time = new Date(parseInt(msg.sentTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.sentTime, 10))
             .toLocaleTimeString() : new Date(parseInt(msg.sentTime, 10)).toLocaleString();
-        $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
+        var str = '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
             '</p><div data-msgId="' + msg.messageId +
             '" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
-            '" class="fl otherImg" src="' + api.pageParam.headImg + '"><p data-msgId="' + msg.messageId +
+            '" class="fl otherImg" src="' + youHeadImg + '"><p data-msgId="' + msg.messageId +
             '" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "' +
-            msg.content.text + '"> ' + transText(msg.content.text) + '</p></div>');
+            msg.content.text + '"> ' + transText(msg.content.text) + '</p></div>'
+        $api.append($api.dom('.main'), str);
+        console.log(str)
     }
     else {
         // 当前发送的消息
-        $api.append($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + new Date().toLocaleTimeString() +
+        var  str2 = '<p class="newsTime" data-msgId="' + msg.messageId + '">' + new Date().toLocaleTimeString() +
             '</p><div data-msgId="" class="other clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' +
-            api.pageParam.targetUserId + '" class="fl otherImg" src="' + api.pageParam.headImg +
+            api.pageParam.targetUserId + '" class="fl otherImg" src="' + youHeadImg +
             '"><p data-msgId="" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "' +
-            msg + '"> ' + transText(msg) + '</p></div>');
+            msg + '"> ' + transText(msg) + '</p></div>'
+        $api.append($api.dom('.main'), str2);
+        console.log(str2);
+        
     }
     slideBut();
 }
@@ -1911,14 +1933,14 @@ function addSendMsgTop(msg, headImg) {
         ' </p></div>');
 }
 
-function addReceMsgTop(msg, youHeadImg) {
+function addReceMsgTop(msg) {
     // console.log('历史消息2'+JSON.stringify(msg))
     var time = new Date(parseInt(msg.sentTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.sentTime, 10))
         .toLocaleTimeString() : new Date(parseInt(msg.sentTime, 10)).toLocaleString();
     $api.prepend($api.dom('.main'), '<p class="newsTime" data-msgId="' + msg.messageId + '">' + time +
         '</p><div data-msgId="' + msg.messageId +
         '" class="other clearfix"><img class="fl otherImg" tapmode onclick="openMemberInfo(this)" data-id="' +
-        api.pageParam.targetUserId + '" src="' + api.pageParam.headImg +
+        api.pageParam.targetUserId + '" src="' + youHeadImg +
         '"><p class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-msgId="' +
         msg.messageId + '" data-newsText= "' + msg.content.text + '">' + transText(msg.content.text) +
         '</p></div>');
@@ -1963,14 +1985,14 @@ function chatHis() {
                                 // 消息方向：SEND(发送) 或者 RECEIVE(接受)
                                 if (ret.result[i].objectName == 'RC:VcMsg') {
                                     // 语音
-                                    addReceVoiceMessages(ret.result[i], youHeadImg, 2);
+                                    addReceVoiceMessages(ret.result[i], 2);
                                 }
                                 else if (ret.result[i].objectName == 'RC:TxtMsg') {
                                     // 文字
-                                    addReceMsgTop(ret.result[i], youHeadImg, 2);
+                                    addReceMsgTop(ret.result[i], 2);
                                 }
                                 else if (ret.result[i].objectName == 'RC:ImgMsg') {
-                                    addReceImgMessages(ret.result[i], youHeadImg, 2);
+                                    addReceImgMessages(ret.result[i], 2);
                                 }
                                 else {
                                 }
@@ -2162,7 +2184,7 @@ function sqlAddReceImgMessages(msg, n) {
             '</p><div data-msgId="' + msg.messageId +
             '" class="other imgwrap clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
             '" class="fl otherImg" src="' + msg.head_img_url + '"><p data-msgId="' + msg.messageId +
-            '" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="' +
+            '" class="fl flex-def flex-cCenter" data-img="'+ msg.filePath +'" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="' +
             msg.filePath + '"> </p></div>');
         slideBut();
     }
@@ -2176,7 +2198,7 @@ function sqlAddReceImgMessages(msg, n) {
             '</p><div data-msgId="' + msg.messageId +
             '" class="other imgwrap clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
             '" class="fl otherImg" src="' + msg.head_img_url + '"><p data-msgId="' + msg.messageId +
-            '" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="' +
+            '" class="fl flex-def flex-cCenter" data-img="'+ msg.filePath +'" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="' +
             msg.filePath + '"> </p></div>');
             slideBut()
     }
@@ -2188,7 +2210,7 @@ function sqlAddReceImgMessages(msg, n) {
             '</p><div data-msgId="' + msg.message.messageId +
             '" class="other imgwrap clearfix"><img tapmode onclick="openMemberInfo(this)" data-id="' + api.pageParam.targetUserId +
             '" class="fl otherImg" src="' + msg.head_img_url + '"><p data-msgId="' + msg.messageId +
-            '" class="fl flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" > <img class="imgNews" src="' +
+            '" class="fl flex-def flex-cCenter" data-img="'+ msg.filePath +'" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" > <img class="imgNews" src="' +
             msg.filePath + '"></p></div>');
         slideBut();
     }
@@ -2196,6 +2218,7 @@ function sqlAddReceImgMessages(msg, n) {
 }
 // 数据库查询 发送图片消息后新建
 function sqlAddSendImgMessages(msg, n) {
+    
     if (n == 1) {
         // 历史消息
         var time = new Date(parseInt(msg.receivedTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ?
@@ -2204,7 +2227,7 @@ function sqlAddSendImgMessages(msg, n) {
             '</p><div data-msgId="' + msg.messageId +
             '" class="oneself imgwrap clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' +
             msg.head_img_url +
-            '"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' +
+            '"><p class="fr flex-def flex-cCenter" data-img="'+ msg.filePath +'" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' +
             msg.messageId + '" ontouchend="gtouchend()"  ><img class="imgNews" src="' + msg.filePath +
             '"> </p></div>');
         slideBut();
@@ -2231,7 +2254,7 @@ function sqlAddSendImgMessages(msg, n) {
             '</p><div data-msgId="' + msg.messageId +
             '" class="oneself imgwrap clearfix"><img tapmode data-id="1" onclick="openMemberInfo(this)"  class="fr oneselfImg" src="' +
             msg.head_img_url +
-            '"><p class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' +
+            '"><p class="fr flex-def flex-cCenter" data-img="'+ msg.filePath +'" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" data-msgId="' +
             msg.messageId + '" ontouchend="gtouchend()"  ><img class="imgNews" src="' + msg.filePath +
             '"> </p></div>');
         slideBut();
