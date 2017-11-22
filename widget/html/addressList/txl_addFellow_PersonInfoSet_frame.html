@@ -136,7 +136,7 @@
     </div> -->
     <div class="weui-cells weui-cells_form mt20">
         <div class="weui-cell weui-cell_switch">
-            <div class="weui-cell__bd">不让他看我供的</div>
+            <div class="weui-cell__bd">不让TA看我的供应</div>
             <div class="weui-cell__ft">
                 <label for="is_gong" class="weui-switch-cp">
                     <input value="is_gong" onchange="changeState(this)" id="is_gong" class="weui-switch-cp__input" type="checkbox" >
@@ -145,7 +145,7 @@
             </div>
         </div>
         <div class="weui-cell weui-cell_switch">
-            <div class="weui-cell__bd">不让他看我求的</div>
+            <div class="weui-cell__bd">不让TA看我的需求</div>
             <div class="weui-cell__ft">
                 <label for="is_qiu" class="weui-switch-cp">
                     <input value="is_qiu" onchange="changeState(this)" id="is_qiu" class="weui-switch-cp__input" type="checkbox" >
@@ -259,7 +259,6 @@
             if(ret) {
                 if (ret.code === 200) {
                     // 1 是 2 否
-                    console.log(JSON.stringify(ret));
                     initPage(ret)
                 } else {
                     alert(ret.msg)
@@ -333,6 +332,10 @@
         }, function(ret, err) {
             if(ret) {
                 if (ret.code === 200) {
+                    // 刷新黑名单列表
+                    api.sendEvent({
+                        name: 'addBlockList',
+                    });
                     api.toast({
                         msg: '设置成功',
                         duration: 2000,

@@ -885,66 +885,64 @@
     function LocationRegisterLocation() {
         bMap.getLocationServices(function (ret, err) {
             if (ret.enable) {
-                console.log(JSON.stringify(ret));
-            } else {
-                console.log("未开启定位功能！");
-            }
-        });
-        var lat,lon,address;
-        bMap.getLocation({
-            accuracy: '100m',//10m/100m/1km/3km
-            autoStop: true,
-            filter: 1
-        }, function(ret, err){
-            if(ret.status){
-                // alert(JSON.stringify(ret));
-                lon = ret.lon;
-                lat = ret.lat;
-                bMap.getNameFromCoords({
-                    lon: lon,
-                    lat: lat
-                },function(ret,err){
+                var lat,lon,address;
+                bMap.getLocation({
+                    accuracy: '100m',//10m/100m/1km/3km
+                    autoStop: true,
+                    filter: 1
+                }, function(ret, err){
                     if(ret.status){
                         // alert(JSON.stringify(ret));
-                        address = ret.address;
-                        if ($api.getStorage('LocationRegisterLocation')) {
-                        } else {
-                            // 未注册过
-                            api.ajax({
-                                url: apiSite + '/location/registerLocation',
-                                method: 'post',
-                                headers: apiHeader,
-                                data: {
-                                    values: {
-                                        token: $api.getStorage('userToken'),
-                                        latitude: lat,
-                                        longitude: lon,
-                                        address: address
-                                    }
-                                }
-                            }, function(ret, err) {
-                                if(ret) {
-                                    if (ret.code === 200) {
-                                        $api.setStorage('LocationRegisterLocation', 'true');
-                                    } else {
-                                        alert(ret.msg)
-                                    }
+                        lon = ret.lon;
+                        lat = ret.lat;
+                        bMap.getNameFromCoords({
+                            lon: lon,
+                            lat: lat
+                        },function(ret,err){
+                            if(ret.status){
+                                // alert(JSON.stringify(ret));
+                                address = ret.address;
+                                if ($api.getStorage('LocationRegisterLocation')) {
                                 } else {
-                                    alert(err.msg)
+                                    // 未注册过
+                                    api.ajax({
+                                        url: apiSite + '/location/registerLocation',
+                                        method: 'post',
+                                        headers: apiHeader,
+                                        data: {
+                                            values: {
+                                                token: $api.getStorage('userToken'),
+                                                latitude: lat,
+                                                longitude: lon,
+                                                address: address
+                                            }
+                                        }
+                                    }, function(ret, err) {
+                                        if(ret) {
+                                            if (ret.code === 200) {
+                                                $api.setStorage('LocationRegisterLocation', 'true');
+                                            } else {
+                                                alert(ret.msg)
+                                            }
+                                        } else {
+                                            alert(err.msg)
+                                        }
+                                    })
                                 }
-                            })
+                            }
+                        });
+                    }else{
+                        if (err.code == 62) {
+                            api.toast({
+                                msg: '请在系统权限中打开我在定位权限',
+                                duration: 2000,
+                                location: 'bottom'
+                            });
                         }
                     }
                 });
-            }else{
-                console.log(JSON.stringify(err));
-                if (err.code == 62) {
-                    api.toast({
-                        msg: '请在系统权限中打开我在定位权限',
-                        duration: 2000,
-                        location: 'bottom'
-                    });
-                }
+            } else {
+                console.log("未开启定位功能！");
             }
         });
     }

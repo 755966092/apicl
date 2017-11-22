@@ -19,6 +19,7 @@
             </span>
         </div>
     </header>
+    <p class="no_data" id="noData"></p>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -29,21 +30,27 @@
         fnInit();
         moduleInit();
         initPage();
-        openList();
+        api.addEventListener({
+            name: 'addBlockList'
+        }, function(ret, err){
+            initPage();
+        });
     }
     // 初始化页面
     function initPage() {
-           console.log(JSON.stringify(api.pageParam))
-        var url;
+        var url,str;
         if (api.pageParam.type === 'blacklist') {
            // 黑名单列表
-            url = '/friendAuth/blackLists'
+            url = '/friendAuth/blackLists';
+            str = '暂无黑名单'
         } else if (api.pageParam.type === 'noSupply') {
             // 不看共
-            url = "/friendAuth/gongLists"
+            url = "/friendAuth/gongLists";
+            str = '所有人都可看我的供应';
         } else if (api.pageParam.type === 'noDemand') {
             // 不看求
-            url = "/friendAuth/qiuLists"
+            url = "/friendAuth/qiuLists";
+            str = '所有人都可看我的需求';
         } else if (api.pageParam.type === 'noProject') {
             // 不看项目
         } else if (api.pageParam.type === 'noCircle') {
@@ -61,11 +68,14 @@
                 }
             }
         }, function(ret, err) {
-            console.log(JSON.stringify(ret));
-            
             if(ret) {
                 if (ret.code === 200) {
-                    formatTheData(ret.data.list)
+                    if(ret.data.list.length !== 0) {
+                        formatTheData(ret.data.list);
+                    } else {
+                        listContact.close();
+                        $api.text($api.byId('noData'), str);
+                    }
                 } else {
                     alert(ret.msg)
                 }
@@ -192,11 +202,21 @@
             // if (flagText != 'null') {
                 // data[i].subTitle = ((userArr[i].remark_current_company || "" + userArr[i].remark_current_position || "" + userArr[i].remark_current_degree || "") == 'undefined' ? (userArr[i].current_company || "" + userArr[i].current_position || "" + userArr[i].current_degree || "") : (userArr[i].remark_current_company || "" + userArr[i].remark_current_position || "" + userArr[i].remark_current_degree || "")) == 'undefined' ? '000' : (userArr[i].remark_current_company || "" + userArr[i].remark_current_position || "" + userArr[i].remark_current_degree || "") == 'undefined' ? (userArr[i].current_company || "" + userArr[i].current_position || "" + userArr[i].current_degree || "") : (userArr[i].remark_current_company || "" + userArr[i].remark_current_position || "" + userArr[i].remark_current_degree || "")
             // }
-            data[i].current_contact =  userArr[i].company_name;
-            data[i].position = userArr[i].position;
+            if (userArr[i].company_name) {
+                data[i].current_contact = userArr[i].company_name
+            } else {
+                data[i].current_contact = userArr[i].current_company
+            }
+            if (userArr[i].position) {
+                data[i].position = userArr[i].position
+            } else {
+                data[i].position = userArr[i].current_position
+            }
+            // data[i].current_contact =  userArr[i].company_name || userArr[i].current_company;
+            // data[i].position = userArr[i].position || userArr[i].current_position;
             data[i].title = userArr[i].ur_nickname? userArr[i].ur_nickname : userArr[i].nickname;
             data[i].img = userArr[i].head_img_url;
-            data[i].subTitle = (data[i].current_contact || "") +' '+ (data[i].position || "");
+            // data[i].subTitle = (data[i].current_contact || "") +' '+ (data[i].position || "");
             data[i].user_id = userArr[i].user_id;
             data[i].litter = PinyinHelper.getShortPinyin(data[i].title).toUpperCase();
             data[i].titleSize = 15;
