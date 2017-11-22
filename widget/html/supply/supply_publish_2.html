@@ -252,7 +252,7 @@
         }, function(ret, err) {
             page_num = 1;
             //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
-            requireData(condition);
+            requireData(condition, 'setCustomRefreshHeaderInfo');
         });
         api.addEventListener({
             name: 'editSupplyAfter'
@@ -413,7 +413,11 @@
 
     }
     // 渲染页面
-    function renderPage(ret) {
+    function renderPage(ret, bottomFlag) {
+           
+        if (bottomFlag === 'setCustomRefreshHeaderInfo') {
+            dataList = [];
+        }
         for (var i = 0; i < ret.data.list.length; i++) {
             // 解析图片json
             ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
@@ -515,7 +519,7 @@
     }
 
     // 请求数据
-    function requireData(data) {
+    function requireData(data,bottomFlag) {
         // console.log('参数:::'+JSON.stringify(data))
         var data = data || {};
         var latitude, longitude, latitudeNum, longitudeNum;
@@ -534,7 +538,7 @@
                     // console.log(JSON.stringify(supplyCache))
                     getData(supplyCache);
                 }
-                renderData(data, supplyCache);
+                renderData(data, supplyCache, bottomFlag);
             } else {
                 var supplyCache = $api.getStorage('supply_publish_2');
                 if (supplyCache) {
@@ -542,7 +546,7 @@
                     getData(supplyCache);
                     selfAdaption();
                 }
-                renderData(data, supplyCache);
+                renderData(data, supplyCache, bottomFlag);
                 $api.css($api.dom('.loading'), 'display: none');
                 api.refreshHeaderLoadDone()
             }
@@ -550,7 +554,7 @@
         //     }
         // }
     }
-    function renderData(data, supplyCache) {
+    function renderData(data, supplyCache, bottomFlag) {
         api.ajax({
             url: apiSite + '/demand/index',
             method: 'post',
@@ -576,7 +580,7 @@
                 if (supplyCache === ret.data.list) {
 
                 } else {
-                    renderPage(ret);
+                    renderPage(ret, bottomFlag);
                     $api.setStorage('supply_publish_2', ret.data.list);
                     if (ret.data.list.length < 15) {
                         $api.css($api.dom('.bbottomLoading'), 'display: none');

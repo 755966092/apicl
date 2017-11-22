@@ -129,6 +129,20 @@
                 </div>
             {{~}}
             
+            {{?it.verify.length!=0}}
+                <p class="workCertification">认证中</p>
+            {{?}}
+            {{~it.verify:value:index}}
+                <div class="weui-cells">
+                    <a class="weui-cell weui-cell_access" href="javascript:;" data-adminId="{{=value.admin_id}}" data-name="{{=value.company_name}}" tapmode onclick="openCompanyInfoPage(this)" data-id="{{=value.company_id}}" data-statu='2' data-val="wrz">
+                        <div class="weui-cell__bd">
+                            <p>{{=value.company_name}}</p>
+                        </div>
+                        <div class="weui-cell__ft">
+                        </div>
+                    </a>
+                </div>
+            {{~}}
         </script>
         <div class="icon_xl"></div>
 
@@ -149,7 +163,8 @@ apiready = function() {
 function requireData() {
     var obj = {
         is_verify:[],
-        no_verify:[]
+        no_verify:[],
+        verify:[]
     }
     api.ajax({
         url: apiSite + '/user_center/workList',
@@ -167,9 +182,12 @@ function requireData() {
                 console.log(JSON.stringify(ret))
                 for (var i = 0; i < ret.data.list.length; i++) {
                     var element = ret.data.list[i];
-                    if (element.is_verify !== -1) {
+                    if (element.is_verify === 1) {
                         // 审核通过
                         obj.is_verify.push(element)
+                    } else if (element.is_verify === 0) {
+                        // 审核中
+                        obj.verify.push(element)
                     } else {
                         obj.no_verify.push(element)
                     }

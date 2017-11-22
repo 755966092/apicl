@@ -8,115 +8,7 @@
     <link rel="stylesheet" type="text/css" href="../../../css/weui.css"/>
     <style>
 
-         .main_no1 .wrap{
-            padding-left:  .36rem;
-            background-color: #fff;
-        }
-        .main_no1 p, .main_no2 p {
-            background-color: #fff;
-            height: .8rem;
-            line-height: .8rem;
-            border-bottom: .01rem solid #d9d9d9;
-            font-size: .28rem;
-            /*padding: 0 .3rem;*/
-            padding-right: .36rem;
-
-        }
-        .main_no1 p.time {
-            padding: 0 .36rem;
-        }
-        .main_no1 p span.select {
-            display: inline-block;
-        }
-        button {
-            display: block;
-            width: 7.2rem;
-            height: .95rem;
-            background-color: #08BB08;
-            color: #fff;
-            font-size: .34rem;
-            margin-top: 4rem;
-            margin: 0 auto;
-        }
-        .main_no3 {
-            width: 6.785rem;
-            height: .841rem;
-            border-radius: .06rem;
-            background-color: #27B24A;
-            border: .01rem solid #27B24A;
-            margin: 0 auto;
-            line-height: .841rem;
-            text-align: center;
-            font-size: .34rem;
-            color: #fff;
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-        }
-
-
-
-        .mobile {
-            height: .6rem;
-            font-size: .28rem;
-            color: #999;
-            line-height: .6rem;
-            padding-left: .3rem;
-        }
-        .telIpt {
-            height: .8rem;
-            /*margin-left: .5rem;*/
-            outline: none;
-            float: right;
-            width: 4rem;
-            text-align: right;
-            padding-right: .4rem;
-        }
-        span.telIpt {
-            display: inline-block;
-            font-size: .3rem;
-            color: #B1A9AB;
-            height: .8rem;
-            /*background: url(../../../image/icon_zk.png)no-repeat;*/
-            background-size: .15rem .25rem;
-            background-position: right  center;
-
-        }
-        .clearIpt {
-            display: none;
-            width: .24rem;
-            height: .8rem;
-            background: url(../../../image/icon_login/icon-clearText.png)no-repeat;
-            background-size: .24rem .24rem;
-            background-position: 0 center;
-            float: right;
-        }
-       textarea {
-        background-color: #fff;
-        text-align: left;
-        width: 100%;
-        font-size: .3rem;
-        resize: none;
-
-        color: #000;
-        padding: .2rem .3rem;
-        box-sizing: border-box;
-        outline: none;
-       }
-       #textLength {
-        background-color: #fff;
-        width: 100%;
-        padding-right:.3rem ;
-        margin: 0;
-        text-align: right;
-        border-top: .01rem solid #EFEFEF;
-       }
-       #over {
-        display: none;
-        color: #129F13;
-       }
-       .wrap {
-           position: relative;
-       }
+      
        .dropDownList {
            position: absolute;
            background-color: #fff;
@@ -138,6 +30,10 @@
        .weui-cell {
            position: relative;
        }
+       .page__bd_spacing {
+           box-sizing: border-box;
+           padding: 1rem .15rem 0;
+        }
     </style>
 </head>
 <body>
@@ -223,15 +119,24 @@
                 </div>
             </div>
         </div>
-        <div class="main clearfix" style="font-size: 0">
-            <div class="weui-cells__title">经历描述</div>
+        <div class="weui-cells__title">经历描述</div>
+        <!-- <div class="main clearfix" style="font-size: 0">
             <textarea rows="6" placeholder="主要经历" id="textarea" maxlength="300" onkeyup="changeText(this)"></textarea>
             <p class="mobile fr" id="textLength"> 0/300</p>
+        </div> -->
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <textarea id="textarea" class="weui-textarea" placeholder="请输入文本" rows="3" maxlength="200" oninput="changeText(this)"></textarea>
+                    <div class="weui-textarea-counter">
+                        <span id="textLength">0</span>/200</div>
+                </div>
+            </div>
         </div>
     </div>
-     <div class="main_no3" id="main_no3"   tapmode   onclick="addStudy()">
-           保存
-       </div>
+    <div class="page__bd page__bd_spacing">
+        <a href="javascript:;" class="weui-btn weui-btn_primary" id="main_no3" tapmode onclick="addStudy()">保存</a>
+    </div>
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
@@ -274,7 +179,7 @@
                 $api.text($api.byId('time_1'), ret.data.info.start_date);
                 $api.text($api.byId('time_2'), ret.data.info.end_date);
                 $api.val($api.byId('textarea'), ret.data.info.description);
-                $api.text($api.byId('textLength'), ret.data.info.description.length + '/300');
+                $api.text($api.byId('textLength'), ret.data.info.description.length);
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -350,7 +255,7 @@
     // 编辑文本和修改文本长度内容
     function changeText(ele) {
         // alert();
-        $api.text($api.byId('textLength'), ele.value.length + '/300');
+        $api.text($api.byId('textLength'), ele.value.length);
     }
     // 打开时间选择器
     function selectTime(ele) {

@@ -1224,20 +1224,24 @@ function openPicture(type) {
     });
 }
 // 发送图片消息
-function sendImg(ret) {
+function sendImg(img) {
   // console.log(JSON.stringify(ret))
     var retprepare;
     rong.sendImageMessage({
         conversationType: 'PRIVATE',
         targetId: targetRongId,
-        imagePath: ret.data,
+        imagePath: img.data,
         extra: ''
     }, function (ret, err) {
         if (ret.status == 'prepare') {
+            console.log('1237:'+JSON.stringify(ret))
             retprepare = ret;
+            retprepare.result.message.content.imageUrl  =  img.data;
             addSendImgMessages(retprepare.result.message, headImg, 1);
         } else if (ret.status == 'progress') {
         } else if (ret.status == 'success') {
+            console.log("1242:"+JSON.stringify(ret));
+            
             chatRecordingSql(retprepare, 'sendMsg', headImg);
             // 发送成功
         } else if (ret.status == 'error') {
@@ -1397,7 +1401,6 @@ function getNews() {
         sql: 'SELECT * FROM tb_chat_' + api.pageParam.userId + '  ORDER BY receivedTime DESC  LIMIT 20'
     }, function (ret, err) {
         if (ret.status) {
-        console.log(JSON.stringify(ret))
             if (ret.data.length > 0) {
                 renderPageSql(ret.data, 1);
                 contrastMessage(ret.data);
@@ -1628,7 +1631,7 @@ function previewImg(ele) {
             h: 'auto'
         },
         pageParam: {
-            imgUrl: $api.attr(ele, 'data-img')
+            imgUrl: $api.attr($api.dom(ele, 'img'), 'src')
         },
         bounces: false,
         scaleEnabled: true
@@ -1683,8 +1686,10 @@ function addReceImgMessages(msg, n) {
 }
 // 发送图片消息后新建
 function addSendImgMessages(msg, headImg, n) {
-    
     // msg.content.imageUrl = msg.content.thumbPath 缩略图;
+    // if (api.systemType==='ios') {
+    //     msg.content.imageUrl = msg.content.thumbPath;
+    // }
     // thumbPath 缩略图
     if (n == 1) {
         // 历史消息
@@ -1904,7 +1909,7 @@ function playVoice2(ele) {
 function addReceMsg(msg, n) {
     // 当天显示时间
     // 不是当天显示年月日 时分秒
-    console.log('新建文字消息:'+youHeadImg)
+    // console.log('新建文字消息:'+youHeadImg)
     if (n == 1) {
         // 历史消息
         // 当天显示时间
@@ -1918,7 +1923,6 @@ function addReceMsg(msg, n) {
             '" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "' +
             msg.content.text + '"> ' + transText(msg.content.text) + '</p></div>'
         $api.append($api.dom('.main'), str);
-        console.log(str)
     }
     else {
         // 当前发送的消息
@@ -1928,7 +1932,6 @@ function addReceMsg(msg, n) {
             '"><p data-msgId="" class="fl flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" data-newsText= "' +
             msg + '"> ' + transText(msg) + '</p></div>'
         $api.append($api.dom('.main'), str2);
-        console.log(str2);
         
     }
     slideBut();
@@ -1998,16 +2001,19 @@ var countId = 20;
 function chatHis() {
     // messageId -= 20;
     var count = messageId > 20 ? 20 : messageId;
-    if (messageId > 0) {
+    console.log(messageId);
+    if (messageId > 1) {
         db.selectSql({
             name: 'db_' + $api.getStorage('userToken'),
             sql: 'SELECT * FROM tb_chat_' + api.pageParam.userId + '  ORDER BY receivedTime DESC LIMIT ' +
                 (countId) + ',20'
         }, function (ret, err) {
             if (ret.status) {
+                console.log('数据库聊天记录:'+JSON.stringify(ret));
                 countId += 20;
                 if (ret.data.length > 0) {
                     renderPageSql(ret.data, 2);
+                    messageId = ret.data[ret.data.length - 1].messageId;
                 }
                 else {
                     rong.getHistoryMessages({
@@ -2017,6 +2023,8 @@ function chatHis() {
                         oldestMessageId: messageId,
                         count: count
                     }, function (ret, err) {
+                        console.log('网路聊天记录:'+JSON.stringify(ret));
+                        
                         allCahtSql(ret.result);
                         for (var i = 0; i < ret.result.length; i++) {
                             if (ret.result[i].messageDirection == 'RECEIVE') {

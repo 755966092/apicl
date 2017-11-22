@@ -129,6 +129,43 @@
     // 初始化页面
     function initPage() {
          $api.text($api.dom('h3'), api.pageParam.name);
+         api.ajax({
+             url: apiSite + '/userCenter/workDetails',
+             method: 'post',
+             headers: apiHeader,
+             data: {
+                 values: { 
+                     token: $api.getStorage('userToken'),
+                     statu: 2,
+                     company_id: parseInt(api.pageParam.companyId),
+                 }
+             }
+         }, function(ret, err) {
+             if(ret) {
+                 if (ret.code === 200) {
+                     // 工牌
+                     if (ret.data.list.identity !== null) {
+                        setStyle('identity', ret.data.list.identity);
+                        imgUrlArr.identity = ret.data.list.identity;
+                     }
+                     // 委托书
+                     if (ret.data.list.authorization !== null) {
+                         setStyle('authorization', ret.data.list.authorization);
+                         imgUrlArr.authorization = ret.data.list.authorization;
+                     }
+                     // 营业执照
+                     if (ret.data.list.business_license !== null) {
+                         setStyle('business_license', ret.data.list.business_license);
+                         imgUrlArr.business_license = ret.data.list.business_license;
+                     }
+                     
+                 } else {
+                     alert(ret.msg)
+                 }
+             } else {
+                 alert(JSON.stringify(err))
+             }
+         })
     }
     var imgUrlArr = {
         identity:'',
@@ -140,27 +177,29 @@
         api.addEventListener({
             name: 'sendEvent_identity'
         }, function(ret, err){
-            setStyle('identity', ret);
+            setStyle('identity', ret.value.imgUrl);
             imgUrlArr.identity = ret.value.imgWebUrl;
         });
         api.addEventListener({
             name: 'sendEvent_business_license'
         }, function(ret, err){
-            setStyle('business_license', ret);
+            setStyle('business_license', ret.value.imgUrl);
             imgUrlArr.business_license = ret.value.imgWebUrl;
         });
         api.addEventListener({
             name: 'sendEvent_authorization'
         }, function(ret, err){
-            setStyle('authorization', ret);
+            setStyle('authorization', ret.value.imgUrl);
             imgUrlArr.authorization = ret.value.imgWebUrl;
         });
     }
     // 设置图片
-    function setStyle(className, ret) {
-            $api.css($api.dom('.'+className), 'background: url(' + ret.value.imgUrl + ')no-repeat;-webkit-background-size: 2.74rem auto;background-size: 2.74rem auto;background-position: center center;');
-            $api.attr($api.dom('.'+className), 'data-url', ret.value.imgUrl);
+    function setStyle(className, imgUrl) {
+        console.log(imgUrl)
+            $api.css($api.dom('.'+className), 'background: url(' + imgUrl + ')no-repeat;-webkit-background-size: 2.74rem auto;background-size: 2.74rem auto;background-position: center center;');
+            $api.attr($api.dom('.'+className), 'data-url', imgUrl);
     }
+    
     // 上传认证资料
     function uploadCertificationInformation() {
         var count = 0
@@ -197,6 +236,9 @@
                         duration: 2000,
                         location: 'bottom'
                     });
+                    setTimeout(() => {
+                        api.closeWin();
+                    }, 1000);
                 } else {
                     alert(ret.msg)
                 }
