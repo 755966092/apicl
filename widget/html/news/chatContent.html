@@ -332,9 +332,20 @@
         border: 0;
     }
     /* 拖消息气泡 */
-
+    .recording {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;height: 100%;
+        background:  url(../../image/chatPage/icon_recording.gif)no-repeat;
+        
+        background-size: 2.72rem 2.72rem;background-position: center;
+        display: none;
+        z-index: 9999;
+    }
     </style>
 </head>
+
 <body id="body" ontouchstart="closeDiv1();">
     <div class="supply_info hide flex-def flex-cCenter" tapmode="" onclick="openSupplyPage(this)">
         <img id="userImgUrl" src="../../image/noimage.jpg">
@@ -352,6 +363,7 @@
     <p class="promptText">
         请勿发布违法违规内容，共同营造文明和谐的聊天环境
     </p>
+    <div class="recording"></div>
     <div class="main">
         <!-- <div class="oneself clearfix">
             <div class="time">04:19</div>
@@ -695,7 +707,7 @@ function updatePage() {
     */
 
 function chatRecordingSql(params, flagStr, headImgUrl) {
-console.log('接受消息'+JSON.stringify(params)+headImgUrl);
+// console.log('接受消息'+JSON.stringify(params)+headImgUrl);
     var user_id = flagStr === 'sendMsg' ? 1 : api.pageParam.userId
     var myHeadImg = $api.getStorage('imgCache');
     // var youHeadImg = api.pageParam.headImg;
@@ -775,7 +787,6 @@ console.log('接受消息'+JSON.stringify(params)+headImgUrl);
     }
     else {
     }
-    console.log(SQL)
     SQLStatement(SQL);
 }
 
@@ -1237,11 +1248,14 @@ function sendImg(ret) {
 }
 // 监听录音按钮
 function boxChatEventListener() {
+    
     UIChatBox.addEventListener({
         target: 'recordBtn',
         name: 'press'
     }, function (ret, err) {
         if (ret) {
+            $api.css($api.dom('.recording'), 'background:  url(../../image/chatPage/icon_recording.gif)no-repeat;background-size: 2.72rem 2.72rem;background-position: center;');
+            $api.css($api.dom('.recording'), 'display: block');
             // 开始录音
             api.startRecord();
         }
@@ -1251,9 +1265,33 @@ function boxChatEventListener() {
     });
     UIChatBox.addEventListener({
         target: 'recordBtn',
+        name: 'move_out'
+    }, function(ret,err){
+        // console.log( '按下录音按钮后，从按钮移出');
+        $api.css($api.dom('.recording'), 'background:  url(../../image/chatPage/icon_recording2.png)no-repeat;background-size: 2.72rem 2.72rem;background-position: center;');
+    });
+    UIChatBox.addEventListener({
+        target: 'recordBtn',
+        name: 'move_out_cancel'
+    }, function(ret,err){
+        // console.log( '按下录音按钮后，从按钮移出并松开按钮');
+        $api.css($api.dom('.recording'), 'display: none');
+        api.stopRecord();
+    });
+    UIChatBox.addEventListener({
+        target: 'recordBtn',
+        name: 'move_in'
+    }, function(ret,err){
+        // console.log( 'ove_out 事件后，重新移入按钮区域');
+        $api.css($api.dom('.recording'), 'background:  url(../../image/chatPage/icon_recording.gif)no-repeat;background-size: 2.72rem 2.72rem;background-position: center;');
+    });
+    UIChatBox.addEventListener({
+        target: 'recordBtn',
         name: 'press_cancel'
     }, function (ret, err) {
         if (ret) {
+            $api.css($api.dom('.recording'), 'display: none');
+            $api.css($api.dom('.recording'), 'background:  url(../../image/chatPage/icon_recording.gif)no-repeat;background-size: 2.72rem 2.72rem;background-position: center;');
             api.stopRecord(function (ret, err) {
                 if (ret) {
                     // 停止录音
