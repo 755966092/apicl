@@ -505,7 +505,6 @@
         }, function(ret, err) {
             if (ret) {
                 if (ret.code == 200) {
-                    // console.log('获取线上备注信息:::' + JSON.stringify(ret))
                     api.ajax({
                         url: apiSite + '/user/detail',
                         method: 'post',
@@ -518,7 +517,6 @@
                         }
                     }, function(retDetail, errDetail) {
                         if (retDetail) {
-                            // console.log('线上原始信息:::' + JSON.stringify(data))
                             infoComparison(data, retDetail.data.info);
                             infoComparison2(ret.data.info, retDetail.data.info);
                             relationship_level_flag = retDetail.data.relationship_level;
@@ -1075,7 +1073,7 @@
         }, function(ret, err) {
             if (ret.status) {
                 if (ret.data.length != 0) {
-                    // console.log('数据库:::' + JSON.stringify(ret))
+                    console.log('数据库:::' + JSON.stringify(ret))
                         // 电话
                     if (ret.data[0].remark_current_contact) {
                         $api.text(phone, ret.data[0].remark_current_contact);

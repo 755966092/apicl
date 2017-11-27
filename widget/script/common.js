@@ -65,7 +65,6 @@ function exitApp() {
 
 //初始化
 var header, headerH;
-
 function fnInit() {
 	header = $api.dom("header");
 	$api.fixStatusBar(header);

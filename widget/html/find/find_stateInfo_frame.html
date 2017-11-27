@@ -163,6 +163,7 @@
         .content .wrap img {
             width: 6.9rem;
             margin: .1rem;
+            pointer-events: none;
         }
         .content .time {
             font-size: .24rem;
@@ -355,7 +356,7 @@
                     <p class="textContent">{{=it.info.topic_info.content}}</p>
                     {{?it.info.topic_info.image_json!=null}}
                         {{ for(var i=0; i< it.info.topic_info.image_json.length; i++){ }}
-                            <img src="{{=it.info.topic_info.image_json[i]}}" tapmode onclick="openImgView(this)">
+                            <img src="{{=it.info.topic_info.image_json[i]}}" tapmode onclick="openImgView(this);event.stopPropagation();">
                         {{ }; }}
                     {{?}}
                 </div>
@@ -373,7 +374,7 @@
                 {{ for(var i = 0; i < it.list.length; i++){ }}
                     <div class="discussContent flex-def ">
                         <div class="img flex-def flex-cStart">
-                            <img src="{{=it.list[i].head_img_url}}" tapmode onclick="openUserInfoPage(this)" data-id="{{=it.list[i].user_id}}">
+                            <img src="{{=it.list[i].head_img_url}}" tapmode onclick="openUserInfoPage(this);event.stopPropagation();" data-id="{{=it.list[i].user_id}}">
                         </div>
                         <div class="flex-item">
                             <div class="discussTitle flex-def flex-zBetween flex-cCenter">
@@ -394,13 +395,13 @@
     </script>
    <div class="selRoleList">
        <ul>
-           <li ontouchstart="selRoleList(this)">关系人</li>
-           <li ontouchstart="selRoleList(this)">知情人</li>
-           <li ontouchstart="selRoleList(this)">甲方</li>
-           <li ontouchstart="selRoleList(this)">总包单位</li>
-           <li ontouchstart="selRoleList(this)">分包单位</li>
-           <li ontouchstart="selRoleList(this)">设计院</li>
-           <li ontouchstart="selRoleList(this)">销售</li>
+           <li tapmode onclick="selRoleList(this);event.stopPropagation();">关系人</li>
+           <li tapmode onclick="selRoleList(this);event.stopPropagation();">知情人</li>
+           <li tapmode onclick="selRoleList(this);event.stopPropagation();">甲方</li>
+           <li tapmode onclick="selRoleList(this);event.stopPropagation();">总包单位</li>
+           <li tapmode onclick="selRoleList(this);event.stopPropagation();">分包单位</li>
+           <li tapmode onclick="selRoleList(this);event.stopPropagation();">设计院</li>
+           <li tapmode onclick="selRoleList(this);event.stopPropagation();">销售</li>
        </ul>
    </div>
     <footer class="flex-def">
