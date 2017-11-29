@@ -79,7 +79,7 @@
     </style>
 </head>
 <body>
-    <div class="warp"   tapmode   onclick="api.closeFrame()">
+    <div class="warp"   tapmode   onclick="closeFrameFn()">
         <div class="main"   tapmode   onclick="event.stopPropagation();">
             <p class="title">全部评论方式</p>
            <div class="discussType">
@@ -98,7 +98,15 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
-
+    
+    function closeFrameFn() {
+        api.sendEvent({
+            name: 'circleTopicComment'
+        });
+        setTimeout(() => {
+            api.closeFrame();
+        }, 300);
+    }
     apiready = function(){
 
     };
@@ -140,10 +148,17 @@
             }
         }, function(ret, err) {
             if(ret) {
-                // alert(JSON.stringify(ret))
-               api.sendEvent({
-                   name: 'circleTopicComment'
-               });
+                if(ret.code == 200) {
+                    api.sendEvent({
+                        name: 'circleTopicComment'
+                    });
+                    setTimeout(() => {
+                        api.closeFrame();
+                    }, 300);
+                } else {
+                    alert(ret.msg)
+                }
+                
                 //console.log(JSON.stringify(obj))
             } else {
                 alert(JSON.stringify(err.msg))

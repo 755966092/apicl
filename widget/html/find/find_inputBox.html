@@ -26,15 +26,19 @@
   
     apiready = function(){
         moduleInit()
-        
-         openInputBox();
-        
-        
+        openInputBox();
         api.addEventListener({
             name:'tap'
         }, function(ret, err){        
            UIChatBox.close();
            //console.log(111)
+           api.closeFrame();
+        });
+        api.addEventListener({
+            name:'circleTopicComment'
+        }, function(ret, err){        
+           UIChatBox.close();
+           console.log(111)
            api.closeFrame();
         });
     };

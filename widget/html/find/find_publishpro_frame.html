@@ -374,7 +374,7 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
                     }, function(ret, err) {
                         if(ret) {
                             if (ret.code != 200) {
-                                alert(ret.msg)
+                                alert(ret.msg+'111')
                             } else {
                                 // alert(JSON.stringify(ret))
                                 api.execScript({
@@ -565,7 +565,19 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
                 // console.log('540540540'+JSON.stringify(ret))
                 getCoords(ret.lon, ret.lat)
             } else {
-                alert(err);
+                if (err.code == 62) {
+                    api.toast({
+                        msg: '请在系统设置中打开我在定位权限',
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                } else {
+                    api.toast({
+                        msg: '获取位置失败',
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                }
             }
         });
     }
