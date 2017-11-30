@@ -235,34 +235,53 @@
         var time_2 = $api.text($api.byId('time_2'))=='至今'?'0000-00-00':$api.text($api.byId('time_2'));
         var textarea = $api.val($api.byId('textarea'));
         var textarea2 = $api.val($api.byId('textarea2'));
-
-         api.ajax({
-            url: apiSite + url,
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: {
-                    token: $api.getStorage('userToken'),
-                    remark_user_id: api.pageParam.userId,
-                    project_id: api.pageParam.project_id,
-                    name: name,
-                    url: project_url,
-                    role: position,
-                    description: textarea,
-                    achievement:　textarea2,
-                    start_date: time_1,
-                    end_date: time_2
+        if(time_1 === '请选择' || time_2 === '请选择') {
+            alert("请选择时间")
+            $api.css($api.dom('.loading'), 'display: none');
+        } else if (textarea == '') {
+            alert("请填写项目描述")
+            $api.css($api.dom('.loading'), 'display: none');
+        } else if (textarea2 == '') {
+            alert("请填写业绩描述")
+            $api.css($api.dom('.loading'), 'display: none');
+        } else if (position == '') {
+            alert("请填写项目角色")
+            $api.css($api.dom('.loading'), 'display: none');
+        } else if (name == '') {
+            alert("请填写项目名称")
+            $api.css($api.dom('.loading'), 'display: none');
+        } else if (project_url == '') {
+            alert("请填写项目URL")
+            $api.css($api.dom('.loading'), 'display: none');
+        } else {
+            api.ajax({
+                url: apiSite + url,
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: {
+                        token: $api.getStorage('userToken'),
+                        remark_user_id: api.pageParam.userId,
+                        project_id: api.pageParam.project_id,
+                        name: name,
+                        url: project_url,
+                        role: position,
+                        description: textarea,
+                        achievement:　textarea2,
+                        start_date: time_1,
+                        end_date: time_2
+                    }
                 }
-            }
-        }, function(ret, err) {
-            if (ret.code == 200) {
-                $api.css($api.dom('.loading'), 'display: none');
-                insertData();
-                api.closeWin();
-            } else {
-                alert(ret.msg);
-            }
-        });
+            }, function(ret, err) {
+                if (ret.code == 200) {
+                    $api.css($api.dom('.loading'), 'display: none');
+                    insertData();
+                    api.closeWin();
+                } else {
+                    alert(ret.msg);
+                }
+            });
+        }
 
     }
      function insertData() {

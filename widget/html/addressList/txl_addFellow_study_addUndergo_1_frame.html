@@ -336,10 +336,22 @@
             }
         }
         //console.log(JSON.stringify(obj))
-        if (time_1 == '请选择' || time_2 == '请选择') {
+        if (time_1 == '请选择' || time_2 == '请选择') { 
             alert('请填写时间');
             $api.css($api.dom('.loading'), 'display: none');
-        } else {
+        } else if (major == '') {
+            alert("请填写专业")
+            $api.css($api.dom('.loading'), 'display: none');
+        } else if (selectEdu == '') {
+            alert("请选择学历")
+            $api.css($api.dom('.loading'), 'display: none');
+        } else if (textarea == '') {
+            alert("请填写在校经历")
+            $api.css($api.dom('.loading'), 'display: none');
+        } else if (school == '') {
+            alert("请填写学校名称")
+            $api.css($api.dom('.loading'), 'display: none');
+        }else {
             api.ajax({
                 url: apiSite + url,
                 method: 'post',

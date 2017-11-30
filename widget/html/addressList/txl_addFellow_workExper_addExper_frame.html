@@ -204,45 +204,58 @@
         var time_1 = $api.text($api.byId('time_1'));
         var time_2 = $api.text($api.byId('time_2'))=='至今'?'0000-00-00':$api.text($api.byId('time_2'));
         var textarea = $api.val($api.byId('textarea'));
-
-         api.ajax({
-            url: apiSite + url,
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: {
-                    token: $api.getStorage('userToken'),
-                    remark_user_id: api.pageParam.userId,
-                    work_id: api.pageParam.work_id,
-                    company_id: '',
-                    company_name: company_name,
-                    position: position,
-                    description: textarea,
-                    start_date: time_1,
-                    end_date: time_2
-                }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                if (ret.code == 200) {
-                    if (time_2 = '0000-00-00') {
-                        api.execScript({
-                            name: 'txl_memberInfo_Win',
-                            frameName: 'txl_memberInfo_Frame',
-                            script: 'initStatus();'
-                        });
+         if (time_2 == '请选择' || time_1 == '请选择') {
+            alert('请填写时间');
+            $api.css($api.dom('.loading'), 'display: none');
+        } else if (textarea == '') {
+             alert("请填写经历描述")
+             $api.css($api.dom('.loading'), 'display: none');
+         } else if (position == '') {
+             alert("请填写职位")
+             $api.css($api.dom('.loading'), 'display: none');
+         } else if (company_name == '') {
+             alert("请填写公司名称")
+             $api.css($api.dom('.loading'), 'display: none');
+         } else {
+            api.ajax({
+                url: apiSite + url,
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: {
+                        token: $api.getStorage('userToken'),
+                        remark_user_id: api.pageParam.userId,
+                        work_id: api.pageParam.work_id,
+                        company_id: '',
+                        company_name: company_name,
+                        position: position,
+                        description: textarea,
+                        start_date: time_1,
+                        end_date: time_2
                     }
-                    $api.css($api.dom('.loading'), 'display: none');
-                    statusCurrent();
-                    insertData();
-                } else {
-                    alert(ret.msg);
                 }
-            } else {
-                $api.css($api.dom('.loading'), 'display: none');
-                alert(JSON.stringify(err))
-            }
-        });
+            }, function(ret, err) {
+                if (ret) {
+                    if (ret.code == 200) {
+                        if (time_2 = '0000-00-00') {
+                            api.execScript({
+                                name: 'txl_memberInfo_Win',
+                                frameName: 'txl_memberInfo_Frame',
+                                script: 'initStatus();'
+                            });
+                        }
+                        $api.css($api.dom('.loading'), 'display: none');
+                        statusCurrent();
+                        insertData();
+                    } else {
+                        alert(ret.msg);
+                    }
+                } else {
+                    $api.css($api.dom('.loading'), 'display: none');
+                    alert(JSON.stringify(err))
+                }
+            });
+        }
 
     }
     // 删除数据

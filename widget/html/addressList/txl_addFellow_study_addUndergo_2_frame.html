@@ -133,13 +133,13 @@
                <p class="time">
                     开始时间
                     <span class="telIpt" >
-                        <span   tapmode data-val="start"  onclick="openTime(this)" id="time_1">请选择</span >
+                        <span   tapmode data-val="startTime"  onclick="openTime(this)" id="time_1">请选择</span >
                     </span>
                </p>
                <p class="time">
                     结束时间
                     <span class="telIpt" >
-                        <span   tapmode   onclick="openTime(this)" id="time_2">请选择</span>
+                        <span   tapmode  data-val="endTime"  onclick="openTime(this)" id="time_2">请选择</span>
                     </span>
                </p>
            </div>
@@ -186,7 +186,7 @@
        }
         var data = $api.attr(ele, 'data-val');
         var text;
-        if (data == 'start') {
+        if (data == 'startTime') {
             text = '选择开始时间'
         } else {
             text = '选择结束时间'
@@ -388,7 +388,16 @@
         if (time_2 == '请选择' || time_1 == '请选择') {
             alert('请填写时间');
             $api.css($api.dom('.loading'), 'display: none');
-        } else {
+        } else if (selectKe == '') {
+            alert("请选择文理科")
+            $api.css($api.dom('.loading'), 'display: none');
+        } else if (textarea == '') {
+            alert("请填写在校经历")
+            $api.css($api.dom('.loading'), 'display: none');
+        } else if (school == '') {
+            alert("请填写学校名称")
+            $api.css($api.dom('.loading'), 'display: none');
+        } else  {
             api.ajax({
                 url: apiSite + url,
                 method: 'post',

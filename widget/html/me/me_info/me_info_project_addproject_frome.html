@@ -15,10 +15,13 @@
            box-sizing: border-box;
            padding: 1rem .15rem 0;
        }
+       .loading {
+           display: none;
+       }
     </style>
 </head>
 <body>
-
+    <div class="loading"></div>
     <div class="wrap">
         <div class="weui-cells">
             <div class="weui-cell">
@@ -43,13 +46,13 @@
                 <div class="weui-cell__bd">
                     <p>开始时间</p>
                 </div>
-                <div class="weui-cell__ft" tapmode data-val='startTime' onclick="selectTime(this,1)" id="time_1">说明文字</div>
+                <div class="weui-cell__ft" tapmode data-val='startTime' onclick="selectTime(this,1)" id="time_1">请选择</div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">
                     <p>结束时间</p>
                 </div>
-                <div class="weui-cell__ft" tapmode data-val='endTime' onclick="selectTime(this,2)" id="time_2">说明文字</div>
+                <div class="weui-cell__ft" tapmode data-val='endTime' onclick="selectTime(this,2)" id="time_2">请选择</div>
             </div>
         </div>
         <div class="weui-cells__title">项目描述</div>
@@ -140,6 +143,7 @@
 
     // 提交数据
     function addStudy() {
+        $api.css($api.dom('.loading'), 'display: block');
         // 获取数据
         var name = $api.val($api.byId('company_name'));
         var position = $api.val($api.byId('company_position'));
@@ -149,38 +153,59 @@
         var textarea = $api.val($api.byId('textarea'));
         var textarea2 = $api.val($api.byId('textarea2'));
 
-         api.ajax({
-            url: apiSite + url,
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: {
-                    token: api.pageParam.userToken || $api.getStorage('userToken'),
-                    project_id: api.pageParam.project_id,
-                    // company_id: '',
-                    name: name,
-                    url: project_url,
-                    role: position,
-                    description: textarea,
-                    achievement:　textarea2,
-                    start_date: time_1,
-                    end_date: time_2
+        if (time_1 === '请选择' || time_2 === '请选择') {
+            alert("请选择时间段")
+            $api.css($api.dom('.loading'), 'display: none');
+        } else if (textarea == '') {
+            alert("请填写项目描述")
+            $api.css($api.dom('.loading'), 'display: none');
+        } else if (textarea2 == '') {
+            alert("请填写业绩描述")
+            $api.css($api.dom('.loading'), 'display: none');
+        } else if (position == '') {
+            alert("请填写项目角色")
+            $api.css($api.dom('.loading'), 'display: none');
+        } else if (name == '') {
+            alert("请填写项目名称")
+            $api.css($api.dom('.loading'), 'display: none');
+        } else if (project_url == '') {
+            alert("请填写项目URL")
+            $api.css($api.dom('.loading'), 'display: none');
+        } else {
+            api.ajax({
+                url: apiSite + url,
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: {
+                        token: api.pageParam.userToken || $api.getStorage('userToken'),
+                        project_id: api.pageParam.project_id,
+                        // company_id: '',
+                        name: name,
+                        url: project_url,
+                        role: position,
+                        description: textarea,
+                        achievement:　textarea2,
+                        start_date: time_1,
+                        end_date: time_2
+                    }
                 }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                if (ret.code === 200) {
-                    api.sendEvent({
-                        name: '_addStudy'
-                    });
-                    api.closeWin();
+            }, function(ret, err) {
+                if (ret) {
+                    if (ret.code === 200) {
+                        api.sendEvent({
+                            name: '_addStudy'
+                        });
+                        $api.css($api.dom('.loading'), 'display: none');
+                        api.closeWin();
+                    } else {
+                        alert(ret.msg)
+                    }
                 } else {
-                    alert(ret.msg)
+                    alert(JSON.stringify(err.msg));
                 }
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
+            });
+        }
 
     }
 
