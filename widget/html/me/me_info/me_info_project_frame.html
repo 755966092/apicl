@@ -8,9 +8,9 @@
     <link rel="stylesheet" type="text/css" href="../../../css/weui.css"/>
     <style>
        
-ˆ        .main_no3 {
+        .main_no3 {
             margin-top: .2rem;
-            background-color: #fff;
+            background: #fff;
         }
         .main_no3 p {
             width: 2.5rem;
@@ -229,9 +229,14 @@
         }, function(ret, err) {
             if (ret) {
                 // getData(ret.data.list)
-                api.sendEvent({
-                    name: 'editText'
-                });
+                if (ret.code === 200) {
+                    getCityList();
+                    api.sendEvent({
+                        name: 'editText'
+                    });
+                } else {
+                    alert(ret.msg)
+                }
             } else {
                 alert(JSON.stringify(err.msg));
             }

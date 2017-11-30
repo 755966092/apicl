@@ -66,7 +66,7 @@
     <div class="weui-cells resultList"></div>
     <script type="text/x-dot-template" id="listT">
         {{ for (var i = 0; i < it.length; i++) { }} 
-            <a class="weui-cell weui-cell_access" href="javascript:;" tapmode   onclick="openEdit(this)" data-type='{{=it[i].type}}' data-id='{{=it[i].work_id}}'>
+            <a class="weui-cell weui-cell_access" href="javascript:;" tapmode   onclick="openEdit(this)" data-type='{{=it[i].type}}' data-id='{{=it[i].education_id}}'>
                 <div class="weui-cell__hd">
                 </div>
                 <div class="weui-cell__bd weui-cell_primary">
@@ -369,7 +369,14 @@
             }
         }, function(ret, err) {
             if (ret) {
-                // getData(ret.data.list)
+                if(ret.code === 200) {
+                    getCityList()
+                    api.sendEvent({
+                        name: 'editText'
+                    });
+                } else {
+                    alert(ret.msg)
+                }
             } else {
                 alert(JSON.stringify(err.msg));
             }
