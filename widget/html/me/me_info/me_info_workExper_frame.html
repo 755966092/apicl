@@ -7,44 +7,6 @@
     <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
     <link rel="stylesheet" type="text/css" href="../../../css/weui.css"/>
     <style>
-      
-        .wrap {
-            margin-top: .2rem;
-        }
-        .dzlist {
-            height: 1.6rem;
-            border-bottom: .01rem solid #E3E3E3;
-            background-color: #fff;
-            padding: 0 .3rem;
-            font-size: 0;
-        }
-        .dzlist .left {
-            width: 6.2rem;
-            margin-top: .35rem;
-        }
-        .dzlist h3 {
-            font-size: .28rem;
-            color: #222;
-
-        }
-        .dzlist p {
-            font-size: .24rem;
-            color: #555;
-        }
-        .dzlist .right {
-            height: 1.6rem;
-            width: .44rem;
-            background: url(../../../image/icon_my/icon_bj.png)no-repeat;
-            background-size: .44rem .44rem;
-            background-position: 0 center;
-        }
-        
-        .dzlist img {
-            width: .64rem;
-            float: left;
-            margin-top: .35rem;
-            margin-right: .1rem;
-        }
         .main_no3 {
             font-size: 0;
             margin-top: .2rem;
@@ -63,78 +25,55 @@
            color: #27B24A;
            margin-left: .2rem;
         }
-        .dzlist .edit {
+
+
+        .editIcon {
+            width:.44rem;height:.44rem;margin-right:.05rem;display:block;
+            background: url(../../../image/icon_my/icon_bj.png)no-repeat;
+            background-size: .44rem .44rem;
+            background-position: center;
+        }
+        .delIcon {
+            width:.44rem;height:.44rem;margin-right:.05rem;display:block;
             background: url(../../../image/icon_login/icon-clearText.png)no-repeat;
             background-size: .25rem .25rem;
-            background-position: 0 center;
+            background-position: center;
+        }
+        .schoolInfo,
+        .positionText,
+        h3 {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 6rem;
         }
         .schoolInfo {
             font-size: .24rem;
-            line-height: .4rem;
         }
-        .kuo {
-            height: .5rem;
+        .positionText {
+            font-size: 0.24rem;
+            color: #555;
+        }
+        h3 {
+            font-size: .28rem;
+            color: #222;
         }
     </style>
 </head>
 <body>
-    
-    <div class="wrap resultList">
-       <!--  <div class="dzlist">
-            <div class="clearfix kuo">
-            <div class="left fl">
-                <h3>北京大学</h3>
-                <p>2013.1 - 2016.3, 金融，硕士</p>
-            </div>
-            <span   tapmode   onclick="openEdit(this)" class="right fr"></span></div>
-            <div class="schoolInfo fl">北京市海淀区清华科技园创业大厦110</div>
-        </div> -->
-       <!-- <div class="dzlist">
-           <div class="left fl">
-                <h3>方小姐</h3>
-                <p>北京市海淀区清华科技园创业大厦110</p>
-           </div>
-           <span   tapmode   onclick="openEdit(this)" class="right fr"></span>
-       </div> -->
-        <div class="dzlist" tapmode onclick="openEdit(this)" data-type='{{=it[i].type}}' data-id='{{=it[i].work_id}}'>
-            <div class="clearfix kuo">
-                <!-- <img src="../../../image/icon_defaultHead.png"> -->
-                <div class="left fl">
-                    <h3>{{=it[i].company_name}}</h3>
-                    <p>{{=it[i].start_date}} - {{=it[i].end_date}},&nbsp;&nbsp;{{=it[i].position}}</p>
-                </div>
-                <span id="btnStatus" class="right fr"></span>
-            </div>
-            <div class="schoolInfo">1</div>
-           
-        </div>
-        <div class="weui-cells">
-            <a class="weui-cell weui-cell_access" href="javascript:;">
+    <div class="weui-cells resultList"></div>
+    <script type="text/x-dot-template" id="listT">
+        {{ for (var i = 0; i < it.length; i++) { }} 
+            <a class="weui-cell weui-cell_access" href="javascript:;" tapmode   onclick="openEdit(this)" data-type='{{=it[i].type}}' data-id='{{=it[i].work_id}}'>
                 <div class="weui-cell__hd">
                 </div>
                 <div class="weui-cell__bd weui-cell_primary">
                     <h3>{{=it[i].company_name}}</h3>
-                    <p>{{=it[i].start_date}} - {{=it[i].end_date}},&nbsp;&nbsp;{{=it[i].position}}</p>
-                    <p>{{=it[i].description}}</p>
+                    <p class="positionText">{{=it[i].start_date}} - {{=it[i].end_date}},&nbsp;&nbsp;{{=it[i].position}}</p>
+                    <p class="schoolInfo">{{=it[i].description}}</p>
                 </div>
-                    <img src="../../../image/icon_my/icon_bj.png"
-                        alt="" style="width:20px;margin-right:5px;display:block">
+                <span class="editIcon btnStatus"></span>
             </a>
-        </div>
-    </div>
-
-    <script type="text/x-dot-template" id="listT">
-        {{ for (var i = 0; i < it.length; i++) { }} 
-            <div class="dzlist" tapmode   onclick="openEdit(this)" data-type='{{=it[i].type}}' data-id='{{=it[i].work_id}}'>
-                <div class="clearfix kuo">
-                <!-- <img src="../../../image/icon_defaultHead.png"> -->
-                <div class="left fl">
-                    <h3>{{=it[i].company_name}}</h3>
-                    <p>{{=it[i].start_date}} - {{=it[i].end_date}},&nbsp;&nbsp;{{=it[i].position}}</p>
-                </div>
-                <span id="btnStatus" class="right fr"></span></div>
-                <div class="schoolInfo fl">{{=it[i].description}}</div>
-            </div>
         {{ }; }}
     </script>
     <div class="main_no3 flex-def flex-zCenter flex-cCenter">
@@ -191,10 +130,9 @@
     function openEdit(ele) {
         var val = $api.attr(ele, 'data-id');
         var type = $api.attr(ele, 'data-type');
-
-        if ($api.hasCls($api.byId('btnStatus'), 'edit')) {
+        if ($api.hasCls($api.dom(ele ,'span'), 'delIcon')) {
             // 删除按钮状态下删除地址
-            $api.remove($api.closest($api.byId('btnStatus'), '.dzlist'));
+            $api.remove($api.closest($api.dom(ele ,'span'), '.weui-cell'));
             delDz2(val);
         } else {
             // 编辑按钮状态下 进入编辑页面
@@ -264,8 +202,8 @@
             name: 'editDz'
         }, function(ret, err) {
             if (ret) {
-                for (var i = 0; i < $api.domAll('.right').length; i++) {
-                    $api.toggleCls($api.domAll('.right')[i], 'edit');
+                for (var i = 0; i < $api.domAll('.editIcon').length; i++) {
+                    $api.toggleCls($api.domAll('.editIcon')[i], 'delIcon');
                 }
                 
             } else {

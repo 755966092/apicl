@@ -5,6 +5,7 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css"/>
     <style>
         
         .addPhone {
@@ -30,110 +31,56 @@
             background-size: .4rem .4rem;
             margin-right: .1rem;
         }
-        .wrap {
-            margin-top: .2rem;
-        }
-        .dzlist {
-            height: 1.6rem;
-            border-bottom: .01rem solid #E3E3E3;
-            background-color: #fff;
-            padding: 0 .3rem;
-            font-size: 0;
-        }
-        .dzlist .left {
-            width: 6.4rem;
-            margin-top: .35rem;
-        }
-        .dzlist h3 {
-            font-size: .28rem;
-            color: #222;
 
-        }
-        .dzlist p {
-            font-size: .24rem;
-            color: #555;
-        }
-        .dzlist .right {
-            height: 1.6rem;
-            width: .44rem;
+         .editIcon {
+            width:.44rem;height:.44rem;margin-right:.05rem;display:block;
             background: url(../../image/icon_my/icon_bj.png)no-repeat;
             background-size: .44rem .44rem;
-            background-position: 0 center;
+            background-position: center;
         }
-        
-        .dzlist img {
-            width: .64rem;
-            float: left;
-            margin-top: .35rem;
-            margin-right: .1rem;
-        }
-        .main_no3 {
-            margin-top: .2rem;
-            background-color: #fff;
-        }
-        .main_no3 p {
-            width: 2.5rem;
-            text-align: center;
-            margin: 0 auto;
-            height: .8rem;
-            line-height: .8rem;
-            font-size: .34rem;
-            color: #27b24a;
-            background:  url(../../image/icon_my/icon_add.png)no-repeat;
-            -webkit-background-size: .4rem .4rem ;
-            background-size: .4rem .4rem ;
-            background-position: 0 center;
-            padding-left: .3rem;
-        }
-        .dzlist .edit {
+        .delIcon {
+            width:.44rem;height:.44rem;margin-right:.05rem;display:block;
             background: url(../../image/icon_login/icon-clearText.png)no-repeat;
             background-size: .25rem .25rem;
-            background-position: 0 center;
+            background-position: center;
+        }
+        .schoolInfo,
+        .positionText,
+        h3 {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 6rem;
         }
         .schoolInfo {
             font-size: .24rem;
-            line-height: .4rem;
-            /*padding-left: .74rem;*/
         }
-        .kuo {
-            height: .5rem;
+        .positionText {
+            font-size: 0.24rem;
+            color: #555;
+        }
+        h3 {
+            font-size: .28rem;
+            color: #222;
         }
     </style>
 </head>
 <body>  
     <div class="loading"></div>
-    <div class="wrap resultList">
-        <!-- <div class="dzlist">
-            <div class="clearfix kuo">
-            <img src="../../image/icon_defaultHead.png">
-            <div class="left fl">
-                <h3>北京大学</h3>
-                <p>2013.1 - 2016.3, 金融，硕士</p>
-            </div>
-            <span   tapmode   onclick="openEdit(this)" class="right fr"></span></div>
-            <div class="schoolInfo">北京市海淀区清华科技园创业大厦110</div>
-        </div> -->
-       <!-- <div class="dzlist">
-           <div class="left fl">
-                <h3>方小姐</h3>
-                <p>北京市海淀区清华科技园创业大厦110</p>
-           </div>
-           <span   tapmode   onclick="openEdit(this)" class="right fr"></span>
-       </div> -->
-    </div>
+    <div class="weui-cells resultList"> </div>
 
     <script type="text/x-dot-template" id="listT">
         {{ for (var i = 0; i < it.length; i++) { }} 
-            <div class="dzlist" tapmode   onclick="openEdit(this)" data-type='{{=it[i].type}}' data-id='{{=it[i].education_id}}' >
-                <div class="clearfix kuo">
-                <!-- <img src="../../image/icon_defaultHead.png"> -->
-                <div class="left fl">
-                    <h3>{{=it[i].school}}</h3>
-                    <p>{{=it[i].start_date}} - {{=it[i].end_date}}, {{=it[i].major}}&nbsp;&nbsp;{{=it[i].degree}}</p>
+             <a class="weui-cell weui-cell_access" href="javascript:;" tapmode   onclick="openEdit(this)" data-type='{{=it[i].type}}' data-id='{{=it[i].education_id}}'>
+                <div class="weui-cell__hd">
                 </div>
-                <span  id="btnStatus" class="right fr"></span></div>
-                <div class="schoolInfo">{{=it[i].description}}</div>
-            </div>
+                <div class="weui-cell__bd weui-cell_primary">
+                    <h3>{{=it[i].school}}</h3>
+                    <p class="positionText">{{=it[i].start_date}} - {{=it[i].end_date}}, {{=it[i].major}}&nbsp;&nbsp;{{=it[i].degree}}</p>
+                    <p class="schoolInfo">{{=it[i].description}}</p>
+                </div>
+                <span class="editIcon"></span>
+            </a>
         {{ }; }}
     </script>
     
@@ -176,10 +123,10 @@
         if (flag) {
             alert('不能操作用户原始信息')
         } else {
-            if ($api.hasCls($api.byId('btnStatus'), 'edit')) {
+            if ($api.hasCls($api.dom(ele,'span'), 'delIcon')) {
                 $api.css($api.dom('.loading'), 'display: block');
                 // 删除按钮状态下删除学习
-                $api.remove($api.closest($api.byId('btnStatus'), '.dzlist'));
+                $api.remove($api.closest($api.dom(ele,'span'), '.weui-cell'));
                 delStusy(val);
             } else {
                 // 编辑按钮状态下 进入编辑页面
@@ -550,8 +497,8 @@
             name: 'editDz'
         }, function(ret, err) {
             if (ret) {
-                for (var i = 0; i < $api.domAll('.right').length; i++) {
-                    $api.toggleCls($api.domAll('.right')[i], 'edit');
+                for (var i = 0; i < $api.domAll('.editIcon').length; i++) {
+                    $api.toggleCls($api.domAll('.editIcon')[i], 'delIcon');
                 }
                 
             } else {
