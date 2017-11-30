@@ -5,157 +5,117 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css"/>
     <style>
+        .dropDownList {
+           position: absolute;
+           background-color: #fff;
+           z-index: 9999;
+           width: 100%;
+           top: .73rem;
+           text-align: right;
+       }
+       .dropDownList p {
+           font-size: 0.28rem;
+           /* padding: .1rem .45rem; */
+           /* box-sizing: border-box; */
+           padding-right: 0.2rem;
+       }
+
+       .weui-cell {
+           font-size: 0.28rem;
+       }
+       .weui-cell {
+           position: relative;
+       }
+       .page__bd_spacing {
+           box-sizing: border-box;
+           padding: 1rem .15rem 0;
+        }
+        .weui-cell__ft {
+            width: 5rem;
+        }
         .loading {
             display: none;
-        }
-        .main_no1 p, .main_no2 p {
-             background-color: #fff;
-            height: .8rem;
-            line-height: .8rem;
-            border-bottom: .01rem solid #d9d9d9;
-            font-size: .28rem;
-            padding-right: .36rem;
-
-        }
-        .main_no1 p.time {
-            padding: 0 .36rem;
-        }
-        .main_no1 p span.select {
-            display: inline-block;
-        }
-        button {
-            display: block;
-            width: 7.2rem;
-            height: .95rem;
-            background-color: #08BB08;
-            color: #fff;
-            font-size: .34rem;
-            margin-top: 4rem;
-            margin: 0 auto;
-        }
-        .main_no3 {
-            margin-top: .2rem;
-            background-color: #fff;
-            margin: 0 auto;
-            width: 6.32rem;
-            border-radius: .1rem;
-            height: .82rem;
-            line-height: .82rem;
-            text-align: center;
-            font-size: .34rem;
-            background-color: #27b24a ;
-            color: #fff;
-            margin-top: 1rem;
-        }
-
-
-
-        .mobile {
-            height: .6rem;
-            font-size: .28rem;
-            color: #999;
-            line-height: .6rem;
-            padding-left: .36rem;
-        }
-        .telIpt {
-            height: .8rem;
-            /*margin-left: .5rem;*/
-            outline: none;
-            float: right;
-            width: 4rem;
-            text-align: right;
-            padding-right: .4rem;
-        }
-        span.telIpt {
-            display: inline-block;
-            font-size: .28rem;
-            color: #B1A9AB;
-            height: .8rem;
-            /*background: url(../../image/icon_zk.png)no-repeat;*/
-            background-size: .15rem .25rem;
-            background-position: right  center;
-
-        }
-        .clearIpt {
-            display: none;
-            width: .24rem;
-            height: .8rem;
-            background: url(../../image/icon_login/icon-clearText.png)no-repeat;
-            background-size: .24rem .24rem;
-            background-position: 0 center;
-            float: right;
-        }
-       textarea {
-        background-color: #fff;
-        text-align: left;
-        width: 100%;
-        font-size: .24rem;
-        color: #000;
-        padding: .2rem .36rem;
-        box-sizing: border-box;
-        outline: none;
-       }
-       #textLength {
-        background-color: #fff;
-        width: 100%;
-        padding-right:.36rem ;
-        margin: 0;
-        text-align: right;
-        border-top: .01rem solid #EFEFEF;
-       }
-        .wrap {
-            padding-left: .36rem;
-            background-color: #fff;
         }
     </style>
 </head>
 <body>
     <div class="loading"></div>
-        <div class="main clearfix">
-            <p class="mobile ">工作经历</p>
-            <div class="main_no1 yd">
-                <div class="wrap">
-                   <p>
-                        公司
-                        <input  type="text" id="company_name" class="telIpt" name="" placeholder ="必填" >
-                   </p>
-                </div>
-               <div class="wrap">
-                   <p>
-                        职务
-                        <input  type="text" id="company_position" class="telIpt" name="" placeholder ="必填" >
-                   </p>
-                </div>
-               <p class="time">
-                    开始时间
-                    <span class="telIpt" >
-                        <span   tapmode data-val="startTime"  onclick="openTime(this,2)" id="time_1">请选择</span>
-                    </span>
-               </p>
-               <p class="time">
-                    结束时间
-                    <span class="telIpt" >
-                        <span   tapmode   onclick="openTime(this,2)" id="time_2">请选择</span>
-                    </span>
-               </p>
-           </div>
+    <div class="weui-cells__title">工作经历</div>
+    <div class="weui-cells">
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <p>公司</p>
+            </div>
+            <input type="text" name="" id="company_name" class="weui-cell__ft" placeholder="必填">
+            <div class="dropDownList resultList">
+                <!-- <div class="weui-cell weui-cell_access">
+                                <div class="weui-cell__bd weui-cell_primary">
+                                    <p>实时搜索文本</p>
+                                </div>
+                            </div> -->
+            </div>
+            <script type="text/x-dot-template" id="listT">
+                {{?it.length>0}}
+                    {{~it:value:index}}
+                        <div tapmode onclick="selCompany(this)" data-comp="{{=value.company_name}}" class="weui-cell weui-cell_access">
+                            <div class="weui-cell__bd weui-cell_primary">
+                                <p>{{=value.company_name}}</p>
+                            </div>
+                        </div>
+                    {{~}}
+                {{?}}
+            </script>
         </div>
-        <div class="main clearfix" style="font-size: 0">
-            <p class="mobile ">经历描述</p>
-            <textarea rows="6" placeholder="主要经历" id="textarea" maxlength="300" oninput="changeText(this)"></textarea>
-            <p class="mobile fr" id="textLength"> 0/300</p>
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <p>职务</p>
+            </div>
+            <input type="text" name="" id="company_position" class="weui-cell__ft" placeholder="必填">
         </div>
-     <div class="main_no3" id="main_no3"   tapmode   onclick="addStudy()">
-           保存
-       </div>
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <p>开始时间</p>
+            </div>
+            <p class="weui-cell__ft" tapmode data-val='startTime' onclick="selectTime(this,1)" id="time_1">请选择</p>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <p>结束时间</p>
+            </div>
+            <p class="weui-cell__ft" tapmode data-val='endTime' onclick="selectTime(this,2)" id="time_2">请选择</p>
+        </div>
+    </div>
+    </div>
+    <div class="weui-cells__title">经历描述</div>
+    <!-- <div class="main clearfix" style="font-size: 0">
+                <textarea rows="6" placeholder="主要经历" id="textarea" maxlength="300" onkeyup="changeText(this)"></textarea>
+                <p class="mobile fr" id="textLength"> 0/300</p>
+            </div> -->
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <textarea id="textarea" class="weui-textarea" placeholder="请输入文本" rows="3" maxlength="200" oninput="changeText(this)"></textarea>
+                <div class="weui-textarea-counter">
+                    <span id="textLength">0</span>/200</div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="page__bd page__bd_spacing">
+        <a href="javascript:;" class="weui-btn weui-btn_primary" id="main_no3" tapmode onclick="addStudy()">保存</a>
+    </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript" src="../../script/jquery.min.js"></script>
 <script type="text/javascript">
     var url;
     apiready = function(){
         moduleInit();
+        bindEvent();
         if (api.pageParam.flag == 1) {
             url = '/remark_user/editWork';
             // 获取数据
@@ -188,7 +148,7 @@
                 $api.text($api.byId('time_1'), ret.data.info.start_date);
                 $api.text($api.byId('time_2'), ret.data.info.end_date);
                 $api.val($api.byId('textarea'), ret.data.info.description);
-                $api.text($api.byId('textLength'), ret.data.info.description.length + '/300');
+                $api.text($api.byId('textLength'), ret.data.info.description.length);
             } else {
                 alert(JSON.stringify(err.msg));
             }
@@ -286,7 +246,7 @@
     // 编辑文本和修改文本长度内容
     function changeText(ele) {
         // alert();
-        $api.text($api.byId('textLength'), ele.value.length + '/300');
+        $api.text($api.byId('textLength'), ele.value.length);
     }
       // 打开时间选择器
     function openTime(ele) {
@@ -480,5 +440,52 @@
             }
         });
     }
+    function bindEvent() {
+            // $('#company_name').on("focus", function () {
+            //     $api.css($api.dom('.dropDownList'), 'display:block');
+            // })
+            // $('#company_name').on("blur", function () {
+            //     $api.css($api.dom('.dropDownList'), 'display:none');
+            // })
+            if (api.systemType == 'ios') {
+                $('#company_name').on("compositionend", function () {
+                    searchKeyword(this);
+                })
+            } else {
+                $('#company_name').on("input", function () {
+                    searchKeyword(this);
+                })
+            }
+        }
+    function searchKeyword(ele) {
+            var keyword = $api.val(ele);
+            api.ajax({
+                url: apiSite + '/userCenter/addCompanyLike',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: {
+                        token: $api.getStorage('userToken'),
+                        name: keyword
+                    }
+                }
+            }, function (ret, err) {
+                if (ret) {
+                    if (ret.code === 200) {
+                        getData(ret.data.list)
+                    } else {
+                        alert(ret.msg)
+                    }
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
+        }
+        // 下拉列表选择公司
+        function selCompany(ele) {
+            var company = $api.attr(ele, 'data-comp');
+            $api.val($api.byId('company_name'), company);
+            $api.html($api.dom('.dropDownList'), '');
+        }
 </script>
 </html>
