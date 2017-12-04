@@ -1073,7 +1073,6 @@
         }, function(ret, err) {
             if (ret.status) {
                 if (ret.data.length != 0) {
-                    console.log('数据库:::' + JSON.stringify(ret))
                         // 电话
                     if (ret.data[0].remark_current_contact) {
                         $api.text(phone, ret.data[0].remark_current_contact);
@@ -1172,6 +1171,7 @@
         switch (relationship_levelType) {
             case 1:
                 $api.text(relationship_level, '自己');
+                $api.css($api.byId('openNetworkOfPeople'), 'display:none');
                 $api.css(btn, 'display: none');
                 // for (var i = 0; i < $api.domAll('ul li .icon').length; i++) {
                 //     $api.css($api.domAll('ul li .icon')[i], 'display: none');
