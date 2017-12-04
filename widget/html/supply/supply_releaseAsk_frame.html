@@ -6,8 +6,9 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <style>
-        .loading {
-            display: none;
+        html,body {
+            width: 100%;
+            height: 100%;
         }
         .contentText {
             background-color: #fff;
@@ -257,13 +258,22 @@
         .companyName {
             display: none;
         }
+        .loading {
+            display: none;
+            z-index: 10000;
+            width: 100%;
+            height: 100%;
+            background:  rgba(0, 0, 0, .5) url(../../image/loading_more.gif)no-repeat;
+            background-size: .8rem .8rem;
+            background-position: center;
+        }
     </style>
 </head>
 <body>
     <div class="loading"></div>
     <div class="contentText clearfix">
         <div class="title">
-            <span class="smallTitle">#我需要#</span>
+            <!-- <span class="smallTitle">#我需要#</span> -->
             <input type="text" placeholder="输入您求助的标题" id="title" maxlength="15">
         </div>
         <textarea placeholder="描述一下您求助的内容" rows="5" id="description"></textarea>
@@ -400,6 +410,7 @@
         classify();
         //console.log('369:::'+JSON.stringify(api.pageParam))
         if (api.pageParam.demand_id) {
+            // $api.css($api.dom('.loading'), 'display: block;');
             $api.text($api.dom('.btn'), '确定');
             $api.css($api.dom('.btn'), 'display: block');
             requireData();
@@ -442,7 +453,11 @@
             name: 'selAddress'
         }, function(ret, err) {
             if (ret) {
-                $api.text($api.byId('position'), ret.value.name+'-'+ret.value.address);
+                 if (ret.value.address != ' ') {
+                    $api.text($api.byId('position'), ret.value.name + '-' + ret.value.address);
+                } else {
+                    $api.text($api.byId('position'), ret.value.name);
+                }
                 //console.log(JSON.stringify(ret))
                 province = ret.value.province;
                 city = ret.value.city;
@@ -497,7 +512,7 @@
         $api.val(descriptionIpt, data.info.description);
         $api.val(reward, data.info.reward);
 
-        var unitText = data.info.unit > 0 ? _dataSource[data.info.unit-1] : '未定义';
+        var unitText = data.info.unit > 0 ? _dataSource[data.info.unit-1] : '其他';
         var classifyData = $api.getStorage('categoryIndex');
         if (classifyData) {
             for (var i = 0; i < classifyData.length; i++) {
@@ -603,9 +618,14 @@
     }
     // 选择地址页面
     function openPosition() {
+        // api.openWin({
+        //     name: 'supply_releasePosition_win',
+        //     url: './supply_releasePosition_win.html'
+        // });
         api.openWin({
-            name: 'supply_releasePosition_win',
-            url: './supply_releasePosition_win.html'
+            name: 'map_win',
+            url: './map_win.html',
+            bounces: false,
         });
     }
     // 删除图片
@@ -1129,7 +1149,8 @@
                 releaseFlag = 1;
                 //console.log(JSON.stringify(ret))
                 imgArr = eval(ret.data.info.image_json)
-                editSupply(ret.data)
+                editSupply(ret.data);
+                // $api.css($api.dom('.loading'), 'display: none');
             } else {
                 alert(JSON.stringify(err.msg))
             }

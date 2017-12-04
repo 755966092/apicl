@@ -7,51 +7,11 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
     <style>
-   
-    ul {
-        margin-top: .2rem;
-    }
-    ul li {
-        font-size: .3rem;
-        line-height: .8rem;
-        height: .8rem;
-        background-color: #fff;
-        background: #fff url(../../image/icon_zk.png)no-repeat;
-        -webkit-background-size: .15rem .25rem;
-        background-size: .15rem .25rem;
-        background-position: 7.05rem center;
-        padding-left: .3rem;
-        margin-top: .01rem;
-    }
-    .text {
-        padding-right: .3rem;
-        border-bottom: .01rem solid #E1E1E1;
-    }
-    .mt30 {
-        margin-top: .3rem;
-    }    
-    .bb {
-        border-bottom: .01rem solid #E1E1E1;
-    }
-    .bb .text {
-        border: 0;
-    }
-    .btn {
-        width: 7.14rem;
-        height: .86rem;
-        background-color: #1AAD19;
-        margin: 0 auto;
-        border-radius: .1rem;
-        color: #fff;font-size: .34rem;
-        line-height: .86rem;
-        text-align: center;
-        margin-top: .57rem;
-    }
-    li .state {
-        margin-right: .3rem;
-        color: #9b9b9b;
-    }
+        .weui-cell__bd p {
+            font-size: 0.32rem;
+        }
     </style>
 </head>
 
@@ -64,34 +24,28 @@
             </span>
         </div>
     </header>
-    <div class="main">
-       <ul class="mt30">
-            <!-- <li >
-                <div class="text">
-                    微信
-                    <span class="fr state">已绑定</span>
-                </div>
-            </li> -->
-          <!--   <li >
-                <div class="text">
-                    手机号
-                    <span class="fr state"></span>
-                </div>
-            </li> -->
-           <!--  <li class="bb">
-                <div class="text">
-                    邮箱
-                    <span class="fr state">已绑定</span>
-                </div>
-            </li> -->
-            <li class="mt30" data-type="paypsd"  onclick="editInfo(this)" tapmode>
-                <div class="text">创建/修改支付密码</div>
-            </li>
-            <li >
-                <div class="text" tapmode onclick="resetPsd()">修改我在密码</div>
-            </li>
-       </ul>
-      
+    <div class="weui-cells">
+        <a class="weui-cell weui-cell_access" href="javascript:;" data-type="paypsd" onclick="editInfo(this)" tapmode>
+            <div class="weui-cell__bd">
+                <p>创建/修改支付密码</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+        <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="resetPsd(1)">
+            <div class="weui-cell__bd">
+                <p>修改我在密码</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+        <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="resetPsd(2)">
+            <div class="weui-cell__bd">
+                <p>忘记我在密码</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -102,11 +56,18 @@
 
     };
     // 修改密码
-    function resetPsd() {
-        api.openWin({
-            name: 'login_resetPassword',
-            url: '../enroll/login_resetPassword.html'
-        });
+    function resetPsd(n) {
+       if (n==1) {
+            api.openWin({
+               name: 'login_resetPassword',
+               url: '../enroll/login_resetPassword.html'
+           });
+       } else {
+           api.openWin({
+               name: 'login_resetPassword',
+               url: '../enroll/login_ForgetPassword1.html'
+           });
+       }
     }
     function editInfo(ele) {
         var type = $api.attr(ele, 'data-type');

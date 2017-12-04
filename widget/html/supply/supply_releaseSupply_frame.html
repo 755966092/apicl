@@ -15,19 +15,12 @@
 
         .loading {
             display: none;
-            /*background: rgba(0,0,0,0.3) url(../../image/loading_more.gif)no-repeat;
-            width: 7.5rem;
-            height: 12.54rem;
-            background: url(../image/loading_more.gif)no-repeat;
-            -webkit-background-size: .8rem .8rem;
+            z-index: 10000;
+            width: 100%;
+            height: 100%;
+            background:  rgba(0, 0, 0, .5) url(../../image/loading_more.gif)no-repeat;
             background-size: .8rem .8rem;
-            background-position: center center;
-            position: absolute;
-            top: 0;*/
-            /* bottom: 0;
-            right: 0;
-            left: 0;
-            margin: auto;*/
+            background-position: center;
         }
 
         .contentText {
@@ -311,6 +304,7 @@
         .initPriceIpt {
             /* border: 1px solid #F00; */
         }
+
     </style>
 </head>
 
@@ -318,7 +312,7 @@
     <div class="loading"></div>
     <div class="contentText clearfix">
         <div class="title">
-            <span class="smallTitle">#我提供#</span>
+            <!-- <span class="smallTitle">#我提供#</span> -->
             <input type="text" placeholder="输入您发布的标题" id="title" maxlength="15">
         </div>
         <textarea placeholder="描述一下您发布的内容" rows="5" id="description"></textarea>
@@ -460,6 +454,7 @@
         moduleInit();
         classify();
         if (api.pageParam.supply_id) {
+            $api.css($api.dom('.loading'), 'display: block');
             $api.text($api.dom('.btn'), '确定');
             $api.css($api.dom('.btn'), 'display: block');
             releaseFlag = 1;
@@ -514,7 +509,11 @@
             name: 'selAddress'
         }, function (ret, err) {
             if (ret) {
-                $api.text($api.byId('position'), ret.value.name + '-' + ret.value.address);
+                if (ret.value.address != ' ') {
+                    $api.text($api.byId('position'), ret.value.name + '-' + ret.value.address);
+                } else {
+                    $api.text($api.byId('position'), ret.value.name);
+                }
                 //console.log(JSON.stringify(ret))
                 province = ret.value.province;
                 city = ret.value.city;
@@ -589,7 +588,7 @@
         $api.val(descriptionIpt, data.info.description);
         $api.val(price, data.info.price);
 
-        var unitText = data.info.unit > 0 ? _dataSource[data.info.unit - 1] : '未定义';
+        var unitText = data.info.unit > 0 ? _dataSource[data.info.unit - 1] : '其他';
         for (var i = 0; i < supplyData.length; i++) {
             if (supplyData[i].category_id == data.info.category_id) {
                 var _categoryId = supplyData[i].name;
@@ -658,9 +657,14 @@
     }
     // 选择地址页面
     function openPosition() {
+        // api.openWin({
+        //     name: 'supply_releasePosition_win',
+        //     url: './supply_releasePosition_win.html'
+        // });
         api.openWin({
-            name: 'supply_releasePosition_win',
-            url: './supply_releasePosition_win.html'
+            name: 'map_win',
+            url: './map_win.html',
+            bounces: false,
         });
     }
     // 删除图片
@@ -1057,9 +1061,6 @@
                 },
                 {
                     name: "其他"
-                },
-                {
-                    name: "未定义"
                 }
             ];
             _dataSource2 = ["次", "幅", "单", "小时", "分钟", "天", "周", "月", "份", "个", "扇", "课时", "面议", "其他"]
@@ -1259,6 +1260,7 @@
                 //console.log(JSON.stringify(ret))
                 imgArr = eval(ret.data.info.image_json)
                 editSupply(ret.data)
+                $api.css($api.dom('.loading'), 'display: none');
             } else {
                 alert(JSON.stringify(err.msg))
             }

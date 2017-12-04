@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
+    <style>
+        .main {
+            margin-top: 6.15rem;
+            /*border: 1px solid #f00;*/
+        }
+        
+        li {
+            padding: .05rem .16rem;
+            border-bottom: 1px solid #d9d9d9;
+            height: 0.8em;
+            background-color: #fff;
+            border-right: .3rem solid #fff;
+        }
+        
+        .name {
+            font-size: .3rem;
+        }
+        
+        .address {
+            font-size: .24rem;
+            color: #999;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+        .select {
+            background: #fff url(../../image/icon_my/icon_enter.png)no-repeat;
+            background-size: .36rem .2rem;
+            background-position: right center;
+            background-clip: border-box;
+        }
+        /* 搜索框 */
+        .searchText {
+            background-color: #fff;
+            font-size: 0.24em;
+            color: #8E8E93;
+            text-align: center;
+            position: fixed;
+            width: 7.17rem;
+            height: 0.5rem;
+            line-height: 0.5rem;
+            top: .16rem;
+            left: .16rem;
+        }
+        .searchText span {
+            background: url(../../image/icon_search.png)no-repeat;
+            background-size: .25rem .26rem;
+            background-position: center left;
+            padding: 0 0 0 .3rem;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <p class="searchText flex-def flex-zCenter flex-cCenter" onclick="openSearchPage()" tapmode>
+            <span>搜索</span>
+        </p>
+        <!-- <div class="weui-search-bar" id="searchBar">
+            <form class="weui-search-bar__form">
+                <div class="weui-search-bar__box">
+                    <i class="weui-icon-search"></i>
+                    <input type="search" disabled class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
+                    <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+                </div>
+                <label class="weui-search-bar__label" id="searchText" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">
+                    <i class="weui-icon-search"></i>
+                    <span>搜索</span>
+                </label>
+            </form>
+            <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+        </div> -->
+      <!--   <ul>
+            <li  class="select flex-def flex-cCenter" id="currentPosi" tapmode onclick="addLabel(this)">
+                <p class="name">  </p>
+            </li>
+        </ul> -->
+        <ul class="resultList">
+            <!-- <li>
+                <p class="name">{{=it[i].name}}</p>
+                <p class="address">{{=it[i].address}}</p>
+            </li> -->
+           
+        </ul>
+        <script type="text/x-dot-template" id="listT">
+            {{ for(var i = 0; i < it.poiList.length; i++){ }} 
+                    <li data-city="{{=it.city}}" data-province="{{=it.province}}" data-district="{{=it.district}}" data-address="{{=it.poiList[i].address}}" data-name="{{=it.poiList[i].name}}" data-lat="{{=it.poiList[i].coord.lat}}" data-lon="{{=it.poiList[i].coord.lon}}" tapmode onclick="addLabel(this)">
+                        <p class="name">{{=it.poiList[i].name}}</p>
+                        <p class="address">{{=it.poiList[i].address}}</p>
+                    </li>
+            {{ } }}
+        </script>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript">
+    var lon,lat,dataArr=[],viewChange = 1;
+    apiready = function() {
+        moduleInit();
+        initMap();
+        scrollBottom();
+        addEventListenerSearch();
+    }
+    function openSearchPage() {
+        api.openWin({
+            name: 'map_frame_search',
+            url: './map_frame_search.html',
+            bounces: false
+        });
+    }
+    
+    function scrollBottom() {
+        api.addEventListener({
+            name: 'scrolltobottom'
+        }, function(ret, err){
+        });
+    }
+    // 监听搜索返回数据
+    function addEventListenerSearch() {
+        api.addEventListener({
+            name: 'addEventListenerSearch'
+        }, function(ret, err) {
+            if (ret) {
+                // 附近热点位置
+                // nearHotSpotLocation(ret.value.obj.lon, ret.value.obj.lat, ret.value.obj);
+                 bMap.addAnnotations({
+                    annotations: [{
+                        id: 2, lon: ret.value.obj.lon, lat: ret.value.obj.lat
+                    }],
+                    icon: 'widget://',
+                    draggable: true
+                }, function(ret){
+                    bMap.addAnnotations({
+                        annotations: [{
+                            id: 1,
+                            lon: lon,
+                            lat: lat
+                        }],
+                        icon: 'widget://image/icon_my/icon_sc.png',
+                        draggable: true
+                    }, function (ret, err) {
+                        
+                    });
+                });
+                setTimeout(function() {
+                    bMap.setCenter({
+                        coords: {
+                            lon: parseFloat(ret.value.obj.lon),
+                            lat: parseFloat(ret.value.obj.lat)
+                        },
+                        animation: true
+                    });
+                }, 1000);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+    // ios下需先初始化才可以打开地图
+    function initMap() {
+        if (api.systemType === 'ios') {
+            startPositioning();
+            // bMap.initMapSDK(function(ret,err) {
+            //     console.log(JSON.stringify(ret))
+            //     console.log(JSON.stringify(err))
+            //     if (ret.status) {
+            //         alert('地图初始化成功，可以从百度地图服务器检索信息了！');
+            //         startPositioning();
+            //     }
+            // });
+        } else {
+            startPositioning();
+        }
+    }
+    // 开始定位
+    function startPositioning() {
+         // bMap.initMapSDK(function(ret,err) {
+            //     console.log(JSON.stringify(ret))
+            //     console.log(JSON.stringify(err))
+            //     if (ret.status) {
+            //         alert('地图初始化成功，可以从百度地图服务器检索信息了！');
+            //         startPositioning();
+            //     }
+            // });
+        bMap.getLocation({
+            accuracy: '100m',
+            autoStop: true,
+            filter: 1
+        }, function(ret, err) {
+            if (ret.status) {
+                openMap(ret.lon, ret.lat);
+                getNameFromCoords(ret.lon, ret.lat);
+            } else {
+                alert(err.code);
+            }
+        });
+    }
+    function getNameFromCoords(lon,lat) {
+        bMap.getNameFromCoords({
+            lon: lon,
+            lat: lat
+        }, function(ret, err) {
+            if (ret.status) {
+                api.sendEvent({
+                    name: 'selectPosition',
+                    extra: {
+                        lon: ret.poiList[0].coord.lon,
+                        lat: ret.poiList[0].coord.lat,
+                        name: ret.poiList[0].name,
+                        address: ret.poiList[0].address,
+                        city: ret.city,
+                        district: ret.district,
+                        province: ret.province
+                    }
+                });
+            }
+        });
+    }
+
+    function openMap(lon, lat) {
+        bMap.open({
+            rect: {
+                x: 0,
+                y: 40,
+                w: api.frameWidth,
+                h: 254
+            },
+            center: {
+                lon: lon,
+                lat: lat
+            },
+            zoomLevel: 17,
+            showUserLocation: true,
+            fixedOn: api.frameName,
+            fixed: true
+        }, function(ret) {
+            if (ret.status) {
+                nearHotSpotLocation(lon, lat)
+                bMap.addEventListener({
+                    name: 'viewChange'
+                }, function(ret) {
+                    if (ret.status) {
+                        delAnno([2]);
+                       bMap.addAnnotations({
+                           annotations: [{
+                               id: 2, lon: ret.lon, lat: ret.lat
+                           }],
+                           icon: 'widget://',
+                           draggable: true
+                       }, function(ret){
+                           if(ret){
+                           }
+                       });
+                       lon = ret.lon;
+                       lat = ret.lat;
+                       if (viewChange) {
+                           // 点击列表地点, 重新设置地图中心, 不刷新列表
+                           // 手滑移动地图视图, 刷新列表数据
+                           // 仿微信
+                           nearHotSpotLocation(lon, lat);
+                        //    getNameFromCoords(lon, lat);
+                        } else {
+                            viewChange = 1;
+                        }
+                    }
+                });
+            }
+        });
+    }
+    // 附近热点位置
+    function nearHotSpotLocation(lon, lat, addEventListenerSearch) {
+        console.log('执行次数');
+        bMap.getNameFromCoords({
+            lon: lon,
+            lat: lat
+        }, function(ret, err) {
+            if (ret.status) {
+                var obj;
+                dataArr = dataArr.concat(ret.poiList);
+                getData(ret);
+                if(addEventListenerSearch) {
+                    var str = '<li data-city="addEventListenerSearch.city" data-province="addEventListenerSearch.province" data-district="addEventListenerSearch.district"  data-address="'+ addEventListenerSearch.address +'" data-name="'+ addEventListenerSearch.name +'" data-lat="'+ addEventListenerSearch.lat +'" data-lon="'+ addEventListenerSearch.lon +'" tapmode onclick="addLabel(this)"><p class="name" >'+ addEventListenerSearch.name +'</p><p class="address">'+ addEventListenerSearch.address +'</p></li >';
+                    $api.prepend($api.dom('ul'), str);
+                    obj = {
+                            lon: addEventListenerSearch.lon,
+                            lat: addEventListenerSearch.lat,
+                            name: addEventListenerSearch.name,
+                            address: addEventListenerSearch.address,
+                            city: addEventListenerSearch.city,
+                            province: addEventListenerSearch.province,
+                            district: addEventListenerSearch.district,
+                        }
+                }
+                $api.addCls($api.domAll('ul li')[0], 'select');
+                if (!addEventListenerSearch) {
+                    obj = {
+                        lon: $api.attr($api.dom('.select'), 'data-lon'),
+                        lat: $api.attr($api.dom('.select'), 'data-lat'),
+                        name: $api.attr($api.dom('.select'), 'data-name'),
+                        address: $api.attr($api.dom('.select'), 'data-address'),
+                        city: $api.attr($api.dom('.select'), 'data-city'),
+                        province: $api.attr($api.dom('.select'), 'data-province'),
+                        district: $api.attr($api.dom('.select'), 'data-district'),
+                    }
+                }
+                api.sendEvent({
+                    name: 'selectPosition',
+                    extra: obj
+                });
+            }
+        });
+    }
+    // 添加标注
+    function addLabel(ele) {
+        var liDom = $api.domAll('li');
+        for (var i = 0; i < liDom.length; i++) {
+            var element = liDom[i];
+            $api.removeCls(element, 'select');
+        }
+        $api.addCls(ele, 'select');
+
+        var lon = $api.attr(ele, 'data-lon'),
+            lat = $api.attr(ele, 'data-lat'),
+            name = $api.attr(ele, 'data-name'),
+            address = $api.attr(ele, 'data-address');
+            city = $api.attr(ele, 'data-city');
+            district = $api.attr(ele, 'data-district');
+            province = $api.attr(ele, 'data-province');
+        // 发送事件, 把选择的位置信息传递给win
+        api.sendEvent({
+            name: 'selectPosition',
+            extra: {
+                lon:lon,
+                lat:lat,
+                name:name,
+                address:address,
+                city: city,
+                district: district,
+                province: province,
+            }
+        });
+        delAnno([2]);
+        // bMap.addAnnotations({
+        //     annotations: [{
+        //         id: 1,
+        //         lon: lon,
+        //         lat: lat
+        //     }],
+        //     icon: 'widget://image/icon_my/icon_sc.png',
+        //     draggable: true
+        // }, function(ret,err) {
+        // });
+        setTimeout(function() {
+            bMap.addAnnotations({
+                annotations: [{
+                    id: 2, lon: lon, lat: lat
+                }],
+                icon: 'widget://',
+                draggable: true
+            }, function(ret){
+            });
+            viewChange = 0;
+            bMap.setCenter({
+                coords: {
+                    lon: $api.attr(ele, 'data-lon'),
+                    lat: $api.attr(ele, 'data-lat')
+                }
+            });
+        }, 500);
+    }
+    // 删除标注
+    function delAnno(ids) {
+        bMap.removeAnnotations({
+            ids: ids
+        });
+    }
+   
+</script>
+
+</html>

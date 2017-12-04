@@ -111,7 +111,7 @@
                 <p class="no_data">暂无附近的人</p>
             {{??}}
                 {{~it:value:index}}
-                    <li class="flex-def flex-cCenter" taomode onclick="openInfoPafe(this)" data-id="{{=value.user_id}}">
+                    <li class="flex-def flex-cCenter" data-sex="{{=value.remark_sex||value.sex}}" data-name="{{=value.remark_nickname==null?value.nickname:value.remark_nickname}}" taomode onclick="openInfoPafe(this)" data-id="{{=value.user_id}}" data-src="{{=(value.remark_head_img_url=='' || value.remark_head_img_url==null)?value.head_img_url:value.remark_head_img_url}}">
                         <img src="{{=(value.remark_head_img_url=='' || value.remark_head_img_url==null)?value.head_img_url:value.remark_head_img_url}}">
                         <div class="info flex-item flex-zLeftRight flex-def flex-zBetween">
                             <div class="title">
@@ -120,14 +120,16 @@
                                     {{?value.remark_sex==null}}
                                         {{?value.sex==2}}
                                             <span class="icon2"></span>
-                                        {{??}}
+                                        {{??value.sex==1}}
                                             <span class="icon"></span>
+                                        {{??}}
                                         {{?}}
                                     {{??}}
                                         {{?value.remark_sex==2}}
                                             <span class="icon2"></span>
-                                        {{??}}
+                                        {{??value.remark_sex==1}}
                                             <span class="icon"></span>
+                                        {{??}}
                                         {{?}}
                                     {{?}}
                                 </div>
@@ -155,7 +157,6 @@
 <script type="text/javascript">
     var paramFlitrate;
     apiready = function(){
-
         eventMonitoring('ScreeningIsComplete');
         requireData()
     };
@@ -177,11 +178,21 @@
     }
     // 进入个人详情页
     function openInfoPafe(ele) {
+        var name = $api.attr(ele, 'data-name');
+        var src = $api.attr(ele, 'data-src');
+        var id = $api.attr(ele, 'data-id');
+        console.log(name)
+        console.log(src)
+        console.log(id)
         api.openWin({
             name: 'txl_memberInfo_Win',
             url: '../addressList/txl_memberInfo_Win.html',
             bounces: false,
-            pageParam: {userId : $api.attr(ele, 'data-id')}
+            pageParam: {
+                userId : id,
+                name: name,
+                headImg: src,
+            }
         });
     }
     // 请求数据
@@ -226,8 +237,7 @@
             if(ret) {
                 if (ret.code === 200) {
                     selectSql(ret.data.list)
-                    console.log(JSON.stringify(ret));
-                    
+                    // console.log(JSON.stringify(ret));
                 } else {
                     alert(ret.msg)
                 }

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <style>
+    </style>
+</head>
+<body>
+
+     <header  class="header">
+        <div class="head">
+            <span class="callback"   tapmode   onclick="api.closeWin()">返回</span>
+            <span class="winTitle">位置</span>
+            <span class="rightBtn" >
+                <!-- <span tapmode onclick="openSearchPage()">搜索</span>     -->
+                <span tapmode onclick="sendPosition()">发送</span>    
+            </span>   
+        </div>
+    </header>
+   
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+    var positionObj = {};
+    apiready = function(){
+        fnInit();
+        api.openFrame({
+            name: 'map_frame',
+            url: './map_frame.html',
+            rect: {
+                x: 0,
+                y: headerH,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                headerH: headerH
+            },
+            bounces: false
+        });
+        api.addEventListener({
+            name: 'selectPosition'
+        }, function(ret, err){
+            positionObj = ret.value;
+        });
+    }
+    function openSearchPage() {
+        api.openWin({
+            name: 'map_frame_search',
+            url: './map_frame_search.html',
+            bounces: false
+        });
+    }
+    function sendPosition() {
+        console.log(JSON.stringify(positionObj))
+        api.sendEvent({
+            name: 'selAddress',
+            extra: {
+                lon: positionObj.lon,
+                lat: positionObj.lat,
+                address: positionObj.address,
+                name: positionObj.name,
+                city: positionObj.city,
+                district: positionObj.district,
+                province: positionObj.province,
+            }
+        });
+        api.closeWin();
+    }
+     function function_name(ele) {
+            // alert(address+name)
+            api.sendEvent({
+                name: 'selAddress',
+                extra: {
+                    lon: lon,
+                    lat: lat,
+                    address: address,
+                    name: name,
+                    city: city,
+                    district: district,
+                    province: province,
+                }
+            });
+            api.closeWin();
+        }
+        
+</script>
+</html>

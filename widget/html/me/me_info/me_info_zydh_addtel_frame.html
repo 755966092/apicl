@@ -5,6 +5,7 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../css/weui.css"/>
     <style>
         .main_no1 {
            margin-top: .6rem;
@@ -83,7 +84,43 @@
             </span>
         </div>
     </header> -->
-    <div class="main clearfix">
+    
+    <div class="weui-cells weui-cells_radio">
+        <label class="weui-cell weui-check__label" for="x11" onclick="selectClass(this)" data-val="1">
+            <div class="weui-cell__bd">
+                <p>移动电话</p>
+            </div>
+            <div class="weui-cell__ft">
+                <input type="radio" class="weui-check" name="radio1" id="x11">
+                <span class="weui-icon-checked"></span>
+            </div>
+        </label>
+        <label class="weui-cell weui-check__label" for="x12" onclick="selectClass(this)" data-val="2">
+    
+            <div class="weui-cell__bd">
+                <p>固定电话</p>
+            </div>
+            <div class="weui-cell__ft">
+                <input type="radio" name="radio1" class="weui-check" id="x12" checked="checked">
+                <span class="weui-icon-checked"></span>
+            </div>
+        </label>
+        <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="selTel()">
+            <div class="weui-cell__bd">
+                <p>类别</p>
+            </div>
+            <div class="weui-cell__ft">
+                <p class="telClass_1">工作</p>
+            </div>
+        </a>
+        <a class="weui-cell weui-cell_access" href="javascript:;">
+            <div class="weui-cell__bd">
+                <p>电话号码</p>
+            </div>
+            <input type="text" name="" style="text-align: right" id="phone" placeholder="输入手机号">
+        </a>
+    </div>
+    <!-- <div class="main clearfix">
        <div class="main_no1">
            <div class="wrap">
                <p   tapmode   onclick="selectClass(this)"  data-val="1">
@@ -97,15 +134,15 @@
            </p>
        </div>
        <div class="main_no2">
-           <p class="telClass"   tapmode   onclick="selTel()">类别
+           <p class="telClass"   tapmode onclick="selTel()">类别
                 <span class="fr telClass_1">工作</span>
            </p>
            <p>电话号码
-                <input type="text" name="" id="phone" placeholder="输入手机号" class="fr">
+                <input style="text-align: right" type="text" name="" id="phone" placeholder="输入手机号" class="fr">
            </p>
        </div>
        <div class="main_no3" tapmode onclick="addTel()">保存</div>
-    </div>
+    </div> -->
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
@@ -162,20 +199,25 @@
     // 选择电话类别  生活 || 工作
     function selTel() {
             var val = $api.text($api.dom('.telClass_1'));
-            api.openFrame({
-                name: 'me_info_tel',
-                url: './me_info_tel.html',
-                rect: {
-                    x: 0,
-                    y: 0,
-                    w: 'auto',
-                    h: api.winHeight
-                },
-                pageParam: {
-                    val:val
-                },
-                bounces: false
+            api.actionSheet({
+                buttons: ['工作', '生活']
+            },function(ret,err){
+                $api.text($api.dom('.telClass_1'), ret.buttonIndex == 1 ? '工作': '生活');
             });
+            // api.openFrame({
+            //     name: 'me_info_tel',
+            //     url: './me_info_tel.html',
+            //     rect: {
+            //         x: 0,
+            //         y: 0,
+            //         w: 'auto',
+            //         h: api.winHeight
+            //     },
+            //     pageParam: {
+            //         val:val
+            //     },
+            //     bounces: false
+            // });
     }
     // 选择电话类别 移动 || 固定
     function selectClass(ele) {
