@@ -9,6 +9,7 @@
         body, html{
             background-color: #000;
             height: 100%;
+            width: 100%;
         }
         .main {
             text-align: center;
@@ -46,6 +47,12 @@
         }
         .loading {
             display: none;
+            z-index: 10000;
+            width: 100%;
+            height: 100%;
+            background:  rgba(0, 0, 0, .5) url(../../image/loading_more.gif)no-repeat;
+            background-size: .8rem .8rem;
+            background-position: center;
         }
     </style>
 </head>
@@ -77,6 +84,10 @@
     apiready = function() {
         FNImageClip = api.require('FNImageClip');
 	    fnInit();
+        if (api.pageParam.headImg !== '../../image/icon_defaultHead.png') {
+            $api.attr($api.dom('.headImg'), 'src', api.pageParam.headImg);
+            flag = 2; 
+        }
     };
 
     function upload(str) {
@@ -119,7 +130,6 @@
         }
     }
     function clipImage(ret) {
-        //console.log(flag)
         FNImageClip.open({
             rect: {
                 x: 0,
@@ -134,10 +144,10 @@
             style: {
                 mask: 'rgba(0,0,0,0.4)',
                 clip: {
-                    w: api.winWidth-1,
+                    w: api.winWidth-2,
                     h: api.winWidth,
-                    x: 0,
-                    y: api.winHeight / 2 - api.winWidth / 2,
+                    x: 1,
+                    y: (api.winHeight - api.winWidth - headerH ) /2  ,
                     borderColor: '#0f0',
                     borderWidth: 1,
                     appearance: 'rectangle'
@@ -152,54 +162,63 @@
         });
     }
     function enter () {
-        //console.log('155:'+flag)
-        if (flag) {
+        if (flag == 1) {
             imgSave();
-        } else {
+        } else if (flag == 0){
+            $api.css($api.dom('.loading'), 'display:block');
             var url = $api.attr($api.dom('img'),'src');
             pushImg(url)
+        } else {
+            api.closeWin();
         }
 
     }
     function imgSave() {
-            $api.css($api.dom('.loading'), 'display:block');
             FNImageClip.save({
                 destPath: 'fs://imageClip/result.png',
                 copyToAlbum: false,
                 quality: 1
             },function(ret, err){
-                //console.log('170:'+JSON.stringify(ret))
                 if(ret) {
-
-                    var obj = api.require('qiniuUpfile');
-                    obj.upfile({
-                        file: ret.destPath,
-                    }, function(retUpfile, err) {
-                        if (retUpfile.status) {
-                            if (retUpfile.oper == "complete") {
-                                //上传成功后组装访问路径，或直接访问文档
-                                // $api.attr($api.dom('img'),'src', 'http://'+ baseUrl +'/'+ retUpfile.info.key);
-                                flag = 0;
-                                $api.attr($api.dom('img'), 'src', 'http://'+ baseUrl +'/'+ retUpfile.info.key);
-                                $api.css($api.dom('.loading'), 'display:none');
-                                FNImageClip.close();
-                            } else if (retUpfile.oper == "progress") {
-                                //上传过程中获取进度数据
-                                // console.log(retUpfile.percent);
-                            }
-                        }
-                    });
+                    $api.attr($api.dom('img'), 'src', ret.destPath);
+                    flag = 0;
+                     FNImageClip.close();
                 } else{
                     alert(JSON.stringify(err));
                 }
             });
     }
     function pushImg(imgUrl) {
-        api.sendEvent({
-            name: 'circleNameEdit3',
-            extra: {imgUrl: imgUrl}
-        });
-        api.closeWin();
+        if (imgUrl === '../../image/icon_defaultHead.png') {
+            alert('请上传圈子图片');
+            $api.css($api.dom('.loading'), 'display:none');
+        } else {
+            var obj = api.require('qiniuUpfile');
+            obj.upfile({
+                file: imgUrl,
+            }, function (retUpfile, err) {
+                if (retUpfile.status) {
+                    if (retUpfile.oper == "complete") {
+                        //上传成功后组装访问路径，或直接访问文档
+                        // $api.attr($api.dom('img'),'src', 'http://'+ baseUrl +'/'+ retUpfile.info.key);
+                        flag=1;
+                        var successImg = 'http://' + baseUrl + '/' + retUpfile.info.key;
+                        console.log(successImg)
+                        $api.attr($api.dom('img'), 'src', successImg);
+                        $api.css($api.dom('.loading'), 'display:none');
+                        api.sendEvent({
+                            name: 'circleNameEdit3',
+                            extra: { imgUrl: successImg,imgUrlLocalhost: imgUrl }
+                        });
+                        api.closeWin();
+                    } else if (retUpfile.oper == "progress") {
+                        //上传过程中获取进度数据
+                        // console.log(retUpfile.percent);
+                    }
+                }
+            });
+        }
+        
     }
 </script>
 </html>

@@ -90,14 +90,14 @@
     
     <div class="main">
         <ul class="mt32">
-            <li class="flex-def flex-cCenter flex-zBetween" tapmode onclick="openPage(1)">
+            <li class="flex-def flex-cCenter flex-zBetween" tapmode onclick="openPage(this,1)">
                 <span class="label">圈子名称</span>
                 <div class="flex-def flex-cCenter">
                         <span id="circleName" class="text"></span>
                         <span class="icon"></span>
                 </div>
             </li>
-            <li class="flex-def flex-cCenter flex-zBetween" tapmode onclick="openPage(3)">
+            <li class="flex-def flex-cCenter flex-zBetween" tapmode onclick="openPage(this,3)">
                 <span class="label">圈子图片</span>
                 <div class="flex-def flex-cCenter">
                         <img id="headImg" src="../../image/icon_defaultHead.png" alt="">
@@ -118,7 +118,7 @@
                         <span class="icon"></span>
                 </div>
             </li>
-            <li class="flex-def flex-cCenter flex-zBetween" id="priceBtn" tapmode onclick="openPage(2)">
+            <li class="flex-def flex-cCenter flex-zBetween" id="priceBtn" tapmode onclick="openPage(this,2)">
                 <span class="label">入圈金额</span>
                 <div class="flex-def flex-cCenter">
                         <span class="text" id="addCirclePrice"></span>
@@ -154,20 +154,27 @@
        ListenToEvents();
     };
     // 打开编辑页面
-    function openPage(n) {
-        var url;
+    function openPage(ele,n) {
+        var url, headImg, text;
         if (n === 1) {
             url = "./find_foundCircle_win_name.html"
+            text = $api.text($api.byId('circleName'));
         } else if (n === 2) {
             url = "./find_foundCircle_win_price.html"
+            text = $api.text($api.byId('addCirclePrice'));
         } else if (n === 3) {
             url = "./find_foundCircle_win_headImg.html"
+            headImg = $api.attr($api.byId('headImg'), 'src');
         }
         // alert(url)
         api.openWin({
             name: 'winname'+url,
             url: url,
-            bounces: false
+            bounces: false,
+            pageParam: {
+                headImg: headImg,
+                text: text
+            }
         });
 
     }
@@ -212,7 +219,9 @@
         api.addEventListener({
             name: 'circleNameEdit3'
         }, function(ret, err){
-            $api.attr($api.byId('headImg'), 'src', ret.value.imgUrl);
+            console.log(ret.value.imgUrl);
+            $api.attr($api.byId('headImg'), 'src', ret.value.imgUrlLocalhost);
+            $api.attr($api.byId('headImg'), 'data-src', ret.value.imgUrl);
         });
         api.addEventListener({
            name: 'saveImg'
@@ -247,7 +256,7 @@
         // apply_reason        // 理由
         var title = $api.text($api.byId('circleName'));
         var description = $api.val($api.byId('description'));
-        var image_url = $api.attr($api.byId('headImg'), 'src');
+        var image_url = $api.attr($api.byId('headImg'), 'data-src');
         var price = $api.text($api.byId('addCirclePrice'));
         var apply_reason = $api.val($api.byId('reason'));
         var type = $api.text($api.byId('priceSetting')) == '免费' ? 1 : 2;
@@ -363,7 +372,7 @@
                     w: api.winWidth-1,
                     h: api.winWidth,
                     x: 1,
-                    y: api.winHeight / 2 - api.winWidth / 2,
+                    y: (api.winHeight - api.winWidth - headerH) / 2 ,
                     borderColor: '#0f0',
                     borderWidth: 1,
                     appearance: 'rectangle'

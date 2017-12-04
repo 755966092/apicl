@@ -111,7 +111,6 @@
             background-size: .63rem .28rem;*/
             font-size: 0.2rem;
             color: #CC0019;
-            font-weight: 600;
             margin-left: 0.05rem;
         }
         .content {
@@ -368,7 +367,7 @@
             </div>
             <div class="discuss">
                 <div class="startEndTime ">
-                    <span>评论（{{=it.commmentLength}}）</span>
+                    <span>评论（{{=it.info.topic_info.comment_count}}）</span>
                     <!-- <span class="zkIcon"></span> -->
                 </div>
                 {{ for(var i = 0; i < it.list.length; i++){ }}
@@ -405,7 +404,7 @@
        </ul>
    </div>
     <footer class="flex-def">
-        <div class="selRole" ontouchstart="selRole()">
+        <div class="selRole" tapmode onclick="selRole()">
             <span class="text" id='role' >选择角色</span>
             <span class="icon"></span>
         </div>
@@ -498,6 +497,7 @@
                 // if (ret.data.info.topic_info.role) {
                 //     ret.data.info.topic_info.role = role[ret.data.info.topic_info.role]
                 // }
+                console.log(JSON.stringify(ret,null,4))
                 ret.data.info.topic_info.create_time = initTime(ret.data.info.topic_info.create_time)
                 for (var i = 0; i < ret.data.list.length; i++) {
                     if (ret.data.list[i].root == 1) {
