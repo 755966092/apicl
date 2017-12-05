@@ -134,7 +134,7 @@
                                     {{?}}
                                 </div>
                                 {{?value.distance<1}}
-                                <p>1km以内</p>
+                                <p>{{=(value.distance*1000)}}m</p>
                                 {{??}}
                                 <p>{{=value.distance}}km</p>
                                 {{?}}
@@ -181,9 +181,6 @@
         var name = $api.attr(ele, 'data-name');
         var src = $api.attr(ele, 'data-src');
         var id = $api.attr(ele, 'data-id');
-        console.log(name)
-        console.log(src)
-        console.log(id)
         api.openWin({
             name: 'txl_memberInfo_Win',
             url: '../addressList/txl_memberInfo_Win.html',
@@ -237,7 +234,6 @@
             if(ret) {
                 if (ret.code === 200) {
                     selectSql(ret.data.list)
-                    // console.log(JSON.stringify(ret));
                 } else {
                     alert(ret.msg)
                 }

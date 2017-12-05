@@ -183,7 +183,9 @@
 </head>
 <body>
     <div class="search">
-        <input type="text" onblur="loseFocus()" onfocus="getFocus()" onkeyup="hideSearIcon(this)" name="" placeholder="搜索">
+        <form>
+            <input type="search" onblur="loseFocus()" onfocus="getFocus()"  name="" placeholder="搜索">
+        </form>
         <span class="searchIcon"></span>
         <!-- <span class="sxIcon"  tapmode onclick="openSlideBar()"></span> -->
     </div>
@@ -236,6 +238,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript" src="../../script/pinyin4js.js"></script>
+<script type="text/javascript" src="../../script/jquery.min.js"></script>
 <script type="text/javascript">
     var selVal=0,selectedObj,apiPageParamFlag;
     var letterArr = [],letterObj = [];
@@ -284,7 +287,19 @@
                 alert(JSON.stringify(err));
             }
         });
+        bindEvent();
     };
+    function bindEvent() {
+            if (api.systemType == 'ios') {
+                $('input').on("compositionend", function () {
+                    hideSearIcon(this);
+                })
+            } else {
+                $('input').on("input", function () {
+                    hideSearIcon(this);
+                })
+            }
+        }
     // 初始化页面
     function initPage() {
         // if(apiPageParamFlag) {

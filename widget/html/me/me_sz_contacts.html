@@ -8,6 +8,36 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
+    <style>
+    .nomain .icon {
+        display: none;
+            width: 2.2rem;
+            height: 2.2rem;
+            background: url(../../image/iocn_addressList/icon_noInfo.png)no-repeat;
+            -webkit-background-size: 2.2rem 2.2rem;
+            background-size: 2.2rem 2.2rem;
+            margin: 0 auto;
+        }
+        .nomain {
+            position: absolute;
+            top: 0;bottom: 0;left: 0;right: 0;
+            margin: auto;
+        }
+        .nomain p {
+            font-size: .3rem;
+            color: #999;
+            /*width: 3.9rem;*/
+            margin: .36rem auto 0;
+            text-align: center;
+        }
+        .nomain .jump {
+            color: #89B2EF;
+            font-size: 0.34rem;
+        }
+        .nomain .wrap {
+            background-color: rgba(0, 0, 0, 0)
+        }
+        </style>
 </head>
 
 <body>
@@ -19,7 +49,15 @@
             </span>
         </div>
     </header>
-    <p class="no_data" id="noData"></p>
+    <!-- <p class="no_data" id="noData"></p> -->
+    <div class="nomain flex-def flex-cCenter flex-zCenter" id="noData">
+        <div class="wrap">
+            <div class="icon">
+            </div>
+            <p>空空如也</p>
+            <p class="jump" tapmode onclick="openCreateCirclePage()">快去发布需求吧</p>
+        </div>
+    </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -74,7 +112,8 @@
                         formatTheData(ret.data.list);
                     } else {
                         listContact.close();
-                        $api.text($api.byId('noData'), str);
+                        // $api.text($api.byId('noData'), str);
+                        $api.css($api.byId('noData'), "display:block");
                     }
                 } else {
                     alert(ret.msg)

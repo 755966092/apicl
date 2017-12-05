@@ -41,7 +41,7 @@
             <div class="weui-cell__bd">加我为朋友时需要验证</div>
             <div class="weui-cell__ft">
                 <label for="addFriend" class="weui-switch-cp">
-                    <input value="addFriend" onchange="changeState(this)" id="addFriend" class="weui-switch-cp__input" type="checkbox" >
+                    <input checked value="addFriend" onchange="changeState(this)" id="addFriend" class="weui-switch-cp__input" type="checkbox" >
                     <div class="weui-switch-cp__box"></div>
                 </label>
             </div>
@@ -145,6 +145,7 @@
         console.log(JSON.stringify(ret))
         if(ret.data.list.is_apply_reason === 2) {
             // 加好友不需要验证
+             $api.removeAttr($api.byId('addFriend'), 'checked');
         } else {
             // 加好友需要验证
             $api.attr($api.byId('addFriend'), 'checked', 'checked');
