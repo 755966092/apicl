@@ -295,19 +295,19 @@ function changeTime(time) {
 // doT模版获取数据
 function getData(data) {
 	// 原生方法
-	//  document.getElementsByClassName('resultList')[0].innerHTML = doT.template(document.getElementById('listT').innerHTML)(data)
+	 document.getElementsByClassName('resultList')[0].innerHTML = doT.template(document.getElementById('listT').innerHTML)(data)
 	// console.log('渲染模版111')
-	var listTText = $api.byId("listT").text;
+			// var listTText = $api.byId("listT").text;
 	// console.log('渲染模版222')
-	var fnListT = doT.template(listTText);
+			// var fnListT = doT.template(listTText);
 	// console.log('渲染模版333')
-	var html = fnListT(data);
+			// var html = fnListT(data);
 	// console.log('渲染模版444')
 	// console.log(html+' at 304')
-	var list = $api.dom(".resultList");
+			// var list = $api.dom(".resultList");
 	// console.log('渲染模版555')
 	// 替换resultList所有内容
-	$api.html(list, html);
+	// $api.html(list, html);
 	// console.log('渲染完成')
 	// alert('getData:' + JSON.stringify(data))
 }

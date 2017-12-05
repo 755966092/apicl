@@ -5,6 +5,7 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css"/>
     <style>
      .no_data {
          background-color: #EDECF3;
@@ -92,10 +93,40 @@
             color: #999;
             line-height: .5rem;
         }
+
+
+        .weui-panel__bd {
+            background-color: #fff;
+        }
+        .weui-media-box__desc {
+            -webkit-line-clamp: 1;
+        }
+        .weui-media-box_appmsg .weui-media-box__hd {
+            margin-right: 0.2rem;
+        }
+         .no1 {
+            margin-right: .6rem;
+        }
+
+        .label {
+            font-size: .24rem;
+            color: #999;
+        }
+        .count {
+            font-size: .24rem;
+            color: #0ABB07;
+        }
+        .weui-media-box_appmsg .weui-media-box__thumb {
+            border-radius: .1rem;
+        }
+         .weui-media-box {
+            padding-top: .2rem;
+            padding-bottom: 0.2rem;
+        }
     </style>
 </head>
 <body>
-    <div class="resultList">
+    <div class="resultList weui-panel__bd">
             <!-- <div class="user">
                         <div class="wrap" data-flag='1' data-name='{{=it[i].title}}' data-id='{{=it[i].circle_id}}' tapmode   onclick="openCircleInfo(this)">
                             <div class=" list flex-def flex-cCenter">
@@ -118,27 +149,24 @@
        </div> -->
        <script type="text/x-dot-template" id="listT">
             {{?it.length != 0}}
-               <div class="user">
                     {{ for (var i = 0; i < it.length; i++) { }}
-                        <div class="wrap" data-flag='1' data-name='{{=it[i].title}}' data-id='{{=it[i].circle_id}}' tapmode   onclick="openCircleInfo(this)">
-                            <div class=" list flex-def flex-cCenter">
-                                <img src="{{=it[i].image_url}}">
-                                <div>
-                                    <div class="circlTitle">
-                                       <div class="circleInfo">
-                                           <h3>{{=it[i].title}}</h3>
-                                           <p class="circleIntroduce">{{=it[i].description}}</p>
-                                       </div>
-                                    </div>
-                                    <p class="circleData">
-                                       <span class="circleTitle">成员: <span class="quantity">{{=it[i].member_count}}</span></span>
-                                       <span class="circleTitle">发布: <span class="quantity">{{=it[i].topic_count}}</span></span>
-                                    </p>
-                                </div>
+                        <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" data-flag='1' data-name='{{=it[i].title}}' data-id='{{=it[i].circle_id}}' tapmode   onclick="openCircleInfo(this)">
+                            <div class="weui-media-box__hd">
+                                <img class="weui-media-box__thumb" src="{{=it[i].image_url}}"
+                                alt="">
                             </div>
-                        </div>
+                            <div class="weui-media-box__bd">
+                                <h4 class="weui-media-box__title">{{=it[i].title}}</h4>
+                                <p class="weui-media-box__desc">{{=it[i].description}}</p>
+                                <p class="weui-media-box__desc">
+                                    <span class="label">成员:</span>
+                                    <span class="count no1">{{=it[i].member_count}}</span>
+                                    <span class="label">发布:</span>
+                                    <span class="count">{{=it[i].topic_count}}</span>
+                                </p>
+                            </div>
+                        </a>
                     {{ }; }}
-               </div>
             {{??}}
             <p class="no_data">暂无数据</p>
             {{?}}

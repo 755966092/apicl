@@ -7,6 +7,7 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
     <style type="text/css">
         html {
             height: 100%;
@@ -137,6 +138,36 @@
             -webkit-background-size: .284rem .34rem;
             background-size: .284rem .34rem;
         }
+
+
+        .weui-panel__bd {
+            background-color: #fff;
+        }
+        .weui-media-box__desc {
+            -webkit-line-clamp: 1;
+        }
+        .weui-media-box_appmsg .weui-media-box__hd {
+            margin-right: 0.2rem;
+        }
+         .no1 {
+            margin-right: .6rem;
+        }
+
+        .label {
+            font-size: .24rem;
+            color: #999;
+        }
+        .count {
+            font-size: .24rem;
+            color: #0ABB07;
+        }
+         .weui-media-box_appmsg .weui-media-box__thumb {
+            border-radius: .1rem;
+        }
+        .weui-media-box {
+            padding-top: .2rem;
+            padding-bottom: 0.2rem;
+        }
     </style>
 </head>
 
@@ -223,27 +254,26 @@
                     <span class="line"></span>
                 </div>
             {{?}}
-            <div class="complete">
+             <div class="weui-panel__bd ">
                 {{ for (var i = 0; i < it.verify_waiting_list.length; i++) { }}
-                    <div class="item">
-                        <div class="wrap flex-def flex-cCenter">
-                            <div class="itemLeft">
-                                <img src="{{=it.verify_waiting_list[i].image_url}}">
-                            </div>
-                            <div class="itemRight">
-                                <h3>{{=it.verify_waiting_list[i].title}}</h3>
-                                <p class="circleInfo">{{=it.verify_waiting_list[i].description}}</p>
-                                <div class="circleCount">
-                                    <span class="label">成员:</span>
-                                    <span class="count no1">{{=it.verify_waiting_list[i].member_count}}</span>
-                                    <span class="label">发布:</span>
-                                    <span class="count">{{=it.verify_waiting_list[i].topic_count}}</span>
-                                </div>
-                            </div>
+                    <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" >
+                        <div class="weui-media-box__hd">
+                            <img class="weui-media-box__thumb" src="{{=it.verify_waiting_list[i].image_url}}"
+                            alt="">
                         </div>
-                    </div>
+                        <div class="weui-media-box__bd">
+                            <h4 class="weui-media-box__title">{{=it.verify_waiting_list[i].title}}</h4>
+                            <p class="weui-media-box__desc">{{=it.verify_waiting_list[i].description}}</p>
+                            <p class="weui-media-box__desc">
+                                <span class="label">成员:</span>
+                                <span class="count no1">{{=it.verify_waiting_list[i].member_count}}</span>
+                                <span class="label">发布:</span>
+                                <span class="count">{{=it.verify_waiting_list[i].topic_count}}</span>
+                            </p>
+                        </div>
+                    </a>
                 {{ }; }}
-            </div>
+                </div>
             {{?it.verify_fail_list.length !== 0}}
                 <div class="title flex-def flex-cCenter flex-zCenter">
                     <span class="line"></span>
@@ -252,26 +282,25 @@
                     <span class="line"></span>
                 </div>
             {{?}}
-            <div class="complete">
-                {{ for (var i = 0; i < it.verify_fail_list.length; i++) { }}
-                    <div class="item">
-                        <div class="wrap flex-def flex-cCenter">
-                            <div class="itemLeft">
-                                <img src="{{=it.verify_fail_list[i].image_url}}">
-                            </div>
-                            <div class="itemRight">
-                                <h3>{{=it.verify_fail_list[i].title}}</h3>
-                                <p class="circleInfo">{{=it.verify_fail_list[i].description}}</p>
-                                <div class="circleCount">
-                                    <span class="label">成员:</span>
-                                    <span class="count no1">{{=it.verify_fail_list[i].member_count}}</span>
-                                    <span class="label">发布:</span>
-                                    <span class="count">{{=it.verify_fail_list[i].topic_count}}</span>
-                                </div>
-                            </div>
-                        </div>
+             <div class="weui-panel__bd ">
+            {{ for (var i = 0; i < it.verify_fail_list.length; i++) { }}
+                <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" >
+                    <div class="weui-media-box__hd">
+                        <img class="weui-media-box__thumb" src="{{=it.verify_fail_list[i].image_url}}"
+                        alt="">
                     </div>
-                {{ }; }}
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">{{=it.verify_fail_list[i].title}}</h4>
+                        <p class="weui-media-box__desc">{{=it.verify_fail_list[i].description}}</p>
+                        <p class="weui-media-box__desc">
+                            <span class="label">成员:</span>
+                            <span class="count no1">{{=it.verify_fail_list[i].member_count}}</span>
+                            <span class="label">发布:</span>
+                            <span class="count">{{=it.verify_fail_list[i].topic_count}}</span>
+                        </p>
+                    </div>
+                </a>
+            {{ }; }}
             </div>
             {{?it.available_list.length !== 0}}
                 <div class="title des flex-def flex-cCenter flex-zCenter">
@@ -281,26 +310,25 @@
                     <span class="line"></span>
                 </div>
             {{?}}
-            <div class="complete">
-                {{ for (var i = 0; i < it.available_list.length; i++) { }}
-                <div class="item" tapmode onclick="openCircleInfo(this)" data-name="{{=it.available_list[i].title}}" data-id="{{=it.available_list[i].circle_id}}">
-                    <div class="wrap flex-def flex-cCenter">
-                        <div class="itemLeft">
-                            <img src="{{=it.available_list[i].image_url}}">
-                        </div>
-                        <div class="itemRight">
-                            <h3>{{=it.available_list[i].title}}</h3>
-                            <p class="circleInfo">{{=it.available_list[i].description}}</p>
-                            <div class="circleCount">
-                                <span class="label">成员:</span>
-                                <span class="count no1">{{=it.available_list[i].member_count}}</span>
-                                <span class="label">发布:</span>
-                                <span class="count">{{=it.available_list[i].topic_count}}</span>
-                            </div>
-                        </div>
+             <div class="weui-panel__bd ">
+            {{ for (var i = 0; i < it.available_list.length; i++) { }}
+                <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" tapmode onclick="openCircleInfo(this)" data-name="{{=it.available_list[i].title}}" data-id="{{=it.available_list[i].circle_id}}">
+                    <div class="weui-media-box__hd">
+                        <img class="weui-media-box__thumb" src="{{=it.available_list[i].image_url}}"
+                        alt="">
                     </div>
-                </div>
-                {{ }; }}
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title">{{=it.available_list[i].title}}</h4>
+                        <p class="weui-media-box__desc">{{=it.available_list[i].description}}</p>
+                        <p class="weui-media-box__desc">
+                            <span class="label">成员:</span>
+                            <span class="count no1">{{=it.available_list[i].member_count}}</span>
+                            <span class="label">发布:</span>
+                            <span class="count">{{=it.available_list[i].topic_count}}</span>
+                        </p>
+                    </div>
+                </a>
+            {{ }; }}
             </div>
        </div>
     </script>
