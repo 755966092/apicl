@@ -18,10 +18,11 @@
         .sexIcon {
             margin-left: .2rem;
             width: .21rem;
-            height: .21rem;
+            height: .4rem;
             background: url(../../image/icon_my/icon_my01.png) no-repeat;
             -webkit-background-size: .21rem .21rem;
             background-size: .21rem .21rem;
+            background-position: center;
         }
         .sexIcon2 {
             background: url(../../image/icon_my/icon_my02.png) no-repeat;
@@ -42,12 +43,18 @@
             display: block;
             border-radius: .1rem;
         }
-    
+        #nickname,.companyName {
+            max-width: 4rem;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden
+        }
         /* 职位公司 */
         .companyName {
             font-size: .24rem;
             color: #555;
         }
+       
         /* 备注 */
         .liRightIcon {
             display: inline-block;
@@ -94,7 +101,7 @@
                 </div>
                 <div class="weui-cell__bd">
                     <p class="userName">
-                        <span id="nickname"></span>
+                        <span id="nickname">姓名</span>
                         <span id="sex" class="sexIcon"></span>
                     </p>
                     <p class="companyName">
@@ -106,21 +113,6 @@
                 <div class="weui-cell__ft"></div>
             </a>
         </div>
-        <!-- <div class="business flex-def flex-cCenter">
-            <div class="supply" tapmode onclick="openSupplyPage(0)">
-                <span class="supplyIcon"></span>
-                <p class="text">供应</p>
-            </div>
-            <div class="ask" tapmode onclick="openSupplyPage(1)">
-                <span class="askIcon"></span>
-                <p class="text">需求</p>
-        
-            </div>
-            <div class="circle" tapmode onclick="openSupplyPage(2)">
-                <span class="circleIcon"></span>
-                <p class="text">圈子</p>
-            </div>
-        </div> -->
         <div class="weui-grids">
             <a href="javascript:;" class="weui-grid" tapmode onclick="openSupplyPage(0)">
                 <div class="weui-grid__icon flex-def flex-cCenter flex-zCenter">
@@ -142,9 +134,9 @@
             </a>
         </div>
         <div class="weui-cells mt30">
-            <a class="weui-cell weui-cell_access" href="javascript:;">
+            <a style="pointer-events: none;" class="weui-cell weui-cell_access" href="javascript:;">
                 <div class="weui-cell__bd">
-                    <p id="relationship_level"></p>
+                    <p id="relationship_level">一度人脉尚未加入</p>
                 </div>
             </a>
             <a class="weui-cell weui-cell_access" href="javascript:;" id="openNetworkOfPeople" tapmode onclick="openNetworkOfPeople()">
@@ -346,7 +338,8 @@
         function hideNetworkOfPeople() {
             // openNetworkOfPeople
             if(api.pageParam.flag == 4 || api.pageParam.userId == 0) {
-                $api.css($api.byId('openNetworkOfPeople'), 'display:none');
+                // $api.css($api.byId('openNetworkOfPeople'), 'display:none');
+                $api.css($api.byId('openNetworkOfPeople'), 'color: #999;pointer-events: none;');
                 // $api.removeCls($api.byId('relationship_level_wrap'), 'wrap1');
                 // $api.removeCls($api.dom($api.byId('relationship_level_wrap'), '.wrap'), 'wrap');
             }
@@ -1174,7 +1167,7 @@
         switch (relationship_levelType) {
             case 1:
                 $api.text(relationship_level, '自己');
-                $api.css($api.byId('openNetworkOfPeople'), 'display:none');
+                $api.css($api.byId('openNetworkOfPeople'), 'color: #999;pointer-events: none;');
                 $api.css(btn, 'display: none');
                 // for (var i = 0; i < $api.domAll('ul li .icon').length; i++) {
                 //     $api.css($api.domAll('ul li .icon')[i], 'display: none');
@@ -1201,6 +1194,7 @@
                 break;
             case 4:
                 $api.text(relationship_level, '初识好友');
+                $api.css($api.byId('openNetworkOfPeople'), 'color: #999;pointer-events: none;');
                 break;
             case 5:
                 $api.text(relationship_level, '二度好友' + compareRelation(status));
@@ -1224,7 +1218,7 @@
                 $api.text(btn, '加为好友');
 
                 $api.text(relationship_level, '无任何关系');
-                $api.css($api.byId('openNetworkOfPeople'), 'display:none');
+                $api.css($api.byId('openNetworkOfPeople'), 'color: #999;pointer-events: none;');
                 // $api.removeCls($api.byId('relationship_level_wrap'), 'wrap1');
                 // $api.removeCls($api.dom($api.byId('relationship_level_wrap'), '.wrap'), 'wrap');
                 // } else {
@@ -1263,6 +1257,7 @@
                 break;
             case 4:
                 $api.text(relationship_level, '初识好友');
+                 $api.css($api.byId('openNetworkOfPeople'), 'color: #999;pointer-events: none;');
                 break;
             case 5:
                 $api.text(relationship_level, '二度好友' + compareRelation(status));
@@ -1283,7 +1278,7 @@
                 $api.text($api.byId('btn'), '加为好友');
                 // $api.css($api.byId('btn'), 'display: none');
                 $api.text(relationship_level, '无任何关系');
-                $api.css($api.byId('openNetworkOfPeople'), 'display:none');
+                $api.css($api.byId('openNetworkOfPeople'), 'color: #999;pointer-events: none;');
                 // $api.removeCls($api.byId('relationship_level_wrap'), 'wrap1');
                 // $api.removeCls($api.dom($api.byId('relationship_level_wrap'), '.wrap'), 'wrap');
                 break;

@@ -10,12 +10,12 @@
         <style>
             .top {
                 height: 0.8rem;
-                width: 7.5rem;
+                /* width: 7.5rem; */
                 background-color: #EDECF3;
             }
             .wrap {
                 height: 0.8rem;
-                width: 7.5rem;
+                /* width: 7.5rem; */
                 box-sizing: border-box;
                 padding: 0 0.15rem;
             }
@@ -44,13 +44,14 @@
         <div class="top ">
             <form class="wrap flex-def flex-cCenter">
                 <!-- <span id="callbackBtn">返回</span> -->
-                    <input class="flex-item" type="search" oninput="changeInput(this)">
+                    <input id="input" class="flex-item" type="search" >
                     <span class="flagText" tapmodu onclick="search(this)">取消</span>
             </form>
         </div>
         <script type="text/javascript" src="../../script/api.js"></script>
         <script type="text/javascript" src="../../script/common.js"></script>
         <script type="text/javascript" src="../../script/pinyin4js.js"></script>
+        <script type="text/javascript" src="../../script/jquery.min.js"></script>
         <script type="text/javascript">
             var headerH;
             apiready = function(){
@@ -84,7 +85,19 @@
 
                     }
                 });
+                bindEvent();
             }
+             function bindEvent() {
+                    if (api.systemType == 'ios') {
+                        $('#input').on("compositionend", function () {
+                            changeInput(this);
+                        })
+                    } else {
+                        $('#input').on("input", function () {
+                            changeInput(this);
+                        })
+                    }
+                }
             function pageInit() {
                 $api.fixStatusBar($api.dom('.top'));
                 headerH = $api.offset($api.dom('.top')).h;
