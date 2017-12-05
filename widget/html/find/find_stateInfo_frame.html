@@ -20,7 +20,7 @@
             height: 1rem;
             line-height: 1rem;
             font-size: 0;
-            width: 7.5rem;
+            width: 100%;
         }
         footer div {
             font-size: 0;
@@ -118,11 +118,12 @@
             text-align: center;
             /*height: 3.77rem;*/
             background-color: #fff;
-            /* width: 7.5rem; */
+            width: 100%;
             box-sizing: border-box;
         }
         .content .wrap {
             width: 100%;
+            /* padding: 0 0.2rem; */
             box-sizing: border-box;
         }
         .content .xqText {
@@ -141,6 +142,9 @@
             -webkit-background-size: .34rem .29rem;
             background-size: .34rem .29rem;
             margin: 0 .2rem;
+        }
+        .imgWrap {
+            padding: 0 .2rem;
         }
         .content h3 {
             font-size: .34rem;
@@ -161,8 +165,9 @@
             margin-top: .2rem;
         }
         .content .wrap img {
-            width: 6.5rem;
-            margin: .1rem;
+            /* width: 6.5rem; */
+            width: 100%;
+            margin: .1rem 0;
             pointer-events: none;
         }
         .content .time {
@@ -195,7 +200,7 @@
         }
         .startEndTime {
             box-sizing: border-box;
-            /* width: 7.5rem; */
+            /* width: 100%; */
             font-size: 0;
             height: .797rem;
             background-color: #fff;
@@ -261,7 +266,7 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 7.5rem;
+            width: 100%;
             height: 100%;
             background-color: rgba(0,0,0,0.6);
 
@@ -301,7 +306,7 @@
             bottom: 1rem;
             left: 0;
             background-color: #fff;
-            width: 7.5rem;
+            width: 100%;
             padding-left: .3rem;
             display: none;
         }
@@ -354,11 +359,13 @@
                     </div>
                     <h3>{{=it.info.topic_info.title}}</h3>
                     <p class="textContent">{{=it.info.topic_info.content}}</p>
-                    {{?it.info.topic_info.image_json!=null}}
+                    <div class="imgWrap">
+                        {{?it.info.topic_info.image_json!=null}}
                         {{ for(var i=0; i< it.info.topic_info.image_json.length; i++){ }}
                             <img src="{{=it.info.topic_info.image_json[i]}}" tapmode onclick="openImgView(this);event.stopPropagation();">
                         {{ }; }}
                     {{?}}
+                    </div>
                 </div>
                 <p class="time">{{=it.info.topic_info.create_time}}</p>
             </div>
