@@ -38,7 +38,7 @@
          .filter {
             width: .57rem;
             height: .3rem;
-            background: url(../../image/icon_supply/icon_sx.png)no-repeat;
+            background: url(../../image/icon_supply/icon_sx1.png)no-repeat;
             -webkit-background-size: .34rem .3rem;
             background-size: .34rem .3rem;
             background-position: right center;
@@ -50,7 +50,7 @@
             font-size: 0;
             box-sizing: border-box;
             /*padding: 0 .25rem;*/
-            padding-right: .25rem;
+            /* padding-right: .25rem; */
             background-color: #FCFCFD;
             color: #555;
             border-bottom: .01rem solid #E1E1DF;
@@ -62,6 +62,9 @@
             box-sizing: border-box;
             border-right: .01rem solid #D4D4D4;
         }
+        .nav .head_center_left:last-child {
+            border-right: 0;
+        }
        /* .nav .head_center_left:last-child {
             border-left: .01rem solid #000;
         }*/
@@ -70,10 +73,16 @@
             background-size: 63px auto;
             color: #27B24A;
             width: 25%;
-            left: .7rem;
+            left: .95rem;
             bottom: 0;
             position: absolute;
             height: 2px;
+        }
+        .rightBtn {
+             background: url(../../image/icon_supply/icon_sx1.png)no-repeat;
+            -webkit-background-size: .34rem .3rem;
+            background-size: .34rem .3rem;
+            background-position: right center;
         }
     </style>
 
@@ -85,7 +94,11 @@
         <div class="head">
             <span class="callback"   tapmode   onclick="api.closeWin()">返回</span>
             <span class="winTitle">供订单</span>
-
+            <span class="rightBtn" tapmode onclick="openShadow()">
+                <!-- <span class="rightFilterBtn" ontouchstart='openShadow()'> -->
+                    <!-- <span class="filter"></span> -->
+                <!-- </span> -->
+            </span>
         </div>
     </header>
     <div class="nav flex-def flex-cCenter">
@@ -97,9 +110,9 @@
             <span class=" head_center_left "   tapmode   onclick="switchApr(1)"><span>我的供应</span></span>
         </span>
         <div class="indexbar" id="indexbar"></div>
-        <span class="rightFilterBtn" ontouchstart='openShadow()'>
+        <!-- <span class="rightFilterBtn" ontouchstart='openShadow()'>
             <span  class="filter"></span>
-        </span>
+        </span> -->
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -171,7 +184,7 @@
 
    // 标题下面竖线
    function sliderbarCallback(id, num) {
-        var width = parseInt((api.frameWidth - $api.offset($api.dom('.rightFilterBtn')).w-6) / 2);
+        var width = parseInt((api.frameWidth) / 2);
         // var width = parseInt(api.frameWidth / 2);
         var move = num * width;
         $api.css($api.byId(id),
