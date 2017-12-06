@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
     <style>
     .nomain .icon {
-        display: none;
+         
             width: 2.2rem;
             height: 2.2rem;
             background: url(../../image/iocn_addressList/icon_noInfo.png)no-repeat;
@@ -37,6 +37,12 @@
         .nomain .wrap {
             background-color: rgba(0, 0, 0, 0)
         }
+        .header {
+            z-index: 9999;
+        }
+        .hide {
+            display: none;
+        }
         </style>
 </head>
 
@@ -50,12 +56,11 @@
         </div>
     </header>
     <!-- <p class="no_data" id="noData"></p> -->
-    <div class="nomain flex-def flex-cCenter flex-zCenter" id="noData">
+    <div class="nomain hide flex-def flex-cCenter flex-zCenter" id="noData">
         <div class="wrap">
             <div class="icon">
             </div>
             <p>空空如也</p>
-            <p class="jump" tapmode onclick="openCreateCirclePage()">快去发布需求吧</p>
         </div>
     </div>
 </body>
@@ -108,13 +113,18 @@
         }, function(ret, err) {
             if(ret) {
                 if (ret.code === 200) {
+                    console.log(ret.data.list.length);
+                    
                     if(ret.data.list.length !== 0) {
                         formatTheData(ret.data.list);
                     } else {
                         listContact.close();
                         // $api.text($api.byId('noData'), str);
-                        $api.css($api.byId('noData'), "display:block");
-                    }
+                        // $api.css($api.byId('noData'), "display:block");
+                        // $api.css($api.dom('nomain'), "display:block");
+                        $api.removeCls($api.byId('noData'), 'hide');
+                        // $api.css($api.dom('nomain'), "display: -webkit-box;display: -moz - box;display: -ms - flexbox;display: -webkit - flex;display: flex;");
+i                    }
                 } else {
                     alert(ret.msg)
                 }

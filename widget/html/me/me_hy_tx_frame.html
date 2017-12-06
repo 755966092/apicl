@@ -55,7 +55,7 @@
         }
         input {
             line-height: 1.04rem;
-            font-size: .9rem;
+            font-size: .6rem;
             outline: none;
             width: 6rem;
         }
@@ -133,6 +133,9 @@
             color: #999;
             margin-top: .2rem;
         }
+        .hide {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -142,15 +145,18 @@
             <p class="title">提现金额</p>
             <div class="inputDiv flex-def ">
                 <span class="jl_left">￥</span>  
-                <input id="money" type="text" class="flex-item input-number"  placeholder="提现金额">
+                <input id="money" type="text" onblur="iptBlur()" onfocus="iptFocus()" class="flex-item input-number"  placeholder="可转出元">
             </div>
         </div>
 
         <div class="surplus flex-def flex-cCenter">  
-            <div>
-              <span class="surplusMoney">帐户余额 <span>￥</span><span class="money">--</span>,</span>
-              <span class="all"   tapmode   onclick="allGet()">全部提现</span>
-              <p class="surplusMoney" id="text"></p>
+            <div class="flex-def flex-cCenter flex-zBetween" style="width:100%">
+                <div>
+                    <span class="surplusMoney">帐户余额 <span>￥</span><span class="money">--</span>,</span>
+                    <span class="all"   tapmode   onclick="allGet()">全部提现</span>
+                </div>
+                <span class="surplusMoney hide" id="warning">推广期间免手续费</span>
+              <!-- <span class="surplusMoney" id="text">奥术大师大</span> -->
             </div>
             <!-- <span class="surplusMoney fr">手续费¥<span class="poundage">1.00</span></span> -->
         </div>
@@ -197,7 +203,15 @@
        // 情况input的placeholder属性
        // $api.attr($api.dom('input'), 'placeholder', '');
    }
-   
+   // 
+   function iptBlur() {
+       // 失去焦点
+       $api.addCls($api.byId('warning'), 'hide');
+    }
+    function iptFocus() {
+        // 获取的焦点
+        $api.removeCls($api.byId('warning'), 'hide');
+    }
    function requireData() {
        api.ajax({
            url: apiSite + '/finance_center/withdrawIndex',
@@ -211,6 +225,7 @@
        }, function(ret, err) {
            if(ret) {
               $api.text($api.byId('text'), ret.data.withdraw_info);
+              $api.attr($api.dom('input'), 'placeholder', '可转出'+ ret.data.balance +'元');
                //console.log(JSON.stringify(ret));
                // 设置余额
                $api.text($api.dom('.money'), ret.data.balance);

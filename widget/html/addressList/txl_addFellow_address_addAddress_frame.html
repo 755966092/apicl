@@ -33,6 +33,7 @@
         li input {
             height: .8rem;
             outline: none;
+            width: 5rem;
         }
         .text {
             color: #B1AEA9;
@@ -99,7 +100,7 @@
     </div>
     <div class="main_no3 ">
         <!-- <button   tapmode   onclick="address()" class="btn">保存</button> -->
-        <button   tapmode   onclick="addRess()" class="btn" disabled>保存</button>
+        <button tapmode onclick="addRess()" class="btn" disabled>保存</button>
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -121,8 +122,45 @@
 
         // 城市选择器返回的内容
         install();
-
+        getAddress();
     };
+    // 定位
+        function getAddress() {
+            bMap.getLocation({
+                accuracy: '100m',
+                autoStop: true,
+                filter: 1
+            }, function (ret, err) {
+                if (ret.status) {
+                    console.log(JSON.stringify(ret, null, 4));
+                    bMap.getNameFromCoords({
+                        // lon: 120.156160,
+                        // lat: 35.968558
+                        lon: ret.lon,
+                        lat: ret.lat
+                    }, function (ret, err) {
+                        if (ret.status) {
+                            // console.log(JSON.stringify(ret, null, 4));
+                            // province 省
+                            // city 市
+                            // district 区
+                            ret.province = ret.province.replace(/市|自治区|维吾尔自治区|省|特别行政区/g, '');
+                            ret.city = ret.city.replace(/市|自治区|特别行政区/g, '');
+                            $api.text($api.dom('.provinces'), ret.province);
+                            $api.text($api.dom('.cities'), ret.city);
+                            $api.text($api.dom('.city'), ret.district);
+                            $api.val($api.dom('.address'), ret.address);
+                            for (var i = 0; i < $api.domAll('.text').length; i++) {
+                                $api.css($api.domAll('.text')[i], 'color: #000');
+                            }
+                            iptCom();
+                        }
+                    });
+                } else {
+                    alert('请打开定位权限');
+                }
+            });
+        }
     function addRess() {
         $api.css($api.dom('.loading'), 'display: block');
         var obj = {};
@@ -140,7 +178,7 @@
                 city: cities,
                 district: city,
                 address: address,
-                zipcode: zipcode,
+                zipcode: zipcode || '',
                 note: '住址',
             }
         } else {
@@ -151,7 +189,7 @@
                 city: cities,
                 district: city,
                 address: address,
-                zipcode: zipcode,
+                zipcode: zipcode || '',
                 note: '住址',
             }
         }
@@ -172,8 +210,6 @@
                     alert(ret.msg)
                 }
                 // getData(ret.data.list)
-                
-                
             } else {
                 $api.css($api.dom('.loading'), 'display: none');
                 alert(JSON.stringify(err.msg));
@@ -327,7 +363,7 @@
         city =  $api.text($api.dom('.city')),
         address =  $api.val($api.dom('.address')),
         zipcode =  $api.val($api.dom('.zipcode'));
-        if (provinces !== '' && cities !== '' && city !== '' && address !== '' && zipcode !== '') {
+        if (provinces !== '' && cities !== '' && city !== '' && address !== '') {
             $api.css($api.dom('.btn'), 'background:  #08BB08');
             $api.removeAttr($api.dom('.btn'),'disabled');
         }

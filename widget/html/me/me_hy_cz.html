@@ -33,12 +33,14 @@
         }
         .price {
             font-size: .42rem;
+            font-weight: 500;
         }
         .count {
             font-size: .3rem;
             color: #555;
         }
         .selItem .selType .item {
+            text-align: center;
             background: #1AAD19;
             color: #fff!important;
         }
@@ -91,6 +93,7 @@
         ul li .text {
             font-size: .3rem;
             color: #333;
+            font-weight: 500;
         }
         ul li .icon {
             float: right;
@@ -135,6 +138,10 @@
         .warn span {
             color: #38B638;
         }
+        .payTypeTitle {
+            font-size: 0.3rem;
+            padding: 0.2rem 0;
+        }
     </style>
 </head>
 <body>
@@ -149,7 +156,14 @@
     <div class="main">
         <div class="selItem">
             <p class="title">充值金额</p>
-            <div class="pl15 flex-def resultList "></div>
+            <div class="pl15 flex-def resultList ">
+                <!-- <div data-count="{{=it[i].month}}" class="itemList m44" tapmode onclick="selType(this)">
+                    <span class="item flex-def flex-zTopBottom flex-zCenter flex-cCenter">
+                        <span class="price">￥22</span>
+                        <span class="count">5个月</span>
+                    </span>
+                </div> -->
+            </div>
         </div>
         <script type="text/x-dot-template" id="listT">
             {{ for (var i = 0; i < it.length; i++) { }}
@@ -160,6 +174,13 @@
                         <span class="count">{{=it[i].month}}个月</span>
                     </span>
                 </div>
+                {{??i==0}}
+                    <div data-count="{{=it[i].month}}" class="itemList selType" tapmode onclick="selType(this)">
+                        <span class="item flex-def flex-zTopBottom flex-zCenter flex-cCenter">
+                            <span class="price">￥{{=it[i].price}}</span>
+                            <span class="count">{{=it[i].month}}个月</span>
+                        </span>
+                    </div>
                 {{??}}
                 <div data-count="{{=it[i].month}}" class="itemList" tapmode onclick="selType(this)">
                     <span class="item flex-def flex-zTopBottom flex-zCenter flex-cCenter">
@@ -172,7 +193,7 @@
         </script>
         <div class="payType">
             <ul>
-                <p class="title">支付方式</p>
+                <p class="payTypeTitle">支付方式</p>
                 <li  class="sel" tapmode data-val = "alipay" onclick="select(this)">
                     <span class="text">支付宝支付</span>
                     <span class="icon"></span>
@@ -209,6 +230,9 @@
         $api.addCls(ele, 'selType');
     }
     function requireData() {
+        if($api.getStorage('purchaseVipIndex')) {
+            getData($api.getStorage('purchaseVipIndex'));
+        }
         api.ajax({
             url: apiSite + '/finance_center/purchaseVipIndex',
             method: 'post',
@@ -223,6 +247,7 @@
                 // alert(JSON.stringify(ret));
                 // $api.text($api.dom('#month .jl_right'), '￥'+ret.data.info[1]);
                 // $api.attr($api.dom('#month'), 'data-price', ret.data.info[1]);
+                $api.setStorage('purchaseVipIndex', ret.data.info);
                 getData(ret.data.info)
                 // $api.text($api.dom('#three .price'), '￥'+ret.data.info[3]);
                 // $api.attr($api.byId('three'), 'data-price', ret.data.info[3]);
