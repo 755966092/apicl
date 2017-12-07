@@ -46,10 +46,6 @@
             background:  #A3DEA3;
           
         }
-        #over {
-        display: none;
-        color: #DF214E;
-       }
     </style>
 </head>
 <body>
@@ -59,7 +55,7 @@
             <span class="winTitle">
                 新增地址
             </span>
-             <span class="rightBtn bj" id="over" ontouchstart="delDz()">删除</span> 
+             <span class="rightBtn bj" id="over" ontouchstart="delDz()">定位</span> 
         </div>
     </header>
 </body>
@@ -68,11 +64,11 @@
 <script type="text/javascript">
     apiready = function(){
 	    fnInit();
-        
         if (api.pageParam.flag) {
             // 1 编辑
             $api.text($api.dom('.winTitle'), '修改地址');
-            $api.css($api.byId('over'), 'display:inline-block');
+            $api.text($api.byId('over'), '删除');
+            $api.css($api.byId('over'), 'color: #DF214E;');
         } else {
             // 0 新增
         }
@@ -95,28 +91,35 @@
     };
      // 删除地址
     function delDz () {
-         api.ajax({
-            url: apiSite + '/user_center/deleteAddress',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: { 
-                    token: $api.getStorage('userToken'),
-                    address_id: api.pageParam.address_id
+        
+        if ($api.text($api.byId('over')) == "删除") {
+            api.ajax({
+                url: apiSite + '/user_center/deleteAddress',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: {
+                        token: $api.getStorage('userToken'),
+                        address_id: api.pageParam.address_id
+                    }
                 }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                // getData(ret.data.list)
-                // alert(JSON.stringify(ret))
-                api.sendEvent({
-                    name: 'addCity'
-                });
-                api.closeWin();
-            } else {
-                alert(JSON.stringify(err.msg));
-            }
-        });
+            }, function (ret, err) {
+                if (ret) {
+                    // getData(ret.data.list)
+                    // alert(JSON.stringify(ret))
+                    api.sendEvent({
+                        name: 'addCity'
+                    });
+                    api.closeWin();
+                } else {
+                    alert(JSON.stringify(err.msg));
+                }
+            });
+        } else {
+            api.sendEvent({
+                name: 'getAddress'
+            });
+        }
     }
 </script>
 </html>

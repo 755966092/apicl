@@ -122,7 +122,12 @@
 
         // 城市选择器返回的内容
         install();
-        getAddress();
+        api.addEventListener({
+            name: 'getAddress'
+        }, function(ret, err){
+            $api.css($api.dom('.loading'), 'display: block');
+            getAddress();
+        });
     };
     // 定位
         function getAddress() {
@@ -154,6 +159,7 @@
                                 $api.css($api.domAll('.text')[i], 'color: #000');
                             }
                             iptCom();
+                            $api.css($api.dom('.loading'), 'display: none');
                         }
                     });
                 } else {

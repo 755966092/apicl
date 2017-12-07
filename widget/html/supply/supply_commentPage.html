@@ -88,6 +88,9 @@
             text-align: center;
             line-height: .9rem;
             color: #fff;
+            background-color: #EDECF3;
+        }
+        .btn1 {
             background-color: #1AAD19;
         }
     </style>
@@ -127,7 +130,9 @@
         <i class="flag"></i>
         <span>匿名</span>
     </p>
-    <div class="btn" tapmode onclick="publishComment()">发表评价</div>
+    <div class="btn" tapmode onclick="publishComment()">
+        <div class="btn1" tapmode onclick="publishComment()">发表评价</div>
+    </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -136,6 +141,7 @@
     var base64Data = {img:[]},imgArr=[];
     apiready = function(){
         fnInit();
+        $api.fixTabBar($api.dom('.btn'))
         moduleInit();
         getData(base64Data);
         // 删除图片
