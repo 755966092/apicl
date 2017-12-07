@@ -111,6 +111,9 @@
             background-size: 1.26rem .2rem;
             background-position: left center;
         }
+        .hide {
+            display: none;
+        }
     </style>
 </head>
 
@@ -125,7 +128,7 @@
                 </div>
                 <div class="weui-cell__bd">
                     <p class="userName flex-def flex-cCenter">
-                        <span id="nickname">姓名</span>
+                        <span id="nickname"></span>
                         <span id="sex" class="sexIcon"></span>
                     </p>
                     <p class="companyName">
@@ -309,7 +312,7 @@
         </div>
         <!-- <div class="btn" id="btn" tapmode onclick="addFriends(this)">发送消息</div> -->
         <div class="page__bd page__bd_spacing">
-            <a  id="btn" href="javascript:;" class="btn weui-btn weui-btn_primary" tapmode onclick="addFriends(this)">发送消息</a>
+            <a  id="btn" href="javascript:;" class="btn hide weui-btn weui-btn_primary" tapmode onclick="addFriends(this)">发送消息</a>
         </div>
         <!-- <div class="shadow"></div> -->
     </div>
@@ -349,7 +352,7 @@
                     api.pageParam.userId = ret.data.info.user_id;
                     // console.log('540')
                     initPage();
-                    initStatus();
+                    // initStatus();
                 } else {
                     alert(JSON.stringify(err))
                 }
@@ -358,7 +361,7 @@
             
             // console.log('549')
             initPage();
-            initStatus();
+            // initStatus();
         }
         // 初始好友不显示人脉轨迹图
         function hideNetworkOfPeople() {
@@ -619,8 +622,10 @@
 
                                 //  当前状态
                                 if (ret.data.status.length > 0) {
+                                    // console.log('第一次渲染状态A:' + JSON.stringify(ret.data.status,null,4))
                                     getData(ret.data.status)
                                 } else {
+                                    // console.log('第一次渲染状态B:' + JSON.stringify(retDetail.data.status,null,4))
                                     getData(retDetail.data.status)
                                 }
                                 // 生日
@@ -631,10 +636,10 @@
                                 }
                             } else {
                                 // 有本地信息 对比信息
-
                                 paramRealName = retDetail.data.info.real_name;
                                 //  当前状态
                                 if (retDetail.data.status.length > 0) {
+                                    // console.log('第二次渲染状态A:' + JSON.stringify(retDetail.data.status,null,4))
                                     getData(retDetail.data.status);
                                     var statueStr = ''
                                     statueStr = (retDetail.data.info.current_position || '') + ' ' + (retDetail.data.info.current_company || '') + ' ' + (retDetail.data.info.current_degree || '')
@@ -715,11 +720,13 @@
                                 }
 
                                 // //  当前状态
-                                // if (ret.data.status.length > 0) {
-                                //     getData(ret.data.status)
-                                // } else {
-                                //     getData(retDetail.data.status)
-                                // }
+                                if (ret.data.status.length > 0) {
+                                    // console.log('第三次渲染状态A:' + JSON.stringify(ret.data.status,null,4))
+                                    getData(ret.data.status)
+                                } else {
+                                    // console.log('第三次渲染状态B:' + JSON.stringify(retDetail.data.status,null,4))
+                                    getData(retDetail.data.status)
+                                }
                                 // 生日
                                 if (ret.data.info.birthday) {
                                     $api.text(birthday, ret.data.info.birthday == '0000-00-00' ? '' : ret.data.info.birthday);
@@ -920,7 +927,8 @@
                     }
                     // console.log('本地数据库tb_remarks_status内容')
                     reviseText(ret.data);
-                    getData(ret.data);
+                     // console.log('第四次渲染状态B:' + JSON.stringify(ret.data,null,4))
+                    // getData(ret.data);
                     statusRemarks(ret.data, 1)
                 } else {
                     // console.log('获取网络信息')
@@ -1057,6 +1065,8 @@
             }, function(retSql, errSql) {
                 if (retSql.status) {
                     reviseText(ret.data.status)
+                    console.log('第五次渲染动态:'+ ret.data.status);
+                    
                     getData(ret.data.status)
                 } else {
                     alert(JSON.stringify(errSql));
@@ -1064,7 +1074,6 @@
             });
         } else {
             reviseText()
-            // getData()
         }
     }
     // 初始化页面
@@ -1179,7 +1188,8 @@
         if (status == 1) {
             // 1 已加入
             // 其他 未加入平台
-            $api.css($api.byId('btn'), 'display: block');
+            // $api.css($api.byId('btn'), 'display: block');
+            $api.removeCls(btn, 'hide');
             sweitchData1(relationship_levelType, status)
                 // $api.text(btn, '加为好友');
         } else {
@@ -1196,8 +1206,8 @@
             case 1:
                 $api.text(relationship_level, '自己');
                 $api.css($api.byId('openNetworkOfPeople'), 'color: #999;pointer-events: none;');
-                $api.css(btn, 'display: none');
-                
+                $api.addCls(btn, 'hide');
+                // $api.css(btn, 'display: none');
                 // for (var i = 0; i < $api.domAll('ul li .icon').length; i++) {
                 //     $api.css($api.domAll('ul li .icon')[i], 'display: none');
                 // }
@@ -1265,7 +1275,8 @@
         switch (relationship_levelType) {
             case 1:
                 $api.text(relationship_level, '自己');
-                $api.css(btn, 'display: none');
+                // $api.css(btn, 'display: none');
+                $api.addCls(btn, 'hide');
                 // for (var i = 0; i < $api.domAll('ul li .icon').length; i++) {
                 //     $api.css($api.domAll('ul li .icon')[i], 'display: none');
                 // }

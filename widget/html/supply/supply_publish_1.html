@@ -461,8 +461,9 @@
 
     // 请求数据
     function requireData(data) {
-        if ($api.getStorage('supply_publish_1')) {
-            getData($api.getStorage('supply_publish_1'))
+        var supplyCache = $api.getStorage('supply_publish_1')
+        if (supplyCache) {
+            getData(supplyCache)
         }
         var data = data || {};
         var latitude, longitude;
@@ -476,18 +477,9 @@
                     data.latitude = ret.lat;
                     data.longitude = ret.lon;
                     // 缓存字段  supply_publish_1
-                    var supplyCache = $api.getStorage('supply_publish_1');
-                    if ($api.getStorage('supply_publish_1')) {
-                        getData(supplyCache);
-                    }
                     $api.css($api.dom('.loading'), 'display: none');
                     fliderSupply(data, supplyCache)
                 } else {
-                    
-                    var supplyCache = $api.getStorage('supply_publish_1');
-                    if (supplyCache) {
-                        getData(supplyCache);
-                    }
                     $api.css($api.dom('.loading'), 'display: none');
                     fliderSupply(data, supplyCache)
                 }
