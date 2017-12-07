@@ -105,6 +105,12 @@
         .weui-grid__label {
             font-size: 0.24rem;
         }
+        .icon_text_loading {
+         
+            background:url(../../image/iocn_addressList/text_loading.gif)no-repeat;
+            background-size: 1.26rem .2rem;
+            background-position: left center;
+        }
     </style>
 </head>
 
@@ -118,7 +124,7 @@
                     <img class="headImg" src="../../image/icon_defaultHead.png" id="head_img_url" alt="">
                 </div>
                 <div class="weui-cell__bd">
-                    <p class="userName">
+                    <p class="userName flex-def flex-cCenter">
                         <span id="nickname">姓名</span>
                         <span id="sex" class="sexIcon"></span>
                     </p>
@@ -154,7 +160,9 @@
         <div class="weui-cells mt30">
             <a style="pointer-events: none;" class="weui-cell weui-cell_access" href="javascript:;">
                 <div class="weui-cell__bd">
-                    <p id="relationship_level">一度人脉尚未加入</p>
+                    <p id="relationship_level" class="icon_text_loading"> 
+                        &nbsp;
+                    </p>
                 </div>
             </a>
             <a class="weui-cell weui-cell_access" href="javascript:;" id="openNetworkOfPeople" tapmode onclick="openNetworkOfPeople()">
@@ -706,12 +714,12 @@
                                     $api.text(phone, retDetail.data.info.current_contact);
                                 }
 
-                                //  当前状态
-                                if (ret.data.status.length > 0) {
-                                    getData(ret.data.status)
-                                } else {
-                                    getData(retDetail.data.status)
-                                }
+                                // //  当前状态
+                                // if (ret.data.status.length > 0) {
+                                //     getData(ret.data.status)
+                                // } else {
+                                //     getData(retDetail.data.status)
+                                // }
                                 // 生日
                                 if (ret.data.info.birthday) {
                                     $api.text(birthday, ret.data.info.birthday == '0000-00-00' ? '' : ret.data.info.birthday);
@@ -1056,7 +1064,7 @@
             });
         } else {
             reviseText()
-            getData()
+            // getData()
         }
     }
     // 初始化页面
@@ -1179,7 +1187,9 @@
 
         }
     }
-
+    function clesrBg() {
+        $api.removeCls($api.byId('relationship_level'), 'icon_text_loading');
+    }
     function sweitchData1(relationship_levelType, status) {
         var btn = $api.byId('btn');
         switch (relationship_levelType) {
@@ -1187,6 +1197,7 @@
                 $api.text(relationship_level, '自己');
                 $api.css($api.byId('openNetworkOfPeople'), 'color: #999;pointer-events: none;');
                 $api.css(btn, 'display: none');
+                
                 // for (var i = 0; i < $api.domAll('ul li .icon').length; i++) {
                 //     $api.css($api.domAll('ul li .icon')[i], 'display: none');
                 // }
@@ -1245,6 +1256,7 @@
                 // }
                 break;
         }
+        clesrBg();
     }
 
     function sweitchData(relationship_levelType, status) {
@@ -1301,6 +1313,7 @@
                 // $api.removeCls($api.dom($api.byId('relationship_level_wrap'), '.wrap'), 'wrap');
                 break;
         }
+        clesrBg()
     }
 
     function compareRelation(status) {

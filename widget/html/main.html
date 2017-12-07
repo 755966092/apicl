@@ -187,6 +187,9 @@
             float: right;
             margin-right: .28rem;
         }
+        .hide {
+            display: none;
+        }
     </style>
 </head>
 
@@ -221,7 +224,7 @@
                 </li>
                 <li tapmode onclick="randomSwitchBtn( this );" class="flex-con ">
                     通讯录
-                    <!-- <span class="weui-badge weui-badge_dot" style="position: absolute;top: 0;right: 10px;"></span> -->
+                    <span class="weui-badge hide weui-badge_dot" id="readLabel" style="position: absolute;top: .1rem;right: .3rem;"></span>
                 </li>
                 <li tapmode onclick="randomSwitchBtn( this );" data-val='3' class="flex-con ">
                     供求圈
@@ -286,6 +289,8 @@
         });
         funIniGroup();
         displaySupply();
+        // 是否存在好友请求
+        getApplyList();
         // 退出app
         exitApp();
         api.addEventListener({
@@ -990,5 +995,31 @@
                 }
             }
         });
+    }
+    // 是否有好友请求
+    function getApplyList() {
+        api.ajax({
+            url: apiSite + '/friend/applyList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: $api.getStorage('userToken'),
+                }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    if (ret.data.list.length>0) {
+                        // 有好友请求
+                        $api.removeCls($api.byId('readLabel'), 'hide');
+                    } 
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
     }
 </script>
