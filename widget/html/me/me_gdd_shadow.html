@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <style>
-        html, body {
+        html,
+        body {
             height: 100%;
             width: 100%;
-            background-color: rgba(0,0,0,0.2);
+            background-color: rgba(0, 0, 0, 0.2);
         }
+
         .main {
             width: 100%;
             height: 100%;
             position: relative;
         }
+
         .slide {
             width: 6rem;
             height: 100%;
@@ -25,22 +31,27 @@
             position: absolute;
             right: 0;
         }
+
         .wrap {
-             padding: .4rem 0  0 .2rem;
+            padding: .4rem 0 0 .2rem;
         }
+
         .slide .status {
             padding-right: .2rem;
             padding-bottom: .2rem;
             margin-bottom: .3rem;
         }
+
         .bb {
             border-bottom: .01rem solid #ECECEC;
         }
+
         .slide p {
             font-size: .24rem;
             color: #555;
             margin-bottom: .15rem;
         }
+
         .slide span {
             margin-right: .13rem;
             width: 1.78rem;
@@ -52,6 +63,7 @@
             line-height: .8rem;
             margin-bottom: .2rem;
         }
+
         .slide .sel {
             /* background: #f3f3f3 url(../../image/icon_supply/icon_text4.png)no-repeat;
             -webkit-background-size: 1.78rem .8rem;
@@ -60,17 +72,21 @@
             /* background-size: .96rem .6rem; */
             color: #27B24A;
         }
+
         .slide span.mr0 {
             margin-right: 0;
         }
+
         .footer {
             height: .78rem;
             width: 100%;
             font-size: 0;
             line-height: .78rem;
             position: absolute;
-            bottom: 0;right: 0;
+            bottom: 0;
+            right: 0;
         }
+
         .footer span {
             border-radius: 0;
             margin: 0;
@@ -80,7 +96,8 @@
             position: absolute;
             bottom: 0;
         }
-        .footer span:last-child{
+
+        .footer span:last-child {
             right: 0;
             bottom: 0;
             color: #fff;
@@ -88,16 +105,17 @@
         }
     </style>
 </head>
+
 <body>
-     <div class="main" ontouchstart="api.closeFrame()">
-        <div class="slide" ontouchstart = 'event.stopPropagation();'>
+    <div class="main" ontouchstart="api.closeFrame()">
+        <div class="slide flex-def flex-zBetween flex-zTopBottom" ontouchstart='event.stopPropagation();'>
             <div class="wrap">
                 <div class="status no1 bb">
                     <p>状态</p>
                     <span data-val="" ontouchstart="selClass(this)" class="sel flag">全部状态</span>
                     <span data-val="1" ontouchstart="selClass(this)">待付款</span>
                     <span data-val="3" ontouchstart="selClass(this)" class="mr0">待接单</span>
-                    <span data-val="4,6,9,11" ontouchstart="selClass(this)" >待完成</span>
+                    <span data-val="4,6,9,11" ontouchstart="selClass(this)">待完成</span>
                     <span data-val="7,8,15" ontouchstart="selClass(this)">已完成</span>
                     <span data-val="2,5,10,12,13,14,16" ontouchstart="selClass(this)" class="mr0">已取消</span>
                 </div>
@@ -114,29 +132,30 @@
                     <span data-val="2" ontouchstart="selClass(this)" class="mr0">代理代销</span>
                 </div>
             </div>
-             <div class="footer">
-                    <span ontouchstart="enter(0)">重置</span>
-                    <span ontouchstart="enter(1)">确定</span>
+            <div class="footer">
+                <span ontouchstart="enter(0)">重置</span>
+                <span ontouchstart="enter(1)">确定</span>
             </div>
         </div>
-     </div>
+    </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
-    apiready = function(){
+    apiready = function () {
         // 保持按钮选择的内容
+        $api.fixTabBar($api.dom('.footer'))
         keepBtn()
     };
     // 保持上次选中的按钮
     function keepBtn() {
         var node = $api.domAll('span');
-            for (var i = 0; i < node.length; i++) {
-                $api.removeCls(node[i], 'sel');
-            }
-            $api.addCls($api.dom('.no1 span[data-val="'+ api.pageParam.status +'"]'), 'sel');
-            $api.addCls($api.dom('.no2 span[data-val="'+ api.pageParam.type +'"]'), 'sel');
-            $api.addCls($api.dom('.no3 span[data-val="'+ api.pageParam.sub_type +'"]'), 'sel');
+        for (var i = 0; i < node.length; i++) {
+            $api.removeCls(node[i], 'sel');
+        }
+        $api.addCls($api.dom('.no1 span[data-val="' + api.pageParam.status + '"]'), 'sel');
+        $api.addCls($api.dom('.no2 span[data-val="' + api.pageParam.type + '"]'), 'sel');
+        $api.addCls($api.dom('.no3 span[data-val="' + api.pageParam.sub_type + '"]'), 'sel');
     }
     function selClass(ele) {
         var node = $api.not($api.closest(ele, '.status'), 'p')
@@ -147,7 +166,7 @@
     }
     function enter(n) {
         if (n) {
-            var type,sub_type,status
+            var type, sub_type, status
             // 确定
             for (var i = 0; i < $api.domAll('.sel').length; i++) {
                 status = $api.attr($api.domAll('.sel')[0], 'data-val');
@@ -163,9 +182,9 @@
                     sub_type: sub_type
                 }
             });
-            setTimeout(function() {
+            setTimeout(function () {
                 api.closeFrame();
-            },500)
+            }, 500)
         } else {
             // 重置
             var node = $api.domAll('span');
@@ -201,4 +220,5 @@
     // 15-系统完成服务，
     // 16-系统取消服务
 </script>
+
 </html>

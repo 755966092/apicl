@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
+    <style>
+        /* html {
+            font-size: inherit;
+        } */
+        .weui-panel__bd {
+            background-color: #fff;
+        }
+        .weui-media-box__desc {
+            -webkit-line-clamp: 1;
+        }
+        .weui-media-box_appmsg .weui-media-box__hd {
+            margin-right: 0.2rem;
+        }
+         .no1 {
+            margin-right: .6rem;
+        }
+        .label {
+            font-size: .24rem;
+            color: #999;
+        }
+        .count {
+            font-size: .24rem;
+            color: #0ABB07;
+        }
+        .weui-media-box_appmsg .weui-media-box__thumb {
+            border-radius: .1rem;
+        }
+         .weui-media-box {
+            padding-top: .2rem;
+            padding-bottom: 0.2rem;
+        }
+        .normal {
+            font-size: 0.24rem;
+            color: #999;
+            text-align: center;
+            padding: .1rem .2rem;
+            background-color: #fff;
+            background-clip: content-box;
+            height: 0.5rem;
+            line-height: 0.5rem;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="resultList weui-panel__bd"></div>
+    <script type="text/x-dot-template" id="listT">
+        {{?it.length != 0}}
+            <div class="other">
+                {{ for (var i = 0; i < it.length; i++) { }} 
+                    <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" data-flag='0' data-name='{{=it[i].title}}' data-id='{{=it[i].circle_id}}' tapmode   onclick="openCircleInfo(this)">
+                        <div class="weui-media-box__hd">
+                            <img class="weui-media-box__thumb" src="{{=it[i].image_url}}"
+                            alt="">
+                        </div>
+                        <div class="weui-media-box__bd">
+                            <h4 class="weui-media-box__title">{{=it[i].title}}</h4>
+                            <p class="weui-media-box__desc">{{=it[i].description}}</p>
+                            <p class="weui-media-box__desc">
+                                <span class="label">成员:</span>
+                                <span class="count no1">{{=it[i].member_count}}</span>
+                                <span class="label">发布:</span>
+                                <span class="count">{{=it[i].topic_count}}</span>
+                            </p>
+                        </div>
+                    </a>    
+                {{ }; }}
+            </div>
+        {{??}}
+        <p class="no_data">没有任何我在圈</p>
+        {{?}}
+    </script>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        api.addEventListener({
+            name: 'searchCircle'
+        }, function(ret, err){
+            getData(ret.value.list)
+        });
+    };
+     // 打开动态详情
+    function openCircleInfo(ele) {
+        var id = $api.attr(ele, 'data-id');
+        var circle_name = $api.attr(ele, 'data-name');
+        var flag = $api.attr(ele, 'data-flag');
+        //console.log('openCircleInfo'+flag)
+        api.openWin({
+            name: 'find_dynamicState_win',
+            url: './find_dynamicState_win.html',
+            bounces: false,
+            pageParam: {
+                circle_id: id,
+                circle_name: circle_name,
+                flag: flag
+
+            }
+        });
+    }
+
+</script>
+
+</html>

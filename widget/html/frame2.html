@@ -194,12 +194,14 @@
         var navH = $api.offset($api.dom('.head')).h;
         var frameH = navH + api.pageParam.headerH;
         var footerH = api.pageParam.footerH;
-        openAprGroup(frameH,api.winHeight - frameH - footerH);
+        var XFooterH = api.pageParam.XFooterH;
+        openAprGroup(frameH,api.winHeight - frameH - XFooterH);
+        // alert("frameH"+ frameH +"footerH"+ footerH+"XFooterH"+ XFooterH)
         // 切换回供求页面打开frame组
         api.addEventListener({
             name: 'openSupplyPublishr'
         }, function(ret, err) {
-            openAprGroup(frameH,api.winHeight - frameH - footerH);
+            openAprGroup(frameH,api.winHeight - frameH - XFooterH);
         });
         api.addEventListener({
            name: 'selClass'
@@ -221,7 +223,8 @@
         api.addEventListener({
             name: 'displaySupply'
         }, function(ret, err){
-            openAprGroup(frameH,api.winHeight - frameH - footerH);
+            // openAprGroup(frameH,api.winHeight - frameH - footerH);
+            openAprGroup(frameH, api.winHeight - frameH - XFooterH);
         });
     };
     // 打开frame组
@@ -232,7 +235,7 @@
                  x: 0,
                  y: frameH+1,
                  w: 'auto',
-                 h: footerH-1
+                 h: footerH
             },
             scrollEnabled: true,
             index: 0,

@@ -129,9 +129,24 @@
             padding-top: .2rem;
             padding-bottom: 0.2rem;
         }
+        .normal {
+            font-size: 0.24rem;
+            color: #999;
+            text-align: center;
+            padding: .1rem .2rem;
+            background-color: #fff;
+            background-clip: content-box;
+            height: 0.5rem;
+            line-height: 0.5rem;
+        }
+
     </style>
 </head>
 <body>
+    <div class="normal" tapmode onclick="openSearchPage()">
+        <i class="weui-icon-search"></i>
+        <span>搜索</span>
+    </div>
     <div class="resultList weui-panel__bd"></div>
     <script type="text/x-dot-template" id="listT">
         {{?it.length != 0}}
@@ -299,6 +314,13 @@
                 flag: flag
 
             }
+        });
+    }
+    function openSearchPage() {
+        api.openWin({
+            name: 'find_searchCircle_win',
+            url: './find_searchCircle_win.html',
+            bounces: false,
         });
     }
 </script>
