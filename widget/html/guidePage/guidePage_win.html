@@ -1,51 +1,70 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
-   
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+
 </head>
+
 <body>
-     
+
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
-    apiready = function(){
-       api.openFrameGroup({
-           name: 'guidePage',
-           rect: {
-               x:0,
-               y:0,
-               w:'auto',
-               h:'auto'
-           },
-           index: 0,
-           preload: 3,
-           frames: [{
-                name: 'guidePage_1', 
+    apiready = function () {
+        var framesArr = ["widget://image/guidePage/guide-01.png",
+            "widget://image/guidePage/guide-02.png",
+            "widget://image/guidePage/guide-03.png",
+            "widget://image/guidePage/guide-04.png"];
+        if (api.screenHeight === 2436) {
+            framesArr = ["widget://image/guidePage/1.png",
+                "widget://image/guidePage/2.png",
+                "widget://image/guidePage/3.png",
+                "widget://image/guidePage/4.png"];
+        }
+        api.openFrameGroup({
+            name: 'guidePage',
+            rect: {
+                x: 0,
+                y: 0,
+                w: api.winWidth,
+                h: api.winHeight
+            },
+            index: 0,
+            preload: 3,
+            frames: [{
+                name: 'guidePage_1',
                 url: './guidePage_1.html',
                 bounces: false,
+                bgColor: framesArr[0],
                 slidBackEnabled: false
-            },{
-                name: 'guidePage_2', 
+            }, {
+                name: 'guidePage_2',
                 url: './guidePage_2.html',
+                bgColor: framesArr[1],
                 bounces: false
-            },{
-                name: 'guidePage_3', 
+            }, {
+                name: 'guidePage_3',
                 url: './guidePage_3.html',
+                bgColor: framesArr[2],
                 bounces: false
-            },{
-                name: 'guidePage_4', 
+            }, {
+                name: 'guidePage_4',
                 url: './guidePage_4.html',
+                bgColor: framesArr[3],
                 bounces: false
             },]
-       }, function(ret, err){
-           
-       });
+        }, function (ret, err) {
+
+        });
     };
-   
+
 </script>
+
 </html>
