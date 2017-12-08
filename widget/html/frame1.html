@@ -10,7 +10,7 @@
         html,body {
             /*height: 16rem;*/
             background-color: #fff;
-            padding-bottom: 7.1rem;
+            /* padding-bottom: 250px; */
             /* font-size: 50px; */
         }
         /*.search {
@@ -396,11 +396,11 @@
                 熟识圈
             </div>
         </div> -->
-        <!-- <div class="main_no2" tapmode onclick="openNewFri(1,4)">
+        <div class="main_no2" tapmode onclick="openNewFri(1,4)">
             <div class="mainP">
                 新的朋友
             </div>
-        </div> -->
+        </div>
          <div class="main_no2"   tapmode   onclick="onceConnected(1,4)">
             <div class="mainP">
                 初识好友
@@ -516,7 +516,7 @@
         // console.log(api.winHeight)
         $api.css($api.dom('.slidePage'),'height:60px')
         if (api.systemType == 'andioid') {
-            $api.css($api.dom('html'), 'padding-bottom: 7.8rem');
+            // $api.css($api.dom('html'), 'padding-bottom: 1rem');
         }
 
         moduleInit();
@@ -842,10 +842,31 @@
 
     function dakai(data1) {
         // console.log(JSON.stringify(data1))
-        var listContactHeight = 455;
+        console.log(api.winHeight)
+        // 华为  604    604 * 0.7 / 75
+        // 小米  640    640 * 0.7 / 90
+        // var listContactHeight = 455;
+        var listContactHeight = api.winHeight * 0.7;
+        var divisor;
+        var winH = api.winHeight;
+        
         if (api.systemType=='ios') {
-            listContactHeight = 505;
+            // listContactHeight = 505;
+            console.log(listContactHeight)
+            $api.css($api.dom('html'), 'padding-bottom:' + (listContactHeight / 100) + 'rem');
+            $api.css($api.dom('body'), 'padding-bottom:' + (listContactHeight / 100) + 'rem');
+        } else {
+            if (winH==640) {
+                divisor = 90;
+            } else if (winH == 604) {
+                divisor = 75
+            }
+            console.log(listContactHeight)
+            $api.css($api.dom('html'), 'padding-bottom:' + (listContactHeight / divisor) + 'rem');
+            $api.css($api.dom('body'), 'padding-bottom:' + (listContactHeight / divisor) + 'rem');
         }
+        
+        
         var dataArr = [];
         var dataKeyArr = [];
         for(key in data1) {
