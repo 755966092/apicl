@@ -60,58 +60,69 @@
             }
         });
         fnInit();
-        if (1) {
-            var userId = api.pageParam.userId
-            if (userId) {
-                api.openFrame({
-                    name: 'txl_memberInfo_Frame',
-                    url: './txl_memberInfo_Frame.html',
-                    rect: {
-                        x: 0,
-                        y: headerH,
-                        w: 'auto',
-                        h: 'auto'
-                    },
-                    pageParam: {
-                        userId: api.pageParam.userId,
-                        flag: api.pageParam.flag,
-                        name: api.pageParam.name,
-                        headImg: api.pageParam.headImg
-                    },
-                    bounces: false
-                });
+         db.executeSql({
+            name: SQLName,
+            sql: 'CREATE TABLE IF NOT EXISTS tb_remarks_status(remark_user_id int , status_id int PRIMARY KEY NOT NULL, name varchar(255), position varchar(255), degree varchar(255), start_date varchar(255), is_default int, type int)'
+        }, function (ret, err) {
+            if (ret.status) {
+                // alert('用户当前状态表格'+ JSON.stringify( ret ) );
+                 if (1) {
+                    var userId = api.pageParam.userId
+                    if (userId) {
+                        api.openFrame({
+                            name: 'txl_memberInfo_Frame',
+                            url: './txl_memberInfo_Frame.html',
+                            rect: {
+                                x: 0,
+                                y: headerH,
+                                w: 'auto',
+                                h: 'auto'
+                            },
+                            pageParam: {
+                                userId: api.pageParam.userId,
+                                flag: api.pageParam.flag,
+                                name: api.pageParam.name,
+                                headImg: api.pageParam.headImg
+                            },
+                            bounces: false
+                        });
+                    } else {
+                        api.openFrame({
+                            name: 'txl_memberInfo_Frame',
+                            url: './txl_memberInfo_Frame.html',
+                            rect: {
+                                x: 0,
+                                y: headerH,
+                                w: 'auto',
+                                h: 'auto'
+                            },
+                            pageParam: {
+                                userId: 0
+                            },
+                            bounces: false
+                        });
+                    }
+                } else {
+                    api.openFrame({
+                        name: 'txl_noMemberInfo_Frame',
+                        url: './txl_noMemberInfo_Frame.html',
+                        rect: {
+                            x: 0,
+                            y: headerH,
+                            w: 'auto',
+                            h: 'auto'
+                        },
+                        pageParam: {
+                            name: 'value'
+                        },
+                        bounces: false
+                    });
+                }
             } else {
-                api.openFrame({
-                    name: 'txl_memberInfo_Frame',
-                    url: './txl_memberInfo_Frame.html',
-                    rect: {
-                        x: 0,
-                        y: headerH,
-                        w: 'auto',
-                        h: 'auto'
-                    },
-                    pageParam: {
-                        userId: 0
-                    },
-                    bounces: false
-                });
+                alert('473' + JSON.stringify(err));
             }
-        } else {
-            api.openFrame({
-                name: 'txl_noMemberInfo_Frame',
-                url: './txl_noMemberInfo_Frame.html',
-                rect: {
-                    x: 0,
-                    y: headerH,
-                    w: 'auto',
-                    h: 'auto'
-                },
-                pageParam: {
-                    name: 'value'
-                },
-                bounces: false
-            });
-        }
+        });
+       
 
 
     };

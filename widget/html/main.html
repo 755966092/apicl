@@ -337,12 +337,18 @@
         ajpush.getRegistrationId();
         ajpush.setListener(
             function(ret) {
-                // console.log(JSON.stringify(ret))
+                // console.log('c初始化极光推送2');
+                // console.log(JSON.stringify(ret));
+                if (ret.extra.type === 1) {
+                    // 有新的好友请求, 显示通讯录上的小红点
+                    $api.removeCls($api.byId('readLabel'), 'hide');
+                }
                 var id = ret.id;
                 var title = ret.title;
                 var content = ret.content;
                 var extra = ret.extra;
             }
+
         );
         // 监听安卓
         api.addEventListener({
@@ -354,7 +360,6 @@
                     var title = ajpush.title;
                     var content = ajpush.content;
                     var extra = ajpush.extra; 
-                    // console.log('307:::' + JSON.stringify(ret))
                         // alert('307:::'+JSON.stringify(ret))
                     if (extra.type == 2) {
                         api.openWin({
@@ -373,6 +378,8 @@
                             }
                         });
                     } else if (extra.type == 1) {
+                        $api.addCls($api.byId('readLabel'), 'hide');
+                        // 新的好友请求
                         api.openWin({
                             name: 'txl_addFellow_friendRequest_win',
                             url: './addressList/txl_addFellow_friendRequest_win.html',
@@ -406,6 +413,7 @@
                             }
                         });
                     } else if (extra.type == 1) {
+                        // 新的好友请求
                         api.openWin({
                             name: 'txl_addFellow_friendRequest_win',
                             url: './addressList/txl_addFellow_friendRequest_win.html',
@@ -429,6 +437,7 @@
 
     // 通讯录添加好友
     function addF() {
+        $api.addCls($api.byId('readLabel'), 'hide');
         api.openWin({
             name: 'txl_addFellow_win',
             url: './addressList/txl_addFellow_win.html',
@@ -1013,10 +1022,14 @@
         }, function(ret, err) {
             if(ret) {
                 if (ret.code === 200) {
-                    if (ret.data.list.length>0) {
-                        // 有好友请求
-                        $api.removeCls($api.byId('readLabel'), 'hide');
-                    } 
+                    for (let i = 0; i < ret.data.list.length; i++) {
+                        const element = ret.data.list[i];
+                        if (element.status == 1) {
+                            // 有等待验证的好友请求
+                            $api.removeCls($api.byId('readLabel'), 'hide');
+                            break;
+                        }
+                    }
                 } else {
                     alert(ret.msg)
                 }
