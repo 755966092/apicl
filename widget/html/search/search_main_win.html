@@ -104,6 +104,7 @@
             }
             function changeInput(ele) {
                 var val = $api.val(ele);
+                console.log(val)
                 // $api.text($api.dom('.flagText'), '搜索');
                 // if (!val) {
                 //     $api.text($api.dom('.flagText'), '取消');
@@ -116,9 +117,11 @@
                 if (keyword) {
                     db.selectSql({
                         name: 'db_' + $api.getStorage('userToken'),
+                        // sql: 'SELECT * FROM addressList '
                         sql: 'SELECT * FROM addressList WHERE (nickname LIKE "%'+keyword+'%") or (remark_nickname LIKE "%'+keyword+'%") or (remark_current_contact LIKE "%'+keyword+'%") or (current_contact LIKE "%'+keyword+'%")'
                     },function(retSql,err){
                         if (retSql.status) {
+                            console.log(JSON.stringify(retSql,null,4))
                             if (retSql.data.length > 0) {
                                 api.sendEvent({
                                     name: 'searchSql',

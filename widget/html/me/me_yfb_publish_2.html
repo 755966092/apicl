@@ -5,6 +5,7 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css"/>
     <style>
         .no_data {
             text-align: center;
@@ -13,54 +14,23 @@
             line-height: .8rem;
             /*display: none;*/
         }
-       .listContent {
-        height: 1.5rem;
-       }
-       .title h3 {
-        font-size: .3rem;
-        width: 2.5rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-       }.title p {
-        font-size: .24rem;
-        color: #555;
-         width: 4rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
 
-       }
-       .money {
-            font-size: .34rem;
-            color:#0ABB07;
-       }
-       .time {
-        font-size: .28rem;
-        color: #999;
-       }
-       img {
-        width: .9rem;
-        height: .9rem;
-        margin-right: .2rem;
-       }
-       .title {
-        font-size: 0;
-       }
-       li:first-child {
-           margin: 0;
-       }
-       li {
-        margin-top: .2rem;
-        border-bottom: .01rem solid #d9d9d9;
-        box-sizing: border-box;
-        background-color: #fff;
-        padding: 0 .3rem;
-       }
         .label {
+            font-style: normal;
             font-size: .2rem;
             color: #cc0019;
             margin-right: .1rem;
+            vertical-align: middle;
+        }
+        .title{
+            font-size: .3rem;
+        }
+        .money {
+            color: #0ABB07;
+            font-size: 0.3rem;
+        }
+        .time {
+            color: #999;
         }
         .nomain .icon {
             width: 2.2rem;
@@ -70,11 +40,16 @@
             background-size: 2.2rem 2.2rem;
             margin: 0 auto;
         }
+
         .nomain {
             position: absolute;
-            top: 0;bottom: 0;left: 0;right: 0;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
             margin: auto;
         }
+
         .nomain p {
             font-size: .3rem;
             color: #999;
@@ -82,50 +57,93 @@
             margin: .36rem auto 0;
             text-align: center;
         }
+
         .nomain .jump {
             color: #89B2EF;
             font-size: 0.34rem;
         }
+
         .nomain .wrap {
             background-color: rgba(0, 0, 0, 0)
+        }
+
+
+        .weui-panel__bd {
+            background-color: #fff;
+        }
+
+        .weui-media-box_appmsg .weui-media-box__hd {
+            margin: 0;
+            height: .9rem;
+        }
+
+        .weui-media-box_appmsg .weui-media-box__thumb {
+            width: 0.9rem;
+            height: 0.9rem;
+        }
+
+        .weui-media-box__desc {
+            -webkit-line-clamp: 1;
+
+        }
+
+        .weui-media-box__desc span,
+        .weui-media-box__title span {
+             text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .weui-media-box__desc span:last-child, 
+        .weui-media-box__title span:last-child {
+            text-align: right;
+            width: 29%;
+        }
+
+        .weui-media-box__desc span:first-child, 
+        .weui-media-box__title span:first-child {
+            width: 69%;
+        }
+
+        .weui-media-box {
+            padding: 0.2rem;
         }
     </style>
 </head>
 <body>
 
     <div class="main">
-    <ul class="resultList">
+    <div class="resultList weui-panel__bd">
 
-    </ul>
+    </div>
     <script type="text/x-dot-template" id="listT">
         {{?it.length > 0}}
             {{ for (var i = 0; i < it.length; i++) { }}
-                <li class="listContent flex-def flex-cCenter" data-id="{{=it[i].demand_id}}" tapmode onclick="info(this)">
-                    {{?it[i].image_json[0]==null}}
-                    <img class="img " src="../../image/noimage.jpg">
-                    {{??}}
-                    <img class="img " src="{{=it[i].image_json[0]}}">
-                    {{?}}
-                    <div class="text flex-item">
-                        <div class="title">
-                            <div class="flex-def flex-cCenter flex-zBetween">
-                                <div class="flex-def flex-cCenter">
-                                    {{?it[i].type==1}}
-                                        <span class="label">[个人]</span>
-                                    {{??}}
-                                        <span class="label">[公司]</span>
-                                    {{?}}
-                                    <h3 class="">{{=it[i].title}}</h3>
-                                </div>
-                                <span class="money">{{=it[i].reward}}元</span>
-                            </div>
-                            <div class="flex-def flex-cCenter flex-zBetween"">
-                                <p>{{=it[i].description}}</p>
-                             <span class="time">{{=it[i].status}}</span>
-                            </div>
-                        </div>
+                 <a href="javascript:void(0);" data-id="{{=it[i].demand_id}}" tapmode onclick="info(this)" class="weui-media-box weui-media-box_appmsg">
+                    <div class="weui-media-box__hd">
+                        {{?it[i].image_json[0]==null}}
+                            <img class="img weui-media-box__thumb" src="../../image/noimage.jpg">
+                        {{??}}
+                            <img class="img weui-media-box__thumb" src="{{=it[i].image_json[0]}}">
+                        {{?}}
                     </div>
-                </li>
+                    <div class="weui-media-box__bd">
+                        <h4 class="weui-media-box__title"> 
+                            <span class="title">
+                                    {{?it[i].type==1}}
+                                        <i class="label">[个人]</i>
+                                    {{??}}
+                                        <i class="label">[公司]</i>
+                                    {{?}}
+                                    {{=it[i].title}}</span>
+                            <span class="money">{{=it[i].reward}}元</span>
+                        </h4>
+                        <p class="weui-media-box__desc">
+                            <span style="color:#000">{{=it[i].description}}</span>
+                            <span>{{=it[i].status}}</span>
+                        </p>
+                    </div>
+                </a> 
             {{ }; }}
         {{??}}
             <div class="nomain flex-def flex-cCenter flex-zCenter">

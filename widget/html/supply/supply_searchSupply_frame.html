@@ -131,42 +131,11 @@
         <div class="ipt">
             <form>
                 <!-- <input type="search" name="" id="ipt" placeholder="搜索"> -->
-                <input type="search" placeholder="搜索">
+                <input type="search"  placeholder="搜索">
                 <span class="filter" tapmode onclick="openFilter()"></span>
             </form>
         </div>
     </div>
-    <!-- <div class="hisSearch clearfix">
-        <div class="title clearfix">
-            <span>历史搜索</span>
-            <span class="delIcon"   tapmode   onclick="clearHis()"></span>
-
-        </div>
-        <div class="hisSearchContent clearfix resultList">
-            <span class="hisSearchItem">公司</span>
-            <span class="hisSearchItem">个人</span>
-            <span class="hisSearchItem">互联网</span>
-            <span class="hisSearchItem">互联网</span>
-            <span class="hisSearchItem">互联网</span>
-            <span class="hisSearchItem">互联网互联网</span>
-        </div>
-        <script type="text/x-dot-template" id="listT">
-            {{ for (var i = 0; i < it.length; i++) { }}
-                 <span class="hisSearchItem">{{=it[i]}}</span>
-            {{ }; }}
-        </script>
-        <div class="allSearch">
-            <p class="title2 clearfix">大家都在搜</p>
-            <ul>
-                <li>儿童摄影</li>
-                <li>儿童摄影</li>
-                <li>儿童摄影</li>
-                <li>儿童摄影儿童摄影</li>
-                <li>儿童摄影</li>
-                <li>儿童摄影</li>
-            </ul>
-        </div>
-    </div> -->
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -214,6 +183,8 @@
 
             // }
         });
+        // 点击搜索收起键盘
+        hideKeyboard();
         api.addEventListener({
             name: 'searchSupply3'
         }, function(ret, err) {
@@ -233,6 +204,13 @@
     // getData(data);
     function delIcon(ele) {
 
+    }
+    function hideKeyboard() {
+        $api.addEvt($api.dom('input'), 'keyup', function (e) {
+            if (e.keyCode === 13) {
+                document.getElementsByTagName('input')[0].blur()
+            }
+        });
     }
     function openFilter() {
         $api.dom('input').blur();

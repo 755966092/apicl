@@ -269,6 +269,8 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
     apiready = function () {
+        
+        // $api.fixTabBar($api.dom('.btn'))
         fnInit();
         requestData();
     };
@@ -372,9 +374,11 @@
                     if (ret.data.is_member) {
                         $api.css($api.dom('.notJoin'), 'display:none');
                         $api.css($api.dom('.haveJoin'), 'display:block');
+                        $api.fixTabBar($api.dom('.haveJoin'))
                     } else {
                         $api.css($api.dom('.haveJoin'), 'display:none');
                         $api.css($api.dom('.notJoin'), 'display:block');
+                         $api.fixTabBar($api.dom('.notJoin'))
                     }
                     $api.text($api.byId('circle_name'), ret.data.info.title);
                     $api.text($api.byId('description'), ret.data.info.description);
