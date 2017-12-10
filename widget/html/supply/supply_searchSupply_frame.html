@@ -32,6 +32,7 @@
             border: .01rem solid #DDDEE2;
             padding-left: .5rem;
             box-sizing: border-box;
+            padding-right: 0.1rem;
         }
         /*input::-webkit-input-placeholder{
             text-align: center;
@@ -131,7 +132,7 @@
         <div class="ipt">
             <form>
                 <!-- <input type="search" name="" id="ipt" placeholder="搜索"> -->
-                <input type="search"  placeholder="搜索">
+                <input type="search" id="input"  placeholder="搜索">
                 <span class="filter" tapmode onclick="openFilter()"></span>
             </form>
         </div>
@@ -146,10 +147,43 @@
     apiready = function(){
         // getData(data);
         //console.log('参数::'+JSON.stringify(api.pageParam))
-        $api.addEvt($api.dom('input'), 'input', function(e) {
-            var iputText = $api.val($api.dom('input'));
-                // if (e.keyCode == 13) {
-                data.push(iputText);
+        bindEvent();
+        // 点击搜索收起键盘
+        hideKeyboard();
+        api.addEventListener({
+            name: 'searchSupply3'
+        }, function(ret, err) {
+            if (ret) {
+                // alert(JSON.stringify(ret));
+                parameter = ret.value.parameter
+                api.pageParam.type = ret.value.type
+                selectedObj = ret.value.selectedObj
+            } else {
+                // alert(JSON.stringify(err));
+            }
+        });
+    };
+    $api.dom('form').onsubmit = function() {
+        return false;
+    };
+    function bindEvent() {
+            if (api.systemType == 'ios') {
+                $api.addEvt($api.byId('input'), 'compositionend', function() {
+                // $('#input').on("compositionend", function () {
+                    changeInput(this);
+                })
+            } else {
+                $api.addEvt($api.byId('input'), 'input', function () {
+                // $('#input').on("input", function () {
+                    changeInput(this);
+                })
+            }
+        }
+    function changeInput(ele) {
+            var iputText = $api.val(ele);
+            // if (e.keyCode == 13) {
+            // data.push(iputText);
+            if (iputText) {
                 api.openFrame({
                     name: 'supply_searchSupplyFruit_frame',
                     url: './supply_searchSupplyFruit_frame.html',
@@ -171,39 +205,19 @@
                         keyword: iputText
                     }
                 });
-                    // }
-
-                // }
-                if (iputText == '') {
-                    api.closeFrame({
-                        name: 'supply_searchSupplyFruit_frame'
-                    });
-                    getData(data);
-                }
+            } else {
+                api.closeFrame({
+                    name: 'supply_searchSupplyFruit_frame'
+                });
+            }
+            // }
 
             // }
-        });
-        // 点击搜索收起键盘
-        hideKeyboard();
-        api.addEventListener({
-            name: 'searchSupply3'
-        }, function(ret, err) {
-            if (ret) {
-                // alert(JSON.stringify(ret));
-                parameter = ret.value.parameter
-                api.pageParam.type = ret.value.type
-                selectedObj = ret.value.selectedObj
-            } else {
-                // alert(JSON.stringify(err));
-            }
-        });
-    };
-    $api.dom('form').onsubmit = function() {
-        return false;
-    };
-    // getData(data);
-    function delIcon(ele) {
-
+            // if (iputText == '') {
+                // api.closeFrame({
+                //     name: 'supply_searchSupplyFruit_frame'
+                // });
+            // }
     }
     function hideKeyboard() {
         $api.addEvt($api.dom('input'), 'keyup', function (e) {
@@ -231,9 +245,6 @@
             bounces: false
         });
     }
-    function clearHis() {
-        data = []
-        // getData(data);
-    }
+   
 </script>
 </html>
