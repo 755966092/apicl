@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <style>
         .main h3 {
             margin: 1.5rem auto .55rem;
@@ -13,9 +16,11 @@
             color: #000;
             line-height: .62rem;
         }
+
         .main .info {
             padding-left: .36rem;
         }
+
         .area {
             font-size: 0;
             border-bottom: .9px solid #ddd;
@@ -27,20 +32,23 @@
 
             display: -webkit-box;
             display: flex;
-            -webkit-box-align: center ;
+            -webkit-box-align: center;
             align-items: center;
             -webkit-box-pack: justify;
             justify-content: space-between;
         }
+
         .areaTitle {
             font-size: .3rem;
             line-height: .55rem;
             margin-right: .42rem;
         }
+
         .areaInfo {
             font-size: .3rem;
             line-height: .4rem;
         }
+
         .areaIcon {
             margin-right: .32rem;
             width: .2rem;
@@ -49,10 +57,12 @@
             background-size: .2rem .33rem;
 
         }
-         .tel {
+
+        .tel {
             height: .78rem;
             padding: 0;
         }
+
         .tel .areaTitle {
             height: .78rem;
             font-size: .3rem;
@@ -61,6 +71,7 @@
             border-right: 0.9px solid #ddd;
             margin-right: .2rem;
         }
+
         .tel input {
             height: .42rem;
             line-height: .42rem;
@@ -70,15 +81,18 @@
             font-weight: 400;
 
         }
+
         .tel .wrap {
             display: -webkit-box;
             display: flex;
-            -webkit-box-align: center ;
+            -webkit-box-align: center;
             align-items: center;
         }
+
         .psd .areaTitle {
             border: 0;
         }
+
         .btn {
             width: 6.8rem;
             height: .85rem;
@@ -95,19 +109,21 @@
             border: .01rem solid #93C893;
 
         }
+
         .enroll {
             font-size: .24rem;
             line-height: .33rem;
             text-align: center;
             margin-top: .35rem;
         }
+
         .enroll span {
             color: #62759C;
             font-size: .24rem;
         }
-
     </style>
 </head>
+
 <body>
     <div class="main">
         <h3>我在</h3>
@@ -122,22 +138,24 @@
             <div class="area tel">
                 <div>
                     <span class="areaTitle">+86</span>
-                    <input  onkeyup="iptChange(); this.value=this.value.replace(/\D/g,'');" onafterpaste="this.value=this.value.replace(/\D/g,'')"  type="number" id="txzh" placeholder="请填写手机号码" >
+                    <input onkeyup="iptChange(); this.value=this.value.replace(/\D/g,'');" onafterpaste="this.value=this.value.replace(/\D/g,'')"
+                        type="number" id="txzh" placeholder="请填写手机号码">
                 </div>
             </div>
             <div class="area tel psd">
                 <div class="wrap">
                     <span class="areaTitle">密码</span>
-                    <input type="password" id="psd"  placeholder="请填写密码">
+                    <input type="password" id="psd" placeholder="请填写密码">
                 </div>
             </div>
         </div>
-        <div class="btn"   tapmode   onclick="login()" id="login">
+        <div class="btn" tapmode onclick="login()" id="login">
             登录
         </div>
         <p class="enroll">没有我在账号？
-            <span class="goEnroll"   tapmode   onclick="register()" id="register">去注册 / </span>
-            <span class="revisePsd"   tapmode   onclick="forgetPsd()">忘记密码</span></p>
+            <span class="goEnroll" tapmode onclick="register()" id="register">去注册 / </span>
+            <span class="revisePsd" tapmode onclick="forgetPsd()">忘记密码</span>
+        </p>
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -146,10 +164,12 @@
 <script type="text/javascript">
     var userToken, rongToken;
 
-    apiready = function(){
+    apiready = function () {
 
         // 初始化模块
         moduleInit();
+
+
         // 退出app
         exitApp();
         // api.openFrame({
@@ -169,13 +189,13 @@
     function iptChange() {
 
 
-        if($api.val($api.dom('#txzh')) === '') {
+        if ($api.val($api.dom('#txzh')) === '') {
             $api.css($api.dom('#login'), 'background: #A3DEA3;');
             $api.css($api.dom('#login'), 'border: .01rem solid #93C893;');
         }
         if ($api.val($api.dom('#txzh')) !== 0) {
-             $api.css($api.dom('#login'), 'background: #1AAD19');
-             $api.css($api.dom('#login'), 'border: .01rem solid #189C17;');
+            $api.css($api.dom('#login'), 'background: #1AAD19');
+            $api.css($api.dom('#login'), 'border: .01rem solid #189C17;');
         }
     }
     function login() {
@@ -193,11 +213,11 @@
                     password: password
                 }
             }
-        }, function(ret, err) {
+        }, function (ret, err) {
             if (ret) {
                 if (ret.code == 200) {
                     // 获得极光推送
-                    ajpush.getRegistrationId(function(ret) {
+                    ajpush.getRegistrationId(function (ret) {
                         var registrationId = ret.id;
                         $api.setStorage('registrationId', registrationId);
                         var appVersion = api.appVersion;
@@ -208,25 +228,25 @@
                             method: 'post',
                             headers: apiHeader,
                             data: {
-                                   values: {
-                                       token: $api.getStorage('userToken'),
-                                       registration_id: registrationId,
-                                       version: appVersion
-                                   }
+                                values: {
+                                    token: $api.getStorage('userToken'),
+                                    registration_id: registrationId,
+                                    version: appVersion
+                                }
                             }
-                        }, function(ret, err) {
-                            if(ret) {
+                        }, function (ret, err) {
+                            if (ret) {
                             } else {
                                 alert(JSON.stringify(err))
                             }
                         })
                     });
                     // 把用户token缓存到本地
-                        userToken = ret.data.token;
-                        rongToken = ret.data.rongcloud_token;
+                    userToken = ret.data.token;
+                    rongToken = ret.data.rongcloud_token;
                     $api.setStorage('userToken', userToken);
                     $api.setStorage('rongToken', rongToken);
-                    
+
 
                     // 把当前的usertoken和rongtoken广播出去
                     // sendToken (userToken,rongToken)
@@ -240,17 +260,17 @@
                 }
             } else {
                 api.toast({
-                        msg: ret.msg
-                    });
+                    msg: ret.msg
+                });
             }
         });
 
     }
 
     // 登陆完成
-    function loginSuccess () {
+    function loginSuccess() {
         rongyun(rongToken);
-         api.openWin({
+        api.openWin({
             name: 'mainPage',
             url: '../main.html',
             slidBackEnabled: false,
@@ -259,11 +279,11 @@
                 rongToken: rongToken
             }
         });
-        setTimeout(function() {
+        setTimeout(function () {
             api.closeFrame({
                 name: 'weixin_login'
             });
-        },500)
+        }, 500)
 
     }
     // 注册
@@ -292,7 +312,6 @@
         if ("undefined" == typeof page) {
             var page = 0;
         }
-        console.log('开始获取2');
         var contacts = api.require('contacts');
         contacts.queryByPage({
             count: 3000,
@@ -301,12 +320,8 @@
             if (ret.status) {
                 contactArr.contacts = contactArr.contacts.concat(ret.contacts);
                 if (page < (ret.pages - 1)) {
-                    console.log('页数'+ page);
-                    
-                    console.log('获取数据完毕'+ret.pages+'--'+ contactArr.contacts.length)
-                    queryContactByPage(userToken, rongToken,page + 1);
+                    queryContactByPage(userToken, rongToken, page + 1);
                 } else {
-                    console.log('上传' + contactArr.contacts.length);
                     syncContacts(userToken, rongToken, contactArr)
                 }
             } else {
@@ -329,7 +344,7 @@
                     contact_json: contactArr
                 }
             }
-        }, function(ret1, err1) {
+        }, function (ret1, err1) {
             // 同步通讯录成功
             // 请求同步的数据，存到本地数据库
             // console.log('上传通讯录数据'+JSON.stringify(ret.contacts))
@@ -342,12 +357,13 @@
 
     // 打开数据库
     function openDb(userToken) {
-         // 打开数据库
+        // 打开数据库
         db.openDatabase({
-            name: 'db_'+userToken
-        }, function(ret, err) {
+            name: 'db_' + userToken
+        }, function (ret, err) {
             if (ret.status) {
                 // console.log("打开数据库成功")
+
             } else {
                 //console.log('新建库错误:'+JSON.stringify(err));
             }
@@ -360,46 +376,55 @@
             method: 'post',
             headers: apiHeader,
             data: {
-               values: {
-                  token: userToken
-               }
+                values: {
+                    token: userToken
+                }
             }
-       }, function(ret, err) {
+        }, function (ret, err) {
+            db.executeSql({
+                name: 'db_' + userToken,
+                sql: 'DROP TABLE addressList_simplify'
+            }, function (retDrop, err) {
+                if (retDrop.status) {
+                    api.ajax({
+                        url: apiSite + '/contact/friend',
+                        method: 'post',
+                        headers: apiHeader,
+                        data: {
+                            values: {
+                                token: $api.getStorage('userToken'),
+                            }
+                        }
+                    }, function (retFriend, err) {
+                        if (retFriend) {
+                            //console.log('360:::')
+                            disData(ret.data.single_list, 1)
+                            disData(ret.data.both_list, 2)
+                            disData(ret.data.unavailable_list, 3)
+                            disData(ret.data.friend_list.concat(retFriend.data.list), 4)
 
-            api.ajax({
-                url: apiSite + '/contact/friend',
-                method: 'post',
-                headers: apiHeader,
-                data: {
-                       values: {
-                           token: $api.getStorage('userToken'),
-                       }
-                }
-            }, function(retFriend, err) {
-                if(retFriend) {
-                    //console.log('360:::')
-                    disData(ret.data.single_list, 1)
-                    disData(ret.data.both_list, 2)
-                    disData(ret.data.unavailable_list, 3)
-                    disData(ret.data.friend_list.concat(retFriend.data.list), 4)
-
+                        } else {
+                            alert(JSON.stringify(err))
+                        }
+                    })
                 } else {
-                    alert(JSON.stringify(err))
+                    // api.alert({ msg: err.msg });
                 }
-            })
+            });
+
 
             // 1 初识好友
             // 2 熟识好友
             // 3 尚未加入
             // 4 一度人脉
-       })
+        })
 
     }
     // 处理数据
-    function disData (data, type) {
+    function disData(data, type) {
 
         // console.log('disData'+JSON.stringify(data))
-        if (data != '' ) {
+        if (data != '') {
             for (var i = 0; i < data.length; i++) {
                 // single_list
                 // both_list
@@ -426,7 +451,7 @@
         }
     }
     // 排序
-    function litterSort(data,type) {
+    function litterSort(data, type) {
         for (var i = 0; i < data.length; i++) {
             for (var j = 0; j < data.length; j++) {
                 if (data[i].litter < data[j].litter) {
@@ -435,8 +460,8 @@
                     data[j] = temp;
                 }
             }
-         }
-         sqlSyntax(data, type);
+        }
+        sqlSyntax(data, type);
     }
     var selectCount = 0;
     // 拼数据库语法字符串
@@ -446,105 +471,105 @@
         for (var i = 0; i < data1.length; i++) {
             data1[i].flag = data1[i].litter[0];
         }
-        var SQLName = 'db_'+$api.getStorage('userToken');
+        var SQLName = 'db_' + $api.getStorage('userToken');
         var SQL = 'INSERT OR REPLACE INTO addressList(user_id,nickname,head_img_url,current_company,current_position,current_contact,current_degree, titleSize,title,img,flag,litter,type, sex, remark_nickname, remark_real_name, remark_head_img_url, remark_sex, remark_birthday, remark_hometown, remark_current_company, remark_current_position, remark_current_degree, remark_current_contact) VALUES '
         var SQL2 = 'INSERT OR REPLACE INTO addressList_simplify(user_id,title,img,subTitle,current_contact, flag,type, path_direction) VALUES ';
         //console.log(JSON.stringify(data1))
         for (var i = 0; i < data1.length; i++) {
-                var subTitleStr= '',contactStr = '';
-                SQL += '('+data1[i].user_id+',"'+ data1[i].nickname +'","'+ data1[i].head_img_url +'","'+ (data1[i].current_company || "") +'","'+ (data1[i].current_position || "")+'","'+ (data1[i].current_contact || "") +'","'+ (data1[i].current_degree || "") +'","'+ data1[i].titleSize +'","'+ data1[i].title +'","'+ data1[i].img+'","'+ data1[i].flag +'","'+ data1[i].litter +'","'+ type +'","'+ (data1[i].sex || 1) +'","'+ (data1[i].remark_nickname || "") +'","'+ (data1[i].remark_real_name || "") +'","'+ (data1[i].remark_head_img_url || "") +'","'+ (data1[i].remark_sex || "") +'","'+ (data1[i].remark_birthday || "") +'","'+ (data1[i].remark_hometown || "") +'","'+ (data1[i].remark_current_company || "") +'","'+ (data1[i].remark_current_position || "") +'","'+ (data1[i].remark_current_degree || "") +'","'+ (data1[i].remark_current_contact || "") +'"),';
+            var subTitleStr = '', contactStr = '';
+            SQL += '(' + data1[i].user_id + ',"' + data1[i].nickname + '","' + data1[i].head_img_url + '","' + (data1[i].current_company || "") + '","' + (data1[i].current_position || "") + '","' + (data1[i].current_contact || "") + '","' + (data1[i].current_degree || "") + '","' + data1[i].titleSize + '","' + data1[i].title + '","' + data1[i].img + '","' + data1[i].flag + '","' + data1[i].litter + '","' + type + '","' + (data1[i].sex || 1) + '","' + (data1[i].remark_nickname || "") + '","' + (data1[i].remark_real_name || "") + '","' + (data1[i].remark_head_img_url || "") + '","' + (data1[i].remark_sex || "") + '","' + (data1[i].remark_birthday || "") + '","' + (data1[i].remark_hometown || "") + '","' + (data1[i].remark_current_company || "") + '","' + (data1[i].remark_current_position || "") + '","' + (data1[i].remark_current_degree || "") + '","' + (data1[i].remark_current_contact || "") + '"),';
 
-                if (data1[i].remark_current_company) {
-                    subTitleStr += data1[i].remark_current_company+" "
-                } else if(data1[i].current_company){
-                    subTitleStr += data1[i].current_company+" "
-                } else {
+            if (data1[i].remark_current_company) {
+                subTitleStr += data1[i].remark_current_company + " "
+            } else if (data1[i].current_company) {
+                subTitleStr += data1[i].current_company + " "
+            } else {
 
-                }
-                if (data1[i].remark_current_position) {
-                    subTitleStr += data1[i].remark_current_position + " "
-                } else if (data1[i].current_position) {
-                    subTitleStr += data1[i].current_position + " "
-                } else {
-
-                }
-                if (data1[i].remark_current_degree) {
-                    subTitleStr += data1[i].remark_current_degree+" "
-                } else if (data1[i].current_degree) {
-                    subTitleStr += data1[i].current_degree+" "
-                } else {
-
-                }
-                if (data1[i].remark_current_contact) {
-                    contactStr = data1[i].remark_current_contact;
-                } else if(data1[i].current_contact) {
-                    contactStr = data1[i].current_contact
-                } else {
-
-                }
-                // subTitleStr
-                SQL2 += '('+data1[i].user_id+',"'+ (data1[i].remark_nickname || data1[i].nickname) +'","'+ (data1[i].remark_head_img_url || data1[i].head_img_url) +'","'+ subTitleStr+'","'+ contactStr +'","'+  data1[i].flag  + '","' + type + '","' + (data1[i].path_direction||0)  +'"),';
             }
+            if (data1[i].remark_current_position) {
+                subTitleStr += data1[i].remark_current_position + " "
+            } else if (data1[i].current_position) {
+                subTitleStr += data1[i].current_position + " "
+            } else {
 
-        SQL = SQL.substring(0,SQL.length-1) + ';'
-        SQL2 = SQL2.substring(0,SQL2.length-1) + ';'
+            }
+            if (data1[i].remark_current_degree) {
+                subTitleStr += data1[i].remark_current_degree + " "
+            } else if (data1[i].current_degree) {
+                subTitleStr += data1[i].current_degree + " "
+            } else {
+
+            }
+            if (data1[i].remark_current_contact) {
+                contactStr = data1[i].remark_current_contact;
+            } else if (data1[i].current_contact) {
+                contactStr = data1[i].current_contact
+            } else {
+
+            }
+            // subTitleStr
+            SQL2 += '(' + data1[i].user_id + ',"' + (data1[i].remark_nickname || data1[i].nickname) + '","' + (data1[i].remark_head_img_url || data1[i].head_img_url) + '","' + subTitleStr + '","' + contactStr + '","' + data1[i].flag + '","' + type + '","' + (data1[i].path_direction || 0) + '"),';
+        }
+
+        SQL = SQL.substring(0, SQL.length - 1) + ';'
+        SQL2 = SQL2.substring(0, SQL2.length - 1) + ';'
         db.executeSql({
             name: SQLName,
             sql: 'CREATE TABLE IF NOT EXISTS addressList(user_id int PRIMARY KEY NOT NULL, nickname varchar(255),real_name varchar(255), head_img_url varchar(255), current_position varchar(255), current_company varchar(255), current_degree varchar(255), current_contact varchar(255), titleSize int, title varchar(255), img varchar(255), flag varchar(255), litter varchar(255), type int, sex varchat(10), remark_nickname varchar(255),  remark_real_name varchar(255) , remark_head_img_url varchar(255) , remark_sex varchar(255) , remark_birthday varchar(255) , remark_hometown varchar(255) , remark_current_company varchar(255) , remark_current_position varchar(255) , remark_current_degree varchar(255), remark_current_contact varchar(255), current_status varchar(255))'
-        }, function(ret, err) {
+        }, function (ret, err) {
             // ;CREATE UNIQUE INDEX user_id_idx on addressList (user_id);
             if (ret.status) {
                 //  // console.log('新建表格');
-                 db.executeSql({
-                     name: SQLName,
-                     sql: 'CREATE UNIQUE INDEX IF NOT EXISTS user_id_idx ON addressList (user_id)'
-                 }, function(ret, err){
-                     if( ret.status ){
+                db.executeSql({
+                    name: SQLName,
+                    sql: 'CREATE UNIQUE INDEX IF NOT EXISTS user_id_idx ON addressList (user_id)'
+                }, function (ret, err) {
+                    if (ret.status) {
                         // console.log( '设置唯一索引成功');
                         db.executeSql({
                             name: SQLName,
                             sql: SQL
-                        }, function(ret, err){
-                            if( ret.status ){
+                        }, function (ret, err) {
+                            if (ret.status) {
                                 // console.log( 'addressList插入数据成功');
-                            }else{
+                            } else {
                                 // console.log( '插入数据:' + JSON.stringify( err ) );
 
                             }
                         });
-                     }else{
-                         // console.log( '设置唯一索引' + JSON.stringify( err ) );
-                     }
-                 });
+                    } else {
+                        // console.log( '设置唯一索引' + JSON.stringify( err ) );
+                    }
+                });
             } else {
                 // console.log('新建表错误:'+JSON.stringify(err));
             }
         });
         db.executeSql({
-            name: 'db_'+$api.getStorage('userToken'),
+            name: 'db_' + $api.getStorage('userToken'),
             sql: 'CREATE TABLE IF NOT EXISTS addressList_simplify(user_id int PRIMARY KEY NOT NULL, title varchar(255),img varchar(255), subTitle varchar(255),current_contact varchar(255), flag varchar(255), type int,path_direction int)'
-        }, function(ret, err){
-            if( ret.status ){
+        }, function (ret, err) {
+            if (ret.status) {
                 //console.log('新建表成功')
                 db.executeSql({
-                    name: 'db_'+$api.getStorage('userToken'),
+                    name: 'db_' + $api.getStorage('userToken'),
                     sql: 'CREATE INDEX IF NOT EXISTS type_idx ON addressList_simplify (type);'
-                }, function(ret, err){
-                    if( ret.status ){
+                }, function (ret, err) {
+                    if (ret.status) {
                         db.executeSql({
-                            name: 'db_'+$api.getStorage('userToken'),
+                            name: 'db_' + $api.getStorage('userToken'),
                             sql: 'CREATE INDEX IF NOT EXISTS flag_idx ON addressList_simplify (flag);'
-                        }, function(ret, err){
-                            if( ret.status ){
+                        }, function (ret, err) {
+                            if (ret.status) {
                                 db.executeSql({
                                     name: SQLName,
                                     sql: SQL2
-                                }, function(ret, err){
-                                    if( ret.status ){
+                                }, function (ret, err) {
+                                    if (ret.status) {
                                         selectCount++;
                                         // console.log(selectCount)
                                         if (selectCount == 4) {
-                                            console.log( '简略表插入数据成功');
+                                            console.log('简略表插入数据成功');
                                             api.sendEvent({
                                                 name: 'editUserInfoUpdateList'
                                             });
@@ -553,26 +578,27 @@
                                                 frameName: 'frame0',
                                                 script: 'historyNews();'
                                             });
-                                           
+
                                         }
-                                    }else{
-                                        alert( JSON.stringify( err ) );
+                                    } else {
+                                        alert(JSON.stringify(err));
                                     }
                                 });
-                            }else{
-                                alert( JSON.stringify( err ) );
+                            } else {
+                                alert(JSON.stringify(err));
                             }
                         });
-                    }else{
-                        alert( JSON.stringify( err ) );
+                    } else {
+                        alert(JSON.stringify(err));
                     }
                 });
-            }else{
-                alert( JSON.stringify( err ) );
+            } else {
+                alert(JSON.stringify(err));
             }
         });
 
 
     }
 </script>
+
 </html>

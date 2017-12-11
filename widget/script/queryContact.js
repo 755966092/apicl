@@ -112,7 +112,6 @@ function requestData() {
         }
     }, function (ret, err) {
         if (ret) {
-            console.log('搜索' + JSON.stringify(ret))
             if (ret.code == 200) {
                 api.ajax({
                     url: apiSite + '/contact/friend',
@@ -124,7 +123,6 @@ function requestData() {
                         }
                     }
                 }, function (retFriend, err) {
-                    console.log('搜索' + JSON.stringify(retFriend))
                     if (retFriend) {
                         if (retFriend.code == 200) {
                             flagFlag = 1;
