@@ -322,9 +322,103 @@
         .selRoleList ul li:Last-child {
             border: 0;
         }
+
+        .discussText img {
+            width: 0.4rem;
+            height: 0.4rem;
+        }
     </style>
 </head>
 <body>
+    <!-- <div class="resultList">
+        <div class="statePersonInfo flex-def flex-cCenter ">
+            <img class="headImg" data-id="1025" tapmode onclick="openUserInfoPage(this)" src="http://img.iinnet.com/FvZfKY3unCYn9_3cr3vdkHmZvdWX"
+                alt="">
+            <div class="text flex-item">
+                <div class="name flex-def flex-cCenter">
+                    <h3>王小呆</h3>
+                    <span class="label">[知情人]</span>
+                </div>
+                <p class="company"> </p>
+            </div>
+        </div>
+        <div class="content flex-def flex-zBetween flex-zTopBottom flex-cEnd">
+            <div class="wrap">
+                <p class="next">即将开始</p>
+                <div class="flex-def flex-cCenter flex-zCenter">
+                    <span class="line"></span>
+                    <span class="imgIcon"></span>
+                    <span class="xqText">详情</span>
+                    <span class="line"></span>
+                </div>
+                <h3>麻麻扣扣</h3>
+                <p class="textContent">人生的终点不是死亡，而是遗忘。在爱的记忆消失前，请记得我[心][心][心]——《寻梦环游记》 ​愿我们永远都能记住彼此爱的回忆~ ​</p>
+        <div class="imgWrap">
+            <img src="http://img.iinnet.com/Fn1chvOGqcLwf2pguak9nZVzG9dh" tapmode onclick="openImgView(this);event.stopPropagation();">
+            <img src="http://img.iinnet.com/FhrSfQVjE1g9mIjtiDtpWm72jsaI" tapmode onclick="openImgView(this);event.stopPropagation();">
+            <img src="http://img.iinnet.com/FrBD3eajGVOcaIYkr2BHkY0wtzQm" tapmode onclick="openImgView(this);event.stopPropagation();"> </div>
+        </div>
+        <p class="time">2017-12-04 18:15:57</p>
+        </div>
+        <div class="startEndTime ">
+            <span>即将开始</span>
+        </div>
+        <div class="discuss">
+            <div class="startEndTime ">
+                <span>评论（3）</span>
+            </div>
+            <div class="discussContent flex-def ">
+                <div class="img flex-def flex-cStart">
+                    <img src="http://img.iinnet.com/FnUe1oBtIUzuEJJAEypX1vsUNHkh" tapmode onclick="openUserInfoPage(this);event.stopPropagation();"
+                        data-id="9969"> </div>
+                <div class="flex-item">
+                    <div class="discussTitle flex-def flex-zBetween flex-cCenter">
+                        <div>
+                            <span class="discussName">大中小18765</span>
+                        </div>
+                        <span class="discussTime">2017-12-08 17:30:53</span>
+                    </div>
+                    <p class="discussText">好喜欢这部电影，场景好漂亮的。情节也很感人泪目</p>
+                </div>
+            </div>
+            <div class="discussContent flex-def ">
+                <div class="img flex-def flex-cStart">
+                    <img src="http://img.iinnet.com/FnUe1oBtIUzuEJJAEypX1vsUNHkh" tapmode onclick="openUserInfoPage(this);event.stopPropagation();"
+                        data-id="9969"> </div>
+                <div class="flex-item">
+                    <div class="discussTitle flex-def flex-zBetween flex-cCenter">
+                        <div>
+                            <span class="discussName">大中小18765</span>
+                        </div>
+                        <span class="discussTime">2017-12-11 10:33:29</span>
+                    </div>
+                    <p class="discussText">
+                        <img style="vertical-align: middle;" src="../../image/chatPage/emotion/Expression_5.png" width="10" height="10">
+                        <img style="vertical-align: middle;" src="../../image/chatPage/emotion/Expression_5.png" width="10" height="10">
+                    </p>
+                </div>
+            </div>
+            <div class="discussContent flex-def ">
+                <div class="img flex-def flex-cStart">
+                    <img src="http://img.iinnet.com/FnUe1oBtIUzuEJJAEypX1vsUNHkh" tapmode onclick="openUserInfoPage(this);event.stopPropagation();"
+                        data-id="9969"> </div>
+                <div class="flex-item">
+                    <div class="discussTitle flex-def flex-zBetween flex-cCenter">
+                        <div>
+                            <span class="discussName">大中小18765</span>
+                        </div>
+                        <span class="discussTime">2017-12-11 13:53:47</span>
+                    </div>
+                    <p class="discussText">
+                        <img style="vertical-align: middle;" src="../../image/chatPage/emotion/Expression_17.png" width="10" height="10">
+                        <img style="vertical-align: middle;" src="../../image/chatPage/emotion/Expression_17.png" width="10" height="10">
+                        <img style="vertical-align: middle;" src="../../image/chatPage/emotion/Expression_17.png" width="10" height="10">
+                    </p>
+                </div>
+            </div>
+        </div> 
+
+    </div> -->
     <div class="resultList"></div>
     <script type="text/x-dot-template" id="listT">
             <div class="statePersonInfo flex-def flex-cCenter ">
@@ -436,6 +530,8 @@
     var role = ['关系人','知情人','甲方','总包单位','分包单位','设计院','销售'],paramImg;
     apiready = function(){
         moduleInit();
+        // 表情转换
+        updatePage();
         $api.fixTabBar($api.dom('footer'))
        api.addEventListener({
            name: 'circleTopicComment'
@@ -506,7 +602,6 @@
                 // if (ret.data.info.topic_info.role) {
                 //     ret.data.info.topic_info.role = role[ret.data.info.topic_info.role]
                 // }
-                console.log(JSON.stringify(ret,null,4))
                 ret.data.info.topic_info.create_time = initTime(ret.data.info.topic_info.create_time)
                 for (var i = 0; i < ret.data.list.length; i++) {
                     if (ret.data.list[i].root == 1) {
@@ -666,5 +761,66 @@
             }
         });
     }
+    function updatePage() {
+            var sourcePath = 'widget://image/chatPage/emotion'; // 表情存放目录
+            getImgsPaths(sourcePath, function (emotion) {
+                emotionData = emotion;
+            });
+        }
+        // 表情转换
+        function getImgsPaths(sourcePathOfChatBox, callback) {
+            var jsonPath = 'widget://image/chatPage/emotion/emotion.json'; // 表情的JSON数组
+            api.readFile({
+                path: jsonPath
+            }, function (ret, err) {
+                if (ret.status) {
+                    var emotionArray = JSON.parse(ret.data);
+                    var emotion = {};
+                    for (var idx in emotionArray) {
+                        var emotionItem = emotionArray[idx];
+                        var emotionText = emotionItem.text;
+                        var emotionUrl = '../../image/chatPage/emotion/' + emotionItem.name + '.png';
+                        emotion[emotionText] = emotionUrl;
+                    }
+
+                    /*把emotion对象 回调出去*/
+                    if ('function' === typeof (callback)) {
+                        callback(emotion);
+                    }
+                }
+
+            });
+        }
+        // 表情转换
+        function transText(text, imgWidth, imgHeight) {
+            var imgWidth = imgWidth || 20;
+            var imgHeight = imgHeight || 20;
+            var regx = /\[(.*?)\]/gm;
+            var textTransed = text.replace(regx, function (match) {
+                var imgSrc = emotionData[match];
+                if (!imgSrc) {
+                    // 说明不对应任何表情，直接返回
+                    return match;
+                }
+                var img = '<img style="vertical-align: middle;" src="' + imgSrc + '" width="' + imgWidth + '" height="' + imgHeight + '">';
+                return img;
+            });
+            return textTransed;
+        }
+         // doT模版获取数据
+            function getData(data) {
+
+                var listTText = $api.byId('listT').text;
+
+                var fnListT = doT.template(listTText);
+
+                var html = fnListT(data);
+                html = transText(html,10,10)
+                var list = $api.dom('.resultList');
+                // 替换resultList所有内容
+                $api.html(list, html);
+                // alert('getData:' + JSON.stringify(data))
+            }
 </script>
+
 </html>

@@ -1,37 +1,44 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <style>
         .loading {
             z-index: 1000;
         }
-        html,body {
+
+        html,
+        body {
             height: 100%;
             width: 100%;
-            background-color: rgba(0,0,0,0);
+            background-color: rgba(0, 0, 0, 0);
         }
 
 
         .warp1 {
             position: relative;
             height: 100%;
-             display: -webkit-box;
+            display: -webkit-box;
             display: flex;
             -webkit-box-direction: normal;
             -webkit-box-orient: vertical;
             flex-direction: column;
-            -webkit-box-align:  end;
+            -webkit-box-align: end;
             align-items: flex-end;
         }
+
         .warp {
             margin-left: 1.5rem;
             width: 6rem;
             background-color: #fff;
         }
+
         .main {
             background-color: #fff;
             position: relative;
@@ -47,6 +54,7 @@
             position: absolute;
             bottom: 0;
         }
+
         .footer span {
             height: .9rem;
             width: 3rem;
@@ -56,6 +64,7 @@
             float: left;
             background-color: #F8F8F8;
         }
+
         .footer span:last-child {
             background-color: #27B24A;
             color: #fff;
@@ -64,15 +73,18 @@
         header.header {
             opacity: 0;
         }
+
         .selected {
             box-sizing: border-box;
             padding-left: .2rem;
             font-size: 0;
             line-height: .81rem;
         }
+
         .selected span {
             font-size: .26rem;
         }
+
         .selected .selectedText {
             width: 4rem;
             white-space: nowrap;
@@ -83,22 +95,26 @@
         }
     </style>
 </head>
-<body   tapmode class=""   onclick="api.closeFrame()">
-   <div class="loading"></div>
+
+<body tapmode class="" onclick="api.closeFrame()">
+    <div class="loading"></div>
     <div class="warp1 flex-def flex-zBetween">
         <header class="header">
             <div class="head"></div>
         </header>
-        <div class="warp flex-item"   tapmode   onclick="api.closeFrame()">
-            <div class="main"   tapmode   onclick="event.cancelBubble=true;">
+        <div class="warp flex-item" tapmode onclick="api.closeFrame()">
+            <div class="main" tapmode onclick="event.cancelBubble=true;">
                 <div>
-                   <p class="selected"><span>已选择：</span><span class="selectedText">请选择分类</span></p>
+                    <p class="selected flex-def flex-cCenter">
+                        <span>已选择：</span>
+                        <span class="selectedText">请选择分类</span>
+                    </p>
 
                 </div>
             </div>
             <div class="footer">
-                <span   tapmode   onclick="enter(0);event.stopPropagation();">取消</span>
-                <span   tapmode   onclick="enter(1);event.stopPropagation();">确定</span>
+                <span tapmode onclick="enter(0);event.stopPropagation();">取消</span>
+                <span tapmode onclick="enter(1);event.stopPropagation();">确定</span>
             </div>
         </div>
     </div>
@@ -108,41 +124,41 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
-    var flag = 0,eventName,discriminate,selectedArr=[];
-    var selectedObj ,objData;
-    apiready = function(){
+    var flag = 0, eventName, discriminate, selectedArr = [];
+    var selectedObj, objData;
+    apiready = function () {
         $api.fixTabBar($api.dom('.footer'))
         fnInit();
         moduleInit();
         selectedObj = api.pageParam.selectedObj;
-         if (selectedObj != 1) {
+        if (selectedObj != 1) {
             for (var i = 0; i < selectedObj.length; i++) {
                 selectedArr.push(selectedObj[i])
             }
         }
-        if (selectedObj) {
+        if (selectedObj.length > 0) {
             $api.text($api.dom('.selectedText'), selectedObj[0].str);
         } else {
             settingText();
         }
         // $api.rmStorage('classifyDataSlide');
         var classifyDataSlide = $api.getStorage('classifyDataSlide');
-        if(classifyDataSlide) {
+        if (classifyDataSlide) {
             if (selectedObj != 1) {
                 for (var i = 0; i < selectedObj.length; i++) {
                     classifyDataSlide[selectedObj[i].key][selectedObj[i].index].titleColor = '#27B24A'
                 }
             }
-            openList(classifyDataSlide,'yes');
+            openList(classifyDataSlide, 'yes');
             requireCategory();
         } else {
             requireCategory();
         }
-            // requireCategory();
+        // requireCategory();
     }
 
     // 设置文字
-    function settingText () {
+    function settingText() {
         $api.text($api.dom('.selectedText'), '选择分类');
     }
     // 打开列表
@@ -152,13 +168,13 @@
         } else {
             $api.setStorage('classifyDataSlide', data);
         }
-        var str='';
+        var str = '';
         //console.log(JSON.stringify(api.pageParam.selectedObj))
         if (api.pageParam.selectedObj == 0) {
             str = ''
         } else {
             // console.log('132行: '+JSON.stringify(selectedObj[0]))
-            str = selectedObj[0].str ||'';
+            str = selectedObj[0].str || '';
             // $api.text($api.dom('.selectedText'), str);
         }
         listContact.open({
@@ -168,7 +184,7 @@
             h: 5,
             data: [],
             fixedOn: api.frameName
-        },function(ret,err){
+        }, function (ret, err) {
         })
         listContact.close();
         listContact.open({
@@ -178,7 +194,7 @@
             h: api.frameHeight - headerH - $api.offset($api.dom('.footer')).h - $api.offset($api.dom('.selected')).h,
             imgHeight: 32,
             borderColor: '#d9d9d9',
-             groupTitle: {
+            groupTitle: {
                 color: '#999',
                 size: 14,
                 bgColor: '#EFEFF4'
@@ -198,39 +214,41 @@
             },
             data: data,
             fixedOn: api.frameName
-        }, function(ret, err) {
+        }, function (ret, err) {
             if (ret) {
                 // alert(JSON.stringify(ret))
                 flag = 1;
                 if (str.indexOf(data[ret.key][ret.index].title) != -1) {
                     // 已选
-                    str = str.replace(data[ret.key][ret.index].title,'')
+                    str = str.replace(data[ret.key][ret.index].title, '')
                     listContact.refreshItem({
                         index: ret.index,
                         key: ret.key,
                         data: {
                             title: data[ret.key][ret.index].title,
                             titleColor: '#000',
-                            titleSize:15
+                            titleSize: 15
                         }
                     });
                     $api.text($api.dom('.selectedText'), str);
                     for (var i = 0; i < selectedArr.length; i++) {
                         if (selectedArr[i].title === data[ret.key][ret.index].title) {
-                            selectedArr.splice(i,1);
+                            selectedArr.splice(i, 1);
                             break;
                         }
                     }
                     //console.log('删除后:'+JSON.stringify(selectedArr));
-                    selectedArr[0].str = str;
+                    if (selectedArr.length>0) {
+                        selectedArr[0].str = str;
+                    }
                 } else {
                     // 未选
-                    str += data[ret.key][ret.index].title+' ';
+                    str += data[ret.key][ret.index].title + ' ';
                     selectedArr.push({
                         title: data[ret.key][ret.index].title,
                         key: ret.key,
                         index: ret.index,
-                        str:''
+                        str: ''
                     });
                     selectedArr[0].str = str;
                     //console.log('删除前:'+JSON.stringify(selectedArr));
@@ -241,7 +259,7 @@
                         data: {
                             title: data[ret.key][ret.index].title,
                             titleColor: '#27B24A',
-                            titleSize:15
+                            titleSize: 15
                         }
                     });
                 }
@@ -252,18 +270,18 @@
         });
         $api.css($api.dom('.loading'), 'display: none');
     }
-     function requireCategory() {
+    function requireCategory() {
         api.ajax({
             url: apiSite + '/category/index',
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: {
-                       type: 1
-                   }
+                values: {
+                    type: 1
+                }
             }
-        }, function(ret, err) {
-            if(ret) {
+        }, function (ret, err) {
+            if (ret) {
                 // handleData(ret)
                 if (ret.data.version == $api.getStorage('classifyVersion')) {
                     // openList($api.getStorage('classifyDataSlide'),'yes');
@@ -287,7 +305,7 @@
             obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]] = [];
         }
         for (var i = 0; i < schoolList.length; i++) {
-            obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]].push({category_id:ret.data.list[i].category_id,title:schoolList[i],titleSize:15});
+            obj[PinyinHelper.getShortPinyin(schoolList[i]).toUpperCase()[0]].push({ category_id: ret.data.list[i].category_id, title: schoolList[i], titleSize: 15 });
         }
         if (JSON.stringify(selectedObj) != '{}') {
             for (var i = 0; i < selectedObj.length; i++) {
@@ -326,37 +344,37 @@
         }
     }
 
-    function f_check_uppercase(obj)   {
-       if (/[A-Z]/.test(obj))    {
-          return true;
-       }
-       return false;
+    function f_check_uppercase(obj) {
+        if (/[A-Z]/.test(obj)) {
+            return true;
+        }
+        return false;
     }
     function sortData(data) {
         for (var i = 0; i < data.length; i++) {
             data[i].letter = PinyinHelper.getShortPinyin($api.trimAll(data[i].name)).toUpperCase();
             data[i].flag = data[i].letter[0];
         }
-        for(var i = 0;i < data.length-1; i++) {
-            for(var j = 0; j < data.length-i-1; j++) {
-                if(data[j].letter > data[j+1].letter){
+        for (var i = 0; i < data.length - 1; i++) {
+            for (var j = 0; j < data.length - i - 1; j++) {
+                if (data[j].letter > data[j + 1].letter) {
                     var temp = data[j];
-                    data[j] = data[j+1];
-                    data[j+1] = temp;
+                    data[j] = data[j + 1];
+                    data[j + 1] = temp;
                 }
             }
         }
         paixv(data);
     }
-    function paixv (data) {
+    function paixv(data) {
         for (var i = 0; i < data.length; i++) {
             if (f_check_uppercase(data[0].flag)) {
                 data[0].initial = data[0].flag;
             } else {
                 data[0].initial = '#';
             }
-            if (i>0) {
-                if (data[i].flag !== data[i-1].flag) {
+            if (i > 0) {
+                if (data[i].flag !== data[i - 1].flag) {
                     if (f_check_uppercase(data[i].flag)) {
                         data[i].initial = data[i].flag;
                     } else {
@@ -385,10 +403,11 @@
                     a = i;
                 }
             }
-            arr[data[a].initial].push (data[i])
+            arr[data[a].initial].push(data[i])
 
         }
         openList(arr)
     }
 </script>
+
 </html>
