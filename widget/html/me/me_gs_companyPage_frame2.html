@@ -252,7 +252,7 @@
                     </div>
                     <p class="price2"></p>
                 </div>
-                <span class="firstImg" style="display:inline-block;width:100%;height:3.8rem;background:url(../../image/icon_supply/supply_noImg.png)no-repeat;background-size:7.1rem 3.8rem;background-position: center center;border-radius:.1rem;">
+                <span class="firstImg" style="display:inline-block;width:100%;height:3.8rem;background:url({{=value.image_json[0]?value.image_json[0]:'../../image/icon_supply/supply_noImg.png'}})no-repeat;background-size:100% auto;background-position: center center;border-radius:.1rem;">
                     {{?value.distance}}
                     <span class="price ">
                         <!-- <span class="position fl">清华大学</span> -->
@@ -312,8 +312,10 @@
         }, function (ret, err) {
             if (ret) {
                 if (ret.code === 200) {
-                    console.log(JSON.stringify(ret.data.list));
-                    
+                    for (var i = 0; i < ret.data.list.length; i++) {
+                        // 解析图片json
+                        ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
+                    }
                     getData(ret.data.list)
                 } else {
                     alert(ret.msg)

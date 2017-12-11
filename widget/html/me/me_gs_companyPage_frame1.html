@@ -163,6 +163,7 @@
             font-size: 0.24rem;
             border-radius: .17rem;
             padding: 0 .12rem;
+            margin-right: 0.1rem;
         }
 
         .position {
@@ -252,10 +253,10 @@
                     </div>
                     <p class="price2"></p>
                 </div>
-                <span class="firstImg" style="display:inline-block;width:100%;height:3.8rem;background:url(../../image/icon_supply/supply_noImg.png)no-repeat;background-size:7.1rem 3.8rem;background-position: center center;border-radius:.1rem;">
+                <span class="firstImg" style="display:inline-block;width:100%;height:3.8rem;background:url({{=value.image_json[0]?value.image_json[0]:'../../image/icon_supply/supply_noImg.png'}})no-repeat;background-size:100% auto;background-position: center center;border-radius:.1rem;">
                     {{?value.distance}}
                     <span class="price ">
-                        <!-- <span class="position fl">清华大学</span> -->
+                        <span class="position fl">{{=value.city}}</span>
                         <span class="distance">距离我{{=value.distance}}km</span>
                     </span>
                     {{?}}
@@ -273,7 +274,10 @@
                 </div>
                 <p class="createTime">{{=value.create_time}}</p>
                 <div class="user flex-def flex-cCenter flex-zBetween">
-                    <span class="classifyLabel">{{=value.category_name}}</span>
+                    <div>
+                        <span class="classifyLabel">{{=value.category_name}}</span>
+                        <span class="classifyLabel">{{=value.sub_type}}</span>
+                    </div>
                     <span class="icon flex-def flex-cCenter">{{=value.browse_count}}人</span>
                 </div>
             </div>
@@ -294,6 +298,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
+    var sub_type = ['自产自销', '代理代销', '技能分享', '出租租赁', '相亲交友'];
     apiready = function () {
         requireData();
     };
@@ -312,7 +317,12 @@
         }, function (ret, err) {
             if (ret) {
                 if (ret.code === 200) {
-                    console.log(JSON.stringify(ret))
+                    // console.log(JSON.stringify(ret))
+                     for (var i = 0; i < ret.data.list.length; i++) {
+                        // 解析图片json
+                        ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
+                        ret.data.list[i].sub_type = sub_type[ret.data.list[i].sub_type-1];
+                     }
                     getData(ret.data.list)
                 } else {
                     alert(ret.msg)
