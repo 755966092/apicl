@@ -448,7 +448,7 @@
         }
         var SQLName = 'db_'+$api.getStorage('userToken');
         var SQL = 'INSERT OR REPLACE INTO addressList(user_id,nickname,head_img_url,current_company,current_position,current_contact,current_degree, titleSize,title,img,flag,litter,type, sex, remark_nickname, remark_real_name, remark_head_img_url, remark_sex, remark_birthday, remark_hometown, remark_current_company, remark_current_position, remark_current_degree, remark_current_contact) VALUES '
-        var SQL2 = 'INSERT OR REPLACE INTO addressList_simplify(user_id,title,img,subTitle,current_contact, flag,type) VALUES ';
+        var SQL2 = 'INSERT OR REPLACE INTO addressList_simplify(user_id,title,img,subTitle,current_contact, flag,type, path_direction) VALUES ';
         //console.log(JSON.stringify(data1))
         for (var i = 0; i < data1.length; i++) {
                 var subTitleStr= '',contactStr = '';
@@ -483,7 +483,7 @@
 
                 }
                 // subTitleStr
-                SQL2 += '('+data1[i].user_id+',"'+ (data1[i].remark_nickname || data1[i].nickname) +'","'+ (data1[i].remark_head_img_url || data1[i].head_img_url) +'","'+ subTitleStr+'","'+ contactStr +'","'+  data1[i].flag  +'","'+ type  +'"),';
+                SQL2 += '('+data1[i].user_id+',"'+ (data1[i].remark_nickname || data1[i].nickname) +'","'+ (data1[i].remark_head_img_url || data1[i].head_img_url) +'","'+ subTitleStr+'","'+ contactStr +'","'+  data1[i].flag  + '","' + type + '","' + (data1[i].path_direction||0)  +'"),';
             }
 
         SQL = SQL.substring(0,SQL.length-1) + ';'
@@ -522,7 +522,7 @@
         });
         db.executeSql({
             name: 'db_'+$api.getStorage('userToken'),
-            sql: 'CREATE TABLE IF NOT EXISTS addressList_simplify(user_id int PRIMARY KEY NOT NULL, title varchar(255),img varchar(255), subTitle varchar(255),current_contact varchar(255), flag varchar(255), type int)'
+            sql: 'CREATE TABLE IF NOT EXISTS addressList_simplify(user_id int PRIMARY KEY NOT NULL, title varchar(255),img varchar(255), subTitle varchar(255),current_contact varchar(255), flag varchar(255), type int,path_direction int)'
         }, function(ret, err){
             if( ret.status ){
                 //console.log('新建表成功')

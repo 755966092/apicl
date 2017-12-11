@@ -143,6 +143,7 @@
          }, function(ret, err) {
              if(ret) {
                  if (ret.code === 200) {
+                     console.log(JSON.stringify(ret,null,4))
                      // 工牌
                      if (ret.data.list.identity !== null) {
                         setStyle('identity', ret.data.list.identity);
@@ -195,7 +196,8 @@
     }
     // 设置图片
     function setStyle(className, imgUrl) {
-        console.log(imgUrl)
+            console.log(className);
+            
             $api.css($api.dom('.'+className), 'background: url(' + imgUrl + ')no-repeat;-webkit-background-size: 2.74rem auto;background-size: 2.74rem auto;background-position: center center;');
             $api.attr($api.dom('.'+className), 'data-url', imgUrl);
     }

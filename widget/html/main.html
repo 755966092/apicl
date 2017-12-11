@@ -719,9 +719,19 @@
                 alert('473' + JSON.stringify(err));
             }
         });
+        //  db.executeSql({
+        //     name: SQLName,
+        //     sql: 'DROP TABLE addressList_simplify'
+        // }, function (ret, err) {
+        //     if (ret.status) {
+        //         alert('2' + JSON.stringify(ret));
+        //     } else {
+        //         alert(JSON.stringify(err));
+        //     }
+        // });
         db.executeSql({
             name: SQLName,
-            sql: 'CREATE TABLE IF NOT EXISTS addressList_simplify(user_id int PRIMARY KEY NOT NULL, title varchar(255),img varchar(255), subTitle varchar(255), current_contact varchar(255), flag varchar(255), type int)'
+            sql: 'CREATE TABLE IF NOT EXISTS addressList_simplify(user_id int PRIMARY KEY NOT NULL, title varchar(255),img varchar(255), subTitle varchar(255), current_contact varchar(255), flag varchar(255), type int,path_direction int)'
         }, function(ret, err) {
             if (ret.status) {
                 db.executeSql({
@@ -748,16 +758,7 @@
             }
         });
 
-        // db.executeSql({
-        //     name: SQLName,
-        //     sql: 'DROP TABLE addressList_one'
-        // }, function(ret, err){
-        //     if( ret.status ){
-        //         alert('2'+ JSON.stringify( ret ) );
-        //     }else{
-        //         alert( JSON.stringify( err ) );
-        //     }
-        // });
+       
     }
 
     function synchronousAddressBook() {
@@ -893,7 +894,7 @@
         var SQLName = 'db_' + $api.getStorage('userToken');
         var SQL = 'INSERT OR REPLACE INTO addressList(user_id,nickname,real_name,head_img_url,current_company,current_position,current_contact,current_degree, titleSize,title,img,flag,litter,type, sex, remark_nickname, remark_real_name, remark_head_img_url, remark_sex, remark_birthday, remark_hometown, remark_current_company, remark_current_position, remark_current_degree, remark_current_contact) VALUES '
 
-        var SQL2 = 'INSERT OR REPLACE INTO addressList_simplify(user_id,title,img,subTitle,current_contact, flag,type) VALUES ';
+        var SQL2 = 'INSERT OR REPLACE INTO addressList_simplify(user_id,title,img,subTitle,current_contact, flag,type,path_direction) VALUES ';
         for (var i = 0; i < data1.length; i++) {
             var subTitleStr = '',
                 contactStr = '';
@@ -927,7 +928,7 @@
 
             }
             // subTitleStr
-            SQL2 += '(' + data1[i].user_id + ',"' + (data1[i].remark_nickname || data1[i].nickname) + '","' + (data1[i].remark_head_img_url || data1[i].head_img_url) + '","' + subTitleStr + '","' + contactStr + '","' + data1[i].flag + '","' + type + '"),';
+            SQL2 += '(' + data1[i].user_id + ',"' + (data1[i].remark_nickname || data1[i].nickname) + '","' + (data1[i].remark_head_img_url || data1[i].head_img_url) + '","' + subTitleStr + '","' + contactStr + '","' + data1[i].flag + '","' + type + '","' + (data1[i].path_direction||0) + '"),';
         }
         SQL2 = SQL2.substring(0, SQL2.length - 1) + ';'
             // console.log(SQL)
@@ -1039,4 +1040,10 @@
             }
         })
     }
+    // 更细版本后对比版本号如果是ios 1.2.x  Android 1.2.x
+    // 如果是最新版本 删除数据库重新更新通讯录然后
+    // 执行以下queryContactByPage(); 函数,
+    // 引入queryContact.js文件
+    // 下次版本删除
+    // 查询同步成功后, 做标记缓存, 下次打开不在更新
 </script>

@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <style type="text/css">
         body {
             font-size: 0;
         }
+
         .img {
             margin-right: .2rem;
         }
@@ -18,16 +22,19 @@
             border-bottom: .01rem solid #ECECEC;
             padding-right: .3rem;
         }
+
         .user .img img {
             width: .5rem;
             height: .5rem;
             border-radius: 50%;
         }
+
         .user .text h3 {
             font-size: .3rem;
             line-height: .42rem;
             margin-right: .1rem;
         }
+
         .user .text p {
             max-width: 5rem;
             overflow: hidden;
@@ -37,10 +44,12 @@
             line-height: .33rem;
             color: #999;
         }
+
         .info {
             padding-right: .3rem;
             height: 1.5rem;
         }
+
         .info .img img {
             width: .9rem;
             height: .9rem;
@@ -53,14 +62,17 @@
             white-space: nowrap;
             font-size: .3rem;
         }
+
         .info .text .top .price {
             font-size: .26rem;
             color: #0ABB07;
         }
+
         .info .text .bottom {
 
             margin-top: .1rem;
         }
+
         .info .text .bottom .left {
             max-width: 3rem;
             overflow: hidden;
@@ -68,25 +80,31 @@
             white-space: nowrap;
             font-size: .24rem;
             color: #555;
-        }.info .text .bottom .right {
+        }
+
+        .info .text .bottom .right {
             font-size: .24rem;
             color: #999;
         }
+
         .label {
-             font-size: .2rem;
+            font-size: .2rem;
             color: #cc0019;
             margin-right: .1rem;
         }
+
         .item {
             background-color: #fff;
 
         }
+
         .wrap {
             padding-left: .3rem;
             background-color: #fff;
             border-bottom: .01rem solid #ececec;
             margin-bottom: .2rem;
         }
+
         .nomain .icon {
             width: 2.2rem;
             height: 2.2rem;
@@ -95,11 +113,16 @@
             background-size: 2.2rem 2.2rem;
             margin: 0 auto;
         }
+
         .nomain {
             position: absolute;
-            top: 0;bottom: 0;left: 0;right: 0;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
             margin: auto;
         }
+
         .nomain p {
             font-size: .3rem;
             color: #999;
@@ -107,15 +130,18 @@
             margin: .36rem auto 0;
             text-align: center;
         }
+
         .nomain .jump {
             color: #89B2EF;
             font-size: 0.34rem;
         }
+
         .nomain .wrap {
             background-color: rgba(0, 0, 0, 0)
         }
     </style>
 </head>
+
 <body>
     <div class="main resultList"></div>
     <script type="text/x-dot-template" id="listT">
@@ -134,7 +160,7 @@
                             <div class="text flex-def flex-cCenter">
                                 <h3>{{=it[i].nickname}}</h3>
                                 {{?it[i].current_company == '' || it[i].current_company == null}}
-                                {{??it[i].current_position == '' it[i].current_position == null}}
+                                {{??it[i].current_position == '' || it[i].current_position == null}}
                                     <p>({{=it[i].current_company}})</p>
                                 {{??it[i].current_company != '' && it[i].current_position != ''}}
                                     <p>({{=it[i].current_company}} {{=it[i].current_position}})</p>
@@ -192,12 +218,12 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", "个", "扇", "课时", "面议","其他","未定义"];
-    apiready = function(){
+    var _dataSource = ["次", "幅", "单", "小时", "分钟", "天", "周", "月", "份", "个", "扇", "课时", "面议", "其他", "未定义"];
+    apiready = function () {
         requireData();
         api.setCustomRefreshHeaderInfo({
             bgColor: '#EFEFF4',
-        }, function(ret, err) {
+        }, function (ret, err) {
             if (ret) {
                 requireData();
             } else {
@@ -225,7 +251,7 @@ var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", 
             name: 'txl_memberInfo_Win',
             url: '../addressList/txl_memberInfo_Win.html',
             bounces: false,
-            pageParam: {userId : $api.attr(ele, 'data-id')}
+            pageParam: { userId: $api.attr(ele, 'data-id') }
         });
     }
     function requireData() {
@@ -234,31 +260,31 @@ var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", 
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: {
-                       token: $api.getStorage('userToken'),
-
-                   }
+                values: {
+                    token: $api.getStorage('userToken'),
+                }
             }
-        }, function(ret, err) {
-            if(ret) {
+        }, function (ret, err) {
+            if (ret) {
                 api.refreshHeaderLoadDone();
                 // alert(JSON.stringify(ret))
                 for (var i = 0; i < ret.data.list.length; i++) {
-                    if ( ret.data.list[i].unit > 0) {
-                         ret.data.list[i].unit = _dataSource[ ret.data.list[i].unit-1]
+                    if (ret.data.list[i].unit > 0) {
+                        ret.data.list[i].unit = _dataSource[ret.data.list[i].unit - 1]
                     } else {
-                         ret.data.list[i].unit = '未定义'
+                        ret.data.list[i].unit = '未定义'
                     }
                     ret.data.list[i].image_json = eval(ret.data.list[i].image_json)
                     ret.data.list[i].create_time = initTime(ret.data.list[i].create_time)
                 }
+                console.log(JSON.stringify(ret, null, 4))
                 getData(ret.data.list)
             } else {
                 alert(JSON.stringify(err))
             }
         })
     }
-      // 打开详情
+    // 打开详情
     function openInfo(ele) {
         api.openWin({
             name: 'supply_info_frame',
@@ -268,5 +294,8 @@ var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份", 
             }
         });
     }
+
+
 </script>
+
 </html>
