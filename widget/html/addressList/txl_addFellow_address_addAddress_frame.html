@@ -130,43 +130,43 @@
         });
     };
     // 定位
-        function getAddress() {
-            bMap.getLocation({
-                accuracy: '100m',
-                autoStop: true,
-                filter: 1
-            }, function (ret, err) {
-                if (ret.status) {
-                    console.log(JSON.stringify(ret, null, 4));
-                    bMap.getNameFromCoords({
-                        // lon: 120.156160,
-                        // lat: 35.968558
-                        lon: ret.lon,
-                        lat: ret.lat
-                    }, function (ret, err) {
-                        if (ret.status) {
-                            // console.log(JSON.stringify(ret, null, 4));
-                            // province 省
-                            // city 市
-                            // district 区
-                            ret.province = ret.province.replace(/市|自治区|维吾尔自治区|省|特别行政区/g, '');
-                            ret.city = ret.city.replace(/市|自治区|特别行政区/g, '');
-                            $api.text($api.dom('.provinces'), ret.province);
-                            $api.text($api.dom('.cities'), ret.city);
-                            $api.text($api.dom('.city'), ret.district);
-                            $api.val($api.dom('.address'), ret.address);
-                            for (var i = 0; i < $api.domAll('.text').length; i++) {
-                                $api.css($api.domAll('.text')[i], 'color: #000');
-                            }
-                            iptCom();
-                            $api.css($api.dom('.loading'), 'display: none');
+    function getAddress() {
+        bMap.getLocation({
+            accuracy: '100m',
+            autoStop: true,
+            filter: 1
+        }, function (ret, err) {
+            if (ret.status) {
+                console.log(JSON.stringify(ret, null, 4));
+                bMap.getNameFromCoords({
+                    // lon: 120.156160,
+                    // lat: 35.968558
+                    lon: ret.lon,
+                    lat: ret.lat
+                }, function (ret, err) {
+                    if (ret.status) {
+                        // console.log(JSON.stringify(ret, null, 4));
+                        // province 省
+                        // city 市
+                        // district 区
+                        ret.province = ret.province.replace(/市|自治区|维吾尔自治区|省|特别行政区/g, '');
+                        ret.city = ret.city.replace(/市|自治区|特别行政区/g, '');
+                        $api.text($api.dom('.provinces'), ret.province);
+                        $api.text($api.dom('.cities'), ret.city);
+                        $api.text($api.dom('.city'), ret.district);
+                        $api.val($api.dom('.address'), ret.address);
+                        for (var i = 0; i < $api.domAll('.text').length; i++) {
+                            $api.css($api.domAll('.text')[i], 'color: #000');
                         }
-                    });
-                } else {
-                    alert('请打开定位权限');
-                }
-            });
-        }
+                        iptCom();
+                        $api.css($api.dom('.loading'), 'display: none');
+                    }
+                });
+            } else {
+                alert('请打开定位权限');
+            }
+        });
+    }
     function addRess() {
         $api.css($api.dom('.loading'), 'display: block');
         var obj = {};

@@ -158,6 +158,12 @@ var userId;
 apiready = function() {
     fnInit();
     requireData();
+    // 设置新的管理员后刷新页面
+    api.addEventListener({
+        name: 'SetNewAdministrator'
+    }, function(ret, err){
+        requireData();
+    });
 };
 // 请求数据
 function requireData() {
@@ -179,7 +185,6 @@ function requireData() {
         if(ret) {
             if (ret.code === 200) {
                 userId = ret.data.list[0].user_id;
-                console.log(JSON.stringify(ret))
                 for (var i = 0; i < ret.data.list.length; i++) {
                     var element = ret.data.list[i];
                     if (element.is_verify === 1) {
@@ -212,7 +217,6 @@ function openCompanyInfoPage(ele) {
         // 非管理员
         val = 'homePage'
     }
-    console.log(adminId)
     api.openWin({
         name: val + 'Win',
         url: './me_gs_' + val + '.html',

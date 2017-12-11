@@ -17,6 +17,17 @@
        .weui-cells {
            display: none;
        }
+       .hide {
+           display: none;
+       }
+       .loading {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, .5) url(../../image/loading_more.gif)no-repeat;
+            background-size: .8rem .8rem;
+            background-position: center
+       }
     </style>
 </head>
 <body>
@@ -26,8 +37,10 @@
             <span class="winTitle">
                 公司主页
             </span>
+            <span class="rightBtn hide" onclick="getAddress()" tapmode>定位</span>
         </div>
     </header>
+    <div class="loading"></div>
     <div class="weui-cells mt20" id="input">
         <div class="weui-cell">
             <div class="weui-cell__bd">
@@ -55,7 +68,6 @@
     apiready = function(){
         fnInit();
         initPage();
-        console.log(JSON.stringify(api.pageParam))
     };
     // 发送事件
     function sendEvent() {
@@ -88,6 +100,7 @@
                 $api.text($api.dom('.winTitle'), '公司官网');
             } else if (api.pageParam.type === 'companyAddress') {
                 $api.text($api.dom('.winTitle'), '公司地址');
+                $api.removeCls($api.dom('.rightBtn'), 'hide');
             } else {
                 
             }
@@ -103,6 +116,30 @@
             $api.css($api.dom('.weui-textarea-counter'), 'color:#999');
             $api.text($api.byId('fontCount'), count);
         }
+    }
+    // 定位
+    function getAddress() {
+        moduleInit();
+        $api.css($api.dom('.loading'), 'display: block');
+        bMap.getLocation({
+            accuracy: '100m',
+            autoStop: true,
+            filter: 1
+        }, function (ret, err) {
+            if (ret.status) {
+                bMap.getNameFromCoords({
+                    lon: ret.lon,
+                    lat: ret.lat
+                }, function (ret, err) {
+                    if (ret.status) {
+                        $api.val($api.dom('input'), ret.address);
+                        $api.css($api.dom('.loading'), 'display: none');
+                    }
+                });
+            } else {
+                alert('请打开定位权限');
+            }
+        });
     }
 </script>
 </html>
