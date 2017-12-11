@@ -743,6 +743,7 @@
 
     // 添加供应
     function addSupply() {
+        $api.css($api.dom('.loading'), 'display:block');
         // if (openImgFlag == 0) {
         //     releaseFlag = 1;
         // }
@@ -823,6 +824,7 @@
                         if(ret) {
                             if (ret.code == 200) {
                                 if (api.pageParam.demand_id) {
+                                    $api.css($api.dom('.loading'), 'display:none');
                                     // 编辑应用返回我发布的页面
                                     api.sendEvent({
                                         name: 'editSupplyAfter',
@@ -1116,7 +1118,7 @@
         }, function(ret, err) {
             if (ret.status) {
                 province = ret.city;
-                city = ret.district;
+                city = ret.city;
                 address = ret.address;
                 district = ret.district;
 

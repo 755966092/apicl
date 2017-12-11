@@ -162,6 +162,7 @@
             font-size: 0.24rem;
             border-radius: .17rem;
             padding: 0 .12rem;
+            margin-right: 0.1rem;
         }
 
         .position {
@@ -236,9 +237,9 @@
               style="background: url({{=it[i].image_json[0]?it[i].image_json[0]:'../../image/icon_supply/supply_noImg.png'}})no-repeat;background-size: 100% auto;background-position: center center;">
                 {{?it[i].distance || it[i].distance==0}}
                 <span class="price ">
-                                <!-- <span class="position fl">清华大学</span> -->
-            <span class="distance">距离我{{=it[i].distance}}km</span>
-            </span>
+                    <span class="position fl">{{=it[i].city || ''}}</span>
+                    <span class="distance">距离我{{=it[i].distance}}km</span>
+                </span>
             {{?}}
             </span>
         <div class="name flex-def flex-cCenter flex-zBetween ">
@@ -253,7 +254,10 @@
                         <span class="announcer">{{=it[i].nickname}}</span>
                         <span class="company">{{=it[i].company_name}}</span>
                     </div> -->
-            <span class="classifyLabel">{{=it[i].category_name}}</span>
+            <div>
+                <span class="classifyLabel">{{=it[i].category_name}}</span>
+                <span class="classifyLabel">{{=it[i].sub_type}}</span>
+            </div>
             <span class="icon flex-def flex-cCenter "><span class="count">{{=it[i].browse_count}}</span></span>
         </div>
     </div>
@@ -268,6 +272,7 @@
 
 <script type="text/javascript ">
     var _dataSource = ["次 ", "幅 ", "单 ", "小时 ", "分钟 ", "天 ", "周 ", "月 ", "份 ", "个 ", "扇 ", "课时 ", "面议 ", "其他 ", "未定义 "];
+    var sub_type = ['自产自销','代理代销','技能分享','出租租赁','相亲交友'];
     var dataList = [],
         page_num = 1,
         dataListFlag = [],
@@ -511,7 +516,6 @@
                     $api.css($api.dom('.loading'), 'display: none');
                     // 停止下拉刷新
                     api.refreshHeaderLoadDone()
-                    
                     renderPage(ret);
                     if (ret.data.list.length < 15) {
                         $api.css($api.dom('.bbottomLoading'), 'display: none');
@@ -608,7 +612,7 @@
         for (var i = 0; i < ret.data.list.length; i++) {
             // 解析图片json
             ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
-
+            ret.data.list[i].sub_type = sub_type[ret.data.list[i].sub_type-1]
             if (ret.data.list[i].unit == 0) {
                 ret.data.list[i].unit = _dataSource[_dataSource.length - 1]
             } else {
@@ -636,6 +640,22 @@
         getData(dataList);
          
     }
+    function getData(data) {
+	// 原生方法
+	// console.log('渲染模版111')
+			var listTText = $api.byId("listT").text;
+	// console.log('渲染模版222')
+			var fnListT = doT.template(listTText);
+	// console.log('渲染模版333')
+			var html = fnListT(data);
+	// console.log('渲染模版444')
+	// console.log(html+' at 304')
+			var list = $api.dom(".resultList");
+	// 替换resultList所有内容
+	$api.html(list, html);
+	// console.log('渲染完成')
+	// alert('getData:' + JSON.stringify(data))
+}
 
     // 进入详情
     function info(ele) {
