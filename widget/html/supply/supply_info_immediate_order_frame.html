@@ -260,7 +260,8 @@
 <script type="text/javascript">
     apiready = function(){
         initPage()
-        //console.log(JSON.stringify(api.pageParam.transmitData))
+        var str = api.pageParam.transmitData.image_json[0];
+        api.pageParam.transmitData.image_json[0] = str.substring(0, str.indexOf('?')) + '?imageView2/3/w/200/h/200/q/75|imageslim'
         $api.fixTabBar($api.byId('footer'))
         getData(api.pageParam.transmitData)
         api.addEventListener({
