@@ -9,17 +9,18 @@
         header.header,
         header .head {
             background-color: rgba(0, 0, 0, 0);
+            background: rgba(0, 0, 0, 0);
             /* padding-top: 0.4rem; */
         }
         html,body {
-            background-color: rgba(0, 0, 0, 0);
+            background: rgba(0, 0, 0, 0);
         }
     </style>
 </head>
 <body>
     <header  class="header">
         <div class="head">
-            <span class="callback"   tapmode   onclick="api.closeWin()"></span>
+            <span class="callback"   tapmode   onclick="api.closeWin()">&nbsp;</span>
             <span class="winTitle">
             </span>
             <!-- <span class="rightBtn" onclick="saveImg()">保存</span> -->
@@ -31,8 +32,7 @@
 <script>
     apiready = function(){
         var imgArr = api.pageParam.paramImg;
-        console.log(JSON.stringify(api.pageParam));
-        
+        // console.log(JSON.stringify(api.pageParam));
         $api.text($api.dom('.winTitle'), (imgArr.indexOf(api.pageParam.url)+1) +' / '+imgArr.length);
         api.addEventListener({
             name: 'changeImg'
