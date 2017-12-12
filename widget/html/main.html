@@ -1055,23 +1055,18 @@
     
     // 先addressList_simplify删除表格, 再执行同步
     function getVersion() {
-        if (api.appVersion === '1.2.5') {
+        if (api.appVersion == '1.2.5') {
+        // if (api.appVersion == '1.2.5') {
             if ($api.getStorage('apiversion')) {
-
+                console.log('有缓存');
             } else {
-                db.executeSql({
-                    name: 'db_' + $api.getStorage('userToken'),
-                    sql: 'DROP TABLE addressList_simplify'
-                }, function (ret, err) {
-                    if (ret.status) {
-                        queryContactByPage();
-                    } else {
-                        // alert(JSON.stringify(err));
-                    }
-                });
+                console.log('更新');
+                queryContactByPage();
             }
              
         } else{
+            console.log('不更新');
+            
         }
     }
     

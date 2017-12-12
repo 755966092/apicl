@@ -20,7 +20,6 @@ function queryContactByPage(page) {
             if (page < (ret.pages - 1)) {
                 queryContactByPage(page + 1);
             } else {
-                console.log(JSON.stringify(contactArr));
                 queryContacts(contactArr)
             }
         } else {
@@ -32,6 +31,7 @@ function queryContactByPage(page) {
 }
 // 创建数据库
 function queryContacts(retContacts) {
+
     db.executeSql({
         name: 'db_' + $api.getStorage('userToken'),
         sql: 'CREATE TABLE IF NOT EXISTS addressList(user_id int PRIMARY KEY NOT NULL, nickname varchar(255),real_name varchar(255), head_img_url varchar(255), current_position varchar(255), current_company varchar(255), current_degree varchar(255), current_contact varchar(255), titleSize int, title varchar(255), img varchar(255), flag varchar(255), litter varchar(255), type int, sex varchat(10), remark_nickname varchar(255),  remark_real_name varchar(255) , remark_head_img_url varchar(255) , remark_sex varchar(255) , remark_birthday varchar(255) , remark_hometown varchar(255) , remark_current_company varchar(255) , remark_current_position varchar(255) , remark_current_degree varchar(255), remark_current_contact varchar(255), current_status varchar(255))'
@@ -51,7 +51,27 @@ function queryContacts(retContacts) {
                     }, function (retDataList, err) {
                         if (retDataList.status) {
                             // console.log('数据库炒作完成')
-                            contactUpdate(retContacts);
+                            db.executeSql({
+                                name: 'db_' + $api.getStorage('userToken'),
+                                sql: 'DROP TABLE addressList_simplify'
+                            }, function (ret, err) {
+                                if (ret.status) {
+                                    db.executeSql({
+                                        name: 'db_' + $api.getStorage('userToken'),
+                                        sql: 'CREATE TABLE IF NOT EXISTS addressList_simplify(user_id int PRIMARY KEY NOT NULL, title varchar(255),img varchar(255), subTitle varchar(255), current_contact varchar(255), flag varchar(255), type int,path_direction int)'
+                                    }, function (ret, err) {
+                                        if (ret.status) {
+                                            contactUpdate(retContacts);
+                                        } else {
+                                            api.alert({ msg: err.msg });
+                                        }
+                                    });
+                                } else {
+                                    api.alert({
+                                        msg: err.msg
+                                    });
+                                }
+                            });
                         } else {
                             api.alert({
                                 msg: err.msg
@@ -59,15 +79,14 @@ function queryContacts(retContacts) {
                         }
                     });
                 } else {
-                    api.alert({
-                        msg: err.msg
-                    });
+                    alert('新建表错误:' + JSON.stringify(err));
                 }
             });
         } else {
-            alert('新建表错误:' + JSON.stringify(err));
+            // alert(JSON.stringify(err));
         }
     });
+
 }
 // 同步通讯录2 上传数据
 function contactUpdate(retData) {
@@ -269,7 +288,7 @@ function sqlSyntax(data1, type) {
     }, function (ret, err) {
         if (ret.status) {
             $api.setStorage('apiversion', 'true');
-         } else {
+        } else {
             alert(JSON.stringify(err));
         }
     });
@@ -283,13 +302,17 @@ function sqlSyntax(data1, type) {
             if (flag == 4) {
                 $api.rmStorage('noAccessToContacts');
                 $api.css($api.dom('.loading'), 'display: none');
-               
+
                 db.selectSql({
                     name: SQLName,
                     sql: 'SELECT * FROM addressList_simplify'
                 }, function (ret, err) {
                     if (ret.status) {
-
+                        api.toast({
+                            msg: '更新通讯录成功',
+                            duration: 2000,
+                            location: 'bottom'
+                        });
                     } else {
                         api.alert({ msg: err.msg });
                     }
