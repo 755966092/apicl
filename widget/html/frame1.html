@@ -946,7 +946,7 @@
                 if (ret) {
                      if (ret.clickType == 0) {
                         // 获取点击联系人信息
-                        addFriends(data1[ret.key][ret.index].user_id);
+                        addFriends(data1[ret.key][ret.index].user_id, data1[ret.key][ret.index].title, data1[ret.key][ret.index].img);
                     }
                     if (ret.clickType == 1) {
                         // 获取点击联系人信息
@@ -997,12 +997,14 @@
         $api.css($api.dom('.loading'), 'display: none');
     }
     // 打开人脉详情
-    function addFriends(userId) {
+    function addFriends(userId,name,headImg) {
         api.openWin({
             name: 'txl_memberInfo_Win',
             url: './addressList/txl_memberInfo_Win.html',
             pageParam: {
-                userId: userId
+                userId: userId,
+                name: name,
+                headImg: headImg
             }
         });
     }

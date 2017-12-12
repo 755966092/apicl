@@ -276,6 +276,7 @@
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/common.js"></script>
 <script type="text/javascript" src="../script/pinyin4js.js"></script>
+<script type="text/javascript" src="../script/queryContact.js"></script>
 <script type="text/javascript">
     var userToken, rongToken, footerH, addPublishUrl = './supply/supply_addSupply.html';
     var XFooterH;
@@ -298,6 +299,8 @@
         getApplyList();
         // 退出app
         exitApp();
+        // 跟新版本重新刷新通讯录
+        getVersion();
         api.addEventListener({
             name: 'searchSupply'
         }, function(ret, err) {
@@ -1051,14 +1054,25 @@
     // 查询同步成功后, 做标记缓存, 下次打开不在更新
     
     // 先addressList_simplify删除表格, 再执行同步
-    //  db.executeSql({
-    //     name: SQLName,
-    //     sql: 'DROP TABLE addressList_simplify'
-    // }, function (ret, err) {
-    //     if (ret.status) {
-    //         alert('2' + JSON.stringify(ret));
-    //     } else {
-    //         alert(JSON.stringify(err));
-    //     }
-    // });
+    function getVersion() {
+        if (api.appVersion === '1.2.5') {
+            if ($api.getStorage('apiversion')) {
+
+            } else {
+                db.executeSql({
+                    name: 'db_' + $api.getStorage('userToken'),
+                    sql: 'DROP TABLE addressList_simplify'
+                }, function (ret, err) {
+                    if (ret.status) {
+                        queryContactByPage();
+                    } else {
+                        // alert(JSON.stringify(err));
+                    }
+                });
+            }
+             
+        } else{
+        }
+    }
+    
 </script>

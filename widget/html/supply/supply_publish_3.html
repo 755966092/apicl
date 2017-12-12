@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
-    <link rel="stylesheet" type="text/css" href="../../css/weui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
     <style>
-     .no_data {
-         background-color: #EDECF3;
-         text-align: center;
-         color: #999;
-         font-size: .3rem;
-         margin-top: .5rem;
+        .no_data {
+            background-color: #EDECF3;
+            text-align: center;
+            color: #999;
+            font-size: .3rem;
+            margin-top: .5rem;
         }
+
         .list {
             font-size: 0;
             background-color: #fff;
@@ -21,33 +25,41 @@
             border-bottom: .01rem solid #e7e7e7;
 
         }
+
         .user .wrap:last-child .list,
         .other .wrap:last-child .list {
             border-bottom: 0;
         }
-        .user, .other {
-             border-bottom: .01rem solid #e7e7e7;
+
+        .user,
+        .other {
+            border-bottom: .01rem solid #e7e7e7;
         }
+
         div.wrap {
             padding-left: .3rem;
             box-sizing: border-box;
             background-color: #fff;
         }
+
         .list .circlTitle {
             -webkit-box-align: center;
             -moz-align-items: center;
             -webkit-align-items: center;
             align-items: center;
         }
+
         .list .img {
             height: 100%;
             margin-top: .3rem;
         }
-        .list  img {
+
+        .list img {
             width: .9rem;
             height: .9rem;
             margin-right: .1rem;
         }
+
         .list .circlTitle h3 {
             font-size: .3rem;
             width: 5.5rem;
@@ -55,6 +67,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .list .circlTitle .circleIntroduce {
             font-size: .28rem;
             color: #9b9b9b;
@@ -63,21 +76,24 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .list .circleData {
             font-size: 0;
             /* margin-top: .1rem; */
-
         }
+
         .list .circleData .circleTitle {
             font-size: .24rem;
             color: #999;
             width: 2rem;
 
         }
+
         .list .circleData .quantity {
             color: #20C11D;
             font-size: .24rem;
         }
+
         .category {
             font-size: .34rem;
             color: #222;
@@ -86,6 +102,7 @@
             padding: .1rem 0 .1rem .3rem;
             border-bottom: .01rem solid #e7e7e7;
         }
+
         .wran {
             margin-top: .2rem;
             text-align: center;
@@ -98,13 +115,16 @@
         .weui-panel__bd {
             background-color: #fff;
         }
+
         .weui-media-box__desc {
             -webkit-line-clamp: 1;
         }
+
         .weui-media-box_appmsg .weui-media-box__hd {
             margin-right: 0.2rem;
         }
-         .no1 {
+
+        .no1 {
             margin-right: .6rem;
         }
 
@@ -112,22 +132,26 @@
             font-size: .24rem;
             color: #999;
         }
+
         .count {
             font-size: .24rem;
             color: #0ABB07;
         }
+
         .weui-media-box_appmsg .weui-media-box__thumb {
             border-radius: .1rem;
         }
-         .weui-media-box {
+
+        .weui-media-box {
             padding-top: .2rem;
             padding-bottom: 0.2rem;
         }
     </style>
 </head>
+
 <body>
-    <div class="resultList weui-panel__bd">
-            <!-- <div class="user">
+    <div class="resultList weui-panel__bd"></div>
+        <!-- <div class="user">
                         <div class="wrap" data-flag='1' data-name='{{=it[i].title}}' data-id='{{=it[i].circle_id}}' tapmode   onclick="openCircleInfo(this)">
                             <div class=" list flex-def flex-cCenter">
                                 <img src="{{=it[i].image_url}}">
@@ -147,30 +171,29 @@
                         </div>
                </div>
        </div> -->
-       <script type="text/x-dot-template" id="listT">
+        <script type="text/x-dot-template" id="listT">
             {{?it.length != 0}}
-                    {{ for (var i = 0; i < it.length; i++) { }}
-                        <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" data-flag='1' data-name='{{=it[i].title}}' data-id='{{=it[i].circle_id}}' tapmode   onclick="openCircleInfo(this)">
-                            <div class="weui-media-box__hd">
-                                <img class="weui-media-box__thumb" src="{{=it[i].image_url}}"
-                                alt="">
-                            </div>
-                            <div class="weui-media-box__bd">
-                                <h4 class="weui-media-box__title">{{=it[i].title}}</h4>
-                                <p class="weui-media-box__desc">{{=it[i].description}}</p>
-                                <p class="weui-media-box__desc">
-                                    <span class="label">成员:</span>
-                                    <span class="count no1">{{=it[i].member_count}}</span>
-                                    <span class="label">发布:</span>
-                                    <span class="count">{{=it[i].topic_count}}</span>
-                                </p>
-                            </div>
-                        </a>
-                    {{ }; }}
+                {{ for (var i = 0; i < it.length; i++) { }}
+                    <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" data-flag='1' data-name='{{=it[i].title}}' data-id='{{=it[i].circle_id}}' tapmode   onclick="openCircleInfo(this)">
+                        <div class="weui-media-box__hd">
+                            <img class="weui-media-box__thumb" src="{{=it[i].image_url}}"
+                            alt="">
+                        </div>
+                        <div class="weui-media-box__bd">
+                            <h4 class="weui-media-box__title">{{=it[i].title}}</h4>
+                            <p class="weui-media-box__desc">{{=it[i].description}}</p>
+                            <p class="weui-media-box__desc">
+                                <span class="label">成员:</span>
+                                <span class="count no1">{{=it[i].member_count}}</span>
+                                <span class="label">发布:</span>
+                                <span class="count">{{=it[i].topic_count}}</span>
+                            </p>
+                        </div>
+                    </a>
+                {{ }; }}
             {{??}}
             <p class="no_data">暂无数据</p>
             {{?}}
-
        </script>
 
 </body>
@@ -179,8 +202,13 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
 
-    apiready = function(){
+    apiready = function () {
         requireData();
+        api.addEventListener({
+            name: 'circleTopicComment'
+        }, function (ret, err) {
+            requireData();
+        });
     };
 
     function requireData() {
@@ -189,14 +217,13 @@
             method: 'post',
             headers: apiHeader,
             data: {
-               values: {
+                values: {
                     token: $api.getStorage('userToken')
-               }
+                }
             }
-        }, function(ret, err) {
-            if(ret) {
-                if(ret.code === 200) {
-                    // openAprGroup(ret.data);
+        }, function (ret, err) {
+            if (ret) {
+                if (ret.code === 200) {
                     getData(ret.data.list)
                 } else {
                     alert(ret.msg)
@@ -225,4 +252,5 @@
         });
     }
 </script>
+
 </html>

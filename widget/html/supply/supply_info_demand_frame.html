@@ -15,7 +15,7 @@
         }
         
         .main {
-            margin-bottom: 1.2rem;
+            margin-bottom: 1.8rem;
         }
         
         .img {
@@ -321,7 +321,6 @@
             left: 0;
             width: 100%;
             border-top: .01rem solid #F8F8F8;
-            background-color: #0ABB07;
         }
         
         footer span {
@@ -398,6 +397,11 @@
             line-height: .5rem;
             color: #fff;
             font-size: .65rem;
+        }
+         .footerwrap {
+            width: 100%;
+            height: 100%;
+            background-color: #0ABB07;
         }
     </style>
 </head>
@@ -557,9 +561,12 @@
             <span id="collect" ontouchstart="supplyCollect(this)"><i class="cancelCollect"></i>取消收藏</span> {{??}}
             <span id="collect" ontouchstart="supplyCollect(this)"><i></i>收藏</span> {{?}}
             <span tapmode onclick="immediateOrder()">立即接单</span>
+           
         </footer>
         {{??}}
-        <footer class="footer" ontouchstart="editSupply()">编辑</footer>
+        <footer class="footer" ontouchstart="editSupply()">
+            <p class="footerwrap">编辑</p>
+        </footer>
         {{?}}
     </script>
 
@@ -782,7 +789,8 @@
         var statusArr = ["求助中", "帮助中", "已结束", "已失效", "已删除"]
         ret.data.info.status = statusArr[ret.data.info.status - 1]
         getData(ret.data);
-        $api.fixTabBar($api.dom('footer'))
+        // $api.fixTabBar($api.byId('no1'))
+        // $api.fixTabBar($api.byId('no2'))
         transmitData = ret.data.info;
     }
     // doT模版获取数据
@@ -791,8 +799,9 @@
         var fnListT = doT.template(listTText);
         var html = fnListT(data);
         var list = $api.dom('.resultList');
-        $api.fixTabBar($api.dom('footer'))
+        
         $api.html(list, html);
+        $api.fixTabBar($api.dom('footer'))
 
     }
 

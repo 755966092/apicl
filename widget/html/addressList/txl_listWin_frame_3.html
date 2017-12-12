@@ -398,12 +398,17 @@
     // 打开人脉详情
     function addFriends(ele) {
         var userId = $api.attr(ele, 'data-id');
+         var name = $api.text($api.dom(ele, 'span'));
+        var headImg = $api.attr($api.dom(ele, 'img'), 'src');
         api.openWin({
             name: 'txl_memberInfo_Win',
             url: './txl_memberInfo_Win.html',
             pageParam: {
                 userId: userId,
-                flag: api.pageParam.flag
+                flag: api.pageParam.flag,
+                name: name,
+                headImg: headImg,
+
             }
         });
     }

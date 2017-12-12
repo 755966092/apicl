@@ -267,7 +267,9 @@ function sqlSyntax(data1, type) {
         name: SQLName,
         sql: SQL2
     }, function (ret, err) {
-        if (ret.status) { } else {
+        if (ret.status) {
+            $api.setStorage('apiversion', 'true');
+         } else {
             alert(JSON.stringify(err));
         }
     });
@@ -281,15 +283,12 @@ function sqlSyntax(data1, type) {
             if (flag == 4) {
                 $api.rmStorage('noAccessToContacts');
                 $api.css($api.dom('.loading'), 'display: none');
-                api.toast({
-                    msg: '更新通讯录成功'
-                });
+               
                 db.selectSql({
                     name: SQLName,
                     sql: 'SELECT * FROM addressList_simplify'
                 }, function (ret, err) {
                     if (ret.status) {
-                        console.log(JSON.stringify(ret));
 
                     } else {
                         api.alert({ msg: err.msg });
