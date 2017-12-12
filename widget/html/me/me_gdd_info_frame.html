@@ -157,7 +157,7 @@
             padding: .3rem .3rem;
             box-sizing: border-box;
          }.orderInfo .top {
-            height: 1.81rem;
+            /* height: 1.81rem; */
             font-size: 0;
          }.orderInfo .top img {
             width: .91rem;
@@ -173,6 +173,7 @@
          }.orderInfo .top .text .price{
             font-size: .34rem;
          }.orderInfo .top .text .infoText{
+             max-width: 3.5rem;
              display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 2;
@@ -181,7 +182,8 @@
             color: #555;
          }.orderInfo .top .text .count{
             margin-left: .1rem;
-            float: right;
+            /* float: right; */
+            
             text-align: right;
             font-size: .24rem;
             color: #999;
@@ -266,6 +268,87 @@
 <body>
     <div class="hull">
         <div class="main resultList">
+            <div class="state flex-def flex-cCenter">
+                <div class="icon2"></div>
+                <div class="text">
+                    <h3>交易成功</h3>
+                    <p>钱款已支付给对方，如有异议请与对方联系</p>
+                </div>
+            </div>
+            <div class="serverTime">
+                <p>服务时间：
+                    <span>2017-12-11 17:12:00</span>
+                </p>
+            </div>
+            <div class="serverTime serverType">
+                <p>服务形式：
+                    <span>线上</span>
+                </p>
+            </div>
+            <div class="userInfo flex-def flex-cCenter">
+                <img class="userHead_img" src="http://img.iinnet.com/FvZfKY3unCYn9_3cr3vdkHmZvdWX" data-id="1025" tapmode onclick="openUserInfoPage(this)">
+                <div class="text flex-def flex-zBetween flex-item">
+                    <div class="left">
+                        <p class="userName">王小呆</p>
+                        <!-- 需要融云id才可以发起聊天 -->
+                        <!-- <p class="position">上海策赢网络科技 董事长</p> -->
+                    </div>
+                    <div class="right flex-def flex-cCenter">
+                        <!-- <span tapmode onclick="callTpl()" class="icon_tel"></span> -->
+                        <!-- 卖家电话字段 -->
+                        <span tapmode onclick="openChatPage(this)" class="icon_chat" data-rong_id='06cb17509ff084bf1da1645d4ef694d3'></span>
+                    </div>
+                </div>
+            </div>
+            <div class="orderInfo">
+                <div class="top flex-def" tapmode onclick="openSupplyInfoPage(this)" data-id="90">
+                    <img src="http://img.iinnet.com/Fhho88W8a-CToagI32UntNxuBwDa?imageView2/1/w/200/h/200/q/75|imageslim">
+                    <div class="text flex-item">
+                        <div class="title flex-def flex-zBetween">
+                            <div class="flex-def flex-cCenter">
+                                <span class="label">[个人]</span>
+                                <p class="supplyName">美食图片</p>
+                            </div>
+                            <p class="price">6.68元/份</p>
+                        </div>
+                        <div class="info flex-def flex-zBetween">
+                            <p class="infoText">吃货的最爱，颜值控的专属
+
+             一组图20张哦🤔🤔</p>
+            <div>
+                <!-- 优惠.折扣 -->
+                <p class="count">退款:8.68</p>
+                <p class="count">补差价:3.00</p>
+                <p class="count">优惠:1.00</p>
+            </div>
+            </div>
+            <p class="count">x1</p>
+            </div>
+            </div>
+            <div class="bottom">
+                <div class="wrap">
+                    <p class="total">合计：
+                        <span class="totalData">￥
+                            <span class="totalNumber">8.68</span>元</span>
+                    </p>
+                    <div class="btnGroup">
+                        <span data-reasonList='[]' data-supplyId='90' data-id='139' tapmode onclick="oriderOperate(this)" class="btn" data-url='/supply_order/buyerDeleteOrder'>删除订单</span>
+                        <span data-reasonList='[]' data-supplyId='90' data-id='139' tapmode onclick="oriderOperate(this)"
+                            class="btn" data-url='/supply_order/buyerCreateOrder'>再来一单</span>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="orderTime">
+                <p>订单编号：
+                    <span class="code" id="code">201712111412109217653340</span>
+                    <span class="label1 fr" tapmode onclick="copyString()" id="copy">复制</span>
+                </p>
+                <p>下单时间：
+                    <span class="code">2017-12-11 14:12:10</span>
+                </p>
+            </div>
+
         </div>
         <script type="text/x-dot-template" id="listT">
             <div class="state flex-def flex-cCenter">
@@ -821,6 +904,7 @@
         var fnListT = doT.template(listTText);
         var html = fnListT(data);
         var list = $api.dom('.resultList');
+        console.log(html)
         // 替换resultList所有内容
         $api.html(list, html);
         $api.fixTabBar($api.dom('.appraise'))
