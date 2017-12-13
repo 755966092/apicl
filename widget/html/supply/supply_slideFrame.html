@@ -146,6 +146,9 @@
             font-size: .24rem;
             margin-right: .25rem;
         }
+        .mr12 {
+            margin-right: 0.12rem;
+        }
     </style>
 </head>
 <body   tapmode class=""   onclick="api.closeFrame()">
@@ -172,6 +175,9 @@
                              <p>类别</p>
                              <span   tapmode   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 " data-type="sub_type_1">自产自销</span>
                              <span   tapmode   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4" data-type="sub_type_2">代理代销</span>
+                             <span   tapmode   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4" data-type="sub_type_3">技能分享</span>
+                             <span   tapmode   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 mr12" data-type="sub_type_4">出租租赁</span>
+                             <span   tapmode   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 mr12" data-type="sub_type_5">相亲交友</span>
                         </li>
                         <li class="no33">
                              <p>排序</p>
@@ -302,8 +308,12 @@
             } else if (parameter.sub_type == 2) {
                 // 2 代理
                 $api.addCls($api.dom('span[data-type="sub_type_2"]'), 'sel');
-            } else {
-
+            } else if (parameter.sub_type == 3) {
+                $api.addCls($api.dom('span[data-type="sub_type_3"]'), 'sel');
+            } else if (parameter.sub_type == 4) {
+                $api.addCls($api.dom('span[data-type="sub_type_4"]'), 'sel');
+            } else if (parameter.sub_type == 5) {
+                $api.addCls($api.dom('span[data-type="sub_type_5"]'), 'sel');
             }
             console.log(JSON.stringify(parameter))
             if (parameter.order == 'distance') {
@@ -372,7 +382,26 @@
                 parameter.type = ($api.text($api.dom('.no11 .sel')) == '个人') ? 1 : 2;
             }
             if ($api.dom('.no22 .sel')) {
-                parameter.sub_type = ($api.text($api.dom('.no22 .sel')) == '自产自销') ? 1 : 2;
+                // parameter.sub_type = ($api.text($api.dom('.no22 .sel')) == '自产自销') ? 1 : 2;
+                switch ($api.text($api.dom('.no22 .sel'))) {
+                    case '自产自销':
+                        parameter.sub_type = 1;
+                        break;
+                    case '代理代销':
+                        parameter.sub_type = 2;
+                        break;
+                    case '技能分享':
+                        parameter.sub_type = 3;
+                        break;
+                    case '出租租赁':
+                        parameter.sub_type = 4;
+                        break;
+                    case '相亲交友':
+                        parameter.sub_type = 5;
+                        break;
+                    default:
+                        break;
+                }
             }
 
             parameter.category_ids = $api.attr($api.dom('.no2Icon'),'data-category');
