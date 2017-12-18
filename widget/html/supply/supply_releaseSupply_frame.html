@@ -19,7 +19,7 @@
             z-index: 10000;
             width: 100%;
             height: 100%;
-            background:  rgba(0, 0, 0, .5) url(../../image/loading_more.gif)no-repeat;
+            background: rgba(0, 0, 0, .5) url(../../image/loading_more.gif)no-repeat;
             background-size: .8rem .8rem;
             background-position: center;
         }
@@ -231,6 +231,7 @@
         }
 
         /*  添加商品链接  */
+
         ul li:nth-child(8) {
             background: #fff url(../../image/icon_supply/icon_08.png)no-repeat;
             background-size: .34rem .34rem;
@@ -460,9 +461,9 @@
         categoryArr = [],
         classify_dataSource,
         classify_dataSource2 = [],
-        otherLinkObj={
-            jd:'',
-            tb:''
+        otherLinkObj = {
+            jd: '',
+            tb: ''
         };
     apiready = function () {
         // 初始化价格输入框
@@ -502,11 +503,11 @@
                 otherLinkObj.tb = ret.value.obj;
             }
             if (otherLinkObj.jd && otherLinkObj.tb) {
-                $api.text($api.byId('otherLink'), '已选京东和淘宝商品');
-            } else if(otherLinkObj.jd) {
-                $api.text($api.byId('otherLink'), '已选京东商品');
-            } else if(otherLinkObj.tb) {
-                $api.text($api.byId('otherLink'), '已选淘宝商品');
+                $api.text($api.byId('otherLink'), '已添加2个商品链接');
+            } else if (otherLinkObj.jd) {
+                $api.text($api.byId('otherLink'), '已添加1个商品链接');
+            } else if (otherLinkObj.tb) {
+                $api.text($api.byId('otherLink'), '已添加1个商品链接');
             } else {
                 $api.text($api.byId('otherLink'), '选填');
             }
@@ -638,13 +639,13 @@
         if (data.info.type == 2) {
             type = 2;
             $api.css($api.dom('.companyName'), 'display:block');
-            $api.css(el, 'css');
             $api.text($api.byId('company_name'), data.info.company_name);
             $api.attr($api.byId('company_name'), 'data-id', data.info.company_id);
 
         }
-         var sub_type_arr = ['自产自销', '代理代销', '技能分享', '出租租赁', '相亲交友']
-        data.info.sub_type = sub_type_arr[data.info.sub_type-1]
+        var sub_type_arr = ['自产自销', '代理代销', '技能分享', '出租租赁', '相亲交友']
+        // data.info.sub_type = sub_type_arr[data.info.sub_type - 1];
+        $api.text(sub_type, sub_type_arr[data.info.sub_type - 1]);
         data.info.form == 1 ? $api.text(form, '线上') : (data.info.form == 2 ? $api.text(form, '线下') : $api.text(form, '线上 + 线下'))
         base64Data.img = eval(data.info.image_json);
         getData(base64Data)
@@ -674,7 +675,7 @@
             date = current[0];
             date1 = current[1];
             date2 = current[2];
-        } else 　{
+        } else {
             date = new Date().getFullYear();
             date1 = new Date().getMonth();
             date2 = new Date().getDate();
@@ -824,8 +825,8 @@
     }
     // 添加供应
     function addSupply() {
-         $api.css($api.dom('.loading'), 'display:block');
-        var  sub_type_arr = ['自产自销', '代理代销', '技能分享', '出租租赁', '相亲交友']
+        $api.css($api.dom('.loading'), 'display:block');
+        var sub_type_arr = ['自产自销', '代理代销', '技能分享', '出租租赁', '相亲交友']
         // if (openImgFlag == 0) {
         //     releaseFlag = 1;
         // }
@@ -834,23 +835,25 @@
         // if (releaseFlag == 1) {
         var token = $api.getStorage('userToken'),            //string  用户Token
             title = $api.val($api.byId('title')),           //string  标题
-            
+
             sub_type = $api.text($api.byId('sub_type')),            //int 类别ID（1-自产自销，2-代理代销
             category_id = $api.attr($api.byId('category_id'), 'data-id'),         //int 分类ID
             price = $api.val($api.byId('price')),           //float   价格
             unit = _dataSource.indexOf($api.text($api.byId('unit'))) + 1,            //string  单位
             form = $api.text($api.byId('form')) == '线上' ? 1 : ($api.text($api.byId('form')) == '线下' ? 2 : 3),            //int 形式（1-线上，2-线下）
             description = $api.val($api.byId('description'));        //string  详细内容
-            image_json = imgArr,          //string  图片（格式：["abc.jpg","ddd.jpg"]）
+        image_json = imgArr,          //string  图片（格式：["abc.jpg","ddd.jpg"]）
             company_id = $api.attr($api.byId('company_name'), 'data-id') || '';      // 公司ID（类型为2-我公司卖时必传）
-            sub_type = sub_type_arr.indexOf(sub_type)+1,
+        sub_type = sub_type_arr.indexOf(sub_type) + 1,
             extra_product = [];
-           for (const key in otherLinkObj) {
-               if (otherLinkObj.hasOwnProperty(key)) {
-                   extra_product.push(otherLinkObj[key])
-               }
-           }
-            // alert('标题 : '+ title +'---类别ID : '+sub_type+'---分类ID : '+category_id+'---价格 : '+price+'----形式'+form+'---内容: '+description +"---省份"+ province + "---地区" +city+ "---地址" +address+ "---纬度" +latitude+'---纬度: '+longitude)
+        for (const key in otherLinkObj) {
+            if (otherLinkObj.hasOwnProperty(key)) {
+                if (otherLinkObj[key]) {
+                    extra_product.push(otherLinkObj[key])
+                }
+            }
+        }
+        // alert('标题 : '+ title +'---类别ID : '+sub_type+'---分类ID : '+category_id+'---价格 : '+price+'----形式'+form+'---内容: '+description +"---省份"+ province + "---地区" +city+ "---地址" +address+ "---纬度" +latitude+'---纬度: '+longitude)
         // var category = $api.text($api.byId('category_id'));
         // for (var i = 0; i < categoryArr.length; i++) {
         //     if (categoryArr[i] === category) {
@@ -905,10 +908,10 @@
                 description: description,
                 image_json: image_json,
                 company_id: company_id,
-                 extra_product: extra_product
+                extra_product: extra_product
             }
         }
-        console.log(JSON.stringify(obj))
+        // console.log(JSON.stringify(obj))
         api.ajax({
             url: apiSite + url,
             method: 'post',
@@ -932,7 +935,7 @@
                         });
                         api.closeWin();
                     } else {
-                         $api.css($api.dom('.loading'), 'display:none');
+                        $api.css($api.dom('.loading'), 'display:none');
                         // 发布新供应返回供应列表
                         api.sendEvent({
                             name: 'editSupplyAfter'
@@ -1058,7 +1061,7 @@
                     name: '相亲交友'
                 }
             ];
-            _dataSource2 = ['自产自销', '代理代销','技能分享','出租租赁','相亲交友']
+            _dataSource2 = ['自产自销', '代理代销', '技能分享', '出租租赁', '相亲交友']
             flag = 1;
         } else if (_data == '_format') {
             _dataSource = [
@@ -1315,8 +1318,18 @@
             }
         }, function (ret, err) {
             if (ret) {
-                //console.log(JSON.stringify(ret))
-                imgArr = eval(ret.data.info.image_json)
+                imgArr = eval(ret.data.info.image_json);
+                if (ret.data.info.extra_product.length > 0) {
+                    $api.text($api.byId('otherLink'), '已添加'+ ret.data.info.extra_product.length +'个商品链接');
+                     for (let i = 0; i < ret.data.info.extra_product.length; i++) {
+                         const element = ret.data.info.extra_product[i];
+                         if(element.source == 1) {
+                            otherLinkObj.jd = element;
+                         } else {
+                            otherLinkObj.tb = element;
+                         }
+                     }
+                }
                 editSupply(ret.data)
                 $api.css($api.dom('.loading'), 'display: none');
             } else {
@@ -1331,7 +1344,7 @@
             name: 'supply_releaseOther_win',
             url: './supply_releaseOther_win.html',
             bounces: false,
-            pageParam: { otherLinkObj : otherLinkObj}
+            pageParam: { otherLinkObj: otherLinkObj }
         });
     }
 </script>

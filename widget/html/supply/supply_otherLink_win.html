@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+</head>
+<body>
+    <header class="header">
+        <div class="head">
+            <span class="callback" tapmode onclick="api.closeWin()">返回</span>
+            <span class="winTitle">
+                
+            </span>
+        </div>
+    </header>
+
+
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        fnInit();
+        console.log(JSON.stringify(api.pageParam,null,4));
+        $api.text($api.dom('.winTitle'), api.pageParam.title);
+        api.openFrame({
+            name: 'supply_otherLink_frame',
+            url: api.pageParam.url,
+            rect: {
+                x: 0,
+                y: headerH,
+                w: 'auto',
+                h: 'auto'
+            },
+            bounces: false
+        });
+    };
+</script>
+</html>

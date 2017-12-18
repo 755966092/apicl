@@ -10,6 +10,77 @@
     <link rel="stylesheet" type="text/css" href="../../css/swiper.min.css" />
     <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
     <style type="text/css">
+    
+        /*  */
+            .introduction {
+                font-size: 0.24rem;
+                color: #999;
+                width: 6.7rem;
+                margin: 0 auto;
+                margin-top: 0.36rem;
+            }
+
+            .mt20 {
+                margin-top: 0.36rem;
+            }
+
+            .weui-cell__bd {
+                position: relative;
+            }
+
+            .weui-input {
+                width: 95%;
+            }
+
+        
+
+            .weui-panel__bd {
+                background-color: #fff;
+            }
+
+            .weui-media-box__bd {
+                font-size: 0;
+            }
+
+            .weui-media-box_appmsg .weui-media-box__hd {
+                width: 2.22rem;
+                height: 2.22rem;
+                margin-right: 0.2rem;
+            }
+
+            .weui-media-box__bd {
+                height: 2.2rem;
+            }
+
+            .currentPrice {
+                font-size: .3rem;
+                color: #CC0019;
+            }
+
+            .originalPrice {
+                font-size: .24rem;
+                color: #3F3F3F;
+                text-decoration: line-through;
+            }
+
+            .clear {
+                font-size: .3rem;
+                color: #5D7099;
+            }
+
+            .weui-media-box__title {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                white-space: normal
+            }
+
+            .weui-cells {
+                border-bottom: #d9d9d9 solid .01rem;
+            }
+        /*  */
         img.default {
             /* width: 100%; */
             height: 4.36rem;
@@ -227,8 +298,14 @@
         .comment {
             margin-top: .2rem;
             background-color: #fff;
+           
         }
-        
+        .otherLink {
+            margin-top: .2rem;
+            background-color: #fff;
+            font-size: .3rem;
+            color: #000;
+        }
         .comment .commentCount {
             font-size: .3rem;
         }
@@ -395,34 +472,32 @@
             top: 0;
             left: 0;
             z-index: 999;
+            
         }
+        
         
         header .head {
-            background-color: rgba(58, 57, 62, 0)
+            background-color: rgba(58, 57, 62, 0);
+            position: relative;
         }
-        
+        body {
+            line-height: inherit;
+        }
         .swiper-wrapper img {
             height: 4.36rem;
         }
         
-        header .rightBtn {
-            line-height: .5rem;
-            color: #fff;
-            font-size: .65rem;
-        }
+       
     </style>
 </head>
 
 <body>
-
-    <!-- <div id="cloaswin" onclick="api.closeWin();"></div> -->
     <header class="header">
         <div class="head">
             <span class="callback" tapmode onclick="api.closeWin()">返回</span>
             <span class="winTitle">
                 信息详情
             </span>
-            <!-- <div class="rightBtn">...</div> -->
         </div>
     </header>
     <div class="loading"></div>
@@ -436,8 +511,8 @@
 
         </div>
     </div>
-    <div class="resultList">
-        <div class="main flex-def flex-zTopBottom">
+    <div class="resultList"></div>
+        <!-- <div class="main flex-def flex-zTopBottom">
             <div class="title flex-def flex-zLeftRight flex-cCenter" tapmode onclick="openUserInfoPage(this)" data-id="9969">
                 <img src="http://img.iinnet.com/Fq9oScpBjR8tVlPr865kPisMnpW3" id="headImg">
                 <div class="titleRight">
@@ -460,8 +535,7 @@
                         <p class="supplyName">本地导游</p>
                         <span class="typeIcon">[个人]</span>
                     </div>
-                    <!-- 分享按钮 -->
-                    <!-- <div class="shareIcon"></div> --></div>
+                </div>
                 <div class="price flex-def flex-zBetween flex-zLeftRight flex-cEnd">
                     <div class="priceText"> ￥
                         <span class="price1">200.00/小时</span>
@@ -476,7 +550,6 @@
                     <span class="form formbg fr">距离 nullkm</span>
                 </div>
             </div>
-            <!-- <div class="sel flex-def flex-zBetween flex-cCenter"> <div> <span class="selTitle">已选：</span> <span class="selText">设计、“APP图标”</span> </div> <span class="selIcon"></span> </div> -->
             <div class="info">
                 <div class="infoTitle flex-def flex-zCenter flex-cCenter flex-zLeftRight">
                     <span class="line"></span>
@@ -494,19 +567,43 @@
             <div class="comment">
                 <div class="commentTitle flex-def flex-cCenter flex-zBetween">
                     <span class="commentCount">评论（0）</span>
-                    <!-- <span class="commentIcon"></span> -->
                 </div>
             </div>
-        </div>
-        <footer>
+            <div class="weui-panel__hd otherLink">外部商品链接</div>
+            <div class="weui-panel__bd" id="list">
+                <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                    <div class="weui-media-box__hd">
+                        <img class="weui-media-box__thumb" src="" alt="">
+                    </div>
+                    <div class="weui-media-box__bd flex-def flex-zBetween flex-zTopBottom">
+                        <h4 class="weui-media-box__title" id="title">aaaaa</h4>
+                        <div>
+                            <p class="flex-def flex-zBetween">
+                                <span class="currentPrice" id="currentPrice">$78</span>
+                                <span class="clear" tapmode onclick="clearLink()">取消链接</span>
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div> -->
+        <!-- <footer>
             <span data-headUrl="http://img.iinnet.com/Fq9oScpBjR8tVlPr865kPisMnpW3" tapmode onclick="openChatPage(this)" data-rongId="47d2b511386521e8235274b1287e5525">
                 <i></i>聊天</span>
             <span id="collect" ontouchstart="supplyCollect(this)">
                 <i></i>收藏</span>
             <span tapmode onclick="immediateOrder(this)">立即下单</span>
-        </footer> at supply_info_frame.html : 846
+        </footer> -->
 
-    </div>
+        <!-- <footer>
+            <span data-headUrl="{{=it.info.head_img_url}}" tapmode onclick="openChatPage(this)" data-rongId="{{=it.info.rongcloud_user_id}}">
+                <i></i>聊天</span> 
+            <span ontouchstart="supplyCollect(this)">
+                <i class="cancelCollect"></i>取消收藏</span> 
+            <span id="collect" ontouchstart="supplyCollect(this)">
+                <i></i>收藏</span> {{?}}
+            <span tapmode onclick="immediateOrder(this)">立即下单</span>
+        </footer> -->
     <script type="text/x-dot-template" id="listT">
         <div class="main flex-def flex-zTopBottom">
             <div class="title flex-def flex-zLeftRight flex-cCenter" tapmode onclick="openUserInfoPage(this)" data-id="{{=it.info.user_id}}">
@@ -606,41 +703,67 @@
                     <!-- <span class="commentIcon"></span> -->
                 </div>
                 {{?it.last_comment!=null}}
-                <div class="commentContent">
-                    <div class="commentContentTitle flex-def flex-zLeftRight">
-                        <img src="{{=it.last_comment.head_img_url}}">
-                        <div class="commentName flex-def flex-zBetween flex-zLeftRight flex-cCenter">
-                            <div class="commentNameLeft flex-def flex-cCenter">
-                                <div class="name">{{=it.last_comment.nickname}}</div>
-                                <div class="avg_point">
-                                    {{ for(var j = 0;j
-                                    < it.last_comment.point;j++){ }} <span class="avg_pointIcon">
-                                        </span>
+                    <div class="commentContent">
+                        <div class="commentContentTitle flex-def flex-zLeftRight">
+                            <img src="{{=it.last_comment.head_img_url}}">
+                            <div class="commentName flex-def flex-zBetween flex-zLeftRight flex-cCenter">
+                                <div class="commentNameLeft flex-def flex-cCenter">
+                                    <div class="name">{{=it.last_comment.nickname}}</div>
+                                    <div class="avg_point">
+                                        {{ for(var j = 0;j < it.last_comment.point;j++){ }} 
+                                            <span class="avg_pointIcon"></span>
                                         {{ }; }}
+                                    </div>
+                                </div>
+                                <div class="commentNameRight">
+                                    {{=it.last_comment.create_time}}
                                 </div>
                             </div>
-                            <div class="commentNameRight">
-                                {{=it.last_comment.create_time}}
-                            </div>
                         </div>
+                        <p class="commentText">{{=it.last_comment.content}}</p>
                     </div>
-                    <p class="commentText">{{=it.last_comment.content}}</p>
-                </div>
-                {{?}} {{?it.info.comment_count==0}} {{??}}
-                <div data-avg="{{=it.info.avg_point}}" class="btn flex-def flex-cCenter" tapmode onclick="openCommentPage(this)">
-                    <div>查看全部</div>
-                </div>
+                {{?}} 
+                {{?it.info.comment_count==0}} 
+                {{??}}
+                    <div data-avg="{{=it.info.avg_point}}" class="btn flex-def flex-cCenter" tapmode onclick="openCommentPage(this)">
+                        <div>查看全部</div>
+                    </div>
                 {{?}}
-            </div>
-
-        </div>
+                </div>
+            {{?it.info.extra_product.length>0}}
+                 <div class="weui-panel__hd otherLink " >外部商品链接</div>
+                 <div class="weui-panel__bd " id="list">
+                    {{~it.info.extra_product :value:index}}
+                        <a href="javascript:void(0);" tapmode onclick="openOtherLink(this)" data-title="{{=value.title}}" data-url="{{=value.item_url}}" class="weui-media-box weui-media-box_appmsg">
+                            <div class="weui-media-box__hd">
+                                <img class="weui-media-box__thumb" src="{{=value.img_url}}" alt="">
+                            </div>
+                            <div class="weui-media-box__bd flex-def flex-zBetween flex-zTopBottom">
+                                <h4 class="weui-media-box__title" id="title">{{=value.title}}</h4>
+                                <div>
+                                    <!-- <p class="currentPrice" id="currentPrice">$30</p> -->
+                                    <p class="flex-def flex-zBetween">
+                                        <span class="currentPrice" id="currentPrice">{{=value.price}}</span>
+                                        <span class="clear" tapmode onclick="clearLink()">去看看</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                    {{~}}
+                 </div>
+            {{?}}
         {{?!it.is_self_add}}
-        <footer>
-            <span data-headUrl="{{=it.info.head_img_url}}" tapmode onclick="openChatPage(this)" data-rongId="{{=it.info.rongcloud_user_id}}"><i></i>聊天</span> {{?it.is_collect}}
-            <span ontouchstart="supplyCollect(this)"><i class="cancelCollect"></i>取消收藏</span> {{??}}
-            <span id="collect" ontouchstart="supplyCollect(this)"><i></i>收藏</span> {{?}}
-            <span tapmode onclick="immediateOrder(this)">立即下单</span>
-        </footer>
+            <footer>
+                <span data-headUrl="{{=it.info.head_img_url}}" tapmode onclick="openChatPage(this)" data-rongId="{{=it.info.rongcloud_user_id}}">
+                    <i></i>聊天
+                </span> 
+                {{?it.is_collect}}
+                    <span ontouchstart="supplyCollect(this)"><i class="cancelCollect"></i>取消收藏</span> 
+                {{??}}
+                    <span id="collect" ontouchstart="supplyCollect(this)"><i></i>收藏</span> 
+                {{?}}
+                <span tapmode onclick="immediateOrder(this)">立即下单</span>
+            </footer>
         {{??}}
             <footer class="footer" ontouchstart="editSupply()">
                 
@@ -663,15 +786,7 @@
         
         fnInit();
         moduleInit();
-        // 初始化页面
-        window.onscroll = function() {
-            var opacityNum = document.body.scrollTop / 145;
-            if (opacityNum < 0.1) {
-                $api.css($api.dom('header.header'), 'background: linear-gradient(rgba(58,57,62,.5), rgba(58,57,62,0));');
-            } else {
-                $api.css($api.dom('header.header'), 'background-color: rgba(58,57,62,' + opacityNum + ')');
-            }
-        }
+       
         initialise(api.pageParam.flag, api.pageParam.compaby_name, api.pageParam.supply_id);
         api.addEventListener({
             name: 'editSupplyAfter'
@@ -841,9 +956,14 @@
             }
         }
         if (eleHtml) {
+            scrollPage();
             $api.html($api.dom('.swiper-wrapper'), eleHtml);
+        } 
+        else if (ret.data.info.extra_product.length > 0){
+            $api.css($api.dom('.resultList'), 'margin-top:1.4rem;');
+            $api.css($api.dom('header.header'), 'background: rgba(58,57,62,1);');
         } else {
-            $api.css($api.dom('header.header'), 'background: rgba(58,57,62,1);position:relative;');
+            $api.css($api.dom('header.header'), 'background: rgba(58,57,62,1);position:relative');
             //  $api.html($api.dom('.swiper-wrapper'), '<img class="default" src="../../image/noimage.jpg">');
         }
         if (ret.data.info.image_json.length > 1) {
@@ -864,7 +984,17 @@
         // ret.data
         transmitData = ret.data.info;
     }
-
+    function scrollPage() {
+         // 初始化页面
+        window.onscroll = function () {
+            var opacityNum = document.body.scrollTop / 145;
+            if (opacityNum < 0.1) {
+                $api.css($api.dom('header.header'), 'background: linear-gradient(rgba(58,57,62,.5), rgba(58,57,62,0));');
+            } else {
+                $api.css($api.dom('header.header'), 'background-color: rgba(58,57,62,' + opacityNum + ')');
+            }
+        }
+    }
     function swiperFun() {
         var mySwiper = new Swiper('.swiper-container', {
             loop: true,
@@ -939,6 +1069,18 @@
                 companyId: $api.attr(ele, 'data-id'),
                 statu: 1,
                 name: $api.attr(ele, 'data-name'),
+            }
+        });
+    }
+    // 打开外链
+    function openOtherLink(ele) {
+        api.openWin({
+            name: 'winname',
+            url: './supply_otherLink_win.html',
+            bounces: false,
+            pageParam: {
+                title: $api.attr(ele, 'data-title'),
+                url: $api.attr(ele, 'data-url'),
             }
         });
     }
