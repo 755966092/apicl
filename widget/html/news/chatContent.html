@@ -455,6 +455,7 @@ var msgId;
 var mainH;
 var _main = 0;
 var scrollH;
+var is_blacklist = 2;
 apiready = function () {
     moduleInit();
     if (api.pageParam.supplyName) {
@@ -492,8 +493,12 @@ apiready = function () {
         // console.log('更新成功更新成功')
     });
 
-    // 调整页面到输入框的后面
-
+    // 检查是否处于黑名单
+    api.addEventListener({
+        name: 'addBlockList'
+    }, function(ret, err){
+        isBlackList();
+    });
     // 滚动到底部
     slideBut();
     api.addEventListener({
@@ -1165,35 +1170,53 @@ function chatTools() {
             boxChatEventListener();
             changeHeight();
             if (ret.eventType == 'send') {
-                // msg: 发送的消息
-                if (ret.msg == '') {
-                // ios下输入框为空的时候不发送消息
-                }
-                else {
-                    sendMsg(ret.msg);
-                }
-
+                if(is_blacklist == 2) {
+                    // msg: 发送的消息
+                    if (ret.msg == '') {
+                        // ios下输入框为空的时候不发送消息
+                    }
+                    else {
+                        sendMsg(ret.msg);
+                    }
                 // 把聊天内容滑动到最下面
+                } else {
+                    api.toast({
+                        msg: '对方在你的黑名单列表中',
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                }
+                
             }
 
             if (ret.eventType === 'clickExtras') {
-                if (ret.index === 0) {
-                    // 打开相册
-                    openPicture('album');
-                }
-                else if (ret.index === 1) {
-                    // 打开相机
-                    openPicture('camera');
-                }
-                else if (ret.index === 2) {
-                    // 发送位置
-                    api.openWin({
-                        name: 'winnmap_winame',
-                        url: './map_win.html',
-                        bounces: false,
-                        pageParam: {
-                            key: 'value'
-                        }
+                if (is_blacklist == 2) {
+                    if (ret.index === 0) {
+                        // 打开相册
+                        openPicture('album');
+                    }
+                    else if (ret.index === 1) {
+                        // 打开相机
+                        openPicture('camera');
+                    }
+                    else if (ret.index === 2) {
+                        // 发送位置
+                        api.openWin({
+                            name: 'winnmap_winame',
+                            url: './map_win.html',
+                            bounces: false,
+                            pageParam: {
+                                key: 'value'
+                            }
+                        });
+                    } else {
+
+                    }
+                } else {
+                    api.toast({
+                        msg: '对方在你的黑名单列表中',
+                        duration: 2000,
+                        location: 'bottom'
                     });
                 }
             }
@@ -1377,6 +1400,7 @@ function getSideInfo(rongUserId) {
                 '?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim';
             
             userId = ret.data.list[rongUserId].user_id;
+            isBlackList()
             // $api.setStorage('youHeadImg_' + targetRongId, youHeadImg);
             $api.setStorage('userId_' + targetRongId, userId);
             api.sendEvent({
@@ -1393,7 +1417,39 @@ function getSideInfo(rongUserId) {
         }
     });
 }
+// 判断是否是黑名单
+    // 请求数据
+    function isBlackList() {
+        api.ajax({
+            url: apiSite + '/friendAuth/authUser',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: {
+                    token: $api.getStorage('userToken'),
+                    to_user: api.pageParam.userId
+                }
+            }
+        }, function (ret, err) {
+            if (ret) {
+                if (ret.code === 200) {
+                    // 1 是 2 否
+                    console.log(JSON.stringify(ret))
+                    if(ret.data.list.is_blacklist == 1) {
+                        // 已把用户拉黑
+                        is_blacklist = 1
+                    } else {
+                        is_blacklist = 2
 
+                    }
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
 // 获取最新消息
 function getNews() {
     db.selectSql({
