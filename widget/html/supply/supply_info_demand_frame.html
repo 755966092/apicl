@@ -8,6 +8,7 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../../css/swiper.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
     <style type="text/css">
         img.default {
             width: 100%;
@@ -450,6 +451,20 @@
                     {{?}}
                 </div>
             </div>
+
+             {{?it.info.company_name != null}}
+                <div class="weui-cells" style="margin-top:.2rem">
+                    <a class="weui-cell weui-cell_access" href="javascript:;" data-name="{{=it.info.company_name}}" data-id={{=it.info.company_id}} tapmode onclick="openCompany(this)">
+                        <div class="weui-cell__bd">
+                            <p style="font-size:.24rem">TA的公司主页</p>
+                            <!-- <p style="font-size:.24rem">{{=it.info.company_name}}</p> -->
+                        </div>
+                        <div class="weui-cell__ft">
+                        </div>
+                    </a>
+                </div>
+            {{?}}
+
             <div class="title2">
                 <div class="top flex-def flex-zBetween">
                     <div class="titleName flex-def flex-zLeftRight flex-cCenter">
@@ -852,6 +867,19 @@
             }
         });
     }
+     // 打开公司主页
+        function openCompany(ele) {
+            api.openWin({
+                name: 'me_gs_homePage',
+                url: '../me/me_gs_homePage.html',
+                bounces: false,
+                pageParam: {
+                    companyId: $api.attr(ele, 'data-id'),
+                    statu: 1,
+                    name: $api.attr(ele, 'data-name'),
+                }
+            });
+        }
 </script>
 
 </html>

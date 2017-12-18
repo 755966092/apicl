@@ -8,6 +8,7 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../../css/swiper.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
     <style type="text/css">
         img.default {
             /* width: 100%; */
@@ -435,7 +436,77 @@
 
         </div>
     </div>
-    <div class="resultList"></div>
+    <div class="resultList">
+        <div class="main flex-def flex-zTopBottom">
+            <div class="title flex-def flex-zLeftRight flex-cCenter" tapmode onclick="openUserInfoPage(this)" data-id="9969">
+                <img src="http://img.iinnet.com/Fq9oScpBjR8tVlPr865kPisMnpW3" id="headImg">
+                <div class="titleRight">
+                    <h3>大中小18765</h3>
+                    <p>第一学 前端开发</p>
+                </div>
+            </div>
+            <div class="weui-cells" style="margin-top:.2rem">
+                <a class="weui-cell weui-cell_access" href="javascript:;">
+                    <div class="weui-cell__bd">
+                        <p style="font-size:.24rem">TA的公司主页</p>
+                    </div>
+                    <div class="weui-cell__ft">
+                    </div>
+                </a>
+            </div>
+            <div class="title2">
+                <div class="top flex-def flex-zBetween">
+                    <div class="titleName flex-def flex-zLeftRight flex-cCenter ">
+                        <p class="supplyName">本地导游</p>
+                        <span class="typeIcon">[个人]</span>
+                    </div>
+                    <!-- 分享按钮 -->
+                    <!-- <div class="shareIcon"></div> --></div>
+                <div class="price flex-def flex-zBetween flex-zLeftRight flex-cEnd">
+                    <div class="priceText"> ￥
+                        <span class="price1">200.00/小时</span>
+                    </div>
+                    <div class="time"> 2017-12-12 18:25:31 </div>
+                </div>
+                <div class="sold_cound flex-def flex-zLeftRight flex-cCenter">
+                    <span class="count">[已售0]</span>
+                    <span class="avg_point"> </span>
+                </div>
+                <div class="form"> 线下 + 线下服务
+                    <span class="form formbg fr">距离 nullkm</span>
+                </div>
+            </div>
+            <!-- <div class="sel flex-def flex-zBetween flex-cCenter"> <div> <span class="selTitle">已选：</span> <span class="selText">设计、“APP图标”</span> </div> <span class="selIcon"></span> </div> -->
+            <div class="info">
+                <div class="infoTitle flex-def flex-zCenter flex-cCenter flex-zLeftRight">
+                    <span class="line"></span>
+                    <div class="text flex-def flex-zLeftRight flex-cCenter">
+                        <span class="imgIcon"></span>
+                        <span class="infoTitleText">详情</span>
+                    </div>
+                    <span class="line"></span>
+                </div>
+                <div class="infoData">
+                    <p>本地导游带你嗨</p>
+                    <img src="http://img.iinnet.com/Fkj-tQIesaelerXWQEcH8C8Y0i8L?imageMogr2/auto-orient/thumbnail/710x/blur/1x0/quality/100|imageslim"
+                        tapmode onclick="openImgView(this)"> </div>
+            </div>
+            <div class="comment">
+                <div class="commentTitle flex-def flex-cCenter flex-zBetween">
+                    <span class="commentCount">评论（0）</span>
+                    <!-- <span class="commentIcon"></span> -->
+                </div>
+            </div>
+        </div>
+        <footer>
+            <span data-headUrl="http://img.iinnet.com/Fq9oScpBjR8tVlPr865kPisMnpW3" tapmode onclick="openChatPage(this)" data-rongId="47d2b511386521e8235274b1287e5525">
+                <i></i>聊天</span>
+            <span id="collect" ontouchstart="supplyCollect(this)">
+                <i></i>收藏</span>
+            <span tapmode onclick="immediateOrder(this)">立即下单</span>
+        </footer> at supply_info_frame.html : 846
+
+    </div>
     <script type="text/x-dot-template" id="listT">
         <div class="main flex-def flex-zTopBottom">
             <div class="title flex-def flex-zLeftRight flex-cCenter" tapmode onclick="openUserInfoPage(this)" data-id="{{=it.info.user_id}}">
@@ -451,6 +522,19 @@
                     {{?}}
                 </div>
             </div>
+
+            {{?it.info.company_name != null}}
+                <div class="weui-cells" style="margin-top:.2rem">
+                    <a class="weui-cell weui-cell_access" href="javascript:;" data-name="{{=it.info.company_name}}" data-id={{=it.info.company_id}} tapmode onclick="openCompany(this)">
+                        <div class="weui-cell__bd">
+                            <p style="font-size:.24rem">TA的公司主页</p>
+                            <!-- <p style="font-size:.24rem">{{=it.info.company_name}}</p> -->
+                        </div>
+                        <div class="weui-cell__ft">
+                        </div>
+                    </a>
+                </div>
+            {{?}}
             <div class="title2">
                 <div class="top flex-def flex-zBetween">
                     <div class="titleName flex-def flex-zLeftRight flex-cCenter ">
@@ -746,7 +830,6 @@
     }
 
     function renderPage(ret, flag, compaby_name, supply_id) {
-        // console.log(JSON.stringify(ret))
             // 解析图片json
         ret.data.info.image_json = eval(ret.data.info.image_json);
         paramImg = ret.data.info.image_json;
@@ -822,6 +905,40 @@
             pageParam: {
                 url: $api.attr(ele, 'src'),
                 paramImg: paramImg
+            }
+        });
+    }
+
+
+    // doT模版获取数据
+    function getData(data) {
+        // 原生方法
+        //  document.getElementsByClassName('resultList')[0].innerHTML = doT.template(document.getElementById('listT').innerHTML)(data)
+        // console.log('渲染模版111')
+        var listTText = $api.byId("listT").text;
+        // console.log('渲染模版222')
+        var fnListT = doT.template(listTText);
+        // console.log('渲染模版333')
+        var html = fnListT(data);
+        // console.log('渲染模版444')
+        // console.log(html+' at 304')
+        var list = $api.dom(".resultList");
+        // 替换resultList所有内容
+        $api.html(list, html);
+        // console.log('渲染完成')
+        // alert('getData:' + JSON.stringify(data))
+    }
+
+    // 打开公司主页
+    function openCompany(ele) {
+        api.openWin({
+            name: 'me_gs_homePage',
+            url: '../me/me_gs_homePage.html',
+            bounces: false,
+            pageParam: {
+                companyId: $api.attr(ele, 'data-id'),
+                statu: 1,
+                name: $api.attr(ele, 'data-name'),
             }
         });
     }
