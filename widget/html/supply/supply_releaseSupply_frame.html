@@ -8,6 +8,7 @@
     />
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
     <style>
         body {
             position: relative;
@@ -229,6 +230,7 @@
             background-position: .3rem center;
         }
 
+        /*  添加商品链接  */
         ul li:nth-child(8) {
             background: #fff url(../../image/icon_supply/icon_08.png)no-repeat;
             background-size: .34rem .34rem;
@@ -260,14 +262,14 @@
             font-size: 0;
         }
 
-        .clearfix img {
+        .resultList img {
             margin-right: .1rem;
             width: 1.6rem;
             height: 1.6rem;
             margin-bottom: .1rem;
         }
 
-        .clearfix span.imgpage {
+        span.imgpage {
             margin-right: .1rem;
             width: 1.6rem;
             height: 1.6rem;
@@ -305,6 +307,9 @@
             /* border: 1px solid #F00; */
         }
 
+        .weui-cells {
+            font-size: 0.3rem;
+        }
     </style>
 </head>
 
@@ -396,10 +401,17 @@
             </li>
 
 
-            <li onclick="selectType(this)" data-val="_unit">
+            <li onclick="selectType(this)" data-val="_unit" class="border100">
                 <div class="wrap">
                     <span>单位</span>
                     <span class="spanno2 _unit" id="unit">必填</span>
+                </div>
+            </li>
+
+            <li class="_otherProducts mt37" tapmode onclick="openSelOther()">
+                <div class="wrap">
+                    <span>外部商品链接</span>
+                    <span class="spanno2 _unit" id="otherLink">选填</span>
                 </div>
             </li>
             <!--  <li class="border100">
@@ -447,7 +459,11 @@
         imgArr = [],
         categoryArr = [],
         classify_dataSource,
-        classify_dataSource2 = [];
+        classify_dataSource2 = [],
+        otherLinkObj={
+            jd:'',
+            tb:''
+        };
     apiready = function () {
         // 初始化价格输入框
         initPriceIpt();
@@ -476,7 +492,26 @@
         // 删除图片
         delImg();
         // 监听选择修改地址
-        monitorSelAddress()
+        monitorSelAddress();
+        api.addEventListener({
+            name: 'addOtherLink'
+        }, function (ret, err) {
+            if (ret.value.source == 1) {
+                otherLinkObj.jd = ret.value.obj;
+            } else {
+                otherLinkObj.tb = ret.value.obj;
+            }
+            if (otherLinkObj.jd && otherLinkObj.tb) {
+                $api.text($api.byId('otherLink'), '已选京东和淘宝商品');
+            } else if(otherLinkObj.jd) {
+                $api.text($api.byId('otherLink'), '已选京东商品');
+            } else if(otherLinkObj.tb) {
+                $api.text($api.byId('otherLink'), '已选淘宝商品');
+            } else {
+                $api.text($api.byId('otherLink'), '选填');
+            }
+            console.log(JSON.stringify(otherLinkObj))
+        });
 
     };
     function initPriceIpt() {
@@ -603,6 +638,7 @@
         if (data.info.type == 2) {
             type = 2;
             $api.css($api.dom('.companyName'), 'display:block');
+            $api.css(el, 'css');
             $api.text($api.byId('company_name'), data.info.company_name);
             $api.attr($api.byId('company_name'), 'data-id', data.info.company_id);
 
@@ -807,8 +843,13 @@
             description = $api.val($api.byId('description'));        //string  详细内容
             image_json = imgArr,          //string  图片（格式：["abc.jpg","ddd.jpg"]）
             company_id = $api.attr($api.byId('company_name'), 'data-id') || '';      // 公司ID（类型为2-我公司卖时必传）
-            sub_type = sub_type_arr.indexOf(sub_type)+1;
-            
+            sub_type = sub_type_arr.indexOf(sub_type)+1,
+            extra_product = [];
+           for (const key in otherLinkObj) {
+               if (otherLinkObj.hasOwnProperty(key)) {
+                   extra_product.push(otherLinkObj[key])
+               }
+           }
             // alert('标题 : '+ title +'---类别ID : '+sub_type+'---分类ID : '+category_id+'---价格 : '+price+'----形式'+form+'---内容: '+description +"---省份"+ province + "---地区" +city+ "---地址" +address+ "---纬度" +latitude+'---纬度: '+longitude)
         // var category = $api.text($api.byId('category_id'));
         // for (var i = 0; i < categoryArr.length; i++) {
@@ -839,7 +880,8 @@
                 form: form,
                 description: description,
                 image_json: image_json,
-                company_id: company_id
+                company_id: company_id,
+                extra_product: extra_product
             }
             //console.log(JSON.stringify(obj))
         } else {
@@ -862,10 +904,11 @@
                 form: form,
                 description: description,
                 image_json: image_json,
-                company_id: company_id
+                company_id: company_id,
+                 extra_product: extra_product
             }
         }
-        
+        console.log(JSON.stringify(obj))
         api.ajax({
             url: apiSite + url,
             method: 'post',
@@ -1282,6 +1325,15 @@
         })
     }
 
+    // openSelOther 选择其他商品
+    function openSelOther() {
+        api.openWin({
+            name: 'supply_releaseOther_win',
+            url: './supply_releaseOther_win.html',
+            bounces: false,
+            pageParam: { otherLinkObj : otherLinkObj}
+        });
+    }
 </script>
 
 </html>
