@@ -208,7 +208,44 @@
                 {{ }; }}
             {{?}}
     </script>
-
+    <script type="text/x-dot-template" id="listT2">
+                 {{?it.length === 0}}
+        <p class="no_data">暂无数据</p>
+        {{??}} {{ for (var i = 0; i
+        < it.length; i++) { }} <div class="item" data-id="{{=it[i].demand_id}}" data-company="{{=it[i].company_name}}" tapmode onclick="info(this)">
+            <div class="userLeft flex-def flex-cCenter flex-zBetween" tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation(); ">
+                <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" class="announcerHead">
+                <div class="username flex-item">
+                    <p class="announcer">{{=it[i].nickname}}</p>
+                    <p class="company">{{=it[i].company_name}}</p>
+                </div>
+                <p class="price2">{{=it[i].reward}}元</p>
+            </div>
+            <span class="firstImg" style="background: url({{=it[i].image_json[0]?it[i].image_json[0]:'../../image/icon_supply/supply_noImg.png'}})no-repeat;background-size: 100% auto;background-position: center center;">
+                    {{?it[i].distance  || it[i].distance==0}}
+                    <span class="price ">
+                     <span class="position fl">{{=it[i].city || ''}}</span>
+                    <span class="distance">距离我{{=it[i].distance}}km</span>
+                    </span>
+            {{?}}
+            </span>
+            <div class="name flex-def flex-cCenter flex-zBetween ">
+                <span class="title  flex-def flex-cCenter"><span>{{=it[i].title}}</span>&nbsp;<span class="label">[{{=it[i].type == 2?'公司':'个人'}}]</span></span>
+                <span tapmode data-id="{{=it[i].demand_id}}" onclick="collect(this);event.stopPropagation();" class=" {{=it[i].is_collect==true?" collect icon ":"icon "}} "></span>
+            </div>
+            <p class="createTime">{{=it[i].create_time}}</p>
+            <div class="user flex-def flex-cCenter flex-zBetween ">
+                <!-- <div class="userLeft flex-def flex-cCenter " tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation(); ">
+                                <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" class="announcerHead" >
+                                <span class="announcer">{{=it[i].nickname}}</span>
+                                <span class="company">{{=it[i].company_name}}</span>
+                            </div> -->
+                <span class="classifyLabel">{{=it[i].category_name}}</span>
+                <span class="icon flex-def flex-cCenter "><span class="count ">{{=it[i].browse_count}}</span></span>
+            </div>
+            </div>
+            {{ }; }} {{?}}
+        </script>
 
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -246,27 +283,6 @@
         });
     };
 
-
-
-    // 根据上传图片的多少自适应图片的大小
-    function selfAdaption() {
-        var listContent = $api.domAll('.item');
-
-        for (var i = 0; i < listContent.length; i++) {
-            var imgArr = listContent[i].getElementsByClassName('content_img');
-            var imgCount = imgArr.length;
-            if (imgCount == 1) {
-             $api.css(listContent[i].getElementsByClassName('content_img')[0], 'width:3.26rem;height:2.86rem;margin-top:.1rem');
-
-            }  else {
-                for (var j = 0; j < imgCount; j++) {
-                    $api.css(listContent[i].getElementsByClassName('content_img')[j], 'width:1.56rem;height:1.56rem');
-                }
-            }
-        }
-    }
-
-
     // 筛选后结果
     function bySelect() {
         var obj = {
@@ -288,10 +304,10 @@
                 //console.log(keyword)
                 //console.log('筛选'+JSON.stringify(obj))
                 // alert('33333:::'+JSON.stringify(obj));
-                if (ret.value.type == 1) {
+                if (ret.value.type == 0) {
                     // 供
                     url = '/supply/index';
-                } else if (ret.value.type == 2) {
+                } else if (ret.value.type == 1) {
                     // 求
                      url = '/demand/index';
                 } else {
@@ -324,27 +340,10 @@
           });
        });
     }
-    // 筛选后页面变化
-    // function viewResults(ele) {
-
-    //     $api.css($api.dom('.results'), 'background: #fff url(../../image/icon_zk.png)no-repeat;background-position: right center;-webkit-background-size: .15rem .25rem;background-size: .15rem .25rem;');
-
-    //     if ($api.text(ele) == '查看订阅的筛选结果') {
-    //         api.openWin({
-    //             name: 'supply_subscribeWin',
-    //             url: './supply_subscribeWin.html',
-    //             pageParam: {
-    //                 name: 'value'
-    //             }
-    //         });
-    //     }
-    //      $api.html(ele, '查看订阅的筛选结果');
-    // }
-
     // 请求数据
     function requireData (data) {
-        //console.log('函数内:'+JSON.stringify(data))
-        //console.log('函数内:'+JSON.stringify(url))
+        console.log('函数内:'+JSON.stringify(data))
+        console.log('函数内:'+JSON.stringify(url))
         var data = data || 1;
         var latitude,longitude;
         if (data !== 1) {
@@ -406,36 +405,80 @@
                         // 2. 如果是昨天显示昨天，
                         // 3. 大于昨天显示天数
                     }
-                    getData(ret.data.list);
-                    selfAdaption();
+                    if (url == '/supply/index') {
+                        getData(ret.data.list);
+                    } else {
+                        getData2(ret.data.list);
+
+                    }
                 } else {
                     alert(JSON.stringify(err.msg))
                 }
             })
         }
-
+        // doT模版获取数据
+        function getData2(data) {
+            // 原生方法
+            //  document.getElementsByClassName('resultList')[0].innerHTML = doT.template(document.getElementById('listT').innerHTML)(data)
+            // console.log('渲染模版111')
+            var listTText = $api.byId("listT2").text;
+            // console.log('渲染模版222')
+            var fnListT = doT.template(listTText);
+            // console.log('渲染模版333')
+            var html = fnListT(data);
+            // console.log('渲染模版444')
+            // console.log(html+' at 304')
+            var list = $api.dom(".resultList");
+            // console.log('渲染模版555')
+            // 替换resultList所有内容
+            $api.html(list, html);
+            // console.log('渲染完成')
+            // alert('getData:' + JSON.stringify(data))
+        }
     // 进入详情
     function info(ele) {
         var flag = 0;
-
-
         var compaby_name = $api.attr(ele, 'data-company'),
             supply_id = $api.attr(ele, 'data-id');
         if (compaby_name != '') {
             flag = 1;
         }
-        // alert(flag +'---'+ compaby_name)
-        api.openWin({
-            name: 'supply_info',
-            url: './supply_info.html',
-            pageParam: {
+        var obj;
+        if (url == '/supply/index') {
+            url = 'supply_info';
+            obj = {
                 flag: flag,
                 compaby_name: compaby_name,
                 supply_id: supply_id
             }
+        } else {
+            
+
+            url = 'supply_info_demand_win';
+            obj = {
+                flag: flag,
+                compaby_name: compaby_name,
+                demand_id: supply_id
+            }
+        }
+        api.openWin({
+            name: url,
+            url: './'+ url +'.html',
+            pageParam: obj
         });
 
     }
-
+     // 用户详情页面
+        function openUserInfoPage(ele) {
+            var userId = $api.attr(ele, 'data-id');
+            api.openWin({
+                name: 'winName',
+                url: '../addressList/txl_memberInfo_Win.html',
+                pageParam: {
+                    userId: userId
+                }
+            });
+        }
+       
 </script>
 </html>

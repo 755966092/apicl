@@ -156,7 +156,7 @@
             if (ret) {
                 // alert(JSON.stringify(ret));
                 parameter = ret.value.parameter
-                api.pageParam.type = ret.value.type
+                api.pageParam.typePage = ret.value.type
                 selectedObj = ret.value.selectedObj
             } else {
                 // alert(JSON.stringify(err));
@@ -227,6 +227,7 @@
         });
     }
     function openFilter() {
+        console.log(JSON.stringify(api.pageParam,null,4))
         $api.dom('input').blur();
         api.openFrame({
             name: 'supply_slideFrame_3',
@@ -238,7 +239,7 @@
                 h: 'auto'
             },
             pageParam: {
-                type: api.pageParam.type,
+                type: api.pageParam.typePage,
                 parameter: parameter,
                 selectedObj: selectedObj,
             },

@@ -4,14 +4,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
     <style>
         .btn {
-            padding: 0 .36rem;;
+            padding: 0 .36rem;
+            ;
         }
+
         .loading {
             width: 100%;
             height: 13.34rem;
@@ -22,9 +25,11 @@
             display: none;
             z-index: 9999;
         }
+
         .mt20 {
             margin-top: 0.2rem;
         }
+
         .mt36 {
             margin-top: 0.36rem;
         }
@@ -94,7 +99,11 @@
         <!-- <a href="javascript:;" class="weui-btn weui-btn_primary"  tapmode onclick="clearAllStrong()" data-val='aboutInin'>清除所有缓存</a> -->
         <!-- <a href="javascript:;" class="weui-btn weui-btn_primary"  tapmode onclick="openList()">打开地图</a> -->
         <!-- <a href="javascript:;" class="weui-btn weui-btn_primary"  tapmode onclick="openList()">打开地图</a> -->
-        <!-- <a href="javascript:;" class="weui-btn weui-btn_primary"  tapmode onclick="openNewPage()">打开新页面</a> -->
+        <a href="javascript:;" class="weui-btn weui-btn_primary" tapmode onclick="openNewPage()">打开新页面</a>
+        <a href="bdapp://map/navi?query=故宫">驾车导航</a>
+        <a href="bdapp://map/direction?destination=latlng:39.9761,116.3282|name:中关村">驾车路线规划</a>
+        <a href="baidumap://map/direction?origin=34.264642646862,108.95108518068&destination=40.007623,116.360582&mode=driving&src=webapp.navi.我在">苹果驾车导航</a>
+        <a href="http://api.map.baidu.com/direction?origin=latlng:34.264642646862,108.95108518068|name:我家&destination=大雁塔&mode=driving&region=西安&output=html&src=yourCompanyName|yourAppName">线路检索</a>
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -104,7 +113,7 @@
 <script type="text/javascript">
     var flag = 0,
         flagFlag = 0;
-    apiready = function() {
+    apiready = function () {
         fnInit();
         moduleInit();
 
@@ -113,19 +122,19 @@
     function clearAllStrong() {
         // var tableArr = ['addressList','tb_remarks_contact','tb_remarks_other_contact','tb_remarks_address','tb_remarks_education','tb_remarks_work','tb_remarks_project','tb_remarks_user_info','tb_remarks_status', 'addressList_simplify']
         // for (var i = 0;i < tableArr.length; i++) {
-           console.log('开始清除');
-           $api.clearStorage();
-            // db.executeSql({
-            //     name: 'db_'+$api.getStorage('userToken'),
-            //     sql: 'delete from addressList_simplify'
-            //     // sql: 'truncate addressList_simplify'
-            // },function(ret,err){
-            //     if (ret.status) {
-            //         console.log('删除成功')
-            //     } else {
-            //         console.log(JSON.stringify(err))
-            //     }
-            // })
+        console.log('开始清除');
+        $api.clearStorage();
+        // db.executeSql({
+        //     name: 'db_'+$api.getStorage('userToken'),
+        //     sql: 'delete from addressList_simplify'
+        //     // sql: 'truncate addressList_simplify'
+        // },function(ret,err){
+        //     if (ret.status) {
+        //         console.log('删除成功')
+        //     } else {
+        //         console.log(JSON.stringify(err))
+        //     }
+        // })
         // }
 
 
@@ -157,7 +166,7 @@
         //         key: 'value'
         //     }
         // });
-      
+
         // api.openWin({
         //     name: 'winnkeyPsdame',
         //     url: './demo/keyPsd.html',
@@ -207,81 +216,81 @@
         // 退出戎云
         rong.disconnect({
             isReceivePush: false
-        }, function(ret, err) {
+        }, function (ret, err) {
             if ('success' == ret.status) {
 
             }
         });
         api.ajax({
-                url: apiSite + '/settings/logout',
-                method: 'post',
-                headers: apiHeader,
-                data: {
-                    values: {
-                        token: $api.getStorage('userToken'),
-                    }
+            url: apiSite + '/settings/logout',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: {
+                    token: $api.getStorage('userToken'),
                 }
-            }, function(ret, err) {
-                if (ret) {
-                    $api.clearStorage();
-                    $api.setStorage('guidePages', api.appVersion);
-                    // $api.rmStorage('userToken');
-                    // $api.rmStorage('rongToken');
-                    // api.closeToWin({
-                    //     name: 'loginPage'
-                    // });
-                    api.openWin({
-                        name: 'winName',
-                        url: '../enroll/me_login.html'
-                    });
-                } else {
-                    alert(JSON.stringify(err))
-                }
-            })
-            // db.openDatabase({
-            //     name: 'db_'+$api.getStorage('userToken'),
-            // }, function(ret, err){
-            //     if( ret.status ){
-            //         var tableArr = ['addressList','tb_remarks_contact','tb_remarks_other_contact','tb_remarks_address','tb_remarks_education','tb_remarks_work','tb_remarks_project','tb_remarks_user_info','tb_remarks_status', 'addressList_simplify']
-            //         for (var i = 0;i < tableArr.length; i++) {
-            //             db.executeSql({
-            //                 name: 'db_'+$api.getStorage('userToken'),
-            //                 sql: 'DROP TABLE IF EXISTS '+tableArr[i]
-            //             },function(ret,err){
-            //                 if (ret.status) {
-            //                         // console.log('执行成功'+i)
-            //                         api.ajax({
-            //                             url: apiSite + '/settings/logout',
-            //                             method: 'post',
-            //                             headers: apiHeader,
-            //                             data: {
-            //                                    values: {
-            //                                        token: $api.getStorage('userToken'),
-            //                                    }
-            //                             }
-            //                         }, function(ret, err) {
-            //                             if(ret) {
-            //                                 $api.clearStorage();
-            //                                 // api.closeToWin({
-            //                                 //     name: 'loginPage'
-            //                                 // });
-            //                                 api.openWin({
-            //                                     name: 'winName',
-            //                                     url: '../enroll/me_login.html'
-            //                                 });
-            //                             } else {
-            //                                 alert(JSON.stringify(err))
-            //                             }
-            //                         })
-            //                 }else {
-            //                     alert(JSON.stringify(err))
-            //                 }
-            //             });
-            //         }
-            //     }else{
-            //         alert( JSON.stringify( err ) );
-            //     }
-            // });
+            }
+        }, function (ret, err) {
+            if (ret) {
+                $api.clearStorage();
+                $api.setStorage('guidePages', api.appVersion);
+                // $api.rmStorage('userToken');
+                // $api.rmStorage('rongToken');
+                // api.closeToWin({
+                //     name: 'loginPage'
+                // });
+                api.openWin({
+                    name: 'winName',
+                    url: '../enroll/me_login.html'
+                });
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+        // db.openDatabase({
+        //     name: 'db_'+$api.getStorage('userToken'),
+        // }, function(ret, err){
+        //     if( ret.status ){
+        //         var tableArr = ['addressList','tb_remarks_contact','tb_remarks_other_contact','tb_remarks_address','tb_remarks_education','tb_remarks_work','tb_remarks_project','tb_remarks_user_info','tb_remarks_status', 'addressList_simplify']
+        //         for (var i = 0;i < tableArr.length; i++) {
+        //             db.executeSql({
+        //                 name: 'db_'+$api.getStorage('userToken'),
+        //                 sql: 'DROP TABLE IF EXISTS '+tableArr[i]
+        //             },function(ret,err){
+        //                 if (ret.status) {
+        //                         // console.log('执行成功'+i)
+        //                         api.ajax({
+        //                             url: apiSite + '/settings/logout',
+        //                             method: 'post',
+        //                             headers: apiHeader,
+        //                             data: {
+        //                                    values: {
+        //                                        token: $api.getStorage('userToken'),
+        //                                    }
+        //                             }
+        //                         }, function(ret, err) {
+        //                             if(ret) {
+        //                                 $api.clearStorage();
+        //                                 // api.closeToWin({
+        //                                 //     name: 'loginPage'
+        //                                 // });
+        //                                 api.openWin({
+        //                                     name: 'winName',
+        //                                     url: '../enroll/me_login.html'
+        //                                 });
+        //                             } else {
+        //                                 alert(JSON.stringify(err))
+        //                             }
+        //                         })
+        //                 }else {
+        //                     alert(JSON.stringify(err))
+        //                 }
+        //             });
+        //         }
+        //     }else{
+        //         alert( JSON.stringify( err ) );
+        //     }
+        // });
     }
 
     function openPage(ele) {
@@ -299,24 +308,24 @@
 
     }
     // 更新通讯录
-    var tt1,tt2
+    var tt1, tt2
     function updateAddressList() {
 
         $api.css($api.dom('.loading'), 'display: block');
         db.executeSql({
             name: SQLName,
             sql: 'CREATE TABLE IF NOT EXISTS addressList_simplify(user_id int PRIMARY KEY NOT NULL, title varchar(255),img varchar(255), subTitle varchar(255), current_contact varchar(255), flag varchar(255), type int, path_direction int)'
-        }, function(ret, err) {
+        }, function (ret, err) {
             if (ret.status) {
                 db.executeSql({
                     name: 'db_' + $api.getStorage('userToken'),
                     sql: 'CREATE INDEX  IF NOT EXISTS  type_idx ON addressList_simplify (type);'
-                }, function(ret, err) {
+                }, function (ret, err) {
                     if (ret.status) {
                         db.executeSql({
                             name: 'db_' + $api.getStorage('userToken'),
                             sql: 'CREATE INDEX  IF NOT EXISTS  flag_idx ON addressList_simplify (flag);'
-                        }, function(ret, err) {
+                        }, function (ret, err) {
                             if (ret.status) {
                                 queryContacts();
                             } else {
@@ -332,13 +341,29 @@
             }
         });
     }
-    
+
 
     function openNewPage() {
-        api.openWin({
-            name: 'me_sz_winframe',
-            url: './me_sz_winframe.html',
-            bounces: false,
+        // api.openWin({
+        //     name: 'me_sz_winframe',
+        //     url: './me_sz_winframe.html',
+        //     bounces: false,
+        // });
+        api.openApp({
+            androidPkg: 'com.baidu.BaiduMap',
+            mimeType: 'text/html',
+            // uri: 'http://www.baidu.com'
+        }, function (ret, err) {
+            if (ret) {
+                var msg = JSON.stringify(ret);
+                api.alert({
+                    title: 'openApp',
+                    msg: msg,
+                    buttons: ['确定']
+                });
+            } else {
+                alert(JSON.stringify(err))
+            }
         });
     }
 </script>

@@ -76,11 +76,11 @@
         }
         .footer span {
             box-sizing: border-box;
-            height: .9rem;
+            height: .78rem;
             width: 3rem;
             font-size: .34rem;
             text-align: center;
-            line-height: .9rem;
+            line-height: .78rem;
             float: left;
             background-color: #F8F8F8;
         }
@@ -160,8 +160,8 @@
                 <div>
                     <ul class="no1">
                         <p>类别</p>
-                        <li tapmode data-id='1' id="supply" onclick="selClassify(this)"   class="sel">供</li>
-                        <li tapmode data-id='2' id="ask" onclick="selClassify(this)" >求</li>
+                        <li tapmode data-id='0' id="supply" onclick="selClassify(this)"   class="sel">供</li>
+                        <li tapmode data-id='1' id="ask" onclick="selClassify(this)" >求</li>
                     </ul>
                     <ul class="no3">
                         <p>排序</p>
@@ -218,7 +218,6 @@
     var val, selectedObj={},str,url;
     apiready = function(){
         $api.fixTabBar($api.dom('.footer'))
-        //console.log(JSON.stringify(api.pageParam))
         fnInit();
         initSel()
         // 进入筛选页面初始化页面
@@ -256,7 +255,7 @@
     }
     // 设置选中的条件
     function initSel() {
-        //console.log('设置选中的条件::'+JSON.stringify(api.pageParam))
+        console.log('设置选中的条件::'+JSON.stringify(api.pageParam))
         if (api.pageParam.parameter) {
             if (api.pageParam.parameter.type) {
                 if (api.pageParam.parameter.type == 1){
@@ -295,14 +294,16 @@
                 $api.text($api.dom('.school'), api.pageParam.parameter.category_ids);
             }
         }
-        if (api.pageParam.type == 1) {
+        if (api.pageParam.type == 0) {
+            console.log(JSON.stringify('搜索供'+api.pageParam,null,4))
             // 搜索供
             url = '/supply/index';
             for (var i = 0; i < $api.domAll('.no1 li').length; i++) {
                 $api.removeCls($api.domAll('.no1 li')[i], 'sel');
             }
             $api.addCls($api.byId('supply'), 'sel');
-        } else if (api.pageParam.type == 2) {
+        } else if (api.pageParam.type == 1) {
+            console.log(JSON.stringify('搜索求'+api.pageParam, null, 4))
             // 搜索求
             url = '/demand/index';
             for (var i = 0; i < $api.domAll('.no1 li').length; i++) {
