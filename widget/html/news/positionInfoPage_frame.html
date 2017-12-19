@@ -15,30 +15,139 @@
             font-size: .24rem;
             color: #999;
         }
-        div {
+        .footer {
+            box-sizing: border-box;
             position: fixed;
             bottom: 0;
             width: 100%;
             padding: 0 .36rem;
             height: 2rem;
         }
+        .navigation {
+            display: inline-block;
+            width: 1rem;
+            height: 2rem;
+            background: url(../../image/chatPage/position1.png)no-repeat;
+            background-size: .8rem .8rem;
+            background-position: center;
+        }
     </style>
 </head>
 <body>
-    <div class="footer flex-def flex-zCenter flex-zTopBottom">
-        <p id="name"></p>
-        <p id="address"></p>
+    <div class="footer flex-def flex-zCenter flex-zBetween">
+        <div class="flex-def flex-zCenter flex-zTopBottom">
+            <p id="name"></p>
+            <p id="address"></p>
+        </div>
+        <div  tapmode onclick="openMap()" class="navigation"></div>
     </div>
+    <!-- 
+        <a href="bdapp://map/direction?destination=latlng:39.9761,116.3282|name:中关村">驾车路线规划</a>
+        <a href="baidumap://map/direction?origin=34.264642646862,108.95108518068&destination=40.007623,116.360582&mode=driving&src=webapp.navi.我在">苹果驾车导航</a>
+     -->
     <script type="text/javascript" src="../../script/api.js"></script>
     <script type="text/javascript" src="../../script/common.js"></script>
     <script type="text/javascript">
+        var isBaidu = false, isGaode = false;
         apiready = function(){
             moduleInit();
+            appInstalledMap(); // 是否安装了地图软件
             openbMap();
             $api.text($api.byId('name'), api.pageParam.obj.name);
             $api.text($api.byId('address'), api.pageParam.obj.address);
         }
-        
+        function appInstalledMap() {
+             // 高德ios: iosamap, 安卓 com.autonavi.minimap
+                // 百度ios: baidumap, 安卓 com.baidu.BaiduMap
+             var appBundle = '', appBundle2 = '';
+            if (api.systemType == 'ios') {
+                appBundle = 'baidumap';
+                appBundle2 = 'iosamap';
+            } else {
+                appBundle = 'com.autonavi.minimap';
+                appBundle2 = 'com.autonavi.minimap';
+            }
+            api.appInstalled({
+                appBundle: appBundle
+            }, function (ret, err) {
+                if (ret.installed) {
+                    // 已经安装
+                    isBaidu = true;
+                } else {
+
+                }
+            })
+             api.appInstalled({
+                appBundle: appBundle2
+            }, function (ret, err) {
+                if (ret.installed) {
+                    // 已经安装
+                    isGaode = true;
+                } else {
+
+                }
+            })
+
+        }
+        function openMap() {
+               console.log(isBaidu +'-'+ isGaode)
+            api.actionSheet({
+                buttons: ['百度地图', '高德地图']
+            },function(ret,err){
+                    if (ret.buttonIndex == 1) {
+                        // 百度
+                        if (isBaidu) {
+                            if (api.systemType === 'ios') {
+                                window.location.href = 'baidumap://map/direction?destination=' + api.pageParam.obj.lat + ',' + api.pageParam.obj.lon + '|name:' + api.pageParam.obj.name + '&mode=driving&src=webapp.navi.我在'
+                            } else {
+                                window.location.href = 'bdapp://map/direction?destination=latlng:' + api.pageParam.obj.lat + ',' + api.pageParam.obj.lon + '|name:' + api.pageParam.obj.name
+                            }
+                        } else {
+                            alert('您还没有安装百度地图')
+                        }
+                    } else {
+                        // 高德
+                        if (isGaode) {
+                            api.ajax({
+                                url: 'http://restapi.amap.com/v3/assistant/coordinate/convert?locations=' + api.pageParam.obj.lon + ',' + api.pageParam.obj.lat + '&coordsys=baidu&output=json&key=47e33bda16fa2d0eff7eb1037b4ad84e',
+                                method: 'get',
+                            }, function (ret) {
+                                if (ret.status == 1) {
+                                    if (api.systemType === 'ios') {
+                                        window.location.href = 'iosamap://path?sourceApplication=applicationName&sid=BGVIS1&did=BGVIS2&dlat=' + ret.locations.split(',')[1] + '&dlon=' + ret.locations.split(',')[0] + '&dname=' + api.pageParam.obj.name + '&dev=0&t=0'
+                                    } else {
+                                        window.location.href = 'androidamap://route/plan/?&dlat=' + ret.locations.split(',')[1] + '&dlon=' + ret.locations.split(',')[0] + '&dname=' + api.pageParam.obj.name + '&dev=0&t=0'
+                                    }
+                                }
+                            })
+                        } else {
+                            alert('您还没有安装高德地图')
+                        }
+                        
+                        
+                    }
+            });
+
+            // api.ajax({
+            //     url: 'http://restapi.amap.com/v3/assistant/coordinate/convert?locations='+ api.pageParam.obj.lon +',' + api.pageParam.obj.lat +'&coordsys=baidu&output=json&key=47e33bda16fa2d0eff7eb1037b4ad84e',
+            //     method: 'get',
+            // }, function(ret) {
+            //     console.log(JSON.stringify(ret))
+            //     if (ret.status == 1) {
+            //         console.log(ret.locations.split(',')[0])
+            //     }
+            // })
+            
+            // if (api.systemType === 'ios') {
+            //     window.location.href = 'iosamap://path?sourceApplication=applicationName&sid=BGVIS1&did=BGVIS2&dlat='+ api.pageParam.obj.lat +'&dlon=' + api.pageParam.obj.lon + '&dname=' + api.pageParam.obj.name + '&dev=0&t=0'
+            //     // window.location.href = 'baidumap://map/direction?destination='+ api.pageParam.obj.lat +',' + api.pageParam.obj.lon + '|name:' + api.pageParam.obj.name + '&mode=driving&src=webapp.navi.我在'
+            // } else {
+               
+            //     // });
+            //     // window.location.href = 'bdapp://map/direction?destination=latlng:' + api.pageParam.obj.lat + ',' + api.pageParam.obj.lon + '|name:'+api.pageParam.obj.name
+            //     window.location.href = 'androidamap://route/plan/?&dlat=' + api.pageParam.obj.lat + '&dlon=' + api.pageParam.obj.lon + '&dname='+ api.pageParam.obj.name +'&dev=0&t=0'
+            // }
+        }
         // 打开百度地图
         function openbMap() {
             bMap.open({

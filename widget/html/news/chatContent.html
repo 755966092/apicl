@@ -648,7 +648,6 @@ function createReceivePositionLabelSql(msg, flag) {
         positionCount = msg.content_text.indexOf(',');
         time = new Date(parseInt(msg.receivedTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(parseInt(msg.receivedTime, 10))
             .toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10)).toLocaleString();
-        // str = '<div class="other clearfix"  tapmode onclick="openPosiPage(this)" data-lat="' + msg.content_lat + '" data-lon="' + msg.content_lon + '" data-name="实打实" data-address="安达市"><div class="time">' + time + '</div><img class="fl otherImg" src="' + youHeadImg + '"><p class="positionNews fl flex-def flex-zTopBottom" ><span class="posName">名字</span> <span class="posiDes">按时 </span><img src="' + msg.conten_imagePath + '" alt=""></p></div>';
         str = '<div class="other clearfix"  tapmode onclick="openPosiPage(this)" data-lat="' + msg.content_lat + '" data-lon="' + msg.content_lon + '" data-name="' + msg.content_text.substring(0, positionCount) + '" data-address="' + msg.content_text.substring(positionCount + 1) + '"><div class="time">' + time + '</div><img class="fl otherImg" src="' + youHeadImg + '"><p class="positionNews fl flex-def flex-zTopBottom" ><span class="posName">' + msg.content_text.substring(0, positionCount) + '</span> <span class="posiDes">' + msg.content_text.substring(positionCount + 1) + '</span><img src="' + msg.content_imagePath + '" alt=""></p></div>';
     }
     else {
@@ -666,6 +665,7 @@ function openPosiPage(ele) {
     var lon = $api.attr(ele, 'data-lon');
     var name = $api.attr(ele, 'data-name');
     var address = $api.attr(ele, 'data-address');
+    console.log('lat:'+lat+', lon:'+ lon )
     api.openWin({
         name: 'positionInfoPage_win',
         url: './positionInfoPage_win.html',
@@ -776,7 +776,7 @@ function chatRecordingSql(params, flagStr, headImgUrl) {
             SQL += '(' + params.msgContent.result.message.messageId + ',"' + params.msgContent.result.message.receivedTime +
                 '","' + user_id + '","' + params.msgContent.result.message.objectName + '","' +  params.msgContent.result.message.messageDirection +
                 '","' + params.msgContent.result.message.content.extra.replace(/"/g, '') + '","' + (params.msgContent
-                    .result.message.content.poi || '') + '",' + params.msgContent.result.message.content.longitude +
+                    .result.message.content.poi || '') + '",' + params.msgContent.result.message.content.latitude +
                 ',' + params.msgContent.result.message.content.longitude + ',"' + params.msgContent.result.message.content
                     .imagePath + '","' + youHeadImg + '","' + params.msgContent.result.message.content.imageUrl +
                 '","","' + params.msgContent.result.message.content.thumbPath + '")';
