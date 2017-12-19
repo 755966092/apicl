@@ -665,7 +665,7 @@ function openPosiPage(ele) {
     var lon = $api.attr(ele, 'data-lon');
     var name = $api.attr(ele, 'data-name');
     var address = $api.attr(ele, 'data-address');
-    console.log('lat:'+lat+', lon:'+ lon )
+  //  console.log('lat:'+lat+', lon:'+ lon )
     api.openWin({
         name: 'positionInfoPage_win',
         url: './positionInfoPage_win.html',
@@ -1257,13 +1257,13 @@ function sendImg(img) {
         extra: ''
     }, function (ret, err) {
         if (ret.status == 'prepare') {
-            console.log('1237:'+JSON.stringify(ret))
+          //  console.log('1237:'+JSON.stringify(ret))
             retprepare = ret;
             retprepare.result.message.content.imageUrl  =  img.data;
             addSendImgMessages(retprepare.result.message, headImg, 1);
         } else if (ret.status == 'progress') {
         } else if (ret.status == 'success') {
-            console.log("1242:"+JSON.stringify(ret));
+          //  console.log("1242:"+JSON.stringify(ret));
             
             chatRecordingSql(retprepare, 'sendMsg', headImg);
             // 发送成功
@@ -1434,7 +1434,7 @@ function getSideInfo(rongUserId) {
             if (ret) {
                 if (ret.code === 200) {
                     // 1 是 2 否
-                    console.log(JSON.stringify(ret))
+                  //  console.log(JSON.stringify(ret))
                     if(ret.data.list.is_blacklist == 1) {
                         // 已把用户拉黑
                         is_blacklist = 1
@@ -2057,7 +2057,7 @@ var countId = 20;
 function chatHis() {
     // messageId -= 20;
     var count = messageId > 20 ? 20 : messageId;
-    console.log(messageId);
+  //  console.log(messageId);
     if (messageId > 1) {
         db.selectSql({
             name: 'db_' + $api.getStorage('userToken'),
@@ -2065,7 +2065,7 @@ function chatHis() {
                 (countId) + ',20'
         }, function (ret, err) {
             if (ret.status) {
-                console.log('数据库聊天记录:'+JSON.stringify(ret));
+              //  console.log('数据库聊天记录:'+JSON.stringify(ret));
                 countId += 20;
                 if (ret.data.length > 0) {
                     renderPageSql(ret.data, 2);
@@ -2079,7 +2079,7 @@ function chatHis() {
                         oldestMessageId: messageId,
                         count: count
                     }, function (ret, err) {
-                        console.log('网路聊天记录:'+JSON.stringify(ret));
+                      //  console.log('网路聊天记录:'+JSON.stringify(ret));
                         
                         allCahtSql(ret.result);
                         for (var i = 0; i < ret.result.length; i++) {
