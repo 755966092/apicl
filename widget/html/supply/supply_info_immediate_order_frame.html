@@ -198,7 +198,7 @@
                         </div>
                     </div>
                     <div class="content flex-def">
-                        {{?it.image_json[0] == null}}
+                        {{?it.image_json.length == 0}}
                         <img src="../../image/noimage.jpg">
                         {{??}}
                         <img src="{{=it.image_json[0]}}">
@@ -263,7 +263,9 @@
     apiready = function(){
         initPage()
         var str = api.pageParam.transmitData.image_json[0];
-        api.pageParam.transmitData.image_json[0] = str.substring(0, str.indexOf('?')) + '?imageView2/3/w/200/h/200/q/75|imageslim'
+        if (api.pageParam.transmitData.image_jso.length > 0) {
+            api.pageParam.transmitData.image_json[0] = str.substring(0, str.indexOf('?')) + '?imageView2/3/w/200/h/200/q/75|imageslim'
+        }
         $api.fixTabBar($api.dom('footer'))
         getData(api.pageParam.transmitData)
         api.addEventListener({

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css"/>
+    <style>
+        .weui-grid {
+            padding: 0;
+            width: 2.5rem;
+            height: 2.5rem;
+            position: relative;
+        }
+        .weui-grid__icon {
+            width: auto;
+            height: auto;
+        }
+        .selIcon {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 0.4rem;
+            height: 0.4rem;
+            background-color: #f00;
+        }
+        .greed {
+            background-color: #0f0;
+        }
+        .hide {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="weui-grids resultList">
+    <script type="text/x-dot-template" id="listT">
+        {{~it :value:index}}
+        <a href="javascript:;" class="weui-grid" tapmode onclick="openImg(this)" data-index="{{=index}}">
+            <span class="selIcon hide" tapmode onclick="selImg(this)"></span>
+            <div class="weui-grid__icon">
+                <img src="{{=value}}" alt="">
+            </div>
+        </a>
+        {{~}}
+    </script>
+</div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript">
+    var data = ["http://img.iinnet.com/Fg5_1forRYyrBYZ5CKlOISCLNDfq", "http://img.iinnet.com/FqYXtzp5p2OGqdpJu2zkoHlkbZh8", "http://img.iinnet.com/FoKs6Bpsv6xKgEVew2nXfQmCLamH"]
+    apiready = function(){
+        api.addEventListener({
+            name: 'showSelIcon'
+        }, function(ret, err){
+            for (let i = 0; i < $api.domAll('.selIcon').length; i++) {
+                const element = $api.domAll('.selIcon')[i];
+                if ($api.hasCls(element, 'hide')) {
+                    $api.removeCls(element, 'hide');
+                } else {
+                    $api.addCls(element, 'hide');
+                }
+            }
+        });
+    };
+        getData(data);
+    function selImg(ele) {
+        if ($api.hasCls(ele, 'greed')) {
+            $api.removeCls(ele, 'greed');
+        } else {
+            $api.addCls(ele, 'greed');
+        }
+    }
+    function openImg(ele) {
+        api.openWin({
+            name: 'wiview_the_image_page_winname',
+            url: '../supply/view_the_image_page_win.html',
+            bounces: false,
+            pageParam: { 
+                paramImg : data,
+                url: $api.attr($api.dom(ele, 'img'), 'src')
+            }
+        });
+    }
+    function initBrow() {
+        var photoBrowser = api.require('photoBrowser');
+        photoBrowser.open({
+            showList: true,
+            images: [
+                'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
+                'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
+                'http://h.hiphotos.baidu.com/image/h%3D300/sign=1f6a583caeefce1bf52bceca9f50f3e8/d000baa1cd11728bc89597e8c1fcc3cec2fd2cbb.jpg',
+                'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
+                'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
+                'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
+                'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
+                'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
+                'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
+                'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
+                'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
+                'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
+                'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
+                'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
+                'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
+                'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
+                'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
+                'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
+                'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
+                'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
+                'http://e.hiphotos.baidu.com/image/pic/item/d8f9d72a6059252dc0311cce3d9b033b5ab5b9d1.jpg'
+            ],
+            placeholderImg: 'widget://res/img/apicloud.png',
+            bgColor: '#000'
+        }, function (ret, err) {
+            if (ret) {
+                alert(JSON.stringify(ret));
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+        // var imageBrowser = api.require('imageBrowser');
+        // imageBrowser.openImages({
+        //     showList: true,
+        //     imageUrls: [
+        //         'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
+        //         'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
+        //         'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
+        //         'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
+        //         'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
+        //         'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
+        //         'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
+        //         'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
+        //         'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
+        //         'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
+        //         'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
+        //         'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
+        //         'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
+        //         'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
+        //         'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
+        //         'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
+        //         'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
+        //         'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
+        //         'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
+        //         'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
+        //         'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
+        //         'http://e.hiphotos.baidu.com/image/pic/item/d8f9d72a6059252dc0311cce3d9b033b5ab5b9d1.jpg'
+        //     ]
+        // });
+    }
+</script>
+</html>
