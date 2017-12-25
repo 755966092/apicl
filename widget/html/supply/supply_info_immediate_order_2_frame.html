@@ -259,7 +259,7 @@
                 </div>
                 <div class="content clearfix">
                     <div class="div flex-def">
-                        {{?it.image_json[0] == null}}
+                        {{?it.image_json.length == 0}}
                         <img  src="../../image/noimage.jpg">
                         {{??}}
                         <img  src="{{=it.image_json[0]}}">
@@ -342,7 +342,9 @@
     apiready = function(){
          $api.fixTabBar($api.dom('footer'));
         var str = api.pageParam.transmitData.image_json[0];
-        api.pageParam.transmitData.image_json[0] = str.substring(0, str.indexOf('?')) + '?imageView2/3/w/200/h/200/q/75|imageslim'
+        if(api.pageParam.transmitData.image_json.length > 0) {
+            api.pageParam.transmitData.image_json[0] = str.substring(0, str.indexOf('?')) + '?imageView2/3/w/200/h/200/q/75|imageslim'
+        }
         getData(api.pageParam.transmitData)
         //console.log(JSON.stringify(api.pageParam.transmitData))
         computeTatol();
