@@ -95,13 +95,19 @@
     var data = [];
     var aCount;
     apiready = function(){
+        moduleInit();
+        if (api.pageParam.imgJson) {
+            $api.addCls($api.dom('.btnWrap'), 'hide');
+            data = api.pageParam.imgJson;
+            getData(data)
+        } else {
+            requireData();
+        }
         showSelIcon();
-        requireData();
     };
      
     // 监听事件
     function showSelIcon() {
-        
         api.addEventListener({
             name: 'showSelIcon'
         }, function (ret, err) {
@@ -157,7 +163,7 @@
         // 获取选中图片的index
         // 删除
         if ($api.text(ele)=='上传') {
-            var UIMediaScanner = api.require('UIMediaScanner');
+            
             UIMediaScanner.open({
                 type: 'picture',
                 column: 4,
@@ -199,13 +205,38 @@
                 rotation: true
             }, function (ret) {
                 if (ret) {
-                    var str = ''
-                    for (let i = 0; i < ret.list.length; i++) {
-                        const element = ret.list[i];
-                        str += '<a href="javascript:;" class="weui-grid" data-url="'+ element.path +'" tapmode onclick="openImg(this)"><span class="selIcon hide" tapmode onclick="selImg(this);event.stopPropagation();" data-url="'+ element.path +'"></span><span data-src="' + element.path +'" class="shadow flex-def flex-cCenter"><p> 0 %</p></span><div class="weui-grid__icon"><img src="'+ element.path +'" alt=""></div></a>'
+                    if (api.systemType == 'ios') {
+                        var str = '',imgLength = ret.list.length,flagLength = 0;
+                        for (let i = 0; i < ret.list.length; i++) {
+                            UIMediaScanner.transPath({
+                                path: ret.list[i].path
+                            }, function (retTransPath, err) {
+                                if (retTransPath) {
+                                    flagLength++;
+                                    // console.log(JSON.stringify(ret));
+                                    ret.list[i].path = retTransPath.path;
+                                    str += '<a href="javascript:;" class="weui-grid" data-url="' + retTransPath.path + '" tapmode onclick="openImg(this)"><span class="selIcon hide" tapmode onclick="selImg(this);event.stopPropagation();" data-url="' + retTransPath.path + '"></span><span data-src="' + retTransPath.path + '" class="shadow flex-def flex-cCenter"><p> 0 %</p></span><div class="weui-grid__icon"><img src="' + retTransPath.path + '" alt=""></div></a>'
+                                    if (flagLength == imgLength) {
+                                         $api.append($api.dom('.resultList'), str);
+                                         upImgFile(ret.list)
+                                    }
+                                } else {
+                                    alert(JSON.stringify(err));
+                                }
+                            });
+                        }
+                        
+                        
+                       
+                    } else {
+                        var str = ''
+                        for (let i = 0; i < ret.list.length; i++) {
+                            const element = ret.list[i];
+                            str += '<a href="javascript:;" class="weui-grid" data-url="'+ element.path +'" tapmode onclick="openImg(this)"><span class="selIcon hide" tapmode onclick="selImg(this);event.stopPropagation();" data-url="'+ element.path +'"></span><span data-src="' + element.path +'" class="shadow flex-def flex-cCenter"><p> 0 %</p></span><div class="weui-grid__icon"><img src="'+ element.path +'" alt=""></div></a>'
+                        }
+                        $api.append($api.dom('.resultList'), str);
+                        upImgFile(ret.list)
                     }
-                    $api.append($api.dom('.resultList'), str);
-                    upImgFile(ret.list)
                 }
             });
         } else {
@@ -244,6 +275,7 @@
     function upImgFile(imgArr) {
         var imgArrlength = imgArr.length,imgUrlArr=[];
         var obj = api.require('qiniuUpfile');
+        console.log(JSON.stringify(imgArr, null, 4))
         for (let i = 0; i < imgArr.length; i++) {
             const element = imgArr[i];
             const domShadowText = $api.dom('span[data-src="' + imgArr[i].path + '"] p');
@@ -251,6 +283,7 @@
             const domA = $api.dom('a[data-url="' + imgArr[i].path + '"]');
             const domSpan = $api.dom('span[data-url="' + imgArr[i].path + '"]');
             const domImg = $api.dom('img[src="' + imgArr[i].path + '"]');
+           
             obj.upfile({
                 file: imgArr[i].path,
             }, function (ret, err) {
@@ -270,7 +303,6 @@
                         }
                     } else if (ret.oper == "progress") {
                         //上传过程中获取进度数据
-                        // console.log(ret.percent+'--测试--'+Math.floor(ret.percent));
                         $api.text(domShadowText, Math.floor(ret.percent)+'%');
                     }
                 }

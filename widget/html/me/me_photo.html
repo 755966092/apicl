@@ -22,6 +22,9 @@
 <script type="text/javascript">
     apiready = function(){
         fnInit();
+        if (api.pageParam.imgJson) {
+            $api.css($api.dom('.rightBtn'), 'display:none');
+        }
         api.openFrame({
             name: 'me_photo_frame',
             url: './me_photo_frame.html',
@@ -31,6 +34,9 @@
                 y: headerH,
                 w: 'auto',
                 h: 'auto'
+            },
+            pageParam: {
+                imgJson: api.pageParam.imgJson
             }
         });
         // api.addEventListener({

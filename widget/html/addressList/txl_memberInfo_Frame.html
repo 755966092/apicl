@@ -7,10 +7,28 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
-    <link rel="stylesheet" type="text/css" href="../../css//weui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/swiper.min.css" />
     <style>
+        header.header {
+            position: fixed;
+            top: 0;
+            z-index: 999;
+            width: 100%;
+            background: rgba(0, 0, 0, 0);
+        }
+        header.headerFixed {
+        }
+         header.header .rightBtn {
+            font-size: .64rem;
+            background: url(../../image/iocn_addressList/icon_drop.png)no-repeat;
+            background-position: right center;
+            -webkit-background-size: .439rem .102rem;
+            background-size: .439rem .102rem;
+            color: #fff;
+        }
            /* 字体位置 */
-    
+        
         .weui-cell {
             font-size: 0.28rem;
         }
@@ -114,14 +132,40 @@
         .hide {
             display: none;
         }
+          .swiper-wrapper img {
+            height: 4.36rem;
+        }
     </style>
 </head>
 
 <body>
-    
     <!-- <p class="wran">加入会员后可查看对方最近一次活跃时间</p> -->
+    <header class="header">
+        <div class="head">
+            <div class="headNo1">
+                <span class="callback" tapmode onclick="api.closeWin()">
+                    返回
+                </span>
+                <span class="winTitle">
+                    详细信息
+                </span>
+            </div>
+            <span class="rightBtn" tapmode onclick="enter()"></span>
+        </div>
+    </header>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <img src="../../image/iocn_addressList/IMG_0559.PNG" class="swiper-slide blue-slide">
+             <!-- <img src="http://imgsrc.baidu.com/imgad/pic/item/83025aafa40f4bfb281dbe70094f78f0f63618c0.jpg" class="swiper-slide blue-slide">
+            <img src="http://imgsrc.baidu.com/imgad/pic/item/5366d0160924ab18cb0aad123ffae6cd7b890bf2.jpg" class="swiper-slide red-slide">
+            <img src="http://img.taopic.com/uploads/allimg/140826/267848-140R60T34860.jpg" class="swiper-slide orange-slide">  -->
+        </div>
+        <div class="swiper-pagination">
+
+        </div>
+    </div>
     <div class="main">
-        <div class="weui-cells mt30">
+        <div class="weui-cells">
             <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openInfo(this)" data-val="details">
                 <div class="weui-cell__hd">
                     <img class="headImg" src="../../image/icon_defaultHead.png" id="head_img_url" alt="">
@@ -310,8 +354,17 @@
                 </div>
             </a>
         </div>
+        <div class="weui-cells mt30">
+            <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openAlbum()">
+                <div class="weui-cell__bd">
+                    <p>照片</p>
+                </div>
+                <div id="hometown" class="weui-cell__ft">
+                </div>
+            </a>
+        </div>
         <!-- <div class="btn" id="btn" tapmode onclick="addFriends(this)">发送消息</div> -->
-        <div class="page__bd page__bd_spacing">
+        <div class=" page__bd page__bd_spacing">
             <a  id="btn" href="javascript:;" class="btn hide weui-btn weui-btn_primary" tapmode onclick="addFriends(this)">发送消息</a>
         </div>
         <!-- <div class="shadow"></div> -->
@@ -319,13 +372,17 @@
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/swiper.min.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript" src="../../data/city_3.js"></script>
 <script type="text/javascript">
     var paramNickname, paramRealName, paramSex, paramHeadImg, relationship_level_flag;
     var SQLName = 'db_' + $api.getStorage('userToken');
+    var oneselfPageFlag = 0, userFlag = 0;
     var targetRongId;
+    var imgJson;
     apiready = function() {
+        fnInit();
         moduleInit();
         // $api.css($api.dom('.shadow'), 'height:' + $api.offset($api.dom('.main')).h + 'px;');
         $api.text($api.byId('nickname'), api.pageParam.name);
@@ -394,7 +451,91 @@
                 location: 'bottom'
             });
         });
+        
+        
+         // 监听是否是未加入用户
+        api.addEventListener({
+            name: 'NotJoinedTheUser'
+        }, function (ret, err) {
+            userFlag = 1;
+        });
+        api.addEventListener({
+            name: 'oneselfPage'
+        }, function (ret, err) {
+            if (ret) {
+                oneselfPageFlag = 1;
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     };
+     function enter() {
+            api.openWin({
+                name: 'txl_addFellow_PersonInfoSet_win',
+                url: './txl_addFellow_PersonInfoSet_win.html',
+                pageParam: {
+                    userId: api.pageParam.userId,
+                    oneselfPageFlag: oneselfPageFlag,
+                    userFlag: userFlag
+                },
+                bounces: false
+            });
+        }
+
+    function scrollPage() {
+            // 初始化页面
+            window.onscroll = function () {
+                var opacityNum = document.body.scrollTop / 145;
+                if (opacityNum < 0.1) {
+                    $api.css($api.dom('header.header'), 'background: linear-gradient(rgba(58,57,62,.5), rgba(58,57,62,0));');
+                } else {
+                    $api.css($api.dom('header.header'), 'background-color: rgba(58,57,62,' + opacityNum + ')');
+                }
+            }
+        }
+    // 轮播图
+    function swiperFun() {
+        var mySwiper = new Swiper('.swiper-container', {
+            loop: true,
+            autoplay: 3000,
+            pagination: '.swiper-pagination',
+            observer: true, //修改swiper自己或子元素时，自动初始化swiper
+            observeParents: true, //修改swiper的父元素时，自动初始化swiper
+        });
+    }
+    // 
+    function initSwiper() {
+        var str='';
+        if (imgJson.length>0) {
+            // $api.addCls($api.dom('header'), 'headerFixed');
+            for (let i = 0; i < imgJson.length; i++) {
+                const element = imgJson[i];
+                if (i < 5) {
+                    str += '<img src="'+ element +'?imageMogr2/auto-orient/thumbnail/!375x218r/gravity/Center/crop/x218/format/jpg/blur/1x0/quality/100|imageslim" class="swiper-slide blue-slide" tapmode onclick="openAlbum(this)">'
+                } else {
+                    break;
+                }
+            }
+            $api.html($api.dom('.swiper-wrapper'), str);
+            swiperFun();
+            
+        } else {
+            
+            // $api.addCls($api.dom('header'), 'clearfix');
+            // $api.css($api.dom('.main'), 'padding-top:1.1rem');
+        }
+        scrollPage();
+        
+    }
+    function openAlbum(ele) {
+        // alert('打开相册')
+        api.openWin({
+            name: 'winname',
+            url: '../me/me_photo.html',
+            bounces: false,
+            pageParam: {imgJson: imgJson}
+        });
+    }
     // 打开供求圈页面
     function openSupplyPage(flag) {
         var url;
@@ -541,6 +682,9 @@
                         }
                     }, function(retDetail, errDetail) {
                         if (retDetail) {
+                            // console.log(JSON.stringify(retDetail,null,4));
+                            imgJson = eval(retDetail.data.info.image_json);
+                            initSwiper();
                             infoComparison(data, retDetail.data.info);
                             infoComparison2(ret.data.info, retDetail.data.info);
                             relationship_level_flag = retDetail.data.relationship_level;

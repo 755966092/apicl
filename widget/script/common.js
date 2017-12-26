@@ -107,7 +107,8 @@ var rong,
 	aliPay,
 	ajpush,
 	fs,
-	FNImageClip,
+    FNImageClip,
+    UIMediaScanner,
 	SQLName;
 
 function moduleInit() {
@@ -145,7 +146,8 @@ function moduleInit() {
 	UIActionSelector = api.require("UIActionSelector");
 	// 复制剪切板
 	clipBoard = api.require("clipBoard");
-
+    // 上传图片
+    UIMediaScanner = api.require('UIMediaScanner');
 }
 
 // 接入融云
