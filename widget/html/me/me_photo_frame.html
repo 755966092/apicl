@@ -12,6 +12,7 @@
             width: 2.5rem;
             height: 2.5rem;
             position: relative;
+             overflow: hidden;
         }
         .weui-grid__icon {
             width: auto;
@@ -28,34 +29,94 @@
         .greed {
             background-color: #0f0;
         }
+        .shadow {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,.5);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .shadow p {
+            font-size: 0.28rem;
+            color: #fff;
+            width: 100%;
+            height: 0.4rem;
+            background-color: rgba(255,255,255,.4);
+            text-align: center;
+        }
         .hide {
             display: none;
+        }
+        .btnWrap {
+            position: fixed;
+            bottom: 0;
+            height: 0.8rem;
+            width: 100%;
+        }
+        .btn {
+            width: 100%;
+            height: .8rem;
+            line-height: 0.8rem;
+            font-size: 0.3rem;
+            background-color: #26AB28;
+            text-align: center;
+            color: #fff;
+        }
+        .delRed {
+            background-color: #E44545;
+        }
+        body {
+            padding-bottom: 0.8rem;
         }
     </style>
 </head>
 <body>
-    <div class="weui-grids resultList">
+    <div class="weui-grids resultList"></div>
     <script type="text/x-dot-template" id="listT">
         {{~it :value:index}}
-        <a href="javascript:;" class="weui-grid" tapmode onclick="openImg(this)" data-index="{{=index}}">
-            <span class="selIcon hide" tapmode onclick="selImg(this)"></span>
+        <a href="javascript:;" class="weui-grid" data-url="{{=value}}" tapmode onclick="openImg(this)" data-index="{{=index}}">
+            <span class="selIcon hide" tapmode onclick="selImg(this);event.stopPropagation();" data-url="{{=value}}" data-index="{{=index}}"></span>
+            <!-- <span data-url="' + element.path +'" class="shadow flex-def flex-cCenter"><p> 0 %</p></span> -->
             <div class="weui-grid__icon">
-                <img src="{{=value}}" alt="">
+                <img src="{{=value}}?imageView2/1/w/200/h/200/q/75|imageslim" alt="">
             </div>
         </a>
         {{~}}
     </script>
-</div>
+    <div class="btnWrap">
+        <div class="btn" onclick="delImg(this)"  tapmode>上传</div>
+    </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    var data = ["http://img.iinnet.com/Fg5_1forRYyrBYZ5CKlOISCLNDfq", "http://img.iinnet.com/FqYXtzp5p2OGqdpJu2zkoHlkbZh8", "http://img.iinnet.com/FoKs6Bpsv6xKgEVew2nXfQmCLamH"]
+    var data = [];
+    var aCount;
     apiready = function(){
+        showSelIcon();
+        requireData();
+    };
+     
+    // 监听事件
+    function showSelIcon() {
+        
         api.addEventListener({
             name: 'showSelIcon'
-        }, function(ret, err){
+        }, function (ret, err) {
+            // 上传按钮变删除
+            var btn = $api.dom('.btn');
+            if ($api.text(btn) == '上传') {
+                $api.text(btn, '删除');
+                $api.addCls(btn, 'delRed');
+            } else {
+                $api.text(btn, '上传');
+                $api.removeCls(btn, 'delRed');
+                if (aCount != $api.domAll('a').length) {
+                    editImageInfo('del');
+                }
+            }
             for (let i = 0; i < $api.domAll('.selIcon').length; i++) {
                 const element = $api.domAll('.selIcon')[i];
                 if ($api.hasCls(element, 'hide')) {
@@ -65,8 +126,102 @@
                 }
             }
         });
-    };
-        getData(data);
+    }
+    // 请求数据
+    function requireData() {
+        api.ajax({
+            url: apiSite + '/user_center/editImageInfoIndex',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: $api.getStorage('userToken'),
+                }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    data = eval(ret.data.info);
+                    getData(data);
+                    aCount = $api.domAll('a').length
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+    // 删除图片
+    function delImg(ele) {
+        // 获取选中图片的index
+        // 删除
+        if ($api.text(ele)=='上传') {
+            var UIMediaScanner = api.require('UIMediaScanner');
+            UIMediaScanner.open({
+                type: 'picture',
+                column: 4,
+                classify: true,
+                max: 9,
+                sort: {
+                    key: 'time',
+                    order: 'desc'
+                },
+                texts: {
+                    stateText: '已选择*项',
+                    cancelText: '取消',
+                    finishText: '完成'
+                },
+                styles: {
+                    bg: '#fff',
+                    mark: {
+                        icon: '',
+                        position: 'bottom_left',
+                        size: 20
+                    },
+                    nav: {
+                        bg: '#eee',
+                        stateColor: '#000',
+                        stateSize: 18,
+                        cancelBg: 'rgba(0,0,0,0)',
+                        cancelColor: '#000',
+                        cancelSize: 18,
+                        finishBg: 'rgba(0,0,0,0)',
+                        finishColor: '#000',
+                        finishSize: 18
+                    }
+                },
+                scrollToBottom: {
+                    intervalTime: 3,
+                    anim: true
+                },
+                exchange: true,
+                rotation: true
+            }, function (ret) {
+                if (ret) {
+                    var str = ''
+                    for (let i = 0; i < ret.list.length; i++) {
+                        const element = ret.list[i];
+                        str += '<a href="javascript:;" class="weui-grid" data-url="'+ element.path +'" tapmode onclick="openImg(this)"><span class="selIcon hide" tapmode onclick="selImg(this);event.stopPropagation();" data-url="'+ element.path +'"></span><span data-src="' + element.path +'" class="shadow flex-def flex-cCenter"><p> 0 %</p></span><div class="weui-grid__icon"><img src="'+ element.path +'" alt=""></div></a>'
+                    }
+                    $api.append($api.dom('.resultList'), str);
+                    upImgFile(ret.list)
+                }
+            });
+        } else {
+            // 删除
+            var delArr = [];
+            for (let i = 0; i < $api.domAll('.greed').length; i++) {
+                const element = $api.domAll('.greed')[i];
+                delArr.push($api.attr(element, 'data-url'))
+            }
+            for (let j = 0; j < delArr.length; j++) {
+                const element = delArr[j];
+                $api.remove($api.dom('a[data-url="'+ element +'"]'));
+            }
+            
+        }
+    }
     function selImg(ele) {
         if ($api.hasCls(ele, 'greed')) {
             $api.removeCls(ele, 'greed');
@@ -81,74 +236,86 @@
             bounces: false,
             pageParam: { 
                 paramImg : data,
-                url: $api.attr($api.dom(ele, 'img'), 'src')
+                url: $api.attr(ele, 'data-url')
             }
         });
     }
-    function initBrow() {
-        var photoBrowser = api.require('photoBrowser');
-        photoBrowser.open({
-            showList: true,
-            images: [
-                'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
-                'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
-                'http://h.hiphotos.baidu.com/image/h%3D300/sign=1f6a583caeefce1bf52bceca9f50f3e8/d000baa1cd11728bc89597e8c1fcc3cec2fd2cbb.jpg',
-                'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
-                'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
-                'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
-                'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
-                'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
-                'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
-                'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
-                'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
-                'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
-                'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
-                'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
-                'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
-                'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
-                'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
-                'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
-                'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
-                'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
-                'http://e.hiphotos.baidu.com/image/pic/item/d8f9d72a6059252dc0311cce3d9b033b5ab5b9d1.jpg'
-            ],
-            placeholderImg: 'widget://res/img/apicloud.png',
-            bgColor: '#000'
-        }, function (ret, err) {
-            if (ret) {
-                alert(JSON.stringify(ret));
-            } else {
-                alert(JSON.stringify(err));
+    // 上传图片
+    function upImgFile(imgArr) {
+        var imgArrlength = imgArr.length,imgUrlArr=[];
+        var obj = api.require('qiniuUpfile');
+        for (let i = 0; i < imgArr.length; i++) {
+            const element = imgArr[i];
+            const domShadowText = $api.dom('span[data-src="' + imgArr[i].path + '"] p');
+            const domShadow = $api.dom('span[data-src="' + imgArr[i].path + '"]');
+            const domA = $api.dom('a[data-url="' + imgArr[i].path + '"]');
+            const domSpan = $api.dom('span[data-url="' + imgArr[i].path + '"]');
+            const domImg = $api.dom('img[src="' + imgArr[i].path + '"]');
+            obj.upfile({
+                file: imgArr[i].path,
+            }, function (ret, err) {
+                if (ret.status) {
+                    if (ret.oper == "complete") {
+                        //上传成功后组装访问路径，或直接访问文档
+                        // 'http://' + baseUrl + '/' + ret.info.key
+                        var imgUrl = 'http://' + baseUrl + '/' + ret.info.key; 
+                        $api.attr(domA, 'data-url', imgUrl);
+                        imgUrlArr.push(imgUrl);
+                        $api.attr(domSpan, 'data-url', imgUrl);
+                        $api.attr(domImg, 'src', imgUrl+'?imageView2/1/w/200/h/200/q/75|imageslim');
+                        $api.addCls(domShadow, 'hide');
+                        if (imgUrlArr.length == imgArrlength) {
+                            // 上传完成, 
+                            editImageInfo('add');
+                        }
+                    } else if (ret.oper == "progress") {
+                        //上传过程中获取进度数据
+                        // console.log(ret.percent+'--测试--'+Math.floor(ret.percent));
+                        $api.text(domShadowText, Math.floor(ret.percent)+'%');
+                    }
+                }
+            });
+        }
+    }
+    // 上传图
+    function editImageInfo(flag) {
+        var imgDomArr = $api.domAll('a');
+        var imgArr=[];
+        for (let i = 0; i < imgDomArr.length; i++) {
+            const element = imgDomArr[i];
+            imgArr.push($api.attr(element, 'data-url'))
+        }
+        data = imgArr;
+        if (flag == 'add') {
+            toastText = '上传成功'
+        } else {
+            toastText = '删除成功'
+        }
+        api.ajax({
+            url: apiSite + '/user_center/editImageInfo',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: $api.getStorage('userToken'),
+                    image_json: imgArr
+                }
             }
-        });
-        // var imageBrowser = api.require('imageBrowser');
-        // imageBrowser.openImages({
-        //     showList: true,
-        //     imageUrls: [
-        //         'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
-        //         'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
-        //         'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
-        //         'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
-        //         'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
-        //         'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
-        //         'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
-        //         'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
-        //         'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
-        //         'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
-        //         'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
-        //         'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
-        //         'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
-        //         'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
-        //         'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
-        //         'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
-        //         'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
-        //         'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
-        //         'http://b.hiphotos.baidu.com/image/pic/item/d52a2834349b033b4257fa101cce36d3d439bd18.jpg',
-        //         'http://b.hiphotos.baidu.com/image/pic/item/d31b0ef41bd5ad6e4411652088cb39dbb7fd3c0b.jpg',
-        //         'http://g.hiphotos.baidu.com/image/pic/item/4034970a304e251f3b402e83ad86c9177f3e5312.jpg',
-        //         'http://e.hiphotos.baidu.com/image/pic/item/d8f9d72a6059252dc0311cce3d9b033b5ab5b9d1.jpg'
-        //     ]
-        // });
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    api.toast({
+                        msg: toastText,
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
     }
 </script>
 </html>
