@@ -187,6 +187,7 @@
         
         .sold_cound,
         .avg_point {
+            /* background-color: #a00; */
             margin-left: .1rem;
             font-size: 0;
         }
@@ -486,8 +487,22 @@
         .swiper-wrapper img {
             height: 4.36rem;
         }
-        
-       
+        .classifyLabel {
+            border: .01rem solid #0ABB07;
+            color: #0ABB07;
+            font-size: 0.24rem;
+            border-radius: .17rem;
+            padding: .01rem .12rem;
+            margin-right: 0.1rem;
+        }
+         .icon {
+            padding-left: 0.35rem;
+            background: url(../../image/icon_supply/icon_pageviews.png) no-repeat;
+            background-size: .26rem .16rem;
+            background-position: left .05rem;
+            font-size: .18rem;
+            color: #999;
+        }
     </style>
 </head>
 
@@ -540,14 +555,18 @@
                     <div class="priceText"> ￥
                         <span class="price1">200.00/小时</span>
                     </div>
-                    <div class="time"> 2017-12-12 18:25:31 </div>
+                    <div class="time">
+                        <span class="classifyLabel">情感交流</span>
+                        <span class="classifyLabel">情感交流</span>
+                    </div>
                 </div>
-                <div class="sold_cound flex-def flex-zLeftRight flex-cCenter">
-                    <span class="count">[已售0]</span>
-                    <span class="avg_point"> </span>
+                <div class="sold_cound flex-def flex-zLeftRight flex-cCenter flex-zBetween">
+                    <span class="count"><span class="icon">66</span>[已售0]</span>
+                    <span class="avg_point"> 2017-12-12 18:25:31</span>
+                    <span class="form formbg">[北京]距离 nullkm</span>
                 </div>
                 <div class="form"> 线下 + 线下服务
-                    <span class="form formbg fr">距离 nullkm</span>
+                    <span class="form  fr">2017-12-12 18:25:31</span>
                 </div>
             </div>
             <div class="info">
@@ -603,7 +622,7 @@
             <span id="collect" ontouchstart="supplyCollect(this)">
                 <i></i>收藏</span> {{?}}
             <span tapmode onclick="immediateOrder(this)">立即下单</span>
-        </footer> -->
+        </footer>-->
     <script type="text/x-dot-template" id="listT">
         <div class="main flex-def flex-zTopBottom">
             <div class="title flex-def flex-zLeftRight flex-cCenter" tapmode onclick="openUserInfoPage(this)" data-id="{{=it.info.user_id}}">
@@ -646,30 +665,34 @@
                         ￥<span class="price1">{{=it.info.price}}/{{=it.info.unit}}</span>
                     </div>
                     <div class="time">
-                        {{=it.info.create_time}}
+                        <!-- {{=it.info.create_time}} -->
+                        <span class="classifyLabel">{{=it.info.category_name}}</span>
+                        <span class="classifyLabel">{{=it.info.sub_type}}</span>
                     </div>
                 </div>
-                <div class="sold_cound flex-def flex-zLeftRight flex-cCenter">
-                    <span class="count">[已售{{=it.info.sold_count}}]</span>
+                <div class="sold_cound flex-def flex-zLeftRight flex-cCenter flex-zBetween">
+                    <span class="count"><span class="icon">{{=it.info.browse_count}} </span>  [已售{{=it.info.sold_count}}]</span>
+                    
                     <span class="avg_point">
                         {{for(var i = 0;i < it.info.avg_point;i++){ }}
                             <span class="avg_pointIcon"></span> {{};}}
                     </span>
+                    {{?it.info.distance>=0}}
+                        <span class="form formbg">[{{=it.info.city}}·{{=it.info.district}}] 距离 {{=it.info.distance}}km</span> 
+                    {{?}}
                 </div>
                 {{?it.info.form == 1}}
                 <div class="form">
-                    线上服务 {{?it.info.distance>=0}}
-                    <span class="form formbg fr">距离 {{=it.info.distance}}km</span> {{?}}
+                    线上服务 
+                    <span class="form  fr">{{=it.info.create_time}}</span>
                 </div>
                 {{??it.info.form == 2}}
                 <div class="form">
-                    线下服务 {{?it.info.distance>=0}}
-                    <span class="form formbg fr">距离 {{=it.info.distance}}km</span> {{?}}
+                    线下服务 <span class="form  fr">{{=it.info.create_time}}</span>
                 </div>
                 {{??}}
                 <div class="form">
-                    线下 + 线下服务 {{?it.info.distance>=0}}
-                    <span class="form formbg fr">距离 {{=it.info.distance}}km</span> {{?}}
+                    线下 + 线下服务 <span class="form  fr">{{=it.info.create_time}}</span>
                 </div>
                 {{?}}
 
@@ -945,8 +968,10 @@
     }
 
     function renderPage(ret, flag, compaby_name, supply_id) {
+        var sub_type = ['自产自销', '代理代销', '技能服务', '出租租赁', '相亲交友'];
             // 解析图片json
-        ret.data.info.image_json = eval(ret.data.info.image_json);
+        ret.data.info.sub_type = sub_type[ret.data.info.sub_type-1]
+            ret.data.info.image_json = eval(ret.data.info.image_json);
         paramImg = ret.data.info.image_json;
         var eleHtml = '';
         for (var i = 0; i < ret.data.info.image_json.length; i++) {
@@ -978,6 +1003,8 @@
         }
         ret.data.info.type = ret.data.info.type === 1 ? "个人" : "公司";
         $api.css($api.dom('.loading'), 'display:none');
+        console.log(JSON.stringify(ret));
+        
         getData(ret.data);
         $api.fixTabBar($api.dom('footer'))
         $api.fixTabBar($api.dom('footer'))
