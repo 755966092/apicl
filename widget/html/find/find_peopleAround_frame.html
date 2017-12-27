@@ -155,12 +155,36 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    var paramFlitrate;
+    var paramFlitrate, page_num = 1, flag = 0,datalList=[];
     apiready = function(){
         eventMonitoring('ScreeningIsComplete');
-        requireData()
+        requireData();
+        scrollBotton();
     };
+    var scrollFlag = 1
+     function scrollBotton() {
+            // 滚动到底部触发的事件
+            api.addEventListener({
+                name: 'scrolltobottom',
+                extra: {
+                    threshold: 0 //设置距离底部多少距离时触发，默认值为0，数字类型
+                }
+            }, function (ret, err) {
+                
+                // if ($api.text($api.dom('.bbottomLoading')) == '暂无更多供求') {
+                // } else {
+                if (scrollFlag) {
+                    scrollFlag = 0;
+                    // $api.css($api.dom('.bbottomLoading'), 'display: block');
+                    // if (page_num == 1) {
+                    //     page_num = 2;
+                    // }
+                    requireData(paramFlitrate);
+                }
+                // }
 
+            });
+        }
     // 事件监听
     function eventMonitoring(eventName) {
         api.addEventListener({
@@ -168,9 +192,10 @@
         }, function(ret, err) {
             if (ret) {
                 $api.css($api.dom('.loading'), 'display: block');
-                requireData(ret);
-
+                datalList = [];
+                page_num = 1;
                 paramFlitrate = ret;
+                requireData(ret);
             } else {
                 alert(JSON.stringify(err));
             }
@@ -215,14 +240,18 @@
                 hometown:param.hometown,
                 start_age:param.start_age,
                 end_age:param.end_age,
+                page_num: page_num
             }
         } else {
             obj = {
                 token: $api.getStorage('userToken'),
                 latitude: api.pageParam.lat,
-                longitude: api.pageParam.lon
+                longitude: api.pageParam.lon,
+                page_num: page_num
             }
         }
+        console.log(JSON.stringify(obj));
+        
         api.ajax({
             url: apiSite + '/location/nearByUserList',
             method: 'post',
@@ -231,9 +260,13 @@
                 values: obj
             }
         }, function(ret, err) {
+            api.refreshHeaderLoadDone();
             if(ret) {
                 if (ret.code === 200) {
-                    selectSql(ret.data.list)
+                    scrollFlag = 1;
+                    page_num++;
+                    datalList = datalList.concat(ret.data.list)
+                    selectSql(datalList)
                 } else {
                     alert(ret.msg)
                 }
