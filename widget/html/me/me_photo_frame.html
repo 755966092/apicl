@@ -24,10 +24,12 @@
             top: 0;
             width: 0.4rem;
             height: 0.4rem;
-            background-color: #f00;
+            background:url(../../image/icon_my/icon_imgSel.png)no-repeat;
+            background-size: .4rem;
         }
         .greed {
-            background-color: #0f0;
+            background:url(../../image/icon_my/icon_imgSel2.png)no-repeat;
+            background-size: .4rem;
         }
         .shadow {
             width: 100%;
@@ -59,7 +61,7 @@
             height: .8rem;
             line-height: 0.8rem;
             font-size: 0.3rem;
-            background-color: #26AB28;
+            background: #26AB28;
             text-align: center;
             color: #fff;
         }
@@ -94,6 +96,7 @@
 <script type="text/javascript">
     var data = [];
     var aCount;
+    var clickFlag = 1;
     apiready = function(){
         moduleInit();
         if (api.pageParam.imgJson) {
@@ -114,11 +117,15 @@
             // 上传按钮变删除
             var btn = $api.dom('.btn');
             if ($api.text(btn) == '上传') {
+                clickFlag = 0;
                 $api.text(btn, '删除');
                 $api.addCls(btn, 'delRed');
             } else {
+                clickFlag = 1;
                 $api.text(btn, '上传');
                 $api.removeCls(btn, 'delRed');
+                // console.log('aCount:'+aCount)
+                // console.log('后来'+$api.domAll('a').length)
                 if (aCount != $api.domAll('a').length) {
                     editImageInfo('del');
                 }
@@ -257,15 +264,24 @@
         }
     }
     function openImg(ele) {
-        api.openWin({
-            name: 'wiview_the_image_page_winname',
-            url: '../supply/view_the_image_page_win.html',
-            bounces: false,
-            pageParam: { 
-                paramImg : data,
-                url: $api.attr(ele, 'data-url')
+        if (clickFlag == 1) {
+            api.openWin({
+                name: 'wiview_the_image_page_winname',
+                url: '../supply/view_the_image_page_win.html',
+                bounces: false,
+                pageParam: { 
+                    paramImg : data,
+                    url: $api.attr(ele, 'data-url')
+                }
+            });
+        } else {
+            // 选择图片selIcon
+             if ($api.hasCls($api.dom(ele, '.selIcon'), 'greed')) {
+                $api.removeCls($api.dom(ele, '.selIcon'), 'greed');
+            } else {
+                $api.addCls($api.dom(ele, '.selIcon'), 'greed');
             }
-        });
+        }
     }
     // 上传图片
     function upImgFile(imgArr) {
