@@ -1002,9 +1002,22 @@
             ret.data.info.unit = '其他'
         }
         ret.data.info.type = ret.data.info.type === 1 ? "个人" : "公司";
+        var retSql = db.selectSqlSync({
+            name: 'db_' + $api.getStorage('userToken'),
+            sql: 'SELECT * FROM addressList_simplify WHERE user_id = ' + ret.data.info.user_id
+        });
+        if (retSql.status) {
+            // 如果有备注返回备注
+            if (retSql.data.length == 1) {
+                ret.data.info.company_name = retSql.data[0].subTitle;
+                ret.data.info.head_img_url = retSql.data[0].img;
+                ret.data.info.nickname = retSql.data[0].title;
+            }
+        } else {
+            alert('292' + JSON.stringify(err));
+        }
         $api.css($api.dom('.loading'), 'display:none');
-        console.log(JSON.stringify(ret));
-        
+
         getData(ret.data);
         $api.fixTabBar($api.dom('footer'))
         $api.fixTabBar($api.dom('footer'))

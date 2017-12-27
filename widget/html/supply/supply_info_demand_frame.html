@@ -404,6 +404,23 @@
             height: 100%;
             background-color: #0ABB07;
         }
+
+         .classifyLabel {
+            border: .01rem solid #0ABB07;
+            color: #0ABB07;
+            font-size: 0.24rem;
+            border-radius: .17rem;
+            padding: .01rem .12rem;
+            margin-right: 0.1rem;
+        }
+         .icon {
+            padding-left: 0.35rem;
+            background: url(../../image/icon_supply/icon_pageviews.png) no-repeat;
+            background-size: .26rem .16rem;
+            background-position: left .05rem;
+            font-size: .18rem;
+            color: #999;
+        }
     </style>
 </head>
 
@@ -479,31 +496,31 @@
                         ￥<span class="reward">{{=it.info.reward}}</span>元
                     </div>
                     <div class="time">
-                        {{=it.info.create_time}}
+                        <span class="classifyLabel">{{=it.info.category_name}}</span>
                     </div>
                 </div>
-                <div class="sold_cound flex-def flex-zLeftRight flex-cCenter">
-                    <span class="count">[{{=it.info.status}}]</span>
+                <div class="sold_cound flex-def flex-zLeftRight flex-cCenter flex-zBetween">
+                    <span class="count"><span class="icon">{{=it.info.browse_count}} </span> [{{=it.info.status}}]</span>
                     <!--<span class="avg_point ">
                         {{for(var i = 0;i < it.info.avg_point;i++){ }}
                             <span class="avg_pointIcon"></span>
                         {{};}}
                     </span>-->
+                    {{?it.info.distance>=0}}
+                    <span class="form formbg fr">[{{=it.info.city}}·{{=it.info.district}}] 距离 {{=it.info.distance}}km</span> {{?}}
                 </div>
                 {{?it.info.form == 1}}
                 <div class="form">
-                    线上服务 {{?it.info.distance>=0}}
-                    <span class="form formbg fr">距离 {{=it.info.distance}}km</span> {{?}}
+                    线上服务 
+                    <span class="form fr">{{=it.info.create_time}}</span> 
                 </div>
                 {{??it.info.form == 2}}
                 <div class="form">
-                    线下服务 {{?it.info.distance>=0}}
-                    <span class="form formbg fr">距离 {{=it.info.distance}}km</span> {{?}}
+                    线下服务 <span class="form fr">{{=it.info.create_time}}</span>
                 </div>
                 {{??}}
                 <div class="form">
-                    线下 + 线下服务 {{?it.info.distance>=0}}
-                    <span class="form formbg fr">距离 {{=it.info.distance}}km</span> {{?}}
+                    线下 + 线下服务 <span class="form fr">{{=it.info.create_time}}</span>
                 </div>
                 {{?}}
             </div>
@@ -802,7 +819,21 @@
         ret.data.info.type = ret.data.info.type === 1 ? "个人" : "公司";
         $api.css($api.dom('.loading'), 'display:none');
         var statusArr = ["求助中", "帮助中", "已结束", "已失效", "已删除"]
-        ret.data.info.status = statusArr[ret.data.info.status - 1]
+        ret.data.info.status = statusArr[ret.data.info.status - 1];
+        var retSql = db.selectSqlSync({
+            name: 'db_' + $api.getStorage('userToken'),
+            sql: 'SELECT * FROM addressList_simplify WHERE user_id = ' + ret.data.info.user_id
+        });
+        if (retSql.status) {
+            // 如果有备注返回备注
+            if (retSql.data.length == 1) {
+                ret.data.info.company_name = retSql.data[0].subTitle;
+                ret.data.info.head_img_url = retSql.data[0].img;
+                ret.data.info.nickname = retSql.data[0].title;
+            }
+        } else {
+            alert('292' + JSON.stringify(err));
+        }
         getData(ret.data);
         // $api.fixTabBar($api.byId('no1'))
         // $api.fixTabBar($api.byId('no2'))
