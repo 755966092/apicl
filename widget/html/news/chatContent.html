@@ -715,7 +715,7 @@ function updatePage() {
     */
 
 function chatRecordingSql(params, flagStr, headImgUrl) {
-    // console.log('接受消息'+JSON.stringify(params)+headImgUrl);
+    console.log('接受消息'+JSON.stringify(params)+headImgUrl);
     var user_id = flagStr === 'sendMsg' ? 1 : api.pageParam.userId
     var myHeadImg = $api.getStorage('imgCache');
     // var youHeadImg = api.pageParam.headImg;
@@ -1272,6 +1272,7 @@ function sendImg(img) {
             // 发送成功
         } else if (ret.status == 'error') {
             // 发送失败
+            console.log(JSON.stringify(ret));
         } else {
         }
     });
@@ -2205,10 +2206,8 @@ function sendMsg(msg) {
     }, function (ret, err) {
         if (ret.status == 'prepare') {
             sendMsg = ret;
-        // alert(JSON.stringify(ret));
         }
         else if (ret.status == 'success') {
-
             api.sendEvent({
                 name: 'sendMsg',
                 extra: {
@@ -2217,6 +2216,13 @@ function sendMsg(msg) {
             });
         }
         else if (ret.status == 'error') {
+            if (err.code == 405) {
+                api.toast({
+                    msg: '你在对方的黑名单中',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+            }
             // api.alert({
             //     title: 'title',
             //     msg: '第三个message' + err.code,

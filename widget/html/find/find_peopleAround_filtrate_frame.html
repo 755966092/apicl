@@ -93,6 +93,8 @@
     apiready = function(){
         moduleInit();
         // 监听点击完成按钮事件
+        // console.log(JSON.stringify(api.pageParam,null,4));
+        
         eventMonitoring('CompleteTheScreeningOfNearbyPeople');
         if (api.pageParam.paramFlitrate) {
             // 有初识条件
@@ -136,7 +138,8 @@
             $api.attr(ageText, 'endAge', '999');
         } else {
             $api.text(ageText, '不限');
-
+            $api.attr(ageText, 'startAge', '0');
+            $api.attr(ageText, 'endAge', '999');
         }
     }
     // 事件监听
@@ -253,7 +256,9 @@
         } else  {
             data = [
                 {
-                    name: '不限'
+                    name: '不限',
+                    startAge: '0',
+                    endAge: '999'
                 },{
                     name: '18岁以下',
                     startAge: '1',

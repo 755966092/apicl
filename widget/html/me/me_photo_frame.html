@@ -94,10 +94,12 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
+    "use strict";
     var data = [];
     var aCount;
     var clickFlag = 1;
-    apiready = function(){
+    window.apiready = function(){
+        
         $api.fixTabBar($api.dom('.btnWrap'))
         moduleInit();
         if (api.pageParam.imgJson) {
@@ -323,6 +325,7 @@
     // 上传图
     function editImageInfo(flag) {
         var imgDomArr = $api.domAll('a');
+        var toastText = '';
         var imgArr=[];
         for (let i = 0; i < imgDomArr.length; i++) {
             const element = imgDomArr[i];

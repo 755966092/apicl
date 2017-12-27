@@ -846,7 +846,7 @@
             company_id = $api.attr($api.byId('company_name'), 'data-id') || '';      // 公司ID（类型为2-我公司卖时必传）
         sub_type = sub_type_arr.indexOf(sub_type) + 1,
             extra_product = [];
-        for (const key in otherLinkObj) {
+        for (var key in otherLinkObj) {
             if (otherLinkObj.hasOwnProperty(key)) {
                 if (otherLinkObj[key]) {
                     extra_product.push(otherLinkObj[key])
@@ -1321,8 +1321,8 @@
                 imgArr = eval(ret.data.info.image_json);
                 if (ret.data.info.extra_product.length > 0) {
                     $api.text($api.byId('otherLink'), '已添加'+ ret.data.info.extra_product.length +'个商品链接');
-                     for (let i = 0; i < ret.data.info.extra_product.length; i++) {
-                         const element = ret.data.info.extra_product[i];
+                     for (var i = 0; i < ret.data.info.extra_product.length; i++) {
+                         var element = ret.data.info.extra_product[i];
                          if(element.source == 1) {
                             otherLinkObj.jd = element;
                          } else {

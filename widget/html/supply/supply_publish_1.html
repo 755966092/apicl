@@ -87,7 +87,7 @@
             font-weight: bolder;
             /*font-weight: 700;*/
             font-size: 0.3rem;
-            max-width: 5rem;
+            max-width: 5.2rem;
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
@@ -425,7 +425,7 @@
             }
             condition = ret.value.condition;
             page_num = 1;
-            requireData(ret.value.condition)
+            requireData(ret.value.condition,'nocache')
             api.pageUp({
                 top:true
             },function(ret,err){});
@@ -465,9 +465,9 @@
     }
 
     // 请求数据
-    function requireData(data) {
+    function requireData(data,str) {
         var supplyCache = $api.getStorage('supply_publish_1')
-        if (supplyCache) {
+        if (supplyCache && !str) {
             getData(supplyCache)
         }
         var data = data || {};

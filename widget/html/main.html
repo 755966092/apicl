@@ -278,6 +278,7 @@
 <script type="text/javascript" src="../script/pinyin4js.js"></script>
 <script type="text/javascript" src="../script/queryContact.js"></script>
 <script type="text/javascript">
+   
     var userToken, rongToken, footerH, addPublishUrl = './supply/supply_addSupply.html';
     var XFooterH;
     apiready = function() {
@@ -1030,8 +1031,9 @@
         }, function(ret, err) {
             if(ret) {
                 if (ret.code === 200) {
-                    for (let i = 0; i < ret.data.list.length; i++) {
-                        const element = ret.data.list[i];
+                    
+                    for (var i = 0; i < ret.data.list.length; i++) {
+                        var element = ret.data.list[i];
                         if (element.status == 1) {
                             // 有等待验证的好友请求
                             $api.removeCls($api.byId('readLabel'), 'hide');

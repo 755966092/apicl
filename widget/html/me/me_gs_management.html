@@ -95,12 +95,15 @@
         for (var i = 0; i < data.length; i++) {
             data[i].title = data[i].nickname;
             data[i].industry_id = data[i].user_id;
+            data[i].img = data[i].head_img_url;
             data[i].subTitle = data[i].name+data[i].position;
+            data[i].subTitle = data[i].name+' '+data[i].position;
             data[i].subTitle = data[i].name+' '+data[i].position;
             data[i].subTitleColor = '#999';
             delete data[i].nickname;
             delete data[i].letter;
             delete data[i].flag;
+            delete data[i].head_img_url;
             data[i].titleSize = 15;
             if (data[i].initial) {
                 if (data[i].initial == '#') {
@@ -126,6 +129,7 @@
         return false;
     }
     function initList(data) {
+        console.log(JSON.stringify(data,null,4));
         listContact.open({
             x: 0,
             y: headerH,
@@ -141,6 +145,13 @@
                 bgColor: '#EFEFF4'
             },
             cellHeight: 50,
+            imgHeight: 32,
+            imgWidth: 32,
+            groupTitle: {
+                color: '#999',
+                size: 14,
+                bgColor: '#EFEFF4'
+            },
             data: data,
             indicator: {
                 bgColor: 'rgba(0,0,0,0)',
