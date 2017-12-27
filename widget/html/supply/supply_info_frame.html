@@ -100,16 +100,18 @@
         }
         
         .title {
-            height: 1rem;
-            padding: 0 .3rem;
+            /* height: 1rem; */
+            padding: .16rem .3rem;
             box-sizing: border-box;
-            border-bottom: .01rem solid #E8E8E8;
+            /* border-bottom: .01rem solid #E8E8E8; */
             background-color: #fff;
+            position: relative;
         }
         
         .title img {
-            width: .7rem;
-            height: .7rem;
+            width: .91rem;
+            height: .91rem;
+            border-radius: .1rem;
         }
         
         .titleRight {
@@ -133,12 +135,27 @@
         }
         
         .title2 {
-            margin: .2rem 0;
-            padding: .2rem .3rem .1rem;
-            border-bottom: .01rem solid #E8E8E8;
+            /* margin: .2rem 0; */
+            padding: .2rem .3rem 0;
+            /* border-bottom: .01rem solid #E8E8E8; */
             background-color: #fff;
+            position: relative;
         }
-        
+        .title2:after{
+                content: " ";
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                height: 1px;
+                border-top: 1px solid #e5e5e5;
+                color: #e5e5e5;
+                -webkit-transform-origin: 0 0;
+                transform-origin: 0 0;
+                -webkit-transform: scaleY(0.5);
+                transform: scaleY(0.5);
+                z-index: 2;
+        }
         .title2 .typeIcon {
             font-size: .2rem;
             color: #CC0019;
@@ -165,10 +182,10 @@
         
         .price {
             font-size: 0;
-            margin: .2rem 0 .2rem;
+            /* margin: .2rem 0 .2rem; */
             /*width: 100%;*/
             padding-bottom: .2rem;
-            border-bottom: .01rem solid #d9d9d9;
+            /* border-bottom: .01rem solid #d9d9d9; */
         }
         
         .price .priceText {
@@ -180,9 +197,12 @@
             font-size: .34rem;
         }
         
-        .price .time {
+         .time {
             color: #999;
-            font-size: .24rem;
+            font-size: 0;
+            background-color: #fff;
+            padding: 0 .3rem;
+            /* border-top: #d9d9d9 solid 1px; */
         }
         
         .sold_cound,
@@ -203,6 +223,7 @@
         
         .sold_cound .count,
         .form {
+            padding: 0.02rem 0;
             font-size: .24rem;
             color: #999;
             line-height: 0.3rem;
@@ -212,8 +233,8 @@
         
         .formbg {
             height: 0.3rem;
-            background: url(../../image/icon_supply/icon_supplyInfoDistance.png)no-repeat;
-            background-size: .2rem .2rem;
+            background: url(../../image/icon_supply/icon_position2.png)no-repeat;
+            background-size: .18rem .24rem;
             padding-left: 0.3rem;
             background-position: left center;
         }
@@ -493,15 +514,27 @@
             font-size: 0.24rem;
             border-radius: .17rem;
             padding: .01rem .12rem;
+            margin: 0.2rem 0;
             margin-right: 0.1rem;
         }
          .icon {
             padding-left: 0.35rem;
             background: url(../../image/icon_supply/icon_pageviews.png) no-repeat;
             background-size: .26rem .16rem;
-            background-position: left .05rem;
+            background-position: left center;
             font-size: .18rem;
             color: #999;
+        }
+        .position {
+            padding: .1rem 0.3rem;
+            background-color: #fff;
+        }
+        .createTime {
+            font-size: 0.28rem;
+            color: #999;
+        }
+        .avgWrap {
+            padding: 0.1rem 0;
         }
     </style>
 </head>
@@ -528,14 +561,49 @@
     </div>
     <div class="resultList"></div>
         <!-- <div class="main flex-def flex-zTopBottom">
-            <div class="title flex-def flex-zLeftRight flex-cCenter" tapmode onclick="openUserInfoPage(this)" data-id="9969">
+           
+            <div class="title2">
+                <div class="top flex-def flex-zBetween flex-cCenter">
+                    <div class="titleName flex-def flex-zLeftRight flex-cCenter ">
+                        <p class="supplyName">本地导游</p>
+                        <span class="typeIcon">[个人]</span>
+                    </div>
+                    
+                </div>
+                <div class="avgWrap flex-def flex-zBetween flex-cCenter">
+                    <div class="avg_point">
+                        <span class="avg_pointIcon"></span>
+                    </div>
+                    <span class="icon">33 </span>
+                </div>
+                <div class="price flex-def flex-zBetween flex-zLeftRight flex-cEnd">
+                    <div class="priceText"> ￥
+                        <span class="price1">200.00/小时</span>
+                    </div>
+                    <span class="createTime">2013-02-32: 12:12:12</span>
+                </div>
+            </div>
+            <div class="time" >
+                <span class="classifyLabel">情感交流</span>
+                <span class="classifyLabel">情感交流</span>
+            </div>
+            <div class="mt30 position">
+                <div class="sold_cound flex-def flex-zLeftRight flex-cCenter flex-zBetween">
+                    <span class="count">[已售0] 线下 + 线下服务</span>
+                </div>
+                <div class="form"> 
+                    <span class="form formbg">[北京]距离 nullkm</span>
+                </div>
+            </div>
+
+            <div class="title mt30 flex-def flex-zLeftRight flex-cCenter" tapmode onclick="openUserInfoPage(this)" data-id="9969">
                 <img src="http://img.iinnet.com/Fq9oScpBjR8tVlPr865kPisMnpW3" id="headImg">
                 <div class="titleRight">
                     <h3>大中小18765</h3>
                     <p>第一学 前端开发</p>
                 </div>
             </div>
-            <div class="weui-cells" style="margin-top:.2rem">
+            <div class="weui-cells">
                 <a class="weui-cell weui-cell_access" href="javascript:;">
                     <div class="weui-cell__bd">
                         <p style="font-size:.24rem">TA的公司主页</p>
@@ -544,32 +612,7 @@
                     </div>
                 </a>
             </div>
-            <div class="title2">
-                <div class="top flex-def flex-zBetween">
-                    <div class="titleName flex-def flex-zLeftRight flex-cCenter ">
-                        <p class="supplyName">本地导游</p>
-                        <span class="typeIcon">[个人]</span>
-                    </div>
-                </div>
-                <div class="price flex-def flex-zBetween flex-zLeftRight flex-cEnd">
-                    <div class="priceText"> ￥
-                        <span class="price1">200.00/小时</span>
-                    </div>
-                    <div class="time">
-                        <span class="classifyLabel">情感交流</span>
-                        <span class="classifyLabel">情感交流</span>
-                    </div>
-                </div>
-                <div class="sold_cound flex-def flex-zLeftRight flex-cCenter flex-zBetween">
-                    <span class="count"><span class="icon">66</span>[已售0]</span>
-                    <span class="avg_point"> 2017-12-12 18:25:31</span>
-                    <span class="form formbg">[北京]距离 nullkm</span>
-                </div>
-                <div class="form"> 线下 + 线下服务
-                    <span class="form  fr">2017-12-12 18:25:31</span>
-                </div>
-            </div>
-            <div class="info">
+            <div class="info mt30">
                 <div class="infoTitle flex-def flex-zCenter flex-cCenter flex-zLeftRight">
                     <span class="line"></span>
                     <div class="text flex-def flex-zLeftRight flex-cCenter">
@@ -625,7 +668,62 @@
         </footer>-->
     <script type="text/x-dot-template" id="listT">
         <div class="main flex-def flex-zTopBottom">
-            <div class="title flex-def flex-zLeftRight flex-cCenter" tapmode onclick="openUserInfoPage(this)" data-id="{{=it.info.user_id}}">
+           
+
+            
+            <div class="title2">
+                <div class="top flex-def flex-zBetween">
+                    <div class="titleName flex-def flex-zLeftRight flex-cCenter ">
+                        <p class="supplyName">{{=it.info.title}}</p>
+                        <span class="typeIcon">[{{=it.info.type}}]</span>
+                    </div>
+                    <!-- 分享按钮 -->
+                    <!-- <div class="shareIcon"></div> -->
+                </div>
+
+
+                <div class="avgWrap flex-def flex-zBetween flex-cCenter">
+                    <span class="avg_point">
+                        {{for(var i = 0;i < it.info.avg_point;i++){ }}
+                            <span class="avg_pointIcon"></span> {{};}}
+                    </span>
+                    <span class="icon">{{=it.info.browse_count}}人</span>
+                </div>
+
+                <div class="price flex-def flex-zBetween flex-zLeftRight flex-cEnd">
+                    <div class="priceText"> ￥
+                        <span class="price1">{{=it.info.price}}/{{=it.info.unit}}</span>
+                    </div>
+                    <span class="createTime">{{=it.info.create_time}}</span>
+                </div>
+            </div>
+                <div class="time">
+                    <span class="classifyLabel">{{=it.info.category_name}}</span>
+                    <span class="classifyLabel">{{=it.info.sub_type}}</span>
+                </div>
+                <div class="mt30 position">
+                    <div class="sold_cound flex-def flex-zLeftRight flex-cCenter flex-zBetween">
+                        <span class="count">[已售0] {{=it.info.form}}</span>
+                    </div>
+                    {{?it.info.distance>=0}}
+                        <div class="form"> 
+                            <span class="form formbg">[{{=it.info.city}}·{{=it.info.district}}] 距离 {{=it.info.distance}}km</span>
+                        </div>
+                    {{?}}
+                </div>
+            
+
+
+            <!-- <div class="sel flex-def flex-zBetween flex-cCenter">
+                <div>
+                    <span class="selTitle">已选：</span>
+                    <span class="selText">设计、“APP图标”</span>
+                </div>
+                <span class="selIcon"></span>
+            </div> -->
+
+
+            <div class="mt30 title flex-def flex-zLeftRight flex-cCenter" tapmode onclick="openUserInfoPage(this)" data-id="{{=it.info.user_id}}">
                 <img src="{{=it.info.head_img_url}}" id="headImg">
                 <div class="titleRight">
                     <h3>{{=it.info.nickname}}</h3>
@@ -637,10 +735,10 @@
                     <p>{{=it.info.current_company}} {{=it.info.current_position}}</p>
                     {{?}}
                 </div>
+                
             </div>
-
             {{?it.info.company_name != null}}
-                <div class="weui-cells" style="margin-top:.2rem">
+                <div class="weui-cells">
                     <a class="weui-cell weui-cell_access" href="javascript:;" data-name="{{=it.info.company_name}}" data-id={{=it.info.company_id}} tapmode onclick="openCompany(this)">
                         <div class="weui-cell__bd">
                             <p style="font-size:.24rem">TA的公司主页</p>
@@ -651,60 +749,7 @@
                     </a>
                 </div>
             {{?}}
-            <div class="title2">
-                <div class="top flex-def flex-zBetween">
-                    <div class="titleName flex-def flex-zLeftRight flex-cCenter ">
-                        <p class="supplyName">{{=it.info.title}}</p>
-                        <span class="typeIcon">[{{=it.info.type}}]</span>
-                    </div>
-                    <!-- 分享按钮 -->
-                    <!-- <div class="shareIcon"></div> -->
-                </div>
-                <div class="price flex-def flex-zBetween flex-zLeftRight flex-cEnd">
-                    <div class="priceText">
-                        ￥<span class="price1">{{=it.info.price}}/{{=it.info.unit}}</span>
-                    </div>
-                    <div class="time">
-                        <!-- {{=it.info.create_time}} -->
-                        <span class="classifyLabel">{{=it.info.category_name}}</span>
-                        <span class="classifyLabel">{{=it.info.sub_type}}</span>
-                    </div>
-                </div>
-                <div class="sold_cound flex-def flex-zLeftRight flex-cCenter flex-zBetween">
-                    <span class="count"><span class="icon">{{=it.info.browse_count}} </span>  [已售{{=it.info.sold_count}}]</span>
-                    
-                    <span class="avg_point">
-                        {{for(var i = 0;i < it.info.avg_point;i++){ }}
-                            <span class="avg_pointIcon"></span> {{};}}
-                    </span>
-                    {{?it.info.distance>=0}}
-                        <span class="form formbg">[{{=it.info.city}}·{{=it.info.district}}] 距离 {{=it.info.distance}}km</span> 
-                    {{?}}
-                </div>
-                {{?it.info.form == 1}}
-                <div class="form">
-                    线上服务 
-                    <span class="form  fr">{{=it.info.create_time}}</span>
-                </div>
-                {{??it.info.form == 2}}
-                <div class="form">
-                    线下服务 <span class="form  fr">{{=it.info.create_time}}</span>
-                </div>
-                {{??}}
-                <div class="form">
-                    线下 + 线下服务 <span class="form  fr">{{=it.info.create_time}}</span>
-                </div>
-                {{?}}
-
-            </div>
-            <!-- <div class="sel flex-def flex-zBetween flex-cCenter">
-                <div>
-                    <span class="selTitle">已选：</span>
-                    <span class="selText">设计、“APP图标”</span>
-                </div>
-                <span class="selIcon"></span>
-            </div> -->
-            <div class="info">
+            <div class="info mt30">
                 <div class="infoTitle flex-def flex-zCenter flex-cCenter flex-zLeftRight">
                     <span class="line"></span>
                     <div class="text flex-def flex-zLeftRight flex-cCenter">
@@ -979,6 +1024,13 @@
                 eleHtml += '<img src="' + ret.data.info.image_json[i] + '?imageMogr2/auto-orient/thumbnail/!750x436r/gravity/Center/crop/x436/format/jpg/interlace/1/blur/1x0/quality/100|imageslim" class="swiper-slide blue-slide">'
                 ret.data.info.image_json[i] = ret.data.info.image_json[i] + '?imageMogr2/auto-orient/thumbnail/710x/blur/1x0/quality/100|imageslim'
             }
+        }
+        if (ret.data.info.form == 1) {
+            ret.data.info.form = '线上服务'
+        } else if (ret.data.info.form == 2) {
+            ret.data.info.form = '线下服务'
+        } else {
+            ret.data.info.form = '线上 + 线下服务'
         }
         if (eleHtml) {
             scrollPage();
