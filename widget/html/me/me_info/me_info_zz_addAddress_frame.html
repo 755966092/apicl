@@ -1,102 +1,107 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../../css/weui.css" />
     <style>
-        ul {
-            margin-top: .2rem;
-            font-size: .28rem;
-            background-color: #fff;
+        .loading {
+            display: none;
         }
-        ul li {
-            height: .8rem;
-            /*border-bottom: .01rem solid #ECECEC;*/
-            padding-left: .36rem;
-            line-height: .8rem;
+        .positioning {
+            display: inline-block;
+            width: 0.32rem;
+            height: .4rem;
+            background: url(../../../image/icon_my/icon_cityPositioning.png)no-repeat;
+            background-size: .32rem .4rem;
         }
-        .wrap {
-            border-bottom: .01rem solid #d9d9d9;
-            padding-right: .36rem;
+
+
+        .weui-label {
+            width: 1.6rem;
         }
-        li .title {
-            width: 1.3rem;
+
+        .weui-input,
+        .weui-cells {
+            font-size: 0.3rem;
         }
-        li input {
-            height: .8rem;
-            outline: none;
-            width: 5rem;
+        .weui-input {
+            color: #999;
         }
-        .text {
-            color: #B1AEA9;
-            width: 5rem;
-        }
-         .main_no3 {
-            margin-top: 2rem;
-            text-align: center;
-        }
-        .main_no3 button {
-            width: 6.3rem;
-            border-radius: .08rem;
-            text-align: center;
-            margin: 0 auto;
-            height: .8rem;
-            line-height: .8rem;
-            font-size: .34rem;
-            color: #fff;
-            background:  #A3DEA3;
-        }
-        ul li.last {
-            border-bottom: .01rem solid #d9d9d9;
+        .main_no3 {
+            padding: 0 .36rem;
+            margin-top: 0.3rem;
         }
     </style>
 </head>
+
 <body>
-   
-    <div class="main">
-        <ul>
-            <li>
-                <div class="wrap">
-                    <span class="title" >省</span>
-                    <span class="text provinces" data-val="provinces"   tapmode   onclick="selectList(this)">所在省份</span>
-                </div>
-            </li>
-            <li>
-                <div class="wrap">
-                    <span class="title" >市</span>
-                    <span class="text cities" data-val="cities"   tapmode   onclick="selectList(this)">所在城市</span>
-                </div>
-            </li>
-            <li>
-                <div class="wrap">
-                    <span class="title" >区</span>
-                    <span class="text city" data-val="city"   tapmode   onclick="selectList(this)">所在城区</span>
-                </div>
-            </li>
-            <li>
-                <div class="wrap">
-                    <span class="title">详细地址</span>
-                    <input type="text" class="address" name="" oninput ="iptCom()" placeholder="街道门牌信息">
-                </div>
-            </li>
-            <li class="last">
-                <span class="title">邮政编码</span>
-                <input type="number" class="zipcode" name="" oninput ="iptCom()" placeholder="邮政编码">
-            </li>
-        </ul>
+    <div class="loading"></div>
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-label">省</label>
+            </div>
+            <div class="weui-cell__bd">
+                <span class="weui-input provinces" type="text" data-val="provinces" tapmode onclick="selectList(this)" placeholder="所在省份">
+                     所在省份
+                </span>
+            </div>
+            <div class="positioning" tapmode onclick="getAddress();event.stopPropagation()"></div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-label">市</label>
+            </div>
+            <div class="weui-cell__bd">
+                <span class="weui-input cities" type="text" data-val="cities" tapmode onclick="selectList(this)" placeholder="所在城市">
+                    所在城市
+                </span>
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-label">区</label>
+            </div>
+            <div class="weui-cell__bd">
+                <span class="weui-input city" type="text" data-val="city" tapmode onclick="selectList(this)" placeholder="所在城区">
+                    所在城区
+                </span>
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-label ">详细地址</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input address" type="text" oninput="iptCom()" placeholder="街道门牌信息">
+                   
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-label ">邮政编码</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input zipcode" type="number" oninput="iptCom()" placeholder="邮政编码">
+            </div>
+        </div>
     </div>
     <div class="main_no3 ">
-        <button   tapmode   onclick="addAddRess()" class="btn" disabled>保存</button>
+        <button href="javascript:;" disabled tapmode onclick="addAddRess()" class="btn weui-btn_disabled weui-btn weui-btn_primary">保存</button>
     </div>
 </body>
 <script type="text/javascript" src="../../../script/api.js"></script>
 <script type="text/javascript" src="../../../script/common.js"></script>
 <script type="text/javascript" src="../../../data/city_level3.js"></script>
 <script type="text/javascript">
-var url, provinces, cities,  address, zipcode;
-    apiready = function(){
+    var url, provinces, cities, address, zipcode;
+    apiready = function () {
         moduleInit();
         if (api.pageParam.flag) {
             // 1 编辑
@@ -106,21 +111,17 @@ var url, provinces, cities,  address, zipcode;
             // 0 新增
             url = '/user_center/addAddress'
         }
-        api.addEventListener({
-            name: 'getAddress'
-        }, function(ret, err){
-            getAddress();
-        });
     };
     // 定位
     function getAddress() {
+        $api.css($api.dom('.loading'), 'display: block');
         bMap.getLocation({
             accuracy: '100m',
             autoStop: true,
             filter: 1
         }, function (ret, err) {
             if (ret.status) {
-              //  console.log(JSON.stringify(ret,null,4));
+                //  console.log(JSON.stringify(ret,null,4));
                 bMap.getNameFromCoords({
                     // lon: 120.156160,
                     // lat: 35.968558
@@ -132,15 +133,14 @@ var url, provinces, cities,  address, zipcode;
                         // province 省
                         // city 市
                         // district 区
-                        ret.province = ret.province.replace(/市|自治区|维吾尔自治区|省|特别行政区/g,'');
-                        ret.city = ret.city.replace(/市|自治区|特别行政区/g,'');
+                        ret.province = ret.province.replace(/市|自治区|维吾尔自治区|省|特别行政区/g, '');
+                        ret.city = ret.city.replace(/市|自治区|特别行政区/g, '');
                         $api.text($api.dom('.provinces'), ret.province);
                         $api.text($api.dom('.cities'), ret.city);
                         $api.text($api.dom('.city'), ret.district);
                         $api.val($api.dom('.address'), ret.address);
-                        for (var i = 0; i < $api.domAll('.text').length; i++) {
-                            $api.css($api.domAll('.text')[i], 'color: #000');
-                        }
+                        $api.css($api.dom('.loading'), 'display: none');
+                        textColor();
                         iptCom();
                     }
                 });
@@ -150,28 +150,28 @@ var url, provinces, cities,  address, zipcode;
         });
     }
     function addAddRess() {
-        provinces =  $api.text($api.dom('.provinces')),
-        cities =  $api.text($api.dom('.cities')),
-        city =  $api.text($api.dom('.city')),
-        address =  $api.val($api.dom('.address')),
-        zipcode =  $api.val($api.dom('.zipcode'));
+        provinces = $api.text($api.dom('.provinces')),
+            cities = $api.text($api.dom('.cities')),
+            city = $api.text($api.dom('.city')),
+            address = $api.val($api.dom('.address')),
+            zipcode = $api.val($api.dom('.zipcode'));
         api.ajax({
             url: apiSite + url,
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
+                values: {
                     token: $api.getStorage('userToken'),
                     province: provinces,
                     city: cities,
                     district: city,
                     address: address,
                     zipcode: zipcode,
-                    note: '住址',
+                    note: '地址',
                     address_id: api.pageParam.address_id
                 }
             }
-        }, function(ret, err) {
+        }, function (ret, err) {
             if (ret) {
                 api.sendEvent({
                     name: 'addCity'
@@ -184,17 +184,18 @@ var url, provinces, cities,  address, zipcode;
     }
     // 请求地址列表
     function getCityList() {
+        $api.css($api.dom('.loading'), 'display: block');
         api.ajax({
             url: apiSite + '/user_center/editAddressIndex',
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
+                values: {
                     token: $api.getStorage('userToken'),
                     address_id: api.pageParam.address_id
                 }
             }
-        }, function(ret, err) {
+        }, function (ret, err) {
             if (ret) {
                 // alert(JSON.stringify(ret))
                 $api.text($api.dom('.provinces'), ret.data.info.province);
@@ -202,6 +203,8 @@ var url, provinces, cities,  address, zipcode;
                 $api.text($api.dom('.city'), ret.data.info.district);
                 $api.val($api.dom('.address'), ret.data.info.address);
                 $api.val($api.dom('.zipcode'), ret.data.info.zipcode);
+                $api.css($api.dom('.loading'), 'display: none');
+                textColor();
                 iptCom();
             } else {
                 alert(JSON.stringify(err.msg));
@@ -210,14 +213,14 @@ var url, provinces, cities,  address, zipcode;
     }
     // 按钮变色
     function iptCom() {
-            provinces =  $api.text($api.dom('.provinces')),
-            cities =  $api.text($api.dom('.cities')),
-            city =  $api.text($api.dom('.city')),
-            address =  $api.val($api.dom('.address')),
-            zipcode =  $api.val($api.dom('.zipcode'));
-        if (provinces !== '' && cities !== '' && city !== '' && address !== '' ) {
-            $api.css($api.dom('.btn'), 'background:  #08BB08');
-            $api.removeAttr($api.dom('.btn'),'disabled');
+        provinces = $api.text($api.dom('.provinces')),
+            cities = $api.text($api.dom('.cities')),
+            city = $api.text($api.dom('.city')),
+            address = $api.val($api.dom('.address')),
+            zipcode = $api.val($api.dom('.zipcode'));
+        if (provinces !== '' && cities !== '' && city !== '' && address !== '') {
+            $api.removeCls($api.dom('.btn'), 'weui-btn_disabled');
+            $api.removeAttr($api.dom('.btn'), 'disabled');
         }
     }
     // 打开选择器
@@ -228,7 +231,7 @@ var url, provinces, cities,  address, zipcode;
         var provinces = $api.text($api.dom('.provinces')),
             cities = $api.text($api.dom('.cities')),
             city = $api.text($api.dom('.city'));
-        var homeText=[];
+        var homeText = [];
         homeText.push(provinces)
         homeText.push(cities)
         homeText.push(city)
@@ -241,7 +244,7 @@ var url, provinces, cities,  address, zipcode;
                     if (cityLevel3[i].sub[j].name == homeText[1]) {
                         active.push(j);
                         for (var p = 0; p < cityLevel3[i].sub[j].sub.length; p++) {
-                            if ( cityLevel3[i].sub[j].sub[p].name == homeText[2]) {
+                            if (cityLevel3[i].sub[j].sub[p].name == homeText[2]) {
                                 active.push(p);
                                 break;
                             }
@@ -250,7 +253,7 @@ var url, provinces, cities,  address, zipcode;
                 }
             }
         }
-        var fontsize = 16,rowLength = 5;
+        var fontsize = 16, rowLength = 5;
         if (api.systemType === 'ios') {
             fontsize = 20;
             rowLength = 7;
@@ -300,16 +303,14 @@ var url, provinces, cities,  address, zipcode;
                 color: '#000'
             },
             fixedOn: api.frameName
-        }, function(ret, err) {
+        }, function (ret, err) {
             if (ret) {
                 // alert(JSON.stringify(ret))
                 if (ret.eventType == 'ok') {
                     $api.text($api.dom('.provinces'), ret.level1);
                     $api.text($api.dom('.cities'), ret.level2);
                     $api.text($api.dom('.city'), ret.level3);
-                    for (var i = 0; i < $api.domAll('.text').length; i++) {
-                        $api.css($api.domAll('.text')[i], 'color: #000');
-                    }
+                   textColor();
                     // 判断按钮变色
                     iptCom();
                 }
@@ -318,5 +319,11 @@ var url, provinces, cities,  address, zipcode;
             }
         });
     }
+    function textColor() {
+         for (var i = 0; i < $api.domAll('.weui-input').length; i++) {
+            $api.css($api.domAll('.weui-input')[i], 'color: #000');
+        }
+    }
 </script>
+
 </html>

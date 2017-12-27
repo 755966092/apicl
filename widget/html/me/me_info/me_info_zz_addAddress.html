@@ -46,6 +46,12 @@
             background:  #A3DEA3;
           
         }
+        .hide {
+            display: none;
+        }
+        #over {
+            color: #DF214E;
+        }
     </style>
 </head>
 <body>
@@ -55,7 +61,7 @@
             <span class="winTitle">
                 新增地址
             </span>
-             <span class="rightBtn bj" id="over" ontouchstart="delDz()">定位</span> 
+             <span class="rightBtn bj hide" id="over" ontouchstart="delDz()">删除</span> 
         </div>
     </header>
 </body>
@@ -67,8 +73,9 @@
         if (api.pageParam.flag) {
             // 1 编辑
             $api.text($api.dom('.winTitle'), '修改地址');
-            $api.text($api.byId('over'), '删除');
-            $api.css($api.byId('over'), 'color: #DF214E;');
+            // $api.text($api.byId('over'), '删除');
+            $api.removeCls($api.byId('over'), 'hide');
+            // $api.css($api.byId('over'), 'color: #DF214E;');
         } else {
             // 0 新增
         }
