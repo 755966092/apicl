@@ -587,6 +587,7 @@ function sendPosition(ret) {
         //console.log('发送准备222:'+JSON.stringify(ret))
         }
         else if (ret.status == 'success') {
+            historicalNews();
             //console.log( JSON.stringify(ret));
             createSendPositionLabel(paramData);
             // 存入数据库
@@ -715,7 +716,7 @@ function updatePage() {
     */
 
 function chatRecordingSql(params, flagStr, headImgUrl) {
-    // console.log('接受消息'+JSON.stringify(params)+headImgUrl);
+    // console.log('接受消息'+JSON.stringify(params));
     var user_id = flagStr === 'sendMsg' ? 1 : api.pageParam.userId
     var myHeadImg = $api.getStorage('imgCache');
     // var youHeadImg = api.pageParam.headImg;
@@ -806,72 +807,74 @@ function allCahtSql(ret) {
         var SQL = 'INSERT OR REPLACE INTO tb_chat_' + api.pageParam.userId +
             '(messageId, receivedTime, objectName, messageDirection, content_extra, content_text, content_lat, content_lon, content_imagePath, head_img_url, filePath, duration, thumbPath) VALUES ';
         for (var i = 0; i < ret.length; i++) {
-            var element = ret[i];
-            if (element.messageDirection == 'SEND') {
-                // 发送的消息, 自己的头像
-                if (element.objectName === 'RC:VcMsg') {
-                    // 录音
-                    SQL += '(' + element.messageId + ',"' + element.receivedTime + '","' + element.objectName +
-                        '","' + element.messageDirection + '","' + element.content.extra.replace(/"/g, '') + '","' +
-                        (element.content.text || '') + '",0,0,"","' + myHeadImg + '","' + element.content.voicePath +
-                        '","' + element.content.duration + '",""),';
-                }
-                else if (element.objectName === 'RC:ImgMsg') {
-                    // 图片
-                    SQL += '(' + element.messageId + ',"' + element.sentTime + '","' + element.objectName + '","' +
-                        element.messageDirection + '","' + element.content.extra.replace(/"/g, '') + '","' + (
-                        element.content.text || '') + '",0,0,"","' + myHeadImg + '","' + element.content.imageUrl +
-                        '","","' + element.content.thumbPath + '"),';
-                }
-                else if (element.objectName === 'RC:LBSMsg') {
-                    // 位置
-                    SQL += '(' + element.messageId + ',"' + element.sentTime + '","' + element.objectName + '","' +
-                        element.messageDirection + '","' + element.content.extra.replace(/"/g, '') + '","' + (
-                        element.content.poi || '') + '",' + element.content.latitude + ',' + element.content.longitude +
-                        ',"' + element.content.imagePath + '","' + myHeadImg + '","' + element.content.imageUrl +
-                        '","","' + element.content.thumbPath + '"),';
-                // console.log(SQL)
+            if (ret[i].sentStatus != "FAILED") {
+                var element = ret[i];
+                if (element.messageDirection == 'SEND') {
+                    // 发送的消息, 自己的头像
+                    if (element.objectName === 'RC:VcMsg') {
+                        // 录音
+                        SQL += '(' + element.messageId + ',"' + element.receivedTime + '","' + element.objectName +
+                            '","' + element.messageDirection + '","' + element.content.extra.replace(/"/g, '') + '","' +
+                            (element.content.text || '') + '",0,0,"","' + myHeadImg + '","' + element.content.voicePath +
+                            '","' + element.content.duration + '",""),';
+                    }
+                    else if (element.objectName === 'RC:ImgMsg') {
+                        // 图片
+                        SQL += '(' + element.messageId + ',"' + element.sentTime + '","' + element.objectName + '","' +
+                            element.messageDirection + '","' + element.content.extra.replace(/"/g, '') + '","' + (
+                                element.content.text || '') + '",0,0,"","' + myHeadImg + '","' + element.content.imageUrl +
+                            '","","' + element.content.thumbPath + '"),';
+                    }
+                    else if (element.objectName === 'RC:LBSMsg') {
+                        // 位置
+                        SQL += '(' + element.messageId + ',"' + element.sentTime + '","' + element.objectName + '","' +
+                            element.messageDirection + '","' + element.content.extra.replace(/"/g, '') + '","' + (
+                                element.content.poi || '') + '",' + element.content.latitude + ',' + element.content.longitude +
+                            ',"' + element.content.imagePath + '","' + myHeadImg + '","' + element.content.imageUrl +
+                            '","","' + element.content.thumbPath + '"),';
+                        // console.log(SQL)
+                    }
+                    else {
+                        // 文字
+                        SQL += '(' + element.messageId + ',"' + element.sentTime + '","' + element.objectName + '","' +
+                            element.messageDirection + '","' + element.content.extra.replace(/"/g, '').replace(/"/g, '') +
+                            '","' + (element.content.text || '') + '",0,0,"","' + myHeadImg + '","","",""),';
+                    }
                 }
                 else {
-                    // 文字
-                    SQL += '(' + element.messageId + ',"' + element.sentTime + '","' + element.objectName + '","' +
-                        element.messageDirection + '","' + element.content.extra.replace(/"/g, '').replace(/"/g, '') +
-                        '","' + (element.content.text || '') + '",0,0,"","' + myHeadImg + '","","",""),';
-                }
-            }
-            else {
-                // 接收的消息, 对方的头像 api.pageParam.headImg
-                if (element.objectName === 'RC:VcMsg') {
-                    // 录音
-                    SQL += '(' + element.messageId + ',"' + element.receivedTime + '","' + element.objectName +
-                        '","' + element.messageDirection + '","' + element.content.extra.replace(/"/g, '') + '","' +
-                        (element.content.text || '') + '",0,0,"","' + youHeadImg + '","' + element.content.voicePath +
-                        '","' + element.content.duration + '",""),';
-                }
-                else if (element.objectName === 'RC:ImgMsg') {
-                    // 图片
-                    SQL += '(' + element.messageId + ',"' + element.sentTime + '","' + element.objectName + '","' +
-                        element.messageDirection + '","' + element.content.extra.replace(/"/g, '') + '","' + (
-                        element.content.text || '') + '",0,0,"","' + youHeadImg + '","' + element.content.imageUrl +
-                        '","","' + element.content.thumbPath + '"),';
-                }
-                else if (element.objectName === 'RC:LBSMsg') {
-                    // 位置
-                    SQL += '(' + element.messageId + ',"' + element.sentTime + '","' + element.objectName + '","' +
-                        element.messageDirection + '","' + element.content.extra.replace(/"/g, '') + '","' + (
-                        element.content.poi || '') + '",' + element.content.latitude + ',' + element.content.longitude +
-                        ',"' + element.content.imagePath + '","' + youHeadImg + '","' + element.content.imageUrl +
-                        '","","' + element.content.thumbPath + '"),';
-            // console.log(JSON.stringify(params));
-                        
-                }   
-                else {
-                    // 文字
-                    // console.log(element.content.extra.replace(/"/g, ''))
-                    // console.log(element.content.extra.replace(/"/g, '').replace(/"/g, ''))
-                    SQL += '(' + element.messageId + ',"' + element.sentTime + '","' + element.objectName + '","' +
-                        element.messageDirection + '","' + element.content.extra.replace(/"/g, '').replace(/"/g, '') +
-                        '","' + (element.content.text || '') + '",0,0,"","' + youHeadImg + '","","",""),';
+                    // 接收的消息, 对方的头像 api.pageParam.headImg
+                    if (element.objectName === 'RC:VcMsg') {
+                        // 录音
+                        SQL += '(' + element.messageId + ',"' + element.receivedTime + '","' + element.objectName +
+                            '","' + element.messageDirection + '","' + element.content.extra.replace(/"/g, '') + '","' +
+                            (element.content.text || '') + '",0,0,"","' + youHeadImg + '","' + element.content.voicePath +
+                            '","' + element.content.duration + '",""),';
+                    }
+                    else if (element.objectName === 'RC:ImgMsg') {
+                        // 图片
+                        SQL += '(' + element.messageId + ',"' + element.sentTime + '","' + element.objectName + '","' +
+                            element.messageDirection + '","' + element.content.extra.replace(/"/g, '') + '","' + (
+                                element.content.text || '') + '",0,0,"","' + youHeadImg + '","' + element.content.imageUrl +
+                            '","","' + element.content.thumbPath + '"),';
+                    }
+                    else if (element.objectName === 'RC:LBSMsg') {
+                        // 位置
+                        SQL += '(' + element.messageId + ',"' + element.sentTime + '","' + element.objectName + '","' +
+                            element.messageDirection + '","' + element.content.extra.replace(/"/g, '') + '","' + (
+                                element.content.poi || '') + '",' + element.content.latitude + ',' + element.content.longitude +
+                            ',"' + element.content.imagePath + '","' + youHeadImg + '","' + element.content.imageUrl +
+                            '","","' + element.content.thumbPath + '"),';
+                        // console.log(JSON.stringify(params));
+
+                    }
+                    else {
+                        // 文字
+                        // console.log(element.content.extra.replace(/"/g, ''))
+                        // console.log(element.content.extra.replace(/"/g, '').replace(/"/g, ''))
+                        SQL += '(' + element.messageId + ',"' + element.sentTime + '","' + element.objectName + '","' +
+                            element.messageDirection + '","' + element.content.extra.replace(/"/g, '').replace(/"/g, '') +
+                            '","' + (element.content.text || '') + '",0,0,"","' + youHeadImg + '","","",""),';
+                    }
                 }
             }
         }
@@ -1267,7 +1270,7 @@ function sendImg(img) {
         } else if (ret.status == 'progress') {
         } else if (ret.status == 'success') {
           //  console.log("1242:"+JSON.stringify(ret));
-            
+            historicalNews();
             chatRecordingSql(retprepare, 'sendMsg', headImg);
             // 发送成功
         } else if (ret.status == 'error') {
@@ -1357,6 +1360,7 @@ function sendVicoe(ret) {
             retprepare = ret;
         }
         else if (ret.status == 'success') {
+            historicalNews();
             // 发送成功
             addSendVoiceMessages(retData, headImg, 0);
             // 存储到表中
@@ -1525,41 +1529,41 @@ function renderPageSql(ret, n) {
     if (n == 2) {
         // 查看历史记录
         for (var i = 0; i < ret.length; i++) {
-            if (ret[i].messageDirection == 'RECEIVE') {
-                // 消息方向：SEND(发送) 或者 RECEIVE(接受)
-                if (ret[i].objectName == 'RC:VcMsg') {
-                    // 语音
-                    sqlAddReceVoiceMessages(ret[i], n);
-                }
-                else if (ret[i].objectName == 'RC:TxtMsg') {
-                    // 文字
-                    sqlAddReceMsg(ret[i], n);
-                }
-                else if (ret[i].objectName == 'RC:ImgMsg') {
-                    // 图片
-                    sqlAddReceImgMessages(ret[i], n);
-                }
-                else {
-                }
-            }
-            else {
-                if (ret[i].objectName == 'RC:VcMsg') {
-                    // 语音
-                    sqlAddSendVoiceMessages(ret[i], n);
-                }
-                else if (ret[i].objectName == 'RC:TxtMsg') {
-                    // 文字
-                    sqlAddSendMsg(ret[i], n);
-                }
-                else if (ret[i].objectName == 'RC:ImgMsg') {
-                    // 图片
-                    sqlAddSendImgMessages(ret[i], n);
+                if (ret[i].messageDirection == 'RECEIVE') {
+                    // 消息方向：SEND(发送) 或者 RECEIVE(接受)
+                    if (ret[i].objectName == 'RC:VcMsg') {
+                        // 语音
+                        sqlAddReceVoiceMessages(ret[i], n);
+                    }
+                    else if (ret[i].objectName == 'RC:TxtMsg') {
+                        // 文字
+                        sqlAddReceMsg(ret[i], n);
+                    }
+                    else if (ret[i].objectName == 'RC:ImgMsg') {
+                        // 图片
+                        sqlAddReceImgMessages(ret[i], n);
+                    }
+                    else {
+                    }
                 }
                 else {
+                    if (ret[i].objectName == 'RC:VcMsg') {
+                        // 语音
+                        sqlAddSendVoiceMessages(ret[i], n);
+                    }
+                    else if (ret[i].objectName == 'RC:TxtMsg') {
+                        // 文字
+                        sqlAddSendMsg(ret[i], n);
+                    }
+                    else if (ret[i].objectName == 'RC:ImgMsg') {
+                        // 图片
+                        sqlAddSendImgMessages(ret[i], n);
+                    }
+                    else {
+                    }
                 }
+                messageId = ret[0].messageId;
             }
-            messageId = ret[0].messageId;
-        }
         if (api.systemType == 'ios') {
             scrollTopPage();
         }
@@ -1625,58 +1629,60 @@ function renderPageSql(ret, n) {
 // 渲染页面
 function renderPage(ret) {
     for (var i = ret.result.length - 1; i >= 0; i--) {
-        if (ret.result[i].messageDirection == 'RECEIVE') {
-            // chatRecordingSql(ret, 'receiveMsg', youHeadImg)
-            // 消息方向：SEND(发送) 或者 RECEIVE(接受)
-            if (ret.result[i].objectName == 'RC:VcMsg') {
-                // 语音
-                addReceVoiceMessages(ret.result[i], 1);
-            }
-            else if (ret.result[i].objectName == 'RC:TxtMsg') {
-                // 文字
-                addReceMsg(ret.result[i], 1);
-            }
-            else if (ret.result[i].objectName == 'RC:ImgMsg') {
-                // 图片
-                addReceImgMessages(ret.result[i], 1);
-            }
-            else if (ret.result[i].objectName == 'RC:LBSMsg') {
-                // 位置
-                // addReceImgMessages(ret.result[i], youHeadImg, 1)
-                createReceivePositionLabelSql(ret.result[i]);
-            }
-            else {
-            }
-        }
-        else {
-            // 发送信息
-            if (ret.result[i].objectName == 'RC:VcMsg') {
-                // 语音
-                addSendVoiceMessages(ret.result[i], headImg, 1);
-            }
-            else if (ret.result[i].objectName == 'RC:TxtMsg') {
-                // 文字
-                addSendMsg(ret.result[i], headImg, 1);
-            }
-            else if (ret.result[i].objectName == 'RC:ImgMsg') {
-                // 图片
-                addSendImgMessages(ret.result[i], headImg, 1);
-            }
-            else if (ret.result[i].objectName == 'RC:LBSMsg') {
-                // 位置
-                // addSendImgMessages(ret.result[i], headImg, 1)
-                // console.log('发送消息的JSON:'+JSON.stringify(ret));
-                createSendPositionLabelSql(ret.result[i]);
-            }
-            else {
-            }
-        }
-        // 获取历史聊天记录后 页面不想上滚动
-        // mainH=$api.offset($api.dom('.main')).h;
-        // _main = mainH
-        // 最新的消息的messageId,获取历史记录函数内部-20处理
-        messageId = ret.result[ret.result.length - 1].messageId;
-        slideBut();
+       if (ret.result[i].sentStatus != 'FAILED') {
+            if (ret.result[i].messageDirection == 'RECEIVE') {
+               // chatRecordingSql(ret, 'receiveMsg', youHeadImg)
+               // 消息方向：SEND(发送) 或者 RECEIVE(接受)
+               if (ret.result[i].objectName == 'RC:VcMsg') {
+                   // 语音
+                   addReceVoiceMessages(ret.result[i], 1);
+               }
+               else if (ret.result[i].objectName == 'RC:TxtMsg') {
+                   // 文字
+                   addReceMsg(ret.result[i], 1);
+               }
+               else if (ret.result[i].objectName == 'RC:ImgMsg') {
+                   // 图片
+                   addReceImgMessages(ret.result[i], 1);
+               }
+               else if (ret.result[i].objectName == 'RC:LBSMsg') {
+                   // 位置
+                   // addReceImgMessages(ret.result[i], youHeadImg, 1)
+                   createReceivePositionLabelSql(ret.result[i]);
+               }
+               else {
+               }
+           }
+           else {
+               // 发送信息
+               if (ret.result[i].objectName == 'RC:VcMsg') {
+                   // 语音
+                   addSendVoiceMessages(ret.result[i], headImg, 1);
+               }
+               else if (ret.result[i].objectName == 'RC:TxtMsg') {
+                   // 文字
+                   addSendMsg(ret.result[i], headImg, 1);
+               }
+               else if (ret.result[i].objectName == 'RC:ImgMsg') {
+                   // 图片
+                   addSendImgMessages(ret.result[i], headImg, 1);
+               }
+               else if (ret.result[i].objectName == 'RC:LBSMsg') {
+                   // 位置
+                   // addSendImgMessages(ret.result[i], headImg, 1)
+                   // console.log('发送消息的JSON:'+JSON.stringify(ret));
+                   createSendPositionLabelSql(ret.result[i]);
+               }
+               else {
+               }
+           }
+           // 获取历史聊天记录后 页面不想上滚动
+           // mainH=$api.offset($api.dom('.main')).h;
+           // _main = mainH
+           // 最新的消息的messageId,获取历史记录函数内部-20处理
+           messageId = ret.result[ret.result.length - 1].messageId;
+           slideBut();
+       }
     }
 }
 // 预览图片
