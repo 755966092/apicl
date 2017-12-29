@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+   <style type="text/css">
+        .hide {
+            display: none;
+        }
+   </style>
+</head>
+<body>
+    <header  class="header">
+        <div class="head">
+            <span class="callback"   tapmode   onclick="api.closeWin()">
+                <!--<span class="heaDicon"></span>-->
+                返回
+            </span>
+            <span class="winTitle">
+                选择行业
+            </span>
+            <span class="rightBtn" tapmode onclick="enter()">确定</span>
+        </div>
+    </header>
+
+
+
+
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/pinyin4js.js"></script>
+<script type="text/javascript">
+    var selectItemText = [];
+    var selectItemId = [];
+    apiready = function(){
+        fnInit();
+        moduleInit();
+        requireListData();
+    };
+    function enter() {
+       api.sendEvent({
+           name: 'selectIndustryItem',
+           extra: {
+               selectItemText: selectItemText,
+               selectItemId: selectItemId
+            }
+       });
+       api.closeWin();
+    }
+  
+    function requireListData() {
+        api.ajax({
+            url: apiSite + '/category/industry',
+            method: 'post',
+            headers: apiHeader
+        }, function (ret, err) {
+            if (ret) {
+                if (ret.code === 200) {
+                    //  console.log(JSON.stringify(ret))
+                    sortData(ret.data.list)
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+
+    // 格式化列表数据
+    function sortData(data) {
+        for (var i = 0; i < data.length; i++) {
+            data[i].letter = PinyinHelper.getShortPinyin($api.trimAll(data[i].name)).toUpperCase();
+            data[i].flag = data[i].letter[0];
+        }
+        for (var i = 0; i < data.length - 1; i++) {
+            for (var j = 0; j < data.length - i - 1; j++) {
+                if (data[j].letter > data[j + 1].letter) {
+                    var temp = data[j];
+                    data[j] = data[j + 1];
+                    data[j + 1] = temp;
+                }
+            }
+        }
+        paixv(data);
+    }
+    function paixv(data) {
+        for (var i = 0; i < data.length; i++) {
+            if (f_check_uppercase(data[0].flag)) {
+                data[0].initial = data[0].flag;
+            } else {
+                data[0].initial = '#';
+            }
+            if (i > 0) {
+                if (data[i].flag !== data[i - 1].flag) {
+                    if (f_check_uppercase(data[i].flag)) {
+                        data[i].initial = data[i].flag;
+                    } else {
+                        data[i].initial = '#';
+                    }
+                }
+            }
+        }
+        var arr = {}
+        var a;
+        for (var i = 0; i < data.length; i++) {
+            data[i].title = data[i].name;
+            data[i].industry_id = data[i].industry_id;
+            delete data[i].name;
+            delete data[i].letter;
+            delete data[i].flag;
+            data[i].titleSize = 15;
+            if (data[i].initial) {
+                if (data[i].initial == '#') {
+                    if (arr[data[i].initial]) {
+                    } else {
+                        arr[data[i].initial] = [];
+                    }
+                    a = i;
+                } else {
+                    arr[data[i].initial] = [];
+                    a = i;
+                }
+            }
+            arr[data[a].initial].push(data[i])
+
+        };
+        initList(arr);
+    }
+    function f_check_uppercase(obj) {
+        if (/[A-Z]/.test(obj)) {
+            return true;
+        }
+        return false;
+    }
+    function initList(data) {
+        
+        listContact.open({
+            x: 0,
+            y: headerH,
+            w: api.frameWidth,
+            h: api.winHeight - headerH,
+            bgColor: '#EFEFF4',
+            // 分割线颜色
+            borderColor: '#EDEDED',
+            groupTitle: {
+                color: '#999',
+                size: 14,
+                bgColor: '#EFEFF4'
+            },
+            cellBgColor: '#fff',
+            indicator: {
+                bgColor: 'rgba(0,0,0,0)',
+                color: '#5A5A5A'
+            },
+            cellHeight: 50,
+            data: data,
+        }, function (ret, err) {
+            var selFlag = selectItemText.indexOf(data[ret.key][ret.index].title);
+            var selFlag2 = selectItemId.indexOf(data[ret.key][ret.index].industry_id);
+            if (selectItemText.length < 3 || (selectItemText.length == 3 && selFlag != -1)) {
+                // 不足三个行业的时候, 可选, 
+                // 已经选择三个行业的时候, 再点击已选的可以进来, 取消选择
+                // console.log(JSON.stringify(data[ret.key][ret.index]));
+                if (selFlag != -1) {
+                    selectItemText = selectItemText.filter(function (value) {
+                        return value != selectItemText[selFlag]
+                    })
+                    selectItemId = selectItemId.filter(function (value) {
+                        return value != selectItemId[selFlag2]
+                    })
+                    // 已经选择
+                    listContact.refreshItem({
+                        index: ret.index,
+                        key: ret.key,
+                        data: {
+                            titleColor: '#000',
+                            titleSize: 15
+                        }
+                    });
+                } else {
+                    // 未选
+                    selectItemText.push(data[ret.key][ret.index].title);
+                    selectItemId.push(data[ret.key][ret.index].industry_id);
+                    listContact.refreshItem({
+                        index: ret.index,
+                        key: ret.key,
+                        data: {
+                            titleColor: '#26AB28',
+                            titleSize: 15
+                        }
+                    });
+                }
+                // console.log(JSON.stringify(selectItemId));
+                // console.log(JSON.stringify(selectItemText));
+            } else {
+                api.toast({
+                    msg: '最多可选三个行业',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+            }
+
+        });
+    }
+
+</script>
+</html>

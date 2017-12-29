@@ -29,6 +29,10 @@
         }
         footer .selRole .text {
             font-size: .34rem;
+            max-width: 2rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         footer .selRole .icon {
             width: .28rem;
@@ -519,10 +523,11 @@
            <li tapmode onclick="selRoleList(this);event.stopPropagation();">分包单位</li>
            <li tapmode onclick="selRoleList(this);event.stopPropagation();">设计院</li>
            <li tapmode onclick="selRoleList(this);event.stopPropagation();">销售</li>
+           
        </ul>
    </div>
     <footer class="flex-def">
-        <div class="selRole" tapmode onclick="selRole()">
+        <div class="selRole flex-zCenter flex-def flex-cCenter" tapmode onclick="selRole()">
             <span class="text" id='role' >选择角色</span>
             <span class="icon"></span>
         </div>
@@ -543,11 +548,14 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    var role = ['关系人','知情人','甲方','总包单位','分包单位','设计院','销售'],paramImg;
+    var role = ['关系人','知情人','甲方','总包单位','分包单位','设计院','销售'],paramImg,roleId;
     apiready = function(){
         moduleInit();
         // 表情转换
         updatePage();
+        // 行业角色
+        
+        industryRole();
         $api.fixTabBar($api.dom('footer'))
        api.addEventListener({
            name: 'circleTopicComment'
@@ -647,16 +655,16 @@
     }
     // 收藏
     function openShadow() {
-        var val = $api.text($api.byId('role')), valId=0;
+        var val = $api.text($api.byId('role'));
         // if ( val == '选择角色') {
         //     $api.removeCls($api.dom('.shadow'), 'dn');
         // } else {
-            for (var i = 0; i < role.length; i++) {
-                if (val == role[i]) {
-                    valId = i+1;
-                    break;
-                }
-            }
+            // for (var i = 0; i < role.length; i++) {
+            //     if (val == role[i]) {
+            //         valId = i+1;
+            //         break;
+            //     }
+            // }
             api.ajax({
                 url: apiSite + '/circle_topic/collect',
                 method: 'post',
@@ -665,7 +673,7 @@
                        values: {
                            token: $api.getStorage('userToken'),
                            topic_id: api.pageParam.topic_id,
-                           role: valId
+                           role: roleId
                        }
                 }
             }, function(ret, err) {
@@ -759,10 +767,10 @@
     }
 
     // 选择角色
-    function selRole() {
-        $api.css($api.dom('.selRoleList'), 'display:block');
-        $api.addCls($api.dom('.selRole .icon'), 'icon2');
-    }
+    // function selRole() {
+    //     $api.css($api.dom('.selRoleList'), 'display:block');
+    //     $api.addCls($api.dom('.selRole .icon'), 'icon2');
+    // }
     //
     function selRoleList(ele) {
         var val = $api.text(ele);
@@ -784,65 +792,151 @@
         });
     }
     function updatePage() {
-            var sourcePath = 'widget://image/chatPage/emotion'; // 表情存放目录
-            getImgsPaths(sourcePath, function (emotion) {
-                emotionData = emotion;
-            });
-        }
-        // 表情转换
-        function getImgsPaths(sourcePathOfChatBox, callback) {
-            var jsonPath = 'widget://image/chatPage/emotion/emotion.json'; // 表情的JSON数组
-            api.readFile({
-                path: jsonPath
-            }, function (ret, err) {
-                if (ret.status) {
-                    var emotionArray = JSON.parse(ret.data);
-                    var emotion = {};
-                    for (var idx in emotionArray) {
-                        var emotionItem = emotionArray[idx];
-                        var emotionText = emotionItem.text;
-                        var emotionUrl = '../../image/chatPage/emotion/' + emotionItem.name + '.png';
-                        emotion[emotionText] = emotionUrl;
-                    }
-
-                    /*把emotion对象 回调出去*/
-                    if ('function' === typeof (callback)) {
-                        callback(emotion);
-                    }
+        var sourcePath = 'widget://image/chatPage/emotion'; // 表情存放目录
+        getImgsPaths(sourcePath, function (emotion) {
+            emotionData = emotion;
+        });
+    }
+    // 表情转换
+    function getImgsPaths(sourcePathOfChatBox, callback) {
+        var jsonPath = 'widget://image/chatPage/emotion/emotion.json'; // 表情的JSON数组
+        api.readFile({
+            path: jsonPath
+        }, function (ret, err) {
+            if (ret.status) {
+                var emotionArray = JSON.parse(ret.data);
+                var emotion = {};
+                for (var idx in emotionArray) {
+                    var emotionItem = emotionArray[idx];
+                    var emotionText = emotionItem.text;
+                    var emotionUrl = '../../image/chatPage/emotion/' + emotionItem.name + '.png';
+                    emotion[emotionText] = emotionUrl;
                 }
 
-            });
-        }
-        // 表情转换
-        function transText(text, imgWidth, imgHeight) {
-            var imgWidth = imgWidth || 20;
-            var imgHeight = imgHeight || 20;
-            var regx = /\[(.*?)\]/gm;
-            var textTransed = text.replace(regx, function (match) {
-                var imgSrc = emotionData[match];
-                if (!imgSrc) {
-                    // 说明不对应任何表情，直接返回
-                    return match;
+                /*把emotion对象 回调出去*/
+                if ('function' === typeof (callback)) {
+                    callback(emotion);
                 }
-                var img = '<img style="vertical-align: middle;" src="' + imgSrc + '" width="' + imgWidth + '" height="' + imgHeight + '">';
-                return img;
-            });
-            return textTransed;
-        }
-         // doT模版获取数据
-            function getData(data) {
-
-                var listTText = $api.byId('listT').text;
-
-                var fnListT = doT.template(listTText);
-
-                var html = fnListT(data);
-                html = transText(html,10,10)
-                var list = $api.dom('.resultList');
-                // 替换resultList所有内容
-                $api.html(list, html);
-                // alert('getData:' + JSON.stringify(data))
             }
+
+        });
+    }
+    // 表情转换
+    function transText(text, imgWidth, imgHeight) {
+        var imgWidth = imgWidth || 20;
+        var imgHeight = imgHeight || 20;
+        var regx = /\[(.*?)\]/gm;
+        var textTransed = text.replace(regx, function (match) {
+            var imgSrc = emotionData[match];
+            if (!imgSrc) {
+                // 说明不对应任何表情，直接返回
+                return match;
+            }
+            var img = '<img style="vertical-align: middle;" src="' + imgSrc + '" width="' + imgWidth + '" height="' + imgHeight + '">';
+            return img;
+        });
+        return textTransed;
+    }
+        // doT模版获取数据
+    function getData(data) {
+
+        var listTText = $api.byId('listT').text;
+
+        var fnListT = doT.template(listTText);
+
+        var html = fnListT(data);
+        html = transText(html,10,10)
+        var list = $api.dom('.resultList');
+        // 替换resultList所有内容
+        $api.html(list, html);
+        // alert('getData:' + JSON.stringify(data))
+    }
+     // 圈子行业角色
+    function industryRole() {
+        api.ajax({
+            url: apiSite + '/circle/industryRole',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: {
+                    token: $api.getStorage('userToken'),
+                    circle_id: api.pageParam.circle_id
+                }
+            }
+        }, function (ret, err) {
+            if (ret) {
+                if (ret.code === 200) {
+                    role = ret.data.role
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+    // 选择角色
+    function selRole() {
+        // var UIActionSelector = api.require('UIActionSelector');
+        UIActionSelector.open({
+            datas: role,
+            actives: [1],
+            layout: {
+                row: 7,
+                col: 1,
+                height: 30,
+                size: 18,
+                sizeActive: 20,
+                rowSpacing: 5,
+                colSpacing: 5,
+                maskBg: 'rgba(0,0,0,0.5)',
+                bg: '#fff',
+                color: '#888',
+                colorSelected: '#000'
+            },
+            animation: true,
+            cancel: {
+                text: '取消',
+                size: 16,
+                w: 90,
+                h: 40,
+                bg: '#eee',
+                // bgActive: '#ccc',
+                color: '#000',
+                // colorActive: '#fff'
+            },
+            ok: {
+                text: '确定',
+                size: 16,
+                w: 90,
+                h: 40,
+                bg: '#eee',
+                // bgActive: '#ccc',
+                color: '#000',
+                // colorActive: '#fff'
+            },
+            title: {
+                text: '请选择',
+                size: 20,
+                h: 44,
+                bg: '#eee',
+                color: '#000'
+            },
+            fixedOn: api.frameName
+        }, function (ret, err) {
+            if (ret) {
+                if (ret.eventType == 'ok') {
+
+                    $api.text($api.byId('role'), ret.selectedInfo[0].name);
+                    // $api.attr($api.dom('._status'), ret.selectedInfo[0].role);
+                    roleId = ret.selectedInfo[0].role
+                }
+            } else {
+                alert(JSON.stringify(err.msg));
+            }
+        });
+    }
+
 </script>
 
 </html>

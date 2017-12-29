@@ -7,148 +7,97 @@
     <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
     <link rel="stylesheet" type="text/css" href="../../css/weui.css"/>
     <style>
-        li {
-            padding: 0 .36rem;
-            border-bottom: .01rem solid #d9d9d9;
-            height: 0.8rem;
-            background-color: #fff;
-        }
-        li .label {
-            font-size: 0.3rem;
-        }
-        li .text {
-            font-size: 0.3rem;
-            margin-right: 0.2rem;
-        }
-        li .icon {
-            width: 0.15rem;
-            height: 0.8rem;
-            background: url(../../image/icon_zk.png)no-repeat  center center/.15rem .25rem;
-        }
-        li img {
+        .weui-cell__ft img {
             width: 0.57rem;
             height: 0.57rem;
-            margin-right: 0.2rem;
+        }
+        .weui-cells {
+            background: transparent;
+        }
+        .weui-cell {
+            font-size: 0.3rem;
+            background-color: #fff;
+        }
+        .btn {
+            padding: 0 .3rem;
+            margin-top: 0.5rem;
         }
         .mt32 {
             margin-top: 0.32rem;
         }
-        textarea {
-            width: 100%;
-            height: 1.85rem;
-            background-color: #fff;
-            box-sizing: border-box;
-            padding: 0.19rem .36rem;
-        }
-        .hr {
-            width: 7.15rem;
-            height: 0.02rem;
-            background-color: #d9d9d9;
-            float: right;
-        }
-        .ipt {
-            font-size: 0;
-            height: 2.4rem;
-            background-color: #fff;
-        }
-        .ipt p {
-            font-size: 0.24rem;
-            text-align: right;
-            line-height: 0.55rem;
-            box-sizing: border-box;
-            padding-right: 0.36rem;
-        }
-        .btn {
-            width: 6.785rem;
-            height: .841rem;
-            border-radius: .06rem;
-            background-color: #1AAD19;
-            border: .01rem solid #189c17;
-            margin: 0 auto;
-            line-height: .841rem;
-            text-align: center;
-            font-size: .34rem;
-            color: #fff;
-            margin-top: .36rem;
-            margin-bottom: .2rem;
-        }
-        .remind {
-            background: #fff url(../../image/icon_supply/icon_06.png)no-repeat ;
-            background-size: .33rem .34rem;
-            background-position: .36rem;
-            padding-left: 0.78rem;
+        #industry {
+            max-width: 5rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         .hide {
             display: none;
         }
     </style>
-    <style>
-        
-    </style>
 </head>
 <body>
-    
-    <div class="main">
-        <ul class="mt32">
-            <li class="flex-def flex-cCenter flex-zBetween" tapmode onclick="openPage(this,1)">
-                <span class="label">圈子名称</span>
-                <div class="flex-def flex-cCenter">
-                        <span id="circleName" class="text"></span>
-                        <span class="icon"></span>
-                </div>
-            </li>
-            <li class="flex-def flex-cCenter flex-zBetween" tapmode onclick="openPage(this,3)">
-                <span class="label">圈子图片</span>
-                <div class="flex-def flex-cCenter">
-                        <img id="headImg" src="../../image/icon_defaultHead.png" alt="">
-                        <span class="icon"></span>
-                </div>
-            </li>
-            <!-- <li class="mt32 flex-def flex-cCenter flex-zBetween">
-                <span class="label">圈子类型</span>
-                <div class="flex-def flex-cCenter">
-                        <span class="text">name</span>
-                        <span class="icon"></span>
-                </div>
-            </li> -->
-            <li class="mt32 flex-def flex-cCenter flex-zBetween" onclick="priceSetting(this)" tapmode>
-                <span class="label">金额设置</span>
-                <div class="flex-def flex-cCenter">
-                        <span class="text" id="priceSetting"></span>
-                        <span class="icon"></span>
-                </div>
-            </li>
-            <li class="flex-def flex-cCenter flex-zBetween" id="priceBtn" tapmode onclick="openPage(this,2)">
-                <span class="label">入圈金额</span>
-                <div class="flex-def flex-cCenter">
-                        <span class="text" id="addCirclePrice"></span>
-                        <span class="icon"></span>
-                </div>
-            </li>
-        </ul>
-        <div class="ipt mt32">
-            <textarea oninput="changeIpt(this,1)" maxlength="80" placeholder="描述一下你所要创建的圈子..." id="description"></textarea>
-            <span class="hr"></span>
-            <p id="text1">0/80</p>
+    <div class="weui-cells">
+        <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openPage(this,1)">
+            <div class="weui-cell__bd">
+                <p>圈子名称</p>
+            </div>
+            <div class="weui-cell__ft" id="circleName"></div>
+        </a>
+        <a class="weui-cell weui-cell_access" style="padding:.14rem .3rem" href="javascript:;" tapmode onclick="openPage(this,3)"> 
+            <div class="weui-cell__bd">
+                <p>圈子图片</p>
+            </div>
+            <div class="weui-cell__ft" style="font-size: 0;">
+                <img id="headImg" src="../../image/icon_defaultHead.png" alt="">
+            </div>
+        </a>
+        <a class="mt32 weui-cell weui-cell_access" href="javascript:;" onclick="openIndustry(this)" tapmode>
+            <div class="weui-cell__bd">
+                <p>圈子行业</p>
+            </div>
+            <div class="weui-cell__ft" id="industry"></div>
+        </a>
+        <a class="mt32 weui-cell weui-cell_access" href="javascript:;" onclick="priceSetting(this)" tapmode>
+            <div class="weui-cell__bd">
+                <p>金额设置</p>
+            </div>
+            <div class="weui-cell__ft" id="priceSetting"></div>
+        </a>
+       
+        <a class="weui-cell weui-cell_access" href="javascript:;" id="priceBtn" tapmode onclick="openPage(this,2)">
+            <div class="weui-cell__bd">
+                <p>入圈金额</p>
+            </div>
+            <div class="weui-cell__ft" id="addCirclePrice"></div>
+        </a>
+        
+       
+        <div class="weui-cell mt32">
+            <div class="weui-cell__bd">
+                <textarea class="weui-textarea" oninput="changeIpt(this,1)" maxlength="80" placeholder="描述一下你所要创建的圈子..." id="description"></textarea>
+                <div class="weui-textarea-counter">
+                    <span id="text1">0/80</span></div>
+            </div>
         </div>
-        <div class="ipt mt32">
-            <textarea oninput="changeIpt(this,2)" maxlength="80" placeholder="说一下你的申请理由..." id="reason"></textarea>
-            <span class="hr"></span>
-            <p id="text2">0/80</p>
+        <div class="weui-cell mt32">
+            <div class="weui-cell__bd">
+                <textarea class="weui-textarea" oninput="changeIpt(this,2)" maxlength="80" placeholder="说一下你的申请理由..." id="reason"></textarea>
+                <div class="weui-textarea-counter">
+                    <span id="text2">0/80</span></div>
+            </div>
         </div>
-        <!-- <ul class="mt32">
-            <li class="remind flex-def flex-cCenter flex-zBetween">
-                <span class="label">提醒谁看</span>
-                <span class="icon"></span>
-            </li>
-        </ul> -->
-        <div class="btn" tapmode onclick="foundCircle()">确认创建</div>
+        <div class="btn">
+            <a href="javascript:;" tapmode onclick="foundCircle()" class="weui-btn weui-btn_primary">确定创建</a>
+        </div>
     </div>
+    
 
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
+    var industry_id="";
     apiready = function() {
        moduleInit();
        ListenToEvents();
@@ -232,6 +181,14 @@
                alert(JSON.stringify(err));
            }
         });
+        // 行业
+        api.addEventListener({
+            name: 'selectIndustryItem'
+        }, function(ret, err){
+            
+            $api.text($api.byId('industry'), ret.value.selectItemText+"");
+            industry_id = ret.value.selectItemId+""
+        });
     }
     // 输入框字数
     function changeIpt(ele, n) {
@@ -266,7 +223,8 @@
             description: description,
             image_url: image_url,
             type: type,
-            apply_reason: apply_reason
+            apply_reason: apply_reason,
+            industry_id: industry_id
         }
         if (title == '') {
             alert('标题不能为空')
@@ -276,8 +234,9 @@
             alert('头像不能为空')
         } else if (apply_reason == '') {
             alert('申请理由不能为空')
+        } else if (industry_id == '') {
+            alert('行业不能为空')
         } else {
-
             if (type == 2 && price == '') {
                 alert('收费圈子加入圈子费用不能为空')
             } else {
@@ -291,7 +250,7 @@
                 //     price: price,
                 //     type: type
                 // };
-                //console.log(JSON.stringify(obj));
+                console.log(JSON.stringify(obj));
                 api.ajax({
                     url: apiSite + '/circle/add',
                     method: 'post',
@@ -426,6 +385,15 @@
                     // console.log(retUpfile.percent);
                 }
             }
+        });
+    }
+    // 打开行业
+    function openIndustry() {
+        api.openWin({
+            name: 'find_foundIndustry_win',
+            url: './find_foundIndustry_win.html',
+            bounces: false,
+            pageParam: {key : 'value'}
         });
     }
 </script>

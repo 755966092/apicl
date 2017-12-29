@@ -266,13 +266,17 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-var base64Data = [], role = ['关系人','知情人','甲方','总包单位','分包单位','设计院','销售'],province='',city='',address="",district='',latitude='',longitude='',imgArr=[];
+var base64Data = [], role = [], selectedCircleId ,roleId,province='',city='',address="",district='',latitude='',longitude='',imgArr=[];
     apiready = function(){
         moduleInit();
         getPos();
+        // 获取圈子行业角色
+        
         if(api.pageParam.circle_id == undefined) {
             // 无圈子id
             $api.css($api.byId('is_circle'), 'display: block');
+        } else {
+            industryRole();
         }
         getData(base64Data);
         // 删除图片
@@ -287,6 +291,10 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
             if (ret) {
                 $api.text($api.byId('circleName'), ret.value.circleName);
                 $api.attr($api.byId('circleName'), 'data-circleId', ret.value.circleId);
+                selectedCircleId =ret.value.circleId;
+                $api.text($api.dom('._status'), '');
+                roleId = "";
+                industryRole();
             } else {
                 alert(JSON.stringify(err));
             }
@@ -327,18 +335,42 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
             },
         });
     }
-    // 添加圈子话题
-    function addTopic() {
-        // 获取身份
-        var roleId = 0;
-            if ($api.text($api.byId('role'))) {
-                for (var i = 0; i < role.length; i++) {
-                    if ($api.text($api.byId('role')) == role[i]) {
-                        roleId = i+1;
-                        break;
-                    }
+    // 圈子行业角色
+    function industryRole() {
+        api.ajax({
+            url: apiSite + '/circle/industryRole',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: $api.getStorage('userToken'),
+                    circle_id: api.pageParam.circle_id || selectedCircleId
                 }
             }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    role = ret.data.role
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+    // 添加圈子话题
+    function addTopic() {
+        // // 获取身份
+        // var roleId = 0;
+        //     if ($api.text($api.byId('role'))) {
+        //         for (var i = 0; i < role.length; i++) {
+        //             if ($api.text($api.byId('role')) == role[i]) {
+        //                 roleId = i+1;
+        //                 break;
+        //             }
+        //         }
+        //     }
                 // 内容
                 var title = $api.val($api.byId('title'));
                 var content = $api.val($api.byId('content'));
@@ -395,23 +427,7 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
     function selRole() {
          // var UIActionSelector = api.require('UIActionSelector');
             UIActionSelector.open({
-                datas: [
-                    {
-                        name:'关系人'
-                    },{
-                        name:'知情人'
-                    },{
-                        name:'甲方'
-                    },{
-                        name:'总包单位'
-                    },{
-                        name:'分包单位'
-                    },{
-                        name:'设计院'
-                    },{
-                        name:'销售'
-                    }
-                ],
+                datas: role,
                 actives: [1],
                 layout: {
                     row: 7,
@@ -457,10 +473,11 @@ var base64Data = [], role = ['关系人','知情人','甲方','总包单位','�
                 fixedOn: api.frameName
             }, function(ret, err) {
                 if (ret) {
-                    // alert(JSON.stringify(ret))
                     if (ret.eventType == 'ok') {
 
-                        $api.text($api.dom('._status'), ret.level1);
+                        $api.text($api.dom('._status'), ret.selectedInfo[0].name);
+                        // $api.attr($api.dom('._status'), ret.selectedInfo[0].role);
+                        roleId = ret.selectedInfo[0].role
                     }
                 } else {
                     alert(JSON.stringify(err.msg));
