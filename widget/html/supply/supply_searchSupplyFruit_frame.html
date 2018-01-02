@@ -193,11 +193,6 @@
                         </div>
                         <p class="createTime">{{=it[i].create_time}}</p>
                         <div class="user flex-def flex-cCenter flex-zBetween ">
-                            <!-- <div class="userLeft flex-def flex-cCenter " tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation(); ">
-                                <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" class="announcerHead" >
-                                <span class="announcer">{{=it[i].nickname}}</span>
-                                <span class="company">{{=it[i].company_name}}</span>
-                            </div> -->
                            <div>
                                 <span class="classifyLabel">{{=it[i].category_name}}</span>
                                 <span class="classifyLabel">{{=it[i].sub_type}}</span>
@@ -235,11 +230,6 @@
             </div>
             <p class="createTime">{{=it[i].create_time}}</p>
             <div class="user flex-def flex-cCenter flex-zBetween ">
-                <!-- <div class="userLeft flex-def flex-cCenter " tapmode data-id="{{=it[i].user_id}}" onclick="openUserInfoPage(this);event.stopPropagation(); ">
-                                <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" class="announcerHead" >
-                                <span class="announcer">{{=it[i].nickname}}</span>
-                                <span class="company">{{=it[i].company_name}}</span>
-                            </div> -->
                 <span class="classifyLabel">{{=it[i].category_name}}</span>
                 <span class="icon flex-def flex-cCenter "><span class="count ">{{=it[i].browse_count}}</span></span>
             </div>
@@ -452,8 +442,6 @@
                 supply_id: supply_id
             }
         } else {
-            
-
             url = 'supply_info_demand_win';
             obj = {
                 flag: flag,
@@ -479,6 +467,72 @@
                 }
             });
         }
-       
+       // 收藏
+       function collect(ele) {
+           console.log(url);
+           var obj = {}
+           if (url == '/supply/index') {
+               
+               obj = {
+                   token: $api.getStorage('userToken'),
+                   supply_id: $api.attr(ele, 'data-id')
+               }
+               collect2(ele, obj, 'supply');
+           } else {
+               
+               obj = {
+                   token: $api.getStorage('userToken'),
+                   demand_id: $api.attr(ele, 'data-id')
+               }
+               collect2(ele, obj,'demand');
+           }
+           
+       }
+       function collect2(ele,obj,flagUrl) {
+           var urlText = '';
+           if ($api.hasCls(ele, 'collect')) {
+               // 已收藏
+               // $api.removeCls(ele, 'collect');
+               urlText = '/'+ flagUrl +'/cancelCollect';
+           } else {
+               // 未收藏
+               // $api.addCls(ele, 'collect');
+               urlText = '/'+ flagUrl +'/collect';
+           }
+           api.ajax({
+               url: apiSite + urlText,
+               method: 'post',
+               headers: apiHeader,
+               data: {
+                   values: obj
+               }
+           }, function (ret, err) {
+               if (ret) {
+                   if (ret.code== 200) {
+                       api.sendEvent({
+                           name: 'editSupplyAfter'
+                       });
+                       if ($api.hasCls(ele, 'collect')) {
+                           // 已收藏
+                           $api.removeCls(ele, 'collect');
+                           api.toast({
+                               msg: '取消收藏成功'
+                           });
+                       } else {
+                           // 未收藏
+                           $api.addCls(ele, 'collect');
+                           api.toast({
+                               msg: '收藏成功'
+                           });
+                       }
+                   } else {
+                       alert(ret.msg)
+                   }
+                   
+               } else {
+                   alert(JSON.stringify(err.msg))
+               }
+           })
+       }
 </script>
 </html>

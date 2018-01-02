@@ -391,9 +391,9 @@
             $api.text($api.dom('.bbottomLoading'), '正在加载...');
             //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
             if (flag) {
-                requireData(condition);
+                requireData(condition, 'pullDownRefresh');
             } else {
-                requireData();
+                requireData(condition, 'pullDownRefresh');
             }
         });
        
@@ -483,16 +483,16 @@
                     data.longitude = ret.lon;
                     // 缓存字段  supply_publish_1
                     $api.css($api.dom('.loading'), 'display: none');
-                    fliderSupply(data, supplyCache)
+                    fliderSupply(data, supplyCache,str)
                 } else {
                     $api.css($api.dom('.loading'), 'display: none');
-                    fliderSupply(data, supplyCache)
+                    fliderSupply(data, supplyCache,str)
                 }
             });
         }
     }
 
-    function fliderSupply(data, supplyCache) {
+    function fliderSupply(data, supplyCache, str) {
         api.ajax({
             url: apiSite + '/supply/index',
             method: 'post',
@@ -516,7 +516,7 @@
                     $api.css($api.dom('.loading'), 'display: none');
                     // 停止下拉刷新
                     api.refreshHeaderLoadDone()
-                    renderPage(ret);
+                    renderPage(ret,str);
                     if (ret.data.list.length < 15) {
                         $api.css($api.dom('.bbottomLoading'), 'display: none');
                     }
@@ -608,7 +608,7 @@
         });
     }
     // 渲染页面
-    function renderPage(ret) {
+    function renderPage(ret, str) {
         
         for (var i = 0; i < ret.data.list.length; i++) {
             // 解析图片json
@@ -634,6 +634,9 @@
                 alert('292' + JSON.stringify(err));
             }
         }
+        if (str == 'pullDownRefresh') {
+            dataList = [];
+        } 
         for (var i = 0; i < ret.data.list.length; i++) {
             dataList.push(ret.data.list[i])
         }

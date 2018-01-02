@@ -146,10 +146,18 @@
             padding-top: .2rem;
             padding-bottom: 0.2rem;
         }
+        .bbottomLoading {
+            text-align: center;
+            font-size: .24rem;
+            color: #999;
+            line-height: .8rem;
+            display: none;
+        }
     </style>
 </head>
 
 <body>
+    <div class="loading"></div>
     <div class="resultList weui-panel__bd"></div>
         <!-- <div class="user">
                         <div class="wrap" data-flag='1' data-name='{{=it[i].title}}' data-id='{{=it[i].circle_id}}' tapmode   onclick="openCircleInfo(this)">
@@ -195,22 +203,55 @@
             <p class="no_data">暂无数据</p>
             {{?}}
        </script>
-
+         <p class="bbottomLoading ">正在加载...</p>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-
+    var page_num = 1, flag = 1,dataList=[];
     apiready = function () {
         requireData();
+        refresh();
         api.addEventListener({
             name: 'circleTopicComment'
         }, function (ret, err) {
             requireData();
         });
     };
+    function refresh(params) {
+         // 滚动到底部触发的事件
+        api.addEventListener({
+            name: 'scrolltobottom',
+            extra: {
+                threshold: 0 //设置距离底部多少距离时触发，默认值为0，数字类型
+            }
+        }, function (ret, err) {
+            if (flag) {
+                flag = 0;
+                $api.css($api.dom('.bbottomLoading'), 'display: block');
+                requireData();
+            }
+            // }
 
+        });
+        // 下拉刷新
+        // api.setCustomRefreshHeaderInfo({
+        //     bgColor: '#EFEFF4',
+        // }, function (ret, err) {
+        //     page_num = 1;
+        //     $api.css($api.dom('.loading'), 'display: none');
+        //     $api.css($api.dom('.bbottomLoading'), 'display: block');
+        //     $api.text($api.dom('.bbottomLoading'), '正在加载...');
+        //     //在这里从服务器加载数据，加载完成后调用api.refreshHeaderLoadDone()方法恢复组件到默认状态
+        //     if (flag) {
+        //         flag = 0;
+        //         requireData();
+        //     } else {
+        //         requireData();
+        //     }
+        // });
+    }
     function requireData() {
         api.ajax({
             url: apiSite + '/circle/otherList',
@@ -218,13 +259,23 @@
             headers: apiHeader,
             data: {
                 values: {
-                    token: $api.getStorage('userToken')
+                    token: $api.getStorage('userToken'),
+                    page_num: page_num
                 }
             }
         }, function (ret, err) {
+            $api.css($api.dom('.loading'), 'display: none');
+            $api.css($api.dom('.bbottomLoading'), 'display: none');
+            flag = 1;
             if (ret) {
                 if (ret.code === 200) {
-                    getData(ret.data.list)
+                    page_num++;
+                    dataList = dataList.concat(ret.data.list);
+                    getData(dataList);
+                    if (ret.data.list.length < 10) {
+                         $api.text($api.dom('.bbottomLoading'), '暂无更多圈子');
+                         $api.css($api.dom('.bbottomLoading'), 'display: block');
+                    }
                 } else {
                     alert(ret.msg)
                 }
