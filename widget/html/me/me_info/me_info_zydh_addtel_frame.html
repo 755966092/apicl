@@ -73,6 +73,10 @@
             padding-left: 0;
             padding-right: .36rem;
         }
+        .page__bd_spacing {
+           box-sizing: border-box;
+           padding: 1rem .15rem 0;
+        }
     </style>
 </head>
 <body>
@@ -91,17 +95,16 @@
                 <p>移动电话</p>
             </div>
             <div class="weui-cell__ft">
-                <input type="radio" class="weui-check" name="radio1" id="x11">
+                <input type="radio" class="weui-check" name="radio1" id="x11" checked="checked">
                 <span class="weui-icon-checked"></span>
             </div>
         </label>
         <label class="weui-cell weui-check__label" for="x12" onclick="selectClass(this)" data-val="2">
-    
             <div class="weui-cell__bd">
                 <p>固定电话</p>
             </div>
             <div class="weui-cell__ft">
-                <input type="radio" name="radio1" class="weui-check" id="x12" checked="checked">
+                <input type="radio" name="radio1" class="weui-check" id="x12" >
                 <span class="weui-icon-checked"></span>
             </div>
         </label>
@@ -119,6 +122,9 @@
             </div>
             <input type="text" name="" style="text-align: right" id="phone" placeholder="输入手机号">
         </a>
+    </div>
+    <div class="page__bd page__bd_spacing">
+        <a href="javascript:;" class="weui-btn weui-btn_primary" id="main_no3" tapmode onclick="addTel()">保存</a>
     </div>
     <!-- <div class="main clearfix">
        <div class="main_no1">
@@ -171,8 +177,8 @@
                 sub_type = ret.data.info.sub_type;
                 $api.val($api.byId('phone'), ret.data.info.phone);
                 $api.removeCls($api.dom('.select'), 'select');
-                $api.addCls($api.dom('p[data-val="'+ ret.data.info.type +'"] span'), 'select');
-
+                $api.attr($api.dom('label[data-val="'+ ret.data.info.type +'"] input'),'checked', "checked");
+                 
                 $api.text($api.dom('.telClass_1'), ret.data.info.sub_type == 1 ? '工作' : '生活');
             } else {
                 alert(JSON.stringify(err))
@@ -202,6 +208,7 @@
             api.actionSheet({
                 buttons: ['工作', '生活']
             },function(ret,err){
+                sub_type = ret.buttonIndex
                 $api.text($api.dom('.telClass_1'), ret.buttonIndex == 1 ? '工作': '生活');
             });
             // api.openFrame({
@@ -222,21 +229,20 @@
     // 选择电话类别 移动 || 固定
     function selectClass(ele) {
         type = $api.attr(ele, 'data-val');
-        for (var i = 0; i < $api.domAll('.selClass').length; i++) {
-            $api.removeCls($api.domAll('.selClass')[i], 'select');
-        }
-        $api.addCls($api.last(ele), 'select');
+        // for (var i = 0; i < $api.domAll('.selClass').length; i++) {
+        //     $api.removeCls($api.domAll('.selClass')[i], 'select');
+        // }
+        // $api.addCls($api.last(ele), 'select');
     }
 
     // 添加电话完成
     function addTel() {
-        var tel = $api.val($api.dom('input')),url;
+        var tel = $api.val($api.byId('phone')),url;
         if (api.pageParam.contactId) {
             url = '/user_center/editContact'
         } else {
             url = '/user_center/addContact';
         }
-        //console.log(tel+'--'+url)
         if(checkPhone(tel)) {
             api.ajax({
                 url: apiSite + url,
@@ -263,12 +269,23 @@
     function checkPhone(data){ 
         var phone = /^1[34578]\d{9}$/,
             tel = /^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{7,14}$/;
-        if(!(phone.test(data))&& !(tel.test(data))){ 
-            alert("电话号码有误，请重填");  
-            return false; 
-        } else {
-            return true
-        }
+            // 一点
+            if (type == 1) {
+                if (!(phone.test(data)) ) {
+                    alert("电话号码有误，请重填");
+                    return false;
+                } else {
+                    return true
+                }
+            } else {
+                 if (!(tel.test(data))) {
+                    alert("电话号码有误，请重填");
+                    return false;
+                } else {
+                    return true
+                }
+            }
+           
     }
 
 </script>
