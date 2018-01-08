@@ -499,6 +499,8 @@
     }
     // 编辑供应
     function editSupply(data) {
+        console.log(JSON.stringify(data));
+        
         classify();
         var titleIpt = $api.byId('title'),
             descriptionIpt = $api.byId('description'),
@@ -511,46 +513,47 @@
         $api.val(titleIpt, data.info.title);
         $api.val(descriptionIpt, data.info.description);
         $api.val(reward, data.info.reward);
-
+        $api.text(category_id, data.info.category_name);
+        $api.attr(category_id, 'data-id',data.info.category_id);
         var unitText = data.info.unit > 0 ? _dataSource[data.info.unit-1] : '其他';
         var classifyData = $api.getStorage('categoryIndex');
-        if (classifyData) {
-            for (var i = 0; i < classifyData.length; i++) {
-                var element = classifyData[i];
-                if(element.category_id == data.info.category_id) {
-                    $api.text(category_id, element.name);
-                    break;
-                }
-            }
-        } else {
-            api.ajax({
-                url: apiSite + '/category/index',
-                method: 'post',
-                headers: apiHeader,
-                data: {
-                    values: {
-                        type: 2
-                    }
-                }
-            }, function(ret, err) {
-                if(ret) {
-                    if(ret.code === 200) {
-                        $api.setStorage('categoryIndex', ret.data.list);
-                        for (var i = 0; i < ret.data.list.length; i++) {
-                            var element = ret.data.list[i];
-                            if(element.category_id == data.info.category_id) {
-                                $api.text(category_id, element.name);
-                                break;
-                            }
-                        }
-                    } else {
-                        alert(ret.msg)
-                    }
-                } else {
-                    alert(JSON.stringify(err))
-                }
-            })
-        }
+        // if (classifyData) {
+        //     for (var i = 0; i < classifyData.length; i++) {
+        //         var element = classifyData[i];
+        //         if(element.category_id == data.info.category_id) {
+        //             $api.text(category_id, element.name);
+        //             break;
+        //         }
+        //     }
+        // } else {
+        //     api.ajax({
+        //         url: apiSite + '/category/index',
+        //         method: 'post',
+        //         headers: apiHeader,
+        //         data: {
+        //             values: {
+        //                 type: 2
+        //             }
+        //         }
+        //     }, function(ret, err) {
+        //         if(ret) {
+        //             if(ret.code === 200) {
+        //                 $api.setStorage('categoryIndex', ret.data.list);
+        //                 for (var i = 0; i < ret.data.list.length; i++) {
+        //                     var element = ret.data.list[i];
+        //                     if(element.category_id == data.info.category_id) {
+        //                         $api.text(category_id, element.name);
+        //                         break;
+        //                     }
+        //                 }
+        //             } else {
+        //                 alert(ret.msg)
+        //             }
+        //         } else {
+        //             alert(JSON.stringify(err))
+        //         }
+        //     })
+        // }
 
         var _categoryId =  categoryArr[data.info.category_id-1]
         $api.text(position, data.info.address);
