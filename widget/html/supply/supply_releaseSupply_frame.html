@@ -921,6 +921,7 @@
             }
         }, function (ret, err) {
             if (ret) {
+                $api.css($api.dom('.loading'), 'display:none');
                 if (ret.code == 200) {
                     //console.log(JSON.stringify(ret))
                     if (api.pageParam.supply_id) {
@@ -935,7 +936,7 @@
                         });
                         api.closeWin();
                     } else {
-                        $api.css($api.dom('.loading'), 'display:none');
+                        
                         // 发布新供应返回供应列表
                         api.sendEvent({
                             name: 'editSupplyAfter'
