@@ -357,6 +357,9 @@
             $('#company_name').on("compositionend", function () {
                 searchKeyword(this);
             })
+            $('#company_name').on("input", function () {
+                searchKeyword(this);
+            })
         } else {
             $('#company_name').on("input", function () {
                 searchKeyword(this);
@@ -364,6 +367,8 @@
         }
     }
     function searchKeyword(ele) {
+        console.log('触发');
+        
         var keyword = $api.val(ele);
         api.ajax({
             url: apiSite + '/userCenter/addCompanyLike',
@@ -378,6 +383,8 @@
         }, function(ret, err) {
             if(ret) {
                 if (ret.code === 200) {
+                    console.log(JSON.stringify(ret));
+                    
                     getData(ret.data.list)
                 } else {
                     alert(ret.msg)

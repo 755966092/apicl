@@ -251,7 +251,7 @@
                         <p class="announcer">{{=value.nickname}}</p>
                         <p class="company">{{=value.company_name}}</p>
                     </div>
-                    <p class="price2"></p>
+                    <p class="price2">{{=value.price}}元 / {{=value.unit}}</p>
                 </div>
                 <span class="firstImg" style="display:inline-block;width:100%;height:3.8rem;background:url({{=value.image_json[0]?value.image_json[0]:'../../image/icon_supply/supply_noImg.png'}})no-repeat;background-size:100% auto;background-position: center center;border-radius:.1rem;">
                     {{?value.distance}}
@@ -299,6 +299,7 @@
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
     var sub_type = ['自产自销', '代理代销', '技能服务', '出租租赁', '相亲交友'];
+    var _dataSource = ["次","幅","单","小时","分钟","天","周","月","份","个","扇","课时","面议","其他","未定义"];
     apiready = function () {
         moduleInit();
         requireData();
@@ -318,11 +319,11 @@
         }, function (ret, err) {
             if (ret) {
                 if (ret.code === 200) {
-                    // console.log(JSON.stringify(ret))
                      for (var i = 0; i < ret.data.list.length; i++) {
                         // 解析图片json
                         ret.data.list[i].image_json = eval(ret.data.list[i].image_json);
                         ret.data.list[i].sub_type = sub_type[ret.data.list[i].sub_type-1];
+                        ret.data.list[i].unit = _dataSource[ret.data.list[i].unit-1]
                         var retSql = db.selectSqlSync({
                             name: 'db_' + $api.getStorage('userToken'),
                             sql: 'SELECT * FROM addressList_simplify WHERE user_id = ' + ret.data.list[i].user_id
@@ -338,8 +339,6 @@
                             alert('292' + JSON.stringify(err));
                         }
                      }
-                     console.log(JSON.stringify(ret))
-                   
                     getData(ret.data.list)
                 } else {
                     alert(ret.msg)
