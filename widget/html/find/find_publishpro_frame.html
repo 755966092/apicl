@@ -91,7 +91,7 @@
         }
 
         .spanno2 {
-            margin-right: .2rem;
+            /* margin-right: .2rem; */
             display: inline-block;
             height: .8rem;
             /*background: url(../../image/icon_zk.png)no-repeat;*/
@@ -100,7 +100,7 @@
             background-position: right center;
             float: right;
             color: #BEBEBE;
-            padding-right: .3rem;
+            /* padding-right: .3rem; */
         }
         li input {
             float: right;
@@ -181,7 +181,7 @@
             height: 1.6rem;
             margin-bottom: .1rem;
         }
-        #is_circle {
+        .hide {
             display: none;
         }
     </style>
@@ -231,11 +231,8 @@
         <p class="position" id="position" tapmode   onclick="openPosition()" ></p>
     </div>
     <div class="classify clearfix">
-        <div class="status" tapmode='hover' ontouchstart="selRole()" data-val='_status' >
-            <span>您的身份</span>
-            <span class="_status spanno2" id="role"></span>
-        </div>
-        <ul>
+        
+        <ul class="mt20">
             <li>
                 <span>截至时间</span>
                 <span class="spanno2"></span>
@@ -246,7 +243,7 @@
                 </span>
 
             </li>
-            <li class="mt20" id="is_circle" class="is_circle"   tapmode   onclick="selCircle()">
+            <li  id="is_circle" class="is_circle hide flex-def flex-zBetween"   tapmode   onclick="selCircle()">
                 <span>选择圈子</span>
                 <span class="spanno2" id="circleName"></span>
             </li>
@@ -259,6 +256,10 @@
                 <span class="spanno2"></span>
             </li> -->
         </ul>
+        <div class="status" tapmode='hover' ontouchstart="selRole()" data-val='_status'>
+            <span>您的身份</span>
+            <span class="_status spanno2" id="role"></span>
+        </div>
     </div>
     <div class="btn" ontouchstart="addTopic()">发布</div>
 </body>
@@ -274,7 +275,8 @@ var base64Data = [], role = [], selectedCircleId ,roleId,province='',city='',add
         
         if(api.pageParam.circle_id == undefined) {
             // 无圈子id
-            $api.css($api.byId('is_circle'), 'display: block');
+            // $api.css($api.byId('is_circle'), 'display: block');
+            $api.removeCls($api.byId('is_circle'), 'hide');
         } else {
             industryRole();
         }
