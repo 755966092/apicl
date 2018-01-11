@@ -313,6 +313,7 @@ function sqlSyntax(data1, type) {
                             duration: 2000,
                             location: 'bottom'
                         });
+                        $api.rmStorage('contactCount');
                     } else {
                         api.alert({ msg: err.msg });
                     }

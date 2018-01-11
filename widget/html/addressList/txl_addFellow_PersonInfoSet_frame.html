@@ -389,6 +389,18 @@
         }
     }
     function updateSql() {
+          db.executeSql({
+            name: 'db_' + $api.getStorage('userToken'),
+            sql: 'DELETE FROM addressList_simplify WHERE user_id = ' + api.pageParam.user_id
+        }, function (ret, err) {
+            if (ret.status) {
+                console.log('删除成功'+ api.pageParam.user_id);
+                
+                api.sendEvent({
+                    name: 'editUserInfoUpdateList'
+                });
+            }
+        })
         db.executeSql({
             name: 'db_'+$api.getStorage('userToken'),
             sql: 'DELETE FROM addressList WHERE user_id = ' + api.pageParam.user_id    
