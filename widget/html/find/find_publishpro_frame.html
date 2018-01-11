@@ -91,6 +91,7 @@
         }
 
         .spanno2 {
+            text-align: right;
             /* margin-right: .2rem; */
             display: inline-block;
             height: .8rem;
@@ -256,9 +257,15 @@
                 <span class="spanno2"></span>
             </li> -->
         </ul>
-        <div class="status" tapmode='hover' ontouchstart="selRole()" data-val='_status'>
+        <div class="status role" tapmode='hover' tapmode onclick="selRole()" data-val='_status'>
             <span>您的身份</span>
-            <span class="_status spanno2" id="role"></span>
+            <span class="_status spanno2"></span>
+            <!-- <input type="text" name=""  class="_status spanno2" disabled> -->
+        </div>
+        <div class="status role hide" tapmode='hover'  tapmode data-val='_status'>
+            <span>您的身份</span>
+            <!-- <span class="_status spanno2" id="role"></span> -->
+            <input type="text" id="roleipt" name="" placeholder="请输入自定义角色名称"  class="_status spanno2">
         </div>
     </div>
     <div class="btn" ontouchstart="addTopic()">发布</div>
@@ -352,6 +359,10 @@ var base64Data = [], role = [], selectedCircleId ,roleId,province='',city='',add
         }, function(ret, err) {
             if(ret) {
                 if (ret.code === 200) {
+                    ret.data.role.push({
+                        "role": -1,
+                        "name": "自定义身份"
+                    })
                     role = ret.data.role
                 } else {
                     alert(ret.msg)
@@ -363,16 +374,6 @@ var base64Data = [], role = [], selectedCircleId ,roleId,province='',city='',add
     }
     // 添加圈子话题
     function addTopic() {
-        // // 获取身份
-        // var roleId = 0;
-        //     if ($api.text($api.byId('role'))) {
-        //         for (var i = 0; i < role.length; i++) {
-        //             if ($api.text($api.byId('role')) == role[i]) {
-        //                 roleId = i+1;
-        //                 break;
-        //             }
-        //         }
-        //     }
                 // 内容
                 var title = $api.val($api.byId('title'));
                 var content = $api.val($api.byId('content'));
@@ -391,13 +392,14 @@ var base64Data = [], role = [], selectedCircleId ,roleId,province='',city='',add
                     district: district,
                     latitude: latitude,            //string  纬度
                     longitude: longitude,
-                    image_json: imgArr
+                    image_json: imgArr,
+                    role_name: $api.val($api.byId('roleipt'))
+
                 }
                 if( start_time ) {
                     obj.start_time = start_time;
                     obj.end_time = end_time;
                 }
-                // console.log(JSON.stringify(obj))
                     api.ajax({
                         url: apiSite + '/circle_topic/add',
                         method: 'post',
@@ -476,9 +478,12 @@ var base64Data = [], role = [], selectedCircleId ,roleId,province='',city='',add
             }, function(ret, err) {
                 if (ret) {
                     if (ret.eventType == 'ok') {
-
-                        $api.text($api.dom('._status'), ret.selectedInfo[0].name);
-                        // $api.attr($api.dom('._status'), ret.selectedInfo[0].role);
+                        if (ret.selectedInfo[0].role == -1) {
+                            $api.addCls($api.domAll('.role')[0], 'hide');
+                            $api.removeCls($api.domAll('.role')[1], 'hide');
+                        } else {
+                            $api.text($api.dom('._status'), ret.selectedInfo[0].name);
+                        }
                         roleId = ret.selectedInfo[0].role
                     }
                 } else {

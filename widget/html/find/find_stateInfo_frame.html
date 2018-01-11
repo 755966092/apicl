@@ -27,6 +27,7 @@
             width: 50%;
             text-align: center;
         }
+        
         footer .selRole .text {
             font-size: .34rem;
             max-width: 2rem;
@@ -347,6 +348,13 @@
             width: 0.4rem;
             height: 0.4rem;
         }
+        #selroleIpt {
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        #selroleIpt input {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -527,9 +535,12 @@
        </ul>
    </div>
     <footer class="flex-def">
-        <div class="selRole flex-zCenter flex-def flex-cCenter" tapmode onclick="selRole()">
-            <span class="text" id='role' >选择角色</span>
-            <span class="icon"></span>
+        <div class="selRole  flex-zCenter flex-def flex-cCenter" tapmode onclick="selRole()">
+            <span class="text selroleBtn" id='role' >选择角色</span>
+            <span class="icon selroleBtn"></span>
+        </div>
+        <div id="selroleIpt" class="selRole hide flex-zCenter flex-def flex-cCenter" >
+            <input type="text"  id="roleipt" name="" placeholder="输入角色名称" >
         </div>
         <div class="collect" tapmode onclick="openShadow()">
             <span class="icon"></span>
@@ -665,21 +676,22 @@
             //         break;
             //     }
             // }
+            var obj = {
+                token: $api.getStorage('userToken'),
+                topic_id: api.pageParam.topic_id,
+                role: roleId,
+                role_name: $api.val($api.dom('input'))
+            }
             api.ajax({
                 url: apiSite + '/circle_topic/collect',
                 method: 'post',
                 headers: apiHeader,
                 data: {
-                       values: {
-                           token: $api.getStorage('userToken'),
-                           topic_id: api.pageParam.topic_id,
-                           role: roleId
-                       }
+                       values: obj
                 }
             }, function(ret, err) {
                 if(ret) {
                     // 收藏成功
-
                     requestData();
                 } else {
                     alert(JSON.stringify(err.msg))
@@ -866,6 +878,10 @@
         }, function (ret, err) {
             if (ret) {
                 if (ret.code === 200) {
+                     ret.data.role.push({
+                        "role": -1,
+                        "name": "自定义身份"
+                    })
                     role = ret.data.role
                 } else {
                     alert(ret.msg)
@@ -926,9 +942,12 @@
         }, function (ret, err) {
             if (ret) {
                 if (ret.eventType == 'ok') {
-
-                    $api.text($api.byId('role'), ret.selectedInfo[0].name);
-                    // $api.attr($api.dom('._status'), ret.selectedInfo[0].role);
+                     if (ret.selectedInfo[0].role == -1) {
+                        $api.addCls($api.domAll('.selRole')[0], 'hide');
+                        $api.removeCls($api.domAll('.selRole')[1], 'hide');
+                    } else {
+                        $api.text($api.byId('role'), ret.selectedInfo[0].name);
+                    }
                     roleId = ret.selectedInfo[0].role
                 }
             } else {
