@@ -129,9 +129,7 @@
                 $api.removeCls(btn, 'delRed');
                 // console.log('aCount:'+aCount)
                 // console.log('后来'+$api.domAll('a').length)
-                if (aCount != $api.domAll('a').length) {
-                    editImageInfo('del');
-                }
+                
             }
             for (let i = 0; i < $api.domAll('.selIcon').length; i++) {
                 const element = $api.domAll('.selIcon')[i];
@@ -173,7 +171,6 @@
         // 获取选中图片的index
         // 删除
         if ($api.text(ele)=='上传') {
-            
             UIMediaScanner.open({
                 type: 'picture',
                 column: 4,
@@ -248,15 +245,17 @@
         } else {
             // 删除
             var delArr = [];
-            for (let i = 0; i < $api.domAll('.greed').length; i++) {
-                const element = $api.domAll('.greed')[i];
+            for (var i = 0; i < $api.domAll('.greed').length; i++) {
+                var element = $api.domAll('.greed')[i];
                 delArr.push($api.attr(element, 'data-url'))
             }
-            for (let j = 0; j < delArr.length; j++) {
-                const element = delArr[j];
+            for (var j = 0; j < delArr.length; j++) {
+                var element = delArr[j];
                 $api.remove($api.dom('a[data-url="'+ element +'"]'));
             }
-            
+            if (aCount != $api.domAll('a').length) {
+                editImageInfo('del');
+            }
         }
     }
     function selImg(ele) {
