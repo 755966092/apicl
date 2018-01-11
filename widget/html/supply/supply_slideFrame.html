@@ -175,9 +175,9 @@
                              <p>类别</p>
                              <span   tapmode   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 " data-type="sub_type_1">自产自销</span>
                              <span   tapmode   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4" data-type="sub_type_2">代理代销</span>
-                             <span   tapmode   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4" data-type="sub_type_3">技能服务</span>
-                             <span   tapmode   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 mr12" data-type="sub_type_4">出租租赁</span>
-                             <span   tapmode   onclick="li_span(this);event.cancelBubble=true;" class="li_span li_span4 mr12" data-type="sub_type_5">相亲交友</span>
+                             <span   tapmode   onclick="li_span(this);event.cancelBubble=true;" class="personal li_span li_span4" data-type="sub_type_3">技能服务</span>
+                             <span   tapmode   onclick="li_span(this);event.cancelBubble=true;" class="personal li_span li_span4 mr12" data-type="sub_type_4">出租租赁</span>
+                             <span   tapmode   onclick="li_span(this);event.cancelBubble=true;" class="personal li_span li_span4 mr12" data-type="sub_type_5">相亲交友</span>
                         </li>
                         <li class="no33">
                              <p>排序</p>
@@ -339,7 +339,19 @@
     }
       // 选中图标
     function li_span(ele) {
+        if ($api.attr(ele, 'data-type') == 'type_2') {
+            for (var i = 0; i < $api.domAll('.personal').length; i++) {
+                var element = $api.domAll('.personal')[i];
+                $api.addCls(element, 'hide');
+            } 
+        } else if ($api.attr(ele, 'data-type') == 'type_1') {
+            for (var i = 0; i < $api.domAll('.personal').length; i++) {
+                var element = $api.domAll('.personal')[i];
+                $api.removeCls(element, 'hide');
+            } 
+        } else {}
         flag = 1;
+        // personal
         var allDom = $api.not($api.closest(ele, 'li'),'p')
         for (var i = 0; i < allDom.length; i++) {
             $api.removeCls(allDom[i], 'sel');

@@ -634,7 +634,7 @@
         $api.text(unit, unitText);
         $api.text(category_id, _categoryId);
         $api.attr(category_id, 'data-id', data.info.category_id);
-
+        
         data.info.type == 1 ? $api.text(_type, '个人') : $api.text(_type, '公司');
         if (data.info.type == 2) {
             type = 2;
@@ -650,6 +650,7 @@
         base64Data.img = eval(data.info.image_json);
         getData(base64Data)
         // 编辑供应返回的相关信息
+        type = data.info.type
         address = data.info.address;
         latitude = data.info.latitude;
         longitude = data.info.longitude;
@@ -1045,24 +1046,39 @@
             _dataSource2 = ['个人', '公司']
             flag = 0;
         } else if (_data == '_genre') {
-            _dataSource = [
-                {
-                    name: '自产自销'
-                },
-                {
-                    name: '代理代销'
-                },
-                {
-                    name: '技能服务'
-                },
-                {
-                    name: '出租租赁'
-                },
-                {
-                    name: '相亲交友'
-                }
-            ];
-            _dataSource2 = ['自产自销', '代理代销', '技能服务', '出租租赁', '相亲交友']
+            if (type == 1) {
+                // 个人
+                 _dataSource = [
+                    {
+                        name: '自产自销'
+                    },
+                    {
+                        name: '代理代销'
+                    },
+                    {
+                        name: '技能服务'
+                    },
+                    {
+                        name: '出租租赁'
+                    },
+                    {
+                        name: '相亲交友'
+                    }
+                ];
+                _dataSource2 = ['自产自销', '代理代销', '技能服务', '出租租赁', '相亲交友']
+            } else {
+                // 公司
+                 _dataSource = [
+                    {
+                        name: '自产自销'
+                    },
+                    {
+                        name: '代理代销'
+                    }
+                ];
+                _dataSource2 = ['自产自销', '代理代销']
+            }
+           
             flag = 1;
         } else if (_data == '_format') {
             _dataSource = [
@@ -1206,8 +1222,8 @@
                     if (_dataSource2[1] == '公司') {
                         if (ret.level1 == '公司') {
                             type = 2;
-                            for (var i = 0; i < $api.domAll('.companyName').length; i++) {
 
+                            for (var i = 0; i < $api.domAll('.companyName').length; i++) {
                                 $api.css($api.domAll('.companyName')[i], 'display: block');
                             }
                         } else {

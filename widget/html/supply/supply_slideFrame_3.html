@@ -179,9 +179,9 @@
                         <p>类别</p>
                         <li tapmode onclick="selSubType(this)" data-id="1">自产自销</li>
                         <li tapmode onclick="selSubType(this)" data-id="2">代理代销</li>
-                        <li tapmode onclick="selSubType(this)" data-id="3">技能服务</li>
-                        <li tapmode onclick="selSubType(this)" data-id="4">出租租赁</li>
-                        <li tapmode onclick="selSubType(this)" data-id="5">相亲交友</li>
+                        <li tapmode onclick="selSubType(this)" class="personal" data-id="3">技能服务</li>
+                        <li tapmode onclick="selSubType(this)" class="personal" data-id="4">出租租赁</li>
+                        <li tapmode onclick="selSubType(this)" class="personal" data-id="5">相亲交友</li>
                     </ul>
                     <h3>分类</h3>
                     <ul class="no2">
@@ -314,6 +314,17 @@
 
     }
     function selType (ele) {
+        if ($api.attr(ele, 'data-id') == '2') {
+            for (var i = 0; i < $api.domAll('.personal').length; i++) {
+                var element = $api.domAll('.personal')[i];
+                $api.addCls(element, 'hide');
+            }
+        } else if ($api.attr(ele, 'data-id') == '1') {
+            for (var i = 0; i < $api.domAll('.personal').length; i++) {
+                var element = $api.domAll('.personal')[i];
+                $api.removeCls(element, 'hide');
+            }
+        } else { }
         for (var i = 0; i < $api.domAll('.no4 li').length; i++) {
             $api.removeCls($api.domAll('.no4 li')[i], 'sel');
         }
