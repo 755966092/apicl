@@ -133,9 +133,11 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    var selVal = 0, selectedObj, pageNum = 0, dataArr = [],webFlag = 1, tableName,tableName2;
+    var selVal = 0, selectedObj, pageNum = 1, dataArr = [],webFlag = 1, tableName,tableName2,contactsCount;
     apiready = function () {
+        
         moduleInit();
+        contactsCount = $api.getStorage('contactCount');
         // requireData(api.pageParam.flag)
         // 切换表格
         switchTable();
@@ -165,6 +167,7 @@
         }, function (ret, err) {
             if (webFlag == 1) {
                 initPage();
+                pageNum++;
                 // webFlag = 0;
                 // requireData(api.pageParam.flag)
             } else {
@@ -175,12 +178,16 @@
     // 网络获取数据
     function requireData(classify,n) {
         // console.log('web获取')
-        var url;
+        var url,flag;
         if (classify === 1) {
+            flag = 'lev2_available'
+            
             url = '/contact/levelTwoAvailable';
         } else if (classify === 2) {
+            flag = 'lev2_unavailable'
             url = '/contact/levelTwoUnavailable';
         } else {
+            flag = 'lev2'
             url = '/contact/levelTwo';
         }
         api.ajax({
@@ -196,21 +203,36 @@
         }, function (ret, err) {
             if (ret) {
                 if (ret.code == 200) {
-                    pageNum++;
-                    insertData(ret.data.list, classify);
-                    dataArr = dataArr.concat(ret.data.list);
-                    if (ret.data.list.length == 0 && classify === 1) {
-                        $api.css($api.dom('p.no1'), 'display:block');
-                    } else if (ret.data.list.length == 0 && classify === 2) {
-                        $api.css($api.dom('p.no2'), 'display:block');
-                    } else if (ret.data.list.length == 0) {
-                        $api.css($api.dom('p.no3'), 'display:block');
+                    if (ret.data.list.length > 0) {
+                        insertData(ret.data.list, classify);
+                        dataArr = dataArr.concat(ret.data.list);
+                        ataArr = dataArr.filterObjKey('user_id');
+                        if (ret.data.list.length == 0 && classify === 1) {
+                            $api.css($api.dom('p.no1'), 'display:block');
+                        } else if (ret.data.list.length == 0 && classify === 2) {
+                            $api.css($api.dom('p.no2'), 'display:block');
+                        } else if (ret.data.list.length == 0) {
+                            $api.css($api.dom('p.no3'), 'display:block');
+                        }
+                        if (!n) {
+                            getData(dataArr);
+                            contactsCount[flag] -= 20;
+                            var str = '还有' + contactsCount[flag] + '位人脉未显示哦';
+                            if (contactsCount[flag] < 0) {
+                            } else {
+                                api.toast({
+                                    msg: str,
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                            }
+                            
+                        }
+                        webFlag = 1;
+                        $api.css($api.dom('.loading'), 'display:none');
                     }
-                    if (!n) {
-                        getData(dataArr);
-                    }
-                    webFlag = 1;
-                    $api.css($api.dom('.loading'), 'display:none');
+                    
+                   
                 } else {
                     alert(ret.msg)
                 }
@@ -326,19 +348,21 @@
     function initPage() {
         // api.pageParam.flag == 1; 二度好友
         // api.pageParam.flag == 1; 二度未加入
-      
+        var flag = '';
         if (api.pageParam.flag == 1) { 
+            flag = 'lev2_available'
             $api.setStorage('Once-the-network-cache-tag', 'true');
-            selectSQL = 'SELECT * FROM '+ tableName +' WHERE status = 1 AND type=2 LIMIT '+ (pageNum * 15 - 1) +',15';
+            selectSQL = 'SELECT * FROM '+ tableName +' WHERE status = 1 AND type=2 LIMIT '+ (pageNum * 20 - 1) +',20';
         } else if (api.pageParam.flag == 2) {
+            flag = 'lev2_unavailable'
             $api.setStorage('second-degree-population-cache', 'true');
-            selectSQL = 'SELECT * FROM '+ tableName +' WHERE status = 2 AND type=2 LIMIT '+ (pageNum * 15 - 1) +',15';
+            selectSQL = 'SELECT * FROM '+ tableName +' WHERE status = 2 AND type=2 LIMIT '+ (pageNum * 20 - 1) +',20';
         } else {
-
+            flag = 'lev2'
             if ($api.getStorage('Once-the-network-cache-tag') && $api.getStorage('second-degree-population-cache')) {
-                selectSQL = 'SELECT * FROM '+ tableName +' WHERE type=2 LIMIT '+ (pageNum * 15 - 1) +',15';
+                selectSQL = 'SELECT * FROM '+ tableName +' WHERE type=2 LIMIT '+ (pageNum * 20 - 1) +',20';
             } else {
-                selectSQL = 'SELECT * FROM '+ tableName +' WHERE type=200 LIMIT '+ (pageNum * 15 - 1) +',15';
+                selectSQL = 'SELECT * FROM '+ tableName +' WHERE type=200 LIMIT '+ (pageNum * 20 - 1) +',20';
                 $api.setStorage('Once-the-network-cache-tag', 'true');
                 $api.setStorage('second-degree-population-cache', 'true');
             }
@@ -348,12 +372,22 @@
             sql: selectSQL
         }, function (ret, err) {
             if (ret.status) {
-                // pageNum++;
-                // console.log(pageNum)
                 if (ret.data.length > 0) {
                     dataArr = dataArr.concat(ret.data);
+                    dataArr = dataArr.filterObjKey('user_id');
                     getData(dataArr);
                     $api.css($api.dom('.loading'), 'display: none');
+                    contactsCount[flag] -= 20; 
+                    var str = '还有' + contactsCount[flag] + '位人脉未显示哦';
+                    if (contactsCount[flag] < 0) {
+                    } else {
+                          api.toast({
+                            msg: str,
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                    }
+                  
                     requireData(api.pageParam.flag,1)
                 } else {
                     if(webFlag == 1) {

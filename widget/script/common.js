@@ -335,3 +335,32 @@ function initTime(time) {
 		}
 	}
 }
+
+// 轮播图
+function swiperFun() {
+    var mySwiper = new Swiper('.swiper-container', {
+        loop: true,
+        autoplay: 3000,
+        // pagination: '.swiper-pagination',
+        observer: true, //修改swiper自己或子元素时，自动初始化swiper
+        observeParents: true, //修改swiper的父元素时，自动初始化swiper
+        // pagination: {
+        //     el: '.swiper-pagination',
+        // },
+    });
+}
+/**
+ * 
+ * @param {*去重的键名} key 
+ */
+Array.prototype.filterObjKey = function (key) {
+    for (var i = 0, temp = {}, result = [], ci; ci = this[i++];) {
+        var ordid = ci[key];
+        if (temp[ordid]) {
+            continue;
+        }
+        temp[ordid] = true;
+        result.push(ci);
+    }
+    return result;
+};  

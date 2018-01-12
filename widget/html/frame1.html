@@ -254,8 +254,10 @@
             name: 'editUserInfoUpdateList'
         }, function(ret, err) {
             if (ret) {
+                $api.rmStorage('contactCount');
                 single_list1 = 0, single_list2 = 0, both_list = 0, unavailable_list = 0, list = 0, friend = 0, dataArr = '';
                 initPage();
+                getContactCount();
             } else {
                 alert(JSON.stringify(err));
             }
@@ -299,6 +301,8 @@
         var contactC = $api.getStorage('contactCount');
         if (contactC) {
             // 缓存
+            console.log('缓存:'+JSON.stringify(contactC));
+            
             $api.text($api.byId('lev2'), contactC.lev2);
             $api.text($api.byId('lev2_available'), contactC.lev2_available);
             $api.text($api.byId('lev2_unavailable'), contactC.lev2_unavailable);
@@ -318,6 +322,8 @@
             }, function (ret, err) {
                 if (ret) {
                     if (ret.code === 200) {
+                        console.log('网络请求:'+JSON.stringify(ret));
+                        
                         $api.text($api.byId('lev2'), ret.data.lev2);
                         $api.text($api.byId('lev2_available'), ret.data.lev2_available);
                         $api.text($api.byId('lev2_unavailable'), ret.data.lev2_unavailable);

@@ -1,32 +1,82 @@
-<div class="comment">
-    <div class="commentTitle flex-def flex-cCenter flex-zBetween">
-        <span class="commentCount">评论（{{=it.info.comment_count}}）</span>
-        <!-- <span class="commentIcon"></span> -->
-    </div>
-    {{?it.last_comment!=null}}
-    <div class="commentContent">
-        <div class="commentContentTitle flex-def flex-zLeftRight">
-            <img src="{{=it.last_comment.head_img_url}}">
-            <div class="commentName flex-def flex-zBetween flex-zLeftRight flex-cCenter">
-                <div class="commentNameLeft flex-def flex-cCenter">
-                    <div class="name">{{=it.last_comment.nickname}}</div>
-                    <div class="avg_point">
-                        {{ for(var j = 0;j
-                        < it.last_comment.point;j++){ }} <span class="avg_pointIcon">
-                            </span>
-                            {{ }; }}
-                    </div>
-                </div>
-                <div class="commentNameRight">
-                    {{=it.last_comment.create_time}}
-                </div>
-            </div>
-        </div>
-        <p class="commentText">{{=it.last_comment.content}}</p>
-    </div>
-    {{?}} {{?it.info.comment_count==0}} {{??}}
-    <div data-avg="{{=it.info.avg_point}}" class="btn flex-def flex-cCenter" tapmode onclick="openCommentPage(this)">
-        <div>查看全部</div>
-    </div>
-    {{?}}
-</div>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="../script/common.js"></script>
+    <script>
+        Array.prototype.quchong = function () {
+            var res = [];
+            var json = {};
+            for (var i = 0; i < this.length; i++) {
+                this[i] = JSON.stringify(this[i]);
+                if (!json[this[i]]) {
+                    res.push(JSON.parse(this[i]));
+                    json[this[i]] = 1;
+                }
+            }
+            return res;
+        }
+        var arr222 = [112, 112, 34, '你好', 112, 112, 34, '你好', 'str', 'str1'];
+        var arr = [
+            {
+                id: 1,
+                name: 'aaa'
+            },
+              {
+                id: 2,
+                name: 'aaab'
+            },
+            {
+                id: 22,
+                name: 'aaab'
+            },
+            {
+                id: 2,
+                name: 'aaab'
+            },
+            {
+                id: 3,
+                name: 'aaa'
+            },
+            {
+                id: 4,
+                name: 'aaa'
+            },
+             {
+                id: 1,
+                name: 'aaa'
+            },
+             {
+                id: 1,
+                name: 'aaa'
+            },
+             {
+                id: 1,
+                name: 'aaa'
+            },
+        ]
+            // Array.prototype.filterObjKey = function (key) {
+            //     for (var i = 0, temp = {}, result = [], ci; ci = this[i++];) {
+            //         var ordid = ci[key];
+            //         if (temp[ordid]) {
+            //             continue;
+            //         }
+            //         temp[ordid] = true;
+            //         result.push(ci);
+            //     }
+            //     return result;
+            // };  
+            
+                console.log(arr.filterObjKey('id'));
+                
+    </script>
+</body>
+
+</html>

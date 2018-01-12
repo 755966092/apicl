@@ -122,16 +122,18 @@
 <script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
     var selVal = 0,
-        selectedObj, pageNum = 0,
+        selectedObj, pageNum = 1,
         dataArr = [],
         webFlag = 1,
         tableName,
+        contactsCount,
         tableName2;
     apiready = function() {
+        contactsCount = $api.getStorage('contactCount');
         moduleInit();
         // requireData(api.pageParam.flag);
         switchTable();
-        initPage();
+        requireData(api.pageParam.flag);
         scrollToBottom();
         api.addEventListener({
             name: 'editNonFriendsInfo'
@@ -158,9 +160,9 @@
             // alert(JSON.stringify(ret));
             if (webFlag == 1) {
                 // console.log('下拉刷新')
-                initPage();
+                // requireData();
+                requireData(api.pageParam.flag);
                 webFlag = 0;
-                // requireData(api.pageParam.flag);
             } else {
                 //                requireData(api.pageParam.flag)
             }
@@ -215,15 +217,18 @@
         // } else {
         //     selectSQL = 'SELECT * FROM db_second_contactst_table WHERE type=3 LIMIT '+ (pageNum * 15 - 1) +',15';
         // }
-
+        var flag;
         if (api.pageParam.flag == 1) {
+                flag = 'lev3_available'
             $api.setStorage('Once-the-network-cache-tag3', 'true');
             selectSQL = 'SELECT * FROM '+tableName+' WHERE status = 1 AND type=3 LIMIT ' + (pageNum * 15 - 1) + ',15';
         } else if (api.pageParam.flag == 2) {
+                flag = 'lev3_unavailable'
             $api.setStorage('second-degree-population-cache3', 'true');
             selectSQL = 'SELECT * FROM '+tableName+' WHERE status = 2 AND type=3 LIMIT ' + (pageNum * 15 - 1) + ',15';
         } else {
 
+                flag = 'lev3'
             if ($api.getStorage('Once-the-network-cache-tag3') && $api.getStorage('second-degree-population-cache3')) {
                 selectSQL = 'SELECT * FROM '+tableName+' WHERE type=3 LIMIT ' + (pageNum * 15 - 1) + ',15';
             } else {
@@ -237,13 +242,25 @@
             sql: selectSQL
         }, function(ret, err) {
             if (ret.status) {
-                pageNum++;
+                console.log('查询本地数据库ß'+'数据库名'+ tableName+JSON.stringify(ret));
                 if (ret.data.length > 0) {
-                    // console.log('查询本地数据库ß');
+                    pageNum++;
                     dataArr = dataArr.concat(ret.data);
                     getData(dataArr);
                     $api.css($api.dom('.loading'), 'display: none');
                     webFlag = 1;
+                    contactsCount[flag] -= 20;
+                    var str = '还有' + contactsCount[flag] + '位人脉未显示哦';
+                    if (contactsCount[flag] <= 0) {
+                        console.log(contactsCount[flag]);
+                        
+                    } else {
+                        api.toast({
+                            msg: str,
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                    }
                     requireData(api.pageParam.flag,1)
                 } else {
                     // console.log('查询网络')
@@ -284,7 +301,7 @@
                 sql: SQL
             }, function(ret, err) {
                 if (ret.status) {
-                    // console.log('执行SQL成功')
+                    console.log('执行SQL成功'+ tableName2+'||'+data.length)
                 } else {
                     api.alert({
                         msg: err.msg
@@ -309,14 +326,20 @@
     }
     // 网络获取数据
     function requireData(classify,n) {
+        console.log(classify);
+        
         var url;
-        if (classify === 1) {
+        var flag;
+        if (api.pageParam.flag === 1) {
+            flag = 'lev3_available'
             url = '/contact/levelThreeAvailable';
             // getData($api.getStorage('levelThreeRelation_1'));
-        } else if (classify === 2) {
+        } else if (api.pageParam.flag === 2) {
+            flag = 'lev3_unavailable'
             url = '/contact/levelThreeUnavailable'
                 // getData($api.getStorage('levelThreeRelation_2'));
         } else {
+            flag = 'lev3'
             url = '/contact/levelThree'
                 // getData($api.getStorage('levelThreeRelation_3'));
         }
@@ -333,30 +356,46 @@
             }
         }, function(ret, err) {
             if (ret) {
-                //console.log('网络数据'+JSON.stringify(ret))
                 $api.css($api.dom('.loading'), 'display:none');
                 if (ret.code == 200) {
-                    pageNum++;
-                    insertData(ret.data.list, classify)
-                    dataArr = dataArr.concat(ret.data.list);
-                    if (classify === 1) {
-                        $api.setStorage('levelThreeRelation_1', dataArr);
-                    } else if (classify === 2) {
-                        $api.setStorage('levelThreeRelation_2', dataArr);
-                    } else {
-                        $api.setStorage('levelThreeRelation_3', dataArr);
+                    if (ret.data.list.length>0) {
+                        
+                        pageNum++;
+                        
+                        dataArr = dataArr.concat(ret.data.list);
+                        dataArr = dataArr.filterObjKey('user_id')
+                        insertData(dataArr, api.pageParam.flag)
+                        // if (api.pageParam.flag === 1) {
+                        //     $api.setStorage('levelThreeRelation_1', dataArr);
+                        // } else if (api.pageParam.flag === 2) {
+                        //     $api.setStorage('levelThreeRelation_2', dataArr);
+                        // } else {
+                        //     $api.setStorage('levelThreeRelation_3', dataArr);
+                        // }
+                        if (ret.data.list.length == 0 && api.pageParam.flag === 1) {
+                            $api.css($api.dom('p.no1'), 'display:block');
+                        } else if (ret.data.list.length == 0 && api.pageParam.flag === 2) {
+                            $api.css($api.dom('p.no2'), 'display:block');
+                        } else if (ret.data.list.length == 0) {
+                            $api.css($api.dom('p.no3'), 'display:block');
+                        }
+                        if (!n) {
+                            dataArr = dataArr.filterObjKey('user_id');
+                            getData(dataArr);
+                            contactsCount[flag] -= 20;
+                            var str = '还有' + contactsCount[flag] + '位人脉未显示哦';
+                            if (contactsCount[flag] <= 0) {
+                                console.log(contactsCount[flag]);
+                            } else {
+                                api.toast({
+                                    msg: str,
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                            }
+                        }
+                        webFlag = 1;
                     }
-                    if (ret.data.list.length == 0 && classify === 1) {
-                        $api.css($api.dom('p.no1'), 'display:block');
-                    } else if (ret.data.list.length == 0 && classify === 2) {
-                        $api.css($api.dom('p.no2'), 'display:block');
-                    } else if (ret.data.list.length == 0) {
-                        $api.css($api.dom('p.no3'), 'display:block');
-                    }
-                    if (!n) {
-                        getData(dataArr);
-                    }
-                    webFlag = 1;
                 } else {
                     alert(ret.msg)
                 }

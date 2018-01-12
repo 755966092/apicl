@@ -32,6 +32,7 @@
             font-size: 0;
             height: .7rem;
             padding: 0 .3rem;
+            
         }
         .main_no1 img {
             width: .5rem;
@@ -62,6 +63,8 @@
             background-position: 0 center;
         }
         .main_no1 span.status {
+            text-align: right;
+            width: 1rem;
             font-size: .24rem;
             color: #F68F23;
         }
@@ -155,7 +158,7 @@
             text-align: center;
             box-sizing: border-box;
             border: .01rem solid #B2B2B2;
-            border-radius: .23rem;
+            border-radius: .06rem;
             margin-right: .15rem;
 
         }
@@ -202,7 +205,13 @@
             margin-right: 0.1rem;
         }
         .textHidden {
-            max-width: 4.5rem;
+            max-width: 3rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .nickname {
+            max-width: 5rem;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -250,15 +259,14 @@
                     <img src="{{=it[i].head_img_url}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim" data-id="{{=it[i].user_id}}" onclick="openUserId(this)">
                     <div class="flex-item flex-def flex-cCenter flex-zBetween">
                         <div class="flex-def flex-cCenter">
-                            <span>{{=it[i].nickname}}</span>
-                            {{?it[i].current_company == ''}}
+                            <span class="nickname">{{=it[i].nickname}}</span>
+                            <!-- {{?it[i].current_company == ''}}
                             {{??it[i].current_position == ''}}
                             <span class="textHidden">({{=it[i].current_company}})</span>
                             {{??it[i].current_position == ''&&it[i].current_company == ''}}
                             {{??}}
                             <span class="textHidden">({{=it[i].current_company}} {{=it[i].current_position}})</span>
-                            {{?}}
-
+                            {{?}} -->
                         </div>
                         <!-- <i></i> -->
                         <span class="status">{{=it[i].status}}</span>
