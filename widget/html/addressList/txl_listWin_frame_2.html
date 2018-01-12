@@ -142,7 +142,8 @@
         // 切换表格
         switchTable();
         // 初始化页面
-        initPage();
+        // initPage();
+        requireData()
         scrollToBottom();
         api.addEventListener({
             name: 'editNonFriendsInfo'
@@ -166,7 +167,8 @@
             name: 'scrolltobottom'
         }, function (ret, err) {
             if (webFlag == 1) {
-                initPage();
+                // initPage();
+                requireData();
                 pageNum++;
                 // webFlag = 0;
                 // requireData(api.pageParam.flag)
@@ -179,11 +181,11 @@
     function requireData(classify,n) {
         // console.log('web获取')
         var url,flag;
-        if (classify === 1) {
+        if (api.pageParam.flag === 1) {
             flag = 'lev2_available'
             
             url = '/contact/levelTwoAvailable';
-        } else if (classify === 2) {
+        } else if (api.pageParam.flag === 2) {
             flag = 'lev2_unavailable'
             url = '/contact/levelTwoUnavailable';
         } else {
@@ -204,12 +206,12 @@
             if (ret) {
                 if (ret.code == 200) {
                     if (ret.data.list.length > 0) {
-                        insertData(ret.data.list, classify);
+                        insertData(ret.data.list, api.pageParam.flag);
                         dataArr = dataArr.concat(ret.data.list);
-                        ataArr = dataArr.filterObjKey('user_id');
-                        if (ret.data.list.length == 0 && classify === 1) {
+                        dataArr = dataArr.filterObjKey('user_id');
+                        if (ret.data.list.length == 0 && api.pageParam.flag === 1) {
                             $api.css($api.dom('p.no1'), 'display:block');
-                        } else if (ret.data.list.length == 0 && classify === 2) {
+                        } else if (ret.data.list.length == 0 && api.pageParam.flag === 2) {
                             $api.css($api.dom('p.no2'), 'display:block');
                         } else if (ret.data.list.length == 0) {
                             $api.css($api.dom('p.no3'), 'display:block');
@@ -217,11 +219,10 @@
                         if (!n) {
                             getData(dataArr);
                             contactsCount[flag] -= 20;
-                            var str = '还有' + contactsCount[flag] + '位人脉未显示哦';
-                            if (contactsCount[flag] < 0) {
+                            if (contactsCount[flag] <= 0) {
                             } else {
                                 api.toast({
-                                    msg: str,
+                                    msg: '还有' + contactsCount[flag] + '位人脉未显示哦',
                                     duration: 2000,
                                     location: 'bottom'
                                 });
@@ -374,15 +375,15 @@
             if (ret.status) {
                 if (ret.data.length > 0) {
                     dataArr = dataArr.concat(ret.data);
-                    dataArr = dataArr.filterObjKey('user_id');
+                    // dataArr = dataArr.filterObjKey('user_id');
                     getData(dataArr);
                     $api.css($api.dom('.loading'), 'display: none');
                     contactsCount[flag] -= 20; 
-                    var str = '还有' + contactsCount[flag] + '位人脉未显示哦';
-                    if (contactsCount[flag] < 0) {
+                    // var str = ;
+                    if (contactsCount[flag] <= 0) {
                     } else {
                           api.toast({
-                            msg: str,
+                            msg: '还有' + contactsCount[flag] + '位人脉未显示哦',
                             duration: 2000,
                             location: 'bottom'
                         });
