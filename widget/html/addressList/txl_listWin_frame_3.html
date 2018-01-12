@@ -7,79 +7,9 @@
     <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
-    <link rel="stylesheet" type="text/css" href="../../css/flex.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
     <style type="text/css">
-        .search {
-            height: .791rem;
-            width: 100%;
-            background-color: #EFEFF4;
-            box-sizing: border-box;
-            padding: .14rem .16rem;
-            font-size: 0;
-            position: relative;
-        }
-        
-        .search input {
-            background-color: #fff;
-            height: .503rem;
-            /*width: 6.4rem;*/
-            width: 100%;
-            float: left;
-            font-size: .24rem;
-            outline: none;
-            text-align: center;
-            padding: 0 .3rem;
-            box-sizing: border-box;
-        }
-        
-        .sxIcon {
-            display: inline-block;
-            width: .64rem;
-            height: .5rem;
-            background: url(../../image/icon_supply/icon_sx.png)no-repeat;
-            -webkit-background-size: .35rem .35rem;
-            background-size: .35rem .35rem;
-            background-position: center center;
-            margin-left: .1rem;
-        }
-        
-        .searchIcon {
-            display: inline-block;
-            width: .25rem;
-            height: .791rem;
-            background: url(../../image/icon_supply/icon_search.png)no-repeat;
-            -webkit-background-size: .25rem .26rem;
-            background-size: .25rem .26rem;
-            background-position: 0 center;
-            position: absolute;
-            top: 0;
-            left: 2.8rem;
-        }
-        
-        p {
-            text-align: center;
-            font-size: .3rem;
-            color: #999;
-            margin-top: .5rem;
-            display: none;
-        }
-        
-        ul li {
-            height: .95rem;
-            background-color: #fff;
-            border-bottom: .01rem solid #d9d9d9;
-            padding: 0 .2rem;
-        }
-        
-        ul li img {
-            width: .55rem;
-            height: .55rem;
-            margin-right: .15rem;
-        }
-        
-        ul li span {
-            font-size: .28rem;
-        }
+       
         
         .loading {
             width: .8rem;
@@ -93,261 +23,125 @@
             left: 0;
             margin: auto;
         }
+        .loading {
+            width: .8rem;
+            height: .8rem;
+            background: url(../../image/loading_more.gif)no-repeat;
+            background-size: .8rem .8rem;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            margin: auto;
+        }
+
+        img {
+            width: .55rem;
+            margin-right: .15rem;
+            display: block;
+            height: .55rem;
+        }
+
+        .weui-cell__bd {
+            font-size: 0.28rem;
+        }
     </style>
 </head>
 
 <body>
     <div class="loading"></div>
-    <div class="main">
-        <ul class="resultList"></ul>
-        <script type="text/x-dot-template" id="listT">
-            {{ for (var i = 0; i
-            < it.length; i++) { }} <li class="flex-def flex-cCenter" tapmode onclick="addFriends(this)" data-id="{{=it[i].user_id}}">
-                {{?it[i].remark_head_img_url}}
-                <img src="{{=it[i].remark_head_img_url}}"> {{??}}
-                <img src="{{=it[i].head_img_url}}"> {{?}} {{?it[i].remark_nickname}}
-                <span>{{=it[i].remark_nickname}}</span> {{??}}
-                <span>{{=it[i].nickname}}</span> {{?}}
-                </li>
-                {{ }; }}
-        </script>
-    </div>
-    <p data-type='1' class="no1">暂无三度好友</p>
-    <p data-type='2' class="no2">暂无尚未加入</p>
-    <p data-type='3' class="no3">暂无三度人脉</p>
+    <div class="resultList"></div>
+    <script type="text/x-dot-template" id="listT">
+         <div class="weui-cells">
+            {{~it:value:index}}
+                <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="addFriends(this)"
+                        data-id="{{=value.user_id}}">
+                    <div class="weui-cell__hd">
+                        {{?value.remark_head_img_url}}
+                            <img src="{{=value.remark_head_img_url}}"> 
+                        {{??}}
+                            <img src="{{=value.head_img_url}}"> 
+                        {{?}} 
+                    </div>
+                    <div class="weui-cell__bd">
+                        {{?value.remark_nickname}}
+                            <p>{{=value.remark_nickname}}</p> 
+                        {{??}}
+                            <p>{{=value.nickname}}</p> 
+                        {{?}}
+                    </div>
+                </a> 
+            {{~}}
+        <div>
+    </script>
+    <p data-type='1' class="no1 hide">暂无三度好友</p>
+    <p data-type='2' class="no2 hide">暂无尚未加入</p>
+    <p data-type='3' class="no3 hide">暂无三度人脉</p>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
-    var selVal = 0,
-        selectedObj, pageNum = 1,
+    var pageNum = 1,
         dataArr = [],
         webFlag = 1,
-        tableName,
         contactsCount,
-        tableName2;
     apiready = function() {
         contactsCount = $api.getStorage('contactCount');
         moduleInit();
-        // requireData(api.pageParam.flag);
-        switchTable();
-        requireData(api.pageParam.flag);
+        requireData();
         scrollToBottom();
+        
+    };
+    function scrollToBottom() {
+        // 上啦加载
+        api.addEventListener({
+            name: 'scrolltobottom'
+        }, function (ret, err) {
+            if (webFlag == 1) {
+                webFlag = 0;
+                requireData();
+
+            } else {
+            }
+        });
         api.addEventListener({
             name: 'editNonFriendsInfo'
-        }, function(ret, err) {
+        }, function (ret, err) {
             if (ret) {
                 pageNum = 1;
                 dataArr = [];
                 if (ret.value.flag) {
-                    requireData(ret.value.flag);
-                } else　 {
+                    requireData();
+                } else {
                     requireData();
                 }
             } else {
                 alert(JSON.stringify(err));
             }
         });
-    };
-
-    function scrollToBottom() {
-        // 上啦加载
-        api.addEventListener({
-            name: 'scrolltobottom'
-        }, function(ret, err) {
-            // alert(JSON.stringify(ret));
-            if (webFlag == 1) {
-                // console.log('下拉刷新')
-                // requireData();
-                requireData(api.pageParam.flag);
-                webFlag = 0;
-            } else {
-                //                requireData(api.pageParam.flag)
-            }
-        });
-    }
-    function switchTable() {
-          // 两个数据库表格交替使用
-        // db_second_contactst_table   db_second_contactst_table2
-        // 第一次进来先使用db_second_contactst_table, 做缓存字段db_second_contactst_table, 清空db_second_contactst_table2的数据
-        // 下次进来如果有db_second_contactst_table缓存字段, 使用db_second_contactst_table2这个表格, 删除db_second_contactst_table缓存字段, 清空db_second_contactst_table2的数据
-        
-        if ($api.getStorage('db_second_contactst_table')) {
-            // console.log('使用第一标')
-            // 有缓存字段, 使用db_second_contactst_table2表格
-            tableName = 'db_second_contactst_table2';
-            // 往db_second_contactst_table里存储数据
-            tableName2 = 'db_second_contactst_table';
-            // 删除缓存字段
-            $api.rmStorage('db_second_contactst_table');
-            // 删除表中事件
-            deleteTable(tableName2)
-        } else {
-            // console.log('使用第二标')
-             // 无缓存字段, 使用db_second_contactst_table表格
-             tableName = 'db_second_contactst_table';
-            // 往db_second_contactst_table里存储数据
-            tableName2 = 'db_second_contactst_table2'
-            // 做缓存字段
-            $api.setStorage('db_second_contactst_table', 'true');
-            deleteTable(tableName2)
-        }
-    }
-    function deleteTable(tabName) {
-        db.executeSql({
-            name: 'db_'+$api.getStorage('userToken'),
-            sql: 'DELETE FROM ' + tabName + " WHERE type = 3"
-        },function(ret,err){
-            if (ret.status) {
-                // api.alert({msg:'执行SQL成功'});
-            }else {
-                api.alert({msg:err.msg});
-            }
-        });
-    }
-    function initPage() {
-        // api.pageParam.flag == 1; 二度好友
-        // api.pageParam.flag == 1; 二度未加入
-        // if (api.pageParam.flag == 1) {
-        //     selectSQL = 'SELECT * FROM db_second_contactst_table WHERE status = 1 AND type=3 LIMIT '+ (pageNum * 15 - 1) +',15';
-        // } else if (api.pageParam.flag == 2) {
-        //     selectSQL = 'SELECT * FROM db_second_contactst_table WHERE status = 2 AND type=3 LIMIT '+ (pageNum * 15 - 1) +',15';
-        // } else {
-        //     selectSQL = 'SELECT * FROM db_second_contactst_table WHERE type=3 LIMIT '+ (pageNum * 15 - 1) +',15';
-        // }
-        var flag;
-        if (api.pageParam.flag == 1) {
-                flag = 'lev3_available'
-            $api.setStorage('Once-the-network-cache-tag3', 'true');
-            selectSQL = 'SELECT * FROM '+tableName+' WHERE status = 1 AND type=3 LIMIT ' + (pageNum * 15 - 1) + ',15';
-        } else if (api.pageParam.flag == 2) {
-                flag = 'lev3_unavailable'
-            $api.setStorage('second-degree-population-cache3', 'true');
-            selectSQL = 'SELECT * FROM '+tableName+' WHERE status = 2 AND type=3 LIMIT ' + (pageNum * 15 - 1) + ',15';
-        } else {
-
-                flag = 'lev3'
-            if ($api.getStorage('Once-the-network-cache-tag3') && $api.getStorage('second-degree-population-cache3')) {
-                selectSQL = 'SELECT * FROM '+tableName+' WHERE type=3 LIMIT ' + (pageNum * 15 - 1) + ',15';
-            } else {
-                selectSQL = 'SELECT * FROM '+tableName+' WHERE type=200 LIMIT ' + (pageNum * 15 - 1) + ',15';
-                $api.setStorage('Once-the-network-cache-tag3', 'true');
-                $api.setStorage('second-degree-population-cache3', 'true');
-            }
-        }
-        db.selectSql({
-            name: 'db_' + $api.getStorage('userToken'),
-            sql: selectSQL
-        }, function(ret, err) {
-            if (ret.status) {
-                console.log('查询本地数据库ß'+'数据库名'+ tableName+JSON.stringify(ret));
-                if (ret.data.length > 0) {
-                    pageNum++;
-                    dataArr = dataArr.concat(ret.data);
-                    getData(dataArr);
-                    $api.css($api.dom('.loading'), 'display: none');
-                    webFlag = 1;
-                    contactsCount[flag] -= 20;
-                    var str = '还有' + contactsCount[flag] + '位人脉未显示哦';
-                    if (contactsCount[flag] <= 0) {
-                        console.log(contactsCount[flag]);
-                        
-                    } else {
-                        api.toast({
-                            msg: str,
-                            duration: 2000,
-                            location: 'bottom'
-                        });
-                    }
-                    requireData(api.pageParam.flag,1)
-                } else {
-                    // console.log('查询网络')
-                    requireData(api.pageParam.flag)
-                }
-            } else {
-                api.alert({
-                    msg: err.msg
-                });
-            }
-        });
-        // if(webFlag == 1) {
-        //     requireData(api.pageParam.flag)
-        // }
-        // webFlag = 0;
-    }
-    // 表中插入数据
-    function insertData(data, status) {
-        // db.executeSql({
-        //     name: 'db_'+$api.getStorage('userToken'),
-        //     sql: 'DELETE FROM db_second_contactst_table'
-        // },function(ret,err){
-        //     if (ret.status) {
-        //         api.alert({msg:'执行SQL成功'});
-        //     }else {
-        //         api.alert({msg:err.msg});
-        //     }
-        // });
-        if (data.length > 0) {
-            var SQL = 'INSERT OR REPLACE INTO '+tableName2+'(user_id, nickname, remark_nickname, head_img_url, remark_head_img_url, type, status) VALUES '
-            for (var i = 0; i < data.length; i++) {
-                var element = data[i];
-                SQL += '(' + element.user_id + ',"' + element.nickname + '","' + (element.remark_nickname == null ? '' : element.remark_nickname) + '","' + element.head_img_url + '","' + (element.remark_head_img_url == null ? '' : element.remark_head_img_url) + '",3,' + (status || 0) + '),'
-            }
-            SQL = SQL.substring(0, SQL.length - 1);
-            db.executeSql({
-                name: 'db_' + $api.getStorage('userToken'),
-                sql: SQL
-            }, function(ret, err) {
-                if (ret.status) {
-                    console.log('执行SQL成功'+ tableName2+'||'+data.length)
-                } else {
-                    api.alert({
-                        msg: err.msg
-                    });
-                }
-            });
-        }
-    }
-
-    // 获取焦点事件
-    function getFocus() {
-        $api.css($api.dom('input'), 'text-align:left');
-        $api.css($api.dom('.searchIcon'), 'left:.2rem');
-
-    }
-    // 逝去焦点事件
-    function loseFocus() {
-        if ($api.val($api.dom('input')) == '') {
-            $api.css($api.dom('input'), 'text-align:center');
-            $api.css($api.dom('.searchIcon'), 'left:2.8rem');
-        }
     }
     // 网络获取数据
     function requireData(classify,n) {
-        console.log(classify);
-        
         var url;
         var flag;
         if (api.pageParam.flag === 1) {
             flag = 'lev3_available'
             url = '/contact/levelThreeAvailable';
-            // getData($api.getStorage('levelThreeRelation_1'));
         } else if (api.pageParam.flag === 2) {
             flag = 'lev3_unavailable'
             url = '/contact/levelThreeUnavailable'
-                // getData($api.getStorage('levelThreeRelation_2'));
         } else {
             flag = 'lev3'
             url = '/contact/levelThree'
-                // getData($api.getStorage('levelThreeRelation_3'));
         }
         api.ajax({
             url: apiSite + url,
             method: 'post',
             headers: apiHeader,
-            timeout: 1000,
+            timeout: 10000,
             data: {
                 values: {
                     token: $api.getStorage('userToken'),
@@ -359,42 +153,27 @@
                 $api.css($api.dom('.loading'), 'display:none');
                 if (ret.code == 200) {
                     if (ret.data.list.length>0) {
-                        
                         pageNum++;
-                        
                         dataArr = dataArr.concat(ret.data.list);
-                        dataArr = dataArr.filterObjKey('user_id')
-                        insertData(dataArr, api.pageParam.flag)
-                        // if (api.pageParam.flag === 1) {
-                        //     $api.setStorage('levelThreeRelation_1', dataArr);
-                        // } else if (api.pageParam.flag === 2) {
-                        //     $api.setStorage('levelThreeRelation_2', dataArr);
-                        // } else {
-                        //     $api.setStorage('levelThreeRelation_3', dataArr);
-                        // }
-                        if (ret.data.list.length == 0 && api.pageParam.flag === 1) {
-                            $api.css($api.dom('p.no1'), 'display:block');
-                        } else if (ret.data.list.length == 0 && api.pageParam.flag === 2) {
-                            $api.css($api.dom('p.no2'), 'display:block');
-                        } else if (ret.data.list.length == 0) {
-                            $api.css($api.dom('p.no3'), 'display:block');
-                        }
-                        if (!n) {
-                            dataArr = dataArr.filterObjKey('user_id');
-                            getData(dataArr);
-                            contactsCount[flag] -= 20;
-                            var str = '还有' + contactsCount[flag] + '位人脉未显示哦';
-                            if (contactsCount[flag] <= 0) {
-                                console.log(contactsCount[flag]);
-                            } else {
-                                api.toast({
-                                    msg: str,
-                                    duration: 2000,
-                                    location: 'bottom'
-                                });
-                            }
+                        getData(dataArr);
+                        contactsCount[flag] -= 20;
+                        if (contactsCount[flag] <= 0) {
+                        } else {
+                            api.toast({
+                                msg: '还有' + contactsCount[flag] + '位人脉未显示哦',
+                                duration: 2000,
+                                location: 'bottom'
+                            });
                         }
                         webFlag = 1;
+                    } else {
+                        if (api.pageParam.flag === 1) {
+                            $api.css($api.dom('p.no1'), 'display:block');
+                        } else if (api.pageParam.flag === 2) {
+                            $api.css($api.dom('p.no2'), 'display:block');
+                        } else {
+                            $api.css($api.dom('p.no3'), 'display:block');
+                        }
                     }
                 } else {
                     alert(ret.msg)
@@ -404,40 +183,10 @@
             }
         })
     }
-
-    function openSlideBar() {
-        api.openFrame({
-            name: 'txl_slideBar_3',
-            url: './txl_slideBar_3.html',
-            rect: {
-                x: 0,
-                y: 0,
-                w: api.winWidth,
-                h: api.winHeight
-            },
-            slidBackEnabled: false,
-            pageParam: {
-                selVal: selVal,
-                selectedObj: selectedObj
-            },
-            bounces: false
-        });
-    }
-
-    function hideSearIcon(ele) {
-        var val = $api.val(ele);
-        if (val !== '') {
-            // $api.css($api.dom('.searchIcon'), 'display:none');
-            searchSQL(val);
-        } else {
-            // $api.css($api.dom('.searchIcon'), 'display:inline-block');
-            searchSQL();
-        }
-    }
     // 打开人脉详情
     function addFriends(ele) {
         var userId = $api.attr(ele, 'data-id');
-         var name = $api.text($api.dom(ele, 'span'));
+         var name = $api.text($api.dom(ele, 'p'));
         var headImg = $api.attr($api.dom(ele, 'img'), 'src');
         api.openWin({
             name: 'txl_memberInfo_Win',
