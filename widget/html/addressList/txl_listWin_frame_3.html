@@ -11,24 +11,13 @@
     <style type="text/css">
        
         
+      
         .loading {
             width: .8rem;
             height: .8rem;
             background: url(../../image/loading_more.gif)no-repeat;
             background-size: .8rem .8rem;
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            right: 0;
-            left: 0;
-            margin: auto;
-        }
-        .loading {
-            width: .8rem;
-            height: .8rem;
-            background: url(../../image/loading_more.gif)no-repeat;
-            background-size: .8rem .8rem;
-            position: absolute;
+            position: fixed;
             top: 0;
             bottom: 0;
             right: 0;
@@ -125,6 +114,7 @@
     }
     // 网络获取数据
     function requireData(classify,n) {
+        $api.css($api.dom('.loading'), 'display:block');
         var url;
         var flag;
         if (api.pageParam.flag === 1) {
@@ -149,8 +139,8 @@
                 }
             }
         }, function(ret, err) {
+            $api.css($api.dom('.loading'), 'display:none');
             if (ret) {
-                $api.css($api.dom('.loading'), 'display:none');
                 if (ret.code == 200) {
                     if (ret.data.list.length>0) {
                         pageNum++;
