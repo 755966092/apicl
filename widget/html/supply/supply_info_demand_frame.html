@@ -683,7 +683,7 @@
         </div>
         {{?!it.is_self_add}}
         <footer>
-            <span data-headUrl="{{=it.info.head_img_url}}" tapmode onclick="openChatPage(this)" data-rongId="{{=it.info.rongcloud_user_id}}"><i></i>聊天</span> {{?it.is_collect}}
+            <span data-headUrl="{{=it.info.head_img_url}}" tapmode onclick="openChatPage(this)" data-rongId="{{=it.info.rongcloud_user_id}}" data-id="{{=it.info.user_id}}"><i></i>聊天</span> {{?it.is_collect}}
             <span id="collect" ontouchstart="supplyCollect(this)"><i class="cancelCollect"></i>取消收藏</span> {{??}}
             <span id="collect" ontouchstart="supplyCollect(this)"><i></i>收藏</span> {{?}}
             <span tapmode onclick="immediateOrder()">立即接单</span>
@@ -732,11 +732,12 @@
     // 打开聊天页面
     function openChatPage(ele) {
         var rong_id = $api.attr(ele, 'data-rongId');
+        var user_id = $api.attr(ele, 'data-id');
         var userName = $api.text($api.dom('h3'));
         // 头像 昵称 供应名字 价格 单位
         var userHeadImg = $api.attr($api.byId('headImg'), 'src');
-        var supplyName = $api.text($api.dom('.demandName'));
-        var priceUint = $api.text($api.dom('.reward'));
+        var supplyName = $api.text($api.dom('.supplyName'));
+        var priceUint = '￥'+$api.text($api.dom('.price1'));
         api.openWin({
             name: 'chatPage',
             url: '../news/chatPage.html',
@@ -747,7 +748,8 @@
                 headImg: userHeadImg,
                 supplyName: supplyName,
                 priceUint: priceUint,
-                order_id: api.pageParam.order_id
+                order_id: api.pageParam.order_id,
+                userId: user_id
             }
         });
     }
