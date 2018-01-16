@@ -7,27 +7,62 @@ var contactArr = {
 // 获取手机通讯录
 function queryContactByPage(page) {
     $api.css($api.dom('.loading'), 'display: block');
-    if ("undefined" == typeof page) {
-        var page = 0;
-    }
     var contacts = api.require('contacts');
-    contacts.queryByPage({
-        count: 1000,
-        pageIndex: page
-    }, function (ret, err) {
-        if (ret.status) {
-            contactArr.contacts = contactArr.contacts.concat(ret.contacts);
-            if (page < (ret.pages - 1)) {
-                queryContactByPage(page + 1);
+    if (api.systemType=='ios') {
+        contacts.allContacts({
+        }, function (ret, err) {
+            if (ret) {
+                // console.log(JSON.stringify(ret));
+                queryContacts(ret)
             } else {
-                queryContacts(contactArr)
+                alert(JSON.stringify(err));
             }
-        } else {
-            api.toast({
-                msg: '请在系统的设置-隐私-通讯录界面允许我在访问您的通讯录'
-            });
+        });
+        // if ("undefined" == typeof page) {
+        //     var page = 0;
+        // }
+        // contacts.queryByPage({
+        //     count: 1000,
+        //     pageIndex: page
+        // }, function (ret, err) {
+        //     if (ret.status) {
+        //         contactArr.contacts = contactArr.contacts.concat(ret.contacts);
+        //         if (page < (ret.pages - 1)) {
+        //             queryContactByPage(page + 1);
+        //         } else {
+        //             console.log(JSON.stringify(contactArr));
+                    
+        //             queryContacts(contactArr)
+        //         }
+        //     } else {
+        //         api.toast({
+        //             msg: '请在系统的设置-隐私-通讯录界面允许我在访问您的通讯录'
+        //         });
+        //     }
+        // });
+    } else {
+        if ("undefined" == typeof page) {
+            var page = 0;
         }
-    });
+        contacts.queryByPage({
+            count: 1000,
+            pageIndex: page
+        }, function (ret, err) {
+            if (ret.status) {
+                contactArr.contacts = contactArr.contacts.concat(ret.contacts);
+                if (page < (ret.pages - 1)) {
+                    queryContactByPage(page + 1);
+                } else {
+                    queryContacts(contactArr)
+                }
+            } else {
+                api.toast({
+                    msg: '请在系统的设置-隐私-通讯录界面允许我在访问您的通讯录'
+                });
+            }
+        });
+    }
+  
 }
 // 创建数据库
 function queryContacts(retContacts) {
@@ -90,7 +125,6 @@ function queryContacts(retContacts) {
 }
 // 同步通讯录2 上传数据
 function contactUpdate(retData) {
-    // console.log('上传')
     api.ajax({
         url: apiSite + '/contact/sync',
         method: 'post',
@@ -118,8 +152,8 @@ function contactUpdate(retData) {
 }
 
 // 同步通讯录3 请求数据
+
 function requestData() {
-    // console.log('请求')
     api.ajax({
         url: apiSite + '/contact/index',
         method: 'post',
@@ -141,6 +175,7 @@ function requestData() {
                             token: $api.getStorage('userToken'),
                         }
                     }
+                   
                 }, function (retFriend, err) {
                     if (retFriend) {
                         if (retFriend.code == 200) {
@@ -176,8 +211,6 @@ function f_check_uppercase(obj) {
 }
 // 同步通讯录4 处理数据
 function disData(data, type) {
-    // console.log('处理数据');
-
     flag += 1;
     // console.log('第四步'+JSON.stringify(data))
     if (data != '') {
@@ -218,8 +251,6 @@ function disData(data, type) {
 }
 // 同步通讯录5 排序
 function litterSort(data, type) {
-    // console.log('同步通讯录5 排序');
-
     for (var i = 0; i < data.length; i++) {
         for (var j = 0; j < data.length; j++) {
             if (data[i].litter < data[j].litter) {
@@ -234,8 +265,6 @@ function litterSort(data, type) {
 var a = 0;
 // 同步通讯录6 拼数据库语法字符串
 function sqlSyntax(data1, type) {
-    // console.log('同步通讯录6 拼数据库语法字符串');
-
     for (var i = 0; i < data1.length; i++) {
         data1[i].flag = data1[i].litter[0];
     }
@@ -298,11 +327,9 @@ function sqlSyntax(data1, type) {
         sql: SQL
     }, function (ret, err) {
         if (ret.status) {
-            // console.log('执行晚上')
             if (flag == 4) {
                 $api.rmStorage('noAccessToContacts');
                 $api.css($api.dom('.loading'), 'display: none');
-
                 db.selectSql({
                     name: SQLName,
                     sql: 'SELECT * FROM addressList_simplify'
