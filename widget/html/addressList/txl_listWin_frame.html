@@ -720,32 +720,50 @@
         var SQLsentence;
 
         if (apiPageParamFlag) {
+            
             // 有参数
             if (condition) {
                 // 有关键字
-                SQLsentence = 'SELECT * FROM addressList WHERE type != 4 and type = '+ apiPageParamFlag +' AND  (title LIKE "%'+ condition +'%" OR remark_current_contact LIKE "%'+ condition +'%" OR remark_nickname LIKE "%'+ condition +'%")';
+                if (api.pageParam.path_direction == 'my') {
+                    // 我认识的好友
+                    SQLsentence = 'SELECT * FROM addressList_simplify WHERE type != "4" AND path_direction=1 and type = ' + apiPageParamFlag + ' AND  (title LIKE "%' + condition + '%")';
+                } else if (api.pageParam.path_direction == 'he') {
+                    SQLsentence = 'SELECT * FROM addressList_simplify WHERE type != "4" AND path_direction=2 and type = ' + apiPageParamFlag + ' AND  (title LIKE "%' + condition + '%")';
+                } else {
+                    SQLsentence = 'SELECT * FROM addressList_simplify WHERE type != "4" and type = ' + apiPageParamFlag + ' AND  (title LIKE "%' + condition + '%")';
+                }
             } else {
                 // 无关键字
-                SQLsentence = 'SELECT * FROM addressList WHERE type != 4 and type = '+ apiPageParamFlag;
+                if (api.pageParam.path_direction == 'my') {
+                    SQLsentence = 'SELECT * FROM addressList_simplify WHERE type != "4" AND path_direction=1 and type = '+ apiPageParamFlag;
+                } else if (api.pageParam.path_direction == 'he') {
+                
+                    SQLsentence = 'SELECT * FROM addressList_simplify WHERE type != "4" AND path_direction=2 and type = '+ apiPageParamFlag;
+                } else {
+                    SQLsentence = 'SELECT * FROM addressList_simplify WHERE type != "4" and type = '+ apiPageParamFlag;
+
+                }
             }
         } else {
             // 无参数
             if (condition) {
                 // 有关键字
-                SQLsentence = 'SELECT * FROM addressList WHERE TYPE != 4 and title LIKE "%'+ condition +'%" OR remark_current_contact LIKE "%'+ condition +'%" OR remark_nickname LIKE "%'+ condition +'%"';
+                SQLsentence = 'SELECT * FROM addressList_simplify WHERE type != "4" and title LIKE "%'+ condition +'%"';
             } else {
                 // 无关键字
-                SQLsentence = 'SELECT * FROM addressList WHERE type != 4';
+                SQLsentence = 'SELECT * FROM addressList_simplify WHERE type != "4"';
             }
         }
-
         // 查询数据库
         db.selectSql({
             name: SQLName,
             sql: SQLsentence
         }, function(ret, err) {
+            
+            console.log(JSON.stringify(ret));
             if (ret.status) {
                 // listContact.close();
+                
                 dakai(paixv(ret.data))
                 // reloadData(paixv(ret.data))
             } else {
