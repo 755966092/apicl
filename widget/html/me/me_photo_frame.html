@@ -114,11 +114,14 @@
      
     // 监听事件
     function showSelIcon() {
+        var btn = $api.dom('.btn');
         api.addEventListener({
             name: 'showSelIcon'
         }, function (ret, err) {
+            console.log('监听到');
+            
             // 上传按钮变删除
-            var btn = $api.dom('.btn');
+            
             if ($api.text(btn) == '上传') {
                 clickFlag = 0;
                 $api.text(btn, '删除');
@@ -139,6 +142,12 @@
                     $api.addCls(element, 'hide');
                 }
             }
+        });
+        api.addEventListener({
+            name: 'showSelIcon2'
+        }, function(ret, err){
+            $api.text(btn, '上传');
+            $api.removeCls(btn, 'delRed');
         });
     }
     // 请求数据
@@ -354,6 +363,15 @@
                         duration: 2000,
                         location: 'bottom'
                     });
+                    if (flag == 'add') {
+                       
+                    } else {
+                        // $api.text($api.dom('.btn'), '上传');
+                        // $api.removeCls($api.dom('.btn'), 'delRed');
+                        api.sendEvent({
+                            name: 'showSelIcon2'
+                        });
+                    }
                 } else {
                     alert(ret.msg)
                 }

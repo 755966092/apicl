@@ -44,14 +44,14 @@
         }
 
         .swiper-wrapper img {
-            height: 5.14rem;
+            height: 7.5rem;
         }
     </style>
 </head>
 <body>
     <div class="swiper-container">
         <div class="swiper-wrapper">
-            <img src="../image/iocn_addressList/IMG_0559.PNG" class="swiper-slide blue-slide">
+            <img src="../image/iocn_addressList/IMG_0559.PNG" tabmode onclick="openAlbum(this)" class="swiper-slide blue-slide">
             <!-- <img src="http://imgsrc.baidu.com/imgad/pic/item/83025aafa40f4bfb281dbe70094f78f0f63618c0.jpg" class="swiper-slide blue-slide">
                 <img src="http://imgsrc.baidu.com/imgad/pic/item/5366d0160924ab18cb0aad123ffae6cd7b890bf2.jpg" class="swiper-slide red-slide">
                 <img src="http://img.taopic.com/uploads/allimg/140826/267848-140R60T34860.jpg" class="swiper-slide orange-slide">  -->
@@ -167,7 +167,7 @@
                     <img src="../image/icon_my/icon_photo.png" alt="">
                 </div>
                 <div class="weui-cell__bd">
-                    <p>照片</p>
+                    <p>相册</p>
                 </div>
                 <div class="weui-cell__ft"></div>
             </a>
@@ -196,6 +196,12 @@
             api.addEventListener({
                 name:'viewappear'
             }, function(ret, err){
+                userInfo();
+            });
+            api.addEventListener({
+                name:'showSelIcon2'
+            }, function(ret, err){
+                $api.html($api.dom('.swiper-wrapper'), '<img src="../image/iocn_addressList/IMG_0559.PNG" tabmode onclick="openAlbum(this)" class="swiper-slide blue-slide">');
                 userInfo();
             });
             api.setFrameAttr({
@@ -238,7 +244,7 @@
                 name: 'me_photo',
                 url: './me/me_photo.html',
                 bounces: false,
-                pageParam: { imgJson: imgJson }
+                // pageParam: { imgJson: imgJson }
             });
             }
         function requireData() {
@@ -262,7 +268,7 @@
                             for (var i = 0; i < imgJson.length; i++) {
                                 var element = imgJson[i];
                                 if (i < 5) {
-                                    str += '<img src="' + element + '?imageMogr2/auto-orient/thumbnail/!750x514r/gravity/Center/crop/x514/format/jpg/interlace/1/blur/1x0/quality/100|imageslim" class="swiper-slide blue-slide" tapmode onclick="openAlbum(this)">'
+                                    str += '<img src="' + element + '?imageMogr2/auto-orient/thumbnail/!750x750r/gravity/Center/crop/750x750/format/jpg/interlace/1/blur/1x0/quality/100|imageslim" class="swiper-slide blue-slide" tapmode onclick="openAlbum(this)">'
                                 } else {
                                     break;
                                 }
