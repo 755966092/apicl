@@ -323,10 +323,13 @@
                 alert(JSON.stringify(err));
             }
         });
+        
         // 打开数据库
         db.openDatabase({
             name: 'db_' + $api.getStorage('userToken')
         }, function(ret, err) {
+            console.log(JSON.stringify(ret));
+            
             if (ret.status) {
                 openRemarksDb()
             } else {
