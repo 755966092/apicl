@@ -403,6 +403,7 @@
         }
         
         footer {
+            z-index: 9999;
             font-size: 0;
             height: .88rem;
             position: fixed;
@@ -679,7 +680,7 @@
                         <span class="typeIcon">[{{=it.info.type}}]</span>
                     </div>
                     <!-- 分享按钮 -->
-                    <!-- <div class="shareIcon"></div> -->
+                    <div class="shareIcon" tapmode onclick="shareData()"></div>
                 </div>
 
 
@@ -1123,8 +1124,75 @@
             }
         });
     }
-
-
+    function shareData() {
+        var val = '';
+       
+         api.ajax({
+            url: apiSite + '/share/supplyParam',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: {
+                    supply_id: api.pageParam.supply_id
+                }
+            }
+        }, function (ret, err) {
+            if (ret) {
+                if (ret.code === 200) {
+                     api.actionSheet({
+                        buttons: ['微信好友', '微信朋友圈']
+                    }, function (ret1, err1) {
+                        if (ret1.buttonIndex == 1) {
+                            // 好友
+                            val = 'session'
+                             shareFn(ret.data, val)
+                        } else {
+                            // pengyouq 
+                            val = 'timeline'
+                             shareFn(ret.data, val)
+                        }
+                    });
+                   
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+    function shareFn(obj,val) {
+            var wx = api.require('wx');
+            api.imageCache({
+                url: obj.thumb
+            }, function (ret, err) {
+                wx.shareWebpage({
+                    apiKey: '',
+                    scene: val,
+                    title: obj.title,
+                    description: obj.description,
+                    thumb: ret.url,
+                    contentUrl: obj.content_url
+                }, function (ret, err) {
+                    if (ret.status) {
+                        api.toast({
+                            msg: '分享成功',
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                    } else {
+                        if (err.code == 2) {
+                            api.toast({
+                                msg: '取消分享',
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                        }
+                    }
+                });
+            });
+           
+    }
     // doT模版获取数据
     function getData(data) {
         // 原生方法
