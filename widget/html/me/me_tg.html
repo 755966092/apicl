@@ -100,8 +100,11 @@
 <script type="text/javascript">
     apiready = function(){
         fnInit();
+        $api.rmStorage('InviteInfo');
         var InviteInfo = $api.getStorage('InviteInfo');
+        // if (InviteInfo) {
         if (InviteInfo) {
+
             // 有缓存
             $api.text($api.byId('invitation_code'), InviteInfo.info.invitation_code);
             $api.attr($api.byId('head_img_url'), 'src', InviteInfo.info.head_img_url);
@@ -127,7 +130,8 @@
             }
         }, function(ret, err) {
             if(ret) {
-
+                console.log(JSON.stringify(ret));
+                
                 if ($api.jsonToStr(cacheData) == $api.jsonToStr(ret.data)) {
                     // 网络数据没有更新
                 } else {
@@ -139,18 +143,21 @@
                         $api.addCls($api.byId('icon'), 'icon2');
                     }
                     $api.setStorage('InviteInfo', ret.data);
-                    createQrcode(ret.data.info.invitation_code, ret.data.info.user_id)
+                    createQrcode(ret.data.info.qr_code_info)
+                    // createQrcode(ret.data.info.invitation_code, ret.data.info.user_id)
                 }
             } else {
                 alert(JSON.stringify(err.msg))
             }
         })
     }
-    function createQrcode(str, id) {
+    function createQrcode(str) {
+        console.log(str);
+        
          // 生成二维码
         var scanner = api.require('scanner');
         scanner.encode({
-            string: str+'-'+ id,
+            string: str,
             save: {
                 imgPath: 'fs://',
                 imgName: 'album1.png',
@@ -165,5 +172,6 @@
             }
         });
     }
+   
 </script>
 </html>
