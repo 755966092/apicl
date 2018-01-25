@@ -67,15 +67,15 @@
     </div>
     <script type="text/x-dot-template" id="listT">
         {{ for (var i = 0; i < it.length; i++) { }} 
-             <a class="weui-cell weui-cell_access" href="javascript:;" tapmode   onclick="openEdit(this)" data-type='{{=it[i].type}}' data-id='{{=it[i].work_id}}'>
+             <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openEdit(this)" data-companyId="{{=it[i].company_id}}" data-type='{{=it[i].type}}' data-id='{{=it[i].work_id}}'>
                 <div class="weui-cell__hd">
                 </div>
-                <div class="weui-cell__bd weui-cell_primary">
+                <div class="weui-cell__bd weui-cell_primary" >
                     <h3>{{=it[i].company_name}}</h3>
                     <p class="positionText">{{=it[i].start_date}} - {{=it[i].end_date}},&nbsp;&nbsp;{{=it[i].position}}</p>
                     <p class="schoolInfo">{{=it[i].description}}</p>
                 </div>
-                <span class="editIcon btnStatus"></span>
+                <span class="editIcon btnStatus" tapmode onclick="openPage(this);event.stopPropagation();" data-companyId="{{=it[i].company_id}}" data-type='{{=it[i].type}}' data-id='{{=it[i].work_id}}'></span>
             </a>
         {{ }; }}
     </script>
@@ -120,17 +120,19 @@
             }
         });
     }
-    // 编辑地址
-    function openEdit(ele) {
-        var val = $api.attr(ele, 'data-id');
-        var type = $api.attr(ele, 'data-type');
+    // openPage
+    function openPage(ele) {
+        console.log('点击了编辑按钮:'+flag);
+        
         if (flag) {
-            alert('不能操作会员原始信息')
+            openCompanyPage($api.attr(ele, 'data-companyId'))
         } else {
-            if ($api.hasCls($api.dom(ele ,'span'), 'delIcon')) {
+            var val = $api.attr(ele, 'data-id');
+            var type = $api.attr(ele, 'data-type');
+            if ($api.hasCls(ele, 'delIcon')) {
                 // 删除按钮状态下删除地址
                 $api.css($api.dom('.loading'), 'display: block');
-                $api.remove($api.closest($api.dom(ele ,'span'), '.weui-cell'));
+                $api.remove($api.closest(ele, '.weui-cell'));
                 deleteWorkExper(val);
             } else {
                 // 编辑按钮状态下 进入编辑页面
@@ -144,13 +146,29 @@
                     },
                     softInputMode: 'pan'
                 });
-                
+
             }
         }
-       
-        
     }
-
+    // 编辑地址
+    function openEdit(ele) {
+        
+        if (flag) {
+            // alert('不能操作会员原始信息')
+            // 打开公司
+            openCompanyPage($api.attr(ele, 'data-companyId'))
+        } else {
+            openCompanyPage($api.attr(ele, 'data-companyId'))
+        }
+    }
+    function openCompanyPage(id) {
+        api.openWin({
+            name: 'me_gs_homePage',
+            url: '../me/me_gs_homePage.html',
+            bounces: false,
+            pageParam: { companyId : id}
+        });
+    }
     // 添加新地址
     function addAddress() {
         api.openWin({
@@ -181,6 +199,9 @@
                             ret.data[i].end_date = '至今'
                         }
                     }
+                     api.sendEvent({
+                        name: 'workList1'
+                    });
                     getData(ret.data);
                 } else {
                     remarkInfo();
@@ -212,6 +233,9 @@
                             ret.data.list[i].end_date = '至今'
                         }
                     }
+                    api.sendEvent({
+                        name: 'workList1'
+                    });
                     getData(ret.data.list);
                 } else {
                     // 原始信息
@@ -243,7 +267,15 @@
                         ret.data.list[i].end_date = '至今'
                     }
                 }
+                api.sendEvent({
+                    name: 'workList'
+                });
                 getData(ret.data.list);
+                for (var i = 0; i < $api.domAll('.editIcon').length; i++) {
+                    console.log('111'+ $api.domAll('.editIcon').length);
+                    
+                      $api.addCls($api.domAll('.editIcon')[i],'hide');
+                }
             } else {
                 alert(JSON.stringify(err.msg));
             }

@@ -1140,16 +1140,18 @@
             if (ret) {
                 if (ret.code === 200) {
                      api.actionSheet({
-                        buttons: ['微信好友', '微信朋友圈']
+                        buttons: ['分享给微信好友', '分享到微信朋友圈']
                     }, function (ret1, err1) {
                         if (ret1.buttonIndex == 1) {
                             // 好友
                             val = 'session'
                              shareFn(ret.data, val)
-                        } else {
+                        } else if (ret1.buttonIndex == 1) {
                             // pengyouq 
                             val = 'timeline'
                              shareFn(ret.data, val)
+                        } else {
+
                         }
                     });
                    

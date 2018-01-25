@@ -135,6 +135,9 @@
           .swiper-wrapper img {
             height: 7.5rem;
         }
+        .weui-cell__ft {
+            padding-left: .5rem;
+        }
     </style>
 </head>
 
@@ -252,7 +255,7 @@
                 </div>
             </a>
         </div>
-        <div class="weui-cells weui-cells_radio resultList mt30">
+        <div class="weui-cells  weui-cells_checkbox resultList mt30">
             <!-- <label class="weui-cell weui-check__label" for="x11" tapmode data-statusId='{{=it[i].status_id}}' data-type='{{=it[i].type}}' onclick="selCurrentStatus(this)">
                     <div class="weui-cell__bd">
                         <p>{{=it[i].name}} {{=it[i].position}}</p>
@@ -271,7 +274,7 @@
                                 <div class="weui-cell__bd">
                                     <p class="statusText" >{{=it[i].name}} {{=it[i].position}}</p>
                                 </div>
-                                <div class="weui-cell__ft">
+                                <div class="weui-cell__ft" tapmode onclick="openPage(this);event.stopPropagation();" data-statusId='{{=it[i].status_id}}' data-type='{{=it[i].type}}'>
                                     {{?it[i].is_default==1}}
                                         <input type="radio" class="weui-check" checked name="radio1">
                                     {{??}}
@@ -299,7 +302,7 @@
                                                 {{=it[i].degree}}
                                             {{?}}</p>
                                 </div>
-                                <div class="weui-cell__ft">
+                                <div class="weui-cell__ft" tapmode onclick="openPage(this);event.stopPropagation();" data-statusId='{{=it[i].status_id}}' data-type='{{=it[i].type}}'>
                                     {{?it[i].is_default==1}}
                                         <input type="radio" class="weui-check" checked name="radio1">
                                     {{??}}
@@ -417,16 +420,8 @@
             initPage();
             // initStatus();
         }
-        // 初始好友不显示人脉轨迹图
-        function hideNetworkOfPeople() {
-            // openNetworkOfPeople
-            if(api.pageParam.flag == 4 || api.pageParam.userId == 0) {
-                // $api.css($api.byId('openNetworkOfPeople'), 'display:none');
-                $api.css($api.byId('openNetworkOfPeople'), 'color: #999;pointer-events: none;');
-                // $api.removeCls($api.byId('relationship_level_wrap'), 'wrap1');
-                // $api.removeCls($api.dom($api.byId('relationship_level_wrap'), '.wrap'), 'wrap');
-            }
-        }
+        
+       
 
         // requireDetailData();
         api.addEventListener({
@@ -467,6 +462,57 @@
             }
         });
     };
+     // 初始好友不显示人脉轨迹图
+        function hideNetworkOfPeople() {
+            // openNetworkOfPeople
+            if (api.pageParam.flag == 4 || api.pageParam.userId == 0) {
+                // $api.css($api.byId('openNetworkOfPeople'), 'display:none');
+                $api.css($api.byId('openNetworkOfPeople'), 'color: #999;pointer-events: none;');
+                // $api.removeCls($api.byId('relationship_level_wrap'), 'wrap1');
+                // $api.removeCls($api.dom($api.byId('relationship_level_wrap'), '.wrap'), 'wrap');
+            }
+        }
+    // 点击选择器
+        function openPage(ele) {
+            // alert('11111')
+             var type = $api.attr(ele, 'data-type'),
+                status_id = $api.attr(ele, 'data-statusId');
+            api.ajax({
+                url: apiSite + '/remark_user/setDefaultStatus',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: {
+                        token: $api.getStorage('userToken'),
+                        remark_user_id: api.pageParam.userId,
+                        type: type,
+                        status_id: status_id
+                    }
+                }
+            }, function (ret, err) {
+                if (ret) {
+                    if (ret.code == 200) {
+                        for (var i = 0; i < $api.domAll('.weui-check').length; i++) {
+                            $api.removeAttr($api.domAll('.weui-check')[i], 'checked');
+                        };
+                        $api.attr($api.dom(ele, '.weui-check'), 'checked', 'checked');
+                        $api.text($api.byId('current_company'), $api.text($api.dom(ele, '.statusText')));
+                        updateStatusSql(status_id, ele)
+                    } else {
+                        // alert(ret.msg+'111')
+                        console.log(JSON.stringify(ret));
+                        if (ret.code == 10038) {
+                            // 打开公司页面
+                            alert('打开公司1')
+                        } else {
+                            alert(ret.msg)
+                        }
+                    }
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
+        }
      function enter() {
             api.openWin({
                 name: 'txl_addFellow_PersonInfoSet_win',
@@ -553,47 +599,9 @@
     }
     // 备注当前状态
     function selCurrentStatus(ele) {
-        var type = $api.attr(ele, 'data-type'),
-            status_id = $api.attr(ele, 'data-statusId');
-        api.ajax({
-            url: apiSite + '/remark_user/setDefaultStatus',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: {
-                    token: $api.getStorage('userToken'),
-                    remark_user_id: api.pageParam.userId,
-                    type: type,
-                    status_id: status_id
-                }
-            }
-        }, function(ret, err) {
-            if (ret) {
-                if (ret.code == 200) {
-                    // for (var i = 0; i < $api.domAll('.iconStatus').length; i++) {
-                    //     $api.removeCls($api.domAll('.iconStatus')[i], 'sel');
-                    // };
-                    // $api.addCls($api.dom(ele, '.iconStatus'), 'sel');
-                    // $api.text($api.byId('current_company'), $api.text($api.dom(ele, '.statusText')));
-                    // $api.text($api.byId('current_company'), $api.text($api.dom(ele, '.statusText')));
-                    // $api.text($api.byId('current_company'), $api.text($api.dom(ele, '.statusText')));
-                    // alert(JSON.stringify(ret))
-                    // console.log('修改当前状态成功')
-                    // 更新数据库
-
-                     for (var i = 0; i < $api.domAll('.weui-check').length; i++) {
-                        $api.removeAttr($api.domAll('.weui-check')[i], 'checked');
-                    };
-                    $api.attr($api.dom(ele, '.weui-check'), 'checked', 'checked');
-                    $api.text($api.byId('current_company'), $api.text($api.dom(ele, '.statusText')));
-                    updateStatusSql(status_id, ele)
-                } else {
-                    alert(ret.msg)
-                }
-            } else {
-                alert(JSON.stringify(err))
-            }
-        })
+        console.log(JSON.stringify(event));
+       // 打开公司
+       alert('打开公司2')
     }
     // 更新数据库
     function updateStatusSql(status_id, ele) {

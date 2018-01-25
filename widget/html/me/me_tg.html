@@ -74,6 +74,7 @@
             <span class="winTitle">
                 推广
             </span>
+            <span class="rightBtn" tapmode onclick="sharePage()">分享</span>
         </div>
     </header>
     <div class="main flex-def flex-zTopBottom">
@@ -118,6 +119,76 @@
 
 
     };
+    function sharePage() {
+        var val;
+        api.ajax({
+            url: apiSite + '/share/invitationParam',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: $api.getStorage('userToken'),
+                }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    // ret.data.description
+                    // ret.data.thumb
+                    // ret.data.content_url
+                    api.actionSheet({
+                        buttons: ['分享给微信好友', '分享到微信朋友圈']
+                    }, function (ret1, err1) {
+                        if (ret1.buttonIndex == 1) {
+                            // 好友
+                            val = 'session'
+                            shareFn(ret.data, val)
+                        } else if (ret1.buttonIndex == 2){
+                            // pengyouq 
+                            val = 'timeline'
+                            shareFn(ret.data, val)
+                        }
+                    });
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+    function shareFn(obj, val) {
+            var wx = api.require('wx');
+            api.imageCache({
+                url: obj.thumb
+            }, function (ret, err) {
+                wx.shareWebpage({
+                    apiKey: '',
+                    scene: val,
+                    title: obj.title,
+                    description: obj.description,
+                    thumb: ret.url,
+                    contentUrl: obj.content_url
+                }, function (ret, err) {
+                    if (ret.status) {
+                        api.toast({
+                            msg: '分享成功',
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                    } else {
+                        if (err.code == 2) {
+                            api.toast({
+                                msg: '取消分享',
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                        }
+                    }
+                });
+            });
+
+        }
     function requestData(cacheData) {
         api.ajax({
             url: apiSite + '/user_center/inviteInfo',

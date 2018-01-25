@@ -9,6 +9,10 @@
         body,html{
             background-color: #EDECF3;
         }
+        header.header .rightBtn {
+            font-size: .5rem;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -21,7 +25,7 @@
             <span class="winTitle">
                 详情
             </span>
-            <span class="rightBtn" tapmode onclick="clearCollect()"></span>
+            <span class="rightBtn" tapmode onclick="clearCollect()">···</span>
         </div>
     </header>
     
@@ -29,6 +33,7 @@
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
+var btnArr = ['分享给微信好友', '分享到微信朋友圈'];
     apiready = function(){
         fnInit();
         api.addEventListener({
@@ -37,7 +42,8 @@
             if (ret) {
                 if (ret.value.is_collect) {
                     // 已收藏
-                    $api.text($api.dom('.rightBtn'), '取消收藏');
+                    btnArr = ['分享给微信好友', '分享到微信朋友圈', '取消收藏'];
+                    // $api.text($api.dom('.rightBtn'), '取消收藏');
                 } else {
                     // 未收藏
                 }
@@ -64,18 +70,61 @@
     };
     function clearCollect() {
         api.ajax({
+            url: apiSite + '/share/circleTopicParam',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    topic_id: api.pageParam.topic_id
+                }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    console.log(JSON.stringify(ret));
+                    api.actionSheet({
+                        buttons: btnArr
+                    }, function (ret1, err1) {
+                        if (ret1.buttonIndex == 1) {
+                            // 好友
+                            val = 'session'
+                            shareFn(ret.data, val)
+                        } else if (ret1.buttonIndex == 2) {
+                            // pengyouq 
+                            val = 'timeline'
+                            shareFn(ret.data, val)
+                        } else if (ret1.buttonIndex == 3) {
+                            // 取消收藏
+                            clearColl(); ª
+                        } else {
+                        }
+                    });
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+
+
+        
+    }
+    function clearColl() {
+        api.ajax({
             url: apiSite + '/circle_topic/cancelCollect',
             method: 'post',
             headers: apiHeader,
             data: {
-                   values: { 
-                       token: $api.getStorage('userToken'),
-                       topic_id: api.pageParam.topic_id
-                   }
+                values: {
+                    token: $api.getStorage('userToken'),
+                    topic_id: api.pageParam.topic_id
+                }
             }
-        }, function(ret, err) {
-            if(ret) {
-                 $api.text($api.dom('.rightBtn'), '');
+        }, function (ret, err) {
+            if (ret) {
+                // $api.text($api.dom('.rightBtn'), '');
+                btnArr = ['分享给微信好友', '分享到微信朋友圈']
                 api.sendEvent({
                     name: 'clearCollect'
                 });
@@ -84,5 +133,39 @@
             }
         })
     }
+     function shareFn(obj, val) {
+         console.log(JSON.stringify(obj));
+         
+            var wx = api.require('wx');
+            api.imageCache({
+                url: obj.thumb
+            }, function (ret, err) {
+                wx.shareWebpage({
+                    apiKey: '',
+                    scene: val,
+                    title: obj.title,
+                    description: obj.description,
+                    thumb: ret.url,
+                    contentUrl: obj.content_url
+                }, function (ret, err) {
+                    if (ret.status) {
+                        api.toast({
+                            msg: '分享成功',
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                    } else {
+                        if (err.code == 2) {
+                            api.toast({
+                                msg: '取消分享',
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                        }
+                    }
+                });
+            });
+
+        }
 </script>
 </html>

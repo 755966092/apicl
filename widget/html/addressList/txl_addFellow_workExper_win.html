@@ -30,7 +30,16 @@
 <script type="text/javascript">
     apiready = function(){
 	    fnInit();
-        
+        api.addEventListener({
+            name: 'workList'
+        }, function(ret, err){
+            $api.addCls($api.byId('over'),'hide');
+        });
+        api.addEventListener({
+            name: 'workList1'
+        }, function(ret, err){
+            $api.removeCls($api.byId('over'), 'hide');
+        });
         api.openFrame({
             name: 'txl_addFellow_workExper_frame',
             url: './txl_addFellow_workExper_frame.html',
