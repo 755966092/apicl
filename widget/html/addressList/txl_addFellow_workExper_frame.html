@@ -152,13 +152,16 @@
     }
     // 编辑地址
     function openEdit(ele) {
-        
         if (flag) {
             // alert('不能操作会员原始信息')
             // 打开公司
-            openCompanyPage($api.attr(ele, 'data-companyId'))
+            if ($api.attr(ele, 'data-companyId') != 'null') {
+                openCompanyPage($api.attr(ele, 'data-companyId'))
+            }
         } else {
-            openCompanyPage($api.attr(ele, 'data-companyId'))
+             if ($api.attr(ele, 'data-companyId') != 'null') {
+                openCompanyPage($api.attr(ele, 'data-companyId'))
+            }
         }
     }
     function openCompanyPage(id) {
