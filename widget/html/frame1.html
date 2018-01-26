@@ -264,9 +264,16 @@
                 alert(JSON.stringify(err));
             }
         });
+        api.addEventListener({
+            name: 'updateAddressList'
+        }, function(ret, err){
+            dataArr = '';
+            initPage()
+        });
         if (!$api.getStorage('guidancePage')) {
             shadowPage();
         }
+       
     }
     function hideWuiList(ele,flag) {
         var cls = '';
@@ -324,8 +331,6 @@
             }, function (ret, err) {
                 if (ret) {
                     if (ret.code === 200) {
-                        console.log('网络请求:'+JSON.stringify(ret));
-                        
                         $api.text($api.byId('lev2'), ret.data.lev2);
                         $api.text($api.byId('lev2_available'), ret.data.lev2_available);
                         $api.text($api.byId('lev2_unavailable'), ret.data.lev2_unavailable);
@@ -344,7 +349,6 @@
         
     }
     function initPage() {
-        
         if ($api.getStorage('noAccessToContacts') == 'true') {
             // 未获取通讯录权限
             $api.css($api.dom('.loading'), 'display: none');
@@ -358,6 +362,7 @@
                     sql: 'SELECT * FROM addressList_simplify WHERE type IN (1,2,3,4) order by flag asc',
                 }, function (ret, err) {
                     if (ret.status) {
+                        
                         // 2 : 熟识好友
                         // 3 : 尚未加入
                         // 1 : 相识好友

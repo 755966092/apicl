@@ -217,6 +217,7 @@
                                 flag: api.pageParam.flag,
                             }
                         });
+                        
                         uodateRemarkSql();
                     } else {
                         alert(ret.msg)
@@ -254,6 +255,8 @@
                             sql: 'UPDATE addressList SET remark_nickname = "' + retWeb.data.info.nickname + '",remark_head_img_url = "' + retWeb.data.info.head_img_url + '", title = "' + retWeb.data.info.nickname + '", flag = "' + litter[0] + '", litter = "' + litter + '",remark_real_name = "' + retWeb.data.info.real_name + '", remark_sex = "' + retWeb.data.info.sex + '" WHERE user_id = ' + api.pageParam.userId
                         }, function(ret, err) {
                             if (ret.status) {
+                                
+                                
                                 api.execScript({
                                     name: 'listWin',
                                     frameName: 'txl_listWin_frame',
@@ -265,6 +268,7 @@
                                         flag: api.pageParam.flag
                                     }
                                 });
+                               
                                 api.closeWin();
                             } else {
                                 alert('690:' + JSON.stringify(err));
@@ -286,8 +290,12 @@
             sql: 'UPDATE addressList_simplify SET title = "' + title + '",img="' + head_img_url + '",flag="' + flag + '" WHERE user_id =' + api.pageParam.userId
         }, function(ret, err) {
             if (ret.status) {
+                console.log('更新数据成功');
                 api.sendEvent({
                     name: 'editUserInfo',
+                });
+                api.sendEvent({
+                    name: 'updateAddressList'
                 });
             } else {
                 alert(JSON.stringify(err));
