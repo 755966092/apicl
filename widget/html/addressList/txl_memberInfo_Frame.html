@@ -381,6 +381,7 @@
     var oneselfPageFlag = 0, userFlag = 0;
     var targetRongId;
     var imgJson;
+    var statusFlag;
     apiready = function() {
         fnInit();
         moduleInit();
@@ -462,72 +463,81 @@
         });
     };
      // 初始好友不显示人脉轨迹图
-        function hideNetworkOfPeople() {
-            // openNetworkOfPeople
-            if (api.pageParam.flag == 4 || api.pageParam.userId == 0) {
-                // $api.css($api.byId('openNetworkOfPeople'), 'display:none');
-                $api.css($api.byId('openNetworkOfPeople'), 'color: #999;pointer-events: none;');
-                // $api.removeCls($api.byId('relationship_level_wrap'), 'wrap1');
-                // $api.removeCls($api.dom($api.byId('relationship_level_wrap'), '.wrap'), 'wrap');
-            }
+    function hideNetworkOfPeople() {
+        // openNetworkOfPeople
+        if (api.pageParam.flag == 4 || api.pageParam.userId == 0) {
+            // $api.css($api.byId('openNetworkOfPeople'), 'display:none');
+            $api.css($api.byId('openNetworkOfPeople'), 'color: #999;pointer-events: none;');
+            // $api.removeCls($api.byId('relationship_level_wrap'), 'wrap1');
+            // $api.removeCls($api.dom($api.byId('relationship_level_wrap'), '.wrap'), 'wrap');
         }
-        // 打开公司
-        function openCompanyPage(id) {
-            api.openWin({
-                name: 'me_gs_homePage',
-                url: '../me/me_gs_homePage.html',
-                bounces: false,
-                pageParam: {companyId : id}
-            });
-        }
+    }
+    // 打开公司
+    function openCompanyPage(id) {
+        api.openWin({
+            name: 'me_gs_homePage',
+            url: '../me/me_gs_homePage.html',
+            bounces: false,
+            pageParam: {companyId : id}
+        });
+    }
     // 点击选择器
-        function openPage(ele) {
-            // alert('11111')
-             var type = $api.attr(ele, 'data-type'),
-                status_id = $api.attr(ele, 'data-statusId');
-            api.ajax({
-                url: apiSite + '/remark_user/setDefaultStatus',
-                method: 'post',
-                headers: apiHeader,
-                data: {
-                    values: {
-                        token: $api.getStorage('userToken'),
-                        remark_user_id: api.pageParam.userId,
-                        type: type,
-                        status_id: status_id
+    function openPage(ele) {
+            var type = $api.attr(ele, 'data-type'),
+            status_id = $api.attr(ele, 'data-statusId');
+            if (statusFlag == 1) {
+                // 备注信息
+                api.ajax({
+                    url: apiSite + '/remark_user/setDefaultStatus',
+                    method: 'post',
+                    headers: apiHeader,
+                    data: {
+                        values: {
+                            token: $api.getStorage('userToken'),
+                            remark_user_id: api.pageParam.userId,
+                            type: type,
+                            status_id: status_id
+                        }
                     }
-                }
-            }, function (ret, err) {
-                if (ret) {
-                    if (ret.code == 200) {
-                        for (var i = 0; i < $api.domAll('.weui-check').length; i++) {
-                            $api.removeAttr($api.domAll('.weui-check')[i], 'checked');
-                        };
-                        $api.attr($api.dom(ele, '.weui-check'), 'checked', 'checked');
-                        
-                        $api.text($api.byId('current_company'), $api.text($api.dom($api.closest(ele , '.weui-cell'), '.statusText')));
-                        updateStatusSql(status_id, ele)
-                    } else {
-                        // alert(ret.msg+'111')
-                        if (ret.code == 10038) {
-                            // 打开公司页面
-                            // alert('打开公司1')
-                            
-                            if ($api.attr(ele, 'data-type')==1 && $api.attr(ele, 'data-companyId') != 'null') {
-                                openCompanyPage($api.attr(ele, 'data-companyId'))
+                }, function (ret, err) {
+                    if (ret) {
+                        if (ret.code == 200) {
+                            for (var i = 0; i < $api.domAll('.weui-check').length; i++) {
+                                $api.removeAttr($api.domAll('.weui-check')[i], 'checked');
+                            };
+                            $api.attr($api.dom(ele, '.weui-check'), 'checked', 'checked');
+
+                            $api.text($api.byId('current_company'), $api.text($api.dom($api.closest(ele, '.weui-cell'), '.statusText')));
+                            updateStatusSql(status_id, ele)
+                        } else {
+                            if (ret.code == 10038) {
+                                // 打开公司页面
+                                // alert('打开公司1')
+                                if ($api.attr(ele, 'data-type') == 1 && $api.attr(ele, 'data-companyId') != 'null') {
+                                    openCompanyPage($api.attr(ele, 'data-companyId'))
+                                } else {
+                                    alert(ret.msg)
+                                }
+
                             } else {
                                 alert(ret.msg)
                             }
-                        } else {
-                            alert(ret.msg)
                         }
+                    } else {
+                        alert(JSON.stringify(err))
                     }
-                } else {
-                    alert(JSON.stringify(err))
-                }
-            })
+                })
+            // 原始信息
+            
+        } else {
+                    alert('无法针对用户设置的状态进行修改')
+            
         }
-     function enter() {
+        // alert('11111')
+        
+        
+    }
+    function enter() {
             api.openWin({
                 name: 'txl_addFellow_PersonInfoSet_win',
                 url: './txl_addFellow_PersonInfoSet_win.html',
@@ -613,9 +623,7 @@
     }
     // 备注当前状态
     function selCurrentStatus(ele) {
-        // console.log(JSON.stringify(event));
     //    打开公司
-    //    alert('打开公司2')
         if ($api.attr(ele, 'data-type') == 1 && $api.attr(ele, 'data-companyId')!='null') {
             openCompanyPage($api.attr(ele, 'data-companyId'))
         } 
@@ -633,7 +641,7 @@
                 }, function(ret, err) {
                     if (ret.status) {
                         // alert( JSON.stringify( ret ) );
-                        // console.log('更新成功')
+                        console.log('更新成功')
                         // initStatus();
                         // reviseText()
 
@@ -652,7 +660,7 @@
             sql: ' UPDATE addressList_simplify SET subTitle = "' + $api.text($api.dom($api.closest(ele, '.weui-cell'), '.statusText')) + '" WHERE user_id =' + api.pageParam.userId
         }, function(ret, err) {
             if (ret.status) {
-                // console.log('执行成功')
+                console.log('执行成功')
                 api.sendEvent({
                     name: 'editUserInfoUpdateList'
                 });
@@ -783,9 +791,13 @@
 
                                 //  当前状态
                                 if (ret.data.status.length > 0) {
+                                    // 备注信息
                                     // console.log('第一次渲染状态A:' + JSON.stringify(ret.data.status,null,4))
+                                    statusFlag = 1;
                                     getData(ret.data.status)
                                 } else {
+                                    statusFlag = 2
+                                    // 原始信息
                                     // console.log('第一次渲染状态B:' + JSON.stringify(retDetail.data.status,null,4))
                                     getData(retDetail.data.status)
                                 }
@@ -800,7 +812,8 @@
                                 paramRealName = retDetail.data.info.real_name;
                                 //  当前状态
                                 if (retDetail.data.status.length > 0) {
-                                    console.log('第二次渲染状态A:' + JSON.stringify(retDetail.data.status,null,4))
+                                    console.log('第二次渲染状态A:' + JSON.stringify(retDetail.data.status,null,4));
+                                    statusFlag = 1;
                                     getData(retDetail.data.status);
                                     var statueStr = ''
                                     statueStr = (retDetail.data.info.current_position || '') + ' ' + (retDetail.data.info.current_company || '') + ' ' + (retDetail.data.info.current_degree || '')
@@ -882,9 +895,11 @@
 
                                 // //  当前状态
                                 if (ret.data.status.length > 0) {
+                                    statusFlag = 1;
                                     // console.log('第三次渲染状态A:' + JSON.stringify(ret.data.status,null,4))
                                     getData(ret.data.status)
                                 } else {
+                                    statusFlag = 2;
                                     // console.log('第三次渲染状态B:' + JSON.stringify(retDetail.data.status,null,4))
                                     getData(retDetail.data.status)
                                 }
@@ -1227,7 +1242,7 @@
                 if (retSql.status) {
                     reviseText(ret.data.status)
                   //  console.log('第五次渲染动态:'+ ret.data.status);
-                    
+                    statusFlag = 2;
                     getData(ret.data.status)
                 } else {
                     alert(JSON.stringify(errSql));

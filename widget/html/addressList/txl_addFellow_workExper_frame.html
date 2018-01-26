@@ -122,8 +122,6 @@
     }
     // openPage
     function openPage(ele) {
-        console.log('点击了编辑按钮:'+flag);
-        
         if (flag) {
             openCompanyPage($api.attr(ele, 'data-companyId'))
         } else {
@@ -326,7 +324,7 @@
         db.selectSql({
             name: 'db_'+$api.getStorage('userToken'),
             sql: 'SELECT * FROM tb_remarks_status WHERE status_id = ' + id
-        }, function(ret, err){        
+        }, function(ret, err){
             if( ret.status ){
                 // 删除的是默认的状态, 更新列表内容
                 // 删除的不是默认的状态, 无操作
@@ -355,14 +353,15 @@
             }
         }, function(ret, err) {
             if(ret) {
-                updateRemarksStatus(ret)
+                updateRemarksStatus(ret);
+                // queryContactByPage();
                 for (var i = 0; i < ret.data.status.length; i++) {
                     if(ret.data.status[i].is_default == 1) {
                         updateStatusTwo(ret.data.status[i].name+' '+ret.data.status[i].position+' '+ret.data.status[i].degree)
                     }
                 }
             } else {
-                alert(JSON.stringify(err))
+                alert(err.msg)
             }
         })
     }

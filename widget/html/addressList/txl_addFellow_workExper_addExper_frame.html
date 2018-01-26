@@ -361,6 +361,12 @@
                 api.sendEvent({
                     name: 'addStudy'
                 });
+                 api.sendEvent({
+                    name: 'editUserInfo'
+                });
+                api.sendEvent({
+                    name: 'updateAddressList'
+                });
                 api.closeWin();
             }else{
                 alert(JSON.stringify( err ) );
@@ -379,9 +385,14 @@
                     sql: 'UPDATE tb_remarks_work SET company_name = "' + ret.data.list[i].company_name + '",position = "' + ret.data.list[i].position+ '",description = "' + ret.data.list[i].description+ '",is_default = "' + ret.data.list[i].is_default+ '",start_date = "' + ret.data.list[i].start_date+ '",end_date = "' + ret.data.list[i].end_date + '" WHERE work_id =' + api.pageParam.work_id
                 }, function(ret, err){
                     if( ret.status ){
-                        //console.log( '更新成功'+JSON.stringify( ret ) );
                         api.sendEvent({
                              name: 'addStudy'
+                        });
+                         api.sendEvent({
+                            name: 'editUserInfo'
+                        });
+                        api.sendEvent({
+                            name: 'updateAddressList'
                         });
                         api.closeWin();
                     }else{
@@ -415,10 +426,6 @@
                         sql: 'UPDATE addressList_simplify SET subTitle = "'+ subTitle +'" WHERE user_id =' + api.pageParam.userId
                     }, function(ret, err){
                         if( ret.status ){
-                            // console.log('437更新成功:')
-                          api.sendEvent({
-                              name: 'editUserInfo'
-                          });
                         }else{
                             alert( JSON.stringify( err ) );
                         }
