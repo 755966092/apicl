@@ -504,7 +504,8 @@
                             $api.removeAttr($api.domAll('.weui-check')[i], 'checked');
                         };
                         $api.attr($api.dom(ele, '.weui-check'), 'checked', 'checked');
-                        $api.text($api.byId('current_company'), $api.text($api.dom(ele, '.statusText')));
+                        
+                        $api.text($api.byId('current_company'), $api.text($api.dom($api.closest(ele , '.weui-cell'), '.statusText')));
                         updateStatusSql(status_id, ele)
                     } else {
                         // alert(ret.msg+'111')
@@ -648,7 +649,7 @@
             // 更新列表数据库
         db.executeSql({
             name: SQLName,
-            sql: ' UPDATE addressList_simplify SET subTitle = "' + $api.text($api.dom(ele, '.statusText')) + '" WHERE user_id =' + api.pageParam.userId
+            sql: ' UPDATE addressList_simplify SET subTitle = "' + $api.text($api.dom($api.closest(ele, '.weui-cell'), '.statusText')) + '" WHERE user_id =' + api.pageParam.userId
         }, function(ret, err) {
             if (ret.status) {
                 // console.log('执行成功')
