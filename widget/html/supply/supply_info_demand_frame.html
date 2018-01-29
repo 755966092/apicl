@@ -1029,12 +1029,11 @@
                                     // 好友
                                     val = 'session'
                                     shareFn(ret.data, val)
-                                } else if (ret1.buttonIndex == 1) {
+                                } else if (ret1.buttonIndex == 2) {
                                     // pengyouq 
                                     val = 'timeline'
                                     shareFn(ret.data, val)
                                 } else {
-
                                 }
                             });
                             
@@ -1049,14 +1048,14 @@
             function shareFn(obj,val) {
                 var wx = api.require('wx');
                 api.imageCache({
-                    url: obj.thumb
+                    url: obj.thumb + "?imageView2/1/w/200/h/200/format/jpg/q/24|imageslim"
                 }, function (ret, err) {
                     wx.shareWebpage({
                         apiKey: '',
                         scene: val,
                         title: obj.title,
                         description: obj.description,
-                        thumb: ret.url,
+                        thumb: ret.url || '',
                         contentUrl: obj.content_url
                     }, function (ret, err) {
                         if (ret.status) {
@@ -1069,6 +1068,12 @@
                             if (err.code == 2) {
                                 api.toast({
                                     msg: '取消分享',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                            } else {
+                                api.toast({
+                                    msg: '未知错误:' + err.code,
                                     duration: 2000,
                                     location: 'bottom'
                                 });
