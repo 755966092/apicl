@@ -855,21 +855,24 @@
     function sendTextCreate(msg, flag) {
         var time;
         var str;
-        if (flag == 'SEND') {
-            // 发送文字消息
-            time = new Date(parseInt(msg.sentTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(
-                parseInt(msg.sentTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.sentTime, 10)).toLocaleString();
-            str = '<div data-msgId="' + msg.messageId +'" class="oneself clearfix"><div class="time">' + time +'</div><div class="flex-def flex-zEnd"><div class="flag-def flex-zTopBottom"><p data-msgId="' +msg.messageId +'" class="flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" >' +transText(msg.content.text) +'</p></div><img tapmode onclick="openMemberInfo(this)" data-id="1" class="oneselfImg" src="' + user_head +'"></div></div>'
-            $api.append($api.dom('.main'), str);
-            slideBut();
-        } else {
-            // 接收文字消息
-            time = new Date(parseInt(msg.receivedTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ?
-                new Date(parseInt(msg.receivedTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10))
-                .toLocaleString();
-                 str = '<div data-msgId="' + msg.messageId +'" class="other clearfix"><div class="time">' + time +'</div><div class="flex-def"><img tapmode onclick="openMemberInfo(this)" data-id="' + user_info[msg.senderUserId].user_id + '" class="otherImg" src="'+ (user_info[msg.senderUserId].remark_head_img_url?user_info[msg.senderUserId].remark_head_img_url:user_info[msg.senderUserId].head_img_url)+'"> <div class="flag-def flex-zTopBottom"><div class="my-name">'+(user_info[msg.senderUserId].remark_nickname?user_info[msg.senderUserId].remark_nickname:user_info[msg.senderUserId].nickname)+'</div><p data-msgId="' + msg.messageId +'" class="flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" >' +transText(msg.content.text) +'</p></div></div></div>'
-            $api.append($api.dom('.main'), str);
-            slideBut();
+        if (msg.content.text != ' ') {
+            
+            if (flag == 'SEND') {
+                // 发送文字消息
+                time = new Date(parseInt(msg.sentTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(
+                    parseInt(msg.sentTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.sentTime, 10)).toLocaleString();
+                str = '<div data-msgId="' + msg.messageId +'" class="oneself clearfix"><div class="time">' + time +'</div><div class="flex-def flex-zEnd"><div class="flag-def flex-zTopBottom"><p data-msgId="' +msg.messageId +'" class="flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" >' +transText(msg.content.text) +'</p></div><img tapmode onclick="openMemberInfo(this)" data-id="1" class="oneselfImg" src="' + user_head +'"></div></div>'
+                $api.append($api.dom('.main'), str);
+                slideBut();
+            } else {
+                // 接收文字消息
+                time = new Date(parseInt(msg.receivedTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ?
+                    new Date(parseInt(msg.receivedTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10))
+                    .toLocaleString();
+                    str = '<div data-msgId="' + msg.messageId +'" class="other clearfix"><div class="time">' + time +'</div><div class="flex-def"><img tapmode onclick="openMemberInfo(this)" data-id="' + user_info[msg.senderUserId].user_id + '" class="otherImg" src="'+ (user_info[msg.senderUserId].remark_head_img_url?user_info[msg.senderUserId].remark_head_img_url:user_info[msg.senderUserId].head_img_url)+'"> <div class="flag-def flex-zTopBottom"><div class="my-name">'+(user_info[msg.senderUserId].remark_nickname?user_info[msg.senderUserId].remark_nickname:user_info[msg.senderUserId].nickname)+'</div><p data-msgId="' + msg.messageId +'" class="flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" >' +transText(msg.content.text) +'</p></div></div></div>'
+                $api.append($api.dom('.main'), str);
+                slideBut();
+            }
         }
 
     }

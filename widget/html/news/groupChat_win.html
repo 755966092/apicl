@@ -12,8 +12,8 @@
             display: inline-block;
             /*width: .3rem;*/
             /*height: .39rem;*/
-            background: url(../../image/icon_other/icon_datum.png)no-repeat;
-            background-size: .3rem .3rem;
+            background: url(../../image/chatPage/icon_group.png)no-repeat;
+            background-size: .52rem auto;
             background-position: right center;
         }
     </style>
@@ -33,10 +33,37 @@
 <script type="text/javascript">
     var groupInfo;
     apiready = function() {
+        moduleInit();
         fnInit();
         requireData();
         eventLisenter();
+        // 清除该回话纬度消息状态
+         rong.clearMessagesUnreadStatus({
+            conversationType: 'GROUP',
+            targetId: api.pageParam.group_id
+        }, function (ret, err) {
+
+        });
+        if (api.pageParam.createGroup == 1) {
+            // 新建群
+             rong.sendTextMessage({
+                conversationType: 'GROUP',
+                targetId: api.pageParam.group_id,
+                text: ' ',
+                extra: ''
+            }, function (ret, err) {
+                if (ret.status == 'prepare') {
+                } else if (ret.status == 'success') {
+                    
+                    console.log('发送成功');
+                } else if (ret.status == 'error') {
+                    console.log('发送失败'+JSON.stringify(ret));
+                    }
+
+            });
+        }
     }
+    
     function eventLisenter() {
         api.addEventListener({
             name: 'editGroupName'

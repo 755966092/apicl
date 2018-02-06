@@ -51,14 +51,17 @@
             max-width: 5rem;
         }
         .announcement {
-            padding: .1rem .5rem .2rem;
+            padding: .1rem .3rem .2rem;
             width: 100%;
             box-sizing: border-box;
             color: #999;
             font-size: 0.28rem;
         }
-        button {
+        button.btn {
             font-size: 0.32rem;
+        }
+        .page__bd {
+            padding: 0 15px;
         }
     </style>
 </head>
@@ -71,25 +74,31 @@
         </li>
          -->
         <li class="item flex-def flex-zTopBottom flex-zStart flex-cCenter" tapmode onclick="addUser(1)">
-            <img src="../../image/icon_supply/icon_addMedia_01.png" alt="">
+            <img src="../../image/chatPage/icon_addGroup.png" alt="">
         </li>
         <li class="item flex-def flex-zTopBottom flex-zStart flex-cCenter" tapmode onclick="addUser(0)">
-            <img src="../../image/icon_supply/icon_del_2.png" alt="">
+            <img src="../../image/chatPage/icon_delGroup.png" alt="">
         </li>
    </ul>
     <div class="weui-cells mt40">
-        <span class="weui-cell " tapmode onclick="openEditGroupName(1)">
+        <div class="weui-cell weui-cell_access" tapmode onclick="openEditGroupName(1)">
             <div class="weui-cell__bd">
                 <p>群聊名称</p>
             </div>
-            <div class="right-text" id="groupName"></div>
-        </span>
-        <button disabled class="weui-cell" tapmode onclick="openEditGroupName(2)">
-            <div class="weui-cell__bd">
-                <p>群公告</p>
+            <div class="weui-cell__ft" id="groupName">aaa</div>
+        </div>
+        
+        <div tapmode onclick="openEditGroupName(2)" class="weui-cell_access flex-def" style="width:100%;padding:0 15px 0 0;box-sizing:border-box"> 
+            <div style="flex:1">
+                <button disabled class="weui-cell btn weui-cell_access" >
+                    <div class="weui-cell__bd">
+                        <p>群公告</p>
+                    </div>
+                </button>
+                <p class="announcement" id="announcement">asdasda</p>
             </div>
-        </button>
-        <p class="announcement" id="announcement"></p>
+            <div class="weui-cell__ft"></div>
+        </div>
 
     </div>
     <div class="weui-cells weui-cells_form mt40">
@@ -102,6 +111,9 @@
                 </label>
             </div>
         </div>
+    </div>
+    <div class="page__bd page__bd_spacing mt40">
+        <a href="javascript:;" class="weui-btn weui-btn_warn" tapmode onclick="delOrQuit()">删除并退出</a>
     </div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
@@ -247,6 +259,82 @@
                     name: $api.text($api.byId('groupName'))
                 }
             });
+        }
+        // 删除并推出
+        function delOrQuit() {
+            
+            if (api.systemType == 'ios') {
+                api.actionSheet({
+                    title: '退出后不会通知群聊中其他成员,且不会在接收此群聊消息',
+                    cancelTitle: '取消',
+                    destructiveTitle: '确定',
+                }, function (ret, err) {
+                     var index = ret.buttonIndex;
+                        if (index == 1) {
+                            api.ajax({
+                                url: apiSite + '/chat_group/quit',
+                                method: 'post',
+                                headers: apiHeader,
+                                data: {
+                                    values: {
+                                        token: api.getStorage('userToken'),
+                                        group_id: api.pageParam.groupInfo.group_info.group_id,
+                                    }
+                                }
+                            }, function (ret, err) {
+                                if (ret) {
+                                    if (ret.code === 200) {
+                                        api.toast({
+                                            msg: '退出成功',
+                                            duration: 2000,
+                                            location: 'bottom'
+                                        });
+                                    } else {
+                                        alert(ret.msg)
+                                    }
+                                } else {
+                                    alert(JSON.stringify(err))
+                                }
+                            })
+                        }
+                });
+            } else {
+                api.confirm({
+                    msg: '退出后不会通知群聊中其他成员,且不会在接收此群聊消息',
+                    buttons: ['确定', '取消']
+                }, function (ret, err) {
+                    var index = ret.buttonIndex;
+                    if (index == 1) {
+                        api.ajax({
+                            url: apiSite + '/chat_group/quit',
+                            method: 'post',
+                            headers: apiHeader,
+                            data: {
+                                values: {
+                                    token: api.getStorage('userToken'),
+                                    group_id: api.pageParam.groupInfo.group_info.group_id,
+                                }
+                            }
+                        }, function (ret, err) {
+                            if (ret) {
+                                if (ret.code === 200) {
+                                    api.toast({
+                                        msg: '退出成功',
+                                        duration: 2000,
+                                        location: 'bottom'
+                                    });
+                                } else {
+                                    alert(ret.msg)
+                                }
+                            } else {
+                                alert(JSON.stringify(err))
+                            }
+                        })
+                    }
+                });
+            }
+          
+            
         }
 </script>
 
