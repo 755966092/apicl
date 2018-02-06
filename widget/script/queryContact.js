@@ -191,6 +191,10 @@ function requestData() {
                             // 相识好友 1 我认识他 2 他认识我
                             disData(ret.data.single_list, 1, 'single_list')
                             disData(ret.data.both_list, 2)
+                            // 4 初始好友
+                            // 1 相识好友
+                            // 2 熟识好友
+                            // 3 尚未加入
                             disData(ret.data.unavailable_list, 3);
                         }
 

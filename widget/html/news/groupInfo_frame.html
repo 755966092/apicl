@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
+    <style>
+        .user-list {
+            box-sizing: border-box;
+            padding: 0 .4rem;
+            flex-wrap: wrap;
+            background-color: white;
+            padding-bottom: 0.4rem;
+        }
+        .user-list .item {
+            width: 1rem;
+            margin-right: .4rem;
+            margin-top: 0.4rem;
+        }
+        .user-list .item:nth-child(5n) {
+            margin-right: 0;
+        }
+        .user-list .item img {
+            width: 1rem;
+            height: 1rem;
+            border-radius: .1rem;
+        }
+        .user-list .item p {
+            font-size: 0.24rem;
+            color: #999;
+            max-width: 90%;
+            text-align: center;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            margin-top: 0.1rem;
+        }
+
+        .mt40 {
+            margin-top: 0.4rem;
+        }
+        .right-text {
+            color: #999999;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 5rem;
+        }
+        .announcement {
+            padding: .1rem .5rem .2rem;
+            width: 100%;
+            box-sizing: border-box;
+            color: #999;
+            font-size: 0.28rem;
+        }
+        button {
+            font-size: 0.32rem;
+        }
+    </style>
+</head>
+
+<body>
+   <ul class="user-list flex-def">
+        <!-- <li class="item flex-def flex-zTopBottom flex-zCenter flex-cCenter">
+            <img src="../../image/tx_1.jpg" alt="">
+            <p>我的名字我的名字我的名字</p>
+        </li>
+         -->
+        <li class="item flex-def flex-zTopBottom flex-zStart flex-cCenter" tapmode onclick="addUser(1)">
+            <img src="../../image/icon_supply/icon_addMedia_01.png" alt="">
+        </li>
+        <li class="item flex-def flex-zTopBottom flex-zStart flex-cCenter" tapmode onclick="addUser(0)">
+            <img src="../../image/icon_supply/icon_del_2.png" alt="">
+        </li>
+   </ul>
+    <div class="weui-cells mt40">
+        <span class="weui-cell " tapmode onclick="openEditGroupName(1)">
+            <div class="weui-cell__bd">
+                <p>群聊名称</p>
+            </div>
+            <div class="right-text" id="groupName"></div>
+        </span>
+        <button disabled class="weui-cell" tapmode onclick="openEditGroupName(2)">
+            <div class="weui-cell__bd">
+                <p>群公告</p>
+            </div>
+        </button>
+        <p class="announcement" id="announcement"></p>
+
+    </div>
+    <div class="weui-cells weui-cells_form mt40">
+        <div class="weui-cell weui-cell_switch">
+            <div class="weui-cell__bd">消息免打扰</div>
+            <div class="weui-cell__ft">
+                <label for="is_gong" class="weui-switch-cp">
+                    <input value="is_gong" onchange="changeState(this)" id="is_gong" class="weui-switch-cp__input" type="checkbox">
+                    <div class="weui-switch-cp__box"></div>
+                </label>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        initPage(api.pageParam.groupInfo);
+        chatGroupCheckIsOwner();
+        eventLisenter();
+    }
+    function eventLisenter() {
+         api.addEventListener({
+            name: 'editGroupName'
+        }, function (ret, err) {
+            $api.text($api.byId('groupName'), ret.value.paramObj.group_name);
+        });
+        api.addEventListener({
+            name: 'editGroupAnnouncement'
+        }, function (ret, err) {
+            $api.text($api.byId('announcement'), ret.value.paramObj.announcement);
+        });
+    }
+    function initPage(paramInfo) {
+        $api.text($api.byId('groupName'), paramInfo.group_info.group_name);
+        $api.text($api.byId('announcement'), paramInfo.group_info.announcement);
+        var str='';
+        for (var i = 0; i < paramInfo.group_member_info.length; i++) {
+            var element = paramInfo.group_member_info[i];
+            str += '<li tabmode onclick="openMemberInfo(this)" data-id="'+ element.user_id +'" class="item flex-def flex-zTopBottom flex-zCenter flex-cCenter"><img src="'+ (element.remark_head_img_url ? element.remark_head_img_url : element.head_img_url) +'" alt=""><p>'+ (element.remark_nickname ? element.remark_nickname : element.nickname) +'</p></li>'
+        }
+        $api.prepend($api.dom('ul'), str);
+    }
+    // 判断是否为群组
+    function chatGroupCheckIsOwner() {
+        api.ajax({
+            url: apiSite + '/chat_group/checkIsOwner',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: $api.getStorage('userToken'),
+                    group_id: api.pageParam.groupInfo.group_info.group_id
+                }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    // disabled
+                    console.log(JSON.stringify(ret));
+                    if (ret.data.is_owner) {
+                        $api.removeAttr($api.dom('button'), 'disabled');
+                    }
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+    // 设置消息免打扰
+     function changeState(ele) {
+            var paramType = $api.attr(ele, 'value');
+            var url,msg;
+            if (ele.checked) {
+                msg='设置消息免打扰成功'
+                // 选中
+                url = '/chat_group/mute'
+            } else {
+                msg = '取消消息免打扰成功'
+                // 未选中
+                url = '/chat_group/UnMute'
+            }
+            api.ajax({
+                url: apiSite + url,
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: { 
+                        token: $api.getStorage('userToken'),
+                        group_id: api.pageParam.groupInfo.group_info.group_id
+                    }
+                }
+            }, function(ret, err) {
+                if(ret) {
+                    if (ret.code === 200) {
+                        api.toast({
+                            msg: msg,
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                    } else {
+                        alert(ret.msg)
+                    }
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
+        }
+        function addUser(flag) {
+            if (flag) {
+                // 加人
+                api.openWin({
+                    name: 'createGroupChat_win',
+                    url: './createGroupChat_win.html',
+                    bounces: false,
+                    pageParam: {key : 'value'}
+                });
+            } else {
+                // 踢人
+                api.openWin({
+                    name: 'createGroupChat_win',
+                    url: './createGroupChat_win.html',
+                    bounces: false,
+                    pageParam: { key: 'value' }
+                });
+            }
+        }
+         // 用户详情
+        function openMemberInfo(ele) {
+            var flag = $api.attr(ele, 'data-id');
+            api.closeWin({
+                name: 'txl_memberInfo_Win'
+            });
+            api.openWin({
+                name: 'txl_memberInfo_Win',
+                url: '../addressList/txl_memberInfo_Win.html',
+                pageParam: {
+                    userId: flag
+                }
+            });
+        }
+        // 编辑群名
+        function openEditGroupName(flag) {
+            api.openWin({
+                name: 'inputWin',
+                url: './input.html',
+                bounces: false,
+                pageParam: {
+                    group_id: api.pageParam.groupInfo.group_info.group_id,
+                    flag: flag,
+                    name: $api.text($api.byId('groupName'))
+                }
+            });
+        }
+</script>
+
+</html>

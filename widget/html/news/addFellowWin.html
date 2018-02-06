@@ -23,7 +23,7 @@
       }
       ul {
         width: 2.48rem;
-        height: 1.55rem;
+        /* height: 1.55rem; */
         float: right;
         padding: 0 .13rem 0;
         box-sizing: border-box;
@@ -50,6 +50,8 @@
         line-height: .75rem;
         border-bottom: .01rem solid #4E4C51;
 
+
+ background: url(../../image/icon_addF.png)no-repeat; background-size: .39rem .30rem; background-position: .25rem center;
       }
 
 
@@ -57,14 +59,17 @@
 
       ul li:first-child {
          background: url(../../image/icon_addF.png)no-repeat;
-            background-size: .39rem .30rem;
+        background-size: .39rem .30rem;
         background-position: .25rem center;
       }
       ul li:nth-child(2) {
          background: url(../../image/icon_sao.png)no-repeat;
             background-size: .31rem .32rem;
         background-position: .25rem center;
-        border-bottom: 0;
+        /* border-bottom: 0; */
+      }
+      ul li:last-child {
+          border: 0;
       }
     </style>
 </head>
@@ -82,6 +87,7 @@
     </div> -->
     <div tapmode onclick="api.closeFrame()">
        <ul>
+           <li tapmode onclick="addFellow(2);event.stopPropagation();">发起群聊</li>
            <li tapmode onclick="addFellow(0);event.stopPropagation();">添加朋友</li>
            <li tapmode onclick="addFellow(1);event.stopPropagation();">扫一扫</li>
            <span></span>
@@ -100,10 +106,18 @@
                 name: 'txl_addFellow_win',
                 url: '../addressList/txl_addFellow_win.html',
             });
-        } else {
+        } else if(n == 1) {
             api.openWin({
                 name: 'scan',
                 url: './scan.html',
+            });
+        } else if (n==2) {
+            // 打开群聊页面
+            api.openWin({
+                name: 'createGroupChat_win',
+                url: './createGroupChat_win.html',
+                bounces: false,
+                pageParam: {key : 'value'}
             });
         }
         setTimeout(function(){

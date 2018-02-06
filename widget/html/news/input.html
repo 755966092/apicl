@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
+    <style>
+      .weui-cell {
+          padding-left:  .3rem;
+      }
+      .weui-cells {
+          margin-top: 0.4rem;
+      }
+      .header button.disabled {
+          color: cadetblue;
+      }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="head">
+            <span class="callback" tapmode onclick="api.closeWin()">返回</span>
+            <span class="winTitle" id="title"></span>
+            <button disabled  class="rightBtn disabled" tapmode onclick="complete()">完成</button>
+        </div>
+    </header>
+    <div class="weui-cells hide" id='ipt1'>
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <input class="weui-input" oninput="editName()" type="text" placeholder="请输入">
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells weui-cells_form hide" id='ipt2'>
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <textarea class="weui-textarea" placeholder="请输入文本" oninput="changeText(this)" rows="3"></textarea>
+                <div class="weui-textarea-counter">
+                    <span>0</span>/200</div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+   
+    apiready = function() {
+        initPage();
+        moduleInit();
+        fnInit();
+    }
+    function initPage() {
+        $api.removeCls($api.byId('ipt' + api.pageParam.flag), 'hide');
+        if (api.pageParam.flag == 1) {
+            $api.text($api.byId('title'), '修改群名称');
+            $api.val($api.dom('input'), api.pageParam.name);
+        } else if (api.pageParam.flag == 2) {
+            $api.text($api.byId('title'), '编辑群公告');
+        } else {
+
+        }
+    }
+    function editName() {
+        $api.removeAttr($api.dom('button'), 'disabled');
+        $api.removeCls($api.dom('button'), 'disabled');
+    }
+     // 编辑文本和修改文本长度内容
+    function changeText(ele) {
+        $api.text($api.dom($api.next(ele), 'span'), ele.value.length);
+    }
+    function complete() {
+        var name = $api.val($api.dom('input'));
+        var announcement = $api.val($api.dom('textarea'));
+        var paramObj={},url,eventName;
+        if (api.pageParam.flag == 1) {
+            // 修改群名片
+            url = '/chat_group/changeGroupName';
+            eventName = 'editGroupName'
+            paramObj = {
+                token: $api.getStorage('userToken'),
+                group_id: api.pageParam.group_id,
+                group_name: name
+            }
+        } else if (api.pageParam.flag == 2) {
+            // 修改群公告
+            eventName = 'editGroupAnnouncement'
+            url = '/chat_group/changeAnnouncement';
+            paramObj = {
+                token: $api.getStorage('userToken'),
+                group_id: api.pageParam.group_id,
+                announcement: announcement
+            }
+        }
+        api.ajax({
+            url: apiSite + url,
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: paramObj
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    api.toast({
+                        msg: '修改成功',
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                    
+                    api.sendEvent({
+                        name: eventName,
+                        extra: { paramObj: paramObj}
+                    });
+                    if (api.pageParam.flag == 1) {
+                        historicalNews();
+                    }
+                    api.closeWin();
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+    
+</script>
+
+</html>

@@ -583,32 +583,78 @@
        });
     }
 
+    
+    // 打开人脉详情
+    function addFriends(userId,name,headImg) {
+        api.openWin({
+            name: 'txl_memberInfo_Win',
+            url: './addressList/txl_memberInfo_Win.html',
+            pageParam: {
+                userId: userId,
+                name: name,
+                headImg: headImg
+            }
+        });
+    }
+   
+    // 查询数据库
+    function query() {
+        var SQLName = 'db_'+$api.getStorage('userToken');
+        // 查询数据库
+        db.selectSql({
+            name: SQLName,
+            sql: 'SELECT * FROM addressList_simplify order by flag asc'
+        }, function(ret, err) {
+            // console.log('查询到的数据:' + JSON.stringify(ret))
+            if (ret.status) {
+                // setTimeout(function(){
+                //     if (ret.data=='') {
+                //         query();
+                //     }
+                // },1)
+                //
+                // console.log('frame1::::::'+JSON.stringify(ret))
+                // if (ret.data.length === 0) {
+                //     // console.log('暂无数据')
+                //     query();
+                // } else {
+                    // console.log('有数据')
+                    // dakai(paixv(ret.data))
+                    setTimeout(function () {
+                        sortData(ret.data);
+                    },1)
+                // }
+            } else {
+                // console.log(JSON.stringify(err));
+            }
+        });
+    }
     function dakai(data1) {
-       
-             var btm = 440 / (100 * (api.frameWidth / 750));
-        $api.css($api.dom('body'), 'padding-bottom:'+ btm +'rem');
-        var dataArr = [];
-        var dataKeyArr = [];
-        for(key in data1) {
-            // console.log(data1[key])
-            dataArr = dataArr.concat(data1[key]);
-            dataKeyArr.push(key)
-        }
-        listContact.open({
-            x: -1000,
-            y: -1000,
-            w: 5,
-            h: 5,
-            data: [],
-            fixedOn: api.frameName
-        },function(ret,err){
-        })
-        listContact.close();
-        listContact.open({
-                x : 0,
-                y : $api.offset($api.byId('news_wrap')).h,
-                w : api.frameWidth,
-                h : 500,
+
+            var btm = 440 / (100 * (api.frameWidth / 750));
+            $api.css($api.dom('body'), 'padding-bottom:' + btm + 'rem');
+            var dataArr = [];
+            var dataKeyArr = [];
+            for (key in data1) {
+                // console.log(data1[key])
+                dataArr = dataArr.concat(data1[key]);
+                dataKeyArr.push(key)
+            }
+            listContact.open({
+                x: -1000,
+                y: -1000,
+                w: 5,
+                h: 5,
+                data: [],
+                fixedOn: api.frameName
+            }, function (ret, err) {
+            })
+            listContact.close();
+            listContact.open({
+                x: 0,
+                y: $api.offset($api.byId('news_wrap')).h,
+                w: api.frameWidth,
+                h: 500,
                 bgColor: '#EFEFF4',
                 // 分割线颜色
                 borderColor: '#EDEDED',
@@ -641,9 +687,9 @@
                 data: data1,
                 fixedOn: 'frame1',
                 fixed: false
-            }, function(ret, err) {
+            }, function (ret, err) {
                 if (ret) {
-                     if (ret.clickType == 0) {
+                    if (ret.clickType == 0) {
                         // 获取点击联系人信息
                         addFriends(data1[ret.key][ret.index].user_id, data1[ret.key][ret.index].title, data1[ret.key][ret.index].img);
                     }
@@ -653,19 +699,19 @@
                         // ios+1
                         if (api.systemType == 'ios') {
                             var tel;
-                            if (dataKeyArr.indexOf(ret.key)==-1) {
+                            if (dataKeyArr.indexOf(ret.key) == -1) {
                                 // 查找不到
                                 if (data1[dataKeyArr[0]][ret.index].remark_current_contact) {
-                                        tel = data1[dataKeyArr[0]][ret.index].remark_current_contact
-                                } else if (data1[dataKeyArr[0]][ret.index].current_contact){
-                                        tel = data1[dataKeyArr[0]][ret.index].current_contact
+                                    tel = data1[dataKeyArr[0]][ret.index].remark_current_contact
+                                } else if (data1[dataKeyArr[0]][ret.index].current_contact) {
+                                    tel = data1[dataKeyArr[0]][ret.index].current_contact
                                 }
                             } else {
 
-                                if (data1[dataKeyArr[dataKeyArr.indexOf(ret.key)+1]][ret.index].current_contact) {
-                                        tel = data1[dataKeyArr[dataKeyArr.indexOf(ret.key)+1]][ret.index].current_contact
-                                } else if (data1[dataKeyArr[dataKeyArr.indexOf(ret.key)+1]][ret.index].current_contact) {
-                                        tel = data1[dataKeyArr[dataKeyArr.indexOf(ret.key)+1]][ret.index].current_contact
+                                if (data1[dataKeyArr[dataKeyArr.indexOf(ret.key) + 1]][ret.index].current_contact) {
+                                    tel = data1[dataKeyArr[dataKeyArr.indexOf(ret.key) + 1]][ret.index].current_contact
+                                } else if (data1[dataKeyArr[dataKeyArr.indexOf(ret.key) + 1]][ret.index].current_contact) {
+                                    tel = data1[dataKeyArr[dataKeyArr.indexOf(ret.key) + 1]][ret.index].current_contact
                                 }
                             }
                             if (tel) {
@@ -693,57 +739,13 @@
                 }
             });
 
-        $api.css($api.dom('.loading'), 'display: none');
-    }
-    // 打开人脉详情
-    function addFriends(userId,name,headImg) {
-        api.openWin({
-            name: 'txl_memberInfo_Win',
-            url: './addressList/txl_memberInfo_Win.html',
-            pageParam: {
-                userId: userId,
-                name: name,
-                headImg: headImg
-            }
-        });
-    }
+            $api.css($api.dom('.loading'), 'display: none');
+        }
     function f_check_uppercase(obj)   {
-       if (/[A-Z]/.test(obj))    {
+        if (/[A-Z]/.test(obj))    {
           return true;
-       }
+        }
        return false;
-    }
-    // 查询数据库
-    function query() {
-        var SQLName = 'db_'+$api.getStorage('userToken');
-        // 查询数据库
-        db.selectSql({
-            name: SQLName,
-            sql: 'SELECT * FROM addressList_simplify order by flag asc'
-        }, function(ret, err) {
-            // console.log('查询到的数据:' + JSON.stringify(ret))
-            if (ret.status) {
-                // setTimeout(function(){
-                //     if (ret.data=='') {
-                //         query();
-                //     }
-                // },1)
-                //
-                // console.log('frame1::::::'+JSON.stringify(ret))
-                // if (ret.data.length === 0) {
-                //     // console.log('暂无数据')
-                //     query();
-                // } else {
-                    // console.log('有数据')
-                    // dakai(paixv(ret.data))
-                    setTimeout(function () {
-                        sortData(ret.data);
-                    },1)
-                // }
-            } else {
-                // console.log(JSON.stringify(err));
-            }
-        });
     }
     function paixv (data) {
         // for (var i = 0; i < data.length; i++) {
