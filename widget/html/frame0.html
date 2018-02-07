@@ -249,6 +249,7 @@
         ul li .headImg {
             font-size: 0;
             align-content: center;
+            border-radius: .1rem;
             /* padding: .02rem; */
         }
         ul li .groupHead {
@@ -269,7 +270,7 @@
             <span class="searchText">搜索</span>
         </div> -->
         <ul class="resultList">
-            <li class="chatList" 
+            <!-- <li class="chatList" 
                 ontouchstart=";event.stopPropagation();"  tapmode onclick="openChat(this)">
                 <div class="warp" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove(this)" ontouchend="gtouchend(this)">
                     <div class="headImg flex-def flex-wrap">
@@ -291,7 +292,7 @@
                     <span class="stamp" data-targetId="{{=it[i].targetId}}" tapmode onclick="delNesItem(this,1);event.stopPropagation()">标为已读</span>
                     <span class="del" data-targetId="{{=it[i].targetId}}" tapmode onclick="delNesItem(this,0);event.stopPropagation()">删除</span>
                 </span>
-            </li>
+            </li> -->
         </ul>
         <!-- <div class="weui-panel__bd">
             <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
@@ -312,15 +313,14 @@
             {{?it.length > 0}}
                 {{ for (var i = 0; i < it.length; i++) { }}
                     {{?it[i].conversationType == 'GROUP'}}
-                        <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" data-remark_nickname="{{=it[i].remark_nickname}}"
+                        <li class="{{=it[i].select}} chatList"  data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" data-remark_nickname="{{=it[i].remark_nickname}}"
                             ontouchstart=";event.stopPropagation();" data-userId="{{=it[i].user_id}}" tapmode onclick="openGroupChat(this)">
                             <div class="warp" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove(this)" ontouchend="gtouchend(this)">
-                                 <div class="headImg groupHead flex-def flex-wrap">
+                                 <div class="headImg groupHead flex-def flex-wrap flex-zCenter">
                                     {{~it[i].head_img_url :value:index}}
                                         {{?it[i].head_img_url.length>4}}
-                                            <img style="width:.27rem;height:.27rem;border-radius:0;" class="fl" src="{{=value}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim"> 
+                                            <img style="width:.26rem;height:.26rem;border-radius:0;" class="fl" src="{{=value}}?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim"> 
                                         {{??}}
-                                        <!-- <span style="font-size:.12rem">{{=value}}</span> -->
                                             <img style="width:.41rem;height:.41rem;border-radius:0;" class="fl" src="{{=value}}"> 
                                         {{?}}
                                     {{~}}
@@ -343,12 +343,12 @@
                                 </div>
                             </div>
                             <span class="slide">
-                                <span class="stamp" data-targetId="{{=it[i].targetId}}" tapmode onclick="delNesItem(this,1);event.stopPropagation()">标为已读</span>
-                                <span class="del" data-targetId="{{=it[i].targetId}}" tapmode onclick="delNesItem(this,0);event.stopPropagation()">删除</span>
+<span class="stamp" data-type="{{=it[i].conversationType}}" data-targetId="{{=it[i].targetId}}" tapmode onclick="delNesItem(this,1);event.stopPropagation()">标为已读</span>
+<span class="del" data-type="{{=it[i].conversationType}}" data-targetId="{{=it[i].targetId}}" tapmode onclick="delNesItem(this,0);event.stopPropagation()">删除</span>
                             </span>
                         </li>
                     {{??}}
-                     <li class="{{=it[i].select}} chatList" data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" data-remark_nickname="{{=it[i].remark_nickname}}" ontouchstart=";event.stopPropagation();"  data-userId="{{=it[i].user_id}}"  tapmode   onclick="openChat(this)">
+                     <li class="{{=it[i].select}} chatList"  data-targetId="{{=it[i].targetId}}" data-nickname="{{=it[i].nickname}}" data-remark_nickname="{{=it[i].remark_nickname}}" ontouchstart=";event.stopPropagation();"  data-userId="{{=it[i].user_id}}"  tapmode   onclick="openChat(this)">
                         <div class="warp" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove(this)" ontouchend="gtouchend(this)">
                             <div class="headImg">
                                 {{?it[i].remark_head_img_url}}
@@ -374,8 +374,8 @@
                             </div>
                         </div>
                         <span class="slide">
-                            <span class="stamp" data-targetId="{{=it[i].targetId}}" tapmode onclick="delNesItem(this,1);event.stopPropagation()">标为已读</span>
-                            <span class="del" data-targetId="{{=it[i].targetId}}" tapmode onclick="delNesItem(this,0);event.stopPropagation()">删除</span>
+<span class="stamp" data-type="{{=it[i].conversationType}}" data-targetId="{{=it[i].targetId}}" tapmode onclick="delNesItem(this,1);event.stopPropagation()">标为已读</span>
+<span class="del" data-type="{{=it[i].conversationType}}" data-targetId="{{=it[i].targetId}}" tapmode onclick="delNesItem(this,0);event.stopPropagation()">删除</span>
                         </span>
                     </li>
                     {{?}}
@@ -501,7 +501,7 @@
         if (n) {
              // 之前调用 init 和 connect 的代码省略
             rong.clearMessagesUnreadStatus({
-                conversationType: 'PRIVATE',
+                conversationType: $api.attr(ele,'data-type'),
                 targetId: targetId
             }, function(ret, err) {
                 historyNews();
@@ -509,13 +509,33 @@
         } else {
             $api.remove($api.closest(ele, 'li'));
             rong.removeConversation({
-                conversationType: 'PRIVATE',
+                conversationType: $api.attr(ele,'data-type'),
                 targetId: targetId
             }, function(ret, err) {
-                if ($api.domAll('.chatList').length == 0) {
-                    contrastCache('chatMessage',historyNews);
-                }
-                // api.toast({ msg: ret.status });
+                // if ($api.domAll('.chatList').length == 0) {
+                //     contrastCache('chatMessage',historyNews);
+                // }
+                db.executeSql({
+                    name: 'db_' + $api.getStorage('userToken'),
+                    sql: 'DELETE FROM tb_chat_list WHERE targetId = ' + targetId
+                },function(ret,err){
+                    if (ret.status) {
+                        // api.alert({msg:'执行SQL成功'});
+                    }else {
+                        // api.alert({msg:err.msg});
+                    }
+                });
+                // console.log(targetId);
+                
+                //  db.selectSql({
+                //     name: 'db_' + $api.getStorage('userToken'),
+                //     sql: 'SELECT * FROM tb_chat_list'
+                // }, function (ret, err) {
+                //     if (ret.status) {
+                //         console.log(JSON.stringify(ret));
+                        
+                //     }
+                // })
             })
         }
     }
@@ -676,7 +696,7 @@
         // console.log('获取历史聊天记录')
         // 历史消息列表
         rong.getConversationList(function(ret, err) {
-            console.log('聊天列表:'+JSON.stringify(ret));
+            // console.log('聊天列表:'+JSON.stringify(ret));
                 var targetRongIdArr = {
                     id_json:[],
                     group_json:[]

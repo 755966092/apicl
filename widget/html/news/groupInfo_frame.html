@@ -4,7 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
@@ -16,19 +17,23 @@
             background-color: white;
             padding-bottom: 0.4rem;
         }
+
         .user-list .item {
             width: 1rem;
             margin-right: .4rem;
             margin-top: 0.4rem;
         }
+
         .user-list .item:nth-child(5n) {
             margin-right: 0;
         }
+
         .user-list .item img {
             width: 1rem;
             height: 1rem;
             border-radius: .1rem;
         }
+
         .user-list .item p {
             font-size: 0.24rem;
             color: #999;
@@ -43,13 +48,15 @@
         .mt40 {
             margin-top: 0.4rem;
         }
-        .right-text {
+
+        .weui-cell__ft {
             color: #999999;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             max-width: 5rem;
         }
+
         .announcement {
             padding: .1rem .3rem .2rem;
             width: 100%;
@@ -57,9 +64,11 @@
             color: #999;
             font-size: 0.28rem;
         }
+
         button.btn {
             font-size: 0.32rem;
         }
+
         .page__bd {
             padding: 0 15px;
         }
@@ -67,19 +76,28 @@
 </head>
 
 <body>
-   <ul class="user-list flex-def">
+    <ul class="user-list flex-def resultList">
         <!-- <li class="item flex-def flex-zTopBottom flex-zCenter flex-cCenter">
             <img src="../../image/tx_1.jpg" alt="">
             <p>我的名字我的名字我的名字</p>
         </li>
          -->
+
+    </ul>
+    <script type="text/x-dot-template" id="listT">
+        {{~it:value}}
+        <li tabmode onclick="openMemberInfo(this)" data-id="{{=value.user_id}}" class="item flex-def flex-zTopBottom flex-zCenter flex-cCenter">
+            <img src="{{=(value.remark_head_img_url ? value.remark_head_img_url : value.head_img_url)}}" alt="">
+            <p>{{=(value.remark_nickname ? value.remark_nickname : value.nickname)}}</p>
+        </li>
+        {{~}}
         <li class="item flex-def flex-zTopBottom flex-zStart flex-cCenter" tapmode onclick="addUser(1)">
             <img src="../../image/chatPage/icon_addGroup.png" alt="">
         </li>
-        <li class="item flex-def flex-zTopBottom flex-zStart flex-cCenter" tapmode onclick="addUser(0)">
+        <li id="delBtn" class="item flex-def flex-zTopBottom flex-zStart flex-cCenter" tapmode onclick="addUser(2)">
             <img src="../../image/chatPage/icon_delGroup.png" alt="">
         </li>
-   </ul>
+    </script>
     <div class="weui-cells mt40">
         <div class="weui-cell weui-cell_access" tapmode onclick="openEditGroupName(1)">
             <div class="weui-cell__bd">
@@ -87,14 +105,14 @@
             </div>
             <div class="weui-cell__ft" id="groupName">aaa</div>
         </div>
-        
-        <div tapmode onclick="openEditGroupName(2)" class="weui-cell_access flex-def" style="width:100%;padding:0 15px 0 0;box-sizing:border-box"> 
+
+        <div id="announcementBtn" tapmode class="weui-cell_access flex-def" style="width:100%;padding:0 15px 0 0;box-sizing:border-box">
             <div style="flex:1">
-                <button disabled class="weui-cell btn weui-cell_access" >
+                <div class="weui-cell btn weui-cell_access">
                     <div class="weui-cell__bd">
                         <p>群公告</p>
                     </div>
-                </button>
+                </div>
                 <p class="announcement" id="announcement">asdasda</p>
             </div>
             <div class="weui-cell__ft"></div>
@@ -120,13 +138,45 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
-    apiready = function() {
+    apiready = function () {
+        moduleInit();
         initPage(api.pageParam.groupInfo);
         chatGroupCheckIsOwner();
         eventLisenter();
     }
+
+    function requireData() {
+        api.ajax({
+            url: apiSite + '/chat_group/info',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: {
+                    token: $api.getStorage('userToken'),
+                    group_id: api.pageParam.groupInfo.group_info.group_id
+                }
+            }
+        }, function (ret, err) {
+            if (ret) {
+                if (ret.code === 200) {
+                    getData(ret.data.group_member_info);
+                    api.sendEvent({
+                        name: 'group_member_count',
+                        extra: {
+                            group_member_count: ret.data.group_info.member_count
+                        }
+                    });
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
+
     function eventLisenter() {
-         api.addEventListener({
+        api.addEventListener({
             name: 'editGroupName'
         }, function (ret, err) {
             $api.text($api.byId('groupName'), ret.value.paramObj.group_name);
@@ -136,16 +186,23 @@
         }, function (ret, err) {
             $api.text($api.byId('announcement'), ret.value.paramObj.announcement);
         });
+        api.addEventListener({
+            name: 'addGroupUser'
+        }, function (ret, err) {
+            requireData();
+        });
     }
+
     function initPage(paramInfo) {
         $api.text($api.byId('groupName'), paramInfo.group_info.group_name);
         $api.text($api.byId('announcement'), paramInfo.group_info.announcement);
-        var str='';
-        for (var i = 0; i < paramInfo.group_member_info.length; i++) {
-            var element = paramInfo.group_member_info[i];
-            str += '<li tabmode onclick="openMemberInfo(this)" data-id="'+ element.user_id +'" class="item flex-def flex-zTopBottom flex-zCenter flex-cCenter"><img src="'+ (element.remark_head_img_url ? element.remark_head_img_url : element.head_img_url) +'" alt=""><p>'+ (element.remark_nickname ? element.remark_nickname : element.nickname) +'</p></li>'
-        }
-        $api.prepend($api.dom('ul'), str);
+        getData(paramInfo.group_member_info);
+        // var str='';
+        // for (var i = 0; i < paramInfo.group_member_info.length; i++) {
+        //     var element = paramInfo.group_member_info[i];
+        //     str += '<li tabmode onclick="openMemberInfo(this)" data-id="'+ element.user_id +'" class="item flex-def flex-zTopBottom flex-zCenter flex-cCenter"><img src="'+ (element.remark_head_img_url ? element.remark_head_img_url : element.head_img_url) +'" alt=""><p>'+ (element.remark_nickname ? element.remark_nickname : element.nickname) +'</p></li>'
+        // }
+        // $api.prepend($api.dom('ul'), str);
     }
     // 判断是否为群组
     function chatGroupCheckIsOwner() {
@@ -154,18 +211,22 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
+                values: {
                     token: $api.getStorage('userToken'),
                     group_id: api.pageParam.groupInfo.group_info.group_id
                 }
             }
-        }, function(ret, err) {
-            if(ret) {
+        }, function (ret, err) {
+            if (ret) {
                 if (ret.code === 200) {
                     // disabled
-                    console.log(JSON.stringify(ret));
                     if (ret.data.is_owner) {
-                        $api.removeAttr($api.dom('button'), 'disabled');
+                        // 是群组
+                        $api.addEvt($api.byId('announcementBtn'), 'click', function () {
+                            openEditGroupName(2)
+                        });
+                    } else {
+                        $api.addCls($api.byId('delBtn'), 'hide');
                     }
                 } else {
                     alert(ret.msg)
@@ -176,166 +237,162 @@
         })
     }
     // 设置消息免打扰
-     function changeState(ele) {
-            var paramType = $api.attr(ele, 'value');
-            var url,msg;
-            if (ele.checked) {
-                msg='设置消息免打扰成功'
-                // 选中
-                url = '/chat_group/mute'
-            } else {
-                msg = '取消消息免打扰成功'
-                // 未选中
-                url = '/chat_group/UnMute'
-            }
-            api.ajax({
-                url: apiSite + url,
-                method: 'post',
-                headers: apiHeader,
-                data: {
-                    values: { 
-                        token: $api.getStorage('userToken'),
-                        group_id: api.pageParam.groupInfo.group_info.group_id
-                    }
+    function changeState(ele) {
+        var paramType = $api.attr(ele, 'value');
+        var url, msg;
+        if (ele.checked) {
+            msg = '设置消息免打扰成功'
+            // 选中
+            url = '/chat_group/mute'
+        } else {
+            msg = '取消消息免打扰成功'
+            // 未选中
+            url = '/chat_group/UnMute'
+        }
+        api.ajax({
+            url: apiSite + url,
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: {
+                    token: $api.getStorage('userToken'),
+                    group_id: api.pageParam.groupInfo.group_info.group_id
                 }
-            }, function(ret, err) {
-                if(ret) {
-                    if (ret.code === 200) {
-                        api.toast({
-                            msg: msg,
-                            duration: 2000,
-                            location: 'bottom'
-                        });
-                    } else {
-                        alert(ret.msg)
-                    }
+            }
+        }, function (ret, err) {
+            if (ret) {
+                if (ret.code === 200) {
+                    api.toast({
+                        msg: msg,
+                        duration: 2000,
+                        location: 'bottom'
+                    });
                 } else {
-                    alert(JSON.stringify(err))
+                    alert(ret.msg)
                 }
-            })
-        }
-        function addUser(flag) {
-            if (flag) {
-                // 加人
-                api.openWin({
-                    name: 'createGroupChat_win',
-                    url: './createGroupChat_win.html',
-                    bounces: false,
-                    pageParam: {key : 'value'}
-                });
             } else {
-                // 踢人
-                api.openWin({
-                    name: 'createGroupChat_win',
-                    url: './createGroupChat_win.html',
-                    bounces: false,
-                    pageParam: { key: 'value' }
-                });
+                alert(JSON.stringify(err))
             }
-        }
-         // 用户详情
-        function openMemberInfo(ele) {
-            var flag = $api.attr(ele, 'data-id');
-            api.closeWin({
-                name: 'txl_memberInfo_Win'
+        })
+    }
+
+    function addUser(flag) {
+        // if (flag) {
+        // 加人 1
+        // 踢人 0
+        api.openWin({
+            name: 'createGroupChat_win',
+            url: './createGroupChat_win.html',
+            bounces: false,
+            pageParam: {
+                addUser: flag,
+                groupInfo: api.pageParam.groupInfo
+            }
+        });
+        // } else {
+        //     // 踢人
+        //     api.openWin({
+        //         name: 'createGroupChat_win',
+        //         url: './createGroupChat_win.html',
+        //         bounces: false,
+        //         pageParam: { key: 'value' }
+        //     });
+        // }
+    }
+    // 用户详情
+    function openMemberInfo(ele) {
+        var flag = $api.attr(ele, 'data-id');
+        api.closeWin({
+            name: 'txl_memberInfo_Win'
+        });
+        api.openWin({
+            name: 'txl_memberInfo_Win',
+            url: '../addressList/txl_memberInfo_Win.html',
+            pageParam: {
+                userId: flag
+            }
+        });
+    }
+    // 编辑群名
+    function openEditGroupName(flag) {
+        api.openWin({
+            name: 'inputWin',
+            url: './input.html',
+            bounces: false,
+            pageParam: {
+                group_id: api.pageParam.groupInfo.group_info.group_id,
+                flag: flag,
+                name: $api.text($api.byId('groupName'))
+            }
+        });
+    }
+    // 删除并推出
+    function delOrQuit() {
+        if (api.systemType == 'ios') {
+            api.actionSheet({
+                title: '退出后不会通知群聊中其他成员,且不会在接收此群聊消息',
+                cancelTitle: '取消',
+                destructiveTitle: '确定',
+            }, function (ret, err) {
+                var index = ret.buttonIndex;
+                if (index == 1) {
+                    aftDel();
+                }
             });
-            api.openWin({
-                name: 'txl_memberInfo_Win',
-                url: '../addressList/txl_memberInfo_Win.html',
-                pageParam: {
-                    userId: flag
+        } else {
+            api.confirm({
+                msg: '退出后不会通知群聊中其他成员,且不会在接收此群聊消息',
+                buttons: ['确定', '取消']
+            }, function (ret, err) {
+                var index = ret.buttonIndex;
+                if (index == 1) {
+                   aftDel();
                 }
             });
         }
-        // 编辑群名
-        function openEditGroupName(flag) {
-            api.openWin({
-                name: 'inputWin',
-                url: './input.html',
-                bounces: false,
-                pageParam: {
+    }
+    function aftDel() {
+         api.ajax({
+            url: apiSite + '/chat_group/quit',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: {
+                    token: $api.getStorage('userToken'),
                     group_id: api.pageParam.groupInfo.group_info.group_id,
-                    flag: flag,
-                    name: $api.text($api.byId('groupName'))
                 }
-            });
-        }
-        // 删除并推出
-        function delOrQuit() {
-            
-            if (api.systemType == 'ios') {
-                api.actionSheet({
-                    title: '退出后不会通知群聊中其他成员,且不会在接收此群聊消息',
-                    cancelTitle: '取消',
-                    destructiveTitle: '确定',
-                }, function (ret, err) {
-                     var index = ret.buttonIndex;
-                        if (index == 1) {
-                            api.ajax({
-                                url: apiSite + '/chat_group/quit',
-                                method: 'post',
-                                headers: apiHeader,
-                                data: {
-                                    values: {
-                                        token: api.getStorage('userToken'),
-                                        group_id: api.pageParam.groupInfo.group_info.group_id,
-                                    }
-                                }
-                            }, function (ret, err) {
-                                if (ret) {
-                                    if (ret.code === 200) {
-                                        api.toast({
-                                            msg: '退出成功',
-                                            duration: 2000,
-                                            location: 'bottom'
-                                        });
-                                    } else {
-                                        alert(ret.msg)
-                                    }
-                                } else {
-                                    alert(JSON.stringify(err))
-                                }
-                            })
-                        }
-                });
-            } else {
-                api.confirm({
-                    msg: '退出后不会通知群聊中其他成员,且不会在接收此群聊消息',
-                    buttons: ['确定', '取消']
-                }, function (ret, err) {
-                    var index = ret.buttonIndex;
-                    if (index == 1) {
-                        api.ajax({
-                            url: apiSite + '/chat_group/quit',
-                            method: 'post',
-                            headers: apiHeader,
-                            data: {
-                                values: {
-                                    token: api.getStorage('userToken'),
-                                    group_id: api.pageParam.groupInfo.group_info.group_id,
-                                }
-                            }
-                        }, function (ret, err) {
-                            if (ret) {
-                                if (ret.code === 200) {
-                                    api.toast({
-                                        msg: '退出成功',
-                                        duration: 2000,
-                                        location: 'bottom'
-                                    });
-                                } else {
-                                    alert(ret.msg)
-                                }
-                            } else {
-                                alert(JSON.stringify(err))
-                            }
-                        })
-                    }
-                });
             }
-          
-            
-        }
+        }, function (ret, err) {
+            if (ret) {
+                if (ret.code === 200) {
+                     api.toast({
+                        msg: '退出成功',
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                    var id = 
+                    rong.removeConversation({
+                        conversationType: 'GROUP',
+                        targetId: api.pageParam.groupInfo.group_info.group_id.toString()
+                    }, function (ret, err) {
+                        console.log('删除成功'+ api.pageParam.groupInfo.group_info.group_id);
+                        console.log(JSON.stringify(ret));
+                        console.log(JSON.stringify(err));
+                        
+                        historicalNews();
+                    })
+                    api.closeToWin({
+                        name: 'main',
+                    });
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+       
+    }
 </script>
 
 </html>

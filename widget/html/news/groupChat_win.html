@@ -24,7 +24,7 @@
         <div class="head">
             <span class="callback" tapmode onclick="api.closeWin()">返回</span>
             <span class="winTitle" id="title"></span>
-            <span class="rightBtn" tapmode onclick="openGroupInfo()"></span>
+            <span class="rightBtn" tapmode ></span>
         </div>
     </header>
 </body>
@@ -76,6 +76,11 @@
         }, function (ret, err) {
             requireData();
         });
+        api.addEventListener({
+            name: 'addGroupUser'
+        }, function (ret, err) {
+            requireData();
+        });
     }
     function openFrame(data) {
         api.openFrame({
@@ -108,10 +113,12 @@
         }, function (ret, err) {
             if (ret) {
                 if (ret.code === 200) {
-                    console.log('群组详情'+JSON.stringify(ret));
                     groupInfo = ret.data;
                     $api.text($api.byId('title'), ret.data.group_info.group_name);
-                    openFrame(ret.data)
+                    openFrame(ret.data);
+                    $api.addEvt($api.dom('.rightBtn'), 'click', function() {
+                        openGroupInfo();
+                    });
                 } else {
                     alert(ret.msg)
                 }

@@ -35,6 +35,11 @@
         fnInit();
         openFrame();
         $api.text($api.byId('title'), '聊天信息('+api.pageParam.groupInfo.group_member_info.length+')');
+        api.addEventListener({
+            name: 'group_member_count'
+        }, function(ret, err){
+            $api.text($api.byId('title'), '聊天信息('+ ret.value.group_member_count+')');
+        });
     }
     function openFrame(data) {
         api.openFrame({

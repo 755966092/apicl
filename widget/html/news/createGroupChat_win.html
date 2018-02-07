@@ -4,24 +4,31 @@
 <head>
     <meta charset="utf-8">
     <meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <style>
-       .head-list {
+        .head-list {
             font-size: 0;
             padding: 0.1rem 0rem;
             height: 0.9rem;
-       }
-       img {
+            border: 1px solid #d9d9d9;
+        }
+
+        img {
             width: 0.9rem;
             height: 0.9rem;
             margin: 0 .05rem;
             border-radius: .04rem;
-       }
-       img:last-child {
-           margin-right: .1rem;
-       }
+        }
+
+        img:last-child {
+            margin-right: .1rem;
+        }
+        .header button.disabled {
+          color: #476146;
+      }
     </style>
 </head>
 
@@ -29,106 +36,144 @@
     <header class="header">
         <div class="head">
             <span class="callback" tapmode onclick="api.closeWin()">返回</span>
-            <span class="winTitle" id="title">发起群聊</span>
-            <span class="rightBtn" tapmode onclick="createGroupChat()">确定</span>
+            <span class="winTitle" id="title"></span>
+            <button disabled class="rightBtn disabled" onclick="createGroupChat()" tapmode>确定<span id="count"></span></button>
         </div>
     </header>
-    <div class='head-list flex-def'></div> 
+    <div class='head-list flex-def'></div>
 
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script type="text/javascript">
     var selectItemText = [];
     var selectItemId = [];
-    var selectItemArr = []
-    apiready = function() {
+    var selectItemArr = [];
+    var userIdList = [];
+    apiready = function () {
+        // api.pageParam.addUser == 1 加人
+        // api.pageParam.addUser == 2 踢人
         fnInit();
         moduleInit();
-        selectData();
+        var rightBtn = $api.dom('.rightBtn');
+        if (!api.pageParam.addUser) {
+            // 新建群
+            selectData();
+            $api.text($api.byId('title'), '选择联系人');
+        } else if (api.pageParam.addUser == 1) {
+            $api.text($api.byId('title'), '选择联系人');
+            // 加人
+            // api.pageParam.groupInfo.group_member_info 群成员列表
+            // console.log(JSON.stringify(api.pageParam.group_member_info));
+            
+            for (var i = 0; i < api.pageParam.groupInfo.group_member_info.length; i++) {
+                var element = api.pageParam.groupInfo.group_member_info[i];
+                userIdList.push(element.user_id)
+            }
+            selectData();
+        } else if (api.pageParam.addUser == 2) {
+            // 踢人
+            $api.text($api.byId('title'), '删除成员');
+            for (var i = 0; i < api.pageParam.groupInfo.group_member_info.length; i++) {
+                var element = api.pageParam.groupInfo.group_member_info[i];
+                element.title = element.remark_nickname?element.remark_nickname:element.nickname;
+                element.img = element.remark_head_img_url?element.remark_head_img_url:element.head_img_url;
+                element.flag = PinyinHelper.getShortPinyin(element.title).toUpperCase()[0];
+            }
+            dakai(paixv(api.pageParam.groupInfo.group_member_info))
+        }
     }
+
     function selectData() {
-      db.selectSql({
+        db.selectSql({
             name: 'db_' + $api.getStorage('userToken'),
             sql: 'SELECT * FROM addressList_simplify WHERE type IN (1,2,4) order by flag asc',
-        },function(ret,err){
+        }, function (ret, err) {
             if (ret.status) {
-               // 4 初始好友
+                // 4 初始好友
                 // 1 相识好友
                 // 2 熟识好友
                 // 3 尚未加入
                 dakai(paixv(ret.data))
-            }else {
-                api.alert({msg:err.msg});
+            } else {
+                api.alert({
+                    msg: err.msg
+                });
             }
         });
     }
 
-     function dakai(data1) {
-            var dataArr = [];
-            var dataKeyArr = [];
-            for (key in data1) {
-                dataArr = dataArr.concat(data1[key]);
-                dataKeyArr.push(key)
-            }
-            listContact.open({
-                x: -1000,
-                y: -1000,
-                w: 5,
-                h: 5,
-                data: [],
-                fixedOn: api.frameName
-            }, function (ret, err) {
-            })
-            listContact.close();
-            listContact.open({
-                x: 0,
-                y: headerH + $api.offset($api.dom('.head-list')).h,
-                w: api.frameWidth,
-                h: api.winHeight,
-                bgColor: '#EFEFF4',
-                // 分割线颜色
-                borderColor: '#EDEDED',
-                imgHeight: 32,
-                imgWidth: 32,
-                groupTitle: {
-                    color: '#999',
-                    size: 14,
-                    bgColor: '#EFEFF4'
-                },
-                cellHeight: 50,
-                rightBg: '#fff',
-                cellBgColor: '#fff',
-                data: data1,
-            }, function (ret, err) {
-                if (ret) {
-                    var selFlag = selectItemText.indexOf(data1[ret.key][ret.index].title);
+    function dakai(data1) {
+        var dataArr = [];
+        var dataKeyArr = [];
+        for (key in data1) {
+            dataArr = dataArr.concat(data1[key]);
+            dataKeyArr.push(key)
+        }
+        listContact.open({
+            x: -1000,
+            y: -1000,
+            w: 5,
+            h: 5,
+            data: [],
+            fixedOn: api.frameName
+        }, function (ret, err) {})
+        listContact.close();
+        listContact.open({
+            x: 0,
+            y: headerH + $api.offset($api.dom('.head-list')).h,
+            w: api.frameWidth,
+            h: api.winHeight,
+            bgColor: '#EFEFF4',
+            // 分割线颜色
+            borderColor: '#EDEDED',
+            imgHeight: 32,
+            imgWidth: 32,
+            groupTitle: {
+                color: '#999',
+                size: 14,
+                bgColor: '#EFEFF4'
+            },
+            cellHeight: 50,
+            rightBg: '#fff',
+            cellBgColor: '#fff',
+            data: data1,
+        }, function (ret, err) {
+            if (ret) {
+                console.log('id列表:'+JSON.stringify(userIdList));
+                console.log('id:'+JSON.stringify(data1[ret.key][ret.index].user_id));
+                console.log('位置:'+JSON.stringify(userIdList.indexOf(parseInt(data1[ret.key][ret.index].user_id))));
+                
+                if (userIdList.indexOf(parseInt(data1[ret.key][ret.index].user_id)) == -1) {
+                     var selFlag = selectItemText.indexOf(data1[ret.key][ret.index].title);
                     var selFlag2 = selectItemId.indexOf(data1[ret.key][ret.index].user_id);
-                    
-                     if (selFlag != -1) {
+                    if (selFlag != -1) {
                         selectItemText = selectItemText.filter(function (value) {
                             return value != selectItemText[selFlag]
                         })
                         selectItemId = selectItemId.filter(function (value) {
                             return value != selectItemId[selFlag2]
                         })
-                        selectItemArr = selectItemArr.filter(function (value,index) {
+                        selectItemArr = selectItemArr.filter(function (value, index) {
                             return value.user_id != data1[ret.key][ret.index].user_id
-                            
+
                         })
                         // 已经选择
                         listContact.refreshItem({
                             index: ret.index,
                             key: ret.key,
                             data: {
+                                img: data1[ret.key][ret.index].img,
                                 title: data1[ret.key][ret.index].title,
                                 titleColor: '#000',
                                 titleSize: 15,
-                                subTitleSize: 10
+                                subTitleSize: 10,
+                                placeholderImg: "widget://image/icon_defaultHead.png"
                             }
                         });
                         // 删除已选头像
-                        $api.remove($api.dom('img[src = "' + data1[ret.key][ret.index].img +'"]'));
+                        $api.remove($api.dom('img[src = "' + data1[ret.key][ret.index].img + '"]'));
                     } else {
                         // 未选
                         selectItemText.push(data1[ret.key][ret.index].title);
@@ -138,173 +183,182 @@
                             index: ret.index,
                             key: ret.key,
                             data: {
+                                img: data1[ret.key][ret.index].img,
                                 title: data1[ret.key][ret.index].title,
                                 titleColor: '#27B24A',
                                 titleSize: 15,
-                                subTitleSize: 10
+                                subTitleSize: 10,
+                                placeholderImg: "widget://image/icon_defaultHead.png"
                             }
                         });
-                        $api.append($api.dom('.head-list'), '<img src="'+ data1[ret.key][ret.index].img +'" alt="">');
+                        $api.append($api.dom('.head-list'), '<img src="' + data1[ret.key][ret.index].img +
+                            '" alt="">');
                     }
-                    // console.log('已选对象:'+JSON.stringify(selectItemArr));
-                    // if (ret.clickType == 0) {
-                        // 获取点击联系人信息
-                        // addFriends(data1[ret.key][ret.index].user_id, data1[ret.key][ret.index].title, data1[ret.key][ret.index].img);
-                    }
-                    // if (ret.clickType == 1) {
-                        // 获取点击联系人信息
-                        // 安卓全局索引
-                        // ios+1
-                        // if (api.systemType == 'ios') {
-                        //     var tel;
-                        //     if (dataKeyArr.indexOf(ret.key) == -1) {
-                        //         // 查找不到
-                        //         if (data1[dataKeyArr[0]][ret.index].remark_current_contact) {
-                        //             tel = data1[dataKeyArr[0]][ret.index].remark_current_contact
-                        //         } else if (data1[dataKeyArr[0]][ret.index].current_contact) {
-                        //             tel = data1[dataKeyArr[0]][ret.index].current_contact
-                        //         }
-                        //     } else {
-
-                        //         if (data1[dataKeyArr[dataKeyArr.indexOf(ret.key) + 1]][ret.index].current_contact) {
-                        //             tel = data1[dataKeyArr[dataKeyArr.indexOf(ret.key) + 1]][ret.index].current_contact
-                        //         } else if (data1[dataKeyArr[dataKeyArr.indexOf(ret.key) + 1]][ret.index].current_contact) {
-                        //             tel = data1[dataKeyArr[dataKeyArr.indexOf(ret.key) + 1]][ret.index].current_contact
-                        //         }
-                        //     }
-                        //     if (tel) {
-                        //         api.call({
-                        //             type: 'tel_prompt',
-                        //             number: tel
-                        //         });
-                        //     } else {
-                        //         alert('您没有对方的手机号码')
-                        //     }
-                        // } else {
-                        //     if (dataArr[ret.index].current_contact) {
-                        //         api.call({
-                        //             type: 'tel_prompt',
-                        //             number: dataArr[ret.index].current_contact
-                        //         });
-                        //     } else {
-                        //         alert('您没有对方的手机号码')
-                        //     }
-
-                        // }
-                    // }
-                // } else {
-                    // alert(JSON.stringify(err.msg));
-                // }
-            });
-        }
-        function f_check_uppercase(obj) {
-            if (/[A-Z]/.test(obj)) {
-                return true;
-            }
-            return false;
-        }
-        function paixv(data) {
-            if (api.systemType == 'ios') {
-                list = data.length
-                for (var i = 0; i < list; i++) {
-                    if (data[i].type == 2) {
-                        both_list++;
-                    } else if (data[i].type == 3) {
-                        unavailable_list++;
-                    } else if (data[i].type == 4) {
-                        friend++;
-                    } else {
-                        if (data[i].path_direction == 1) {
-                            single_list1++;
+                }
+                var rightBtn = $api.dom('.rightBtn');
+                
+                if (!api.pageParam.addUser) {
+                    // 新建群
+                    if (selectItemId.length > 0) {
+                        $api.text($api.byId('count'), '(' + selectItemId.length + ')');
+                        if (selectItemId.length > 1) {
+                            $api.removeCls(rightBtn, 'disabled');
+                            $api.removeAttr(rightBtn, 'disabled');
                         } else {
-                            single_list2++;
+                            $api.addCls(rightBtn, 'disabled');
+                            $api.attr(rightBtn, 'disabled', true);
                         }
-                    }
-                    data[i].placeholderImg = "widget://image/icon_defaultHead.png";
-                    if (f_check_uppercase(data[0].flag)) {
-                        data[0].initial = data[0].flag;
                     } else {
-                        data[0].initial = '#';
+                        $api.text($api.byId('count'), '');
+                        $api.addCls(rightBtn, 'disabled');
+                        $api.attr(rightBtn, 'disabled', true);
                     }
-                    if (i > 0) {
-                        if (data[i].flag !== data[i - 1].flag) {
-                            if (f_check_uppercase(data[i].flag)) {
-                                data[i].initial = data[i].flag;
-                            } else {
-                                data[i].initial = '#';
-                            }
+                } else if (api.pageParam.addUser == 1) {
+                   btnStatu()
+                } else if (api.pageParam.addUser == 2) {
+                    btnStatu()
+                  
+                }
+            }
+        });
+    }
+    function btnStatu() {
+        var rightBtn = $api.dom('.rightBtn');
+        if (selectItemId.length > 0) {
+            $api.text($api.byId('count'), '(' + selectItemId.length + ')');
+            $api.removeCls(rightBtn, 'disabled');
+            $api.removeAttr(rightBtn, 'disabled');
+        } else {
+            $api.text($api.byId('count'), '');
+            $api.addCls(rightBtn, 'disabled');
+            $api.attr(rightBtn, 'disabled', true);
+        }
+    }
+    function f_check_uppercase(obj) {
+        if (/[A-Z]/.test(obj)) {
+            return true;
+        }
+        return false;
+    }
+
+    function paixv(data) {
+        if (api.systemType == 'ios') {
+            list = data.length
+            for (var i = 0; i < list; i++) {
+                data[i].placeholderImg = "widget://image/icon_defaultHead.png";
+                if (f_check_uppercase(data[0].flag)) {
+                    data[0].initial = data[0].flag;
+                } else {
+                    data[0].initial = '#';
+                }
+                if (i > 0) {
+                    if (data[i].flag !== data[i - 1].flag) {
+                        if (f_check_uppercase(data[i].flag)) {
+                            data[i].initial = data[i].flag;
+                        } else {
+                            data[i].initial = '#';
                         }
                     }
                 }
+            }
+            
+        } else {
+            list = data.length
+            for (var i = 0; i < list; i++) {
+                if (f_check_uppercase(data[0].flag)) {
+                    data[0].initial = data[0].flag;
+                } else {
+                    data[0].initial = '#';
+                }
+                if (i > 0) {
+                    if (data[i].flag !== data[i - 1].flag) {
+                        if (f_check_uppercase(data[i].flag)) {
+                            data[i].initial = data[i].flag;
+                        } else {
+                            data[i].initial = '#';
+                        }
+                    }
+                }
+            }
+        }
+        var arr = {}
+        var a;
+        for (var i = 0; i < data.length; i++) {
+            delete data[i].flag;
+            delete data[i].type;
+            delete data[i].subTitle;
+            // data[i].subTitle = (data[i].current_company || ""+ data[i].current_position || ""+data[i].current_degree||"") ? (data[i].current_company || ""+" "+ data[i].current_position || ""+" "+data[i].current_degree||"") : ""
+            // data[i].subTitleColor = '#999'
+            data[i].titleSize = 15;
+            // 从群详情加人按钮点击进入之后要判断群里的人s
+            if (api.pageParam.addUser == 1) {
+                if (userIdList.indexOf(parseInt(data[i].user_id)) != -1) {
+                    data[i].titleColor = '#27B24A'
+                }
+            }
+            if (data[i].initial) {
+                if (data[i].initial == '#') {
+                    if (arr[data[i].initial]) {} else {
+                        arr[data[i].initial] = [];
+                    }
+                    a = i;
+                } else {
+                    arr[data[i].initial] = [];
+                    a = i;
+                }
+            }
+            arr[data[a].initial].push(data[i])
+        }
+        return arr;
+    }
+    // 新建群聊
+    function createGroupChat() {
+        console.log('已选用户:' + JSON.stringify(selectItemId.toString()));
+        var paramObj = {},url;
+        if (api.pageParam.groupInfo) {
+            if (api.pageParam.addUser == 1) {
+                // 增加群成员
+                url = '/chat_group/enter';
+            } else if(api.pageParam.addUser == 2) {
+                // 减少群成员
+                url = '/chat_group/remove';
             } else {
 
-                list = data.length
-                for (var i = 0; i < list; i++) {
-                    if (f_check_uppercase(data[0].flag)) {
-                        data[0].initial = data[0].flag;
-                    } else {
-                        data[0].initial = '#';
-                    }
-                    if (i > 0) {
-                        if (data[i].flag !== data[i - 1].flag) {
-                            if (f_check_uppercase(data[i].flag)) {
-                                data[i].initial = data[i].flag;
-                            } else {
-                                data[i].initial = '#';
-                            }
-                        }
-                    }
-                }
             }
-            var arr = {}
-            var a;
-            for (var i = 0; i < data.length; i++) {
-                delete data[i].flag;
-                delete data[i].type;
-                // data[i].subTitle = (data[i].current_company || ""+ data[i].current_position || ""+data[i].current_degree||"") ? (data[i].current_company || ""+" "+ data[i].current_position || ""+" "+data[i].current_degree||"") : ""
-                data[i].subTitleColor = '#999'
-                data[i].titleSize = 15;
-
-                if (data[i].initial) {
-                    if (data[i].initial == '#') {
-                        if (arr[data[i].initial]) {
-                        } else {
-                            arr[data[i].initial] = [];
-                        }
-                        a = i;
-                    } else {
-                        arr[data[i].initial] = [];
-                        a = i;
-                    }
-                }
-                arr[data[a].initial].push(data[i])
+            paramObj = {
+                token: $api.getStorage('userToken'),
+                group_id: api.pageParam.groupInfo.group_info.group_id,
+                user_id_list: selectItemId.toString(),
             }
-            return arr;
+        } else {
+            // 新建群
+            url = '/chat_group/create';
+            paramObj = {
+                token: $api.getStorage('userToken'),
+                user_id_list: selectItemId.toString()
+            }
         }
-        // 新建群聊
-        function createGroupChat() {
-            console.log('已选用户:'+ JSON.stringify(selectItemId.toString()));
-            
-            api.ajax({
-                url: apiSite + '/chat_group/create',
-                method: 'post',
-                headers: apiHeader,
-                data: {
-                    values: {
-                        token: $api.getStorage('userToken'),
-                        user_id_list: selectItemId.toString()
-                    }
-                }
-            }, function(ret, err) {
-                if(ret) {
-                    if (ret.code === 200) {
-                        console.log('新建成功'+JSON.stringify(ret));
+        api.ajax({
+            url: apiSite + url,
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: paramObj
+            }
+        }, function (ret, err) {
+            if (ret) {
+                if (ret.code === 200) {
+                    if (api.pageParam.groupInfo) {
+                        api.sendEvent({
+                            name: 'addGroupUser'
+                        });
+                        api.closeWin();
+                    } else {
                         api.toast({
                             msg: '新建成功',
                             duration: 2000,
                             location: 'bottom'
                         });
-                        api.closeWin();
                         api.openWin({
                             name: 'groupChat_win',
                             url: './groupChat_win.html',
@@ -314,14 +368,17 @@
                                 createGroup: 1
                             }
                         });
-                    } else {
-                        alert(ret.msg)
+                        api.closeWin();
                     }
+                    
                 } else {
-                    alert(JSON.stringify(err))
+                    alert(ret.msg)
                 }
-            })
-        }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+    }
 </script>
 
 </html>
