@@ -419,7 +419,6 @@
         }, function(ret, err) {
             contrastCache('chatMessage',historyNews);
         });
-        
     }
     function openCreateCirclePage() {
         api.sendEvent({
@@ -985,30 +984,7 @@
                 pageParam: {group_id : targetId}
             });
     }
-    // 获取群组列表
-    function getGroup() {
-        api.ajax({
-            url: apiSite + '/chat_group/userGroupList',
-            method: 'post',
-            headers: apiHeader,
-             data: {
-                values: {
-                    token: $api.getStorage('userToken')
-                }
-            }
-        }, function(ret, err) {
-            if(ret) {
-                if (ret.code === 200) {
-                    // console.log('群组列表:'+JSON.stringify(ret));
-                    
-                } else {
-                    alert(ret.msg)
-                }
-            } else {
-                alert(JSON.stringify(err))
-            }
-        })
-    }
+    
     </script>
 </body>
 

@@ -38,7 +38,7 @@
         requireData();
         eventLisenter();
         // 清除该回话纬度消息状态
-         rong.clearMessagesUnreadStatus({
+        rong.clearMessagesUnreadStatus({
             conversationType: 'GROUP',
             targetId: api.pageParam.group_id
         }, function (ret, err) {
@@ -113,6 +113,8 @@
         }, function (ret, err) {
             if (ret) {
                 if (ret.code === 200) {
+                    console.log('群组详情:'+JSON.stringify(ret.data));
+                    
                     groupInfo = ret.data;
                     $api.text($api.byId('title'), ret.data.group_info.group_name);
                     openFrame(ret.data);

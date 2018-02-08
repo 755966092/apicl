@@ -91,10 +91,10 @@
             <p>{{=(value.remark_nickname ? value.remark_nickname : value.nickname)}}</p>
         </li>
         {{~}}
-        <li class="item flex-def flex-zTopBottom flex-zStart flex-cCenter" tapmode onclick="addUser(1)">
+        <li class="item flex-def  flex-zTopBottom flex-zStart flex-cCenter" tapmode onclick="addUser(1)">
             <img src="../../image/chatPage/icon_addGroup.png" alt="">
         </li>
-        <li id="delBtn" class="item flex-def flex-zTopBottom flex-zStart flex-cCenter" tapmode onclick="addUser(2)">
+        <li id="delBtn" class="item hide flex-def flex-zTopBottom flex-zStart flex-cCenter" tapmode onclick="addUser(2)">
             <img src="../../image/chatPage/icon_delGroup.png" alt="">
         </li>
     </script>
@@ -160,6 +160,7 @@
             if (ret) {
                 if (ret.code === 200) {
                     getData(ret.data.group_member_info);
+                    chatGroupCheckIsOwner();
                     api.sendEvent({
                         name: 'group_member_count',
                         extra: {
@@ -196,6 +197,12 @@
     function initPage(paramInfo) {
         $api.text($api.byId('groupName'), paramInfo.group_info.group_name);
         $api.text($api.byId('announcement'), paramInfo.group_info.announcement);
+        // 消息免打扰图标
+        if (paramInfo.is_silent) {
+           $api.attr($api.byId('is_gong'), 'checked', true);
+        }
+        // $api.attr($api.byId('is_gong'), 'checked', false); 
+
         getData(paramInfo.group_member_info);
         // var str='';
         // for (var i = 0; i < paramInfo.group_member_info.length; i++) {
@@ -225,6 +232,7 @@
                         $api.addEvt($api.byId('announcementBtn'), 'click', function () {
                             openEditGroupName(2)
                         });
+                        $api.removeCls($api.byId('delBtn'), 'hide');
                     } else {
                         $api.addCls($api.byId('delBtn'), 'hide');
                     }
@@ -267,6 +275,9 @@
                         duration: 2000,
                         location: 'bottom'
                     });
+                    api.sendEvent({
+                        name: 'addGroupUser'
+                    });
                 } else {
                     alert(ret.msg)
                 }
@@ -277,7 +288,6 @@
     }
 
     function addUser(flag) {
-        // if (flag) {
         // 加人 1
         // 踢人 0
         api.openWin({
@@ -289,15 +299,6 @@
                 groupInfo: api.pageParam.groupInfo
             }
         });
-        // } else {
-        //     // 踢人
-        //     api.openWin({
-        //         name: 'createGroupChat_win',
-        //         url: './createGroupChat_win.html',
-        //         bounces: false,
-        //         pageParam: { key: 'value' }
-        //     });
-        // }
     }
     // 用户详情
     function openMemberInfo(ele) {
