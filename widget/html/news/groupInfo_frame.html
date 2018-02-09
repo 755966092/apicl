@@ -160,6 +160,7 @@
             if (ret) {
                 if (ret.code === 200) {
                     getData(ret.data.group_member_info);
+                    api.pageParam.groupInfo = ret.data
                     chatGroupCheckIsOwner();
                     api.sendEvent({
                         name: 'group_member_count',
@@ -190,7 +191,10 @@
         api.addEventListener({
             name: 'addGroupUser'
         }, function (ret, err) {
-            requireData();
+            if (ret.value.key == 'mute') {
+            } else {
+                requireData();
+            }
         });
     }
 
@@ -276,7 +280,8 @@
                         location: 'bottom'
                     });
                     api.sendEvent({
-                        name: 'addGroupUser'
+                        name: 'addGroupUser',
+                        extra: {key: 'mute'}
                     });
                 } else {
                     alert(ret.msg)

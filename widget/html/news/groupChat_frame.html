@@ -405,6 +405,7 @@
     apiready = function () {
         // console.log('传来的数据:'+JSON.stringify(api.pageParam));
         moduleInit();
+        chatTools();
         // 表情转换
         updatePage();
         // 处理群成员数据ß
@@ -412,10 +413,16 @@
         // 获取历史消息
         getHistoryNews();
         // 输入框
-        chatTools();
-        eventListener();
         
+        eventListener();
         dataProcessing()
+        api.addEventListener({
+            name: 'viewappear'
+        }, function(ret, err){
+            console.log('111');
+            
+            
+        });
     }
     // 时间监听以及数据处理
     function eventListener() {
@@ -430,10 +437,10 @@
         api.addEventListener({
             name: 'receiveMsg'
         }, function (ret, err) {
-            // console.log('接收到消息:'+JSON.stringify(ret));
-            if (ret.value.msgContent.result.objectName == 'RC:TxtMsg') {
+            console.log('接收到消息:'+JSON.stringify(ret));
+            // if (ret.value.msgContent.result.message.objectName == 'RC:TxtMsg') {
                 sendTextCreate(ret.value.msgContent.result.message, ret.value.msgContent.result.message.messageDirection)
-            }
+            // }
         });
     }
     // 处理群数据
@@ -508,17 +515,17 @@
                 emotionBtn: {
                     normalImg: 'widget://image/chatPage/face1.png'
                 },
-                // 加号按钮
-                extrasBtn: {
-                    normalImg: 'widget://image/chatPage/add1.png'
-                },
-                keyboardBtn: {
-                    normalImg: 'widget://image/chatPage/key1.png'
-                },
-                // 录音按钮
-                speechBtn: {
-                    normalImg: 'widget://image/chatPage/cam1.png'
-                },
+                // // 加号按钮
+                // extrasBtn: {
+                //     normalImg: 'widget://image/chatPage/add1.png'
+                // },
+                // keyboardBtn: {
+                //     normalImg: 'widget://image/chatPage/key1.png'
+                // },
+                // // 录音按钮
+                // speechBtn: {
+                //     normalImg: 'widget://image/chatPage/cam1.png'
+                // },
                 // “按住 录音”按钮的样式
                 recordBtn: {
                     normalBg: 'widget://image/chatPage/suo1.png',

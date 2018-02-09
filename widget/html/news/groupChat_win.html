@@ -35,21 +35,24 @@
     apiready = function() {
         moduleInit();
         fnInit();
-        requireData();
+        requireData(1);
         eventLisenter();
         // 清除该回话纬度消息状态
         rong.clearMessagesUnreadStatus({
             conversationType: 'GROUP',
             targetId: api.pageParam.group_id
         }, function (ret, err) {
-
+            api.execScript({
+                name: 'main',
+                script: 'getTotalCount();'
+            });
         });
         if (api.pageParam.createGroup == 1) {
             // 新建群
              rong.sendTextMessage({
                 conversationType: 'GROUP',
                 targetId: api.pageParam.group_id,
-                text: ' ',
+                text: '大家好!',
                 extra: ''
             }, function (ret, err) {
                 if (ret.status == 'prepare') {
@@ -99,7 +102,7 @@
             }
         });
     }
-    function requireData() {
+    function requireData(flag) {
         api.ajax({
             url: apiSite + '/chat_group/info',
             method: 'post',
@@ -117,10 +120,14 @@
                     
                     groupInfo = ret.data;
                     $api.text($api.byId('title'), ret.data.group_info.group_name);
-                    openFrame(ret.data);
+                    if (flag) {
+                        openFrame(ret.data);
+                    }
                     $api.addEvt($api.dom('.rightBtn'), 'click', function() {
                         openGroupInfo();
                     });
+                    console.log('新建群');
+                    
                 } else {
                     alert(ret.msg)
                 }

@@ -351,12 +351,12 @@
             float: left;
         }
         
-        footer span:nth-child(1),
-        footer span:nth-child(2) {
-            width: 25%;
+        .leftBtn {
+            width: 16.6%;
+            line-height: 1.1;
         }
         
-        footer span:nth-child(3) {
+        footer span.jd {
             font-size: .3rem;
             width: 50%;
             line-height: .88rem;
@@ -372,14 +372,19 @@
             background-size: .4rem .38rem;
             background-position: center bottom;
         }
+        footer span.shareIcon i {
+            background: url(../../image/icon_supply/icon_share3.png)no-repeat;
+            background-size: .4rem .4rem;
+            background-position: center bottom;
+        }
         
-        footer span:nth-child(2) i {
+        footer span.collect i {
             background: url(../../image/icon_supply/icon_collect.png)no-repeat;
             background-size: .4rem .35rem;
             background-position: center bottom;
         }
         
-        footer span i.cancelCollect {
+        footer span.collect i.cancelCollect {
             background: url(../../image/icon_supply/icon_collect02.png)no-repeat;
             background-size: .4rem .35rem;
             background-position: center bottom;
@@ -469,7 +474,7 @@
         </div>
     </header>
 
-    <div class="loading"></div>
+    <!-- <div class="loading"></div> -->
     <div class="swiper-container">
         <div class="swiper-wrapper">
             <!-- <img src="http://imgsrc.baidu.com/imgad/pic/item/83025aafa40f4bfb281dbe70094f78f0f63618c0.jpg" class="swiper-slide blue-slide">
@@ -539,11 +544,15 @@
                     tapmode onclick="openImgView(this)"> </div>
         </div>
     <footer>
-        <span data-headUrl="http://img.iinnet.com/FvZfKY3unCYn9_3cr3vdkHmZvdWX" tapmode onclick="openChatPage(this)" data-rongId="06cb17509ff084bf1da1645d4ef694d3">
-            <i></i>聊天</span>
-        <span id="collect" ontouchstart="supplyCollect(this)">
-            <i></i>收藏</span>
-        <span tapmode onclick="immediateOrder()">立即接单</span>
+        <div>
+            <span class='leftBtn chat' data-headUrl="http://img.iinnet.com/FvZfKY3unCYn9_3cr3vdkHmZvdWX" tapmode onclick="openChatPage(this)" data-rongId="06cb17509ff084bf1da1645d4ef694d3">
+                <i></i>聊天</span>
+            <span class='leftBtn shareIcon' ontouchstart="supplyCollect(this)">
+                <i></i>分享</span>
+            <span class='leftBtn collect' id="collect" ontouchstart="supplyCollect(this)">
+                <i></i>收藏</span>
+        </div>
+        <span class="jd" tapmode onclick="immediateOrder()">立即接单</span>
     </footer>  -->
 
     <script type="text/x-dot-template" id="listT">
@@ -567,7 +576,7 @@
                         <span class="typeIcon">[{{=it.info.type}}]</span>
                     </div>
                     <!-- 分享按钮 -->
-                    <div class="shareIcon" tapmode onclick="shareData()"></div>
+                    <!-- <div class="shareIcon" tapmode onclick="shareData()"></div> -->
                 </div>
                 <div class="avgWrap flex-def flex-zBetween flex-cCenter">
                     <span class="avg_point">
@@ -682,13 +691,32 @@
 
         </div>
         {{?!it.is_self_add}}
-        <footer>
-            <span data-headUrl="{{=it.info.head_img_url}}" tapmode onclick="openChatPage(this)" data-rongId="{{=it.info.rongcloud_user_id}}" data-id="{{=it.info.user_id}}"><i></i>聊天</span> {{?it.is_collect}}
-            <span id="collect" ontouchstart="supplyCollect(this)"><i class="cancelCollect"></i>取消收藏</span> {{??}}
-            <span id="collect" ontouchstart="supplyCollect(this)"><i></i>收藏</span> {{?}}
+        <!-- <footer>
+            <span data-headUrl="{{=it.info.head_img_url}}" tapmode onclick="openChatPage(this)" data-rongId="{{=it.info.rongcloud_user_id}}" data-id="{{=it.info.user_id}}">
+                <i></i>
+                聊天
+            </span> 
+            {{?it.is_collect}}
+                <span id="collect" ontouchstart="supplyCollect(this)"><i class="cancelCollect"></i>取消收藏</span> 
+            {{??}}
+                <span id="collect" ontouchstart="supplyCollect(this)"><i></i>收藏</span> 
+            {{?}}
             <span tapmode onclick="immediateOrder()">立即接单</span>
-           
-        </footer>
+        </footer> -->
+         <footer>
+        <div>
+            <span class='leftBtn chat' data-headUrl="{{=it.info.head_img_url}}" tapmode onclick="openChatPage(this)" data-rongId="{{=it.info.rongcloud_user_id}}" data-id="{{=it.info.user_id}}">
+                <i></i>聊天</span>
+            <span class='leftBtn shareIcon' tapmode onclick="shareData()">
+                <i></i>分享</span>
+            {{?it.is_collect}}
+                <span id="collect" class='leftBtn collect' ontouchstart="supplyCollect(this)"><i class="cancelCollect"></i>取消收藏</span> 
+            {{??}}
+                <span id="collect" class='leftBtn collect' ontouchstart="supplyCollect(this)"><i></i>收藏</span> 
+            {{?}}
+        </div>
+        <span class="jd" tapmode onclick="immediateOrder()">立即接单</span>
+    </footer> 
         {{??}}
         <footer class="footer" ontouchstart="editSupply()">
             <p class="footerwrap">编辑</p>

@@ -29,6 +29,14 @@
         .header button.disabled {
           color: #476146;
       }
+    .loading {
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,.5) url(../../image/loading_more.gif)no-repeat;
+        background-position: center;
+        background-size: .8rem .8rem;
+        display: none;
+    }
     </style>
 </head>
 
@@ -41,7 +49,6 @@
         </div>
     </header>
     <div class='head-list flex-def'></div>
-
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -54,6 +61,8 @@
     apiready = function () {
         // api.pageParam.addUser == 1 加人
         // api.pageParam.addUser == 2 踢人
+        console.log('参数:'+JSON.stringify(api.pageParam));
+        
         fnInit();
         moduleInit();
         var rightBtn = $api.dom('.rightBtn');
@@ -141,6 +150,7 @@
             data: data1,
         }, function (ret, err) {
             if (ret) {
+            // $api.css($api.dom('.loading'), 'display:block');
                 console.log('id列表:'+JSON.stringify(userIdList));
                 console.log('id:'+JSON.stringify(data1[ret.key][ret.index].user_id));
                 console.log('位置:'+JSON.stringify(userIdList.indexOf(parseInt(data1[ret.key][ret.index].user_id))));
@@ -174,6 +184,7 @@
                         });
                         // 删除已选头像
                         $api.remove($api.dom('img[src = "' + data1[ret.key][ret.index].img + '"]'));
+//  $api.css($api.dom('.loading'), 'display:none');
                     } else {
                         // 未选
                         selectItemText.push(data1[ret.key][ret.index].title);
@@ -193,6 +204,7 @@
                         });
                         $api.append($api.dom('.head-list'), '<img src="' + data1[ret.key][ret.index].img +
                             '" alt="">');
+//  $api.css($api.dom('.loading'), 'display:none');
                     }
                 }
                 var rightBtn = $api.dom('.rightBtn');
@@ -353,7 +365,9 @@
                             name: 'addGroupUser'
                         });
                         // listContact.close();
-                        api.closeWin();
+                       setTimeout(function () {
+                            api.closeWin();
+                        }, 500)
                     } else {
                         api.toast({
                             msg: '新建成功',
@@ -369,8 +383,9 @@
                                 createGroup: 1
                             }
                         });
-                        // listContact.close();
-                        api.closeWin();
+                        setTimeout(function () {
+                            api.closeWin();
+                        }, 500)
                     }
                 } else {
                     alert(ret.msg)

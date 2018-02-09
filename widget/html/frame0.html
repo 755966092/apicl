@@ -506,6 +506,12 @@
                 historyNews();
             })
         } else {
+            rong.clearMessagesUnreadStatus({
+                conversationType: $api.attr(ele, 'data-type'),
+                targetId: targetId
+            }, function (ret, err) {
+                historyNews();
+            })
             $api.remove($api.closest(ele, 'li'));
             rong.removeConversation({
                 conversationType: $api.attr(ele,'data-type'),
@@ -537,6 +543,10 @@
                 // })
             })
         }
+        api.execScript({
+            name:'main',
+            script:'getTotalCount();'
+        });
     }
     var startX,startY;
     var endX,endY;
