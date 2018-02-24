@@ -443,8 +443,15 @@
         }, function(ret, err) {
             addPublishUrl = './supply/supply_addSupply.html'
         });
+        
+        if (api.systemType == 'ios') {
+            api.addEventListener({
+                name: 'viewappear'
+            }, function (ret, err) {
+                rongyun($api.getStorage('rongToken'));
+            });
+        }
     }
-
 
     // 通讯录添加好友
     function addF() {
