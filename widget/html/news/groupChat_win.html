@@ -34,6 +34,7 @@
     var groupInfo;
     apiready = function() {
         moduleInit();
+        createSqlTable();
         fnInit();
         requireData(1);
         eventLisenter();
@@ -116,8 +117,7 @@
         }, function (ret, err) {
             if (ret) {
                 if (ret.code === 200) {
-                    console.log('群组详情:'+JSON.stringify(ret.data));
-                    
+                    // console.log('群组详情:'+JSON.stringify(ret.data));
                     groupInfo = ret.data;
                     $api.text($api.byId('title'), ret.data.group_info.group_name);
                     if (flag) {
@@ -126,8 +126,6 @@
                     $api.addEvt($api.dom('.rightBtn'), 'click', function() {
                         openGroupInfo();
                     });
-                    console.log('新建群');
-                    
                 } else {
                     alert(ret.msg)
                 }
@@ -144,6 +142,31 @@
             pageParam: { groupInfo: groupInfo}
         });
     }
+     // 新建数据库表格
+        function createSqlTable() {
+            // if (!$api.getStorage('tb_chat_group_record' + api.pageParam.group_id)) {
+            //     // if (1) {
+            //     db.executeSql({
+            //         name: SQLName,
+            //         sql: 'DROP TABLE tb_chat_group_' + api.pageParam.group_id
+            //     }, function (ret, err) {
+            //         if (ret.status) {
+            //             $api.setStorage('tb_chat_group_record' + api.pageParam.group_id, 'true');
+            //         } else {
+            //             $api.setStorage('tb_chat_group_record' + api.pageParam.group_id, 'true');
+            //         }
+            //     });
+            // }
+            db.executeSql({
+                name: 'db_' + $api.getStorage('userToken'),
+                sql: 'CREATE TABLE IF NOT EXISTS tb_chat_group_' + api.pageParam.group_id + '(group_id int DEFAULT '+ api.pageParam.group_id +',user_id int,nickname varchar(255),head_img_url varchar(255),messageId int PRIMARY KEY NOT NULL,receivedTime char(13),objectName varchar(255),messageDirection varchar(255),content_extra varchar(255),content_text text,content_lat varchar(255),content_lon varchar(255),content_imagePath varchar(255),voicePath varchar(255),duration int,thumbPath varchar(255))'
+            }, function (ret, err) {
+                if (ret.status) {
+                } else {
+                    alert('473' + JSON.stringify(err));
+                }
+            });
+        }
 </script>
 
 </html>

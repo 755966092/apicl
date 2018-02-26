@@ -201,8 +201,7 @@ function receiveMsg() {
         }
     });
     rong.setOnReceiveMessageListener(function (ret, err) {
-        console.log(JSON.stringify(ret));
-        
+        // console.log(JSON.stringify(ret));
         // 接收消息监听器接收到消息后刷新列表
         historicalNews();
         api.sendEvent({

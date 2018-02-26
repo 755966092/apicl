@@ -26,7 +26,7 @@
             /* max-width: 2rem; */
             height: .36rem;
             margin: 0 auto;
-            margin-bottom: .1ˆrem;
+            margin-bottom: .1rem;
             padding: 0 .1rem;
             /* background-color: #CFCFCF; */
             font-size: .2rem;
@@ -381,7 +381,7 @@
 <body id="body" ontouchstart="closeDiv1();">
     <div class="recording"></div>
     <div class="main">
-        <!-- ˆ -->
+        <!--  -->
         <!-- <div data-msgId="" class="oneself clearfix imgwrap">
             <img class="fr oneselfImg" src="../../image/tx_1.jpg">
             <p data-msgId="" class="fr flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()"
@@ -411,6 +411,7 @@
     </p>
 </div>-->
 
+
         <div class="shadow">
             <p tapmode="" onclick="closeDiv(0);event.stopPropagation();">
                 复制
@@ -431,26 +432,21 @@
     var user_name, user_head;
     var user_info = {};
     apiready = function () {
+         // 处理群成员数据ß
+        dataProcessing();
         // console.log('传来的数据:'+JSON.stringify(api.pageParam));
         moduleInit();
         chatTools();
         // 表情转换
         updatePage();
-        // 处理群成员数据ß
-        dataProcessing();
+       
         // 获取历史消息
         getHistoryNews();
-        // 输入框
-
+        // 事件监听
         eventListener();
+        // 处理群数据
         dataProcessing()
-        api.addEventListener({
-            name: 'viewappear'
-        }, function (ret, err) {
-            console.log('111');
-
-
-        });
+       
     }
     // 时间监听以及数据处理
     function eventListener() {
@@ -476,12 +472,13 @@
                 sendTextCreate(ret.value.msgContent.result.message, ret.value.msgContent.result.message.messageDirection)
             } else if (ret.value.msgContent.result.message.objectName == 'RC:ImgMsg') {
                 sendImgCreate(ret.value.msgContent.result.message, ret.value.msgContent.result.message.messageDirection)
-
             } else if (ret.value.msgContent.result.message.objectName == 'RC:LBSMsg') {
                 sendPosCreate(ret.value.msgContent.result.message, ret.value.msgContent.result.message.messageDirection)
             } else if (ret.value.msgContent.result.message.objectName == 'RC:VcMsg') {
                 sendVoiceCreate(ret.value.msgContent.result.message, ret.value.msgContent.result.message.messageDirection)
             }
+            // 缓存消息
+            saveMessage(ret.value.msgContent);
         });
     }
     // 处理群数据
@@ -490,7 +487,6 @@
             var element = api.pageParam.data.group_member_info[i];
             user_info[element.rongcloud_user_id] = element
         }
-
     }
     // 关闭浮成菜单
     function closeDiv1() {
@@ -510,6 +506,7 @@
             } else if (ret.status == 'success') {
                 sendTextCreate(sendMsg.result.message, 'SEND');
                 historicalNews();
+                saveMessage(sendMsg, 'SEND');
             } else if (ret.status == 'error') {
                 if (err.code == 405) {
                     api.toast({
@@ -550,7 +547,7 @@
                 //console.log( JSON.stringify(ret));
                 sendPosCreate(paramData.result.message, 'SEND');
                 // 存入数据库
-                // chatRecordingSql(paramData, 'sendMsg', headImg);
+                saveMessage(paramData, 'sendMsg');
             } else if (ret.status == 'error') {
                 // console.log( err.code);
             }
@@ -718,16 +715,14 @@
             extra: ''
         }, function (ret, err) {
             if (ret.status == 'prepare') {
-                console.log('1237:' + JSON.stringify(ret))
                 retprepare = ret;
                 retprepare.result.message.content.imageUrl = img.data;
                 sendImgCreate(retprepare.result.message, 'SEND');
             } else if (ret.status == 'progress') {} else if (ret.status == 'success') {
-                console.log("1242:" + JSON.stringify(ret));
                 historicalNews();
                 // sendImgCreate(retprepare.result.message, headImg, 1);
                 // 存入本地缓存
-                // chatRecordingSql(retprepare, 'sendMsg', headImg);
+                saveMessage(retprepare, 'sendMsg');
                 // 发送成功
             } else if (ret.status == 'error') {
                 // 发送失败
@@ -821,7 +816,7 @@
                 // 发送成功
                 sendVoiceCreate(retprepare.result.message, 'SEND');
                 // 存储到表中
-                // chatRecordingSql(retprepare, 'sendMsg', headImg);
+                saveMessage(retprepare, 'sendMsg');
             } else if (ret.status == 'error') {}
 
         });
@@ -859,7 +854,6 @@
         }, 10);
     }
     // 判断是否是黑名单
-    // 请求数据
     function isBlackList() {
         api.ajax({
             url: apiSite + '/friendAuth/authUser',
@@ -905,6 +899,8 @@
             count: 20
         }, function (ret, err) {
             if (ret.status == 'success') {
+                console.log('获取到的消息:'+JSON.stringify(ret));
+                
                 var rong_id_arr = [];
                 for (var j = ret.result.length - 1; j >= 0; j--) {
                     if (ret.result[j].messageDirection == 'RECEIVE') {
@@ -920,12 +916,16 @@
                     // element.messageDirection == 'RECEIVE'  接收的消息
                     // element.messageDirection == 'SEND'  发送的消息
                     if (element.objectName == 'RC:TxtMsg') {
+                        console.log('TxtMsg');
                         sendTextCreate(element, element.messageDirection)
                     } else if (element.objectName == 'RC:ImgMsg') {
+                        console.log('ImgMsg');
                         sendImgCreate(element, element.messageDirection)
                     } else if (element.objectName == 'RC:LBSMsg') {
+                        console.log('LBSMsg');
                         sendPosCreate(element, element.messageDirection)
                     } else if (element.objectName == 'RC:VcMsg') {
+                        console.log('VcMsg');
                         sendVoiceCreate(element, element.messageDirection)
                     }
                 }
@@ -936,36 +936,33 @@
     }
     // 新建文字消息
     function sendTextCreate(msg, flag) {
+        console.log('text1');
         var time;
         var str;
         if (msg.content.text != ' ') {
-
+            console.log('text2');
             if (flag == 'SEND') {
                 // 发送文字消息
+                console.log('text3');
                 time = new Date(parseInt(msg.sentTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ?
-                    new Date(
-                        parseInt(msg.sentTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.sentTime, 10)).toLocaleString();
-                str = '<div data-msgId="' + msg.messageId + '" class="oneself clearfix"><div class="time">' + time +
-                    '</div><div class="flex-def flex-zEnd"><div class="flag-def flex-zTopBottom"><p data-msgId="' + msg
-                    .messageId +
-                    '" class="flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" >' +
-                    transText(msg.content.text) +
-                    '</p></div><img tapmode onclick="openMemberInfo(this)" data-id="1" class="oneselfImg" src="' +
-                    user_head + '"></div></div>'
+                    new Date(parseInt(msg.sentTime, 10)).toLocaleTimeString():new Date(parseInt(msg.sentTime, 10)).toLocaleString();
+                console.log('text3.5'+JSON.stringify(msg));
+                str = '<div data-msgId="' + msg.messageId + '" class="oneself clearfix"><div class="time">' + time +'</div><div class="flex-def flex-zEnd"><div class="flag-def flex-zTopBottom"><p data-msgId="' + msg.messageId +'" class="flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()">' + transText(msg.content.text) + '</p></div><img tapmode onclick="openMemberInfo(this)" data-id="1" class="oneselfImg" src="' + user_head + '"></div></div>'
+                    console.log('text4');
                 $api.append($api.dom('.main'), str);
                 slideBut();
             } else {
                 // 接收文字消息
                 time = new Date(parseInt(msg.receivedTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ?
-                    new Date(parseInt(msg.receivedTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime,
+                    new Date(parseInt(msg.receivedTime, 10)).toLocaleTimeString():new Date(parseInt(msg.receivedTime,
                         10))
                     .toLocaleString();
                 str = '<div data-msgId="' + msg.messageId + '" class="other clearfix"><div class="time">' + time +
                     '</div><div class="flex-def"><img tapmode onclick="openMemberInfo(this)" data-id="' + user_info[msg
                         .senderUserId].user_id + '" class="otherImg" src="' + (user_info[msg.senderUserId].remark_head_img_url ?
-                        user_info[msg.senderUserId].remark_head_img_url : user_info[msg.senderUserId].head_img_url) +
+                        user_info[msg.senderUserId].remark_head_img_url:user_info[msg.senderUserId].head_img_url) +
                     '"> <div class="flag-def flex-zTopBottom"><div class="my-name">' + (user_info[msg.senderUserId].remark_nickname ?
-                        user_info[msg.senderUserId].remark_nickname : user_info[msg.senderUserId].nickname) +
+                        user_info[msg.senderUserId].remark_nickname:user_info[msg.senderUserId].nickname) +
                     '</div><p data-msgId="' + msg.messageId +
                     '" class="flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" >' +
                     transText(msg.content.text) + '</p></div></div></div>'
@@ -977,13 +974,12 @@
     }
     // 新建图片消息
     function sendImgCreate(msg, flag) {
-        console.log('msg:' + JSON.stringify(msg));
         var time;
         var str;
         if (flag == 'SEND') {
             // 发送图片消息
-            time = new Date(parseInt(msg.sentTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(
-                parseInt(msg.sentTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.sentTime, 10)).toLocaleString();
+            time = new Date(parseInt(msg.sentTime, 10)).toLocaleDateString() == new Date().toLocaleDateString()?new Date(
+                parseInt(msg.sentTime, 10)).toLocaleTimeString():new Date(parseInt(msg.sentTime, 10)).toLocaleString();
             str = `
                 <div data-msgId="` + msg.messageId +
                 `" class="oneself clearfix imgwrap">
@@ -1003,17 +999,17 @@
         } else {
             // 接收图片消息
             time = new Date(parseInt(msg.receivedTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ?
-                new Date(parseInt(msg.receivedTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10))
+                new Date(parseInt(msg.receivedTime, 10)).toLocaleTimeString():new Date(parseInt(msg.receivedTime, 10))
                 .toLocaleString();
 
             str = '<div data-msgId="' + msg.messageId + '" class="other imgwrap clearfix"><div class="time">' + time +
                 '</div><div class="flex-def"><img tapmode onclick="openMemberInfo(this)" data-id="' + user_info[msg.senderUserId]
-                .user_id + '" class="otherImg" src="' + (user_info[msg.senderUserId].remark_head_img_url ? user_info[
-                    msg.senderUserId].remark_head_img_url : user_info[msg.senderUserId].head_img_url) +
+                .user_id + '" class="otherImg" src="' + (user_info[msg.senderUserId].remark_head_img_url?user_info[
+                    msg.senderUserId].remark_head_img_url:user_info[msg.senderUserId].head_img_url) +
                 '"><div class="flag-def flex-zTopBottom"><div class="my-name">' + (user_info[msg.senderUserId].remark_nickname ?
-                    user_info[msg.senderUserId].remark_nickname : user_info[msg.senderUserId].nickname) +
+                    user_info[msg.senderUserId].remark_nickname:user_info[msg.senderUserId].nickname) +
                 '</div><p data-msgId="' + msg.messageId +
-                '" class="flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="' +
+                '" class="flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="' +
                 msg.content.imageUrl + '"></p></div></div></div>'
             $api.append($api.dom('.main'), str);
             slideBut();
@@ -1026,8 +1022,8 @@
         var positionCount = msg.content.poi.indexOf(',');
         if (flag == 'SEND') {
             // 发送图片消息
-            time = new Date(parseInt(msg.sentTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(
-                parseInt(msg.sentTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.sentTime, 10)).toLocaleString();
+            time = new Date(parseInt(msg.sentTime, 10)).toLocaleDateString() == new Date().toLocaleDateString()?new Date(
+                parseInt(msg.sentTime, 10)).toLocaleTimeString():new Date(parseInt(msg.sentTime, 10)).toLocaleString();
             str = `
                 <div class="oneself clearfix" data-msgId="` + msg.messageId +
                 `">
@@ -1053,15 +1049,15 @@
         } else {
             // 接收图片消息
             time = new Date(parseInt(msg.receivedTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ?
-                new Date(parseInt(msg.receivedTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10))
+                new Date(parseInt(msg.receivedTime, 10)).toLocaleTimeString():new Date(parseInt(msg.receivedTime, 10))
                 .toLocaleString();
 
             str = '<div data-msgId="' + msg.messageId + '" class="other clearfix"><div class="time">' + time +
                 '</div><div class="flex-def"><img tapmode onclick="openMemberInfo(this)" data-id="' + user_info[msg.senderUserId]
-                .user_id + '" class="otherImg" src="' + (user_info[msg.senderUserId].remark_head_img_url ? user_info[
-                    msg.senderUserId].remark_head_img_url : user_info[msg.senderUserId].head_img_url) +
+                .user_id + '" class="otherImg" src="' + (user_info[msg.senderUserId].remark_head_img_url?user_info[
+                    msg.senderUserId].remark_head_img_url:user_info[msg.senderUserId].head_img_url) +
                 '"><div class="flag-def flex-zTopBottom"><div class="my-name">' + (user_info[msg.senderUserId].remark_nickname ?
-                    user_info[msg.senderUserId].remark_nickname : user_info[msg.senderUserId].nickname) +
+                    user_info[msg.senderUserId].remark_nickname:user_info[msg.senderUserId].nickname) +
                 '</div> <p tapmode onclick="openPosiPage(this)"  data-address="' + msg.content.poi.substring(
                     positionCount + 1) + '" data-name="' + msg.content.poi.substring(0, positionCount) + '" data-lat="' +
                 msg.content.latitude + '" data-lon="' + msg.content.longitude +
@@ -1074,20 +1070,19 @@
     }
     // 新建录音消息
     function sendVoiceCreate(msg, flag) {
-        console.log('录音:' + JSON.stringify(msg));
         var time;
         var str;
         var widthNum = msg.content.duration;
         if (flag == 'SEND') {
             // 发送录音消息
-            time = new Date(parseInt(msg.sentTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ? new Date(
-                parseInt(msg.sentTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.sentTime, 10)).toLocaleString();
+            time = new Date(parseInt(msg.sentTime, 10)).toLocaleDateString() == new Date().toLocaleDateString()?new Date(
+                parseInt(msg.sentTime, 10)).toLocaleTimeString():new Date(parseInt(msg.sentTime, 10)).toLocaleString();
             str = `
                  <div class="oneself clearfix" data-msgId="` + msg.messageId +
                 `">
                     <div class="time">` + time +
                 `</div>
-                    <img class="fr oneselfImg" src="../../image/icon_defaultHead.png">
+                    <img class="fr oneselfImg" src="`+ user_head +`">
                     <p class="fr flex-def flex-cCenter flex-zEnd" style="width:` +
                 widthNum / 4 +
                 `rem" ontouchstart="gtouchstart()" ontouchmove="gtouchmove()"
@@ -1104,14 +1099,13 @@
         } else {
             // 接收录音消息
             time = new Date(parseInt(msg.receivedTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ?
-                new Date(parseInt(msg.receivedTime, 10)).toLocaleTimeString() : new Date(parseInt(msg.receivedTime, 10))
+                new Date(parseInt(msg.receivedTime, 10)).toLocaleTimeString():new Date(parseInt(msg.receivedTime, 10))
                 .toLocaleString();
             str = '<div data-msgId="' + msg.messageId + '" class="other clearfix"><div class="time">' + time +
                 '</div><div class="flex-def"><img tapmode onclick="openMemberInfo(this)" data-id="' + user_info[msg.senderUserId]
-                .user_id + '" class="otherImg" src="' + (user_info[msg.senderUserId].remark_head_img_url ? user_info[
-                    msg.senderUserId].remark_head_img_url : user_info[msg.senderUserId].head_img_url) +
-                '"><div class="flag-def flex-zTopBottom"><div class="my-name">' + (user_info[msg.senderUserId].remark_nickname ?
-                    user_info[msg.senderUserId].remark_nickname : user_info[msg.senderUserId].nickname) +
+                .user_id + '" class="otherImg" src="' + (user_info[msg.senderUserId].remark_head_img_url?user_info[
+                    msg.senderUserId].remark_head_img_url:user_info[msg.senderUserId].head_img_url) +
+                '"><div class="flag-def flex-zTopBottom"><div class="my-name">' + (user_info[msg.senderUserId].remark_nickname?user_info[msg.senderUserId].remark_nickname:user_info[msg.senderUserId].nickname) +
                 '</div><p class="fl flex-def flex-cCenter flex-zStart" style="width:' + widthNum / 4 +
                 'rem" ontouchstart="gtouchstart()" ontouchmove="gtouchmove()"ontouchend = "gtouchend()" tapmode onclick="playVoice(this)" data-voivePath= "' + msg.content.voicePath + '"><img class="voiceMsg" src="../../image/chatPage/icon_break.png" height="20"></p><span class="voiceTime voiceTimeOther fl">' +
                 msg.content.duration + '"</span></div></div></div>'
@@ -1326,8 +1320,6 @@
             $api.attr($api.dom(ele, '.voiceMsg'), 'src', '../../image/chatPage/icon_play.gif');
         }
         // 播放语音
-        console.log('语音路径:'+ $api.attr(ele, 'data-voivePath'));
-        
         api.startPlay({
             path: $api.attr(ele, 'data-voivePath')
         }, function (ret, err) {
@@ -1344,6 +1336,50 @@
             }
         });
     }
+    // 缓存消息
+    function saveMessage(msg) {
+        // console.log('发送的消息');
+        // console.log(JSON.stringify(msg));
+        // console.log('发送的消息');
+        var content = msg.result.message;
+        var user_id=user_info[msg.result.message.senderUserId].user_id
+        var head_img= user_info[msg.result.message.senderUserId].remark_head_img_url?user_info[msg.result.message.senderUserId].remark_head_img_url:user_info[msg.result.message.senderUserId].head_img_url
+        var nickname =  user_info[msg.result.message.senderUserId].remark_nickname?user_info[msg.result.message.senderUserId].remark_nickname:user_info[msg.result.message.senderUserId].nickname
+        var SQL = 'INSERT OR REPLACE INTO tb_chat_group_' + api.pageParam.group_id + '(user_id,nickname,head_img_url,messageId,receivedTime,objectName,messageDirection,content_extra,content_text,content_lat,content_lon,content_imagePath,voicePath,duration,thumbPath) VALUES ("' + user_id + '","' + nickname +'","'+ head_img +'",';
+        // messageId, receivedTime, objectName, messageDirection, content_extra, content_text, content_lat, content_lon, content_imagePath, voicePath, duration, thumbPath
+        if (content.objectName == 'RC:TxtMsg') {
+            SQL += content.messageId+',"'+ (content.receivedTime || content.sentTime) + '", "RC:TxtMsg","' + content.messageDirection+'","'+ content.content.extra +'","' + content.content.text +'","content_lat","content_lon","content_imagePath","voicePath",5,"thumbPath")'
+        } else if (content.objectName == 'RC:VcMsg') {
+            SQL += content.messageId + ',"' + (content.receivedTime || content.sentTime) + '", "RC:VcMsg","' + content.messageDirection + '","' + content.content.extra + '","text","1","2","3","'+ content.content.voicePath +'",'+ content.content.duration +',"6")'
+        } else if (content.objectName == 'RC:ImgMsg') {
+            SQL += content.messageId + ',"' + (content.receivedTime || content.sentTime) + '", "RC:ImgMsg","' + content.messageDirection + '","' + content.content.extra + '","text","lat","lon","'+content.content.content_imagePath+'","voicePath",5,"' + content.content.thumbPath +'")'
+        } else if (content.objectName == 'RC:LBSMsg') {
+             SQL += content.messageId + ',"' + (content.receivedTime || content.sentTime) + '", "RC:TxtMsg","' + content.messageDirection + '","' + content.content.extra + '","' + content.content.poi + '","'+content.content.latitude+'","' + content.content.longitude +'","' + content.content.imagePath +'","voicePath",5,"thumbPath")'
+        }
+        SQLStatement(SQL)
+    }
+     function SQLStatement(SQL) {
+            db.executeSql({
+                name: 'db_' + $api.getStorage('userToken'),
+                sql: SQL
+            }, function (ret, err) {
+                if (ret.status) {
+                    // console.log('存入聊天记录表格成功');
+                    db.selectSql({
+                        name: 'db_'+$api.getStorage('userToken'),
+                        sql: 'SELECT * FROM tb_chat_group_' + api.pageParam.group_id
+                    },function(ret,err){
+                        if (ret.status) {
+                            console.log('查询到的结果'+JSON.stringify(ret))
+                        }else {
+                            alert('386');
+                        }
+                    });
+                } else {
+                    alert('390' + JSON.stringify(err) + JSON.stringify(ret));
+                }
+            });
+        }
 </script>
 
 </html>
