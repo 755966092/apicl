@@ -1476,6 +1476,7 @@
                 getNews();
             } else {
                 alert(JSON.stringify(err.msg));
+                getNews();
             }
         });
     }
@@ -1518,6 +1519,8 @@
             name: 'db_' + $api.getStorage('userToken'),
             sql: 'SELECT * FROM tb_chat_' + api.pageParam.userId + '  ORDER BY receivedTime DESC  LIMIT 20'
         }, function (ret, err) {
+            // console.log('最新消息:'+JSON.stringify(ret));
+            
             if (ret.status) {
                 if (ret.data.length > 0) {
                     renderPageSql(ret.data, 1);
