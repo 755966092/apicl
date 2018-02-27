@@ -4,7 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <style>
@@ -24,7 +25,7 @@
         <div class="head">
             <span class="callback" tapmode onclick="api.closeWin()">返回</span>
             <span class="winTitle" id="title"></span>
-            <span class="rightBtn" tapmode ></span>
+            <span class="rightBtn" tapmode></span>
         </div>
     </header>
 </body>
@@ -32,7 +33,7 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     var groupInfo;
-    apiready = function() {
+    apiready = function () {
         moduleInit();
         createSqlTable();
         fnInit();
@@ -50,24 +51,23 @@
         });
         if (api.pageParam.createGroup == 1) {
             // 新建群
-             rong.sendTextMessage({
+            rong.sendTextMessage({
                 conversationType: 'GROUP',
                 targetId: api.pageParam.group_id,
                 text: '大家好!',
                 extra: ''
             }, function (ret, err) {
-                if (ret.status == 'prepare') {
-                } else if (ret.status == 'success') {
-                    
+                if (ret.status == 'prepare') {} else if (ret.status == 'success') {
+
                     console.log('发送成功');
                 } else if (ret.status == 'error') {
-                    console.log('发送失败'+JSON.stringify(ret));
-                    }
+                    console.log('发送失败' + JSON.stringify(ret));
+                }
 
             });
         }
     }
-    
+
     function eventLisenter() {
         api.addEventListener({
             name: 'editGroupName'
@@ -86,6 +86,7 @@
             requireData();
         });
     }
+
     function openFrame(data) {
         api.openFrame({
             name: 'groupChat_frame',
@@ -99,74 +100,106 @@
             },
             pageParam: {
                 group_id: api.pageParam.group_id,
-                data:data
+                data: data
             }
         });
     }
+
     function requireData(flag) {
-        api.ajax({
-            url: apiSite + '/chat_group/info',
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: {
-                    token: $api.getStorage('userToken'),
-                    group_id: api.pageParam.group_id
-                }
+        var group_cache = $api.getStorage('group_info_' + api.pageParam.group_id);
+        if (group_cache) {
+            // 有缓存
+            groupInfo = group_cache;
+            $api.text($api.byId('title'), group_cache.group_info.group_name);
+             if (flag) {
+                openFrame(groupInfo);
             }
-        }, function (ret, err) {
-            if (ret) {
-                if (ret.code === 200) {
-                    // console.log('群组详情:'+JSON.stringify(ret.data));
-                    groupInfo = ret.data;
-                    $api.text($api.byId('title'), ret.data.group_info.group_name);
-                    if (flag) {
-                        openFrame(ret.data);
+            $api.addEvt($api.dom('.rightBtn'), 'click', function () {
+                openGroupInfo();
+            });
+        } else {
+            // 无缓存
+            api.ajax({
+                url: apiSite + '/chat_group/info',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: {
+                        token: $api.getStorage('userToken'),
+                        group_id: api.pageParam.group_id
                     }
-                    $api.addEvt($api.dom('.rightBtn'), 'click', function() {
-                        openGroupInfo();
-                    });
-                } else {
-                    alert(ret.msg)
                 }
-            } else {
-                alert(JSON.stringify(err))
-            }
-        })
+            }, function (ret, err) {
+                if (ret) {
+                    if (ret.code === 200) {
+                        // console.log('群组详情:'+JSON.stringify(ret.data));
+                        groupInfo = ret.data;
+                        $api.setStorage('group_info_' + api.pageParam.group_id, groupInfo);
+                        $api.text($api.byId('title'), ret.data.group_info.group_name);
+                        if (flag) {
+                            openFrame(ret.data);
+                        }
+                        $api.addEvt($api.dom('.rightBtn'), 'click', function () {
+                            openGroupInfo();
+                        });
+                    } else {
+                        alert(ret.msg)
+                    }
+                } else {
+                    openFrame();
+                    console.log('断网');
+                }
+            })
+        }
+        
     }
+
     function openGroupInfo() {
         api.openWin({
             name: 'groupInfo_win',
             url: './groupInfo_win.html',
             bounces: false,
-            pageParam: { groupInfo: groupInfo}
+            pageParam: {
+                groupInfo: groupInfo
+            }
         });
     }
-     // 新建数据库表格
-        function createSqlTable() {
-            // if (!$api.getStorage('tb_chat_group_record' + api.pageParam.group_id)) {
-            //     // if (1) {
-            //     db.executeSql({
-            //         name: SQLName,
-            //         sql: 'DROP TABLE tb_chat_group_' + api.pageParam.group_id
-            //     }, function (ret, err) {
-            //         if (ret.status) {
-            //             $api.setStorage('tb_chat_group_record' + api.pageParam.group_id, 'true');
-            //         } else {
-            //             $api.setStorage('tb_chat_group_record' + api.pageParam.group_id, 'true');
-            //         }
-            //     });
-            // }
-            db.executeSql({
-                name: 'db_' + $api.getStorage('userToken'),
-                sql: 'CREATE TABLE IF NOT EXISTS tb_chat_group_' + api.pageParam.group_id + '(group_id int DEFAULT '+ api.pageParam.group_id +',user_id int,nickname varchar(255),head_img_url varchar(255),messageId int PRIMARY KEY NOT NULL,receivedTime char(13),objectName varchar(255),messageDirection varchar(255),content_extra varchar(255),content_text text,content_lat varchar(255),content_lon varchar(255),content_imagePath varchar(255),voicePath varchar(255),duration int,thumbPath varchar(255))'
-            }, function (ret, err) {
-                if (ret.status) {
-                } else {
-                    alert('473' + JSON.stringify(err));
-                }
-            });
-        }
+    // 新建数据库表格
+    function createSqlTable() {
+        // if (!$api.getStorage('tb_chat_group_record' + api.pageParam.group_id)) {
+        //     // if (1) {
+        //     db.executeSql({
+        //         name: SQLName,
+        //         sql: 'DROP TABLE tb_chat_group_' + api.pageParam.group_id
+        //     }, function (ret, err) {
+        //         if (ret.status) {
+        //             $api.setStorage('tb_chat_group_record' + api.pageParam.group_id, 'true');
+        //         } else {
+        //             $api.setStorage('tb_chat_group_record' + api.pageParam.group_id, 'true');
+        //         }
+        //     });
+        // }
+        // db.executeSql({
+        //     name: SQLName,
+        //     sql: 'DROP TABLE tb_chat_group_' + api.pageParam.group_id
+        // }, function (ret, err) {
+        //     if (ret.status) {
+                db.executeSql({
+                    name: 'db_' + $api.getStorage('userToken'),
+                    sql: 'CREATE TABLE IF NOT EXISTS tb_chat_group_' + api.pageParam.group_id +
+                        '(group_id int DEFAULT ' + api.pageParam.group_id +
+                        ',user_id int,nickname varchar(255),head_img_url varchar(255),messageId int PRIMARY KEY NOT NULL,senderUserId varchar(233),receivedTime char(13),sentTime char(13),objectName varchar(255),messageDirection varchar(255),content_extra varchar(255),content_text text, content_poi text,content_lat varchar(255),content_lon varchar(255),content_imagePath varchar(255),voicePath varchar(255),duration int,thumbPath varchar(255))'
+                }, function (ret, err) {
+                    if (ret.status) {} else {
+                        alert('473' + JSON.stringify(err));
+                    }
+                });
+        //     } else {
+        //         $api.setStorage('tb_chat_group_record' + api.pageParam.group_id, 'true');
+        //     }
+        // });
+
+    }
 </script>
 
 </html>
