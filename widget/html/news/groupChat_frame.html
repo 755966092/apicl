@@ -435,6 +435,7 @@
     var pageNum = 1;
     var mainH;
     var _main = 0;
+    var messageId = -1;
     apiready = function () {
          // 处理群成员数据ß
         // console.log('传来的数据:'+JSON.stringify(api.pageParam));
@@ -910,8 +911,42 @@
         }, function (ret, err) {
             if (ret.status) {
                 pageNum++;
+                var leng = ret.data.length;
                 api.refreshHeaderLoadDone();
-                handleMsg(ret.data,'sql','top')
+                if (leng > 0) {
+                    // console.log('本地获取历史记录');
+                    handleMsg(ret.data, 'sql', 'top');
+                    messageId = ret.data[leng-1].messageId
+                } else {
+                    // console.log('网络获取历史记录');
+                    // 网络获取聊天记录
+                     rong.getHistoryMessages({
+                        conversationType: 'GROUP',
+                        targetId: api.pageParam.group_id,
+                        oldestMessageId: messageId,
+                        count: 20
+                    }, function (ret, err) {
+                        if (ret.status == 'success') {
+                            msgObj = ret.result;
+                            // console.log('上啦历史:'+JSON.stringify(ret));
+                            console.log('上啦历史messageId:'+JSON.stringify(messageId));
+                            if (msgObj.length > 0) {
+                                messageId = msgObj[msgObj.length-1].messageId;
+                                handleMsg(msgObj, 'web','top');
+                                saveNewMessage(ret.result)
+                            } else {
+                                api.toast({
+                                    msg: '无更多消息',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                            }
+                        } else {
+
+                        }
+                    })
+                }
+
             }
         })
     }
@@ -924,8 +959,8 @@
             sql: 'SELECT * FROM tb_chat_group_' + api.pageParam.group_id +' ORDER BY messageId DESC LIMIT 0,20'
         }, function (ret, err) {
             if (ret.status) {
-                console.log('ret.status:'+ ret.status);
                 if (ret.data.length > 0) {
+                    // console.log('本地获取的历史记录');
                     msgObj = ret.data;
                     handleMsg(msgObj,'sql');
                     rong.getHistoryMessages({
@@ -935,14 +970,14 @@
                         count: 20
                     }, function (ret, err) {
                         if (ret.status == 'success') {
-                            // console.log('查询到的结果' + JSON.stringify(ret))  
-                            console.log('查询到的结果2' + JSON.stringify(msgObj))  
                             // handleMsg(ret.result, 'web')
+                            
                             if(ret.result[0].messageId == msgObj[0].messageId) {
                                 // 无更新
-                                
+                                messageId = msgObj[msgObj.length - 1].messageId;
                             } else{
                                 // 有更新
+                                messageId = ret.result[ret.result.length - 1].messageId;
                                 handleMsg(ret.result,'web')
                                 saveNewMessage(ret.result)
                             }      
@@ -960,7 +995,9 @@
                         count: 20
                     }, function (ret, err) {
                         if (ret.status == 'success') {
-                            msgObj = ret.result
+                            // console.log('网路获取的历史记录');
+                            msgObj = ret.result;
+                            messageId = msgObj[msgObj.length-1].messageId;
                             handleMsg(msgObj,'web');
                             saveNewMessage(ret.result)
                         } else {
@@ -1015,16 +1052,18 @@
             }
              
         } else {
-             for (var i = msg.length - 1; i >= 0; i--) {
-                var element = msg[i];
-                // RC:TxtMsg 文字消息
-                // RC:VcMsg 录音消息
-                // RC:ImgMsg 图片消息
-                // RC:LBSMsg 位置消息
-                // element.messageDirection == 'RECEIVE'  接收的消息
-                // element.messageDirection == 'SEND'  发送的消息
-                classRunder2(element, top)
+             if (top === 'top') {
+                for (var i = 0; i < msg.length; i++) {
+                    var element = msg[i];
+                    classRunder2(element, top)
+                }
+            } else {
+               for (var i = msg.length - 1; i >= 0; i--) {
+                     var element = msg[i];
+                     classRunder2(element, top)
+                 }
             }
+             
         }
         scrollTopPage()
     }
