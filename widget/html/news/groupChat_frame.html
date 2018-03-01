@@ -432,11 +432,16 @@
     var user_name, user_head;
     var user_info = {};
     var emotionData;
+    var pageNum = 1;
+    var mainH;
+    var _main = 0;
     apiready = function () {
          // 处理群成员数据ß
         // console.log('传来的数据:'+JSON.stringify(api.pageParam));
         moduleInit();
         chatTools();
+        // 下拉刷新
+        pullDownToRefresh()
         // 表情转换
         // 获取历史消息
         updatePage();
@@ -445,7 +450,7 @@
         eventListener();
         // 处理群数据
         dataProcessing()
-       
+        
     }
     // 时间监听以及数据处理
     function eventListener() {
@@ -888,15 +893,38 @@
         // scrollIntoView 滚动到可是界面的底部   true滚动到顶部
         $api.dom('.main').scrollIntoView(false);
     }
+    // 下拉刷新
+    function pullDownToRefresh() {
+        api.setCustomRefreshHeaderInfo({
+            bgColor: '#C0C0C0',
+            isScale: true,
+        }, function () {
+            // 停止刷新
+            xiala()
+        });
+    }
+    function xiala() {
+        db.selectSql({
+            name: 'db_' + $api.getStorage('userToken'),
+            sql: 'SELECT * FROM tb_chat_group_' + api.pageParam.group_id + ' ORDER BY messageId DESC LIMIT ' + (pageNum * 20) + ',20'
+        }, function (ret, err) {
+            if (ret.status) {
+                pageNum++;
+                api.refreshHeaderLoadDone();
+                handleMsg(ret.data,'sql','top')
+            }
+        })
+    }
     // 获取历史消息
     function getHistoryNews() {
         var msgObj;
         // 本地历史消息
         db.selectSql({
             name: 'db_' + $api.getStorage('userToken'),
-            sql: 'SELECT * FROM tb_chat_group_' + api.pageParam.group_id +' ORDER BY messageId DESC'
+            sql: 'SELECT * FROM tb_chat_group_' + api.pageParam.group_id +' ORDER BY messageId DESC LIMIT 0,20'
         }, function (ret, err) {
             if (ret.status) {
+                console.log('ret.status:'+ ret.status);
                 if (ret.data.length > 0) {
                     msgObj = ret.data;
                     handleMsg(msgObj,'sql');
@@ -908,6 +936,7 @@
                     }, function (ret, err) {
                         if (ret.status == 'success') {
                             // console.log('查询到的结果' + JSON.stringify(ret))  
+                            console.log('查询到的结果2' + JSON.stringify(msgObj))  
                             // handleMsg(ret.result, 'web')
                             if(ret.result[0].messageId == msgObj[0].messageId) {
                                 // 无更新
@@ -957,8 +986,15 @@
         //     }
         // })
     }
+    // 上啦加载历史记录后不滚动页面
+    function scrollTopPage() {
+        mainH = $api.offset($api.dom('.main')).h;
+        scrollH = mainH - _main;
+        _main = mainH;
+        window.scrollTo(0, scrollH);
+    }
     // 处理历史消息
-    function handleMsg(msg, flag) {
+    function handleMsg(msg, flag, top) {
         var rong_id_arr = [];
         for (var j = msg.length - 1; j >= 0; j--) {
             if (msg[j].messageDirection == 'RECEIVE') {
@@ -966,34 +1002,18 @@
             }
         }
         if (flag == 'sql') {
-             for (var i = msg.length - 1; i >= 0; i--) {
-                var element = msg[i];
-                // RC:TxtMsg 文字消息
-                // RC:VcMsg 录音消息
-                // RC:ImgMsg 图片消息
-                // RC:LBSMsg 位置消息
-                // element.messageDirection == 'RECEIVE'  接收的消息
-                // element.messageDirection == 'SEND'  发送的消息
-                element.content = {};
-                element.content.text = element.content_text
-                element.content.poi = element.content_poi
-                element.content.extra = element.content_extra
-                element.content.lat = element.content_lat
-                element.content.lon = element.content_lon
-                element.content.duration = element.duration
-                element.content.voicePath = element.voicePath
-                element.content.imagePath = element.content_imagePath
-                element.content.imageUrl = element.content_imagePath
-                if (element.objectName == 'RC:TxtMsg') {
-                    sendTextCreate(element, element.messageDirection)
-                } else if (element.objectName == 'RC:ImgMsg') {
-                    sendImgCreate(element, element.messageDirection)
-                } else if (element.objectName == 'RC:LBSMsg') {
-                    sendPosCreate(element, element.messageDirection)
-                } else if (element.objectName == 'RC:VcMsg') {
-                    sendVoiceCreate(element, element.messageDirection)
+            if (top === 'top') {
+                for (var i =0; i < msg.length; i++) {
+                    var element = msg[i];
+                    classRunder(element, top)
+                }
+            } else {
+                for (var i = msg.length - 1; i >= 0; i--) {
+                    var element = msg[i];
+                    classRunder(element, top)
                 }
             }
+             
         } else {
              for (var i = msg.length - 1; i >= 0; i--) {
                 var element = msg[i];
@@ -1003,22 +1023,52 @@
                 // RC:LBSMsg 位置消息
                 // element.messageDirection == 'RECEIVE'  接收的消息
                 // element.messageDirection == 'SEND'  发送的消息
-
-                if (element.objectName == 'RC:TxtMsg') {
-                    sendTextCreate(element, element.messageDirection)
-                } else if (element.objectName == 'RC:ImgMsg') {
-                    sendImgCreate(element, element.messageDirection)
-                } else if (element.objectName == 'RC:LBSMsg') {
-                    sendPosCreate(element, element.messageDirection)
-                } else if (element.objectName == 'RC:VcMsg') {
-                    sendVoiceCreate(element, element.messageDirection)
-                }
+                classRunder2(element, top)
             }
         }
-       
+        scrollTopPage()
+    }
+    // 消息分类渲染
+    function classRunder(element, top) {
+         // RC:TxtMsg 文字消息
+        // RC:VcMsg 录音消息
+        // RC:ImgMsg 图片消息
+        // RC:LBSMsg 位置消息
+        // element.messageDirection == 'RECEIVE'  接收的消息
+        // element.messageDirection == 'SEND'  发送的消息
+        element.content = {};
+        element.content.text = element.content_text
+        element.content.poi = element.content_poi
+        element.content.extra = element.content_extra
+        element.content.lat = element.content_lat
+        element.content.lon = element.content_lon
+        element.content.duration = element.duration
+        element.content.voicePath = element.voicePath
+        element.content.imagePath = element.content_imagePath
+        element.content.imageUrl = element.content_imagePath
+        classRunder2(element, top)
+    }
+    function classRunder2(element, top) {
+         if (element.objectName == 'RC:TxtMsg') {
+            sendTextCreate(element, element.messageDirection, top)
+        } else if (element.objectName == 'RC:ImgMsg') {
+            sendImgCreate(element, element.messageDirection, top)
+        } else if (element.objectName == 'RC:LBSMsg') {
+            sendPosCreate(element, element.messageDirection, top)
+        } else if (element.objectName == 'RC:VcMsg') {
+            sendVoiceCreate(element, element.messageDirection, top)
+        }
+    }
+    // html添加到页面上
+    function addHtml(str,top) {
+        if (top == 'top') {
+            $api.prepend($api.dom('.main'), str);
+        } else {
+            $api.append($api.dom('.main'), str);
+        }
     }
     // 新建文字消息
-    function sendTextCreate(msg, flag) {
+    function sendTextCreate(msg, flag,top) {
         var time;
         var str;
         if (msg.content.text != ' ') {
@@ -1027,7 +1077,7 @@
                 time = new Date(parseInt(msg.sentTime, 10)).toLocaleDateString() == new Date().toLocaleDateString() ?
                     new Date(parseInt(msg.sentTime, 10)).toLocaleTimeString():new Date(parseInt(msg.sentTime, 10)).toLocaleString();
                 str = '<div data-msgId="' + msg.messageId + '" class="oneself clearfix"><div class="time">' + time +'</div><div class="flex-def flex-zEnd"><div class="flag-def flex-zTopBottom"><p data-msgId="' + msg.messageId +'" class="flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()">' + transText(msg.content.text) + '</p></div><img tapmode onclick="openMemberInfo(this)" data-id="1" class="oneselfImg" src="' + user_head + '"></div></div>'
-                $api.append($api.dom('.main'), str);
+                addHtml(str,top)
                 slideBut();
             } else {
                 // 接收文字消息
@@ -1043,14 +1093,14 @@
                     '</div><p data-msgId="' + msg.messageId +
                     '" class="flex-def flex-cCenter" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()" >' +
                     transText(msg.content.text) + '</p></div></div></div>'
-                $api.append($api.dom('.main'), str);
+               addHtml(str, top)
                 slideBut();
             }
         }
 
     }
     // 新建图片消息
-    function sendImgCreate(msg, flag) {
+    function sendImgCreate(msg, flag,top) {
         var time;
         var str;
         if (flag == 'SEND') {
@@ -1071,7 +1121,7 @@
                     </p>
                 </div>
             `
-            $api.append($api.dom('.main'), str);
+            addHtml(str, top)
             slideBut();
         } else {
             // 接收图片消息
@@ -1088,12 +1138,12 @@
                 '</div><p data-msgId="' + msg.messageId +
                 '" class="flex-def flex-cCenter" tapmode onclick="previewImg(this)" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove()" ontouchend="gtouchend()"><img class="imgNews" src="' +
                 msg.content.imageUrl + '"></p></div></div></div>'
-            $api.append($api.dom('.main'), str);
+            addHtml(str, top)
             slideBut();
         }
     }
     // 新建位置消息
-    function sendPosCreate(msg, flag) {
+    function sendPosCreate(msg, flag, top) {
         
         var time;
         var str;
@@ -1122,7 +1172,7 @@
                     </p>
                 </div>
             `
-            $api.append($api.dom('.main'), str);
+            addHtml(str, top)
             slideBut();
         } else {
             // 接收图片消息
@@ -1142,12 +1192,12 @@
                 '"  class="positionNews fr flex-def flex-zTopBottom"><span class="posName" > ' + msg.content.poi.substring(
                     0, positionCount) + '</span ><span class="posiDes">' + msg.content.poi.substring(positionCount + 1) +
                 '</span><img src="' + msg.content.imagePath + '" alt=""></p></div></div></div>'
-            $api.append($api.dom('.main'), str);
+            addHtml(str, top)
             slideBut();
         }
     }
     // 新建录音消息
-    function sendVoiceCreate(msg, flag) {
+    function sendVoiceCreate(msg, flag, top) {
        
         var time;
         var str;
@@ -1173,7 +1223,7 @@
                 msg.content.duration + `"</span>
                 </div>
             `
-            $api.append($api.dom('.main'), str);
+            addHtml(str, top)
             slideBut();
         } else {
             // 接收录音消息
@@ -1188,7 +1238,7 @@
                 '</div><p class="fl flex-def flex-cCenter flex-zStart" style="width:' + widthNum / 4 +
                 'rem" ontouchstart="gtouchstart()" ontouchmove="gtouchmove()"ontouchend = "gtouchend()" tapmode onclick="playVoice(this)" data-voivePath= "' + msg.content.voicePath + '"><img class="voiceMsg" src="../../image/chatPage/icon_break.png" height="20"></p><span class="voiceTime voiceTimeOther fl">' +
                 msg.content.duration + '"</span></div></div></div>'
-            $api.append($api.dom('.main'), str);
+            addHtml(str, top)
             slideBut();
         }
     }
@@ -1418,7 +1468,7 @@
     // 缓存消息
     function saveMessage(msg) {
         // console.log('发送的消息');
-        console.log(JSON.stringify(msg));
+        // console.log(JSON.stringify(msg));
         // console.log('发送的消息');
         var content = msg;
         if (msg.result) {
@@ -1471,7 +1521,7 @@
     }
     // 执行sql语句
      function SQLStatement(SQL) {
-         console.log('SQL语句:'+SQL);
+        //  console.log('SQL语句:'+SQL);
             db.executeSql({
                 name: 'db_' + $api.getStorage('userToken'),
                 sql: SQL
@@ -1483,7 +1533,7 @@
                         sql: 'SELECT * FROM tb_chat_group_' + api.pageParam.group_id
                     },function(ret,err){
                         if (ret.status) {
-                            console.log('查询到的结果'+JSON.stringify(ret))
+                            // console.log('查询到的结果'+JSON.stringify(ret))
                         }else {
                             alert('386');
                         }
