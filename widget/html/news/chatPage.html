@@ -59,31 +59,7 @@
         // 新建表格
         createSqlTable();
         // 聊天内容
-        api.openFrame({
-            name: 'chattContent',
-            url: './chatContent.html',
-            softInputMode: 'resize',
-            rect: {
-                x: 0,
-                y: headerH,
-                w: 'auto',
-                h: 'auto'
-            },
-            pageParam: {
-                nickname: nickname,
-                targetRongId: targetRongId,
-                headImg: api.pageParam.headImg,
-                supplyName: api.pageParam.supplyName,
-                priceUint: api.pageParam.priceUint,
-                type: api.pageParam.type,
-                targetUserId: userId,
-                order_id: api.pageParam.order_id,
-                userId: userId || api.pageParam.userId,
-
-            },
-            bounces: true,
-
-        });
+        
         api.execScript({
             name: 'main',
             // frameName: 'fram0',
@@ -108,7 +84,33 @@
             $api.text($api.byId('title'), ret.value.title);
         })
     };
+    function openF() {
+        api.openFrame({
+            name: 'chattContent',
+            url: './chatContent.html',
+            softInputMode: 'resize',
+            rect: {
+                x: 0,
+                y: headerH,
+                w: 'auto',
+                h: 'auto'
+            },
+            pageParam: {
+                nickname: api.pageParam.nickname,
+                targetRongId: api.pageParam.targetRongId,
+                headImg: api.pageParam.headImg,
+                supplyName: api.pageParam.supplyName,
+                priceUint: api.pageParam.priceUint,
+                type: api.pageParam.type,
+                targetUserId: userId,
+                order_id: api.pageParam.order_id,
+                userId: userId || api.pageParam.userId,
 
+            },
+            bounces: true,
+
+        });
+    }
     function openMemberInfo() {
         api.openWin({
             name: 'txl_memberInfo_Win',
@@ -137,24 +139,14 @@
                  sql: 'DROP TABLE tb_chat_'+ api.pageParam.userId
              }, function(ret, err){
                  if( ret.status ){
-                        $api.setStorage('tb_chat_chat_record'+ api.pageParam.userId, 'true');
+                        createtB()
                     }else{
-                        $api.setStorage('tb_chat_chat_record'+ api.pageParam.userId, 'true');
-                    //  alert( JSON.stringify( err ) );
+                       createtB()
                  }
              });
+        } else {
+            createtB()
         }
-        db.executeSql({
-            name: 'db_' + $api.getStorage('userToken'),
-            sql: 'CREATE TABLE IF NOT EXISTS tb_chat_' + api.pageParam.userId + '(messageId int PRIMARY KEY NOT NULL, receivedTime char(13), user_id int DEFAULT ' + api.pageParam.userId + ', objectName varchar(255), messageDirection varchar(255), content_extra varchar(255), content_text text,content_lat float default 0, content_lon float default 0, content_imagePath varchar(255), head_img_url varchar(255), filePath varchar(255), duration varchar(255), thumbPath varchar(255))'
-        }, function(ret, err) {
-            if (ret.status) {
-                // alert( JSON.stringify( ret ) );
-            } else {
-                alert('473' + JSON.stringify(err));
-                //console.log('473'+ JSON.stringify( err ) );
-            }
-        });
         // db.selectSql({
         //     name: 'db_' + $api.getStorage('userToken'),
         //     sql: 'SELECT * FROM  tb_chat_' + api.pageParam.userId
@@ -165,6 +157,21 @@
         //         api.alert({msg:err.msg});
         //     }
         // });
+    }
+    function createtB(params) {
+         db.executeSql({
+            name: 'db_' + $api.getStorage('userToken'),
+            sql: 'CREATE TABLE IF NOT EXISTS tb_chat_' + api.pageParam.userId + '(messageId int PRIMARY KEY NOT NULL, receivedTime char(13), user_id int DEFAULT ' + api.pageParam.userId + ', objectName varchar(255), messageDirection varchar(255), content_extra varchar(255), content_text text,content_lat float default 0, content_lon float default 0, content_imagePath varchar(255), head_img_url varchar(255), filePath varchar(255), duration varchar(255), thumbPath varchar(255))'
+        }, function (ret, err) {
+            if (ret.status) {
+                // alert( JSON.stringify( ret ) );
+                $api.setStorage('tb_chat_chat_record' + api.pageParam.userId, 'true');
+                openF();
+            } else {
+                alert('473' + JSON.stringify(err));
+                //console.log('473'+ JSON.stringify( err ) );
+            }
+        });
     }
 </script>
 

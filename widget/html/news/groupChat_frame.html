@@ -438,9 +438,13 @@
     var messageId = -1;
     apiready = function () {
          // 处理群成员数据ß
-        // console.log('传来的数据:'+JSON.stringify(api.pageParam));
+         // 处理群数据
+        dataProcessing()
+         // console.log('传来的数据:'+JSON.stringify(api.pageParam));
         moduleInit();
-        chatTools();
+        setTimeout(() => {
+            chatTools();
+        }, 700);
         // 下拉刷新
         pullDownToRefresh()
         // 表情转换
@@ -449,8 +453,7 @@
         
         // 事件监听
         eventListener();
-        // 处理群数据
-        dataProcessing()
+       
         
     }
     // 时间监听以及数据处理
@@ -834,14 +837,20 @@
             name: 'move'
         }, function (ret, err) {
             pushPageMove(ret.panelHeight, ret.inputBarHeight);
-            window.setTimeout('slideBut()', 300);
+            // window.setTimeout('slideBut()', 300);
+            window.setTimeout(function () {
+                slideBut();
+            }, 300);
         });
         UIChatBox.addEventListener({
             target: 'inputBar',
             name: 'change'
         }, function (ret, err) {
             pushPageMove(ret.panelHeight, ret.inputBarHeight);
-            window.setTimeout('slideBut()', 300);
+            // window.setTimeout('slideBut()', 300);
+             window.setTimeout(function () {
+                slideBut();
+            }, 300);
         });
     }
     // 修改聊天内容高度
@@ -849,14 +858,13 @@
         var inputHeight = api.winHeight - (panelHeight + inputBarHeight);
         setTimeout(function () {
             api.setFrameAttr({
-                name: 'chattContent',
+                name: 'groupChat_frame',
                 rect: {
                     x: 0,
                     y: api.pageParam.headerH,
                     h: inputHeight
                 }
             });
-
         }, 10);
     }
     // 判断是否是黑名单
@@ -953,6 +961,7 @@
     }
     // 获取历史消息
     function getHistoryNews() {
+        
         var msgObj;
         // 本地历史消息
         db.selectSql({
@@ -961,7 +970,6 @@
         }, function (ret, err) {
             if (ret.status) {
                 if (ret.data.length > 0) {
-                    // console.log('本地获取的历史记录');
                     msgObj = ret.data;
                     handleMsg(msgObj,'sql');
                     rong.getHistoryMessages({
@@ -972,7 +980,6 @@
                     }, function (ret, err) {
                         if (ret.status == 'success') {
                             // handleMsg(ret.result, 'web')
-                            
                             if(ret.result[0].messageId == msgObj[0].messageId) {
                                 // 无更新
                                 messageId = msgObj[msgObj.length - 1].messageId;
@@ -996,7 +1003,6 @@
                         count: 20
                     }, function (ret, err) {
                         if (ret.status == 'success') {
-                            // console.log('网路获取的历史记录');
                             msgObj = ret.result;
                             messageId = msgObj[msgObj.length-1].messageId;
                             handleMsg(msgObj,'web');

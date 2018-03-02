@@ -617,9 +617,21 @@
     // 添加好友按钮
     function addFellow() {
         //添加时间，控制frame0页面的添加好友弹框的显示，如果在该页面写会被frame覆盖
-        api.sendEvent({
-            name: 'showNews',
-        });
+        // api.sendEvent({
+        //     name: 'showNews',
+        //      extra: { key: ' value' }
+        // });
+           api.openFrame({
+                    name: 'frameName',
+                    url: './news/addFellowWin.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        // w : api.winWidth,
+                        // h : api.winHeight
+                    },
+                    bounces: false
+                });
     }
     // 点击发布按钮
     function addPublish() {
@@ -698,30 +710,60 @@
                 //console.log('473'+ JSON.stringify( err ) );
             }
         });
-        // db.executeSql({
-        //      name: SQLName,
-        //      sql: 'DROP TABLE tb_chat_list'
-        //  }, function(ret, err){
-        //      if( ret.status ){
-        //          alert('1'+ JSON.stringify( ret ) );
-        //      }else{
-        //          alert( JSON.stringify( err ) );
-        //      }
-        //  });
+        if (!$api.getStorage('delChatTan')) {
+             db.executeSql({
+                name: SQLName,
+                sql: 'DROP TABLE tb_chat_list'
+            }, function (ret, err) {
+                if (ret.status) {
+                    db.executeSql({
+                        name: SQLName,
+                        sql: 'CREATE TABLE IF NOT EXISTS tb_chat_list(user_id int PRIMARY KEY NOT NULL, head_img_url varchar(255), remark_head_img_url varchar(255), nickname varchar(255), remark_nickname varchar(255), conversationType varchar(255), latestMessage_text varchar(255), receivedTime varchar(255), targetId varchar(255),unreadMessageCount int)'
+                    }, function (ret, err) {
+                        if (ret.status) {
+                            // alert( JSON.stringify( ret ) );
+                            // console.log('新建表格成功');
+                            $api.setStorage('delChatTan','true')
+                        } else {
+                            alert('473' + JSON.stringify(err));
+                            //console.log('473'+ JSON.stringify( err ) );
+                        }
+                    });
+                } else {
+                    // alert(JSON.stringify(err));
+                    db.executeSql({
+                        name: SQLName,
+                        sql: 'CREATE TABLE IF NOT EXISTS tb_chat_list(user_id int PRIMARY KEY NOT NULL, head_img_url varchar(255), remark_head_img_url varchar(255), nickname varchar(255), remark_nickname varchar(255), conversationType varchar(255), latestMessage_text varchar(255), receivedTime varchar(255), targetId varchar(255),unreadMessageCount int)'
+                    }, function (ret, err) {
+                        if (ret.status) {
+                            // alert( JSON.stringify( ret ) );
+                            // console.log('新建表格成功');
+                            $api.setStorage('delChatTan', 'true')
+                        } else {
+                            alert('473' + JSON.stringify(err));
+                            //console.log('473'+ JSON.stringify( err ) );
+                        }
+                    });
+                }
+            });
+        } else {
+             db.executeSql({
+                name: SQLName,
+                sql: 'CREATE TABLE IF NOT EXISTS tb_chat_list(user_id int PRIMARY KEY NOT NULL, head_img_url varchar(255), remark_head_img_url varchar(255), nickname varchar(255), remark_nickname varchar(255), conversationType varchar(255), latestMessage_text varchar(255), receivedTime varchar(255), targetId varchar(255),unreadMessageCount int)'
+            }, function (ret, err) {
+                if (ret.status) {
+                    // alert( JSON.stringify( ret ) );
+                    // console.log('新建表格成功');
+                    $api.setStorage('delChatTan', 'true')
+                } else {
+                    alert('473' + JSON.stringify(err));
+                    //console.log('473'+ JSON.stringify( err ) );
+                }
+            });
+        }
+       
         // 聊天列表
-        db.executeSql({
-            name: SQLName,
-            sql: 'CREATE TABLE IF NOT EXISTS tb_chat_list(user_id int PRIMARY KEY NOT NULL, head_img_url varchar(255), remark_head_img_url varchar(255), nickname varchar(255), remark_nickname varchar(255), conversationType varchar(255), latestMessage_text varchar(255), receivedTime varchar(255), targetId varchar(255),unreadMessageCount int)'
-        }, function(ret, err) {
-            if (ret.status) {
-                // alert( JSON.stringify( ret ) );
-                // console.log('新建表格成功');
-
-            } else {
-                alert('473' + JSON.stringify(err));
-                //console.log('473'+ JSON.stringify( err ) );
-            }
-        });
+       
 
         // 用户当前状态表格
         db.executeSql({
