@@ -472,14 +472,16 @@
         api.addEventListener({
             name: 'receiveMsg'
         }, function (ret, err) {
-            if (ret.value.msgContent.result.message.objectName == 'RC:TxtMsg') {
-                sendTextCreate(ret.value.msgContent.result.message, ret.value.msgContent.result.message.messageDirection)
-            } else if (ret.value.msgContent.result.message.objectName == 'RC:ImgMsg') {
-                sendImgCreate(ret.value.msgContent.result.message, ret.value.msgContent.result.message.messageDirection)
-            } else if (ret.value.msgContent.result.message.objectName == 'RC:LBSMsg') {
-                sendPosCreate(ret.value.msgContent.result.message, ret.value.msgContent.result.message.messageDirection)
-            } else if (ret.value.msgContent.result.message.objectName == 'RC:VcMsg') {
-                sendVoiceCreate(ret.value.msgContent.result.message, ret.value.msgContent.result.message.messageDirection)
+            if (ret.value.msgContent.result.message.conversationType == 'GROUP') {
+                if (ret.value.msgContent.result.message.objectName == 'RC:TxtMsg') {
+                    sendTextCreate(ret.value.msgContent.result.message, ret.value.msgContent.result.message.messageDirection)
+                } else if (ret.value.msgContent.result.message.objectName == 'RC:ImgMsg') {
+                    sendImgCreate(ret.value.msgContent.result.message, ret.value.msgContent.result.message.messageDirection)
+                } else if (ret.value.msgContent.result.message.objectName == 'RC:LBSMsg') {
+                    sendPosCreate(ret.value.msgContent.result.message, ret.value.msgContent.result.message.messageDirection)
+                } else if (ret.value.msgContent.result.message.objectName == 'RC:VcMsg') {
+                    sendVoiceCreate(ret.value.msgContent.result.message, ret.value.msgContent.result.message.messageDirection)
+                }
             }
             // 缓存消息
             saveMessage(ret.value.msgContent);
@@ -929,7 +931,6 @@
                         if (ret.status == 'success') {
                             msgObj = ret.result;
                             // console.log('上啦历史:'+JSON.stringify(ret));
-                            console.log('上啦历史messageId:'+JSON.stringify(messageId));
                             if (msgObj.length > 0) {
                                 messageId = msgObj[msgObj.length-1].messageId;
                                 handleMsg(msgObj, 'web','top');

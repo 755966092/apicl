@@ -675,7 +675,6 @@
                     }
                 }
                 // 数据库内容
-                // console.log(JSON.stringify(ret.data));
                 getData(ret.data);
                 historyNews(ret.data);
             }else {
@@ -853,7 +852,6 @@
                     }
                 }
                 // 网络数据有更新 刷新数据 从新缓存数据
-                // console.log('列表渲染数据:'+JSON.stringify(data));
                 
                 getData(data);
                 if (data.length <= 0) {
@@ -903,7 +901,7 @@
     }
     function chatListSql(data) {
         // 网络获取的内容
-        // console.log(JSON.stringify(data))
+        console.log(JSON.stringify(data))
         if (data.length > 0 ) {
             var SQL = 'INSERT OR REPLACE INTO tb_chat_list (user_id, head_img_url, remark_head_img_url, nickname, remark_nickname,conversationType, latestMessage_text, receivedTime, targetId, unreadMessageCount) VALUES '
             for (var i = 0; i < data.length; i++) {
@@ -962,6 +960,8 @@
         var list = $api.dom('.resultList');
         // 替换resultList所有内容
         $api.html(list, html);
+        console.log(html);
+        
         // alert('getData:' + JSON.stringify(data))
     }
 

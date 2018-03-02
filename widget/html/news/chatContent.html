@@ -546,24 +546,25 @@
         api.addEventListener({
             name: 'receiveMsg'
         }, function (ret, err) {
-            console.log('单聊界面监听到消息');
-
-            var value = ret.value;
-            if (value.targetId == targetRongId) {
-                // addReceMsg(ret.value.msg, youHeadImg,0);
-                if (value.msgContent.result.message.objectName == 'RC:VcMsg') {
-                    addReceVoiceMessages(value.msgContent.result, 0);
-                } else if (value.msgContent.result.message.objectName == 'RC:TxtMsg') {
-                    addReceMsg(value.msg, 0);
-                } else if (value.msgContent.result.message.objectName == 'RC:ImgMsg') {
-                    addReceImgMessages(value.msgContent.result, 0);
-                } else if (value.msgContent.result.message.objectName == 'RC:LBSMsg') {
-                    createReceivePositionLabel(value);
+            if (ret.value.msgContent.result.message.conversationType == 'PRIVATE') {
+                var value = ret.value;
+                if (value.targetId == targetRongId) {
+                    // addReceMsg(ret.value.msg, youHeadImg,0);
+                    if (value.msgContent.result.message.objectName == 'RC:VcMsg') {
+                        addReceVoiceMessages(value.msgContent.result, 0);
+                    } else if (value.msgContent.result.message.objectName == 'RC:TxtMsg') {
+                        addReceMsg(value.msg, 0);
+                    } else if (value.msgContent.result.message.objectName == 'RC:ImgMsg') {
+                        addReceImgMessages(value.msgContent.result, 0);
+                    } else if (value.msgContent.result.message.objectName == 'RC:LBSMsg') {
+                        createReceivePositionLabel(value);
+                    }
                 }
-            }
 
-            chatRecordingSql(ret.value, 'receiveMsg', youHeadImg);
+                chatRecordingSql(ret.value, 'receiveMsg', youHeadImg);
             // 收到消息后, 添加消息内容到页面
+            }
+            
 
         });
         xiala(messageId);

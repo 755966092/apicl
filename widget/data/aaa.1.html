@@ -1,120 +1,100 @@
-<html>
-
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-  <style type="text/css">
-    body,
-    html {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      font-family: "微软雅黑";
-    }
-
-    #allmap {
-      width: 100%;
-      height: 500px;
-    }
-
-    p {
-      margin-left: 5px;
-      font-size: 14px;
-    }
-  </style>
-  <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=uVI0viOM0c4W64xi19cVxza3q9IniAIy"></script>
-  <script type="text/javascript" src="../script/doT.min.js"></script>
-  <title>根据关键字本地搜索</title>
-</head>
-
-<body>
-  <div id="allmap"></div>
-  <p>返回北京市“景点”关键字的检索结果，并展示在地图上</p>
-  <ul class="resultList"></ul>
-  <script type="text/x-dot-template" id="listT">
-    {{~it:value:index}}
-    <li onclick="setPoint(this)" data-point="{{=value.point}}" data-lat="{{=value.point.lat}}" data-lng="{{=value.point.lng}}">{{=value.title}}</li>
-    {{~}}
-  </script>
-
-</body>
-
-</html>
-<script type="text/javascript">
-  // 百度地图API功能
-  var map = new BMap.Map("allmap");
-  map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);
-  map.enableScrollWheelZoom(true);
-  var local = new BMap.LocalSearch(map, {
-    renderOptions: {
-      map: map,
-    },
-    pageCapacity: 12,
-    onSearchComplete: function (ret) {
-      // console.log(ret.vr)
-      getData(ret.vr)
-    }
-  });
-  // loc?al.setPageCapacity(100)
-  local.search("清华大学东南门");
-
-  function getData(data) {
-    // 原生方法
-    document.getElementsByClassName('resultList')[0].innerHTML = doT.template(document.getElementById('listT').innerHTML)
-      (data)
-  }
-
-  function setPoint(point) {
-    var pointP = new BMap.Point(point.getAttribute("data-lng"), point.getAttribute("data-lat"));
-    // map.setCenter(pointP)
-    map.centerAndZoom(pointP, 18);
-    // console.log(JSON.stringify(point.getAttribute("data-lat")))
-    // console.log(JSON.stringify(point.getAttribute("data-lng")))
-    // console.log(JSON.stringify(point.getAttribute("data-lat")), JSON.stringify(point.getAttribute("data-lng")))
-  }
-
-  // 
-  // 
-  // 
-  // 
-  // var local = new BMap.LocalSearch(map, 
-  //   { 
-  //     renderOptions:{map: map},
-  //     onSearchComplete : getLocalResult 
-  //   }); 
-  // local.search("车站"); 
-  // function getLocalResult(){
-
-  //   var local = new BMap.LocalSearch(map, {  
-  //     renderOptions: {  
-  //         map: map,  
-  //     },
-  //     onSearchComplete: function(results){ 
-  //         //可以得到搜索结果且搜索结果不为空 
-  //         if(local.getStatus() == BMAP_STATUS_SUCCESS){
-  //        var html="";
-  //        //遍历结果第一页的点，自定义结果面板
-  //        for (var i = 0; i < results.getCurrentNumPois(); i++){  
-  //            var poi = results.getPoi(i);
-  //                //下面根据LocalResultPoi对象的值拼html代码，此处略
-  //                title[i] = poi.title;
-  //                if(poi.address)
-  //                    address[i] = poi.address;
-  //                if(poi.phoneNumber)
-  //                    telephone[i] = poi.phoneNumber;
-  //            } 
-
-  //            //重新遍历第一页所有点，对结果面板中的每一条记录添加click事件
-  //            for (var i = 0; i < results.getCurrentNumPois(); i++){  
-  //               $("#poi" + i).click(function(){
-  //                   //这里用前面title、address、telephone三个数组中存放的值来拼信息窗里的html代码，存在变量content中，然后：
-  //                    var info = new BMap.InfoWindow(content);
-  //                    //利用在第一个问题中的markerArr数组设置触发函数，但注意数组的索引值不能用i，因为函数运行时i已不存在，因此在构造结果面板时，每个节点我添加了一个index属性，并用下面的代码获取，设置属性的代码类似于：<div id='poi5' index='5'></div>                        
-  //                    markerArr[$(this).attr("index")].openInfoWindow(info);
-  //               })
-  //            } 
-  //        } 
-  //    },
-  //    pageCapacity: 8  
-  // });
-</script>
+<li class="undefined chatList" data-targetId="6" data-nickname="1861169、成府路13260、大中小18765" data-remark_nickname="" ontouchstart=";event.stopPropagation();"
+    data-userId="6" tapmode onclick="openGroupChat(this)">
+    <div class="warp" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove(this)" ontouchend="gtouchend(this)">
+        <div class="headImg groupHead flex-def flex-wrap flex-zCenter">
+            <img style="width:.41rem;height:.41rem;border-radius:0;" class="fl" src="http://img.iinnet.com/FkyGHXeVO8-N9JD69262-4p-gyYv">
+            <img style="width:.41rem;height:.41rem;border-radius:0;" class="fl" src="http://img.iinnet.com/FlcfxZr8WXKbW73wfy4tn7LNU-2Z">
+            <img style="width:.41rem;height:.41rem;border-radius:0;" class="fl" src="http://img.iinnet.com/Fq9oScpBjR8tVlPr865kPisMnpW3">
+            <span class="select">2</span>
+        </div>
+        <div class="contentRight">
+            <div class="name">
+                <h3>1861169、成府路13260、大中小18765</h3>
+                <span class="time">10:59</span>
+            </div>
+            <p>123</p>
+        </div>
+    </div>
+    <span class="slide">
+        <span class="stamp" data-type="GROUP" data-targetId="6" tapmode onclick="delNesItem(this,1);event.stopPropagation()">标为已读</span>
+        <span class="del" data-type="GROUP" data-targetId="6" tapmode onclick="delNesItem(this,0);event.stopPropagation()">删除</span>
+    </span>
+</li>
+<li class="undefined chatList" data-targetId="9b22b1efd52803e8ba186222438484b7" data-nickname="1861169" data-remark_nickname="袁壮"
+    ontouchstart=";event.stopPropagation();" data-userId="102543" tapmode onclick="openChat(this)">
+    <div class="warp" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove(this)" ontouchend="gtouchend(this)">
+        <div class="headImg">
+            <img class="fl" src="http://img.iinnet.com/FkyGHXeVO8-N9JD69262-4p-gyYv?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim">
+            <span class="select">3</span>
+        </div>
+        <div class="contentRight">
+            <div class="name">
+                <h3>袁壮</h3>
+                <span class="time">10:59</span>
+            </div>
+            <p>12</p>
+        </div>
+    </div>
+    <span class="slide">
+        <span class="stamp" data-type="PRIVATE" data-targetId="9b22b1efd52803e8ba186222438484b7" tapmode onclick="delNesItem(this,1);event.stopPropagation()">标为已读</span>
+        <span class="del" data-type="PRIVATE" data-targetId="9b22b1efd52803e8ba186222438484b7" tapmode onclick="delNesItem(this,0);event.stopPropagation()">删除</span>
+    </span>
+</li>
+<li class="undefined chatList" data-targetId="759d2765861e5ba5f4b8e576bfeaee33" data-nickname="成府路13260" data-remark_nickname="袁壮2"
+    ontouchstart=";event.stopPropagation();" data-userId="909" tapmode onclick="openChat(this)">
+    <div class="warp" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove(this)" ontouchend="gtouchend(this)">
+        <div class="headImg">
+            <img class="fl" src="http://img.iinnet.com/FhpTMDrQcOkO_xIPGCM3xuOaNALV?imageView2/1/w/150/h/150/interlace/1/q/100|imageslim"> </div>
+        <div class="contentRight">
+            <div class="name">
+                <h3>袁壮2</h3>
+                <span class="time">2018-3-1 9:45</span>
+            </div>
+            <p>26</p>
+        </div>
+    </div>
+    <span class="slide">
+        <span class="stamp" data-type="PRIVATE" data-targetId="759d2765861e5ba5f4b8e576bfeaee33" tapmode onclick="delNesItem(this,1);event.stopPropagation()">标为已读</span>
+        <span class="del" data-type="PRIVATE" data-targetId="759d2765861e5ba5f4b8e576bfeaee33" tapmode onclick="delNesItem(this,0);event.stopPropagation()">删除</span>
+    </span>
+</li>
+<li class="undefined chatList" data-targetId="5" data-nickname="1861169、成府路13260、大中小18765" data-remark_nickname="" ontouchstart=";event.stopPropagation();"
+    data-userId="5" tapmode onclick="openGroupChat(this)">
+    <div class="warp" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove(this)" ontouchend="gtouchend(this)">
+        <div class="headImg groupHead flex-def flex-wrap flex-zCenter">
+            <img style="width:.41rem;height:.41rem;border-radius:0;" class="fl" src="http://img.iinnet.com/FkyGHXeVO8-N9JD69262-4p-gyYv">
+            <img style="width:.41rem;height:.41rem;border-radius:0;" class="fl" src="http://img.iinnet.com/FlcfxZr8WXKbW73wfy4tn7LNU-2Z">
+            <img style="width:.41rem;height:.41rem;border-radius:0;" class="fl" src="http://img.iinnet.com/Fq9oScpBjR8tVlPr865kPisMnpW3"> </div>
+        <div class="contentRight">
+            <div class="name">
+                <h3>1861169、成府路13260、大中小18765</h3>
+                <span class="time">2018-2-27 17:02</span>
+            </div>
+            <p>5</p>
+        </div>
+    </div>
+    <span class="slide">
+        <span class="stamp" data-type="GROUP" data-targetId="5" tapmode onclick="delNesItem(this,1);event.stopPropagation()">标为已读</span>
+        <span class="del" data-type="GROUP" data-targetId="5" tapmode onclick="delNesItem(this,0);event.stopPropagation()">删除</span>
+    </span>
+</li>
+<li class="undefined chatList" data-targetId="2" data-nickname="成府路13260、大中小18765、1861169" data-remark_nickname="" ontouchstart=";event.stopPropagation();"
+    data-userId="2" tapmode onclick="openGroupChat(this)">
+    <div class="warp" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove(this)" ontouchend="gtouchend(this)">
+        <div class="headImg groupHead flex-def flex-wrap flex-zCenter">
+            <img style="width:.41rem;height:.41rem;border-radius:0;" class="fl" src="http://img.iinnet.com/FlcfxZr8WXKbW73wfy4tn7LNU-2Z">
+            <img style="width:.41rem;height:.41rem;border-radius:0;" class="fl" src="http://img.iinnet.com/Fq9oScpBjR8tVlPr865kPisMnpW3">
+            <img style="width:.41rem;height:.41rem;border-radius:0;" class="fl" src="http://img.iinnet.com/FkyGHXeVO8-N9JD69262-4p-gyYv"> </div>
+        <div class="contentRight">
+            <div class="name">
+                <h3>成府路13260、大中小18765、1861169</h3>
+                <span class="time">2018-2-27 11:47</span>
+            </div>
+            <p>这</p>
+        </div>
+    </div>
+    <span class="slide">
+        <span class="stamp" data-type="GROUP" data-targetId="2" tapmode onclick="delNesItem(this,1);event.stopPropagation()">标为已读</span>
+        <span class="del" data-type="GROUP" data-targetId="2" tapmode onclick="delNesItem(this,0);event.stopPropagation()">删除</span>
+    </span>
+</li> at frame0.html : 963
