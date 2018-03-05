@@ -248,13 +248,17 @@
                     rongToken = ret.data.rongcloud_token;
                     $api.setStorage('userToken', userToken);
                     $api.setStorage('rongToken', rongToken);
-
-
                     // 把当前的usertoken和rongtoken广播出去
                     // sendToken (userToken,rongToken)
                   //  console.log('开始获取');
-                    loginSuccess(userToken, rongToken);
-                    queryContactByPage()
+                   db.openDatabase({
+                        name: 'db_' + userToken,
+                        // name: 'db_' + $api.getStorage('userToken'),
+                    }, function (ret, err) {
+                        loginSuccess(userToken, rongToken);
+                        queryContactByPage()    
+                    })
+                    
                 } else {
                     api.toast({
                         msg: ret.msg
