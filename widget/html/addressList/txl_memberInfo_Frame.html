@@ -205,11 +205,14 @@
             </a>
         </div>
         <div class="weui-cells mt30">
-            <a style="pointer-events: none;" class="weui-cell weui-cell_access" href="javascript:;">
+            <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openRelationshipPage()">
+            <!-- <a style="pointer-events: none;" class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openRelationshipPage()"> -->
                 <div class="weui-cell__bd">
                     <p id="relationship_level" class="icon_text_loading"> 
                         &nbsp;
                     </p>
+                </div>
+                <div class="weui-cell__ft">
                 </div>
             </a>
             <a class="weui-cell weui-cell_access" href="javascript:;" id="openNetworkOfPeople" tapmode onclick="openNetworkOfPeople()">
@@ -1777,6 +1780,16 @@
             url: './txl_friendInfo_networkOfPeople_win.html',
             bounces: false,
             pageParam: {
+                userId: api.pageParam.userId
+            }
+        });
+    }
+    function openRelationshipPage() {
+        api.openWin({
+            name: 'txl_relationshipWin',
+            url: './txl_relationship_win.html',
+            bounces: false,
+             pageParam: {
                 userId: api.pageParam.userId
             }
         });

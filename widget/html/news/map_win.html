@@ -1,33 +1,40 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8"><meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
     <title>title</title>
-    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <style>
     </style>
 </head>
+
 <body>
 
-     <header  class="header">
+    <header class="header">
         <div class="head">
-            <span class="callback"   tapmode   onclick="api.closeWin()">返回</span>
+            <span class="callback" tapmode onclick="api.closeWin()">返回</span>
             <span class="winTitle">位置</span>
-            <span class="rightBtn" >
+            <span class="rightBtn">
                 <!-- <span tapmode onclick="openSearchPage()">搜索</span>     -->
-                <span tapmode onclick="sendPosition()">发送</span>    
-            </span>   
+                <span tapmode onclick="sendPosition()">发送</span>
+            </span>
         </div>
     </header>
-   
+
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript">
     var positionObj = {};
-    apiready = function(){
+    apiready = function () {
         fnInit();
+        if (api.pageParam.key == 'txl_addRelationshipInfo_address') {
+            $api.text($api.dom('.rightBtn span'), '确定');
+        }
         api.openFrame({
             name: 'map_frame',
             url: './map_frame.html',
@@ -44,10 +51,11 @@
         });
         api.addEventListener({
             name: 'selectPosition'
-        }, function(ret, err){
+        }, function (ret, err) {
             positionObj = ret.value;
         });
     }
+
     function openSearchPage() {
         api.openWin({
             name: 'map_frame_search',
@@ -55,32 +63,49 @@
             bounces: false
         });
     }
+
     function sendPosition() {
-        // console.log(JSON.stringify(positionObj))
-        var url =  "http://api.map.baidu.com/staticimage/v2?ak=uVI0viOM0c4W64xi19cVxza3q9IniAIy&width=443&height=172&center="+ positionObj.lon +","+ positionObj.lat +"&markers="+ positionObj.lon +","+ positionObj.lat +"&zoom=17&markerStyles=l,,0xff0000"
-        // positionObj.imgPath = url;
-       
-        api.download({
-            url: url,
-            report: true,
-            allowResume: true
-        },function(ret,err){
-            if (ret) {
-                // console.log('文件大小：'+ret.fileSize+'；下载进度：'+ret.percent+'；下载状态'+ret.state+'存储路径: '+ret.savePath);
-                if (ret.state === 1) {
-                    positionObj.imgPath = ret.savePath;
-                    api.sendEvent({
-                        name: 'sendPosition',
-                        extra: {positionObj: positionObj}
-                    });
-                    api.closeWin();
+        if (api.pageParam.key == 'txl_addRelationshipInfo_address') {
+            api.sendEvent({
+                name: 'sendAddressPosition',
+                extra: {
+                    positionObj: positionObj
+                }
+            });
+            api.closeWin();
+        } else {
+            // console.log(JSON.stringify(positionObj))
+            var url =
+                "http://api.map.baidu.com/staticimage/v2?ak=uVI0viOM0c4W64xi19cVxza3q9IniAIy&width=443&height=172&center=" +
+                positionObj.lon + "," + positionObj.lat + "&markers=" + positionObj.lon + "," + positionObj.lat +
+                "&zoom=17&markerStyles=l,,0xff0000"
+            // positionObj.imgPath = url;
+
+            api.download({
+                url: url,
+                report: true,
+                allowResume: true
+            }, function (ret, err) {
+                if (ret) {
+                    // console.log('文件大小：'+ret.fileSize+'；下载进度：'+ret.percent+'；下载状态'+ret.state+'存储路径: '+ret.savePath);
+                    if (ret.state === 1) {
+                        positionObj.imgPath = ret.savePath;
+                        api.sendEvent({
+                            name: 'sendPosition',
+                            extra: {
+                                positionObj: positionObj
                             }
-                        } else{
-                            var value = err.msg;
-                        }
-                    });
-       
+                        });
+                        api.closeWin();
+                    }
+                } else {
+                    var value = err.msg;
+                }
+            });
+        }
+
+
     }
-        
 </script>
+
 </html>

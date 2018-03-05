@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
+</head>
+
+<body>
+    <header class="header">
+        <div class="head">
+            <span class="callback" tapmode onclick="api.closeWin()">
+                返回
+            </span>
+            <span class="winTitle">
+                认识情况
+            </span>
+            <span class="rightBtn" tapmode onclick="addF()">保存</span>
+        </div>
+    </header>
+    <div class="weui-cells__title">认识时间</div>
+    <div class="weui-cells">
+        <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="selDate(this)">
+            <div class="weui-cell__bd">
+                <p id="date">2017年02月19</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+    </div>
+    <div class="weui-cells__title">认识地点</div>
+    <div class="weui-cells">
+        <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openMap()">
+            <div class="weui-cell__bd">
+                <p id="address">北京市</p>
+                <p id="address1" style="font-size:.28rem;color:#999">海淀区</p>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+var  addressObj= {};
+    apiready = function () {
+        fnInit();
+        moduleInit();
+        api.addEventListener({
+            name: 'sendAddressPosition'
+        }, function(ret, err){
+            addressObj = ret.value.positionObj
+            $api.text($api.byId('address'), addressObj.name);
+            $api.text($api.byId('address1'), addressObj.address );
+        });
+    };
+   
+    function addF() {
+        var obj = {
+            address: addressObj.address,
+            addressName: addressObj.name,
+            date: $api.text($api.byId('date')),
+            id: api.pageParam.userId,
+        }
+        console.log(JSON.stringify(obj, null, 4));
+        api.closeToWin({
+            name: 'txl_relationshipWin',
+            animation: {
+                type: 'flip',
+                subType: 'from_bottom',
+                duration: 500
+            }
+        });
+
+    }
+     // 打开时间选择器
+        function selDate(ele) {
+            var date, date1, date2;
+            var current = $api.text($api.byId('date'));
+            if (current != '请选择') {
+                // current = current.split('-')
+                var yearIndex = current.indexOf('年');
+                var monthIndex = current.indexOf('月');
+                date = current.slice(0, yearIndex);
+                date1 = current.slice(yearIndex+1, monthIndex);
+                date2 = current.slice(monthIndex+1, current.length);
+            } else 　{
+                date = new Date().getFullYear();
+                date1 = new Date().getMonth();
+                date2 = new Date().getDate();
+            }
+            api.openPicker({
+                type: 'date',
+                date: date + '-' + date1 + '-' + date2,
+                maxDate: new Date().toLocaleDateString().replace(/\//g, '-'),
+                title: '选择时间'
+            }, function (ret, err) {
+                if (ret) {
+                    $api.text($api.byId('date'), ret.year + '年' + ret.month + '月' + ret.day);
+                } else {
+                    alert(JSON.stringify(err.msg));
+                }
+            });
+        }
+        // 打开地图
+        function openMap() {
+            api.openWin({
+                name: 'map_win',
+                url: '../news/map_win.html',
+                bounces: false,
+                pageParam: {key : 'txl_addRelationshipInfo_address'}
+            });
+        }
+</script>
+
+</html>

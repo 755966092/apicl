@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
+</head>
+
+<body>
+    <header class="header">
+        <div class="head">
+            <span class="callback" tapmode onclick="api.closeWin()">
+                <!--<span class="heaDicon"></span>-->
+                返回
+            </span>
+            <span class="winTitle">
+                编辑信息
+            </span>
+            <span class="rightBtn" tapmode onclick="addF()">保存</span>
+        </div>
+    </header>
+    <div class="weui-cells__title">姓名</div>
+    <div class="weui-cells mt30">
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <input class="weui-input" id="name" type="text" placeholder="请输入姓名">
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells__title">联系方式</div>
+    <div class="weui-cells mt30">
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <input class="weui-input" id="tel" type="text" placeholder="请输入联系方式">
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells__title">其他信息</div>
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <textarea class="weui-textarea" placeholder="请输入文本" oninput="changeText(this)" maxlength="200" rows="3"></textarea>
+                <div class="weui-textarea-counter">
+                    <span>0</span>/200</div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        fnInit();
+    };
+    // 编辑文本和修改文本长度内容
+    function changeText(ele) {
+        $api.text($api.dom($api.next(ele), 'span'), ele.value.length);
+    }
+    function addF() {
+        var obj = {
+            other_name: $api.val($api.byId('name')),
+            other_mobile: $api.val($api.byId('tel')),
+            other_remake: $api.val($api.dom('textarea')),
+            relation_user_id: api.pageParam.userId,
+            remake: api.pageParam.classify,
+             token: $api.getStorage('userToken'),
+        }
+        console.log(JSON.stringify(obj,null,4));
+        api.ajax({
+            url: apiSite + '/RelationUser/addRelationOther',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: obj
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                     api.closeToWin({
+                        name: 'txl_relationshipWin',
+                        animation: {
+                            type: 'flip',
+                            subType: 'from_bottom',
+                            duration: 500
+                        }
+                    });
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(JSON.stringify(err))
+            }
+        })
+       
+        
+    }
+</script>
+
+</html>

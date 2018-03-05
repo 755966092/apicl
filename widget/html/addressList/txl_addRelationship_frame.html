@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="tapmode onclick="selClass(this)" format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
+    <style>
+        .button-sp-area {
+            padding: 1rem 1rem 0;
+        }
+        .weui-input:disabled {
+            color: #aaa;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="head">
+            <span class="callback" tapmode onclick="api.closeWin()">
+                <!--<span class="heaDicon"></span>-->
+                返回
+            </span>
+            <span class="winTitle">
+                添加关系人
+            </span>
+        </div>
+    </header>
+<div class="weui-cells__title">自定义</div>
+<div class="weui-cells mt30">
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <input class="weui-input" id="name" type="text"  placeholder="请输入文本">
+        </div>
+    </div>
+</div>
+    <div class="weui-cells weui-cells_radio mt30">
+        <label class="weui-cell weui-check__label" tapmode onclick="selClass(this)" for="x10" >
+            <div class="weui-cell__bd">
+                <p>自定义</p>
+            </div>
+            <div class="weui-cell__ft">
+                <input value="自定义" type="radio" name="radio1" tapmode class="weui-check" checked id="x10">
+                <span class="weui-icon-checked"></span>
+            </div>
+        </label>
+        <label class="weui-cell weui-check__label" tapmode onclick="selClass(this)" for="x11">
+            <div class="weui-cell__bd">
+                <p>父亲</p>
+            </div>
+            <div class="weui-cell__ft">
+                <input value="父亲" type="radio" class="weui-check" name="radio1" tapmode id="x11">
+                <span class="weui-icon-checked"></span>
+            </div>
+        </label>
+        <label class="weui-cell weui-check__label" tapmode onclick="selClass(this)" for="x12">
+            <div class="weui-cell__bd">
+                <p>母亲</p>
+            </div>
+            <div class="weui-cell__ft">
+                <input value="母亲" type="radio" name="radio1" tapmode class="weui-check" id="x12">
+                <span class="weui-icon-checked"></span>
+            </div>
+        </label>
+        <label class="weui-cell weui-check__label" tapmode onclick="selClass(this)" for="x13">
+            <div class="weui-cell__bd">
+                <p>妻子</p>
+            </div>
+            <div class="weui-cell__ft">
+                <input value="妻子" type="radio" name="radio1" tapmode class="weui-check" id="x13">
+                <span class="weui-icon-checked"></span>
+            </div>
+        </label>
+        <label class="weui-cell weui-check__label" tapmode onclick="selClass(this)" for="x14">
+            <div class="weui-cell__bd">
+                <p>丈夫</p>
+            </div>
+            <div class="weui-cell__ft">
+                <input value="丈夫" type="radio" name="radio1" tapmode  class="weui-check" id="x14">
+                <span class="weui-icon-checked"></span>
+            </div>
+        </label>
+        <label class="weui-cell weui-check__label" tapmode onclick="selClass(this)" for="x15">
+            <div class="weui-cell__bd">
+                <p>介绍人</p>
+            </div>
+            <div class="weui-cell__ft">
+                <input value="介绍人" type="radio" name="radio1" tapmode class="weui-check" id="x15">
+                <span class="weui-icon-checked"></span>
+            </div>
+        </label>
+        
+    </div>
+    
+    <div class="button-sp-area">
+        <a href="javascript:;" class="weui-btn weui-btn_primary" tapmode onclick="openInfo()">下一步</a>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript">
+    var sel = 'customize'; 
+    apiready = function () {
+        fnInit();
+    };
+    // 打开编辑信息页面
+    function openInfo() {
+        // console.log($api.val($api.dom('.weui-check:checked')));
+        // console.log(document.querySelectorAll('.weui-check:checked'));
+        var classify;
+        if (sel == 'customize') {
+            classify = $api.val($api.byId('name'));
+        } else {
+            classify = $api.val($api.dom('.weui-check:checked'));
+        }
+        if (classify) {
+            api.openWin({
+                name: 'txl_addRelationshipInfo_frame',
+                url: './txl_addRelationshipInfo_frame.html',
+                bounces: false,
+                pageParam: {
+                    userId: api.pageParam.userId,
+                    classify: classify
+                }
+            });
+        } else {
+            api.toast({
+                msg: '请填写自定义关系',
+                duration: 2000,
+                location: 'bottom'
+            });
+        }
+        
+    }
+    function selClass(ele) {
+        var dom = $api.byId('name');
+        if ($api.attr(ele, 'for') == 'x10') {
+            $api.removeAttr(dom, 'disabled');
+            sel = 'customize'
+        } else {
+            $api.attr(dom, 'disabled','true');
+            sel = ''
+        }
+    }
+</script>
+
+</html>
