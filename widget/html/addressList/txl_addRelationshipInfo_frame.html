@@ -70,7 +70,6 @@
             remake: api.pageParam.classify,
              token: $api.getStorage('userToken'),
         }
-        console.log(JSON.stringify(obj,null,4));
         api.ajax({
             url: apiSite + '/RelationUser/addRelationOther',
             method: 'post',
@@ -81,6 +80,9 @@
         }, function(ret, err) {
             if(ret) {
                 if (ret.code === 200) {
+                    api.sendEvent({
+                        name: 'addRelation'
+                    });
                      api.closeToWin({
                         name: 'txl_relationshipWin',
                         animation: {
@@ -93,7 +95,7 @@
                     alert(ret.msg)
                 }
             } else {
-                alert(JSON.stringify(err))
+                alert(err.msg)
             }
         })
        

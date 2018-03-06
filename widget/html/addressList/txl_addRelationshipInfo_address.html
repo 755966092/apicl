@@ -27,7 +27,7 @@
     <div class="weui-cells">
         <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="selDate(this)">
             <div class="weui-cell__bd">
-                <p id="date">2017年02月19</p>
+                <p id="date">选择时间</p>
             </div>
             <div class="weui-cell__ft">
             </div>
@@ -37,8 +37,8 @@
     <div class="weui-cells">
         <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openMap()">
             <div class="weui-cell__bd">
-                <p id="address">北京市</p>
-                <p id="address1" style="font-size:.28rem;color:#999">海淀区</p>
+                <p id="address">选择地点</p>
+                <p id="address1" style="font-size:.28rem;color:#999">选择地点</p>
             </div>
             <div class="weui-cell__ft">
             </div>
@@ -52,71 +52,129 @@ var  addressObj= {};
     apiready = function () {
         fnInit();
         moduleInit();
+        listenerEvent();
+        initPage()
+    };
+    function initPage() {
+        var data = api.pageParam.relation_info;
+        $api.text($api.byId('date'), data.know_time||"选择时间");
+        $api.text($api.byId('address'), data.know_place||'相识地点');
+        $api.text($api.byId('address1'), data.konw_address||'相识地点');
+    }
+    function listenerEvent() {
         api.addEventListener({
             name: 'sendAddressPosition'
-        }, function(ret, err){
+        }, function (ret, err) {
             addressObj = ret.value.positionObj
             $api.text($api.byId('address'), addressObj.name);
-            $api.text($api.byId('address1'), addressObj.address );
+            $api.text($api.byId('address1'), addressObj.address);
         });
-    };
-   
+    }
     function addF() {
-        var obj = {
-            address: addressObj.address,
-            addressName: addressObj.name,
-            date: $api.text($api.byId('date')),
-            id: api.pageParam.userId,
-        }
-        console.log(JSON.stringify(obj, null, 4));
-        api.closeToWin({
-            name: 'txl_relationshipWin',
-            animation: {
-                type: 'flip',
-                subType: 'from_bottom',
-                duration: 500
+        if ($api.text($api.byId('date')) == '选择时间') {
+            api.toast({
+                msg: '请选择时间',
+                duration: 2000,
+                location: 'bottom'
+            });
+        } else if (!addressObj.name&&!api.pageParam.relation_info) {
+            api.toast({
+                msg: '请选择地址',
+                duration: 2000,
+                location: 'bottom'
+            });
+        } 
+        else {
+            var obj = {
+                konw_address: addressObj.address || api.pageParam.relation_info.konw_address,
+                token: $api.getStorage('userToken'),
+                know_place: addressObj.name || api.pageParam.relation_info.know_place,
+                know_time: $api.text($api.byId('date')).replace(/[年月]/g, '-'),
+                relation_user_id: api.pageParam.userId,
+                place_longitude: addressObj.lon || api.pageParam.relation_info.place_longitude,
+                place_latitude: addressObj.lat || api.pageParam.relation_info.place_latitude
             }
-        });
+            api.ajax({
+                url: apiSite + '/RelationUser/editRelation',
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: obj
+                }
+            }, function (ret, err) {
+                if (ret) {
+                    if (ret.code === 200) {
+                        api.sendEvent({
+                            name: 'addRelation'
+                        });
+                        api.closeToWin({
+                            name: 'txl_relationshipWin',
+                            animation: {
+                                type: 'flip',
+                                subType: 'from_bottom',
+                                duration: 500
+                            }
+                        });
+                    } else {
+                        alert(ret.msg)
+                    }
+                } else {
+                    alert(err.msg)
+                }
+            })
+        }
+        
 
     }
      // 打开时间选择器
-        function selDate(ele) {
-            var date, date1, date2;
-            var current = $api.text($api.byId('date'));
-            if (current != '请选择') {
-                // current = current.split('-')
-                var yearIndex = current.indexOf('年');
-                var monthIndex = current.indexOf('月');
-                date = current.slice(0, yearIndex);
-                date1 = current.slice(yearIndex+1, monthIndex);
-                date2 = current.slice(monthIndex+1, current.length);
-            } else 　{
-                date = new Date().getFullYear();
-                date1 = new Date().getMonth();
-                date2 = new Date().getDate();
+    function selDate(ele) {
+        var date, date1, date2;
+        var current = $api.text($api.byId('date'));
+        if (current != '请选择') {
+            current = current.replace(/[年月]/g,'-').split('-')
+            date = current[0];
+            date1 = current[1];
+            date2 = current[2];
+        } else 　{
+            date = new Date().getFullYear();
+            date1 = new Date().getMonth();
+            date2 = new Date().getDate();
+        }
+        api.openPicker({
+            type: 'date',
+            date: date + '-' + date1 + '-' + date2,
+            maxDate: new Date().toLocaleDateString().replace(/\//g, '-'),
+            title: '选择时间'
+        }, function (ret, err) {
+            if (ret) {
+                $api.text($api.byId('date'), ret.year + '年' + ret.month + '月' + ret.day);
+            } else {
+                alert(JSON.stringify(err.msg));
             }
-            api.openPicker({
-                type: 'date',
-                date: date + '-' + date1 + '-' + date2,
-                maxDate: new Date().toLocaleDateString().replace(/\//g, '-'),
-                title: '选择时间'
-            }, function (ret, err) {
-                if (ret) {
-                    $api.text($api.byId('date'), ret.year + '年' + ret.month + '月' + ret.day);
-                } else {
-                    alert(JSON.stringify(err.msg));
+        });
+    }
+    // 打开地图
+    function openMap() {
+        var obj ;
+
+            if (api.pageParam.relation_info) {
+                obj = {
+                    key: 'txl_addRelationshipInfo_address',
+                    lon: api.pageParam.relation_info.place_longitude || '',
+                    lat: api.pageParam.relation_info.place_latitude || ''
                 }
-            });
-        }
-        // 打开地图
-        function openMap() {
-            api.openWin({
-                name: 'map_win',
-                url: '../news/map_win.html',
-                bounces: false,
-                pageParam: {key : 'txl_addRelationshipInfo_address'}
-            });
-        }
+            } else {
+                 obj = {
+                    key: 'txl_addRelationshipInfo_address',
+                }
+            }
+        api.openWin({
+            name: 'map_win',
+            url: '../news/map_win.html',
+            bounces: false,
+            pageParam: obj
+        });
+    }
 </script>
 
 </html>

@@ -198,18 +198,24 @@
             //         startPositioning();
             //     }
             // });
-        bMap.getLocation({
-            accuracy: '100m',
-            autoStop: true,
-            filter: 1
-        }, function(ret, err) {
-            if (ret.status) {
-                openMap(ret.lon, ret.lat);
-                getNameFromCoords(ret.lon, ret.lat);
+            if (api.pageParam.lon&&api.pageParam.lat) {
+                openMap(api.pageParam.lon, api.pageParam.lat);
+                getNameFromCoords(api.pageParam.lon, api.pageParam.lat);
             } else {
-                alert(err.code);
+                bMap.getLocation({
+                    accuracy: '100m',
+                    autoStop: true,
+                    filter: 1
+                }, function (ret, err) {
+                    if (ret.status) {
+                        openMap(ret.lon, ret.lat);
+                        getNameFromCoords(ret.lon, ret.lat);
+                    } else {
+                        alert(err.code);
+                    }
+                });
             }
-        });
+       
     }
     function getNameFromCoords(lon,lat) {
         bMap.getNameFromCoords({

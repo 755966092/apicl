@@ -35,7 +35,8 @@
     </style>
 </head>
 
-<body class="resultList">
+<body>
+    <div class="resultList"></div>
     <!-- <div class="weui-cells__title">该联系人添加于</div>
     <div class="weui-cells">
         <a class="weui-cell weui-cell_access" href="javascript:;" tapmpde onclick="openNewPage()">
@@ -94,8 +95,13 @@
         <div class="weui-cells">
             <a class="weui-cell weui-cell_access" href="javascript:;" tapmpde onclick="openNewPage()">
                 <div class="weui-cell__bd">
-                    <p class="listDate">{{=it.know_time || '相识时间'}}</p>
-                    <p>{{=it.relation_infoknow_place || '相识地点'}}</p>
+                    {{?it.relation_info}}
+                    <p class="listDate">{{=it.relation_info.know_time || '相识时间'}}</p>
+                    <p>{{=it.relation_info.know_place || '相识地点'}}</p>
+                    {{??}}
+                    <p class="listDate">相识时间</p>
+                    <p>相识地点</p>
+                    {{?}}
                 </div>
                 <div class="weui-cell__ft">
                 </div>
@@ -104,7 +110,7 @@
         {{~it.relation_list :value:index}}
         <div class="wrap">
             <div class="weui-cells__title">{{=value.remake}}</div>
-            <div class="weui-cells" data-tel="{{=value.other_mobile}}" >
+            <div class="weui-cells" data-tel="{{=value.other_mobile}}">
                 <div class="weui-cell weui-cell_swiped" ontouchstart="gtouchstart(this)" ontouchmove="gtouchmove(this)" ontouchend="gtouchend(this)">
                     <div class="weui-cell__bd item">
                         <div class="weui-cell">
@@ -130,29 +136,41 @@
 <script type="text/javascript" src="../../script/common.js"></script>
 <script type="text/javascript" src="../../script/doT.min.js"></script>
 <script type="text/javascript">
+    var relation_info;
     apiready = function () {
-        requireData()
+        requireData();
+        listenerEvent();
     };
-    var startX, startY;
-    var endX, endY;
+    // 监听事件
+    function listenerEvent() {
+        api.addEventListener({
+            name: 'addRelation'
+        }, function (ret, err) {
+            requireData();
+        });
+    }
+    // 请求数据
     function requireData() {
         api.ajax({
             url: apiSite + '/RelationUser/relationInfo',
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
+                values: {
                     token: $api.getStorage('userToken'),
                     relation_user_id: api.pageParam.userId
                 }
             }
-        }, function(ret, err) {
-            if(ret) {
+        }, function (ret, err) {
+            if (ret) {
                 if (ret.code === 200) {
-                    console.log(JSON.stringify(ret));
                     // ret.data.relation_info
                     // ret.data.relation_list
-                   getData(ret.data)
+                    if (ret.data.relation_info) {
+                        ret.data.relation_info.know_time = ret.data.relation_info.know_time.slice(0, ret.data.relation_info.know_time.indexOf(' ')).replace(/[-]/,'年').replace(/[-]/, '月')
+                        relation_info = ret.data.relation_info;
+                    }
+                    getData(ret.data)
                 } else {
                     alert(ret.msg)
                 }
@@ -161,19 +179,20 @@
             }
         })
     }
+    // 判断左右滑动
+    var startX, startY;
+    var endX, endY;
     function gtouchstart(ele) {
         var e = window.event;
         startX = e.touches[0].pageX;
         startY = e.touches[0].pageY;
         // console.log(startY)
     };
-
     function gtouchmove() {
         var e = window.event;
         endX = e.touches[0].pageX;
         endY = e.touches[0].pageY;
     };
-
     function gtouchend(ele) {
         if (endX == 0 && endY == 0) {
 
@@ -205,14 +224,15 @@
             $api.css($api.dom(ele, '.weui-cell__bd'), 'transform: translateX(0px)');
         }
     }
-
+    // 打开新页面
     function openNewPage() {
         api.openWin({
             name: 'winname',
             url: './txl_addRelationshipInfo_address.html',
             bounces: false,
             pageParam: {
-                userId: api.pageParam.userId
+                userId: api.pageParam.userId,
+                relation_info: relation_info
             }
         });
     }
@@ -223,20 +243,20 @@
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
+                values: {
                     token: $api.getStorage('userToken'),
                     other_id: $api.attr(ele, 'data-id')
                 }
             }
-        }, function(ret, err) {
-            if(ret) {
+        }, function (ret, err) {
+            if (ret) {
                 if (ret.code === 200) {
                     api.toast({
                         msg: '删除成功',
                         duration: 2000,
                         location: 'bottom'
                     });
-                     $api.remove($api.closest(ele, '.wrap'));
+                    $api.remove($api.closest(ele, '.wrap'));
                 } else {
                     alert(ret.msg)
                 }
