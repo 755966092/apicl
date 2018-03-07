@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"
+    />
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
+  
+</head>
+
+<body>
+<div class="weui-cells resultList">
+    <!-- <a class="weui-cell weui-cell_access" href="javascript:;" tapmode onclick="openGroupInfo(this)">
+        <div class="weui-cell__bd">
+            <p>孩子同学的家长</p>
+        </div>
+        <div class="weui-cell__ft">14人</div>
+    </a> -->
+    
+</div>
+<script type="text/x-dot-template" id="listT">
+    {{~it:value:index}}
+        <a class="weui-cell weui-cell_access" data-id="{{=value.id}}" data-length="{{=value.people_count}}" data-name="{{=value.group_name}}" data-user="{{=value.people_in}}" href="javascript:;" tapmode onclick="openGroupInfo(this)">
+            <div class="weui-cell__bd">
+                <p>{{=value.group_name}}</p>
+            </div>
+            <div class="weui-cell__ft">{{=value.people_count}}人</div>
+        </a>
+    {{~}}
+</script>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/doT.min.js"></script>
+<script>
+    apiready = function(){
+        requireData()
+        api.addEventListener({
+            name: 'createLabel'
+        }, function(ret, err){
+            // 新建标签
+            requireData();
+        });
+    }
+    function requireData() {
+        api.ajax({
+            url: apiSite + '/UserGroup/getGroupList',
+            method: 'post',
+            headers: apiHeader,
+            data: {
+                values: { 
+                    token: $api.getStorage('userToken'),
+                }
+            }
+        }, function(ret, err) {
+            if(ret) {
+                if (ret.code === 200) {
+                    getData(ret.data.list)
+                } else {
+                    alert(ret.msg)
+                }
+            } else {
+                alert(err.msg)
+            }
+        })
+    }
+    function openGroupInfo(ele) {
+        var id = $api.attr(ele, 'data-id');
+        var name = $api.attr(ele, 'data-name');
+        var length = $api.attr(ele, 'data-length');
+        api.openWin({
+            name: 'txl_groupInfo_win',
+            url: './txl_groupInfo_win.html',
+            bounces: false,
+            pageParam: {
+                id : id,
+                name : name,
+                length : length
+            }
+        });
+    }
+</script>
+
+</html>

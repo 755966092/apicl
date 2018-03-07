@@ -58,6 +58,7 @@
     var selectItemId = [];
     var selectItemArr = [];
     var userIdList = [];
+    var listData;
     apiready = function () {
         // api.pageParam.addUser == 1 加人
         // api.pageParam.addUser == 2 踢人
@@ -66,32 +67,43 @@
         fnInit();
         moduleInit();
         var rightBtn = $api.dom('.rightBtn');
-        if (!api.pageParam.addUser) {
-            // 新建群
-            selectData();
-            $api.text($api.byId('title'), '选择联系人');
-        } else if (api.pageParam.addUser == 1) {
-            $api.text($api.byId('title'), '选择联系人');
-            // 加人
-            // api.pageParam.groupInfo.group_member_info 群成员列表
-            // console.log(JSON.stringify(api.pageParam.group_member_info));
-            
-            for (var i = 0; i < api.pageParam.groupInfo.group_member_info.length; i++) {
-                var element = api.pageParam.groupInfo.group_member_info[i];
-                userIdList.push(element.user_id)
+        if (api.pageParam.key == 'createLabel') {
+             $api.removeCls(rightBtn, 'disabled');
+            $api.removeAttr(rightBtn, 'disabled');
+             for (var i = 0; i < api.pageParam.userIdList.length; i++) {
+                var element = api.pageParam.userIdList[i];
+                userIdList.push(parseInt(element))
             }
             selectData();
-        } else if (api.pageParam.addUser == 2) {
-            // 踢人
-            $api.text($api.byId('title'), '删除成员');
-            for (var i = 0; i < api.pageParam.groupInfo.group_member_info.length; i++) {
-                var element = api.pageParam.groupInfo.group_member_info[i];
-                element.title = element.remark_nickname?element.remark_nickname:element.nickname;
-                element.img = element.remark_head_img_url?element.remark_head_img_url:element.head_img_url;
-                element.flag = PinyinHelper.getShortPinyin(element.title).toUpperCase()[0];
+            $api.text($api.byId('title'), '选择联系人');
+        } else {
+             if (!api.pageParam.addUser) {
+                // 新建群
+                selectData();
+                $api.text($api.byId('title'), '选择联系人');
+            } else if (api.pageParam.addUser == 1) {
+                $api.text($api.byId('title'), '选择联系人');
+                // 加人
+                // api.pageParam.groupInfo.group_member_info 群成员列表
+                // console.log(JSON.stringify(api.pageParam.group_member_info));
+                for (var i = 0; i < api.pageParam.groupInfo.group_member_info.length; i++) {
+                    var element = api.pageParam.groupInfo.group_member_info[i];
+                    userIdList.push(element.user_id)
+                }
+                selectData();
+            } else if (api.pageParam.addUser == 2) {
+                // 踢人
+                $api.text($api.byId('title'), '删除成员');
+                for (var i = 0; i < api.pageParam.groupInfo.group_member_info.length; i++) {
+                    var element = api.pageParam.groupInfo.group_member_info[i];
+                    element.title = element.remark_nickname ? element.remark_nickname : element.nickname;
+                    element.img = element.remark_head_img_url ? element.remark_head_img_url : element.head_img_url;
+                    element.flag = PinyinHelper.getShortPinyin(element.title).toUpperCase()[0];
+                }
+                dakai(paixv(api.pageParam.groupInfo.group_member_info))
             }
-            dakai(paixv(api.pageParam.groupInfo.group_member_info))
         }
+       
     }
 
     function selectData() {
@@ -104,6 +116,7 @@
                 // 1 相识好友
                 // 2 熟识好友
                 // 3 尚未加入
+                listData = ret.data;
                 dakai(paixv(ret.data))
             } else {
                 api.alert({
@@ -151,12 +164,12 @@
         }, function (ret, err) {
             if (ret) {
             // $api.css($api.dom('.loading'), 'display:block');
-                console.log('id列表:'+JSON.stringify(userIdList));
-                console.log('id:'+JSON.stringify(data1[ret.key][ret.index].user_id));
-                console.log('位置:'+JSON.stringify(userIdList.indexOf(parseInt(data1[ret.key][ret.index].user_id))));
+                // console.log('id列表:'+JSON.stringify(userIdList));
+                // console.log('id:'+JSON.stringify(data1[ret.key][ret.index].user_id));
+                // console.log('位置:'+JSON.stringify(userIdList.indexOf(parseInt(data1[ret.key][ret.index].user_id))));
                 
                 if (userIdList.indexOf(parseInt(data1[ret.key][ret.index].user_id)) == -1) {
-                     var selFlag = selectItemText.indexOf(data1[ret.key][ret.index].title);
+                    var selFlag = selectItemText.indexOf(data1[ret.key][ret.index].title);
                     var selFlag2 = selectItemId.indexOf(data1[ret.key][ret.index].user_id);
                     if (selFlag != -1) {
                         selectItemText = selectItemText.filter(function (value) {
@@ -184,7 +197,7 @@
                         });
                         // 删除已选头像
                         $api.remove($api.dom('img[src = "' + data1[ret.key][ret.index].img + '"]'));
-//  $api.css($api.dom('.loading'), 'display:none');
+        //  $api.css($api.dom('.loading'), 'display:none');
                     } else {
                         // 未选
                         selectItemText.push(data1[ret.key][ret.index].title);
@@ -204,32 +217,40 @@
                         });
                         $api.append($api.dom('.head-list'), '<img src="' + data1[ret.key][ret.index].img +
                             '" alt="">');
-//  $api.css($api.dom('.loading'), 'display:none');
+        //  $api.css($api.dom('.loading'), 'display:none');
                     }
                 }
                 var rightBtn = $api.dom('.rightBtn');
-                
-                if (!api.pageParam.addUser) {
-                    // 新建群
+                if (api.pageParam.key == 'createLabel') {
+                    var rightBtn = $api.dom('.rightBtn');
                     if (selectItemId.length > 0) {
                         $api.text($api.byId('count'), '(' + selectItemId.length + ')');
-                        if (selectItemId.length > 1) {
-                            $api.removeCls(rightBtn, 'disabled');
-                            $api.removeAttr(rightBtn, 'disabled');
+                    } else {
+                        $api.text($api.byId('count'), '');
+                    }
+                } else {
+                    if (!api.pageParam.addUser) {
+                        // 新建群
+                        if (selectItemId.length > 0) {
+                            $api.text($api.byId('count'), '(' + selectItemId.length + ')');
+                            if (selectItemId.length > 1) {
+                                $api.removeCls(rightBtn, 'disabled');
+                                $api.removeAttr(rightBtn, 'disabled');
+                            } else {
+                                $api.addCls(rightBtn, 'disabled');
+                                $api.attr(rightBtn, 'disabled', true);
+                            }
                         } else {
+                            $api.text($api.byId('count'), '');
                             $api.addCls(rightBtn, 'disabled');
                             $api.attr(rightBtn, 'disabled', true);
                         }
-                    } else {
-                        $api.text($api.byId('count'), '');
-                        $api.addCls(rightBtn, 'disabled');
-                        $api.attr(rightBtn, 'disabled', true);
+                    } else if (api.pageParam.addUser == 1) {
+                       btnStatu()
+                    } else if (api.pageParam.addUser == 2) {
+                        btnStatu()
+                      
                     }
-                } else if (api.pageParam.addUser == 1) {
-                   btnStatu()
-                } else if (api.pageParam.addUser == 2) {
-                    btnStatu()
-                  
                 }
             }
         });
@@ -303,11 +324,16 @@
             // data[i].subTitleColor = '#999'
             data[i].titleSize = 15;
             // 从群详情加人按钮点击进入之后要判断群里的人s
-            if (api.pageParam.addUser == 1) {
+            if (api.pageParam.addUser == 1 || api.pageParam.key == 'createLabel') {
                 if (userIdList.indexOf(parseInt(data[i].user_id)) != -1) {
                     data[i].titleColor = '#27B24A'
                 }
             }
+            // if (api.pageParam.key == 'createLabel') {
+            //     if (userIdList.indexOf(parseInt(data[i].user_id)) != -1) {
+            //         data[i].titleColor = '#27B24A'
+            //     }
+            // }
             if (data[i].initial) {
                 if (data[i].initial == '#') {
                     if (arr[data[i].initial]) {} else {
@@ -321,79 +347,113 @@
             }
             arr[data[a].initial].push(data[i])
         }
+        
         return arr;
     }
     // 新建群聊
     function createGroupChat() {
-        console.log('已选用户:' + JSON.stringify(selectItemId.toString()));
+        // console.log('已选用户:' + JSON.stringify(selectItemId));
+        // console.log('所有用户:' + JSON.stringify(listData));
         var paramObj = {},url;
-        if (api.pageParam.groupInfo) {
-            if (api.pageParam.addUser == 1) {
-                // 增加群成员
-                url = '/chat_group/enter';
-            } else if(api.pageParam.addUser == 2) {
-                // 减少群成员
-                url = '/chat_group/remove';
-            } else {
-
+        if (api.pageParam.key == 'createLabel') {
+            paramObj = []
+            for (var i = 0; i < selectItemId.length; i++) {
+                var element = selectItemId[i];
+                paramObj.push(listData.filter(function (value, index) {
+                    return value.user_id == element
+                })[0])
             }
-            paramObj = {
-                token: $api.getStorage('userToken'),
-                group_id: api.pageParam.groupInfo.group_info.group_id,
-                user_id_list: selectItemId.toString(),
-            }
+            api.sendEvent({
+                name: 'createLabel',
+                extra: { 
+                    paramObj: paramObj,
+                    selectItemId: selectItemId
+                }
+            });
+            api.closeToWin({
+                name: 'txl_createGroup_win',
+                animation: {
+                    type: 'flip',
+                    subType: 'from_bottom',
+                    duration: 500
+                }
+            });
         } else {
-            // 新建群
-            url = '/chat_group/create';
-            paramObj = {
-                token: $api.getStorage('userToken'),
-                user_id_list: selectItemId.toString()
-            }
-        }
-        api.ajax({
-            url: apiSite + url,
-            method: 'post',
-            headers: apiHeader,
-            data: {
-                values: paramObj
-            }
-        }, function (ret, err) {
-            if (ret) {
-                if (ret.code === 200) {
-                    if (api.pageParam.groupInfo) {
-                        api.sendEvent({
-                            name: 'addGroupUser'
-                        });
-                        // listContact.close();
-                       setTimeout(function () {
-                            api.closeWin();
-                        }, 500)
-                    } else {
-                        api.toast({
-                            msg: '新建成功',
-                            duration: 2000,
-                            location: 'bottom'
-                        });
-                        api.openWin({
-                            name: 'groupChat_win',
-                            url: './groupChat_win.html',
-                            bounces: false,
-                            pageParam: {
-                                group_id: ret.data.group_id,
-                                createGroup: 1
-                            }
-                        });
-                        setTimeout(function () {
-                            api.closeWin();
-                        }, 500)
-                    }
+            if (api.pageParam.groupInfo) {
+                if (api.pageParam.addUser == 1) {
+                    // 增加群成员
+                    url = '/chat_group/enter';
+                } else if (api.pageParam.addUser == 2) {
+                    // 减少群成员
+                    url = '/chat_group/remove';
                 } else {
-                    alert(ret.msg)
+
+                }
+                paramObj = {
+                    token: $api.getStorage('userToken'),
+                    group_id: api.pageParam.groupInfo.group_info.group_id,
+                    user_id_list: selectItemId.toString(),
                 }
             } else {
-                alert(JSON.stringify(err))
+                // 新建群
+                url = '/chat_group/create';
+                paramObj = {
+                    token: $api.getStorage('userToken'),
+                    user_id_list: selectItemId.toString()
+                }
             }
-        })
+            api.ajax({
+                url: apiSite + url,
+                method: 'post',
+                headers: apiHeader,
+                data: {
+                    values: paramObj
+                }
+            }, function (ret, err) {
+                if (ret) {
+                    if (ret.code === 200) {
+                        if (api.pageParam.key == 'createLabel') {
+
+                        } else {
+                            if (api.pageParam.groupInfo) {
+                                api.sendEvent({
+                                    name: 'addGroupUser'
+                                });
+                                // listContact.close();
+                                setTimeout(function () {
+                                    api.closeWin();
+                                }, 500)
+                            } else {
+                                api.toast({
+                                    msg: '新建成功',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                                api.openWin({
+                                    name: 'groupChat_win',
+                                    url: './groupChat_win.html',
+                                    bounces: false,
+                                    pageParam: {
+                                        group_id: ret.data.group_id,
+                                        createGroup: 1
+                                    }
+                                });
+                                setTimeout(function () {
+                                    api.closeWin();
+                                }, 500)
+                            }
+                        }
+
+                    } else {
+                        alert(ret.msg)
+                    }
+                } else {
+                    alert(JSON.stringify(err))
+                }
+            })
+        }
+      
+        
     }
 </script>
 
