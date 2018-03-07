@@ -9,32 +9,31 @@
     <title>title</title>
     <link rel="stylesheet" type="text/css" href="../../css/api.css" />
     <link rel="stylesheet" type="text/css" href="../../css/weui.css" />
-  
+
 </head>
 
 <body>
-<div class="wrap">
-    <div class="weui-cells__title">分组名称</div>
-    <div class="weui-cells">
-        <div class="weui-cell">
-            <div class="weui-cell__bd">
-                <input class="weui-input" type="text" placeholder="请输入文本">
+    <div class="wrap">
+        <div class="weui-cells__title">分组名称</div>
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请输入文本">
+                </div>
             </div>
         </div>
+        <div class="weui-cells__title length">分组成员()</div>
+        <div class="weui-cells">
+            <a class="weui-cell weui-cell_access" href="javascript:;" >
+                <div class="weui-cell__hd">
+                    <img src="../../image/icon_my/icon_add.png" alt="" style="width:20px;margin-right:5px;display:block">
+                </div>
+                <div class="weui-cell__bd">
+                    <p style="color:#27b24a">新增成员</p>
+                </div>
+            </a>
+        </div>
     </div>
-    <div class="weui-cells__title length">分组成员()</div>
-    <div class="weui-cells">
-        <a class="weui-cell weui-cell_access" href="javascript:;">
-            <div class="weui-cell__hd">
-                <img src="../../image/icon_my/icon_add.png"
-                    alt="" style="width:20px;margin-right:5px;display:block">
-            </div>
-            <div class="weui-cell__bd">
-                <p style="color:#27b24a">新增成员</p>
-            </div>
-        </a>
-    </div>
-</div>
 </body>
 <script type="text/javascript" src="../../script/api.js"></script>
 <script type="text/javascript" src="../../script/common.js"></script>
@@ -42,29 +41,56 @@
 <script type="text/javascript" src="../../script/jquery.min.js"></script>
 <script type="text/javascript" src="../../script/pinyin4js.js"></script>
 <script>
-    apiready = function(){
+    var userIdList = [];
+    var obj;
+    var listData = []
+    apiready = function () {
         moduleInit();
-        $('.length').text('分组成员('+ api.pageParam.length +')');
-        $('input').val(api.pageParam.nameˆ)
-        console.log($('.wrap').height());
-        requireData()
+        $('.length').text('分组成员(' + api.pageParam.length + ')');
+        $('input').val(api.pageParam.name)
+        requireData();
+        api.addEventListener({
+            name: 'createLabel'
+        }, function (ret, err) {
+            console.log(JSON.stringify(ret));
+            listData = listData.concat(ret.value.paramObj);
+            obj = new SrotList(listData)
+            listContact.reloadData({
+                data: obj.sqrtData()
+            },function(ret,err){
+                api.alert({msg:ret.section+"*"+ret.index});
+            });
+            // userList = userList.concat(ret.value.paramObj)
+            // getData(userList)
+            // userIdList = userIdList.concat(ret.value.selectItemId);
+            // api.sendEvent({
+            //     name: 'createLabel2',
+            //     extra: {
+            //         name: name,
+            //         userIdList: userIdList,
+            //     }
+            // });
+        });
     }
+
     function requireData() {
         api.ajax({
             url: apiSite + '/UserGroup/getUserGroupList',
             method: 'post',
             headers: apiHeader,
             data: {
-                values: { 
+                values: {
                     token: $api.getStorage('userToken'),
                     group_id: api.pageParam.id
                 }
             }
-        }, function(ret, err) {
-            if(ret) {
+        }, function (ret, err) {
+            if (ret) {
                 if (ret.code === 200) {
                     console.log(JSON.stringify(ret));
-                    listOpen(new SrotList(ret.data.list))
+                    listData = ret.data.list
+                    obj = new SrotList(listData)
+                    listOpen(obj.sqrtData())
                 } else {
                     alert(ret.msg)
                 }
@@ -73,23 +99,65 @@
             }
         })
     }
+
     function listOpen(data) {
-        var wrapH = $('.wrap').height();
+        var wrapH = $('html').height();
         listContact.open({
-            y: wrapH,
+            x: -1000,
+            y: -1000,
+            w: 5,
+            h: 5,
+            data: [],
+            fixedOn: api.frameName
+        }, function (ret, err) {})
+        listContact.close();
+
+        listContact.open({
+            x: 0,
+            y: wrapH + api.pageParam.headerH,
+            w: api.frameWidth,
             h: api.frameHeight - wrapH,
-            rightBtn:[{
+            bgColor: '#EFEFF4',
+            // 分割线颜色
+            borderColor: '#EDEDED',
+            imgHeight: 32,
+            imgWidth: 32,
+            groupTitle: {
+                color: '#999',
+                size: 14,
+                bgColor: '#EFEFF4'
+            },
+            cellHeight: 50,
+            rightBg: '#fff',
+            indicator: {
+                bgColor: 'rgba(0,0,0,0)',
+                color: '#5A5A5A'
+            },
+            cellBgColor: '#fff',
+            rightBtn: [{
                 color: '#8B0000',
-                title: '备注'
+                title: '删除'
             }],
             data: data
-        }, function(ret, err) {
-            api.alert({
-                msg: ret.section + "*" + ret.index
-            });
+        }, function (ret, err) {
+
+            if (ret.clickType === 0) {
+                // 点击事件
+                // ret.key
+                // ret.index
+                // console.log(JSON.stringify(data[ret.key][ret.index]));
+                openUserInfo(data[ret.key][ret.index])
+            } else if (ret.clickType == 1) {
+                // 点击删除按钮事件
+
+            } else {
+
+            }
         });
     }
+    // 排序
     function SrotList(list) {
+        this.userIdList = [];
         this.list = list;
         this.obj = {};
         this.sortObj = function (key) {
@@ -107,26 +175,62 @@
         }
         this.sqrtData = function () {
             var that = this;
-            this.list.forEach(function (value) {
-                var zimu = PinyinHelper.getShortPinyin(value.nickname).toUpperCase()[0];
-                value.letter = /[A-Z]/.test(zimu) ? zimu : '#';
-                value.title = value.nickname
-                value.img = value.head_img_url
-                value.subTitle = value.company_name
-                value.titleSize = 15
-            })
-            this.list = this.list.sort(this.sortObj('letter'))
-            this.list.forEach(function (value) {
-                if (!that.obj[value.letter]) {
-                    that.obj[value.letter] = []
+            console.log(JSON.stringify(that.list));
+            
+            if (!that.list[0].initial) {
+                that.list.forEach(function (value) {
+                    var zimu = PinyinHelper.getShortPinyin(value.nickname).toUpperCase()[0];
+                    value.initial = /[A-Z]/.test(zimu) ? zimu : '#';
+                    value.title = value.nickname
+                    value.img = value.head_img_url
+                    // value.subTitle = value.company_name + ' ' + value.position
+                    value.titleSize = 15;
+                    delete value.head_img_url;
+                    delete value.company_name;
+                    delete value.nickname;
+                    delete value.rongcloud_user_id;
+                    delete value.position;
+                })
+            }
+            that.list = that.list.sort(that.sortObj('initial'))
+            that.list.forEach(function (value) {
+                that.userIdList.push(value.user_id)
+                if (!that.obj[value.initial]) {
+                    that.obj[value.initial] = []
                 }
-                that.obj[value.letter].push(value)
+                that.obj[value.initial].push(value)
             })
             return that.obj
         }
-        return this.sqrtData()
     }
+    // 打开个人详情页
+    function openUserInfo(data) {
+        api.openWin({
+            name: 'txl_memberInfo_Win',
+            url: './txl_memberInfo_Win.html',
+            bounces: false,
+            pageParam: {
+                userId: data.user_id,
+                name: data.title,
+                headImg: data.img
+            }
+        });
+    }
+    // 新增成员
+    function openAddUser() {
+        console.log(JSON.stringify(obj));
 
+        api.openWin({
+            name: 'createGroupChat_win',
+            url: '../news/createGroupChat_win.html',
+            bounces: false,
+            pageParam: {
+                key: 'createLabel',
+                key2: 'editLabel',
+                userIdList: obj.userIdList
+            }
+        });
+    }
 </script>
 
 </html>

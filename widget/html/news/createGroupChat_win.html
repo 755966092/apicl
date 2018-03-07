@@ -370,14 +370,19 @@
                     selectItemId: selectItemId
                 }
             });
-            api.closeToWin({
-                name: 'txl_createGroup_win',
-                animation: {
-                    type: 'flip',
-                    subType: 'from_bottom',
-                    duration: 500
-                }
-            });
+            if (api.pageParam.key2) {
+                api.closeWin();
+            } else {
+                api.closeToWin({
+                    name: 'txl_createGroup_win',
+                    animation: {
+                        type: 'flip',
+                        subType: 'from_bottom',
+                        duration: 500
+                    }
+                });
+            }
+            
         } else {
             if (api.pageParam.groupInfo) {
                 if (api.pageParam.addUser == 1) {
